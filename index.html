@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Easter Company - Engineering, Education, Entertainment &amp; Enterprise</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimal-ui,shrink-to-fit=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="">
+
+  <meta property="og:title" content="Owen Easter - CV & Portfolio">
+  <meta property="og:image" content="/static/meta/preview-banner.png">
+  <meta property="og:url" content="https://oceaster.github.io">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Owen Easter - CV & Portfolio">
+  <meta name="twitter:image" content="/static/meta/preview-banner.png">
+  <meta name="twitter:site" content="@eastercompany">
+  <meta name="twitter:creator" content="@eastercompany">
+  <meta name="twitter:description" content="">
+
+  <link rel="icon" href="/static/meta/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/meta/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/meta/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/static/meta/apple-touch-icon.png">
+  <link rel="manifest" href="/static/meta/site.webmanifest">
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
+  <link rel="stylesheet" href="static/css/background.css">
+  <link rel="stylesheet" href="static/css/footer.css">
+  <link rel="stylesheet" href="static/css/nav.css">
+  <link rel="stylesheet" href="static/css/project.css">
+  <link rel="stylesheet" href="static/css/style.css">
+  <script src="static/js/bashful.js"></script>
+  <script src="static/js/project.js"></script>
+</head>
+<body>
+  <div class='background'>
+  </div>
+  <div id="nav-container" class="glass">
+    <nav>
+      <div style="justify-content:flex-start;">
+        <a href="/"><img src="static/assets/logo/easter_logo.svg" alt="easter logo"/></a>
+        <h1 id="nav-title">Easter Company</h1>
+      </div>
+      <div style="justify-content:flex-end;">
+        <input id="search-input" type="text" style="display:none;" placeholder="search respository..." onkeydown="onSearchKey(this);"/>
+        <i id="search-open" class="bx bx-search" onclick="openSearch();"></i>
+        <i id="search-close" class="bx bx-x" onclick="closeSearch()" style="display:none;"></i>
+      </div>
+    </nav>
+  </div>
+  <main>
+    <div class="hero">
+      <img src="static/assets/logo/easter_logo.svg" alt="easter logo"/>
+      <svg viewbox="0 0 10 2">
+        <text x="5" y="1" text-anchor="middle" font-size="0.66" fill="none" stroke-width=".015" stroke="#fff" font-family="Poppins">EASTER COMPANY</text>
+      </svg>
+    </div>
+
+    <h1 style="width:100%;text-align:center;margin:10vh auto 0 auto;font-size:22px;color:#ddd;">Browse Our Applications</h1>
+    <h2 style="width:100%;text-align:center;margin:0 auto 10vh auto;font-size:18px;color:#999;">Engineering, Education, Entertainment, Enterprise.</h2>
+
+    <div class="project glass">
+      <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
+          <i class='bx bx-x'></i>
+      </div>
+      <div class="content">
+        <div class="preview">
+          <div class="info">
+            <div class="header">
+              <img src="https://bashful-sh.github.io/static/assets/logo/bashful-sh_logo.jpg" alt="bashful-sh logo"/>
+              <h2>Bashful<p>By Bashful-sh</p></h2>
+            </div>
+            <p id="bashful-description">...</p>
+            <div class="stats">
+              <p class="git-stats">
+                <i class='bx bxs-star'></i><span id="bashful-star-count">&nbsp;</span>&nbsp;
+                <i class='bx bx-broadcast'></i><span id="bashful-watcher-count">&nbsp;</span>&nbsp;
+                <i class='bx bx-git-repo-forked'></i><span id="bashful-fork-count">&nbsp;</span>&nbsp;
+              </p>
+              <p class="last-updated"><i>Last Updated:&nbsp;<span id="bashful-last-updated">&nbsp;</span></i></p>
+            </div>
+          </div>
+        </div>
+        <div class="command-selector">
+          <div id="download-cmd-option-bashful" class="download-cmd-option selected" onclick="bashfulSelectDownload();">Download & Install</div>
+          <div id="clone-cmd-option-bashful" class="clone-cmd-option" onclick="bashfulSelectClone();">Clone Source</div>
+          <button id="copy-button-bashful" class="copy-button" title="Copy to Clipboard" onclick="selectCopy('bashful');">
+            <i class='bx bx-copy'></i>
+          </button>
+        </div>
+        <div class="command-snippet">
+          <code id="bashful-selected-command">curl -fsSL https://bashful-sh.github.io/install.sh | bash</code>
+        </div>
+        <div class="options">
+          <a href="https://github.com/bashful-sh/bashful/wiki"><button>Documentation<i class="bx bx-file"></i></button></a>
+          <a href="https://github.com/bashful-sh/bashful"><button>Source<i class="bx bx-code"></i></button></a>
+          <a href="https://github.com/bashful-sh/bashful/commits/LTS"><button>Commits<i class="bx bx-git-commit"></i></button></a>
+          <iframe src="https://github.com/sponsors/eastercompany/button" title="Sponsor" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <h1 style="width:100%;text-align:center;margin:10vh auto 0 auto;font-size:22px;color:#ddd;">Follow Our Socials</h1>
+    <h2 style="width:100%;text-align:center;margin:0 auto 10vh auto;font-size:18px;color:#999;">Never miss a beat. We never slow down.</h2>
+
+    <div class="socials-section">
+      <a href="https://facebook.com/eastercompany">
+      <i class='bx bxl-facebook-square'></i>
+      </a>
+      <a href="https://www.linkedin.com/company/72223947">
+        <i class='bx bxl-linkedin'></i>
+      </a>
+      <a href="https://www.instagram.com/eastercompany">
+        <i class='bx bxl-instagram-alt'></i>
+      </a>
+    </div>
+
+    <footer>
+      <p id="footer-text">
+        All related assets are copyright<br/>&copy; Easter Company, all rights reserved.
+      </p>
+    </footer>
+  </main>
+</body>

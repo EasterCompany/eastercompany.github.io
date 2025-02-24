@@ -1,0 +1,26 @@
+/*
+*
+*/
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-items: center;
+  vertical-align: center;
+  justify-content: center;
+  width: fit-content;
+  height: 5vmin;
+  margin-top: auto;
+  padding-top: 2.5vmin;
+  background-color: transparent;
+}
+
+#footer-text {
+  user-select: none;
+  color: #fff;
+  text-align: center;
+  font-family: "Poppins";
+  font-weight: normal;
+  font-size: 13px;
+}
