@@ -207,3 +207,28 @@ button {
 .socials-section>a {
   color: #DADADA;
 }
+
+#waveform {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: none;
+  opacity: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(240, 240, 240, 0);
+  transition: .5s ease-in-out;
+}
+
+#recordButton {
+  color: #fff;
+  transition: .5s ease-in-out;
+}
+
+#recordButton.recording {
+  text-shadow: 1px 1px 20px rgba(65, 136, 255, 1);
+}

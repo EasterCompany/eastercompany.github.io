@@ -22,11 +22,13 @@
   <meta name="twitter:creator" content="@eastercompany">
   <meta name="twitter:description" content="Engineering, Education, Entertainment, Enterprise">
 
-  <link rel="icon" href="/static/meta/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="16x16" href="/static/meta/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/meta/favicon-32x32.png">
-  <link rel="apple-touch-icon" href="/static/meta/apple-touch-icon.png">
-  <link rel="manifest" href="/static/meta/site.webmanifest">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg" />
+  <link rel="shortcut icon" href="/static/meta/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Easter" />
+  <link rel="manifest" href="/static/meta/site.webmanifest" />
+
   <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
   <link rel="stylesheet" href="static/css/background.css">
@@ -36,10 +38,13 @@
   <link rel="stylesheet" href="static/css/style.css">
   <script src="static/js/bashful.js"></script>
   <script src="static/js/project.js"></script>
+  <script src="static/js/stf.js"></script>
 </head>
+
 <body>
   <div class='background'>
   </div>
+
   <div id="nav-container" class="glass">
     <nav>
       <div style="justify-content:flex-start;">
@@ -47,12 +52,12 @@
         <h1 id="nav-title">Easter Company</h1>
       </div>
       <div style="justify-content:flex-end;">
-        <input id="search-input" type="text" style="display:none;" placeholder="search respository..." onkeydown="onSearchKey(this);"/>
-        <i id="search-open" class="bx bx-search" onclick="openSearch();"></i>
-        <i id="search-close" class="bx bx-x" onclick="closeSearch()" style="display:none;"></i>
+        <canvas id="waveform"></canvas>
+        <i id="recordButton" class="bx bx-microphone" onclick="recordAndPrepareAudio();"></i>
       </div>
     </nav>
   </div>
+
   <main>
     <div class="hero">
       <img src="static/assets/logo/easter_logo.svg" alt="easter logo"/>
@@ -126,4 +131,5 @@
       </p>
     </footer>
   </main>
+
 </body>
