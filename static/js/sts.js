@@ -1,3 +1,9 @@
+const isLocal = window.location.hostname === 'localhost'
+const baseUrl = isLocal ? 'http://localhost' : 'https://api.easter.company';
+const transcriptionAPI = isLocal ? `${baseUrl}:9500/transcribe` : `${baseUrl}/transcribe`;
+const promptAPI = isLocal ? `${baseUrl}:9501/prompt` : `${baseUrl}/prompt`;
+const ttsAPI = isLocal ? `${baseUrl}:9502/tts` : `${baseUrl}/tts`;
+
 let mediaRecorder = null;
 let isRecording = false;
 let audioContext, analyser, dataArray, bufferLength;
@@ -45,14 +51,14 @@ async function recordAndPrepareAudio() {
 
       async function processAudio(formData) {
         try {
-          const transcriptionResponse = await fetch('http://localhost:9500/transcribe', {
+          const transcriptionResponse = await fetch(transcriptionAPI, {
             method: 'POST',
             body: formData
           });
           const transcriptionData = await transcriptionResponse.json();
           console.log('Transcription API:', transcriptionData);
 
-          const llmResponse = await fetch('http://localhost:9501/prompt', {
+          const llmResponse = await fetch(promptAPI, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -62,7 +68,7 @@ async function recordAndPrepareAudio() {
           const llmData = await llmResponse.json();
           console.log('LLM response:', llmData.response);
 
-          const speakResponse = await fetch('http://localhost:9502/tts', {
+          const speakResponse = await fetch(ttsAPI, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
