@@ -5,6 +5,7 @@
 *,
 *::before,
 *::after {
+  scroll-behavior: smooth;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -16,6 +17,7 @@
   text-rendering: optimizeLegibility;
   font-family: default;
   font-weight: normal;
+  transition: .33s ease-in-out;
 }
 
 body {
