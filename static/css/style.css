@@ -19,14 +19,14 @@
 }
 
 body {
+  z-index: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+
   display: flex;
-  overflow: hidden;
   vertical-align: middle;
   justify-content: flex-start;
   flex-direction: column;
-
-  width: 100vw;
-  height: 100vh;
 
   font-family: "Poppins", sans-serif;
   font-weight: normal;
@@ -39,16 +39,14 @@ body {
 
 main {
   z-index: 1;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+
   display: flex;
   flex-direction: column;
 
-  width: 100vw;
-
-  min-height: 500px;
-  height: 100vh;
-
-  padding: calc(10vh + 64px) 0 2.5vh 0;
+  width: fit-content;
+  height: fit-content;
 
   color: #dfdfdf;
   background-color: transparent;
@@ -80,13 +78,15 @@ main>h1,main>h2 {
   background: #9d9d9d;
 }
 
-
-img,svg,i {
+img,svg,i,h1,h2,h3,button {
   user-select: none;
+  text-align: center;
+  background-color: transparent;
+  transition: .33s ease-in-out;
 }
 
 h1 {
-  color: #ffffffDD;
+  color: #ffffffdd;
   font-family: "Poppins";
   font-size: 22px;
   font-weight: normal;
@@ -97,23 +97,27 @@ h1 {
 }
 
 h2 {
-  color: #ffffffAA;
+  text-align: center;
+  color: #ffffffaa;
   font-family: "Poppins";
-  font-size: 20px;
+  font-size: 22px;
   font-weight: normal;
   line-height: 1.25;
   letter-spacing: -1px;
-  margin-bottom: 13px;
+  width: 100%;
+  margin: 12.5vh auto 0 auto;
 }
 
 h3 {
+  text-align: center;
   color: #ffffff88;
   font-family: "Poppins";
   font-size: 18px;
   font-weight: normal;
   line-height: 1.25;
   letter-spacing: -1px;
-  margin-bottom: 13px;
+  width: 100%;
+  margin: 0 auto 10vh auto;
 }
 
 p {
@@ -121,14 +125,6 @@ p {
   text-wrap: balance;
   color: inherit;
   margin-bottom: 13px;
-}
-
-.hero {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  margin: auto auto;
 }
 
 button {
@@ -171,11 +167,37 @@ button {
        column-gap: 0.66rem;
 }
 
-.hero>svg,.hero>img {
-  user-select: none;
+.hero {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 100vw;
+  width: 100vw;
+  max-width: 100vw;
+
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+
+  margin: 0 0 0 0;
+  padding: 7.5vh 0 5vh 0;
+}
+
+.hero>img {
   width: 100%;
-  height: 33vh;
-  background-color: transparent;
+  height: 50vh;
+}
+
+.hero>svg {
+  width: 100%;
+  height: 25vh;
+}
+
+.hero>h2 {
+  font-size: clamp(13px, 1.25vw, 22px);
 }
 
 .glass {
