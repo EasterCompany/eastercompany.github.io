@@ -1,3 +1,10 @@
+/*
+ *  static/js/dexter.js
+ *
+ *  Handles all of Dexter's web integrations.
+ *
+ */
+
 const isLocal = window.location.hostname === '127.0.0.1'
 const baseUrl = isLocal ? 'http://127.0.0.1' : 'https://api.easter.company';
 const transcriptionAPI = isLocal ? `${baseUrl}:9500/transcribe` : `${baseUrl}/transcribe`;
