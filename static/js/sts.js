@@ -65,7 +65,6 @@ async function recordAndPrepareAudio() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({ prompt: transcriptionData.text }),
-            credentials: 'include'
           });
           const llmData = await llmResponse.json();
           console.log('LLM response:', llmData.response);
