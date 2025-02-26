@@ -2,8 +2,9 @@ User-agent: Googlebot
 Disallow: /static/
 Disallow: /downloads/
 Disallow: /README.md
+Disallow: CNAME
 
 User-agent: *
 Allow: /
 
-Sitemap: https://eastercompany.github.io/sitemap.xml
+Sitemap: https://easter.company/sitemap.xml
