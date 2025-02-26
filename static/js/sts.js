@@ -75,7 +75,6 @@ async function recordAndPrepareAudio() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({ text: llmData.response }),
-            credentials: 'include'
           });
           const audioBlob = await speakResponse.blob();
           console.log('TTS response:', audioBlob);
