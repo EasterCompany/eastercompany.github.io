@@ -1,5 +1,5 @@
-const isLocal = window.location.hostname === 'localhost'
-const baseUrl = isLocal ? 'http://localhost' : 'https://api.easter.company';
+const isLocal = window.location.hostname === '127.0.0.1'
+const baseUrl = isLocal ? 'http://127.0.0.1' : 'https://api.easter.company';
 const transcriptionAPI = isLocal ? `${baseUrl}:9500/transcribe` : `${baseUrl}/transcribe`;
 const promptAPI = isLocal ? `${baseUrl}:9501/prompt` : `${baseUrl}/prompt`;
 const ttsAPI = isLocal ? `${baseUrl}:9502/tts` : `${baseUrl}/tts`;
@@ -53,7 +53,8 @@ async function recordAndPrepareAudio() {
         try {
           const transcriptionResponse = await fetch(transcriptionAPI, {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include'
           });
           const transcriptionData = await transcriptionResponse.json();
           console.log('Transcription API:', transcriptionData);
@@ -63,7 +64,8 @@ async function recordAndPrepareAudio() {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ prompt: transcriptionData.text })
+            body: JSON.stringify({ prompt: transcriptionData.text }),
+            credentials: 'include'
           });
           const llmData = await llmResponse.json();
           console.log('LLM response:', llmData.response);
@@ -73,7 +75,8 @@ async function recordAndPrepareAudio() {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ text: llmData.response })
+            body: JSON.stringify({ text: llmData.response }),
+            credentials: 'include'
           });
           const audioBlob = await speakResponse.blob();
           console.log('TTS response:', audioBlob);
