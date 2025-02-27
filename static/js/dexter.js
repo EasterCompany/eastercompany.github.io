@@ -44,6 +44,9 @@ async function toggleRecording() {
 
 // Function to start recording
 async function startRecording() {
+  if (recordButton.disabled) {
+    return;
+  }
   console.log("Starting recording...");
   recordButton.classList.add('recording');
   waveform.style.display = "block";
@@ -104,6 +107,7 @@ function handleRecordingStop() {
 
 // Function to process the recorded audio
 async function processAudio(formData) {
+  recordButton.disabled = true;
   recordButton.classList.remove("bx-microphone");
   recordButton.classList.add("bx-loader", "spin");
 
@@ -170,6 +174,7 @@ async function processAudio(formData) {
     console.error('Error:', error);
   }
 
+  recordButton.disabled = false;
   recordButton.classList.remove("bx-loader", "spin");
   recordButton.classList.add("bx-microphone");
 }
@@ -241,14 +246,14 @@ function drawWaveform(level, isDexterSpeaking) {
     const barHeight = (dataArray[i] / 255) * canvas.height * 2;
 
     // Use different colors for user and Dexter
-    canvasCtx.fillStyle = isDexterSpeaking ? 'rgba(255, 165, 0, 0.2)' : 'rgba(65, 136, 255, 0.2)';
+    canvasCtx.fillStyle = isDexterSpeaking ? '#f0831955' : '#00599B55';
     canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
     x += barWidth;
   }
 
   // Draw a line for the average level
   const averageBarHeight = (level / 255) * canvas.height * 2;
-  canvasCtx.fillStyle = '#dadada33';
+  canvasCtx.fillStyle = '#aaaaaa22';
   canvasCtx.fillRect(0, canvas.height - averageBarHeight / 2, canvas.width, 2);
 }
 
