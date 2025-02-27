@@ -104,6 +104,9 @@ function handleRecordingStop() {
 
 // Function to process the recorded audio
 async function processAudio(formData) {
+  recordButton.classList.remove("bx-microphone");
+  recordButton.classList.add("bx-loader", "spin");
+
   try {
     const transcriptionResponse = await fetch(transcriptionAPI, {
       method: 'POST',
@@ -166,7 +169,11 @@ async function processAudio(formData) {
   } catch (error) {
     console.error('Error:', error);
   }
+
+  recordButton.classList.remove("bx-loader", "spin");
+  recordButton.classList.add("bx-microphone");
 }
+
 // Function to check for silence and draw the waveform
 function checkSilence(isDexterSpeaking = false) {
   let silenceTimer = null;
