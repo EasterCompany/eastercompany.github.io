@@ -1,6 +1,9 @@
 /*
 *
 */
+:root {
+  --hover-bg: #29292929;
+}
 
 *,
 *::before,
@@ -198,6 +201,109 @@ button {
 
 .hero>h2 {
   font-size: clamp(13px, 1.25vw, 22px);
+}
+
+.about-us {
+  text-align: center;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 48px;
+}
+
+.about-us,
+.about-values {
+  font-size: 16px;
+  width: 100%;
+  max-width: 1300px;
+}
+
+.about-us > .about-content > h2 {
+  text-align: center;
+  width: 100%;
+  margin: 0 0 32px 0 !important;
+  padding: unset !important;
+}
+
+.about-us > .about-values > h2 {
+  text-align: center;
+  width: 100%;
+  margin: 32px 0 0 0 !important;
+  padding: unset !important;
+}
+
+.about-us > .about-content > p {
+  padding: 0 clamp(8px, 10vmin, 420px) !important;
+}
+
+.about-us > .about-values > ul > li {
+  padding: 8px clamp(8px, 10vmin, 420px) !important;
+}
+
+.about-us > .about-values > ul > li > strong {
+  font-family: "Poppins";
+  font-weight: 600;
+}
+
+.about-values ul {
+  list-style: none;
+  padding: 32px;
+}
+
+.about-values li {
+  width: 100%;
+  padding: 32px;
+  border-bottom: 1px solid #dadada66;
+}
+
+.about-values li:last-child {
+  border-bottom: none;
+}
+
+.about-values li:hover {
+  background-color: var(--hover-bg);
+}
+
+.signature {
+  color: #666;
+  font-style: italic;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.signature>img {
+  width: 286px;
+  height: 286px;
+}
+
+.about-bashful-sh {
+  text-align: center;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 48px;
+}
+
+.about-bashful-sh .about-content {
+  font-size: 16px;
+}
+
+.about-bashful-sh h2 {
+  text-align: center;
+  width: 100%;
+  margin: unset !important;
+  padding: unset !important;
+}
+
+.about-bashful-sh p {
+  padding: 16px clamp(8px, 10vmin, 420px) !important;
+}
+
+.bashful-sh-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align:center;
 }
 
 .glass {
