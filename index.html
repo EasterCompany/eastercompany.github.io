@@ -1,207 +1,251 @@
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Easter Company - Engineering, Education, Entertainment &amp; Enterprise</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,minimal-ui,shrink-to-fit=no,viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="description" content="Engineering, Education, Entertainment, Enterprise">
-
-  <meta property="og:title" content="Easter Company">
-  <meta property="og:image" content="/static/meta/preview-banner.png">
-  <meta property="og:url" content="https://eastercompany.github.io">
-  <meta property="og:type" content="website">
-  <meta property="og:description" content="Engineering, Education, Entertainment, Enterprise">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Easter Company">
-  <meta name="twitter:image" content="/static/meta/preview-banner.png">
-  <meta name="twitter:site" content="@eastercompany">
-  <meta name="twitter:creator" content="@eastercompany">
-  <meta name="twitter:description" content="Engineering, Education, Entertainment, Enterprise">
-
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg" />
-  <link rel="shortcut icon" href="/static/meta/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="Easter" />
-  <link rel="manifest" href="/static/meta/site.webmanifest" />
-
-  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="static/css/background.css">
-  <link rel="stylesheet" href="static/css/footer.css">
-  <link rel="stylesheet" href="static/css/nav.css">
-  <link rel="stylesheet" href="static/css/project.css">
-  <link rel="stylesheet" href="static/css/style.css">
-</head>
-
-<body>
-  <div class='background'>
-  </div>
-
-  <div id="nav-container" class="glass">
-    <nav>
-      <div style="justify-content:flex-start;">
-        <a href="/"><img src="static/assets/logo/easter_logo.svg" alt="easter logo"/></a>
-        <h1 id="nav-title">Easter Company</h1>
-      </div>
-      <div style="justify-content:flex-end;">
-        <canvas id="waveform"></canvas>
-        <i id="recordButton" class="bx bx-microphone"></i>
-      </div>
-    </nav>
-  </div>
-
-  <main>
-    <div class="hero">
-      <img src="/static/assets/logo/easter_logo.svg" alt="easter logo"/>
-      <svg viewbox="0 0 10 2">
-        <text x="5" y="1" text-anchor="middle" font-size="0.66" fill="none" stroke-width=".015" stroke="#fff" font-family="Poppins">EASTER COMPANY</text>
-      </svg>
-      <h2 style="margin:0 auto 10vh auto;color:#999;">Engineering, Education, Entertainment, Enterprise.</h2>
+<html lang="en-GB">
+  <head>
+    <title>Easter Company - Engineering, Education, Entertainment &amp; Enterprise</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimal-ui,shrink-to-fit=no,viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Engineering, Education, Entertainment, Enterprise">
+    <meta property="og:title" content="Easter Company">
+    <meta property="og:image" content="/static/meta/preview-banner.png">
+    <meta property="og:url" content="https://eastercompany.github.io">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Engineering, Education, Entertainment, Enterprise">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Easter Company">
+    <meta name="twitter:image" content="/static/meta/preview-banner.png">
+    <meta name="twitter:site" content="@eastercompany">
+    <meta name="twitter:creator" content="@eastercompany">
+    <meta name="twitter:description" content="Engineering, Education, Entertainment, Enterprise">
+    <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg" />
+    <link rel="shortcut icon" href="/static/meta/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Easter" />
+    <link rel="manifest" href="/static/meta/site.webmanifest" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
+    <link rel="stylesheet" href="static/css/background.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/nav.css">
+    <link rel="stylesheet" href="static/css/project.css">
+    <link rel="stylesheet" href="static/css/footer.css">
+  </head>
+  <body>
+    <div class='background'>
     </div>
-
-    <h2>Browse Our Applications</h2>
-    <h3>Addons for a modern world.</h3>
-
-    <div class="project glass">
-      <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
-          <i class='bx bx-x'></i>
+    <div id="nav-container" class="glass">
+      <nav>
+        <div style="justify-content:flex-start;">
+          <a href="/"><img src="static/assets/logo/easter_logo.svg" alt="easter logo"/></a>
+          <h1 id="nav-title">Easter Company</h1>
+        </div>
+        <div style="justify-content:flex-end;">
+          <canvas id="waveform"></canvas>
+          <i id="recordButton" class="bx bx-microphone"></i>
+        </div>
+      </nav>
+    </div>
+    <main>
+      <div class="hero">
+        <img src="/static/assets/logo/easter_logo.svg" alt="easter logo"/>
+        <svg viewbox="0 0 10 2">
+          <text x="5" y="1" text-anchor="middle" font-size="0.66" fill="none" stroke-width=".015" stroke="#fff" font-family="Poppins">EASTER COMPANY</text>
+        </svg>
+        <h2 style="margin:0 auto 10vh auto;color:#999;">Engineering, Education, Entertainment, Enterprise.</h2>
       </div>
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <img src="/static/assets/logo/dexter_logo_alt.svg" alt="dexter logo" style="border:unset;"/>
-              <h2>Dexter<p>By eastercompany</p></h2>
-            </div>
-            <p id="dexter-description">Dexter is a small but powerful artificial intelligence program optimised to run on efficient<br/>hardware with equal outcomes to the leading power hungry models.</p>
-            <div class="stats">
-              <p class="git-stats">
-                <i class='bx bxs-download'></i><span id="dexter-download-count">&nbsp;Not available in your country yet.</span>&nbsp;
-              </p>
-              <p class="last-updated"><i>Last Updated:&nbsp;<span id="dexter-last-updated">&nbsp;26/02/2025, 00:15:23</span></i></p>
+
+      <div class="about-us glass">
+        <div class="about-content">
+          <h2>Crafting Tomorrow's Technology, Today.</h2>
+          <p>At Easter Company, we're not just building software; we're architecting the future. Our core focus lies in the intersection of Artificial Intelligence, robust software development, and powerful developer tools. We believe in creating solutions that are not only innovative but also practical, efficient, and reliable.</p>
+          <p>We're driven by a passion for cutting-edge technology and a commitment to excellence. Our team is dedicated to delivering exceptional software experiences that empower users and businesses to thrive in the digital age. With a foundation built on trust and a relentless pursuit of innovation, we're here to redefine what's possible.</p>
+        </div>
+        <div class="about-values">
+          <h2>Our Code</h2>
+          <ul>
+            <li><strong>Precision:</strong> Every line of code, every algorithm, honed for peak performance.</li>
+            <li><strong>Endurance:</strong> Our software is built to withstand the rigors of any challenge, unyielding and robust.</li>
+            <li><strong>Efficiency:</strong> Functionality over flourish. We optimize for speed and utility, eliminating all excess.</li>
+            <li><strong>Superiority:</strong> We forge tools that stand unchallenged, the apex of technological prowess.</li>
+            <li><strong>Integrity:</strong> Our word is our bond. We deliver what we promise, with absolute transparency.</li>
+          </ul>
+        </div>
+        <div class="signature">
+          <img src="/static/assets/signature.svg" alt="signature"/>
+          <p>Owen Easter, CEO & Founder</p>
+          <p>Feburary 1st, 2018</p>
+        </div>
+      </div>
+
+      <h2>Browse Our Applications</h2>
+      <h3>Addons for a modern world.</h3>
+
+      <div class="project glass">
+        <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
+            <i class='bx bx-x'></i>
+        </div>
+        <div class="content">
+          <div class="preview">
+            <div class="info">
+              <div class="header">
+                <img src="/static/assets/logo/dexter_logo_alt.svg" alt="dexter logo" style="border:unset;"/>
+                <h2>Dexter<p>By eastercompany</p></h2>
+              </div>
+              <p id="dexter-description">Dexter is a small but powerful artificial intelligence program optimised to run on efficient<br/>hardware with equal outcomes to the leading power hungry models.</p>
+              <div class="stats">
+                <p class="git-stats">
+                  <i class='bx bxs-download'></i><span id="dexter-download-count">&nbsp;Not available in your country yet.</span>&nbsp;
+                </p>
+                <p class="last-updated"><i>Last Updated:&nbsp;<span id="dexter-last-updated">&nbsp;26/02/2025, 00:15:23</span></i></p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="options">
-          <h3 style="margin:0;padding:0 5% 0 0;width:fit-content;font-size:16px;color:#666;">View/Download:</h3>
-          <a><button disabled style="opacity:0.33"><i class="bx bx-globe"></i>Web</button></a>
-          <a><button disabled style="opacity:0.33"><i class="bx bx-desktop"></i>Desktop</button></a>
-          <a><button disabled style="opacity:0.33"><i class="bx bxl-android"></i>Android</button></a>
-          <a><button disabled style="opacity:0.33"><i class="bx bxl-apple"></i>iOS</button></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="project glass">
-      <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
-          <i class='bx bx-x'></i>
-      </div>
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <img src="https://bashful-sh.github.io/static/assets/logo/bashful-sh_logo.jpg" alt="bashful-sh logo"/>
-              <h2>Bashful<p>By bashful-sh</p></h2>
-            </div>
-            <p id="bashful-description">&nbsp;</p>
-            <div class="stats">
-              <p class="git-stats">
-                <i class='bx bxs-star'></i><span id="bashful-star-count">&nbsp;</span>&nbsp;
-                <i class='bx bx-broadcast'></i><span id="bashful-watcher-count">&nbsp;</span>&nbsp;
-                <i class='bx bx-git-repo-forked'></i><span id="bashful-fork-count">&nbsp;</span>&nbsp;
-              </p>
-              <p class="last-updated"><i>Last Updated:&nbsp;<span id="bashful-last-updated">&nbsp;</span></i></p>
-            </div>
+          <div class="options">
+            <h3 style="margin:0;padding:0 5% 0 0;width:fit-content;font-size:16px;color:#666;">View/Download:</h3>
+            <a><button disabled style="opacity:0.33"><i class="bx bx-globe"></i>Web</button></a>
+            <a><button disabled style="opacity:0.33"><i class="bx bx-desktop"></i>Desktop</button></a>
+            <a><button disabled style="opacity:0.33"><i class="bx bxl-android"></i>Android</button></a>
+            <a><button disabled style="opacity:0.33"><i class="bx bxl-apple"></i>iOS</button></a>
           </div>
         </div>
-        <div class="command-selector">
-          <div id="bashful-lts-cmd-option" onclick="selectGitCommand('bashful-sh', 'bashful', 'lts');">Download & Install</div>
-          <div id="bashful-latest-cmd-option" onclick="selectGitCommand('bashful-sh', 'bashful', 'latest');">Clone Source</div>
-          <button id="bashful-copy-cmd-button" class="copy-button" title="Copy to Clipboard" onclick="selectCopyButton('bashful');">
-            <i class='bx bx-copy'></i>
-          </button>
-        </div>
-        <div class="command-snippet">
-          <code id="bashful-cmd-code"></code>
-        </div>
-        <div class="options">
-          <a href="https://github.com/bashful-sh/bashful/wiki"><button><i class="bx bx-file"></i>&nbsp;Documentation</button></a>
-          <a href="https://github.com/bashful-sh/bashful"><button><i class="bx bx-code"></i>&nbsp;Source</button></a>
-          <a href="https://github.com/bashful-sh/bashful/commits/DEV"><button><i class="bx bx-git-commit"></i>&nbsp;Commits</button></a>
-          <iframe src="https://github.com/sponsors/eastercompany/button" title="Sponsor" height="32px" width="116px" style="outline:none;border:1px solid #FF999966;border-radius:16px;"></iframe>
-        </div>
       </div>
-    </div>
 
-    <div class="project glass">
-      <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
-          <i class='bx bx-x'></i>
-      </div>
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <img src="/static/assets/logo/overlord_logo.svg" alt="overlord logo" style="border:unset;"/>
-              <h2>Overlord<p>By eastercompany</p></h2>
-            </div>
-            <p id="overlord-description">&nbsp;</p>
-            <div class="stats">
-              <p class="git-stats">
-                <i class='bx bxs-star'></i><span id="overlord-star-count">&nbsp;</span>&nbsp;
-                <i class='bx bx-broadcast'></i><span id="overlord-watcher-count">&nbsp;</span>&nbsp;
-                <i class='bx bx-git-repo-forked'></i><span id="overlord-fork-count">&nbsp;</span>&nbsp;
-              </p>
-              <p class="last-updated"><i>Last Updated:&nbsp;<span id="overlord-last-updated">&nbsp;</span></i></p>
+      <div class="project glass">
+        <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
+            <i class='bx bx-x'></i>
+        </div>
+        <div class="content">
+          <div class="preview">
+            <div class="info">
+              <div class="header">
+                <img src="https://bashful-sh.github.io/static/assets/logo/bashful-sh_logo.jpg" alt="bashful-sh logo"/>
+                <h2>Bashful<p>By bashful-sh</p></h2>
+              </div>
+              <p id="bashful-description">&nbsp;</p>
+              <div class="stats">
+                <p class="git-stats">
+                  <i class='bx bxs-star'></i><span id="bashful-star-count">&nbsp;</span>&nbsp;
+                  <i class='bx bx-broadcast'></i><span id="bashful-watcher-count">&nbsp;</span>&nbsp;
+                  <i class='bx bx-git-repo-forked'></i><span id="bashful-fork-count">&nbsp;</span>&nbsp;
+                </p>
+                <p class="last-updated"><i>Last Updated:&nbsp;<span id="bashful-last-updated">&nbsp;</span></i></p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="command-selector">
-          <div id="overlord-lts-cmd-option" onclick="selectGitCommand('eastercompany', 'overlord', 'lts');">Download & Install</div>
-          <div id="overlord-latest-cmd-option" onclick="selectGitCommand('eastercompany', 'overlord', 'latest');">Clone Source</div>
-          <button id="overlord-copy-cmd-button" class="copy-button" title="Copy to Clipboard" onclick="selectCopyButton('overlord');">
-            <i class='bx bx-copy'></i>
-          </button>
-        </div>
-        <div class="command-snippet">
-          <code id="overlord-cmd-code"></code>
-        </div>
-        <div class="options">
-          <a href="https://github.com/eastercompany/overlord/wiki"><button><i class="bx bx-file"></i>&nbsp;Documentation</button></a>
-          <a href="https://github.com/eastercompany/overlord"><button><i class="bx bx-code"></i>&nbsp;Source</button></a>
-          <a href="https://github.com/eastercompany/overlord/commits/DEV"><button><i class="bx bx-git-commit"></i>&nbsp;Commits</button></a>
-          <iframe src="https://github.com/sponsors/eastercompany/button" title="Sponsor" height="32px" width="116px" style="outline:none;border:1px solid #FF999966;border-radius:16px;"></iframe>
+          <div class="command-selector">
+            <div id="bashful-lts-cmd-option" onclick="selectGitCommand('bashful-sh', 'bashful', 'lts');">Download & Install</div>
+            <div id="bashful-latest-cmd-option" onclick="selectGitCommand('bashful-sh', 'bashful', 'latest');">Clone Source</div>
+            <button id="bashful-copy-cmd-button" class="copy-button" title="Copy to Clipboard" onclick="selectCopyButton('bashful');">
+              <i class='bx bx-copy'></i>
+            </button>
+          </div>
+          <div class="command-snippet">
+            <code id="bashful-cmd-code"></code>
+          </div>
+          <div class="options">
+            <a href="https://github.com/bashful-sh/bashful/wiki"><button><i class="bx bx-file"></i>&nbsp;Documentation</button></a>
+            <a href="https://github.com/bashful-sh/bashful"><button><i class="bx bx-code"></i>&nbsp;Source</button></a>
+            <a href="https://github.com/bashful-sh/bashful/commits/DEV"><button><i class="bx bx-git-commit"></i>&nbsp;Commits</button></a>
+            <iframe src="https://github.com/sponsors/eastercompany/button" title="Sponsor" height="32px" width="116px" style="outline:none;border:1px solid #FF999966;border-radius:16px;"></iframe>
+          </div>
         </div>
       </div>
-    </div>
 
-    <h2>Follow Our Socials</h2>
-    <h3>Never miss a beat. We never slow down.</h3>
+      <div class="project glass">
+        <div class="toggle-project-button" onclick="toggleProjectWindow(this);">
+            <i class='bx bx-x'></i>
+        </div>
+        <div class="content">
+          <div class="preview">
+            <div class="info">
+              <div class="header">
+                <img src="/static/assets/logo/overlord_logo.svg" alt="overlord logo" style="border:unset;"/>
+                <h2>Overlord<p>By eastercompany</p></h2>
+              </div>
+              <p id="overlord-description">&nbsp;</p>
+              <div class="stats">
+                <p class="git-stats">
+                  <i class='bx bxs-star'></i><span id="overlord-star-count">&nbsp;</span>&nbsp;
+                  <i class='bx bx-broadcast'></i><span id="overlord-watcher-count">&nbsp;</span>&nbsp;
+                  <i class='bx bx-git-repo-forked'></i><span id="overlord-fork-count">&nbsp;</span>&nbsp;
+                </p>
+                <p class="last-updated"><i>Last Updated:&nbsp;<span id="overlord-last-updated">&nbsp;</span></i></p>
+              </div>
+            </div>
+          </div>
+          <div class="command-selector">
+            <div id="overlord-lts-cmd-option" onclick="selectGitCommand('eastercompany', 'overlord', 'lts');">Download & Install</div>
+            <div id="overlord-latest-cmd-option" onclick="selectGitCommand('eastercompany', 'overlord', 'latest');">Clone Source</div>
+            <button id="overlord-copy-cmd-button" class="copy-button" title="Copy to Clipboard" onclick="selectCopyButton('overlord');">
+              <i class='bx bx-copy'></i>
+            </button>
+          </div>
+          <div class="command-snippet">
+            <code id="overlord-cmd-code"></code>
+          </div>
+          <div class="options">
+            <a href="https://github.com/eastercompany/overlord/wiki"><button><i class="bx bx-file"></i>&nbsp;Documentation</button></a>
+            <a href="https://github.com/eastercompany/overlord"><button><i class="bx bx-code"></i>&nbsp;Source</button></a>
+            <a href="https://github.com/eastercompany/overlord/commits/DEV"><button><i class="bx bx-git-commit"></i>&nbsp;Commits</button></a>
+            <iframe src="https://github.com/sponsors/eastercompany/button" title="Sponsor" height="32px" width="116px" style="outline:none;border:1px solid #FF999966;border-radius:16px;"></iframe>
+          </div>
+        </div>
+      </div>
 
-    <div class="socials-section">
-      <a href="https://facebook.com/eastercompany">
-      <i class='bx bxl-facebook-square'></i>
-      </a>
-      <a href="https://www.linkedin.com/company/72223947">
-        <i class='bx bxl-linkedin'></i>
-      </a>
-      <a href="https://www.instagram.com/eastercompany">
-        <i class='bx bxl-instagram-alt'></i>
-      </a>
-    </div>
+      <h2>Discover Open Source</h2>
+      <h3>We fund and maintain massive open-source projects</h3>
 
-    <footer>
-      <p id="footer-text">
-        All related assets are copyright<br/>&copy; Easter Company, all rights reserved.
-      </p>
-    </footer>
-  </main>
+      <div class="about-bashful-sh glass">
+        <div class="about-content">
+          <h2>Bashful &amp; Bashful-sh</h2>
+          <p>Bashful-sh is an independent, open-source, and non-profit organization dedicated to developing cutting-edge software solutions. While the team behind Bashful-sh shares members with Easter Company, it operates as a separate entity with its own distinct legal structure, ownership, and licensing. This allows for greater flexibility in project development and community collaboration.</p>
+          <p>Bashful-sh is committed to creating high-quality, accessible software that empowers users and pushes the boundaries of technology. Our projects are driven by a passion for innovation and a belief in the power of open-source collaboration. We invite developers and users alike to join us in building the future of software together.</p>
+          <h2>Join the Community</h2>
+          <p>To learn more about Bashful-sh, explore our projects on GitHub, contribute to our repositories, or connect with us on social media. We welcome your involvement and support!</p>
+        </div>
+        <div class="bashful-sh-btns">
+          <a href="https://github.com/bashful-sh/"><button><i class="bx bxl-github"></i>&nbsp;Github</button></a>
+          <a href="https://bashful-sh.github.io/"><button><i class="bx bx-globe"></i>&nbsp;Website</button></a>
+        </div>
+      </div>
 
+      <h2>Follow Our Socials</h2>
+      <h3>Never miss a beat. We never slow down.</h3>
+
+      <div class="socials-section" style="margin-bottom:98px;">
+        <a href="https://facebook.com/eastercompany">
+          <i class='bx bxl-facebook-square'></i>
+        </a>
+        <a href="https://www.linkedin.com/company/72223947">
+          <i class='bx bxl-linkedin'></i>
+        </a>
+        <a href="https://www.instagram.com/eastercompany">
+          <i class='bx bxl-instagram-alt'></i>
+        </a>
+      </div>
+      <div class="socials-section" style="margin-top:0;">
+        <a href="https://facebook.com/eastercompany">
+          <i class='bx bxl-twitter'></i>
+        </a>
+        <a href="https://www.linkedin.com/company/72223947">
+          <i class='bx bxl-github'></i>
+        </a>
+        <a href="https://www.instagram.com/eastercompany">
+          <i class='bx bxl-youtube'></i>
+        </a>
+      </div>
+
+      <footer>
+        <p id="footer-text">
+          All related assets are copyright<br/>&copy; Easter Company, all rights reserved.
+        </p>
+      </footer>
+    </main>
+  </body>
   <script src="static/js/main.js"></script>
   <script src="static/js/git.js"></script>
   <script src="static/js/dexter.js"></script>
-</body>
+</html>
