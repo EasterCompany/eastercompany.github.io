@@ -100,7 +100,6 @@ async function startRecording() {
   audioChunks = new Array(); // Reset audioChunks
 
   mediaRecorder.addEventListener("dataavailable", event => {
-    console.log("Data available:", event.data);
     audioChunks.push(event.data);
   });
 
