@@ -61,9 +61,9 @@ const fetchAndUpdateGithubAPIData = (ownerName, repoName) => {
     .then(response => response.json())
     .then(data => {
       console.log(
-        `%c [${ownerName}/${repoName}] Github API Status: %c Good `,
-        `background: #ddd; color: #000; padding: 4px; border-radius: 2px;`,
-        `background: #6f6; color: #000; padding: 4px; border-radius: 2px; margin-left: 1ch;`,
+        `%c [git.js] ${ownerName}/${repoName} API Status: %c 200 `,
+        `background: #ddd; color: #000; padding: 4px;`,
+        `background: #6f6; color: #000; padding: 4px;`,
         data
       );
       _setElement("description", data.description || '--');
@@ -74,10 +74,9 @@ const fetchAndUpdateGithubAPIData = (ownerName, repoName) => {
     })
     .catch(() => {
       console.log(
-        `%c [${ownerName}/${repoName}] Github API Status: %c Bad `,
-        `background: #ddd; color: #000; padding: 4px; border-radius: 2px;`,
-        `background: #f66; color: #000; padding: 4px; border-radius: 2px;`,
-        `margin-left: 1ch;`
+        `%c [git.js] ${ownerName}/${repoName} API Status: %c 500 `,
+        `background: #ddd; color: #000; padding: 4px;`,
+        `background: #f66; color: #000; padding: 4px;`
       );
       _setElement("star-count", "--");
       _setElement("watcher-count", "--");
