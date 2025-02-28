@@ -4,11 +4,54 @@
  *  Handles all of Dexter's web integrations.
  *
  */
-const isLocal = window.location.hostname === '127.0.0.1';
-const baseUrl = isLocal ? 'http://127.0.0.1' : 'https://api.easter.company';
-const transcriptionAPI = isLocal ? `${baseUrl}:9500/transcribe` : `${baseUrl}/transcribe`;
-const promptAPI = isLocal ? `${baseUrl}:9501/prompt` : `${baseUrl}/prompt`;
-const ttsAPI = isLocal ? `${baseUrl}:9502/tts` : `${baseUrl}/tts`;
+
+const dexterConfig = {
+  isLocal: window.location.hostname === '127.0.0.1',
+  baseUrl: window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1' : 'https://api.easter.company',
+  api: {
+    transcription: '/stt',
+    prompt: '/llm',
+    tts: '/tts'
+  },
+  silenceThreshold: 1,
+  minRecordingTime: 3000,
+  defaultSession: (deviceId) => {
+    return { deviceId: deviceId, history: [] }
+  },
+  defaultSessionString: (deviceId) => {
+    return JSON.stringify({ deviceId: deviceId, history: [] })
+  }
+};
+
+const transcriptionAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}:9500${dexterConfig.api.transcription}` : `${dexterConfig.baseUrl}${dexterConfig.api.transcription}`;
+const promptAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}:9501${dexterConfig.api.prompt}` : `${dexterConfig.baseUrl}${dexterConfig.api.prompt}`;
+const ttsAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}:9502${dexterConfig.api.tts}` : `${dexterConfig.baseUrl}${dexterConfig.api.tts}`;
+
+function newSession() {
+  let sessionData = localStorage.getItem('dexter.localSession');
+
+  if (sessionData === undefined || sessionData === null) {
+    const newSessionId = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+    const newSessionData = dexterConfig.defaultSessionString(newSessionId);
+    localStorage.setItem('dexter.localSession', newSessionData);
+    sessionData = localStorage.getItem('dexter.localSession');
+  }
+
+  sessionData = JSON.parse(sessionData);
+  return sessionData;
+};
+
+const session = newSession();
+
+function updateChatHistoryLLM(response) {
+  session.history.push({ role: 'assistant', content: response });
+  if (session.history.length > 6) {
+    session.history = session.history.slice(-6);
+  }
+  localStorage.setItem('dexter.localSession', JSON.stringify(session));
+}
 
 const recordButton = document.getElementById('recordButton');
 const waveform = document.getElementById('waveform');
@@ -47,7 +90,6 @@ async function startRecording() {
   if (recordButton.disabled) {
     return;
   }
-  console.log("Starting recording...");
   recordButton.classList.add('recording');
   waveform.style.display = "block";
   waveform.style.opacity = 1;
@@ -80,8 +122,6 @@ async function startRecording() {
 
 // Function to stop recording
 function stopRecording() {
-  console.log("Stopping recording...");
-
   // Check if mediaRecorder is not null before stopping it
   if (mediaRecorder) {
     mediaRecorder.stop();
@@ -95,7 +135,6 @@ function stopRecording() {
 
 // Function to handle the recording stop event
 function handleRecordingStop() {
-  console.log("Recording stopped.");
   isRecording = false;
 
   const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
@@ -115,20 +154,23 @@ async function processAudio(formData) {
     const transcriptionResponse = await fetch(transcriptionAPI, {
       method: 'POST',
       body: formData,
-      credentials: 'include'
+      //credentials: 'include'
     });
+
     const transcriptionData = await transcriptionResponse.json();
-    console.log('Transcription API:', transcriptionData);
+    const userPrompt = transcriptionData.text;
+    session.history.push({ role: 'user', content: userPrompt });
 
     const llmResponse = await fetch(promptAPI, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ prompt: transcriptionData.text }),
+      body: JSON.stringify({ session: session }),
     });
+
     const llmData = await llmResponse.json();
-    console.log('LLM response:', llmData.response);
+    updateChatHistoryLLM(llmData.response);
 
     const speakResponse = await fetch(ttsAPI, {
       method: 'POST',
@@ -140,7 +182,6 @@ async function processAudio(formData) {
 
     // Get the audio as a byte array
     const audioBytes = await speakResponse.arrayBuffer();
-    console.log('TTS response (bytes):', audioBytes);
 
     // Decode the audio data
     audioContext.decodeAudioData(audioBytes, function (buffer) {
