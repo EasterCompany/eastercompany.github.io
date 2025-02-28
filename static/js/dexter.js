@@ -7,7 +7,7 @@
 
 const dexterConfig = {
   isLocal: window.location.hostname === '127.0.0.1',
-  baseUrl: window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1' : 'https://api.easter.company',
+  baseUrl: window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:9500' : 'https://api.easter.company',
   api: {
     transcription: '/stt',
     prompt: '/llm',
@@ -23,9 +23,9 @@ const dexterConfig = {
   }
 };
 
-const transcriptionAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}:9500${dexterConfig.api.transcription}` : `${dexterConfig.baseUrl}${dexterConfig.api.transcription}`;
-const promptAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}:9501${dexterConfig.api.prompt}` : `${dexterConfig.baseUrl}${dexterConfig.api.prompt}`;
-const ttsAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}:9502${dexterConfig.api.tts}` : `${dexterConfig.baseUrl}${dexterConfig.api.tts}`;
+const transcriptionAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}${dexterConfig.api.transcription}` : `${dexterConfig.baseUrl}${dexterConfig.api.transcription}`;
+const promptAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}${dexterConfig.api.prompt}` : `${dexterConfig.baseUrl}${dexterConfig.api.prompt}`;
+const ttsAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}${dexterConfig.api.tts}` : `${dexterConfig.baseUrl}${dexterConfig.api.tts}`;
 
 function newSession() {
   let sessionData = localStorage.getItem('dexter.localSession');
