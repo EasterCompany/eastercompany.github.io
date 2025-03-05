@@ -16,10 +16,10 @@ const dexterConfig = {
   silenceThreshold: 1,
   minRecordingTime: 3000,
   defaultSession: (deviceId) => {
-    return { deviceId: deviceId, history: [] }
+    return { clientType: 'user', deviceId: deviceId, history: [] }
   },
   defaultSessionString: (deviceId) => {
-    return JSON.stringify({ deviceId: deviceId, history: [] })
+    return JSON.stringify({ clientType: 'user', deviceId: deviceId, history: [] })
   }
 };
 
@@ -121,11 +121,9 @@ async function startRecording() {
 
 // Function to stop recording
 function stopRecording() {
-  // Check if mediaRecorder is not null before stopping it
   if (mediaRecorder) {
     mediaRecorder.stop();
   }
-
   recordButton.classList.remove('recording');
   waveform.style.display = "none";
   waveform.style.opacity = 0;
@@ -143,6 +141,10 @@ function handleRecordingStop() {
   processAudio(formData);
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Function to process the recorded audio
 async function processAudio(formData) {
   recordButton.disabled = true;
@@ -150,33 +152,52 @@ async function processAudio(formData) {
   recordButton.classList.add("bx-loader", "spin");
 
   try {
+
+    // Convert the users speech input to text using the Easter Company transcription API
     const transcriptionResponse = await fetch(transcriptionAPI, {
       method: 'POST',
       body: formData,
       //credentials: 'include'
     });
 
+    // Push the text data to the conversation log.
     const transcriptionData = await transcriptionResponse.json();
     const userPrompt = transcriptionData.text;
     session.history.push({ role: 'user', content: userPrompt });
 
-    const llmResponse = await fetch(promptAPI, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ session: session }),
-    });
+    // Attempt to process request with Dexnet
+    sendMessageToDexnet()
 
-    const llmData = await llmResponse.json();
-    updateChatHistoryLLM(llmData.response);
+    // Give the network a moment to handle everything in silence
+    let timesAwaited = 0;
+    await sleep(2000);
 
+    // Keep checking if the network handled the request
+    while (session.history[session.history.length - 1].role === "user") {
+      await sleep(1000);
+      timesAwaited = timesAwaited + 1;
+      /*
+       *  If the network takes forever, just process it with the legacy API instead.
+       *
+      const llmResponse = await fetch(promptAPI, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ session: session }),
+      });
+      const llmData = await llmResponse.json();
+      updateChatHistoryLLM(llmData.response);
+      */
+    }
+
+    // Convert the last response to speech via the tts API
     const speakResponse = await fetch(ttsAPI, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ text: llmData.response }),
+      body: JSON.stringify({ text: session.history[session.history.length - 1].content }),
     });
 
     // Get the audio as a byte array
