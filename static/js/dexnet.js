@@ -6,7 +6,7 @@ async function sendDexnetUserProcessRequest() {
   socket.send(JSON.stringify(session));
   console.log("Sent session data to network:", session);
   while (session.history[session.history.length - 1].role === "user") {
-    await sleep(1000);
+    await sleep(500);
     socket.send(JSON.stringify({ clientType: 'user', deviceId: session.deviceId }));
   }
 }
@@ -15,7 +15,7 @@ socket.onopen = function (event) {
   console.log(`Connected to Easter Company distributed AI compute network with unique id: ${session.deviceId}`);
   setInterval(() => {
     socket.send(JSON.stringify({ keepAlive: true }));
-  }, 1000);
+  }, 500);
 };
 
 socket.onmessage = function (event) {
@@ -46,7 +46,7 @@ socket.onclose = function (event) {
     socket.onmessage = socket.onmessage;
     socket.onclose = socket.onclose;
     socket.onerror = socket.onerror;
-  }, 5000);
+  }, 500);
 };
 
 socket.onerror = function (error) {
