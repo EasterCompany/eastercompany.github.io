@@ -168,27 +168,9 @@ async function processAudio(formData) {
     // Attempt to process request with Dexnet
     sendMessageToDexnet()
 
-    // Give the network a moment to handle everything in silence
-    let timesAwaited = 0;
-    await sleep(2000);
-
     // Keep checking if the network handled the request
     while (session.history[session.history.length - 1].role === "user") {
-      await sleep(1000);
-      timesAwaited = timesAwaited + 1;
-      /*
-       *  If the network takes forever, just process it with the legacy API instead.
-       *
-      const llmResponse = await fetch(promptAPI, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ session: session }),
-      });
-      const llmData = await llmResponse.json();
-      updateChatHistoryLLM(llmData.response);
-      */
+      await sleep(33);
     }
 
     // Convert the last response to speech via the tts API
