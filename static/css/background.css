@@ -1,5 +1,5 @@
 :root {
-  --stripe-color: #DADADA;
+  --stripe-color: #FFF;
   --bg: var(--stripe-color);
   --maincolor: var(--bg);
 }

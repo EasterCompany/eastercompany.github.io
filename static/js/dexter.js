@@ -1,304 +1,540 @@
 /*
- *  static/js/dexter.js
- *
- *  Handles all of Dexter's web integrations.
- *
- */
+*     Dexter JS
+*
+*     Universal front end web client (javascript) integrations for
+*     Dexter APIs and Workspace Interface.
+*/
 
-const dexterConfig = {
+// Dexter Global Configuration
+const dexter = {
+  // State
   isLocal: window.location.hostname === '127.0.0.1',
-  baseUrl: window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:9500' : 'https://api.easter.company',
-  api: {
-    transcription: '/stt',
-    prompt: '/llm',
-    tts: '/tts'
-  },
-  silenceThreshold: 1,
-  minRecordingTime: 3000,
-  defaultSession: (deviceId) => {
-    return { clientType: 'user', deviceId: deviceId, history: [] }
-  },
-  defaultSessionString: (deviceId) => {
-    return JSON.stringify({ clientType: 'user', deviceId: deviceId, history: [] })
+  http: window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'https://easter.company',
+  https: window.location.hostname === '127.0.0.1' ? 'https://127.0.0.1:8000' : 'https://easter.company',
+  apiHost: window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:9500' : 'https://api.easter.company',
+  wssHost: window.location.hostname === '127.0.0.1' ? 'ws://127.0.0.1:9501' : 'wss://api.easter.company/dexnet',
+  isListening: false,   // is recording audio
+  isSpeaking: false,    // is playing audio
+  isSTTing: false,      // is waiting on speech-to-text api
+  isLLMing: false,      // is waiting on llm inference api
+  isTTSing: false,      // is waiting on text-to-speech api
+  microphoneIsMuted: false,
+  workspaceIsActive: false,
+  workspaceIsChanging: false,
+  workspaceIsLoaded: false,
+  // User/Dexter Session
+  session: null,
+  // DOM Elements
+  icon: document.getElementById('dexter-icon'),
+  iconLogo: document.getElementById('dexter-icon-D'),
+  iconSpinner: document.getElementById('dexter-icon-O'),
+  rootContent: document.getElementById('main'),
+  navTitle: document.getElementById('nav-title'),
+  workspaceButton: document.getElementById('dexter-workspace-button'),
+  chatButton: document.getElementById('dexter-chat-button'),
+  voiceButton: document.getElementById('dexter-voice-button'),
+  sttLoader: document.getElementById('dexter-stt-loader'),
+  llmLoader: document.getElementById('dexter-llm-loader'),
+  ttsLoader: document.getElementById('dexter-tts-loader'),
+  waveform: document.getElementById('dexter-waveform'),
+  windowsContainer: document.getElementById('windows-container'),
+  reasonerWindow: document.getElementById('reasoner-window'),
+  mainWindow: document.getElementById('main-window'),
+  otherWindow: document.getElementById('other-window'),
+};
+
+// APIs
+const defaultDexterAPIContext = () => {
+  return {
+    stt: () => `${dexter.apiHost}/stt`,
+    llm: () => `${dexter.apiHost}/llm`,
+    tts: () => `${dexter.apiHost}/tts`,
+    net: () => `${dexter.wssHost}/net`
+  };
+};
+dexter.api = defaultDexterAPIContext();
+
+// Local Audio Context
+const defaultDexterAudioContext = () => {
+  return {
+    recorder: null,
+    chunks: null,
+    context: null,
+    analyser: null,
+    dataArray: null,
+    bufferLength: null,
+    silenceThreshold: 1,
+    minRecordingTime: 1750,
+    silenceTimer: null,
+    endTime: null,
+    startTime: null,
+    soundDetected: false,
+  };
+};
+dexter.audio = defaultDexterAudioContext();
+
+// Global Site Alerts
+const highUsageError = () => alertBanner("High Traffic Warning!", "Due to a current high volume of user activity, free users may experience interruptions in service (and/or) a lower quality of service.", 10);
+const lowerPowerError = () => alertBanner("Low Power:", "Due to higher than usual demand, Dexter is currently operating at one third capacity for free tier users in-order to compensate.", 10);
+
+const dexterNewSession = async () => {
+  localStorage.removeItem('dexter.localSession'); // legacy
+  localStorage.removeItem('dexter.session');
+  const newDeviceId = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+  dexter.session = {
+    clientType: 'user',
+    deviceId: newDeviceId,
+    chatHistory: [],
+  };
+  localStorage.setItem('dexter.session', JSON.stringify(dexter.session));
+  return await dexterLoadSession();
+}
+
+const dexterLoadSession = async () => {
+  const _localSessionStorage = localStorage.getItem('dexter.session');
+  if (_localSessionStorage) {
+    return JSON.parse(_localSessionStorage);
+  }
+  return await dexterNewSession();
+}
+
+const dexterSaveSession = async () => {
+  localStorage.setItem('dexter.session', JSON.stringify(dexter.session));
+  return await dexterLoadSession();
+}
+
+dexterLoadSession().then((sessionData) => dexter.session = sessionData);
+
+const updateDexterSessionChatHistory = async (role, content) => {
+  dexter.session.chatHistory.push({ role: role, content: content });
+  if (dexter.session.chatHistory.length > 6) {
+    dexter.session.chatHistory = dexter.session.chatHistory.slice(-6);
+  }
+  return await dexterSaveSession();
+}
+
+const exitDexterWorkspace = async () => {
+  if (dexter.workspaceIsChanging) {
+    return;
+  };
+
+  dexter.workspaceIsChanging = true;
+  dexter.isListening = false;
+  dexter.isSpeaking = false;
+  dexter.audio = {
+    recorder: null,
+    chunks: null,
+    context: null,
+    analyser: null,
+    dataArray: null,
+    bufferLength: null,
+    silenceThreshold: 1,
+    minRecordingTime: 1750,
+    silenceTimer: null,
+    endTime: null,
+    startTime: null,
+    soundDetected: false,
+  };
+  hide(dexter.reasonerWindow);
+  hide(dexter.otherWindow);
+  hide(dexter.mainWindow);
+  unmuteDexter(false);
+  dexterStopListening();
+  disable(dexter.icon)
+  disable(dexter.iconSpinner)
+
+  await sleep(250);
+  hide(dexter.windowsContainer);
+  await sleep(250);
+  show(dexter.chatButton);
+  show(dexter.navTitle);
+  add(dexter.rootContent);
+  await sleep(250);
+
+  show(dexter.rootContent);
+  dexter.workspaceIsActive = false;
+  dexter.workspaceIsChanging = false;
+  return;
+}
+
+const enterDexterWorkspace = async () => {
+  if (dexter.workspaceIsChanging) {
+    return;
+  };
+  if (!dexter.workspaceIsLoaded) {
+    windows.forEach(windowElement => {
+      showLoadingSpinner(windowElement);
+    });
+  }
+  activate(dexter.icon);
+  activate(dexter.iconSpinner);
+  hide(dexter.rootContent);
+  await sleep(250);
+
+  remove(dexter.rootContent);
+  hide(dexter.chatButton);
+  hide(dexter.navTitle);
+  await sleep(250);
+
+  show(dexter.windowsContainer);
+  dexter.workspaceIsActive = true;
+  await sleep(250);
+  unmuteDexter(true);
+
+  show(dexter.reasonerWindow, 1);
+  show(dexter.otherWindow, 1);
+  show(dexter.mainWindow, 1);
+
+  setTimeout(() => {
+    windows.forEach(windowElement => {
+      hideLoadingSpinner(windowElement);
+    });
+    dexter.workspaceIsChanging = false;
+    dexter.workspaceIsLoaded = true;
+  }, 1500);
+  sleep(10000).then(() => hide(dexter.alert));
+  return;
+}
+
+const toggleDexterWorkspace = async () => {
+  if (dexter.workspaceIsActive) {
+    await exitDexterWorkspace();
+  } else {
+    highUsageError();
+    return await enterDexterWorkspace();
   }
 };
 
-const transcriptionAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}${dexterConfig.api.transcription}` : `${dexterConfig.baseUrl}${dexterConfig.api.transcription}`;
-const promptAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}${dexterConfig.api.prompt}` : `${dexterConfig.baseUrl}${dexterConfig.api.prompt}`;
-const ttsAPI = dexterConfig.isLocal ? `${dexterConfig.baseUrl}${dexterConfig.api.tts}` : `${dexterConfig.baseUrl}${dexterConfig.api.tts}`;
-
-function newSession() {
-  let sessionData = localStorage.getItem('dexter.localSession');
-
-  if (sessionData === undefined || sessionData === null) {
-    const newSessionId = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
-    const newSessionData = dexterConfig.defaultSessionString(newSessionId);
-    localStorage.setItem('dexter.localSession', newSessionData);
-    sessionData = localStorage.getItem('dexter.localSession');
-  }
-
-  sessionData = JSON.parse(sessionData);
-  return sessionData;
-};
-
-const session = newSession();
-
-function updateChatHistoryLLM(response) {
-  session.history.push({ role: 'assistant', content: response });
-  if (session.history.length > 6) {
-    session.history = session.history.slice(-6);
-  }
-  localStorage.setItem('dexter.localSession', JSON.stringify(session));
+if (dexter.icon) {
+  dexter.icon.addEventListener('click', toggleDexterWorkspace);
 }
 
-const recordButton = document.getElementById('recordButton');
-const waveform = document.getElementById('waveform');
-
-let mediaRecorder = null;
-let audioChunks = new Array();
-let isRecording = false;
-let audioContext, analyser, dataArray, bufferLength;
-
-// Initialize audio context and analyser
-function initializeAudioContext() {
-  audioContext = new AudioContext();
-  analyser = audioContext.createAnalyser();
-  bufferLength = analyser.frequencyBinCount;
-  dataArray = new Uint8Array(bufferLength);
-}
-
-// Function to start or stop recording
-async function toggleRecording() {
-  try {
-    if (isRecording) {
-      stopRecording();
-      return;
+const toggleDexterChat = async () => {
+  console.log('toggle chat.');
+  console.log(dexter);
+  if (dexter.mainWindow && !dexter.workspaceIsActive && !dexter.workspaceIsChanging) {
+    console.log('work space is not open.');
+    if (dexter.mainWindow.classList.contains('hide') || dexter.windowsContainer.classList.contains('hide')) {
+      console.log('showing...');
+      hide(dexter.reasonerWindow);
+      hide(dexter.otherWindow);
+      show(dexter.windowsContainer);
+      await sleep(250);
+      show(dexter.mainWindow);
+    } else {
+      console.log('hiding...');
+      hide(dexter.reasonerWindow);
+      hide(dexter.otherWindow);
+      hide(dexter.mainWindow);
+      await sleep(250);
+      hide(dexter.windowsContainer);
     }
-
-    startRecording();
-
-  } catch (error) {
-    console.error("Error accessing microphone:", error);
-    isRecording = false;
   }
+};
+
+if (dexter.chatButton) {
+  dexter.chatButton.addEventListener('click', toggleDexterChat);
 }
 
-// Function to start recording
-async function startRecording() {
-  if (recordButton.disabled) {
+const drawDexterWaveform = async () => {
+  if (!dexter.isListening && !dexter.isSpeaking) {
     return;
   }
-  recordButton.classList.add('recording');
-  waveform.style.display = "block";
-  waveform.style.opacity = 1;
-  isRecording = true;
 
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  mediaRecorder = new MediaRecorder(stream);
-  audioChunks = new Array(); // Reset audioChunks
-
-  mediaRecorder.addEventListener("dataavailable", event => {
-    audioChunks.push(event.data);
-  });
-
-  mediaRecorder.addEventListener("stop", handleRecordingStop);
-  mediaRecorder.start();
-
-  // Initialize audioContext and analyser only once
-  if (!audioContext) {
-    initializeAudioContext();
-  }
-
-  // Connect the user's microphone to the analyser
-  const source = audioContext.createMediaStreamSource(stream);
-  source.connect(analyser);
-
-  // Start checking for silence and drawing the waveform
-  checkSilence();
-}
-
-// Function to stop recording
-function stopRecording() {
-  if (mediaRecorder) {
-    mediaRecorder.stop();
-  }
-  recordButton.classList.remove('recording');
-  waveform.style.display = "none";
-  waveform.style.opacity = 0;
-  isRecording = false;
-}
-
-// Function to handle the recording stop event
-function handleRecordingStop() {
-  isRecording = false;
-
-  const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-  const formData = new FormData();
-  formData.append("audio", audioBlob, "recording.wav");
-
-  processAudio(formData);
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Function to process the recorded audio
-async function processAudio(formData) {
-  recordButton.disabled = true;
-  recordButton.classList.remove("bx-microphone");
-  recordButton.classList.add("bx-loader", "spin");
-
-  try {
-
-    // Convert the users speech input to text using the Easter Company transcription API
-    const transcriptionResponse = await fetch(transcriptionAPI, {
-      method: 'POST',
-      body: formData,
-      //credentials: 'include'
-    });
-
-    // Push the text data to the conversation log.
-    const transcriptionData = await transcriptionResponse.json();
-    const userPrompt = transcriptionData.text;
-    session.history.push({ role: 'user', content: userPrompt });
-
-    // Attempt to process request with Dexnet
-    sendMessageToDexnet()
-
-    // Keep checking if the network handled the request
-    while (session.history[session.history.length - 1].role === "user") {
-      await sleep(33);
-    }
-
-    // Convert the last response to speech via the tts API
-    const speakResponse = await fetch(ttsAPI, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ text: session.history[session.history.length - 1].content }),
-    });
-
-    // Get the audio as a byte array
-    const audioBytes = await speakResponse.arrayBuffer();
-
-    // Decode the audio data
-    audioContext.decodeAudioData(audioBytes, function (buffer) {
-      // Create an audio source node
-      const source = audioContext.createBufferSource();
-      source.buffer = buffer;
-
-      // Connect the source to the analyser and destination (output)
-      source.connect(analyser);
-      source.connect(audioContext.destination);
-
-      // Start the audio playback
-      source.start(0);
-
-      // Trigger waveform visualization for Dexter's response
-      isRecording = true;
-      waveform.style.display = "block";
-      waveform.style.opacity = 1;
-      checkSilence(true); // Dexter is speaking
-
-      // Stop waveform visualization and reset isRecording when Dexter finishes speaking
-      source.onended = () => {
-        isRecording = false;
-        waveform.style.display = "none";
-        waveform.style.opacity = 0;
-      };
-    }, function (e) {
-      console.error('Error decoding audio data:', e);
-    });
-  } catch (error) {
-    console.error('Error:', error);
-  }
-
-  recordButton.disabled = false;
-  recordButton.classList.remove("bx-loader", "spin");
-  recordButton.classList.add("bx-microphone");
-}
-
-// Function to check for silence and draw the waveform
-function checkSilence(isDexterSpeaking = false) {
-  let silenceTimer = null;
-  const silenceThreshold = 1; // Adjust as needed
-  let lastSoundTime = new Date().getTime();
-  const minRecordingTime = 3000; // Adjust as needed
-  let recordingStartTime = new Date().getTime();
-
-  function monitorSilence() {
-    analyser.getByteTimeDomainData(dataArray);
-    let sum = 0;
-    for (let i = 0; i < bufferLength; i++) {
-      sum += Math.abs(dataArray[i] - 128);
-    }
-    const average = sum / bufferLength;
-    drawWaveform(average, isDexterSpeaking);
-
-    const currentTime = new Date().getTime();
-    const recordingDuration = currentTime - recordingStartTime;
-
-    // Silence detection only for user input
-    if (!isDexterSpeaking) {
-      if (average < silenceThreshold && recordingDuration > minRecordingTime) {
-        if (!silenceTimer) {
-          silenceTimer = setTimeout(() => {
-            stopRecording(); // Stop recording after a period of silence
-          }, silenceThreshold * 1000);
-        }
-      } else {
-        clearTimeout(silenceTimer);
-        silenceTimer = null;
-        lastSoundTime = new Date().getTime();
-      }
-
-      // Stop recording if no sound for an extended period
-      if (new Date().getTime() - lastSoundTime > 10 * 1000) {
-        clearTimeout(silenceTimer);
-        stopRecording();
-      }
-    }
-
-    if (isRecording) {
-      requestAnimationFrame(() => monitorSilence());
-    }
-  }
-
-  monitorSilence();
-}
-
-// Function to draw the waveform
-function drawWaveform(level, isDexterSpeaking) {
-  const canvas = document.getElementById('waveform');
-  const canvasCtx = canvas.getContext('2d');
-
+  const canvasCtx = dexter.waveform.getContext('2d');
   const navContainer = document.getElementById('nav-container');
-  canvas.width = navContainer.offsetWidth;
-  canvas.height = navContainer.offsetHeight;
 
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  dexter.iconSpinner.style.borderColor = dexter.isSpeaking ? '#f99' : '#99f';
+  dexter.waveform.width = navContainer.offsetWidth;
+  dexter.waveform.height = navContainer.offsetHeight;
+  canvasCtx.clearRect(0, 0, dexter.waveform.width, dexter.waveform.height);
 
-  const barWidth = canvas.width / bufferLength;
   let x = 0;
-
-  for (let i = 0; i < bufferLength; i++) {
-    const barHeight = (dataArray[i] / 255) * canvas.height * 2;
-
-    // Use different colors for user and Dexter
-    canvasCtx.fillStyle = isDexterSpeaking ? '#f0831955' : '#00599B55';
-    canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
+  const barWidth = dexter.waveform.width / dexter.audio.bufferLength;
+  for (let i = 0; i < dexter.audio.bufferLength; i++) {
+    if (!dexter.isListening && !dexter.isSpeaking) {
+      return;
+    }
+    const barHeight = (dexter.audio.dataArray[i] / 255) * dexter.waveform.height * 2;
+    canvasCtx.fillStyle = dexter.isSpeaking ? '#f0831966' : '#1976ed66';
+    canvasCtx.fillRect(x, dexter.waveform.height - barHeight / 2, barWidth, barHeight);
     x += barWidth;
   }
-
-  // Draw a line for the average level
-  const averageBarHeight = (level / 255) * canvas.height * 2;
-  canvasCtx.fillStyle = '#aaaaaa22';
-  canvasCtx.fillRect(0, canvas.height - averageBarHeight / 2, canvas.width, 2);
 }
 
-// Add event listener to the record button
-recordButton.addEventListener('click', toggleRecording);
+async function dexterCheckSilence() {
+
+  function analyzeAudio() {
+    dexter.audio.analyser.getByteTimeDomainData(dexter.audio.dataArray);
+    let sum = 0;
+    for (let i = 0; i < dexter.audio.bufferLength; i++) {
+      sum += Math.abs(dexter.audio.dataArray[i] - 128);
+    }
+    return sum / dexter.audio.bufferLength;
+  }
+
+  function handleSilence(average) {
+    if (average <= dexter.audio.silenceThreshold) {
+      if (!dexter.audio.silenceTimer) {
+        dexter.audio.silenceTimer = setTimeout(() => {
+          return dexter.audio.recorder.stop();
+        }, dexter.audio.silenceThreshold * 1000);
+      }
+    } else {
+      clearTimeout(dexter.audio.silenceTimer);
+      dexter.audio.silenceTimer = null;
+      dexter.audio.endTime = new Date().getTime();
+    }
+  }
+
+  function handleTimeout() {
+    if (new Date().getTime() - dexter.audio.startTime > (20 * 1000)) {
+      clearTimeout(dexter.audio.silenceTimer);
+      return dexter.audio.recorder.stop();
+    }
+  }
+
+  function monitorAudio() {
+    const average = analyzeAudio();
+    drawDexterWaveform();
+    const currentTime = new Date().getTime();
+    if (!dexter.audio.soundDetected) {
+      if (average > dexter.audio.silenceThreshold) {
+        dexter.audio.soundDetected = true;
+        if (!dexter.audio.startTime) dexter.audio.startTime = currentTime;
+        dexter.audio.endTime = currentTime;
+      }
+    } else {
+      const recordingDuration = currentTime - dexter.audio.startTime;
+      if (!dexter.isSpeaking) {
+        if (recordingDuration > dexter.audio.minRecordingTime) {
+          handleSilence(average);
+        }
+        handleTimeout();
+      }
+    }
+  }
+  monitorAudio();
+  const intervalId = setInterval(() => {
+    if (dexter.isListening || dexter.isSpeaking) {
+      monitorAudio();
+    } else {
+      clearInterval(intervalId);
+    }
+  }, 12.5);
+}
+
+async function dexterStartListening() {
+  dexter.isListening = true;
+  dexter.audio.silenceThreshold = 0.99;
+  dexter.audio.minRecordingTime = 2000;
+  dexter.voiceButton.classList.add('recording');
+  dexter.waveform.style.display = "block";
+  dexter.waveform.style.opacity = 1;
+  dexter.audio.context = new AudioContext();
+  dexter.audio.analyser = dexter.audio.context.createAnalyser();
+  dexter.audio.bufferLength = dexter.audio.analyser.frequencyBinCount;
+  dexter.audio.dataArray = new Uint8Array(dexter.audio.bufferLength);
+  dexter.audio.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  dexter.audio.chunks = new Array();
+  dexter.audio.recorder = new MediaRecorder(dexter.audio.stream);
+  dexter.audio.recorder.addEventListener("stop", async () => {
+    dexter.isListening = false;
+    if (!dexter.microphoneIsMuted) {
+      await dexterProcessAudio()
+    }
+  });
+  dexter.audio.recorder.ondataavailable = (event) => {
+    if (event.data.size > 0) {
+      const _dateTimeStamp = new Date().getTime();
+      if (_dateTimeStamp > dexter.audio.startTime) dexter.audio.chunks.push({
+        data: event.data,
+        timestamp: _dateTimeStamp,
+      });
+    }
+  };
+  dexter.audio.recorder.start();
+  dexter.audio.source = dexter.audio.context.createMediaStreamSource(dexter.audio.stream);
+  dexter.audio.source.connect(dexter.audio.analyser);
+  dexter.audio.startTime = null;
+  dexter.audio.endTime = null;
+  dexter.audio.soundDetected = false;
+  dexter.audio.silenceTimer = null;
+  dexter.audio.filteredChunks = null;
+  return dexterCheckSilence();
+}
+
+async function dexterStopListening() {
+  dexter.isListening = false;
+  dexter.voiceButton.classList.remove('recording');
+  dexter.waveform.style.display = "none";
+  dexter.waveform.style.opacity = 0;
+  if (dexter.audio.recorder) {
+    dexter.audio.recorder.stop();
+  }
+}
+
+async function toggleDexterListening() {
+  if (dexter.isListening) {
+    await dexterStopListening();
+  } else {
+    await dexterStartListening();
+  }
+}
+
+async function muteDexter() {
+  if (dexter.isListening) {
+    await dexterStopListening();
+  }
+  dexter.microphoneIsMuted = true;
+  dexter.voiceButton.classList.remove('recording');
+  dexter.voiceButton.classList.add('muted');
+  return;
+};
+
+async function unmuteDexter(startRecording = false) {
+  dexter.microphoneIsMuted = false;
+  dexter.voiceButton.classList.remove('muted');
+  if (dexter.workspaceIsActive) {
+    dexter.voiceButton.classList.add('recording');
+    if (startRecording) {
+      return await dexterStartListening();
+    }
+  }
+  return;
+};
+
+async function toggleDexterMute() {
+  if (dexter.microphoneIsMuted) {
+    return await unmuteDexter();
+  } else {
+    return await muteDexter();
+  }
+};
+
+async function toggleDexterVoiceInterface() {
+  if (dexter.workspaceIsActive) {
+    return await toggleDexterMute();
+  } else {
+    highUsageError();
+    return await toggleDexterListening();
+  }
+};
+
+if (dexter.voiceButton) {
+  dexter.voiceButton.addEventListener('click', async () => await toggleDexterVoiceInterface());
+}
+
+async function toggleProcessLoader(state, el, callbackFunc) {
+  if (state) {
+    add(el);
+    await sleep(250);
+    show(el);
+  } else {
+    hide(el);
+    await sleep(999);
+    remove(el);
+  }
+  return callbackFunc ? await callbackFunc() : null;
+}
+
+async function processLoaderStepFunction() {
+  toggleProcessLoader(dexter.isSTTing, dexter.sttLoader, async () => {
+    if (dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing) {
+      dexter.iconSpinner.style.color = '#66f';
+      dexter.iconLogo.style.color = '#66f';
+    }
+  });
+  toggleProcessLoader(dexter.isLLMing, dexter.llmLoader, async () => {
+    if (dexter.isLLMing && !dexter.isTTSing) {
+      dexter.iconSpinner.style.color = '#6f6';
+      dexter.iconLogo.style.color = '#6f6';
+    }
+  });
+  toggleProcessLoader(dexter.isTTSing, dexter.ttsLoader, async () => {
+    if (dexter.isTTSing) {
+      dexter.iconSpinner.style.color = '#f08319';
+      dexter.iconLogo.style.color = '#f08319';
+    }
+  });
+  if (!dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing) {
+    if (dexter.workspaceIsActive) {
+      dexter.iconSpinner.style.color = '#fff'
+      dexter.iconLogo.style.color = '#fff';
+    } else {
+      dexter.iconSpinner.style.color = '#fff'
+      dexter.iconLogo.style.color = '#66f';
+    }
+  }
+}
+
+step.add(processLoaderStepFunction);
+
+async function dexterSpeechRecognitionAPI(formData) {
+  try {
+    if (dexter.workspaceIsActive) {
+      dexterStartListening();
+    }
+
+    const sttResponse = await fetch(dexter.api.stt(), {
+      method: 'POST',
+      body: formData,
+    });
+
+    const sttData = await sttResponse.json();
+    if (sttData.text && sttData.language === 'en' && sttData.text !== "") {
+      updateDexterSessionChatHistory('user', sttData.text);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  dexter.isSTTing = false;
+}
+
+async function dexterProcessAudio() {
+  try {
+    dexter.isSTTing = true;
+    const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
+    const audioBlob = new Blob(blobParts, { type: "audio/wav" });
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "recording.wav");
+    await dexterSpeechRecognitionAPI(formData);
+  } catch (e) {
+    console.error(e);
+  }
+}
+//sendMessageToDexnet()
+//while (session.history[session.history.length - 1].role === "user") {
+//await sleep(33);
+//}
+/*
+const speakResponse = await fetch(ttsAPI, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    text: dexter.session.chatHistory[dexter.session.chatHistory.length - 1].content
+  }),
+});
+
+const audioBytes = await speakResponse.arrayBuffer();
+dexter.audioContext.decodeAudioData(audioBytes, function (buffer) {
+  const source = audioContext.createBufferSource();
+  source.buffer = buffer;
+  source.connect(analyser);
+  source.connect(audioContext.destination);
+  source.start(0);
+  dexter.isListening = true;
+  dexter.waveform.style.display = "block";
+  dexter.waveform.style.opacity = 1;
+  checkSilence(true);
+  source.onended = () => {
+    dexter.isListening = false;
+    dexter.waveform.style.display = "none";
+    dexter.waveform.style.opacity = 0;
+  };
+});
+*/

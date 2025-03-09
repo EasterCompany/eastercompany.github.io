@@ -1,6 +1,18 @@
-// dexnet.js
-const wss_uri = window.location.hostname === "127.0.0.1" ? "ws://127.0.0.1:9501" : "wss://api.easter.company/dexnet";
-let socket = new WebSocket(wss_uri);
+/*
+*
+*     Dexter Speech Addon (JS)
+*
+*     Dexter APIs and Workspace Interface for Dexters voice-to-voice features.
+*     Include as a dependency if voice-to-voice features are requried or,
+*     exclude from project if voice features are redundent.
+*
+*/
+
+
+// Function to check for silence and draw the waveform
+
+// DEXNET ----------------------------------------------
+let socket = new WebSocket(dexter.wss);
 
 async function sendDexnetUserProcessRequest() {
   socket.send(JSON.stringify(session));
@@ -41,7 +53,7 @@ socket.onclose = function (event) {
     console.error("Connection died");
   }
   setTimeout(function () {
-    socket = new WebSocket(wss_uri);
+    socket = new WebSocket(dexterConfig.dexnetWss);
     socket.onopen = socket.onopen;
     socket.onmessage = socket.onmessage;
     socket.onclose = socket.onclose;
@@ -59,4 +71,4 @@ function sendMessageToDexnet() {
   } else {
     console.error("Dexnet connection is not established, but was expected.");
   }
-}
+};

@@ -1,10 +1,3 @@
-/*
- *  static/js/git.js
- *
- *  Handles git project specific functionality and API requests.
- *
- */
-
 const downloadGitProjectCmds = {
   'bashful-sh': {
     'bashful': {
