@@ -1,11 +1,10 @@
-.container {
-  --uib-size: 28px;
-  --uib-color: #66f;
-  --uib-speed: 1.75s;
-  position: relative;
+.loader-container {
+  --uib-size: 36px;
+  --uib-color: #6666ff66;
+  --uib-speed: 2s;
+  position: absolute;
   height: var(--uib-size);
   width: var(--uib-size);
-  animation: rotate calc(var(--uib-speed) * 4) linear infinite;
 }
 
 @keyframes rotate {
@@ -79,15 +78,38 @@
     transform: rotate(240deg);
   }
 }
+#dexter-stt-loader.loader-container {
+  background: none;
+  transform: skew(-0.06turn, 55deg);
+  animation: rotate calc(var(--uib-speed) * 2.12) linear infinite;
+}
+#dexter-stt-loader>.particle::before {
+  background-color: #6666ff;
+}
+#dexter-llm-loader.loader-container {
+  background: none;
+  transform: skew(-0.06turn, 55deg);
+  animation: rotate calc(var(--uib-speed) * 3.34) linear infinite;
+}
+#dexter-llm-loader>.particle::before {
+  background-color: #ffffff;
+}
+#dexter-tts-loader.loader-container {
+  background: none;
+  transform: skew(-0.06turn, 55deg);
+  animation: rotate calc(var(--uib-speed) * 4.89) linear infinite;
+}
+#dexter-tts-loader>.particle::before {
+  background-color: #f08319;
+}
 .particle::before {
   content: '';
   position: absolute;
   height: 17.5%;
   width: 17.5%;
   border-radius: 50%;
-  background-color: var(--uib-color);
   flex-shrink: 0;
-  transition: background-color 0.3s ease;
+  transition: background-color 2.5s ease;
   --uib-d: calc(var(--uib-delay) * var(--uib-speed));
   animation: orbit var(--uib-speed) linear var(--uib-d) infinite;
 }

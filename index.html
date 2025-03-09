@@ -6,57 +6,193 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="revised" content="2025-02-06">
     <meta name="description" content="Artificial Intelligence & Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter & Bashful products.">
     <meta property="og:title" content="Easter Company">
-    <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg">
+    <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_updated=2025-02-06">
     <meta property="og:url" content="https://easter.company">
     <meta property="og:type" content="website">
     <meta property="og:description" content="Artificial Intelligence & Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter & Bashful products.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Easter Company">
-    <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg">
+    <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_updated=2025-02-06">
     <meta name="twitter:site" content="@eastercompany">
     <meta name="twitter:creator" content="@eastercompany">
     <meta name="twitter:description" content="Artificial Intelligence & Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter & Bashful products.">
     <meta property="fb:app_id" content="1541540286236316" />
     <meta name="apple-mobile-web-app-title" content="Easter" />
-    <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg" />
-    <link rel="shortcut icon" href="/static/meta/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png" />
-    <link rel="manifest" href="/static/meta/site.webmanifest" />
+    <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_updated=2025-02-06" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_updated=2025-02-06" />
+    <link rel="shortcut icon" href="/static/meta/favicon.ico?last_updated=2025-02-06" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_updated=2025-02-06" />
+    <link rel="manifest" href="/static/meta/site.webmanifest?last_updated=2025-02-06" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
-    <link rel="stylesheet" href="/static/css/background.css">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/nav.css">
-    <link rel="stylesheet" href="/static/css/project.css">
-    <link rel="stylesheet" href="/static/css/footer.css">
+    <link rel="stylesheet" href="/static/css/background.css?last_updated=2025-02-06">
+    <link rel="stylesheet" href="/static/css/main.css?last_updated=2025-02-06">
+    <link rel="stylesheet" href="/static/css/project.css?last_updated=2025-02-06">
+    <link rel="stylesheet" href="/static/css/footer.css?last_updated=2025-02-06">
+    <link rel="stylesheet" href="/static/css/particle_loader.css?last_updated=2025-02-06">
+    <link rel="stylesheet" href="/static/css/hatch_loader.css?last_updated=2025-02-06">
+    <link rel="stylesheet" href="/static/css/windows.css?last_updated=2025-02-06">
   </head>
   <body>
     <div class='background'>
     </div>
-    <div id="nav-container" class="glass">
-      <nav>
-        <div style="justify-content:flex-start;">
-          <a href="/"><img src="/static/assets/logo/easter_logo.svg" alt="easter logo"/></a>
-          <h1 id="nav-title">Easter Company</h1>
-        </div>
-        <div style="justify-content:flex-end;">
-          <canvas id="waveform"></canvas>
-          <i id="recordButton" class="bx bx-microphone"></i>
-        </div>
-      </nav>
+    <div id="alert-banner" class="alert-banner hide">
+      <i id="alert-banner-icon" class='bx bxs-error-alt'></i><b id="alert-banner-title" class="alert-banner-title"></b>&nbsp;&nbsp;<i id="alert-banner-text" class="alert-banner-text"></i>
     </div>
-    <main>
-      <div class="hero">
-        <img src="/static/assets/logo/easter_logo.svg" alt="easter logo"/>
-        <svg viewbox="0 0 10 2">
-          <text x="5" y="1" text-anchor="middle" font-size="0.66" fill="none" stroke-width=".015" stroke="#fff" font-family="Poppins">EASTER COMPANY</text>
-        </svg>
-        <h2 style="margin:0 auto 10vh auto;color:#999;">Engineering, Education, Entertainment, Enterprise.</h2>
+    <nav id="nav-container" class="glass">
+      <canvas id="dexter-waveform"></canvas>
+      <div id="nav-left-section">
+        <div id="dexter-icon" class="dexter-icon">
+          <div id="dexter-loader" class="dexter-loader">
+            <div id="dexter-stt-loader" class="loader-container hide">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+            <div id="dexter-llm-loader" class="loader-container hide">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+            <div id="dexter-tts-loader" class="loader-container hide">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+            <i id="dexter-icon-D" class="bx bxs-diamond dexter-icon-D"></i>
+            <div id="dexter-icon-spinner" class="dexter-icon-spinner">
+              <i id="dexter-icon-O" class="bx bxs-certification dexter-icon-O"></i>
+            </div>
+          </div>
+        </div>
+        <h1 id="nav-title" class="nav-title">easter.company</h1>
       </div>
-      <div class="about-us glass">
+      <div id="nav-right-section">
+        <i id="dexter-chat-button" class="bx bxs-message-dots"></i>
+        <i id="dexter-voice-button" class="bx bx-microphone"></i>
+        <i id="dexter-signal-button" class="bx bx-no-signal"></i>
+      </div>
+    </nav>
+    <div id="windows-container" class="windows-container hide">
+      <div id="reasoner-window" class="window glass">
+        <div id="window-bar1" class="window-bar hide">
+          <div class="tab active" data-tab="tab1a">Tab 1</div>
+          <div class="tab" data-tab="tab2a">Tab 2</div>
+          <div class="tab" data-tab="tab3a">Tab 3</div>
+          <i class="fullscreen-toggle bx bx-fullscreen" data-window="window1"></i>
+        </div>
+        <div class="tab-content-loader">
+          <div class="hatch-container">
+            <div class="line"></div>
+          </div>
+        </div>
+        <div class="tab-content active hide" id="tab1a">
+        </div>
+        <div class="tab-content" id="tab2a">
+        </div>
+        <div class="tab-content" id="tab3a">Content for Tab 3</div>
+        <div class="resize-handle hide" id="resize-handle1">
+          <i class="bx bx-expand-alt" ></i>
+        </div>
+      </div>
+      <div id="main-window" class="window glass">
+        <div id="window-bar2" class="window-bar hide">
+          <div class="tab active" data-tab="tab1b">
+          </div>
+          <div class="tab" data-tab="tab2b">Tab 2</div>
+          <div class="tab" data-tab="tab3b">Tab 3</div>
+          <i class="fullscreen-toggle bx bx-fullscreen" data-window="window2"></i>
+        </div>
+        <div class="tab-content-loader">
+          <div class="hatch-container">
+            <div class="line"></div>
+          </div>
+        </div>
+        <div class="tab-content active hide" id="tab1b">
+          <div id="chat-interface"></div>
+          <div id="input-area">
+            <div id="input-resize-handle"><i class='bx bx-reflect-horizontal'></i></div>
+            <div id="input-row">
+              <textarea id="message-input" class="glass"></textarea>
+              <div id="input-row-buttons">
+                <button id="send-button"><i class='bx bx-send'></i>Chat</button>
+                <button id="search-button"><i class='bx bx-globe'></i>Search</button>
+                <button id="code-button"><i class='bx bx-code-alt'></i>Code</button>
+                <button id="attach-button"><i class='bx bx-paperclip'></i>Attach</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="tab2b">Content for Tab 2</div>
+        <div class="tab-content" id="tab3b">Content for Tab 3</div>
+        <div class="resize-handle hide" id="resize-handle2">
+          <i class='bx bx-expand-alt' ></i>
+        </div>
+      </div>
+      <div id="other-window" class="window glass">
+        <div id="window-bar3" class="window-bar hide">
+          <div class="tab active" data-tab="tab1c">Tab 1</div>
+          <div class="tab" data-tab="tab2c">Tab 2</div>
+          <div class="tab" data-tab="tab3c">Tab 3</div>
+          <i class="fullscreen-toggle bx bx-fullscreen" data-window="window3"></i>
+        </div>
+        <div class="tab-content-loader">
+          <div class="hatch-container">
+            <div class="line"></div>
+          </div>
+        </div>
+        <div class="tab-content active hide" id="tab1c">
+        </div>
+        <div class="tab-content" id="tab2c">Content for Tab 2</div>
+        <div class="tab-content" id="tab3c">Content for Tab 3</div>
+        <div class="resize-handle hide" id="resize-handle3">
+          <i class='bx bx-expand-alt' ></i>
+        </div>
+      </div>
+    </div>
+    <main id="main">
+      <div id="hero" class="hero">
+        <img src="/static/assets/logo/easter_logo.svg" alt="easter logo"/>
+        <svg viewBox="0 0 10 2">
+          <text x="5" y="1.25" text-anchor="middle" font-size="1" fill="none" stroke-width=".025" stroke="#999" font-family="Poppins">COMPANY</text>
+          <text x="5" y="0.75" text-anchor="middle" font-size="1" fill="none" stroke-width=".025" stroke="#fff" font-family="Poppins">EASTER</text>
+        </svg>
+        <h2 class="radialGlow" style="margin:-5vh 2% 15vh 2%;">Engineering, Education, Entertainment, Enterprise.</h2>
+      </div>
+      <div id="about-us" class="about-us glass">
         <div class="about-content">
           <h2>Crafting Tomorrow's Technology, Today.</h2>
           <p>At Easter Company, we're not just building software; we're architecting the future. Our core focus lies in the intersection of Artificial Intelligence, robust software development, and powerful developer tools. We believe in creating solutions that are not only innovative but also practical, efficient, and reliable.</p>
@@ -145,7 +281,7 @@
             <a href="https://github.com/bashful-sh/bashful/wiki"><button><i class="bx bx-file"></i>&nbsp;Documentation</button></a>
             <a href="https://github.com/bashful-sh/bashful"><button><i class="bx bx-code"></i>&nbsp;Source</button></a>
             <a href="https://github.com/bashful-sh/bashful/commits/DEV"><button><i class="bx bx-git-commit"></i>&nbsp;Commits</button></a>
-            <a href="https://github.com/sponsors/eastercompany/"><button><i style="color:#af4154;" class="bx bxs-heart"></i>&nbsp;Sponsor</button></a>
+            <a href="https://github.com/sponsors/eastercompany/"><button><i style="color:#f66;" class="bx bxs-heart"></i>&nbsp;Sponsor</button></a>
           </div>
         </div>
       </div>
@@ -185,7 +321,7 @@
             <a href="https://github.com/eastercompany/overlord/wiki"><button><i class="bx bx-file"></i>&nbsp;Documentation</button></a>
             <a href="https://github.com/eastercompany/overlord"><button><i class="bx bx-code"></i>&nbsp;Source</button></a>
             <a href="https://github.com/eastercompany/overlord/commits/DEV"><button><i class="bx bx-git-commit"></i>&nbsp;Commits</button></a>
-            <a href="https://github.com/sponsors/eastercompany/"><button><i style="color:#af4154;" class="bx bxs-heart"></i>&nbsp;Sponsor</button></a>
+            <a href="https://github.com/sponsors/eastercompany/"><button><i style="color:#f66;" class="bx bxs-heart"></i>&nbsp;Sponsor</button></a>
           </div>
         </div>
       </div>
@@ -234,9 +370,9 @@
         </p>
       </footer>
     </main>
-    <script src="/static/js/main.js?cache=no"></script>
-    <script src="/static/js/git.js?cache=no"></script>
-    <script src="/static/js/dexter.js?cache=no"></script>
-    <script src="/static/js/dexnet.js?cache=no"></script>
+    <script src="/static/js/main.js?last_updated=2025-02-06"></script>
+    <script src="/static/js/git_projects.js?last_updated=2025-02-06"></script>
+    <script src="/static/js/dexter.js?last_updated=2025-02-06"></script>
+    <script src="/static/js/windows.js?last_updated=2025-02-06"></script>
   </body>
 </html>
