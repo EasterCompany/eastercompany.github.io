@@ -23,7 +23,11 @@ const dexter = {
   workspaceIsChanging: false,
   workspaceIsLoaded: false,
   // User/Dexter Session
-  session: null,
+  session: {
+    clientType: 'user',
+    deviceId: null,
+    chatHistory: [],
+  },
   // DOM Elements
   icon: document.getElementById('dexter-icon'),
   iconLogo: document.getElementById('dexter-icon-D'),
@@ -90,7 +94,7 @@ const dexterNewSession = async () => {
   };
   localStorage.setItem('dexter.session', JSON.stringify(dexter.session));
   return await dexterLoadSession();
-}
+};
 
 const dexterLoadSession = async () => {
   const _localSessionStorage = localStorage.getItem('dexter.session');
@@ -100,14 +104,87 @@ const dexterLoadSession = async () => {
   }
 
   return await dexterNewSession();
-}
+};
 
 const dexterSaveSession = async () => {
   localStorage.setItem('dexter.session', JSON.stringify(dexter.session));
   return await dexterLoadSession();
-}
+};
 
-dexterLoadSession().then((sessionData) => dexter.session = sessionData);
+dexterLoadSession().then((sessionData) => {
+  dexter.session = sessionData;
+  dexter.session.chatHistory.forEach(x => addMessage(x.role, x.content));
+});
+
+const dexterLLMAPI = async () => {
+  dexter.isLLMing = true;
+  const response = await fetch(dexter.api.llm(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      session: dexter.session
+    }),
+  });
+
+  dexter.isLLMing = false;
+  if (!response.ok) {
+    const errorData = await response.json();
+    return {
+      error: {
+        status: response.status,
+        message: response.statusText,
+        details: errorData
+      }
+    };
+  }
+
+  return response.json()
+};
+
+const dexterTTSAPI = async (message) => {
+  dexter.isTTSing = true;
+  dexter.isSpeaking = true;
+
+  try {
+    const speakResponse = await fetch(dexter.api.tts(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tts: message
+      }),
+    });
+    dexter.isTTSing = false;
+
+    if (!speakResponse.ok) {
+      return;
+    }
+
+    const audioBytes = await speakResponse.arrayBuffer();
+    dexter.audio.context.decodeAudioData(audioBytes, function (buffer) {
+      const source = dexter.audio.context.createBufferSource();
+      source.buffer = buffer;
+      source.connect(dexter.audio.analyser);
+      source.connect(dexter.audio.context.destination);
+      source.start(0);
+      dexter.waveform.style.display = "block";
+      dexter.waveform.style.opacity = 1;
+      dexterCheckSilence(true);
+      source.onended = () => {
+        dexter.waveform.style.display = "none";
+        dexter.waveform.style.opacity = 0;
+        dexter.isSpeaking = false;
+      };
+    });
+  } catch (e) {
+    dexter.isTTSing = false;
+    dexter.isSpeaking = false;
+    console.error(e)
+  }
+}
 
 const updateDexterSessionChatHistory = async (role, content) => {
   dexter.session.chatHistory.push({ role: role, content: content });
@@ -118,7 +195,28 @@ const updateDexterSessionChatHistory = async (role, content) => {
 
   await dexterSaveSession();
   addMessage(role, content);
-}
+
+  if (role.toLowerCase() === "user") {
+    if (!dexter.isLLMing) {
+      const llmResponse = await dexterLLMAPI();
+      if (llmResponse === null) {
+        updateDexterSessionChatHistory("system", "INTERNAL SERVER ERROR");
+        return;
+      } else if (llmResponse.error !== undefined) {
+        updateDexterSessionChatHistory("system", llmResponse.error.message);
+        return;
+      } else if (llmResponse.choices) {
+        updateDexterSessionChatHistory("assistant", llmResponse.choices[0].text);
+        return;
+      }
+    } else {
+      console.log("Dexter is busy...");
+    }
+  } else if (role.toLowerCase() === "assistant") {
+    await dexterTTSAPI(content);
+    return;
+  }
+};
 
 const exitDexterWorkspace = async () => {
   if (dexter.workspaceIsChanging) {
@@ -470,24 +568,28 @@ step.add(processLoaderStepFunction);
 
 async function dexterSpeechRecognitionAPI(formData) {
   try {
-    if (dexter.workspaceIsActive) {
-      dexterStartListening();
-    }
-
     const sttResponse = await fetch(dexter.api.stt(), {
       method: 'POST',
       body: formData,
     });
-
+    dexter.isSTTing = false;
     const sttData = await sttResponse.json();
     if (sttData.text && sttData.language === 'en' && sttData.text !== "") {
       updateDexterSessionChatHistory('user', sttData.text);
     }
   } catch (e) {
     console.error(e);
+    dexter.isSTTing = false;
   }
-  dexter.isSTTing = false;
 }
+
+sendButton.addEventListener('click', () => {
+  const messageText = messageInput.value.trim();
+  if (messageText) {
+    updateDexterSessionChatHistory('user', messageText);
+    messageInput.value = '';
+  }
+});
 
 async function dexterProcessAudio() {
   try {
@@ -496,9 +598,10 @@ async function dexterProcessAudio() {
     const audioBlob = new Blob(blobParts, { type: "audio/wav" });
     const formData = new FormData();
     formData.append("audio", audioBlob, "recording.wav");
-    await dexterSpeechRecognitionAPI(formData);
+    dexterSpeechRecognitionAPI(formData);
   } catch (e) {
     console.error(e);
+    dexter.isSTTing = false;
   }
 }
 
@@ -507,31 +610,4 @@ async function dexterProcessAudio() {
 //await sleep(33);
 //}
 /*
-const speakResponse = await fetch(ttsAPI, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    text: dexter.session.chatHistory[dexter.session.chatHistory.length - 1].content
-  }),
-});
-
-const audioBytes = await speakResponse.arrayBuffer();
-dexter.audioContext.decodeAudioData(audioBytes, function (buffer) {
-  const source = audioContext.createBufferSource();
-  source.buffer = buffer;
-  source.connect(analyser);
-  source.connect(audioContext.destination);
-  source.start(0);
-  dexter.isListening = true;
-  dexter.waveform.style.display = "block";
-  dexter.waveform.style.opacity = 1;
-  checkSilence(true);
-  source.onended = () => {
-    dexter.isListening = false;
-    dexter.waveform.style.display = "none";
-    dexter.waveform.style.opacity = 0;
-  };
-});
 */
