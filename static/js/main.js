@@ -4,10 +4,15 @@
  *    Extends JavaScript with simple APIs for interfacing
  *    with the Overlord ecosystem.
  */
+const navTitleEl = document.querySelector("#nav-title");
 const alertBannerEl = document.querySelector('#alert-banner');
 const alertBannerTitleEl = document.querySelector('#alert-banner-title');
 const alertBannerTextEl = document.querySelector('#alert-banner-text');
 const alertBannerIconEl = document.querySelector('#alert-banner-icon');
+
+if (navTitleEl) {
+  navTitleEl.innerText = window.location.hostname;
+}
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
