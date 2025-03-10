@@ -247,6 +247,7 @@
 .user-message {
   text-align: right;
   margin-left: auto;
+  margin-right: 24px;
   align-self: flex-end;
   border: 1px solid #55557545;
   border-top: 0;
@@ -255,6 +256,7 @@
 }
 
 .assistant-message {
+  margin-left: 24px;
   margin-right: auto;
   align-self: flex-start;
   border: 1px solid #75555545;

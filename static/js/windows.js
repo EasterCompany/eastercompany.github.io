@@ -107,23 +107,9 @@ inputResizeHandle.addEventListener('mousedown', (e) => {
   }
 });
 
-// Send Message
-sendButton.addEventListener('click', () => {
-  const messageText = messageInput.value.trim();
-  if (messageText) {
-    addMessage('user', messageText);
-    messageInput.value = '';
-    setTimeout(() => {
-      addMessage('assistant', 'Assistant: Received your message.');
-    }, 500);
-    setTimeout(() => {
-      addMessage('system', 'System: message sent');
-    }, 1000);
-  }
-});
-
 function addMessage(type, text) {
   const messageDiv = document.createElement('div');
+
   messageDiv.textContent = text;
   messageDiv.classList.add('message', `${type}-message`);
   chatInterface.appendChild(messageDiv);
