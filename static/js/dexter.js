@@ -223,6 +223,9 @@ const toggleDexterChat = async () => {
       show(dexter.windowsContainer);
       await sleep(250);
       show(dexter.mainWindow);
+      setTimeout(() => {
+        hideLoadingSpinner(dexter.mainWindow);
+      }, 1500);
     } else {
       console.log('hiding...');
       hide(dexter.reasonerWindow);
