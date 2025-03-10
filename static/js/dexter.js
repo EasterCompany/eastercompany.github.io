@@ -94,9 +94,11 @@ const dexterNewSession = async () => {
 
 const dexterLoadSession = async () => {
   const _localSessionStorage = localStorage.getItem('dexter.session');
+
   if (_localSessionStorage) {
     return JSON.parse(_localSessionStorage);
   }
+
   return await dexterNewSession();
 }
 
@@ -109,17 +111,19 @@ dexterLoadSession().then((sessionData) => dexter.session = sessionData);
 
 const updateDexterSessionChatHistory = async (role, content) => {
   dexter.session.chatHistory.push({ role: role, content: content });
+
   if (dexter.session.chatHistory.length > 6) {
     dexter.session.chatHistory = dexter.session.chatHistory.slice(-6);
   }
-  return await dexterSaveSession();
+
+  await dexterSaveSession();
+  addMessage(role, content);
 }
 
 const exitDexterWorkspace = async () => {
   if (dexter.workspaceIsChanging) {
     return;
   };
-
   dexter.workspaceIsChanging = true;
   dexter.isListening = false;
   dexter.isSpeaking = false;
@@ -163,11 +167,6 @@ const enterDexterWorkspace = async () => {
   if (dexter.workspaceIsChanging) {
     return;
   };
-  if (!dexter.workspaceIsLoaded) {
-    windows.forEach(windowElement => {
-      showLoadingSpinner(windowElement);
-    });
-  }
   activate(dexter.icon);
   activate(dexter.iconSpinner);
   hide(dexter.rootContent);
@@ -194,7 +193,6 @@ const enterDexterWorkspace = async () => {
     dexter.workspaceIsChanging = false;
     dexter.workspaceIsLoaded = true;
   }, 1500);
-  sleep(10000).then(() => hide(dexter.alert));
   return;
 }
 
@@ -212,12 +210,8 @@ if (dexter.icon) {
 }
 
 const toggleDexterChat = async () => {
-  console.log('toggle chat.');
-  console.log(dexter);
   if (dexter.mainWindow && !dexter.workspaceIsActive && !dexter.workspaceIsChanging) {
-    console.log('work space is not open.');
     if (dexter.mainWindow.classList.contains('hide') || dexter.windowsContainer.classList.contains('hide')) {
-      console.log('showing...');
       hide(dexter.reasonerWindow);
       hide(dexter.otherWindow);
       show(dexter.windowsContainer);
@@ -227,7 +221,6 @@ const toggleDexterChat = async () => {
         hideLoadingSpinner(dexter.mainWindow);
       }, 1500);
     } else {
-      console.log('hiding...');
       hide(dexter.reasonerWindow);
       hide(dexter.otherWindow);
       hide(dexter.mainWindow);
@@ -508,6 +501,7 @@ async function dexterProcessAudio() {
     console.error(e);
   }
 }
+
 //sendMessageToDexnet()
 //while (session.history[session.history.length - 1].role === "user") {
 //await sleep(33);

@@ -113,12 +113,9 @@ sendButton.addEventListener('click', () => {
   if (messageText) {
     addMessage('user', messageText);
     messageInput.value = '';
-
-    // Simulate assistant reply
     setTimeout(() => {
       addMessage('assistant', 'Assistant: Received your message.');
     }, 500);
-
     setTimeout(() => {
       addMessage('system', 'System: message sent');
     }, 1000);
