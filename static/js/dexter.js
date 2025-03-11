@@ -122,8 +122,11 @@ const endDexterOfTransaction = () => {
   dexter.isSTTing = false;
   dexter.isLLMing = false;
   dexter.isTTSing = false;
+  dexter.microphoneIsMuted = false;
   dexter.waveform.style.display = "none";
   dexter.waveform.style.opacity = 0;
+  dexter.voiceButton.classList.remove("muted");
+  dexter.voiceButton.classList.remove("recording");
   if (dexter.workspaceIsActive) {
     dexterStartListening();
   }
