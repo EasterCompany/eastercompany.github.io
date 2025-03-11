@@ -135,9 +135,6 @@ const dexterSTTAPI = async (formData) => {
   try {
     const sttResponse = await fetch(dexter.api.stt(), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body: formData,
     });
     dexter.isSTTing = false;
