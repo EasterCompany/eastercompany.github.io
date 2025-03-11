@@ -134,8 +134,10 @@ const endDexterOfTransaction = () => {
 const dexterSTTAPI = async (formData) => {
   try {
     const sttResponse = await fetch(dexter.api.stt(), {
-      mode: 'no-cors',
       method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
       body: formData,
     });
     dexter.isSTTing = false;
@@ -153,7 +155,6 @@ const dexterChatAPI = async () => {
   dexter.isLLMing = true;
   try {
     const response = await fetch(dexter.api.chat(), {
-      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -186,7 +187,6 @@ const dexterTTSAPI = async (message) => {
 
   try {
     const speakResponse = await fetch(dexter.api.tts(), {
-      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -629,10 +629,3 @@ async function dexterProcessAudio() {
     dexter.isSTTing = false;
   }
 }
-
-//sendMessageToDexnet()
-//while (session.history[session.history.length - 1].role === "user") {
-//await sleep(33);
-//}
-/*
-*/
