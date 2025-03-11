@@ -51,7 +51,7 @@ const dexter = {
 const defaultDexterAPIContext = () => {
   return {
     stt: () => `${dexter.apiHost}/stt`,
-    llm: () => `${dexter.apiHost}/llm`,
+    chat: () => `${dexter.apiHost}/chat`,
     tts: () => `${dexter.apiHost}/tts`,
     net: () => `${dexter.wssHost}/net`
   };
@@ -116,6 +116,19 @@ dexterLoadSession().then((sessionData) => {
   dexter.session.chatHistory.forEach(x => addMessage(x.role, x.content));
 });
 
+const endDexterOfTransaction = () => {
+  dexter.isListening = false;
+  dexter.isSpeaking = false;
+  dexter.isSTTing = false;
+  dexter.isLLMing = false;
+  dexter.isTTSing = false;
+  dexter.waveform.style.display = "none";
+  dexter.waveform.style.opacity = 0;
+  if (dexter.workspaceIsActive) {
+    dexterStartListening();
+  }
+}
+
 const dexterSTTAPI = async (formData) => {
   try {
     const sttResponse = await fetch(dexter.api.stt(), {
@@ -129,35 +142,38 @@ const dexterSTTAPI = async (formData) => {
     }
   } catch (e) {
     console.error(e);
-    dexter.isSTTing = false;
+    endDexterOfTransaction();
   }
 }
 
-const dexterLLMAPI = async () => {
+const dexterChatAPI = async () => {
   dexter.isLLMing = true;
-  const response = await fetch(dexter.api.llm(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      session: dexter.session
-    }),
-  });
-
-  dexter.isLLMing = false;
-  if (!response.ok) {
-    const errorData = await response.json();
-    return {
-      error: {
-        status: response.status,
-        message: response.statusText,
-        details: errorData
-      }
-    };
+  try {
+    const response = await fetch(dexter.api.chat(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        session: dexter.session
+      }),
+    });
+    if (!response.ok) {
+      endDexterOfTransaction();
+      const errorData = await response.json();
+      return {
+        error: {
+          status: response.status,
+          message: response.statusText,
+          details: errorData
+        }
+      };
+    }
+    dexter.isLLMing = false;
+    return response.json()
+  } catch {
+    endDexterOfTransaction();
   }
-
-  return response.json()
 };
 
 const dexterTTSAPI = async (message) => {
@@ -191,17 +207,11 @@ const dexterTTSAPI = async (message) => {
       dexter.waveform.style.opacity = 1;
       dexterCheckSilence(true);
       source.onended = () => {
-        dexter.waveform.style.display = "none";
-        dexter.waveform.style.opacity = 0;
-        dexter.isSpeaking = false;
-        if (dexter.workspaceIsActive) {
-          return dexterStartListening();
-        }
+        endDexterOfTransaction();
       };
     });
   } catch (e) {
-    dexter.isTTSing = false;
-    dexter.isSpeaking = false;
+    endDexterOfTransaction();
     console.error(e)
   }
 }
@@ -218,7 +228,7 @@ const updateDexterSessionChatHistory = async (role, content) => {
 
   if (role.toLowerCase() === "user") {
     if (!dexter.isLLMing) {
-      const llmResponse = await dexterLLMAPI();
+      const llmResponse = await dexterChatAPI();
       if (llmResponse === null) {
         updateDexterSessionChatHistory("system", "INTERNAL SERVER ERROR");
         return;
@@ -243,8 +253,9 @@ const exitDexterWorkspace = async () => {
     return;
   };
   dexter.workspaceIsChanging = true;
-  dexter.isListening = false;
-  dexter.isSpeaking = false;
+  if (dexter.audio.recorder) {
+    dexter.audio.recorder.stop();
+  }
   dexter.audio = {
     recorder: null,
     chunks: null,
@@ -278,6 +289,7 @@ const exitDexterWorkspace = async () => {
   show(dexter.rootContent);
   dexter.workspaceIsActive = false;
   dexter.workspaceIsChanging = false;
+  endDexterOfTransaction();
   return;
 }
 
