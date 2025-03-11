@@ -133,19 +133,21 @@ const endDexterOfTransaction = () => {
 
 const dexterSTTAPI = async (formData) => {
   try {
-    console.log("formData:", formData); // Add this line to log formData
     const sttResponse = await fetch(dexter.api.stt(), {
-      mode: 'no-cors',
       method: 'POST',
       body: formData,
     });
     dexter.isSTTing = false;
+
+    console.log(sttResponse);
     const sttData = await sttResponse.json();
+
     if (sttData.stt) {
       updateDexterSessionChatHistory('user', sttData.stt);
     }
+
   } catch (e) {
-    console.error(e);
+    console.error("Transcription Error:", e);
     endDexterOfTransaction();
   }
 };
