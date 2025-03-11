@@ -116,6 +116,23 @@ dexterLoadSession().then((sessionData) => {
   dexter.session.chatHistory.forEach(x => addMessage(x.role, x.content));
 });
 
+const dexterSTTAPI = async (formData) => {
+  try {
+    const sttResponse = await fetch(dexter.api.stt(), {
+      method: 'POST',
+      body: formData,
+    });
+    dexter.isSTTing = false;
+    const sttData = await sttResponse.json();
+    if (sttData.text && sttData.language === 'en' && sttData.text !== "") {
+      updateDexterSessionChatHistory('user', sttData.text);
+    }
+  } catch (e) {
+    console.error(e);
+    dexter.isSTTing = false;
+  }
+}
+
 const dexterLLMAPI = async () => {
   dexter.isLLMing = true;
   const response = await fetch(dexter.api.llm(), {
@@ -205,8 +222,8 @@ const updateDexterSessionChatHistory = async (role, content) => {
       } else if (llmResponse.error !== undefined) {
         updateDexterSessionChatHistory("system", llmResponse.error.message);
         return;
-      } else if (llmResponse.choices) {
-        updateDexterSessionChatHistory("assistant", llmResponse.choices[0].text);
+      } else if (llmResponse.llm) {
+        updateDexterSessionChatHistory("assistant", llmResponse.llm);
         return;
       }
     } else {
@@ -566,23 +583,6 @@ async function processLoaderStepFunction() {
 
 step.add(processLoaderStepFunction);
 
-async function dexterSpeechRecognitionAPI(formData) {
-  try {
-    const sttResponse = await fetch(dexter.api.stt(), {
-      method: 'POST',
-      body: formData,
-    });
-    dexter.isSTTing = false;
-    const sttData = await sttResponse.json();
-    if (sttData.text && sttData.language === 'en' && sttData.text !== "") {
-      updateDexterSessionChatHistory('user', sttData.text);
-    }
-  } catch (e) {
-    console.error(e);
-    dexter.isSTTing = false;
-  }
-}
-
 sendButton.addEventListener('click', () => {
   const messageText = messageInput.value.trim();
   if (messageText) {
@@ -598,7 +598,7 @@ async function dexterProcessAudio() {
     const audioBlob = new Blob(blobParts, { type: "audio/wav" });
     const formData = new FormData();
     formData.append("audio", audioBlob, "recording.wav");
-    dexterSpeechRecognitionAPI(formData);
+    dexterSTTAPI(formData);
   } catch (e) {
     console.error(e);
     dexter.isSTTing = false;
