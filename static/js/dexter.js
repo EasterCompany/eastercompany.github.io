@@ -51,9 +51,8 @@ const dexter = {
 const defaultDexterAPIContext = () => {
   return {
     stt: () => `${dexter.apiHost}/stt`,
-    chat: () => `${dexter.apiHost}/chat`,
+    chat: () => `${dexter.apiHost}/net/chat`,
     tts: () => `${dexter.apiHost}/tts`,
-    net: () => `${dexter.wssHost}/net`
   };
 };
 dexter.api = defaultDexterAPIContext();
