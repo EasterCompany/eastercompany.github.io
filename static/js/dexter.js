@@ -135,8 +135,9 @@ const dexterSTTAPI = async (formData) => {
   try {
     console.log("formData:", formData); // Add this line to log formData
     const sttResponse = await fetch(dexter.api.stt(), {
+      mode: 'no-cors',
       method: 'POST',
-      body: formData, // Remove the content-type header, the browser will set it correctly.
+      body: formData,
     });
     dexter.isSTTing = false;
     const sttData = await sttResponse.json();
