@@ -124,8 +124,8 @@ const dexterSTTAPI = async (formData) => {
     });
     dexter.isSTTing = false;
     const sttData = await sttResponse.json();
-    if (sttData.text && sttData.language === 'en' && sttData.text !== "") {
-      updateDexterSessionChatHistory('user', sttData.text);
+    if (sttData.stt) {
+      updateDexterSessionChatHistory('user', sttData.stt);
     }
   } catch (e) {
     console.error(e);
@@ -194,6 +194,9 @@ const dexterTTSAPI = async (message) => {
         dexter.waveform.style.display = "none";
         dexter.waveform.style.opacity = 0;
         dexter.isSpeaking = false;
+        if (dexter.workspaceIsActive) {
+          return dexterStartListening();
+        }
       };
     });
   } catch (e) {
@@ -452,9 +455,18 @@ async function dexterStartListening() {
   dexter.audio.chunks = new Array();
   dexter.audio.recorder = new MediaRecorder(dexter.audio.stream);
   dexter.audio.recorder.addEventListener("stop", async () => {
-    dexter.isListening = false;
     if (!dexter.microphoneIsMuted) {
-      await dexterProcessAudio()
+      dexter.voiceButton.classList.remove('recording');
+      dexter.waveform.style.display = "none";
+      dexter.waveform.style.opacity = 0;
+      dexter.audio.soundDetected = false;
+      dexter.isListening = false;
+      dexter.isSTTing = true;
+      dexterProcessAudio()
+    } else {
+      dexter.audio.soundDetected = false;
+      dexter.isListening = false;
+      dexter.isSTTing = false;
     }
   });
   dexter.audio.recorder.ondataavailable = (event) => {
@@ -478,10 +490,6 @@ async function dexterStartListening() {
 }
 
 async function dexterStopListening() {
-  dexter.isListening = false;
-  dexter.voiceButton.classList.remove('recording');
-  dexter.waveform.style.display = "none";
-  dexter.waveform.style.opacity = 0;
   if (dexter.audio.recorder) {
     dexter.audio.recorder.stop();
   }
