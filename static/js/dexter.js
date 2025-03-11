@@ -133,9 +133,10 @@ const endDexterOfTransaction = () => {
 
 const dexterSTTAPI = async (formData) => {
   try {
+    console.log("formData:", formData); // Add this line to log formData
     const sttResponse = await fetch(dexter.api.stt(), {
       method: 'POST',
-      body: formData,
+      body: formData, // Remove the content-type header, the browser will set it correctly.
     });
     dexter.isSTTing = false;
     const sttData = await sttResponse.json();
@@ -146,7 +147,7 @@ const dexterSTTAPI = async (formData) => {
     console.error(e);
     endDexterOfTransaction();
   }
-}
+};
 
 const dexterChatAPI = async () => {
   dexter.isLLMing = true;
@@ -619,7 +620,7 @@ async function dexterProcessAudio() {
     const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
     const audioBlob = new Blob(blobParts, { type: "audio/wav" });
     const formData = new FormData();
-    formData.append("audio", audioBlob, "recording.wav");
+    formData.append("audio", audioBlob, "audio.wav");
     dexterSTTAPI(formData);
   } catch (e) {
     console.error(e);
