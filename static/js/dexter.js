@@ -29,9 +29,11 @@ const dexter = {
     chatHistory: [],
   },
   // DOM Elements
+  nav: document.getElementById('nav-container'),
   icon: document.getElementById('dexter-icon'),
   iconLogo: document.getElementById('dexter-icon-D'),
   iconSpinner: document.getElementById('dexter-icon-O'),
+  bodyContent: document.getElementsByTagName('body')[0],
   rootContent: document.getElementById('main'),
   navTitle: document.getElementById('nav-title'),
   workspaceButton: document.getElementById('dexter-workspace-button'),
@@ -302,6 +304,8 @@ const enterDexterWorkspace = async () => {
   if (dexter.workspaceIsChanging) {
     return;
   };
+  dexter.nav.style.background = ``;
+  dexter.mainWindow.style.background = ``;
   dexter.workspaceIsChanging = true;
   document.body.requestFullscreen();
 
@@ -355,10 +359,14 @@ const toggleDexterChat = async () => {
       show(dexter.windowsContainer);
       await sleep(250);
       show(dexter.mainWindow);
+      dexter.nav.style.background = `rgba(20,20,29,0.95)`;
+      dexter.mainWindow.style.background = `rgba(20,20,29,0.95)`;
       setTimeout(() => {
         hideLoadingSpinner(dexter.mainWindow);
       }, 1500);
     } else {
+      dexter.nav.style.background = ``;
+      dexter.mainWindow.style.background = ``;
       hide(dexter.reasonerWindow);
       hide(dexter.otherWindow);
       hide(dexter.mainWindow);
@@ -492,10 +500,12 @@ async function dexterStartListening() {
   dexter.audio.recorder.ondataavailable = (event) => {
     if (event.data.size > 0) {
       const _dateTimeStamp = new Date().getTime();
-      if (_dateTimeStamp > dexter.audio.startTime) dexter.audio.chunks.push({
-        data: event.data,
-        timestamp: _dateTimeStamp,
-      });
+      if (_dateTimeStamp > dexter.audio.startTime) {
+        if (dexter.audio.chunks) dexter.audio.chunks.push({
+          data: event.data,
+          timestamp: _dateTimeStamp,
+        });
+      }
     }
   };
   dexter.audio.recorder.start();
@@ -567,13 +577,11 @@ if (dexter.voiceButton) {
 }
 
 async function toggleProcessLoader(state, el, callbackFunc) {
-  if (state) {
+  if (state && (el.classList.contains('hide') || el.classList.contains('remove'))) {
     add(el);
-    await sleep(250);
     show(el);
-  } else {
+  } else if (!state) {
     hide(el);
-    await sleep(999);
     remove(el);
   }
   return callbackFunc ? await callbackFunc() : null;
@@ -622,6 +630,7 @@ sendButton.addEventListener('click', () => {
 async function dexterProcessAudio() {
   try {
     dexter.isSTTing = true;
+    if (!dexter.audio.chunks) return;
     const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
     const audioBlob = new Blob(blobParts, { type: "audio/wav" });
     const formData = new FormData();
