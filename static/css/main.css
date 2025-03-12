@@ -292,6 +292,16 @@ nav {
   cursor: pointer;
 }
 
+#nav-title {
+  display: none;
+}
+
+@media only screen and (min-width: 720px) {
+  #nav-title {
+    display: flex;
+  }
+}
+
 .dexter-icon {
   z-index: 1;
   display: flex;
