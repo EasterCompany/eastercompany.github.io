@@ -257,6 +257,7 @@ const exitDexterWorkspace = async () => {
     return;
   };
   dexter.workspaceIsChanging = true;
+  document.exitFullscreen();
   if (dexter.audio.recorder) {
     dexter.audio.recorder.stop();
   }
@@ -301,6 +302,9 @@ const enterDexterWorkspace = async () => {
   if (dexter.workspaceIsChanging) {
     return;
   };
+  dexter.workspaceIsChanging = true;
+  document.body.requestFullscreen();
+
   activate(dexter.icon);
   activate(dexter.iconSpinner);
   hide(dexter.rootContent);
