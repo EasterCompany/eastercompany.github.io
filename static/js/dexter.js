@@ -138,8 +138,6 @@ const dexterSTTAPI = async (formData) => {
       body: formData,
     });
     dexter.isSTTing = false;
-
-    console.log(sttResponse);
     const sttData = await sttResponse.json();
 
     if (sttData.stt) {
@@ -503,7 +501,7 @@ async function dexterStartListening() {
   dexter.audio.endTime = null;
   dexter.audio.soundDetected = false;
   dexter.audio.silenceTimer = null;
-  dexter.audio.filteredChunks = null;
+  dexter.audio.filteredChunks = new Array();
   return dexterCheckSilence();
 }
 
