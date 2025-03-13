@@ -661,3 +661,33 @@ button {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+#dexter-webview {
+  cursor: pointer;
+  user-select: none;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  border: none;
+  outline: none;
+}
+
+#dexter-codeview {
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  border: none;
+  outline: none;
+}
+
+#dexter-fileview {
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  border: none;
+  outline: none;
+}

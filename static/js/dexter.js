@@ -128,7 +128,7 @@ const endDexterOfTransaction = () => {
   dexter.waveform.style.opacity = 0;
   dexter.voiceButton.classList.remove("muted");
   dexter.voiceButton.classList.remove("recording");
-  if (dexter.workspaceIsActive) {
+  if (!dexter.isListening && !dexter.isSpeaking && !dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing && dexter.workspaceIsActive) {
     dexterStartListening();
   }
 }
@@ -548,7 +548,7 @@ async function unmuteDexter(startRecording = false) {
   dexter.voiceButton.classList.remove('muted');
   if (dexter.workspaceIsActive) {
     dexter.voiceButton.classList.add('recording');
-    if (startRecording) {
+    if (startRecording && !dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing) {
       return await dexterStartListening();
     }
   }
@@ -614,6 +614,9 @@ async function processLoaderStepFunction() {
       dexter.iconSpinner.style.color = '#fff'
       dexter.iconLogo.style.color = '#66f';
     }
+    if (!dexter.isListening && !dexter.isSpeaking && dexter.workspaceIsActive) {
+      dexterStartListening();
+    }
   }
 }
 
@@ -630,7 +633,9 @@ sendButton.addEventListener('click', () => {
 async function dexterProcessAudio() {
   try {
     dexter.isSTTing = true;
-    if (!dexter.audio.chunks) return;
+    if (!dexter.audio.chunks) {
+      return;
+    }
     const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
     const audioBlob = new Blob(blobParts, { type: "audio/wav" });
     const formData = new FormData();
