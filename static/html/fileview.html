@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
+  <title>Dexter File View</title>
+  <style>
+    * {
+      font-family: "Poppins";
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #202029;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background: #3d3d3d;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #9d9d9d;
+    }
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    #tool-bar {
+      display: flex;
+      position: fixed;
+      align-items: left;
+      vertical-align: middle;
+      justify-content: flex-start;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 18px 24px;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .file-upload {
+      cursor: pointer;
+      display: inline-block;
+      padding: 6px 12px;
+      color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .file-upload:hover {
+      background-color: #dadada33;
+      opacity: 0.8;
+    }
+    #file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: calc(64px + 1%);
+      padding-bottom: 1%;
+    }
+    @media (min-width: 800px) {
+      #file-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .file-box {
+      color: #dadada;
+      background: #20202975;
+      border: 1px solid #dadada75;
+      padding: 24px 0 0 0;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .file-box div:nth-child(2) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    .file-button-container {
+      display: flex;
+      flex-direction: column;
+      vertical-align: middle;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 24px;
+    }
+    .file-button {
+      display: flex;
+      flex-direction: column;
+      vertical-align: middle;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      color: #fff;
+      background-color: transparent;
+      border-top: 1px solid #dadada75;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      width: 100%;
+      height: 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 13px;
+      border-radius: 0;
+      cursor: pointer;
+    }
+    .file-button:hover {
+      background-color: #dadada33;
+      opacity: 0.8;
+    }
+    .remove-button {
+      background-color: #f44336;
+    }
+    #file-view-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(20, 20, 29, 0.5);
+      z-index: 1000;
+      overflow: auto;
+    }
+    #file-content {
+      background-color: #fff;
+      margin: 50px auto;
+      padding: 20px;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 5px;
+      position: relative;
+    }
+    #file-text {
+      margin-top: 32px;
+      overflow-x: hidden;
+      text-overflow: wrap;
+    }
+    #back-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #202029;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="tool-bar">
+    <label class="file-upload">
+      <input type="file" id="file-input" accept=".txt,.csv,.md,.js,.ts,.go,.css,.html,.py,.java,.c,.cpp,.json,.xml">
+      Upload File
+    </label>
+  </div>
+  <div id="file-grid"></div>
+  <div id="file-view-container">
+    <div id="file-content">
+      <pre id="file-text"></pre>
+      <button id="back-button">Close</button>
+    </div>
+  </div>
+  <script>
+    document.getElementById('file-input').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        displayFileInfo(file);
+      }
+    });
+
+    function displayFileInfo(file) {
+      const fileGrid = document.getElementById('file-grid');
+      const fileBox = document.createElement('div');
+      fileBox.classList.add('file-box');
+
+      let icon = getFileIcon(file.name);
+      const iconElement = document.createElement('div');
+      iconElement.classList.add('file-icon');
+      iconElement.textContent = icon;
+
+      const nameElement = document.createElement('div');
+      nameElement.textContent = `Name: ${file.name}`;
+
+      const sizeElement = document.createElement('div');
+      sizeElement.textContent = `Size: ${formatFileSize(file.size)}`;
+
+      const typeElement = document.createElement('div');
+      typeElement.textContent = `Type: ${file.type || 'Unknown'}`;
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.classList.add('file-button-container');
+
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.classList.add('file-button', 'remove-button');
+      removeButton.addEventListener('click', function() {
+        if (confirm(`Are you sure you want to remove ${file.name}?`)) {
+          fileGrid.removeChild(fileBox);
+        }
+      });
+
+      const viewButton = document.createElement('button');
+      viewButton.textContent = 'View';
+      viewButton.classList.add('file-button');
+      viewButton.addEventListener('click', function() {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('file-text').textContent = e.target.result;
+          document.getElementById('file-view-container').style.display = 'block';
+        };
+        reader.readAsText(file);
+      });
+
+      const downloadButton = document.createElement('a');
+      downloadButton.textContent = 'Download';
+      downloadButton.classList.add('file-button');
+      downloadButton.href = URL.createObjectURL(file);
+      downloadButton.download = file.name;
+
+      buttonContainer.appendChild(viewButton);
+      buttonContainer.appendChild(downloadButton);
+      buttonContainer.appendChild(removeButton);
+
+      fileBox.appendChild(iconElement);
+      fileBox.appendChild(nameElement);
+      fileBox.appendChild(sizeElement);
+      fileBox.appendChild(typeElement);
+      fileBox.appendChild(buttonContainer);
+
+      fileGrid.appendChild(fileBox);
+    }
+
+    function getFileIcon(fileName) {
+      const extension = fileName.split('.').pop().toLowerCase();
+      switch (extension) {
+        case 'txt': return '📄';
+        case 'csv': return '📊';
+        case 'md': return '📝';
+        case 'js': return '⚙️';
+        case 'ts': return '⚙️';
+        case 'go': return '💻';
+        case 'css': return '🎨';
+        case 'html': return '🌐';
+        case 'py': return '🐍';
+        case 'java': return '☕';
+        case 'c': return '💻';
+        case 'cpp': return '💻';
+        case 'json': return '📦';
+        case 'xml': return '🏷️';
+        default: return '📄';
+      }
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    document.getElementById('back-button').addEventListener('click', function() {
+      document.getElementById('file-view-container').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

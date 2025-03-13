@@ -59,7 +59,10 @@
   overflow: hidden;
   cursor: move;
   display: flex;
+  align-items: center;
+  vertical-align: middle;
   justify-content: flex-start;
+  min-height: 32px;
   border-top-left-radius: 4px;
   background-color: #00000025;
 }
@@ -77,6 +80,12 @@
 }
 
 .tab {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
   padding: 5px 10px;
   cursor: pointer;
 }
@@ -86,7 +95,6 @@
 }
 
 .tab-content {
-  padding: 10px;
   display: none;
   flex-grow: 1;
   overflow-y: auto;
@@ -137,7 +145,6 @@
 #chat-interface {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 10px;
 }
 
 #input-area {
@@ -238,7 +245,7 @@
   width: fit-content;
   max-width: 90%;
   padding: 2ch;
-  margin-bottom: 3ch;
+  margin: 1.5ch 0 0 0;
   border-radius: 4px;
   box-shadow: 1px 1px 10px #33333333;
   transition: none !important;
