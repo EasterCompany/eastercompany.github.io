@@ -258,7 +258,7 @@ const dexterTTSAPI = async (message) => {
     });
   } catch (e) {
     endDexterOfTransaction();
-    console.error(e)
+    console.error(e);
   }
 }
 
@@ -554,13 +554,13 @@ async function dexterStartListening() {
   dexter.audio.silenceTimer = null;
   dexter.audio.filteredChunks = new Array();
   return dexterCheckSilence();
-}
+};
 
 async function dexterStopListening() {
   if (dexter.audio.recorder) {
     dexter.audio.recorder.stop();
   }
-}
+};
 
 async function toggleDexterListening() {
   if (dexter.isListening) {
@@ -568,7 +568,7 @@ async function toggleDexterListening() {
   } else {
     await dexterStartListening();
   }
-}
+};
 
 async function muteDexter() {
   dexter.microphoneIsMuted = true;
