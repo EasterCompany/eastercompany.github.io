@@ -696,36 +696,55 @@ button {
   outline: none;
 }
 
-#tab1a {
+#tab1a,
+#tab2a,
+#tab3a {
   white-space: pre-wrap;
   padding: 16px;
 }
-#tab1a>h2 {
+#tab1a>h2,
+#tab2a>h2,
+#tab3a>h2 {
   margin-top: unset;
 }
-#tab1a>hr {
+#tab1a>hr,
+#tab2a>hr,
+#tab3a>hr {
   margin-bottom: 12px;
 }
-#dexter-user-notes ul {
+#dexter-user-notes ul,
+#dexter-assistant-notes ul,
+#dexter-organization-notes ul {
   list-style-type: disc;
   margin: 4px 0 0 0;
 }
-#dexter-user-notes strong {
+#dexter-user-notes strong,
+#dexter-assistant-notes strong,
+#dexter-organization-notes strong  {
   font-weight: bold;
 }
-#dexter-user-notes em, #dexter-user-notes i {
+#dexter-user-notes em,
+#dexter-assistant-notes em,
+#dexter-organization-notes em {
   font-style: italic;
 }
-#dexter-user-notes strong, #dexter-user-notes h1, #dexter-user-notes h2, #dexter-user-notes h3, #dexter-user-notes h4, #dexter-user-notes h5, #dexter-user-notes h6 {
+#dexter-user-notes strong, #dexter-user-notes h1, #dexter-user-notes h2, #dexter-user-notes h3, #dexter-user-notes h4, #dexter-user-notes h5, #dexter-user-notes h6,
+#dexter-assistant-notes strong, #dexter-assistant-notes h1, #dexter-assistant-notes h2, #dexter-assistant-notes h3, #dexter-assistant-notes h4, #dexter-assistant-notes h5, #dexter-assistant-notes h6,
+#dexter-organization-notes strong, #dexter-organization-notes h1, #dexter-organization-notes h2, #dexter-organization-notes h3, #dexter-organization-notes h4, #dexter-organization-notes h5, #dexter-organization-notes h6 {
   margin: 4px 0 0 0;
   font-weight: bold;
 }
-#dexter-user-notes p {
+#dexter-user-notes p,
+#dexter-assistant-notes p,
+#dexter-organization-notes p {
   margin: 4px 0 0 0;
   padding: 0 0 0 0;
 }
-#dexter-user-notes code {
+#dexter-user-notes code,
+#dexter-assistant-notes code,
+#dexter-organization-notes code {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
   font-family: monospace;
+  background-color: transparent;
 }

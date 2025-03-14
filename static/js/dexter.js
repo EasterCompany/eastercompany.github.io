@@ -276,7 +276,7 @@ const updateDexterSessionChatHistory = async (role, content) => {
 
   if (role.toLowerCase() === "user") {
     if (!dexter.isLLMing) {
-      await dexterUserNotesAPI();
+      dexterUserNotesAPI();
       const llmResponse = await dexterChatAPI();
       if (llmResponse === null) {
         updateDexterSessionChatHistory("system", "INTERNAL SERVER ERROR");
@@ -452,6 +452,7 @@ const drawDexterWaveform = async () => {
 async function dexterCheckSilence() {
 
   function analyzeAudio() {
+    if (!dexter.audio.analyser) return 0;
     dexter.audio.analyser.getByteTimeDomainData(dexter.audio.dataArray);
     let sum = 0;
     for (let i = 0; i < dexter.audio.bufferLength; i++) {
@@ -531,7 +532,6 @@ async function dexterStartListening() {
     dexter.waveform.style.opacity = 0;
     dexter.audio.soundDetected = false;
     dexter.isListening = false;
-    dexter.isSTTing = true;
     dexterProcessAudio()
   });
   dexter.audio.recorder.ondataavailable = (event) => {
@@ -573,13 +573,17 @@ async function toggleDexterListening() {
 async function muteDexter() {
   dexter.microphoneIsMuted = true;
   dexter.voiceButton.classList.remove('recording');
+  dexter.voiceButton.classList.remove('bx-microphone');
   dexter.voiceButton.classList.add('muted');
+  dexter.voiceButton.classList.add('bx-microphone-off');
   return;
 };
 
 async function unmuteDexter(startRecording = false) {
   dexter.microphoneIsMuted = false;
   dexter.voiceButton.classList.remove('muted');
+  dexter.voiceButton.classList.remove('bx-microphone-off');
+  dexter.voiceButton.classList.add('bx-microphone');
   if (dexter.workspaceIsActive) {
     dexter.voiceButton.classList.add('recording');
     if (startRecording && !dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing) {
@@ -619,14 +623,7 @@ sendButton.addEventListener('click', () => {
 });
 
 async function dexterProcessAudio() {
-  if (dexter.isSTTing || dexter.isLLMing || dexter.isTTSing) {
-    return;
-  }
   try {
-    dexter.isSTTing = true;
-    if (!dexter.audio.chunks) {
-      return;
-    }
     const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
     const audioBlob = new Blob(blobParts, { type: "audio/wav" });
     const formData = new FormData();
@@ -634,7 +631,6 @@ async function dexterProcessAudio() {
     dexterSTTAPI(formData);
   } catch (e) {
     console.error(e);
-    dexter.isSTTing = false;
   }
 }
 
