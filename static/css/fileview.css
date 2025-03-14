@@ -36,7 +36,6 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 18px 24px;
 }
 input[type="file"] {
   display: none;
@@ -44,7 +43,10 @@ input[type="file"] {
 .file-upload {
   cursor: pointer;
   display: inline-block;
+  text-align: center;
+  width: 100%;
   padding: 6px 12px;
+  margin: 18px 24px;
   color: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;

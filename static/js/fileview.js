@@ -10,6 +10,7 @@ class FileUploadManager {
     this.fileInput.addEventListener('change', this.handleFileUpload.bind(this));
     this.backButton.addEventListener('click', this.hideFileView.bind(this));
 
+    this.setupDragAndDrop();
     this.reUploadFiles();
   }
 
@@ -175,6 +176,41 @@ class FileUploadManager {
       });
       this.displayFileInfo(dummyFile);
     });
+  }
+
+  setupDragAndDrop() {
+    window.addEventListener('dragover', (event) => {
+      event.preventDefault(); // Prevent default browser behavior
+    });
+
+    window.addEventListener('drop', (event) => {
+      event.preventDefault(); // Prevent default browser behavior
+      const files = event.dataTransfer.files;
+      if (files && files.length > 0) {
+        this.handleDroppedFiles(files);
+      }
+    });
+  }
+
+  async handleDroppedFiles(files) {
+    for (const file of files) {
+      if (await this.isDuplicate(file)) {
+        alert(`Duplicate file "${file.name}" detected. Upload skipped.`);
+        continue;
+      }
+
+      const contentHash = await this.generateContentHash(file);
+      const fileContent = await file.text();
+
+      this.uploadedFiles[contentHash] = {
+        name: file.name,
+        contentHash: contentHash,
+        content: fileContent,
+      };
+
+      this.saveUploadedFiles();
+      this.displayFileInfo(file);
+    }
   }
 }
 
