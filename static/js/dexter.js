@@ -27,6 +27,7 @@ const dexter = {
     clientType: 'user',
     deviceId: null,
     chatHistory: [],
+    userNotes: "Nothing of note, yet.",
   },
   // DOM Elements
   nav: document.getElementById('nav-container'),
@@ -47,6 +48,7 @@ const dexter = {
   reasonerWindow: document.getElementById('reasoner-window'),
   mainWindow: document.getElementById('main-window'),
   otherWindow: document.getElementById('other-window'),
+  userNotes: document.getElementById('dexter-user-notes'),
 };
 
 // APIs
@@ -54,6 +56,7 @@ const defaultDexterAPIContext = () => {
   return {
     stt: () => `${dexter.apiHost}/stt`,
     chat: () => `${dexter.apiHost}/net/chat`,
+    userNotes: () => `${dexter.apiHost}/net/user_notes`,
     tts: () => `${dexter.apiHost}/tts`,
   };
 };
@@ -78,12 +81,16 @@ const defaultDexterAudioContext = () => {
 };
 dexter.audio = defaultDexterAudioContext();
 
-// Global Site Alerts
 const highUsageError = () => alertBanner("High Traffic Warning!", "Due to a current high volume of user activity, free users may experience interruptions in service (and/or) a lower quality of service.", 10);
 const lowerPowerError = () => alertBanner("Low Power:", "Due to higher than usual demand, Dexter is currently operating at one third capacity for free tier users in-order to compensate.", 10);
 
+const displayMarkdown = (markdownText, containerId) => {
+  const html = marked.parse(markdownText);
+  document.getElementById(containerId).innerHTML = html;
+}
+
 const dexterNewSession = async () => {
-  localStorage.removeItem('dexter.localSession'); // legacy
+  localStorage.removeItem('dexter.localSession');
   localStorage.removeItem('dexter.session');
   const newDeviceId = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -92,6 +99,7 @@ const dexterNewSession = async () => {
     clientType: 'user',
     deviceId: newDeviceId,
     chatHistory: [],
+    userNotes: "Nothing of note, yet.",
   };
   localStorage.setItem('dexter.session', JSON.stringify(dexter.session));
   return await dexterLoadSession();
@@ -99,11 +107,9 @@ const dexterNewSession = async () => {
 
 const dexterLoadSession = async () => {
   const _localSessionStorage = localStorage.getItem('dexter.session');
-
   if (_localSessionStorage) {
     return JSON.parse(_localSessionStorage);
   }
-
   return await dexterNewSession();
 };
 
@@ -115,6 +121,7 @@ const dexterSaveSession = async () => {
 dexterLoadSession().then((sessionData) => {
   dexter.session = sessionData;
   dexter.session.chatHistory.forEach(x => addMessage(x.role, x.content));
+  displayMarkdown(dexter.session.userNotes, 'dexter-user-notes');
 });
 
 const endDexterOfTransaction = () => {
@@ -123,26 +130,24 @@ const endDexterOfTransaction = () => {
   dexter.isSTTing = false;
   dexter.isLLMing = false;
   dexter.isTTSing = false;
-  dexter.microphoneIsMuted = false;
   dexter.waveform.style.display = "none";
   dexter.waveform.style.opacity = 0;
-  dexter.voiceButton.classList.remove("muted");
-  dexter.voiceButton.classList.remove("recording");
   if (!dexter.isListening && !dexter.isSpeaking && !dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing && dexter.workspaceIsActive) {
     dexterStartListening();
   }
 }
 
 const dexterSTTAPI = async (formData) => {
+  dexter.isSTTing = true;
   try {
     const sttResponse = await fetch(dexter.api.stt(), {
       method: 'POST',
       body: formData,
     });
-    dexter.isSTTing = false;
-    const sttData = await sttResponse.json();
 
+    const sttData = await sttResponse.json();
     if (sttData.stt) {
+      dexter.isSTTing = false;
       updateDexterSessionChatHistory('user', sttData.stt);
     }
 
@@ -150,6 +155,41 @@ const dexterSTTAPI = async (formData) => {
     console.error("Transcription Error:", e);
     endDexterOfTransaction();
   }
+};
+
+const dexterUserNotesAPI = async () => {
+  dexter.isLLMing = true;
+  try {
+    const response = await fetch(dexter.api.userNotes(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        session: dexter.session
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return console.error({
+        error: {
+          status: response.status,
+          message: response.statusText,
+          details: errorData
+        }
+      });
+    }
+
+    const responseJson = await response.json();
+    if (!responseJson.error) {
+      dexter.session.userNotes = responseJson.response;
+      displayMarkdown(dexter.session.userNotes, 'dexter-user-notes');
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  dexter.isLLMing = false;
 };
 
 const dexterChatAPI = async () => {
@@ -229,11 +269,14 @@ const updateDexterSessionChatHistory = async (role, content) => {
     dexter.session.chatHistory = dexter.session.chatHistory.slice(-6);
   }
 
-  await dexterSaveSession();
+  if (role.toLowerCase() == "assistant" || role.toLowerCase() == "system") {
+    await dexterSaveSession();
+  }
   addMessage(role, content);
 
   if (role.toLowerCase() === "user") {
     if (!dexter.isLLMing) {
+      await dexterUserNotesAPI();
       const llmResponse = await dexterChatAPI();
       if (llmResponse === null) {
         updateDexterSessionChatHistory("system", "INTERNAL SERVER ERROR");
@@ -483,22 +526,16 @@ async function dexterStartListening() {
   dexter.audio.chunks = new Array();
   dexter.audio.recorder = new MediaRecorder(dexter.audio.stream);
   dexter.audio.recorder.addEventListener("stop", async () => {
-    if (!dexter.microphoneIsMuted) {
-      dexter.voiceButton.classList.remove('recording');
-      dexter.waveform.style.display = "none";
-      dexter.waveform.style.opacity = 0;
-      dexter.audio.soundDetected = false;
-      dexter.isListening = false;
-      dexter.isSTTing = true;
-      dexterProcessAudio()
-    } else {
-      dexter.audio.soundDetected = false;
-      dexter.isListening = false;
-      dexter.isSTTing = false;
-    }
+    dexter.voiceButton.classList.remove('recording');
+    dexter.waveform.style.display = "none";
+    dexter.waveform.style.opacity = 0;
+    dexter.audio.soundDetected = false;
+    dexter.isListening = false;
+    dexter.isSTTing = true;
+    dexterProcessAudio()
   });
   dexter.audio.recorder.ondataavailable = (event) => {
-    if (event.data.size > 0) {
+    if (event.data.size > 0 && !dexter.microphoneIsMuted) {
       const _dateTimeStamp = new Date().getTime();
       if (_dateTimeStamp > dexter.audio.startTime) {
         if (dexter.audio.chunks) dexter.audio.chunks.push({
@@ -534,9 +571,6 @@ async function toggleDexterListening() {
 }
 
 async function muteDexter() {
-  if (dexter.isListening) {
-    await dexterStopListening();
-  }
   dexter.microphoneIsMuted = true;
   dexter.voiceButton.classList.remove('recording');
   dexter.voiceButton.classList.add('muted');
@@ -576,6 +610,34 @@ if (dexter.voiceButton) {
   dexter.voiceButton.addEventListener('click', async () => await toggleDexterVoiceInterface());
 }
 
+sendButton.addEventListener('click', () => {
+  const messageText = messageInput.value.trim();
+  if (messageText) {
+    updateDexterSessionChatHistory('user', messageText);
+    messageInput.value = '';
+  }
+});
+
+async function dexterProcessAudio() {
+  if (dexter.isSTTing || dexter.isLLMing || dexter.isTTSing) {
+    return;
+  }
+  try {
+    dexter.isSTTing = true;
+    if (!dexter.audio.chunks) {
+      return;
+    }
+    const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
+    const audioBlob = new Blob(blobParts, { type: "audio/wav" });
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "audio.wav");
+    dexterSTTAPI(formData);
+  } catch (e) {
+    console.error(e);
+    dexter.isSTTing = false;
+  }
+}
+
 async function toggleProcessLoader(state, el, callbackFunc) {
   if (state && (el.classList.contains('hide') || el.classList.contains('remove'))) {
     add(el);
@@ -588,6 +650,9 @@ async function toggleProcessLoader(state, el, callbackFunc) {
 }
 
 async function processLoaderStepFunction() {
+  if (dexter.microphoneIsMuted && dexter.isListening) {
+    dexter.isListening = false;
+  }
   toggleProcessLoader(dexter.isSTTing, dexter.sttLoader, async () => {
     if (dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing) {
       dexter.iconSpinner.style.color = '#66f';
@@ -614,7 +679,7 @@ async function processLoaderStepFunction() {
       dexter.iconSpinner.style.color = '#fff'
       dexter.iconLogo.style.color = '#66f';
     }
-    if (!dexter.isListening && !dexter.isSpeaking && dexter.workspaceIsActive) {
+    if (!dexter.isListening && !dexter.isSpeaking && dexter.workspaceIsActive && !dexter.microphoneIsMuted) {
       dexterStartListening();
     }
   }
@@ -622,27 +687,3 @@ async function processLoaderStepFunction() {
 
 step.add(processLoaderStepFunction);
 
-sendButton.addEventListener('click', () => {
-  const messageText = messageInput.value.trim();
-  if (messageText) {
-    updateDexterSessionChatHistory('user', messageText);
-    messageInput.value = '';
-  }
-});
-
-async function dexterProcessAudio() {
-  try {
-    dexter.isSTTing = true;
-    if (!dexter.audio.chunks) {
-      return;
-    }
-    const blobParts = dexter.audio.chunks.map((chunk) => chunk.data);
-    const audioBlob = new Blob(blobParts, { type: "audio/wav" });
-    const formData = new FormData();
-    formData.append("audio", audioBlob, "audio.wav");
-    dexterSTTAPI(formData);
-  } catch (e) {
-    console.error(e);
-    dexter.isSTTing = false;
-  }
-}

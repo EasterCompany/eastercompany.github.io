@@ -445,6 +445,7 @@ button {
 }
 
 .hero {
+  user-select: none;
   display: flex;
   flex-direction: column;
 
@@ -465,16 +466,19 @@ button {
 }
 
 .hero>img {
+  user-select: none;
   width: 100%;
   height: 33vh;
 }
 
 .hero>svg {
+  user-select: none;
   width: 100%;
   height: 25vh;
 }
 
 .hero>h2 {
+  user-select: none;
   font-size: clamp(13px, 1.25vw, 22px);
 }
 
@@ -690,4 +694,38 @@ button {
   padding: 0 0 0 0;
   border: none;
   outline: none;
+}
+
+#tab1a {
+  white-space: pre-wrap;
+  padding: 16px;
+}
+#tab1a>h2 {
+  margin-top: unset;
+}
+#tab1a>hr {
+  margin-bottom: 12px;
+}
+#dexter-user-notes ul {
+  list-style-type: disc;
+  margin: 4px 0 0 0;
+}
+#dexter-user-notes strong {
+  font-weight: bold;
+}
+#dexter-user-notes em, #dexter-user-notes i {
+  font-style: italic;
+}
+#dexter-user-notes strong, #dexter-user-notes h1, #dexter-user-notes h2, #dexter-user-notes h3, #dexter-user-notes h4, #dexter-user-notes h5, #dexter-user-notes h6 {
+  margin: 4px 0 0 0;
+  font-weight: bold;
+}
+#dexter-user-notes p {
+  margin: 4px 0 0 0;
+  padding: 0 0 0 0;
+}
+#dexter-user-notes code {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-family: monospace;
 }
