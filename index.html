@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="/static/css/project.css?last_updated=2025-03-12">
     <link rel="stylesheet" href="/static/css/footer.css?last_updated=2025-03-12">
     <link rel="stylesheet" href="/static/css/particle_loader.css?last_updated=2025-03-12">
+    <link rel="stylesheet" href="/static/css/jimu_loader.css?last_updated=2025-03-12">
     <link rel="stylesheet" href="/static/css/hatch_loader.css?last_updated=2025-03-12">
     <link rel="stylesheet" href="/static/css/windows.css?last_updated=2025-03-12">
   </head>
@@ -101,17 +102,17 @@
         <h1 id="nav-title" class="nav-title">easter.company</h1>
       </div>
       <div id="nav-right-section">
+        <i id="dexter-signal-button" class="bx bx-no-signal remove"></i>
         <i id="dexter-chat-button" class="bx bxs-message-dots"></i>
         <i id="dexter-voice-button" class="bx bx-microphone"></i>
-        <i id="dexter-signal-button" class="bx bx-no-signal remove"></i>
       </div>
     </nav>
     <div id="windows-container" class="windows-container hide">
       <div id="reasoner-window" class="window glass">
         <div id="window-bar1" class="window-bar">
-          <div class="tab active" data-tab="tab1a"><i class='bx bxs-brain'></i></div>
-          <div class="tab" data-tab="tab2a"><i class='bx bxs-brain'></i></div>
-          <div class="tab" data-tab="tab3a"><i class='bx bxs-brain'></i></div>
+          <div class="tab active" data-tab="tab1a"><i class='bx bxs-user-detail'></i></div>
+          <div class="tab" data-tab="tab2a"><i class='bx bxs-mask'></i></div>
+          <div class="tab" data-tab="tab3a"><i class='bx bxs-business'></i></div>
           <!--<i class="fullscreen-toggle bx bx-fullscreen" data-window="window1"></i>-->
         </div>
         <div class="tab-content-loader">
@@ -125,8 +126,15 @@
           <div id="dexter-user-notes"></div>
         </div>
         <div class="tab-content" id="tab2a">
+          <h2>Assistant Notes</h2>
+          <hr/>
+          <div id="dexter-assistant-notes"></div>
         </div>
-        <div class="tab-content" id="tab3a">Content for Tab 3</div>
+        <div class="tab-content" id="tab3a">
+          <h2>Organization Notes</h2>
+          <hr/>
+          <div id="dexter-organization-notes"></div>
+        </div>
         <div class="resize-handle hide" id="resize-handle1">
           <i class="bx bx-expand-alt" ></i>
         </div>
