@@ -93,9 +93,9 @@ img,svg,i,h1,h2,h3,button {
 .radialGlow {
   background: linear-gradient(
     to right,
-    #666 0%,
-    #999 10%,
-    #fff 100%
+    #666666 0%,
+    #999999 50%,
+    #bbbbbb 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
