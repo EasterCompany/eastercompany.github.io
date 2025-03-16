@@ -38,6 +38,7 @@ const dexter = {
   rootContent: document.getElementById('main'),
   navTitle: document.getElementById('nav-title'),
   workspaceButton: document.getElementById('dexter-workspace-button'),
+  webButton: document.getElementById('dexter-web-button'),
   chatButton: document.getElementById('dexter-chat-button'),
   voiceButton: document.getElementById('dexter-voice-button'),
   sttLoader: document.getElementById('dexter-stt-loader'),
@@ -422,6 +423,10 @@ const toggleDexterChat = async () => {
 
 if (dexter.chatButton) {
   dexter.chatButton.addEventListener('click', toggleDexterChat);
+}
+
+if (dexter.webButton) {
+  dexter.webButton.addEventListener('click', toggleDexterChat);
 }
 
 const drawDexterWaveform = async () => {
