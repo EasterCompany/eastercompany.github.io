@@ -320,6 +320,7 @@ const exitDexterWorkspace = async () => {
     startTime: null,
     soundDetected: false,
   };
+  dexter.voiceButton.classList.remove("recording");
   hide(dexter.reasonerWindow);
   hide(dexter.otherWindow);
   hide(dexter.mainWindow);
@@ -513,10 +514,12 @@ async function dexterCheckSilence() {
 }
 
 async function dexterStartListening() {
+  if (dexter.workspaceIsActive && !dexter.microphoneIsMuted) {
+    dexter.voiceButton.classList.add('recording');
+  }
   dexter.isListening = true;
   dexter.audio.silenceThreshold = 0.99;
   dexter.audio.minRecordingTime = 2000;
-  dexter.voiceButton.classList.add('recording');
   dexter.waveform.style.display = "block";
   dexter.waveform.style.opacity = 1;
   dexter.audio.context = new AudioContext();
@@ -545,6 +548,9 @@ async function dexterStartListening() {
       }
     }
   };
+  if (dexter.microphoneIsMuted) {
+    return;
+  }
   dexter.audio.recorder.start();
   dexter.audio.source = dexter.audio.context.createMediaStreamSource(dexter.audio.stream);
   dexter.audio.source.connect(dexter.audio.analyser);
