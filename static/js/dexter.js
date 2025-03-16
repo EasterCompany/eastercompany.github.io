@@ -136,6 +136,9 @@ const endDexterOfTransaction = () => {
   if (!dexter.isListening && !dexter.isSpeaking && !dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing && dexter.workspaceIsActive) {
     dexterStartListening();
   }
+  if (!dexter.workspaceIsActive) {
+    dexter.voiceButton.classList.remove("recording");
+  }
 }
 
 const dexterSTTAPI = async (formData) => {
@@ -321,7 +324,6 @@ const exitDexterWorkspace = async () => {
     startTime: null,
     soundDetected: false,
   };
-  dexter.voiceButton.classList.remove("recording");
   hide(dexter.reasonerWindow);
   hide(dexter.otherWindow);
   hide(dexter.mainWindow);
