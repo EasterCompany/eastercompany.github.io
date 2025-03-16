@@ -649,6 +649,11 @@ async function processLoaderStepFunction() {
   if (dexter.microphoneIsMuted && dexter.isListening) {
     dexter.isListening = false;
   }
+  if (!dexter.windowsContainer.classList.contains("hide") && !dexter.windowsContainer.classList.contains("remove")) {
+    dexter.bodyContent.style.overflowY = "hidden";
+  } else {
+    dexter.bodyContent.style.overflowY = "auto";
+  }
   toggleProcessLoader(dexter.isSTTing, dexter.sttLoader, async () => {
     if (dexter.isSTTing && !dexter.isLLMing && !dexter.isTTSing) {
       dexter.iconSpinner.style.color = '#66f';
