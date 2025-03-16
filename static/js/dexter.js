@@ -426,7 +426,7 @@ if (dexter.chatButton) {
 }
 
 if (dexter.webButton) {
-  dexter.webButton.addEventListener('click', toggleDexterChat);
+  dexter.webButton.addEventListener('click', toggleDexterWorkspace);
 }
 
 const drawDexterWaveform = async () => {
