@@ -97,7 +97,7 @@ resizeHandles.forEach(handle => {
   });
 });
 
-// Input Area Resizing
+/* Input Area Resizing
 inputResizeHandle.addEventListener('mousedown', (e) => {
   isInputResizing = true;
   initialMouseY = e.clientY;
@@ -106,6 +106,7 @@ inputResizeHandle.addEventListener('mousedown', (e) => {
     defaultInputHeight = inputArea.offsetHeight;
   }
 });
+*/
 
 function addMessage(type, text) {
   const messageDiv = document.createElement('div');
