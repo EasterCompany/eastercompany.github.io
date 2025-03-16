@@ -396,6 +396,10 @@ if (dexter.icon) {
   dexter.icon.addEventListener('click', toggleDexterWorkspace);
 }
 
+if (dexter.webButton) {
+  dexter.webButton.addEventListener('click', toggleDexterWorkspace);
+}
+
 const toggleDexterChat = async () => {
   if (dexter.mainWindow && !dexter.workspaceIsActive && !dexter.workspaceIsChanging) {
     if (dexter.mainWindow.classList.contains('hide') || dexter.windowsContainer.classList.contains('hide')) {
@@ -423,10 +427,6 @@ const toggleDexterChat = async () => {
 
 if (dexter.chatButton) {
   dexter.chatButton.addEventListener('click', toggleDexterChat);
-}
-
-if (dexter.webButton) {
-  dexter.webButton.addEventListener('click', toggleDexterWorkspace);
 }
 
 const drawDexterWaveform = async () => {
