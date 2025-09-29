@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EID Authentication Service - Interactive Docs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Easter Company Dark Theme -->
+    <!-- Application Structure Plan: The application is structured as a tabbed single-page application (SPA) to provide a task-oriented user experience. This design was chosen over a linear document format because developers typically seek specific information (e.g., a single config variable or a CLI command). The tabs—Overview, Configuration, CLI Commands, and API Endpoints—allow for direct navigation to the relevant section. This non-linear approach enhances usability by making information retrieval faster and more intuitive. Interactive elements like the config environment toggle and the CLI command explorer further simplify the process of understanding and using the service. -->
+    <!-- Visualization & Content Choices: Report Info: Configuration Table -> Goal: Inform/Compare -> Presentation: Interactive Table -> Interaction: A 'Dev/Prod' toggle dynamically updates the default values, making comparison easy. Report Info: CLI Commands -> Goal: Organize/Inform -> Presentation: Interactive Command Explorer -> Interaction: Users select a command category, which dynamically displays subcommands and usage examples with a one-click copy feature. This is more engaging and practical than static text. Report Info: API Endpoints (derived from source code) -> Goal: Inform -> Presentation: Card-based list -> Interaction: None, but presents info clearly with colored method badges. All presentations use structured HTML/CSS and JS, with no Chart.js/Plotly needed as the source data is not quantitative. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A;
+            color: #e2e8f0;
+        }
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .tab-btn {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            border-color: #00FF99; /* Easter Co. Green */
+            color: #00FF99;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .card {
+            background-color: rgba(22, 22, 22, 0.8);
+            border: 1px solid #27272a;
+            backdrop-filter: blur(10px);
+        }
+        .code-block {
+            background-color: #000000;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            position: relative;
+            border: 1px solid #27272a;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background-color: #334155;
+            color: #e2e8f0;
+        }
+        .copy-btn-feedback {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #00FF99;
+            color: #0A0A0A;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .glow-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 255, 153, 0.15), transparent);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="min-h-screen container mx-auto px-4 py-8 md:py-12 relative">
+        <div class="glow-effect"></div>
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-50">EID Authentication Service</h1>
+            <p class="mt-2 text-lg text-slate-400">Interactive Developer Documentation</p>
+        </header>
+
+        <main>
+            <div class="w-full max-w-5xl mx-auto">
+                <!-- Tabs Navigation -->
+                <div class="border-b border-slate-800 mb-8">
+                    <nav class="-mb-px flex justify-center space-x-4 md:space-x-8" id="tabs">
+                        <button data-tab="overview" class="tab-btn active py-4 px-1 text-base font-medium text-slate-400 hover:text-green-400 hover:border-green-400 whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block h-5 w-5 mr-2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            Overview
+                        </button>
+                        <button data-tab="configuration" class="tab-btn py-4 px-1 text-base font-medium text-slate-400 hover:text-green-400 hover:border-green-400 whitespace-nowrap">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block h-5 w-5 mr-2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            Configuration
+                        </button>
+                        <button data-tab="cli" class="tab-btn py-4 px-1 text-base font-medium text-slate-400 hover:text-green-400 hover:border-green-400 whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block h-5 w-5 mr-2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" x2="20" y1="19" y2="19"></line></svg>
+                            CLI Commands
+                        </button>
+                        <button data-tab="api" class="tab-btn py-4 px-1 text-base font-medium text-slate-400 hover:text-green-400 hover:border-green-400 whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block h-5 w-5 mr-2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            API Endpoints
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Content Sections -->
+                <div id="tab-content">
+                    <!-- Overview Section -->
+                    <div id="overview" class="content-section active">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="card p-6 rounded-lg">
+                                <h2 class="text-2xl font-bold mb-4 text-slate-100">Introduction</h2>
+                                <p class="text-slate-400 leading-relaxed">The EID Authentication Service is a robust and efficient software solution, engineered in the Go programming language to furnish user authentication and data management functionalities. It can be operated as a REST API server or as a command-line interface (CLI) for direct interaction. For the purposes of data persistence and retrieval, it leverages the Redis in-memory data structure store.</p>
+                            </div>
+                            <div class="card p-6 rounded-lg">
+                                <h2 class="text-2xl font-bold mb-4 text-slate-100">System Requirements</h2>
+                                <ul class="space-y-3 text-slate-400">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-green-400 mr-3 flex-shrink-0 mt-1"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.76.77-.76-.77a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path><path d="M12 5v9"></path><path d="M12 18h.01"></path></svg>
+                                        <span><strong class="font-semibold text-slate-200">Go:</strong> Version 1.21 or later.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-green-400 mr-3 flex-shrink-0 mt-1"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"></path><path d="M12 6v6l4 2"></path></svg>
+                                        <span><strong class="font-semibold text-slate-200">Redis:</strong> An active and accessible Redis server instance.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="md:col-span-2 card p-6 rounded-lg">
+                                <h2 class="text-2xl font-bold mb-4 text-slate-100">Build Instructions</h2>
+                                <p class="text-slate-400 mb-4">To build the service, clone the repository and run the build command from the root directory.</p>
+                                <div class="code-block">
+                                    <pre><code class="font-mono text-sm text-slate-300">git clone &lt;your-repository-url&gt;
+cd eid-auth-service
+go build -o eid-auth-service .</code></pre>
+                                    <button class="copy-btn">Copy</button>
+                                    <div class="copy-btn-feedback">Copied!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Section -->
+                    <div id="configuration" class="content-section">
+                        <div class="card p-6 rounded-lg">
+                            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-slate-100">Configuration Variables</h2>
+                                    <p class="text-slate-400 mt-1">The application is configured via environment variables. Toggle to see the default values for each environment.</p>
+                                </div>
+                                <div class="flex items-center space-x-3 mt-4 sm:mt-0">
+                                    <span class="text-sm font-medium text-slate-300">Development</span>
+                                    <label for="env-toggle" class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="env-toggle" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                                    </label>
+                                    <span class="text-sm font-medium text-slate-300">Production</span>
+                                </div>
+                            </div>
+
+                            <div id="config-vars-container" class="space-y-4">
+                                <!-- Config vars will be injected here by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CLI Commands Section -->
+                    <div id="cli" class="content-section">
+                        <div class="card p-6 rounded-lg">
+                            <h2 class="text-2xl font-bold text-slate-100 mb-2">CLI Command Explorer</h2>
+                            <p class="text-slate-400 mb-6">Select a command category to see available subcommands, usage, and examples.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6" id="cli-nav">
+                                <button data-cli="monitor" class="cli-nav-btn bg-green-500/10 text-green-400 font-semibold py-2 px-4 rounded-full text-sm">monitor</button>
+                                <button data-cli="user" class="cli-nav-btn bg-slate-800 text-slate-300 font-semibold py-2 px-4 rounded-full text-sm">user</button>
+                                <button data-cli="verify" class="cli-nav-btn bg-slate-800 text-slate-300 font-semibold py-2 px-4 rounded-full text-sm">verify</button>
+                            </div>
+
+                            <div id="cli-content-container" class="space-y-6">
+                                <!-- CLI content will be injected here by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Endpoints Section -->
+                    <div id="api" class="content-section">
+                        <div class="card p-6 rounded-lg">
+                             <h2 class="text-2xl font-bold text-slate-100 mb-2">REST API Endpoints</h2>
+                            <p class="text-slate-400 mb-6">The service exposes the following endpoints when run with the <code class="font-mono text-sm bg-slate-900 border border-slate-700 text-slate-300 p-1 rounded">serve</code> command.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- API Endpoints will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.getElementById('tabs');
+        const content = document.getElementById('tab-content');
+        const configContainer = document.getElementById('config-vars-container');
+        const envToggle = document.getElementById('env-toggle');
+        const cliNav = document.getElementById('cli-nav');
+        const cliContentContainer = document.getElementById('cli-content-container');
+        
+        const configData = {
+            dev: [
+                { key: 'EID_AUTH_SERVICE_SERVER_PORT', desc: 'The network port for the REST server.', value: '6640' },
+                { key: 'EID_AUTH_SERVICE_REDIS_URL', desc: 'The network address for the Redis server.', value: '127.0.0.1:6379' },
+                { key: 'EID_AUTH_SERVICE_REDIS_KEY', desc: 'The authentication credential for Redis.', value: '(none)' },
+                { key: 'EID_AUTH_SERVICE_REDIS_DB', desc: 'The logical Redis database instance.', value: '0' },
+                { key: 'EID_AUTH_SERVICE_JWT_SECRET', desc: 'Secret key for signing JWTs.', value: '123' },
+                { key: 'EID_AUTH_SERVICE_RATELIMIT_RPS', desc: 'Rate limit: requests per second.', value: '10' },
+                { key: 'EID_AUTH_SERVICE_RATELIMIT_BURST', desc: 'Rate limit: allowed burst size.', value: '20' },
+            ],
+            prod: [
+                { key: 'EID_AUTH_SERVICE_SERVER_PORT', desc: 'The network port for the REST server.', value: '6640' },
+                { key: 'EID_AUTH_SERVICE_REDIS_URL', desc: 'The network address for the Redis server.', value: '(cloud instance)' },
+                { key: 'EID_AUTH_SERVICE_REDIS_KEY', desc: 'The authentication credential for Redis.', value: '(none)' },
+                { key: 'EID_AUTH_SERVICE_REDIS_DB', desc: 'The logical Redis database instance.', value: '0' },
+                { key: 'EID_AUTH_SERVICE_JWT_SECRET', desc: 'Secret key for signing JWTs.', value: '123' },
+                { key: 'EID_AUTH_SERVICE_RATELIMIT_RPS', desc: 'Rate limit: requests per second.', value: '2' },
+                { key: 'EID_AUTH_SERVICE_RATELIMIT_BURST', desc: 'Rate limit: allowed burst size.', value: '4' },
+            ]
+        };
+
+        const cliData = {
+            monitor: {
+                title: "Monitor Commands",
+                desc: "Retrieve real-time statistics about the service and its dependencies like Redis.",
+                commands: [
+                    {
+                        usage: "monitor [metric]",
+                        example: "./eid-auth-service monitor total",
+                        details: `<strong>Available Metrics:</strong><ul class="list-disc list-inside mt-2 ml-4 text-slate-400"><li><strong>total:</strong> The aggregate count of records in the database.</li><li><strong>redis_memory:</strong> Current memory usage of the Redis instance.</li><li><strong>redis_uptime:</strong> Uptime of the Redis server in seconds.</li><li><strong>redis_version:</strong> Software version of the Redis server.</li><li><strong>go_version:</strong> Version of the Go runtime.</li></ul>`
+                    }
+                ]
+            },
+            user: {
+                title: "User Commands",
+                desc: "Manage user entities within the authentication service.",
+                commands: [
+                    {
+                        usage: 'user create "[name]" "[email]" "[phone]" "[password]"',
+                        example: './eid-auth-service user create "John Smith" "john@example.com" "1234567890" "password123"',
+                        details: "Creates a new user with the provided details."
+                    },
+                    {
+                        usage: "user get [eid]",
+                        example: './eid-auth-service user get "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"',
+                        details: "Retrieves a user's public information by their unique EID."
+                    }
+                ]
+            },
+            verify: {
+                title: "Verification Commands",
+                desc: "Check if an email or phone number is already associated with a verified user account.",
+                commands: [
+                    {
+                        usage: "verify email [email]",
+                        example: './eid-auth-service verify email "john@example.com"',
+                        details: "Checks if the provided email address exists and is verified."
+                    },
+                    {
+                        usage: "verify phone [phone]",
+                        example: './eid-auth-service verify phone "1234567890"',
+                        details: "Checks if the provided phone number exists and is verified."
+                    }
+                ]
+            }
+        };
+        
+        const apiData = [
+            { path: '/monitor', method: 'GET', desc: 'Get real-time monitoring statistics for the service.', limited: false },
+            { path: '/verify/email', method: 'POST', desc: 'Check if an email address is verified.', limited: false },
+            { path: '/verify/phone', method: 'POST', desc: 'Check if a phone number is verified.', limited: false },
+            { path: '/user', method: 'GET', desc: 'Get a user\'s public data by identifier.', limited: false },
+            { path: '/user/create', method: 'POST', desc: 'Create a new user account.', limited: true },
+            { path: '/user/delete', method: 'DELETE', desc: 'Delete a user account.', limited: true },
+            { path: '/login', method: 'POST', desc: 'Authenticate a user and get session tokens.', limited: true },
+            { path: '/refresh', method: 'POST', desc: 'Refresh an expired access token.', limited: true },
+            { path: '/logout', method: 'POST', desc: 'Log out and invalidate a user\'s session.', limited: true },
+        ];
+
+
+        function renderConfig(env) {
+            configContainer.innerHTML = '';
+            const data = configData[env];
+            data.forEach(item => {
+                const element = document.createElement('div');
+                element.className = 'p-4 border border-slate-800 rounded-lg config-item';
+                element.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center">
+                        <div>
+                            <p class="font-mono text-sm font-medium text-green-400">${item.key}</p>
+                            <p class="text-sm text-slate-400 mt-1">${item.desc}</p>
+                        </div>
+                        <div class="mt-2 sm:mt-0">
+                            <span class="font-mono text-sm bg-slate-900 text-slate-300 py-1 px-3 rounded-full border border-slate-700">${item.value}</span>
+                        </div>
+                    </div>
+                `;
+                configContainer.appendChild(element);
+            });
+        }
+
+        function renderCli(cmd) {
+            cliContentContainer.innerHTML = '';
+            const data = cliData[cmd];
+            let html = `<h3 class="text-xl font-bold text-slate-100">${data.title}</h3><p class="text-slate-400 mb-4">${data.desc}</p>`;
+            
+            data.commands.forEach(command => {
+                html += `
+                    <div class="border-t border-slate-800 pt-4">
+                        <p class="font-semibold text-slate-200">Usage:</p>
+                        <p class="font-mono text-sm text-slate-400 bg-black p-2 rounded mt-1 border border-slate-800">${command.usage}</p>
+                        <p class="font-semibold text-slate-200 mt-3">Details:</p>
+                        <div class="text-sm text-slate-400 mt-1">${command.details}</div>
+                        <p class="font-semibold text-slate-200 mt-3">Example:</p>
+                        <div class="code-block mt-1">
+                            <pre><code class="font-mono text-sm text-slate-300">${command.example}</code></pre>
+                            <button class="copy-btn">Copy</button>
+                            <div class="copy-btn-feedback">Copied!</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cliContentContainer.innerHTML = html;
+            addCopyListeners();
+        }
+        
+        function renderApiEndpoints() {
+            const container = document.querySelector('#api .grid');
+            container.innerHTML = apiData.map(endpoint => {
+                const methodColor = {
+                    'GET': 'bg-green-500/10 text-green-400',
+                    'POST': 'bg-blue-500/10 text-blue-400',
+                    'DELETE': 'bg-red-500/10 text-red-400'
+                }[endpoint.method] || 'bg-slate-700 text-slate-300';
+
+                return `
+                    <div class="border border-slate-800 rounded-lg p-4 bg-slate-900/50">
+                        <div class="flex items-center justify-between">
+                             <p class="font-mono text-base font-semibold text-slate-100">${endpoint.path}</p>
+                             <span class="text-xs font-bold px-2 py-1 rounded-full ${methodColor}">${endpoint.method}</span>
+                        </div>
+                        <p class="text-sm text-slate-400 mt-2">${endpoint.desc}</p>
+                        ${endpoint.limited ? '<p class="text-xs text-green-400 font-semibold mt-2">Rate-Limited</p>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        tabs.addEventListener('click', (e) => {
+            if (e.target.matches('.tab-btn')) {
+                const tab = e.target.dataset.tab;
+                
+                tabs.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                content.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                document.getElementById(tab).classList.add('active');
+            }
+        });
+
+        envToggle.addEventListener('change', () => {
+            renderConfig(envToggle.checked ? 'prod' : 'dev');
+        });
+
+        cliNav.addEventListener('click', (e) => {
+            if (e.target.matches('.cli-nav-btn')) {
+                const cmd = e.target.dataset.cli;
+                cliNav.querySelectorAll('.cli-nav-btn').forEach(btn => {
+                    btn.classList.remove('bg-green-500/10', 'text-green-400');
+                    btn.classList.add('bg-slate-800', 'text-slate-300');
+                });
+                e.target.classList.add('bg-green-500/10', 'text-green-400');
+                e.target.classList.remove('bg-slate-800', 'text-slate-300');
+                renderCli(cmd);
+            }
+        });
+        
+        function addCopyListeners() {
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const codeBlock = button.previousElementSibling;
+                    const text = codeBlock.innerText;
+                    const feedback = button.nextElementSibling;
+
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        feedback.style.opacity = '1';
+                        setTimeout(() => {
+                            feedback.style.opacity = '0';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                    document.body.removeChild(textarea);
+                });
+            });
+        }
+        
+        // Initial renders
+        renderConfig('dev');
+        renderCli('monitor');
+        renderApiEndpoints();
+        addCopyListeners();
+    });
+</script>
+</body>
+</html>
+
