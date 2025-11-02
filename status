@@ -1,7 +1,7 @@
 {
   "service": "easter.company",
   "version": "1.0.0",
-  "status": "operational",
+  "status": "OK",
   "uptime": 0,
   "timestamp": 0
 }
