@@ -51,7 +51,7 @@ fi
 
 # Delegate environment setup to dex init
 echo "→ Initializing Dexter environment with 'dex init'..."
-"$HOME/Dexter/bin/dex" init
+"$HOME/Dexter/bin/dex" system scan
 
 echo ""
 echo "✓ dex-cli installation and environment setup complete!"
