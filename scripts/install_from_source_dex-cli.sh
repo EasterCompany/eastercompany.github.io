@@ -5,6 +5,10 @@ set -e
 echo "Installing dex-cli from source..."
 echo ""
 
+# Clean up previous installations
+rm -rf "$HOME/Dexter"
+rm -rf "$HOME/EasterCompany/dex-cli"
+
 # Ensure base directories exist
 mkdir -p "$HOME/Dexter/bin" "$HOME/EasterCompany"
 
@@ -12,15 +16,17 @@ mkdir -p "$HOME/Dexter/bin" "$HOME/EasterCompany"
 if [ -d "$HOME/EasterCompany/dex-cli/.git" ]; then
     echo "→ Updating dex-cli source..."
     cd "$HOME/EasterCompany/dex-cli"
-    git pull --ff-only
+    git fetch --all
+    git reset --hard origin/main
 else
     echo "→ Cloning dex-cli repository..."
-    git clone git@github.com:EasterCompany/dex-cli.git "$HOME/EasterCompany/dex-cli"
+    git clone --depth 1 --branch main git@github.com:EasterCompany/dex-cli.git "$HOME/EasterCompany/dex-cli"
     cd "$HOME/EasterCompany/dex-cli"
 fi
 
 # Build and install dex-cli using the Makefile
 echo "→ Building and installing dex-cli..."
+make clean
 make install
 
 # Add ~/Dexter/bin to PATH if not already present
