@@ -1,26 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-GB">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
-  <link rel="stylesheet" href="/static/css/fileview.css?last_updated=2025-03-16">
-  <title>Dexter File View</title>
-</head>
-<body>
-  <div id="tool-bar">
-    <label class="file-upload">
-      <input type="file" id="file-input" accept=".txt,.csv,.md,.js,.ts,.go,.css,.html,.py,.java,.c,.cpp,.json,.xml">
-      Upload File
-    </label>
-  </div>
-  <div id="file-grid"></div>
-  <div id="file-view-container">
-    <div id="file-content">
-      <pre id="file-text"></pre>
-      <button id="back-button">Close</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/fileview.css?last_updated=2025-03-16"
+    />
+    <title>Dexter File View</title>
+  </head>
+  <body>
+    <div id="tool-bar">
+      <label class="file-upload">
+        <input
+          type="file"
+          id="file-input"
+          accept=".txt,.csv,.md,.js,.ts,.go,.css,.html,.py,.java,.c,.cpp,.json,.xml"
+        />
+        Upload File
+      </label>
     </div>
-  </div>
-  <script src="/static/js/fileview.js?last_updated=2025-03-16"></script>
-</body>
+    <div id="file-grid"></div>
+    <div id="file-view-container">
+      <div id="file-content">
+        <pre id="file-text"></pre>
+        <button id="back-button">Close</button>
+      </div>
+    </div>
+    <script src="/static/js/fileview.js?last_updated=2025-03-16"></script>
+  </body>
 </html>
