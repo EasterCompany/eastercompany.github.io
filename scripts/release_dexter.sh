@@ -1,9 +1,10 @@
 #!/bin/bash
 # dex-cli binary installer
 set -e
-echo "Releasing dex-cli..."
+echo "Releasing Dexter..."
 # Current Dexter Build Info
 DEX_BIN_DIR="$HOME/Dexter/bin"
+
 DEX_EXECUTABLE="$DEX_BIN_DIR/dex"
 DEX_VERSION_OUT=$(
   "$DEX_EXECUTABLE" "version"
@@ -11,16 +12,36 @@ DEX_VERSION_OUT=$(
 )
 DEX_VERSION_OUT="${DEX_VERSION_OUT%SUFFIX}"
 DEX_VERSION="${DEX_VERSION_OUT//[$'\t\r\n ']/}"
+
+EVENT_EXECUTABLE="$DEX_BIN_DIR/dex-event-service"
+EVENT_VERSION_OUT=$(
+  "$EVENT_EXECUTABLE" "version"
+  echo "</end>"
+)
+EVENT_VERSION_OUT="${EVENT_VERSION_OUT%<end>}"
+EVENT_VERSION="${EVENT_VERSION_OUT//[$'\t\r\n ']/}"
+
+MODEL_EXECUTABLE="$DEX_BIN_DIR/dex-model-service"
+MODEL_VERSION_OUT=$(
+  "$MODEL_EXECUTABLE" "version"
+  echo "</end>"
+)
+MODEL_VERSION_OUT="${MODEL_VERSION_OUT%</end>}"
+MODEL_VERSION="${MODEL_VERSION_OUT//[$'\t\r\n ']/}"
+
 # ~/EasterCompany organisation directory
 EC_DIR="$HOME/EasterCompany"
+
 # .../easter.company website repo paths
 EC_WEB_DIR="$EC_DIR/easter.company"
 EC_WEB_STATIC_DIR="$EC_WEB_DIR/static"
 EC_WEB_BIN_DIR="$EC_WEB_STATIC_DIR/bin"
+
 # .../easter.company website repo paths for dex-cli
 EC_WEB_DEX_CLI_DIR="$EC_WEB_BIN_DIR/dex-cli"
 EC_WEB_DEX_CLI_LATEST_TXT="$EC_WEB_DEX_CLI_DIR/latest.txt"
 EC_WEB_DEX_CLI_EXECUTABLE="$EC_WEB_DEX_CLI_DIR/dex"
+
 # production urls
 LATEST_TXT_URL="https://easter.company/static/bin/dex-cli/latest.txt"
 EXECUTABLE_URL="https://easter.company/static/bin/dex-cli/dex"
