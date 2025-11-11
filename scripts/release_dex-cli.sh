@@ -17,10 +17,6 @@ EC_DIR="$HOME/EasterCompany"
 EC_WEB_DIR="$EC_DIR/easter.company"
 EC_WEB_STATIC_DIR="$EC_WEB_DIR/static"
 EC_WEB_BIN_DIR="$EC_WEB_STATIC_DIR/bin"
-EC_WEB_SCRIPTS_DIR="$EC_WEB_DIR/scripts"
-EC_WEB_DEX_CLI_INSTALL_SCRIPT="$EC_WEB_SCRIPTS_DIR/install_dex-cli.sh"
-EC_WEB_DEX_CLI_RELEASE_SCRIPT="$EC_WEB_SCRIPTS_DIR/release_dex-cli.sh"
-EC_WEB_DEX_CLI_INSTALL_SOURCE="$EC_WEB_SCRIPTS_DIR/install_dex-cli_source.sh"
 # .../easter.company website repo paths for dex-cli
 EC_WEB_DEX_CLI_DIR="$EC_WEB_BIN_DIR/dex-cli"
 EC_WEB_DEX_CLI_LATEST_TXT="$EC_WEB_DEX_CLI_DIR/latest.txt"
@@ -28,9 +24,13 @@ EC_WEB_DEX_CLI_EXECUTABLE="$EC_WEB_DEX_CLI_DIR/dex"
 # production urls
 LATEST_TXT_URL="https://easter.company/static/bin/dex-cli/latest.txt"
 EXECUTABLE_URL="https://easter.company/static/bin/dex-cli/dex"
-# ~/EasterCompany/dex-cli project directory
-DEX_CLI_PROJECT_DIR="$HOME/EasterCompany/dex-cli/"
 
+echo "Changing working directory ..."
+cd "$EC_WEB_DIR"
+echo "Changed working directory successfully!"
+echo ""
+
+echo "Identifying release candidate ..."
 echo "Release Candidate: $DEX_VERSION"
 echo ""
 echo "Updating $LATEST_TXT_URL ..."
@@ -51,7 +51,6 @@ fi
 
 echo "Updated and verified '$EC_WEB_DEX_CLI_LATEST_TXT' successfully!"
 echo ""
-
 echo "Updating $EXECUTABLE_URL ..."
 cp -rf "$DEX_EXECUTABLE" "$EC_WEB_DEX_CLI_EXECUTABLE"
 
@@ -70,24 +69,18 @@ fi
 
 echo "Updated and verified '$EC_WEB_DEX_CLI_EXECUTABLE' successfully!"
 echo ""
-
 echo "Staging changes in '$EC_WEB_DIR' ..."
 cd "$EC_WEB_DIR"
 git add static/bin/dex-cli/dex
 git add static/bin/dex-cli/latest.txt
-
 echo "Staged changes successfully!"
 echo ""
-
 echo "Creating commit ..."
 git commit -m "new dex-cli release: $DEX_VERSION"
-
 echo "Created commit successfully!"
 echo ""
-
 echo "Pushing new latest release ..."
 git push -f origin main
-
 echo ""
 echo "Pushed new latest release of dex-cli."
 echo "Latest Tag URL: $LATEST_TXT_URL"
