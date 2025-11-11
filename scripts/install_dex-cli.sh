@@ -5,7 +5,8 @@ echo "Installing dex-cli..."
 echo ""
 DEX_BIN_DIR="$HOME/Dexter/bin"
 DEX_EXECUTABLE_PATH="$DEX_BIN_DIR/dex"
-DOWNLOAD_URL="https://easter.company/latest/dex"
+TAGS_URL="https://easter.company/static/bin/dex-cli/latest.txt"
+DOWNLOAD_URL="https://easter.company/static/bin/latest/dex-cli"
 # Ensure the Dexter bin directory exists
 mkdir -p "$DEX_BIN_DIR"
 # Download the pre-built binary
