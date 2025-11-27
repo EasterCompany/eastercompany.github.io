@@ -1,33 +1,33 @@
 {
   "latest": {
-    "user": "2.2.0.main.65808cf.2025-11-27-10-13-49.linux-amd64.ggmnckyb",
-    "dev": "2.2.0.main.65808cf.2025-11-27-10-13-49.linux-amd64.ggmnckyb"
+    "user": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt",
+    "dev": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt"
   },
   "releases": {
-    "2.2.0": {
+    "2.3.0": {
       "type": "minor",
-      "date": "2025-11-27T10:15:16Z",
-      "commit": "ccf3d09",
+      "date": "2025-11-27T10:23:46Z",
+      "commit": "af89375",
       "binaries": {
         "cli": {
           "linux-amd64": {
-            "path": "/bin/2.2.0/dex",
-            "size": 10871519,
-            "checksum": "ac10c4c995a886557e0c61d707af08b5242c0ded6737bfdc7acb62d858a913b1"
+            "path": "/bin/2.3.0/dex",
+            "size": 10871551,
+            "checksum": "62f02dcbc9f8409456734d03e849cd2cd3d020b53ee16993c0588d4deab79412"
           }
         },
         "discord": {
           "linux-amd64": {
-            "path": "/bin/2.2.0/dex-discord-service",
-            "size": 8151332,
-            "checksum": "9597316a770bea6498daa56f08262b8bdb193014d94e4bbb32258ed57e889e11"
+            "path": "/bin/2.3.0/dex-discord-service",
+            "size": 8155428,
+            "checksum": "65d6709b305f54ec03aa9693bf8f71aa80e2187e1a722917b7155f2260c45022"
           }
         },
         "event": {
           "linux-amd64": {
-            "path": "/bin/2.2.0/dex-event-service",
-            "size": 7991588,
-            "checksum": "7cf9d3a18b8de06c5edbf716dad0a4da7d68240c3afa403b92a155d22f46112e"
+            "path": "/bin/2.3.0/dex-event-service",
+            "size": 7995684,
+            "checksum": "35a71a2cae5b4cdadc915b28e8041d53d190af6f21294e1011e2304a0dcb833b"
           }
         }
       }
@@ -35,8 +35,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.2.0.main.65808cf.2025-11-27-10-13-49.linux-amd64.ggmnckyb",
-      "user": "2.2.0.main.65808cf.2025-11-27-10-13-49.linux-amd64.ggmnckyb",
+      "current": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt",
+      "user": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
