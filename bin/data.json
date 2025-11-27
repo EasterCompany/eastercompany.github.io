@@ -1,0 +1,53 @@
+{
+  "latest": {
+    "user": "unknown",
+    "dev": "unknown"
+  },
+  "releases": {
+    "2.1.0": {
+      "type": "minor",
+      "date": "2025-11-27T09:57:53Z",
+      "commit": "0bd41d4",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.1.0/dex",
+            "size": 10882798,
+            "checksum": "700af54a62f7f3bea7b75d7f42cb28d7db7b2f6051d9909aa794afff0093a986"
+          }
+        },
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/2.1.0/dex-discord-service",
+            "size": 8151332,
+            "checksum": "0d6bab0dbce9eb39d659dc4d90e263a405219525bb100ce355b4cbc8433cf9b1"
+          }
+        },
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.1.0/dex-event-service",
+            "size": 7991588,
+            "checksum": "09d01c49d2da3a0f36db3a74d1a871ef8abc51b033c7760015cef38175209dc8"
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "cli": {
+      "current": "unknown",
+      "user": "unknown",
+      "repository": "github.com/EasterCompany/dex-cli"
+    },
+    "discord": {
+      "current": "unknown",
+      "user": "unknown",
+      "repository": "github.com/EasterCompany/dex-discord-service"
+    },
+    "event": {
+      "current": "unknown",
+      "user": "unknown",
+      "repository": "github.com/EasterCompany/dex-event-service"
+    }
+  }
+}
