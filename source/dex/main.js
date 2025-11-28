@@ -649,6 +649,114 @@ function onReady() {
         }
     }
 
+    const navbarMicrophone = document.getElementById('navbar-microphone');
+    let animationFrameId;
+    let audioContext;
+    let analyser;
+
+    function startAudioVisualization(canvas) {
+        const canvasCtx = canvas.getContext('2d');
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+
+        // Create a dummy oscillator to have some audio data
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+        oscillator.connect(analyser);
+        analyser.connect(audioContext.destination);
+        oscillator.start();
+
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        function draw() {
+            animationFrameId = requestAnimationFrame(draw);
+            analyser.getByteTimeDomainData(dataArray);
+
+            canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            canvasCtx.lineWidth = 2;
+            canvasCtx.strokeStyle = 'rgb(0, 255, 255)';
+
+            canvasCtx.beginPath();
+
+            const sliceWidth = canvas.width * 1.0 / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * canvas.height / 2;
+
+                if (i === 0) {
+                    canvasCtx.moveTo(x, y);
+                } else {
+                    canvasCtx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            canvasCtx.lineTo(canvas.width, canvas.height / 2);
+            canvasCtx.stroke();
+        }
+
+        draw();
+    }
+
+    function stopAudioVisualization() {
+        cancelAnimationFrame(animationFrameId);
+        if (audioContext) {
+            audioContext.close();
+        }
+    }
+
+    if (navbarMicrophone) {
+        navbarMicrophone.addEventListener('click', () => {
+            const nav = document.querySelector('nav');
+            const navLeft = document.querySelector('.nav-left');
+            const openWindowContent = openWindow?.isOpen() ? openWindow.id : null;
+            const windowContent = openWindowContent ? document.querySelector(`#${openWindowContent} .window-content`) : null;
+
+
+            if (nav.classList.contains('recording')) {
+                // Stop recording
+                nav.classList.remove('recording');
+                navLeft.classList.remove('recording');
+                stopAudioVisualization();
+                const canvas = document.getElementById('audio-canvas');
+                if (canvas) {
+                    canvas.remove();
+                }
+            } else {
+                // Start recording
+                nav.classList.add('recording');
+                navLeft.classList.add('recording');
+
+                if (windowContent) {
+                    const canvas = document.createElement('canvas');
+                    canvas.id = 'audio-canvas';
+                    windowContent.prepend(canvas);
+                    startAudioVisualization(canvas);
+                }
+
+                // Stop recording after 30 seconds
+                setTimeout(() => {
+                    nav.classList.remove('recording');
+                    navLeft.classList.remove('recording');
+                    stopAudioVisualization();
+                    const canvas = document.getElementById('audio-canvas');
+                    if (canvas) {
+                        canvas.remove();
+                    }
+                }, 30000);
+            }
+        });
+    }
+
+
     // Handle login form submission
     function handleLoginSubmit(e) {
         e.preventDefault();
