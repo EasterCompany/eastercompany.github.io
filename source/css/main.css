@@ -1134,4 +1134,7 @@ footer.hide {
 .metric-value-active {
   color: #5eff5e;
 }
+.metric-value-error {
+  color: #ff6b6b;
+}
 /* --- End Theme System --- */
