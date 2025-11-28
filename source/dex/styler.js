@@ -106,7 +106,7 @@ export function injectNavbar(isLoggedIn = false) {
 
     const navbarHTML = `
         <div class="nav-left">
-            <h1>${getCleanHostname()}</h1>
+            <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon">
         </div>
         <div class="nav-right">
             ${navRightContent}
