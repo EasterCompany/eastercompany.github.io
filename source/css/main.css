@@ -74,6 +74,12 @@ nav {
     transition: all 0.3s ease-in-out;
 }
 
+.nav-left .navbar-favicon {
+    height: 30px; /* Adjust size as needed */
+    width: auto;
+    margin-right: 10px;
+}
+
 .nav-left h1 {
     font-size: 1.1em;
     font-weight: 500;
