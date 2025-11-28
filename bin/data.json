@@ -1,33 +1,40 @@
 {
   "latest": {
-    "user": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt",
-    "dev": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt"
+    "user": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw",
+    "dev": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw"
   },
   "releases": {
-    "2.3.0": {
+    "2.5.0": {
       "type": "minor",
-      "date": "2025-11-27T10:23:46Z",
-      "commit": "af89375",
+      "date": "2025-11-28T00:05:00Z",
+      "commit": "7b91f32",
       "binaries": {
         "cli": {
           "linux-amd64": {
-            "path": "/bin/2.3.0/dex",
-            "size": 10871551,
-            "checksum": "62f02dcbc9f8409456734d03e849cd2cd3d020b53ee16993c0588d4deab79412"
+            "path": "/bin/2.5.0/dex",
+            "size": 10871210,
+            "checksum": "9f09bef8ecd0c90fa3f27be933c510af4b7d0db59f6698e4f5340d257c8dc22c"
           }
         },
         "discord": {
           "linux-amd64": {
-            "path": "/bin/2.3.0/dex-discord-service",
-            "size": 8155428,
-            "checksum": "65d6709b305f54ec03aa9693bf8f71aa80e2187e1a722917b7155f2260c45022"
+            "path": "/bin/2.5.0/dex-discord-service",
+            "size": 8159524,
+            "checksum": "256db87deafa5b442d879eb24924192027f0a75db5969504139598026a7791d6"
           }
         },
         "event": {
           "linux-amd64": {
-            "path": "/bin/2.3.0/dex-event-service",
+            "path": "/bin/2.5.0/dex-event-service",
             "size": 7995684,
-            "checksum": "35a71a2cae5b4cdadc915b28e8041d53d190af6f21294e1011e2304a0dcb833b"
+            "checksum": "f814abfef0e491e0c89d5e194424afa35b0ba72993033958ce8a1df8fcd47ad7"
+          }
+        },
+        "event-test-handler": {
+          "linux-amd64": {
+            "path": "/bin/2.5.0/event-test-handler",
+            "size": 5996836,
+            "checksum": "31cc53213d6f72b2b88fec6d1eda1dc71c0bef862c93e53d8f208c98de6e84f1"
           }
         }
       }
@@ -35,13 +42,13 @@
   },
   "services": {
     "cli": {
-      "current": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt",
-      "user": "2.3.0.main.b6b74c3.2025-11-27-10-22-06.linux-amd64.alsyrdjt",
+      "current": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw",
+      "user": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "unknown",
-      "user": "unknown",
+      "current": "2025/11/28 00:05:01 [STATUS] Starting status server on 0.0.0.0:8300\n2025/11/28 00:05:01 Dexter Discord Service running...\n2025/11/28 00:05:01 HTTP status server is available.\n2025/11/28 00:05:01 Discord token found, starting bot...\n2025/11/28 00:05:01 [STATUS] Server error: listen tcp :8300: bind: address already in use\n2025/11/28 00:05:01 Connected to Redis for Discord bot.\n2025/11/28 00:05:01 Redis cache cleared for Discord bot.\n2025/11/28 00:05:01 Creating Discord session...\n2025/11/28 00:05:01 Opening Discord connection...\n2025/11/28 00:05:01 Error: Failed to open Discord connection: websocket: close 4004: Authentication failed.\n2025/11/28 00:31:09 Shutting down...\n2025/11/28 00:31:09 Shutdown complete.",
+      "user": "2025/11/28 00:05:01 [STATUS] Starting status server on 0.0.0.0:8300\n2025/11/28 00:05:01 Dexter Discord Service running...\n2025/11/28 00:05:01 HTTP status server is available.\n2025/11/28 00:05:01 Discord token found, starting bot...\n2025/11/28 00:05:01 [STATUS] Server error: listen tcp :8300: bind: address already in use\n2025/11/28 00:05:01 Connected to Redis for Discord bot.\n2025/11/28 00:05:01 Redis cache cleared for Discord bot.\n2025/11/28 00:05:01 Creating Discord session...\n2025/11/28 00:05:01 Opening Discord connection...\n2025/11/28 00:05:01 Error: Failed to open Discord connection: websocket: close 4004: Authentication failed.\n2025/11/28 00:31:09 Shutting down...\n2025/11/28 00:31:09 Shutdown complete.",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
