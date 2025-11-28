@@ -77,12 +77,31 @@ nav {
 .nav-left {
     display: flex;
     align-items: center;
+    position: relative; /* Needed for absolute positioning of children */
 }
 
-.nav-left .navbar-favicon {
-    height: 30px; /* Adjust size as needed */
-    width: auto;
-    margin-right: 10px;
+.nav-left .navbar-favicon,
+.nav-left #navbar-microphone {
+    height: 30px;
+    width: 30px;
+    transition: opacity 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.nav-left #navbar-microphone {
+    position: absolute;
+    opacity: 0;
+    font-size: 24px; /* Adjust size as needed */
+    color: #fff;
+    line-height: 30px; /* Center vertically */
+}
+
+.nav-left:hover .navbar-favicon {
+    opacity: 0;
+}
+
+.nav-left:hover #navbar-microphone {
+    opacity: 1;
 }
 
 .nav-left h1 {

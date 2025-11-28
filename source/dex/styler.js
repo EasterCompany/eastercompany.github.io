@@ -96,7 +96,6 @@ export function injectNavbar(isLoggedIn = false) {
     const navRightContent = isLoggedIn
         ? `
             <i id="message-icon" class='bx bxs-message-dots'></i>
-            <i class='bx bx-microphone'></i>
             <i id="user-icon" class='bx bx-user'></i>
             <i id="settings-icon" class='bx bx-cog'></i>
         `
@@ -107,6 +106,7 @@ export function injectNavbar(isLoggedIn = false) {
     const navbarHTML = `
         <div class="nav-left">
             <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon">
+            <i class='bx bx-microphone' id="navbar-microphone"></i>
         </div>
         <div class="nav-right">
             ${navRightContent}
