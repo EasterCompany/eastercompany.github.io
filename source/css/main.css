@@ -74,6 +74,11 @@ nav {
     transition: all 0.3s ease-in-out;
 }
 
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
 .nav-left .navbar-favicon {
     height: 30px; /* Adjust size as needed */
     width: auto;
@@ -89,6 +94,7 @@ nav {
 
 .nav-right {
     display: flex;
+    align-items: center;
     gap: 20px;
 }
 
