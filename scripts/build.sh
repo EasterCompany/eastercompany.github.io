@@ -3,46 +3,92 @@ set -e
 
 # Define paths
 ROOT_DIR=$(dirname "$0")/..
-SRC_DIR="$ROOT_DIR/source/dex"
-JS_ENTRY_POINT="$SRC_DIR/main.js"
-JS_OUTPUT_FILE="$ROOT_DIR/dex.js"
-
-CSS_SRC_DIR="$ROOT_DIR/source/css"
-CSS_ENTRY_POINT="$CSS_SRC_DIR/main.css"
-CSS_OUTPUT_FILE="$ROOT_DIR/dex.css"
-
+SRC_DIR="$ROOT_DIR/source"
+TEMPLATES_DIR="$SRC_DIR/templates"
+JS_ENTRY_POINT="$SRC_DIR/dex/main.js"
+CSS_ENTRY_POINT="$SRC_DIR/css/main.css"
 ESBUILD_BIN="$HOME/go/bin/esbuild"
 
-# 1. Bundle, minify, and obfuscate the JavaScript
+# 1. Clean up old hashed files
+echo "Cleaning up old build files..."
+rm -f "$ROOT_DIR"/dex.*.js "$ROOT_DIR"/dex.*.js.map "$ROOT_DIR"/dex.*.css
+
+# 2. Generate a hash from the source file contents
+echo "Generating content hash..."
+# Find all source files and hash their combined content
+HASH=$(find "$SRC_DIR" -type f -print0 | sort -z | xargs -0 cat | sha1sum | head -c 8)
+echo "Build hash: $HASH"
+
+# Define hashed output filenames
+JS_OUTPUT_FILE="$ROOT_DIR/dex.$HASH.js"
+CSS_OUTPUT_FILE="$ROOT_DIR/dex.$HASH.css"
+
+# 3. Bundle, minify, and obfuscate the JavaScript
 echo "Bundling JavaScript..."
 "$ESBUILD_BIN" "$JS_ENTRY_POINT" --bundle --minify --sourcemap --outfile="$JS_OUTPUT_FILE"
 
-# 2. Bundle and minify the CSS
+# 4. Bundle and minify the CSS
 echo "Bundling CSS..."
 "$ESBUILD_BIN" "$CSS_ENTRY_POINT" --bundle --minify --outfile="$CSS_OUTPUT_FILE"
 
-# 3. Inject the script tag and link tag into HTML files
-echo "Injecting script and link tags into HTML files..."
-SCRIPT_TAG='<script src="/dex.js" defer></script>'
-LINK_TAG='<link rel="stylesheet" href="/dex.css">'
+# 5. Inject head content, script tag, and link tag into HTML files
+echo "Injecting head content and build tags into HTML files..."
+SCRIPT_TAG="<script src=\"/dex.$HASH.js\" defer></script>"
+LINK_TAG="<link rel=\"stylesheet\" href=\"/dex.$HASH.css\">"
 
 for html_file in "$ROOT_DIR"/*.html; do
     if [ -f "$html_file" ]; then
-        # Inject CSS link tag if not present
-        if ! grep -q "$LINK_TAG" "$html_file"; then
-            sed -i "s|</head>|$LINK_TAG</head>|" "$html_file"
-            echo "  - Injected CSS link into $html_file"
+        # Get filename without path and extension
+        filename=$(basename "$html_file" .html)
+
+        # Generate page title from filename
+        # Replace hyphens and underscores with spaces, capitalize words
+        if [ "$filename" = "404" ]; then
+            page_title="404 - Page Not Found"
+        elif [ "$filename" = "index" ]; then
+            page_title="Home"
         else
-            echo "  - CSS link already exists in $html_file"
+            # Convert filename: replace - and _ with spaces, then capitalize each word
+            page_title=$(echo "$filename" | sed 's/[-_]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
         fi
 
-        # Inject JS script tag if not present
-        if ! grep -q "$SCRIPT_TAG" "$html_file"; then
-            sed -i "s|</body>|$SCRIPT_TAG</body>|" "$html_file"
-            echo "  - Injected JS script into $html_file"
-        else
-            echo "  - JS script already exists in $html_file"
+        # Full title with site name
+        full_title="$page_title - Easter Company"
+
+        # Remove old tags
+        sed -i 's|<link rel="stylesheet" href="/dex\..*\.css">||g' "$html_file"
+        sed -i 's|<script src="/dex\..*\.js" defer></script>||g' "$html_file"
+
+        # Remove old head content between markers
+        sed -i '/<!-- HEAD_START -->/,/<!-- HEAD_END -->/d' "$html_file"
+
+        # Inject head template after <head> tag using a temp file approach
+        if [ -f "$TEMPLATES_DIR/head.html" ]; then
+            # Create a temporary file with the injection, replacing the title
+            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" '
+                /<head>/ {
+                    print
+                    print "<!-- HEAD_START -->"
+                    while ((getline line < head_file) > 0) {
+                        # Replace title with page-specific title
+                        if (line ~ /<title>/) {
+                            print "  <title>" title "</title>"
+                        } else {
+                            print line
+                        }
+                    }
+                    close(head_file)
+                    print "<!-- HEAD_END -->"
+                    next
+                }
+                { print }
+            ' "$html_file" > "$html_file.tmp" && mv "$html_file.tmp" "$html_file"
         fi
+
+        # Inject CSS and JS tags
+        sed -i "s|</head>|$LINK_TAG</head>|" "$html_file"
+        sed -i "s|</body>|$SCRIPT_TAG</body>|" "$html_file"
+        echo "  - Injected tags into $html_file (title: $full_title)"
     fi
 done
 
