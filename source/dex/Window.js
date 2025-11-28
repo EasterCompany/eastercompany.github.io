@@ -1,0 +1,138 @@
+// source/dex/Window.js
+
+/**
+ * Creates and manages a single window instance.
+ * @param {object} options - Configuration for the window.
+ * @param {string} options.id - A unique ID for the window.
+ * @param {string} [options.content] - The initial HTML content for the window (if not using tabs).
+ * @param {Array<object>} [options.tabs] - An array of tab objects, each with a 'title' and 'content'.
+ * @param {string} options.icon - Optional boxicon class for the header icon (e.g., 'bx-user', 'bxs-message-dots')
+ * @param {function} options.onClose - Optional callback when window is closed
+ */
+export function createWindow(options) {
+    let windowEl = null;
+    let closeCallback = options.onClose || null;
+
+    function open() {
+        if (windowEl) {
+            windowEl.classList.add('open');
+            return;
+        }
+
+        let container = document.getElementById('windows-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'windows-container';
+            container.className = 'windows-container';
+            document.body.appendChild(container);
+        }
+
+        windowEl = document.createElement('div');
+        windowEl.id = options.id;
+        windowEl.className = 'window';
+
+        const iconClass = options.icon || 'bx-window';
+        let contentHTML;
+        let headerHTML = `
+            <div class="window-header">
+                <i class="bx ${iconClass}"></i>
+                <i class="bx bx-x window-close"></i>
+            </div>
+        `;
+
+        if (options.tabs && options.tabs.length > 0) {
+            const tabTitles = options.tabs.map((tab, index) => `
+                <div class="tab ${index === 0 ? 'active' : ''}" data-tab-index="${index}">${tab.title}</div>
+            `).join('');
+
+            const tabContents = options.tabs.map((tab, index) => `
+                <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>
+            `).join('');
+
+            contentHTML = `
+                <div class="tab-bar">${tabTitles}</div>
+                <div class="window-content">${tabContents}</div>
+            `;
+        } else {
+            contentHTML = `<div class="window-content">${options.content}</div>`;
+        }
+
+        windowEl.innerHTML = headerHTML + contentHTML;
+        container.appendChild(windowEl);
+
+        const closeBtn = windowEl.querySelector('.window-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                close();
+            });
+        }
+
+        if (options.tabs && options.tabs.length > 0) {
+            const tabs = windowEl.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabIndex = tab.getAttribute('data-tab-index');
+
+                    windowEl.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    windowEl.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    windowEl.querySelector(`.tab-content[data-tab-content="${tabIndex}"]`).classList.add('active');
+                });
+            });
+        }
+
+        setTimeout(() => {
+            windowEl.classList.add('open');
+        }, 10);
+    }
+
+    function close(immediate = false) {
+        if (!windowEl) return;
+
+        if (immediate) {
+            windowEl.classList.add('switching');
+            windowEl.classList.remove('open');
+            setTimeout(() => {
+                if (windowEl && windowEl.parentNode) {
+                    windowEl.parentNode.removeChild(windowEl);
+                }
+                windowEl = null;
+            }, 200);
+        } else {
+            windowEl.classList.remove('open');
+            if (closeCallback) {
+                closeCallback();
+            }
+            setTimeout(() => {
+                if (windowEl && windowEl.parentNode) {
+                    windowEl.parentNode.removeChild(windowEl);
+                }
+                windowEl = null;
+            }, 400);
+        }
+    }
+
+    function setContent(content) {
+        if (windowEl) {
+            const contentDiv = windowEl.querySelector('.window-content');
+            if (contentDiv) {
+                // This is more complex with tabs, for now, we just replace the whole content
+                contentDiv.innerHTML = content;
+            }
+        }
+    }
+    
+    function isOpen() {
+        return windowEl && windowEl.classList.contains('open');
+    }
+
+    return {
+        open,
+        close,
+        setContent,
+        isOpen,
+        id: options.id,
+    };
+}
