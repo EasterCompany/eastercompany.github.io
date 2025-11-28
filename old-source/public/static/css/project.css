@@ -1,0 +1,304 @@
+/*
+* static/css/project.css
+* contains all styling classes for a project object.
+*/
+
+/* PROJECT CONTAINER */
+.project {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-self: center;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+
+  margin: 0 0 32px 0;
+  padding: 2.5vmax 2.5vmax;
+
+  width: calc(100vw - 5vw);
+  max-width: 1298px !important;
+  min-height: fit-content !important;
+
+  transition: .33s ease-in-out !important;
+  box-shadow: 1px 1px 12px #111;
+}
+.project:hover {
+  box-shadow: 1px 1px 12px #ddd;
+}
+.project>*,.project>*>*{
+  transition: .33s ease-in-out !important;
+}
+.project>.toggle-project-button {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.project>.toggle-project-button>* {
+  display: none;
+}
+.selected-project {
+  cursor: unset !important;
+  justify-content: flex-start !important;
+  padding: 3vmax !important;
+  width: calc(100vw - 2.5vw);
+  max-width: 1298px !important;
+  box-shadow: 1px 1px 12px #111 !important;
+}
+@media only screen and (min-width: 1368px) {
+  .selected-project {
+    justify-content: center !important;
+    overflow: hidden;
+    min-height: 50vh !important;
+    height: fit-content !important;
+  }
+}
+.selected-project>.toggle-project-button {
+  position: fixed !important;
+  top: 8px !important;
+  right: 16px !important;
+  width: unset !important;
+  height: unset !important;
+  font-size: 24px;
+  background: unset !important;
+}
+.selected-project>.toggle-project-button>* {
+  display: block !important;
+}
+.selected-project>.toggle-project-button:hover>i {
+  color: #333;
+  background: #666;
+  box-shadow: 0 0 20px #999;
+}
+
+/* PROJECT CONTENT CONTAINER */
+.project>.content {
+  min-width: 200px;
+  width: 90vw;
+  max-width: 968px;
+}
+
+/* PROJECT HEADER */
+.project>.content>.preview>.info>.header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+@media (min-width: 1368px) {
+}
+
+.project>.content>.preview>.info>.header>img {
+  width: 36px;
+  height: 36px;
+
+  margin: 4px 12px 4px 0;
+  padding: 0 0 0 0;
+
+  border: 1px solid #000;
+  border-radius: 4px;
+  box-shadow: 1px 1px 24px #101010;
+}
+@media (min-width: 1368px) {
+  .project>.content>.preview>.info>.header>img {
+  }
+}
+
+.project>.content>.preview>.info>.header>h2 {
+  color:#DDD;
+  font-size:20px;
+  margin: 0;
+  text-align: left;
+}
+
+.project>.content>.preview>.info>.header>h2>p {
+  color:#666;
+  font-size:16px;
+}
+
+.project>.content>.preview>.info>p {
+  font-size: 16px;
+}
+@media (min-width: 1368px) {
+  .project>.content>.preview>.info>p {
+    font-size: 18px;
+  }
+}
+
+
+/* PROJECT STATISTICS SECTION */
+.project>.content>.preview>.info>.stats {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25vmin 0 0 0;
+  font-size: 16px;
+}
+.project>.content>.preview>.info>.stats>.git-stats {
+  width: 100%;
+}
+.project>.content>.preview>.info>.stats>.last-updated {
+  color: #666;
+  text-align: left;
+  width: 100%;
+}
+@media (min-width: 1368px) {
+  .project>.content>.preview>.info>.stats {
+    flex-direction: row;
+  }
+  .project>.content>.preview>.info>.stats>.last-updated {
+    text-align: right;
+  }
+}
+
+/* PROJECT DOWNLOAD/INSTALL/SPONSOR SECTION */
+.project>.content>.command-selector,
+.project>.content>.command-snippet,
+.project>.content>.options {
+  display: none;
+}
+
+.selected-project>.content>.command-selector {
+  z-index: -1;
+  display: flex !important;
+  flex-direction: row;
+  margin-top: 2.5vmin;
+}
+
+.selected-project>.content>.command-selector>div {
+  opacity: 0.66;
+  cursor: pointer;
+  user-select: none;
+  width: fit-content;
+  padding: 6px 12px;
+  color: #ffffff;
+  font-family: "Poppins";
+  font-size: 13px;
+  font-weight: normal;
+
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  border-bottom-width: 0px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.selected-project>.content>.command-selector>.selected {
+  opacity: 1 !important;
+  padding: 6px 24px;
+  box-shadow: 0 -1px 12px #00000099;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.selected-project>.content>.command-selector>button {
+  opacity: 1;
+  cursor: pointer;
+  user-select: none;
+  margin: 0 0 0 auto;
+  color: #ffffff;
+  font-family: "Poppins";
+  font-size: 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom-width: 0px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.selected-project>.content>.command-snippet {
+  z-index: 1;
+  display: flex !important;
+  padding: 12px 24px;
+  margin-bottom: 16px;
+  color: #ffffff;
+  font-family: "Poppins";
+  font-size: 16px;
+
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.selected-project>.content>.options {
+  display: flex !important;
+  overflow: auto;
+  flex-direction: column;
+  align-items: left;
+  justify-content: flex-start;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.25vmin 0;
+}
+
+.selected-project>.content>.options>iframe{
+  margin: 6px 0 6px auto;
+  color: #fff;
+  font-size: 13px;
+  font-family: "Poppins";
+  font-weight: normal;
+  line-height: 1.5;
+  text-align: center;
+  text-transform: unset;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease-in-out;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -moz-column-gap: 0.66rem;
+       column-gap: 0.66rem;
+}
+.selected-project>.content>.options>*>*,
+.selected-project>.content>.options>iframe{
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+}
+@media (min-width: 1368px) {
+  .selected-project>.content>.options {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .selected-project>.content>.options>*>*,
+  .selected-project>.content>.options>iframe{
+    min-width: unset;
+    width: unset;
+    max-width: unset;
+  }
+}
+
+.selected-project>.content>.copy-button {
+  cursor: pointer;
+  padding: 5px;
+  font-size: 1.2rem;
+  color: #666;
+}

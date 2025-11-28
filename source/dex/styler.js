@@ -1,0 +1,42 @@
+// styler.js - Injects styles and elements into the page.
+
+export function applyBaseStyles() {
+    console.log("Applying base styles...");
+
+    // 1. Inject Standardized CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Easter Company Standard Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            
+            /* Dark Theme */
+            background-color: #1a1d21;
+            color: #c5c5c5;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #ececec;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        a {
+            color: #3b9cff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        /* Add more generic tag styles here */
+    `;
+    document.head.appendChild(style);
+}
