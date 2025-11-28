@@ -131,139 +131,264 @@ function onReady() {
         };
     }
 
-    // Function to generate settings content
-    function getSettingsContent() {
-        const currentTheme = getCurrentTheme();
-        const userEmail = getUserEmail() || 'user@easter.company';
-        const notificationState = getNotificationState();
-        const analyticsEnabled = isAnalyticsEnabled();
-        return `
-            <h1 style="text-align: center; margin-bottom: 30px;">Settings</h1>
-            <div class="theme-selector">
-                <div class="theme-card ${currentTheme === THEMES.AUTO ? 'active' : ''}" data-theme="${THEMES.AUTO}">
-                    <div class="theme-preview theme-preview-auto"></div>
-                    <div class="theme-info">
-                        <h3>Auto</h3>
-                        <p>Automatically switches between Default and Legacy based on screen size and display settings.</p>
-                        <span class="theme-badge">${currentTheme === THEMES.AUTO ? 'Active' : 'Select'}</span>
-                    </div>
-                </div>
-                <div class="theme-card ${currentTheme === THEMES.DEFAULT ? 'active' : ''}" data-theme="${THEMES.DEFAULT}">
-                    <div class="theme-preview theme-preview-default"></div>
-                    <div class="theme-info">
-                        <h3>Default</h3>
-                        <p>Clean, minimalist dark theme with solid black background.</p>
-                        <span class="theme-badge">${currentTheme === THEMES.DEFAULT ? 'Active' : 'Select'}</span>
-                    </div>
-                </div>
-                <div class="theme-card ${currentTheme === THEMES.ANIMATED ? 'active' : ''}" data-theme="${THEMES.ANIMATED}">
-                    <div class="theme-preview theme-preview-animated"></div>
-                    <div class="theme-info">
-                        <h3>Legacy</h3>
-                        <p>Beautiful GPU-accelerated rainbow gradient background animation.</p>
-                        <span class="theme-badge">${currentTheme === THEMES.ANIMATED ? 'Active' : 'Select'}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-divider"></div>
-
-            <div class="settings-section">
-                <h2 class="settings-section-title">Configuration</h2>
-                <div class="settings-list">
-                    <div class="settings-item settings-item-input">
-                        <div>
-                            <label class="settings-item-label">Services</label>
-                            <span class="settings-item-description">Upload your service-map.json to connect this client to your services.</span>
-                        </div>
-                        <div class="file-upload-container">
-                            <button class="file-upload-btn" id="service-map-upload-btn">Choose File</button>
-                            <span class="file-upload-name" id="service-map-file-name">${localStorage.getItem('service_map') ? 'service-map.json' : 'No file selected'}</span>
-                            <input type="file" class="file-upload-input" id="service-map-input" accept=".json,application/json" hidden>
-                            ${localStorage.getItem('service_map') ? '<button class="file-delete-btn" id="service-map-delete-btn" title="Delete service map">×</button>' : ''}
-                        </div>
-                        <div class="file-upload-error" id="service-map-error" style="display: none;"></div>
-                    </div>
-                    <div class="settings-item settings-item-input">
-                        <div>
-                            <label class="settings-item-label">Servers</label>
-                            <span class="settings-item-description">Upload your server-map.json to connect this client to your servers.</span>
-                        </div>
-                        <div class="file-upload-container">
-                            <button class="file-upload-btn" id="server-map-upload-btn">Choose File</button>
-                            <span class="file-upload-name" id="server-map-file-name">${localStorage.getItem('server_map') ? 'server-map.json' : 'No file selected'}</span>
-                            <input type="file" class="file-upload-input" id="server-map-input" accept=".json,application/json" hidden>
-                            ${localStorage.getItem('server_map') ? '<button class="file-delete-btn" id="server-map-delete-btn" title="Delete server map">×</button>' : ''}
-                        </div>
-                        <div class="file-upload-error" id="server-map-error" style="display: none;"></div>
-                    </div>
-                    <div class="settings-item settings-item-input">
-                        <div>
-                            <label class="settings-item-label">User Settings</label>
-                            <span class="settings-item-description">Upload your options.json to configure user preferences.</span>
-                        </div>
-                        <div class="file-upload-container">
-                            <button class="file-upload-btn" id="options-upload-btn">Choose File</button>
-                            <span class="file-upload-name" id="options-file-name">${localStorage.getItem('user_options') ? 'options.json' : 'No file selected'}</span>
-                            <input type="file" class="file-upload-input" id="options-input" accept=".json,application/json" hidden>
-                            ${localStorage.getItem('user_options') ? '<button class="file-delete-btn" id="options-delete-btn" title="Delete user settings">×</button>' : ''}
-                        </div>
-                        <div class="file-upload-error" id="options-error" style="display: none;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-divider"></div>
-
-            <div class="settings-section">
-                <h2 class="settings-section-title">Preferences</h2>
-                <div class="settings-list">
-                    <div class="settings-item">
-                        <div class="settings-item-info">
-                            <span class="settings-item-label">Notifications</span>
-                            <span class="settings-item-description">${notificationState.supported ? 'Receive desktop notifications' : 'Not supported in this browser'}</span>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="notifications-toggle" ${notificationState.enabled ? 'checked' : ''} ${!notificationState.supported ? 'disabled' : ''}>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="settings-item">
-                        <div class="settings-item-info">
-                            <span class="settings-item-label">Analytics</span>
-                            <span class="settings-item-description">Help improve the platform (enables debug mode)</span>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="analytics-toggle" ${analyticsEnabled ? 'checked' : ''}>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-divider"></div>
-
-            <div class="settings-section">
-                <h2 class="settings-section-title">Metrics</h2>
-                <div class="settings-metrics">
-                    <div class="metric-item">
-                        <span class="metric-label">Storage Used</span>
-                        <span class="metric-value">2.4 GB / 10 GB</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="metric-label">Active Sessions</span>
-                        <span class="metric-value">1 device</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="metric-label">Account Status</span>
-                        <span class="metric-value metric-value-active">Active</span>
-                    </div>
-                </div>
-            </div>
-        `;
+    async function getMicrophoneState() {
+        if (!navigator.permissions) {
+            // Permissions API not supported
+            return { enabled: false, supported: false };
+        }
+        try {
+            const permissionStatus = await navigator.permissions.query({ name: 'microphone' });
+            return {
+                enabled: permissionStatus.state === 'granted',
+                supported: true,
+                state: permissionStatus.state // 'granted', 'prompt', 'denied'
+            };
+        } catch (e) {
+            console.error("Error querying microphone permission:", e);
+            return { enabled: false, supported: false };
+        }
     }
 
-    // Function to attach theme selector event listeners
+    async function updateMicrophoneToggleState() {
+        const microphoneToggle = document.getElementById('microphone-toggle');
+        if (!microphoneToggle) return;
+
+        const micState = await getMicrophoneState();
+
+        const description = document.querySelector('#microphone-setting-item .settings-item-description');
+
+        if (micState.supported) {
+            microphoneToggle.disabled = false;
+            microphoneToggle.checked = micState.enabled;
+            if (description) description.textContent = 'Allow access to your microphone';
+        } else {
+            microphoneToggle.disabled = true;
+            microphoneToggle.checked = false;
+            if (description) description.textContent = 'Not supported in this browser';
+        }
+    }
+
+    // Function to generate settings content
+        function getSettingsContent() {
+            const currentTheme = getCurrentTheme();
+            const userEmail = getUserEmail() || 'user@easter.company';
+            const notificationState = getNotificationState();
+            const analyticsEnabled = isAnalyticsEnabled();
+    
+            // Get data from localStorage
+            const serviceMapString = localStorage.getItem('service_map');
+            const serverMapString = localStorage.getItem('server_map');
+            const userOptionsString = localStorage.getItem('user_options');
+    
+            let metricsHtml;
+    
+            if (serviceMapString && serverMapString && userOptionsString) {
+                metricsHtml = `<p>Loading metrics...</p>`;
+                setTimeout(updateMetricsDashboard, 0);
+            } else {
+                metricsHtml = `<p>Please upload your config files to enable metrics.</p>`;
+            }
+    
+    
+            return `
+                <h1 style="text-align: center; margin-bottom: 30px;">Settings</h1>
+                <div class="theme-selector">
+                    <div class="theme-card ${currentTheme === THEMES.AUTO ? 'active' : ''}" data-theme="${THEMES.AUTO}">
+                        <div class="theme-preview theme-preview-auto"></div>
+                        <div class="theme-info">
+                            <h3>Auto</h3>
+                            <p>Automatically switches between Default and Legacy based on screen size and display settings.</p>
+                            <span class="theme-badge">${currentTheme === THEMES.AUTO ? 'Active' : 'Select'}</span>
+                        </div>
+                    </div>
+                    <div class="theme-card ${currentTheme === THEMES.DEFAULT ? 'active' : ''}" data-theme="${THEMES.DEFAULT}">
+                        <div class="theme-preview theme-preview-default"></div>
+                        <div class="theme-info">
+                            <h3>Default</h3>
+                            <p>Clean, minimalist dark theme with solid black background.</p>
+                            <span class="theme-badge">${currentTheme === THEMES.DEFAULT ? 'Active' : 'Select'}</span>
+                        </div>
+                    </div>
+                    <div class="theme-card ${currentTheme === THEMES.ANIMATED ? 'active' : ''}" data-theme="${THEMES.ANIMATED}">
+                        <div class="theme-preview theme-preview-animated"></div>
+                        <div class="theme-info">
+                            <h3>Legacy</h3>
+                            <p>Beautiful GPU-accelerated rainbow gradient background animation.</p>
+                            <span class="theme-badge">${currentTheme === THEMES.ANIMATED ? 'Active' : 'Select'}</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="settings-divider"></div>
+    
+                <div class="settings-section">
+                    <h2 class="settings-section-title">Configuration</h2>
+                    <div class="settings-list">
+                        <div class="settings-item settings-item-input">
+                            <div>
+                                <label class="settings-item-label">Services</label>
+                                <span class="settings-item-description">Upload your service-map.json to connect this client to your services.</span>
+                            </div>
+                            <div class="file-upload-container">
+                                <button class="file-upload-btn" id="service-map-upload-btn">Choose File</button>
+                                <span class="file-upload-name" id="service-map-file-name">${localStorage.getItem('service_map') ? 'service-map.json' : 'No file selected'}</span>
+                                <input type="file" class="file-upload-input" id="service-map-input" accept=".json,application/json" hidden>
+                                ${localStorage.getItem('service_map') ? '<button class="file-delete-btn" id="service-map-delete-btn" title="Delete service map">×</button>' : ''}
+                            </div>
+                            <div class="file-upload-error" id="service-map-error" style="display: none;"></div>
+                        </div>
+                        <div class="settings-item settings-item-input">
+                            <div>
+                                <label class="settings-item-label">Servers</label>
+                                <span class="settings-item-description">Upload your server-map.json to connect this client to your servers.</span>
+                            </div>
+                            <div class="file-upload-container">
+                                <button class="file-upload-btn" id="server-map-upload-btn">Choose File</button>
+                                <span class="file-upload-name" id="server-map-file-name">${localStorage.getItem('server_map') ? 'server-map.json' : 'No file selected'}</span>
+                                <input type="file" class="file-upload-input" id="server-map-input" accept=".json,application/json" hidden>
+                                ${localStorage.getItem('server_map') ? '<button class="file-delete-btn" id="server-map-delete-btn" title="Delete server map">×</button>' : ''}
+                            </div>
+                            <div class="file-upload-error" id="server-map-error" style="display: none;"></div>
+                        </div>
+                        <div class="settings-item settings-item-input">
+                            <div>
+                                <label class="settings-item-label">User Settings</label>
+                                <span class="settings-item-description">Upload your options.json to configure user preferences.</span>
+                            </div>
+                            <div class="file-upload-container">
+                                <button class="file-upload-btn" id="options-upload-btn">Choose File</button>
+                                <span class="file-upload-name" id="options-file-name">${localStorage.getItem('user_options') ? 'options.json' : 'No file selected'}</span>
+                                <input type="file" class="file-upload-input" id="options-input" accept=".json,application/json" hidden>
+                                ${localStorage.getItem('user_options') ? '<button class="file-delete-btn" id="options-delete-btn" title="Delete user settings">×</button>' : ''}
+                            </div>
+                            <div class="file-upload-error" id="options-error" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="settings-divider"></div>
+    
+                <div class="settings-section">
+                    <h2 class="settings-section-title">Preferences</h2>
+                    <div class="settings-list">
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <span class="settings-item-label">Notifications</span>
+                                <span class="settings-item-description">${notificationState.supported ? 'Receive desktop notifications' : 'Not supported in this browser'}</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notifications-toggle" ${notificationState.enabled ? 'checked' : ''} ${!notificationState.supported ? 'disabled' : ''}>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item" id="microphone-setting-item">
+                            <div class="settings-item-info">
+                                <span class="settings-item-label">Access Microphone</span>
+                                <span class="settings-item-description">Allow access to your microphone</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="microphone-toggle" disabled>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <span class="settings-item-label">Analytics</span>
+                                <span class="settings-item-description">Help improve the platform (enables debug mode)</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="analytics-toggle" ${analyticsEnabled ? 'checked' : ''}>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="settings-divider"></div>
+    
+                <div class="settings-section">
+                    <h2 class="settings-section-title">Metrics</h2>
+                    <div class="settings-metrics">
+                        ${metricsHtml}
+                    </div>
+                </div>
+            `;
+        }
+    
+                async function updateMetricsDashboard() {
+                    const serviceMapString = localStorage.getItem('service_map');
+                    if (!serviceMapString) return;
+            
+                    let serviceMapData;
+                    try {
+                        serviceMapData = JSON.parse(serviceMapString);
+                    } catch (e) {
+                        console.error("Error parsing service_map from localStorage:", e);
+                        return;
+                    }
+            
+                    const metricsContainer = document.querySelector('.settings-metrics');
+                    if (!metricsContainer) return;
+            
+                    let services = [];
+                    if (serviceMapData && typeof serviceMapData.services === 'object') {
+                        const serviceGroupsToInclude = ['cs', 'be', 'th'];
+                        for (const group of serviceGroupsToInclude) {
+                            if (Array.isArray(serviceMapData.services[group])) {
+                                services.push(...serviceMapData.services[group]);
+                            }
+                        }
+                    } else {
+                        const errorMessage = "Error: service-map.json does not contain a valid 'services' object.";
+                        console.error(errorMessage, serviceMapData);
+                        metricsContainer.innerHTML = `<p>${errorMessage}</p>`;
+                        return;
+                    }
+            
+                    metricsContainer.innerHTML = '<p>Loading metrics...</p>';
+            
+                            const promises = services.map(service => {
+                                const domain = service.domain === '0.0.0.0' ? 'localhost' : service.domain;
+                                const metricsUrl = `http://${domain}:${service.port}/service`;
+                                return fetch(metricsUrl)
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            return { name: service.id, status: 'offline' };
+                                        }
+                                        return response.json().then(data => ({ name: service.id, status: 'online', version: data.version.str, ...data }));
+                                    })
+                                    .catch(() => ({ name: service.id, status: 'offline' }));
+                            });            
+                    const results = await Promise.all(promises);
+            
+                    const totalServices = results.length;
+                    const onlineServices = results.filter(s => s.status === 'online').length;
+                    const offlineServices = totalServices - onlineServices;
+            
+                    let metricsHtml = `
+                        <div class="metric-item">
+                            <span class="metric-label">Total Services</span>
+                            <span class="metric-value">${totalServices}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Online Services</span>
+                            <span class="metric-value ${onlineServices > 0 ? 'metric-value-active' : ''}">${onlineServices}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Offline Services</span>
+                            <span class="metric-value ${offlineServices > 0 ? 'metric-value-error' : ''}">${offlineServices}</span>
+                        </div>
+                    `;
+            
+                    const serviceVersions = results.filter(s => s.status === 'online').map(s => `
+                        <div class="metric-item">
+                            <span class="metric-label">${s.name} Version</span>
+                            <span class="metric-value">${s.version || 'unknown'}</span>
+                        </div>
+                    `).join('');
+            
+                    metricsContainer.innerHTML = metricsHtml + serviceVersions;
+                }    // Function to attach theme selector event listeners
     function attachThemeListeners() {
         const themeCards = document.querySelectorAll('.theme-card');
         themeCards.forEach(card => {
@@ -282,6 +407,8 @@ function onReady() {
                     attachOptionsListeners();
                     attachNotificationListener();
                     attachAnalyticsListener();
+                    updateMicrophoneToggleState();
+                    attachMicrophoneListener();
                 }, 10);
             });
         });
@@ -334,6 +461,8 @@ function onReady() {
                             attachOptionsListeners();
                             attachNotificationListener();
                             attachAnalyticsListener();
+                            updateMicrophoneToggleState();
+                            attachMicrophoneListener();
                         }, 10);
                     } catch (error) {
                         errorDiv.textContent = 'Invalid JSON format';
@@ -363,6 +492,8 @@ function onReady() {
                     attachOptionsListeners();
                     attachNotificationListener();
                     attachAnalyticsListener();
+                    updateMicrophoneToggleState();
+                    attachMicrophoneListener();
                 }, 10);
             });
         }
@@ -412,6 +543,8 @@ function onReady() {
                             attachThemeListeners();
                             attachServiceMapListeners();
                             attachServerMapListeners();
+                            updateMicrophoneToggleState();
+                            attachMicrophoneListener();
                         }, 10);
                     } catch (error) {
                         errorDiv.textContent = 'Invalid JSON format';
@@ -441,6 +574,8 @@ function onReady() {
                     attachOptionsListeners();
                     attachNotificationListener();
                     attachAnalyticsListener();
+                    updateMicrophoneToggleState();
+                    attachMicrophoneListener();
                 }, 10);
             });
         }
@@ -474,6 +609,32 @@ function onReady() {
                     // Cannot programmatically revoke permission, just inform user
                     if (Notification.permission === 'granted') {
                         alert('To disable notifications, please use your browser settings.');
+                        e.target.checked = true;
+                    }
+                }
+            });
+        }
+    }
+
+    function attachMicrophoneListener() {
+        const microphoneToggle = document.getElementById('microphone-toggle');
+
+        if (microphoneToggle && !microphoneToggle.disabled) {
+            microphoneToggle.addEventListener('change', async (e) => {
+                if (e.target.checked) {
+                    // Request permission
+                    try {
+                        await navigator.mediaDevices.getUserMedia({ audio: true });
+                        // Permission granted
+                    } catch (error) {
+                        console.error('Microphone permission error:', error);
+                        e.target.checked = false;
+                    }
+                } else {
+                    // Cannot programmatically revoke permission, just inform user
+                    const micState = await getMicrophoneState();
+                    if (micState.enabled) {
+                        alert('To disable microphone access, please use your browser settings.');
                         e.target.checked = true;
                     }
                 }
@@ -545,6 +706,8 @@ function onReady() {
                             attachServiceMapListeners();
                             attachServerMapListeners();
                             attachOptionsListeners();
+                            updateMicrophoneToggleState();
+                            attachMicrophoneListener();
                         }, 10);
                     } catch (error) {
                         errorDiv.textContent = 'Invalid JSON format';
@@ -574,10 +737,14 @@ function onReady() {
                     attachOptionsListeners();
                     attachNotificationListener();
                     attachAnalyticsListener();
+                    updateMicrophoneToggleState();
+                    attachMicrophoneListener();
                 }, 10);
             });
         }
     }
+
+
 
     const settingsWindow = createWindow({
         id: 'settings-window',
@@ -675,11 +842,12 @@ function onReady() {
             animationFrameId = requestAnimationFrame(draw);
             analyser.getByteTimeDomainData(dataArray);
 
-            canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
             canvasCtx.lineWidth = 2;
             canvasCtx.strokeStyle = 'rgb(0, 255, 255)';
+            canvasCtx.shadowBlur = 10;
+            canvasCtx.shadowColor = 'rgb(0, 255, 255)';
 
             canvasCtx.beginPath();
 
@@ -735,12 +903,16 @@ function onReady() {
                 nav.classList.add('recording');
                 navLeft.classList.add('recording');
 
-                if (windowContent) {
-                    const canvas = document.createElement('canvas');
-                    canvas.id = 'audio-canvas';
-                    windowContent.prepend(canvas);
-                    startAudioVisualization(canvas);
-                }
+                const canvas = document.createElement('canvas');
+                canvas.id = 'audio-canvas';
+                canvas.style.position = 'absolute';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.zIndex = '-1';
+                nav.prepend(canvas);
+                startAudioVisualization(canvas);
 
                 // Stop recording after 30 seconds
                 setTimeout(() => {
@@ -800,6 +972,8 @@ function onReady() {
                     attachOptionsListeners();
                     attachNotificationListener();
                     attachAnalyticsListener();
+                    updateMicrophoneToggleState();
+                    attachMicrophoneListener();
                 }, 100);
             });
         }
