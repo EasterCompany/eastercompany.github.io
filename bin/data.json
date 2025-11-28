@@ -1,40 +1,40 @@
 {
   "latest": {
-    "user": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw",
-    "dev": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw"
+    "user": "2.6.0.main.c07f218.2025-11-28-04-28-23.linux-amd64.ovddrzvu",
+    "dev": "2.6.0.main.c07f218.2025-11-28-04-28-23.linux-amd64.ovddrzvu"
   },
   "releases": {
-    "2.5.0": {
+    "2.6.0": {
       "type": "minor",
-      "date": "2025-11-28T00:05:00Z",
-      "commit": "7b91f32",
+      "date": "2025-11-28T04:28:26Z",
+      "commit": "9338fdf",
       "binaries": {
         "cli": {
           "linux-amd64": {
-            "path": "/bin/2.5.0/dex",
-            "size": 10871210,
-            "checksum": "9f09bef8ecd0c90fa3f27be933c510af4b7d0db59f6698e4f5340d257c8dc22c"
+            "path": "/bin/2.6.0/dex",
+            "size": 10888837,
+            "checksum": "90db55fd8eaff291dc1f5a2a11cdfeb961d0c58f4a28f05e3c783f658d5a1d6e"
           }
         },
         "discord": {
           "linux-amd64": {
-            "path": "/bin/2.5.0/dex-discord-service",
-            "size": 8159524,
-            "checksum": "256db87deafa5b442d879eb24924192027f0a75db5969504139598026a7791d6"
+            "path": "/bin/2.6.0/dex-discord-service",
+            "size": 8163620,
+            "checksum": "75c743f3f5b6b3bbb8cbc6de0ac65c8031004fafe504e96251442f0c9edb7382"
           }
         },
         "event": {
           "linux-amd64": {
-            "path": "/bin/2.5.0/dex-event-service",
-            "size": 7995684,
-            "checksum": "f814abfef0e491e0c89d5e194424afa35b0ba72993033958ce8a1df8fcd47ad7"
+            "path": "/bin/2.6.0/dex-event-service",
+            "size": 7987492,
+            "checksum": "4bffcfcef64b6c604f8dfe62a5a025aeb056451c47b7c388ad6576bea72a0f46"
           }
         },
         "event-test-handler": {
           "linux-amd64": {
-            "path": "/bin/2.5.0/event-test-handler",
+            "path": "/bin/2.6.0/event-test-handler",
             "size": 5996836,
-            "checksum": "31cc53213d6f72b2b88fec6d1eda1dc71c0bef862c93e53d8f208c98de6e84f1"
+            "checksum": "f650e2c898548edb62ee370a2597d988304684eecf32d7ebdf46fb69f15a8d3d"
           }
         }
       }
@@ -42,18 +42,18 @@
   },
   "services": {
     "cli": {
-      "current": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw",
-      "user": "2.5.0.main.93df941.2025-11-28-00-03-39.linux-amd64.qzbkxejw",
+      "current": "2.6.0.main.c07f218.2025-11-28-04-28-23.linux-amd64.ovddrzvu",
+      "user": "2.6.0.main.c07f218.2025-11-28-04-28-23.linux-amd64.ovddrzvu",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "2025/11/28 00:05:01 [STATUS] Starting status server on 0.0.0.0:8300\n2025/11/28 00:05:01 Dexter Discord Service running...\n2025/11/28 00:05:01 HTTP status server is available.\n2025/11/28 00:05:01 Discord token found, starting bot...\n2025/11/28 00:05:01 [STATUS] Server error: listen tcp :8300: bind: address already in use\n2025/11/28 00:05:01 Connected to Redis for Discord bot.\n2025/11/28 00:05:01 Redis cache cleared for Discord bot.\n2025/11/28 00:05:01 Creating Discord session...\n2025/11/28 00:05:01 Opening Discord connection...\n2025/11/28 00:05:01 Error: Failed to open Discord connection: websocket: close 4004: Authentication failed.\n2025/11/28 00:31:09 Shutting down...\n2025/11/28 00:31:09 Shutdown complete.",
-      "user": "2025/11/28 00:05:01 [STATUS] Starting status server on 0.0.0.0:8300\n2025/11/28 00:05:01 Dexter Discord Service running...\n2025/11/28 00:05:01 HTTP status server is available.\n2025/11/28 00:05:01 Discord token found, starting bot...\n2025/11/28 00:05:01 [STATUS] Server error: listen tcp :8300: bind: address already in use\n2025/11/28 00:05:01 Connected to Redis for Discord bot.\n2025/11/28 00:05:01 Redis cache cleared for Discord bot.\n2025/11/28 00:05:01 Creating Discord session...\n2025/11/28 00:05:01 Opening Discord connection...\n2025/11/28 00:05:01 Error: Failed to open Discord connection: websocket: close 4004: Authentication failed.\n2025/11/28 00:31:09 Shutting down...\n2025/11/28 00:31:09 Shutdown complete.",
+      "current": "2.6.0.main.6a7fd26.2025-11-28-04-28-25.linux-amd64.xcc2smfd",
+      "user": "2.6.0.main.6a7fd26.2025-11-28-04-28-25.linux-amd64.xcc2smfd",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "unknown",
-      "user": "unknown",
+      "current": "2.6.0.main.1a39b20.2025-11-28-04-28-24.linux-amd64.jvzq6bis",
+      "user": "2.6.0.main.1a39b20.2025-11-28-04-28-24.linux-amd64.jvzq6bis",
       "repository": "github.com/EasterCompany/dex-event-service"
     }
   }
