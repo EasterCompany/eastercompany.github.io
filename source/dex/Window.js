@@ -32,30 +32,47 @@ export function createWindow(options) {
         windowEl.className = 'window';
 
         const iconClass = options.icon || 'bx-window';
+        let tabBarHTML = '';
         let contentHTML;
-        let headerHTML = `
-            <div class="window-header">
-                <i class="bx ${iconClass}"></i>
-                <i class="bx bx-x window-close"></i>
-            </div>
-        `;
 
         if (options.tabs && options.tabs.length > 0) {
-            const tabTitles = options.tabs.map((tab, index) => `
-                <div class="tab ${index === 0 ? 'active' : ''}" data-tab-index="${index}">${tab.title}</div>
-            `).join('');
+            const tabTitles = options.tabs.map((tab, index) => {
+                let iconHtml;
+                if (tab.icon) {
+                    iconHtml = `<i class="bx ${tab.icon}"></i>`;
+                } else if (tab.title && tab.title.length > 0) {
+                    const glyph = tab.title.charAt(0).toUpperCase();
+                    iconHtml = `<span class="tab-glyph">${glyph}</span>`;
+                } else {
+                    iconHtml = `<i class="bx bx-question-mark"></i>`; // Default fallback if no icon or title
+                }
+
+                return `
+                    <div class="tab ${index === 0 ? 'active' : ''}" data-tab-index="${index}">
+                        ${iconHtml}
+                        <span class="tab-title">${tab.title}</span>
+                    </div>
+                `;
+            }).join('');
+
+            tabBarHTML = `<div class="tab-bar">${tabTitles}</div>`;
 
             const tabContents = options.tabs.map((tab, index) => `
                 <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>
             `).join('');
+            contentHTML = `<div class="window-content">${tabContents}</div>`;
 
-            contentHTML = `
-                <div class="tab-bar">${tabTitles}</div>
-                <div class="window-content">${tabContents}</div>
-            `;
         } else {
             contentHTML = `<div class="window-content">${options.content}</div>`;
         }
+
+        const headerHTML = `
+            <div class="window-header">
+                <i class="bx ${iconClass}"></i>
+                ${tabBarHTML}
+                <i class="bx bx-x window-close"></i>
+            </div>
+        `;
 
         windowEl.innerHTML = headerHTML + contentHTML;
         container.appendChild(windowEl);
@@ -68,6 +85,7 @@ export function createWindow(options) {
             });
         }
 
+        // This logic remains the same, as it operates on the rendered elements
         if (options.tabs && options.tabs.length > 0) {
             const tabs = windowEl.querySelectorAll('.tab');
             tabs.forEach(tab => {

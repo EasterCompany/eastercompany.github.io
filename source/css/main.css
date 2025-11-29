@@ -410,26 +410,29 @@ main a {
 }
 
 .window-header {
-    display: none; /* Hidden on mobile by default */
+    display: flex; /* Is now a flex container */
     justify-content: space-between;
     align-items: center;
-    padding: 8px 15px;
+    padding: 0 15px; /* Vertical padding will be on children */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgba(40, 40, 40, 0.5);
     flex-shrink: 0;
-    position: relative; /* Changed from absolute to relative */
     width: 100%;
 }
 
-.window-header i {
-    font-size: 1.2em;
-    color: #eee;
+.window-header > .bx {
+    padding: 8px 0;
 }
 
 .window-header .window-close {
+    display: none; /* Hidden by default on small screens */
     cursor: pointer;
     transition: color 0.3s ease, transform 0.2s ease;
 }
+
+/* Later in the file, within @media (min-width: 768px) */
+/* This will make it visible on desktop screens */
+/* .window-header .window-close { display: block; } */
 
 .window-header .window-close:hover {
     color: #fff;
@@ -448,26 +451,53 @@ main a {
 
 .tab-bar {
     display: flex;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(0, 0, 0, 0.1);
+    flex-grow: 1; /* Allows the tab bar to fill space */
+    justify-content: center; /* Center the tabs within the bar */
+    margin: 0 15px; /* Add space between side icons and tabs */
 }
 
 .tab {
-    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and title */
+    padding: 12px 15px; /* Adjust padding */
     cursor: pointer;
     color: #aaa;
-    transition: all 0.3s ease;
     border-bottom: 2px solid transparent;
+    flex-grow: 0; /* Don't grow by default */
+    flex-shrink: 0;
+    max-width: 50px; /* Small width for inactive tabs */
+    overflow: hidden;
+    opacity: 0.7;
+    transition: all 0.4s ease; /* Slower transition for a smoother effect */
+}
+
+.tab .tab-title {
+    display: none; /* Hide title on inactive tabs */
+    white-space: nowrap;
+}
+
+.tab-glyph {
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 .tab:hover {
     background-color: rgba(255, 255, 255, 0.05);
     color: #fff;
+    opacity: 1;
 }
 
 .tab.active {
     color: #fff;
     border-bottom-color: #fff;
+    flex-grow: 1; /* Take up remaining space */
+    max-width: 100%; /* Allow it to grow fully */
+    opacity: 1;
+}
+
+.tab.active .tab-title {
+    display: inline; /* Show title on active tab */
 }
 
 .tab-content {
@@ -585,8 +615,8 @@ footer.hide {
         margin: 0; /* Center with flexbox, remove top margin */
     }
 
-    .window-header {
-        display: flex; /* Show header on desktop */
+    .window-header .window-close {
+        display: block; /* Show close button on desktop */
     }
 
     footer {
@@ -1136,5 +1166,9 @@ footer.hide {
 }
 .metric-value-error {
   color: #ff6b6b;
+}
+
+.metric-version-monospace {
+    font-family: monospace;
 }
 /* --- End Theme System --- */

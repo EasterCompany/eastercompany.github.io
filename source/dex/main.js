@@ -78,9 +78,10 @@ function onReady() {
     const messageWindow = createWindow({
         id: 'message-window',
         tabs: [
-            { title: 'Logs', content: '<h1>Logs</h1><p>This is the logs tab.</p>' },
-            { title: 'Notifications', content: '<h1>Notifications</h1><p>This is the notifications tab.</p>' },
-            { title: 'Conversations', content: '<h1>Conversations</h1><p>This is the conversations tab.</p>' }
+            { icon: 'bx-bell', title: 'Notifications', content: '<h1>Notifications</h1><p>This is the notifications tab.</p>' },
+            { icon: 'bx-history', title: 'Logs', content: '<h1>Logs</h1><p>This is the logs tab.</p>' },
+            { icon: 'bx-calendar-event', title: 'Events', content: '<h1>Events</h1><p>This is the events tab.</p>' },
+            { icon: 'bx-line-chart', title: 'System Monitor', content: '<h1>System Monitor</h1><p>This is the system monitor tab.</p>' }
         ],
         icon: 'bxs-message-dots',
         onClose: onWindowClose
@@ -184,7 +185,6 @@ function onReady() {
     
             if (serviceMapString && serverMapString && userOptionsString) {
                 metricsHtml = `<p>Loading metrics...</p>`;
-                setTimeout(updateMetricsDashboard, 0);
             } else {
                 metricsHtml = `<p>Please upload your config files to enable metrics.</p>`;
             }
@@ -195,28 +195,25 @@ function onReady() {
                 <div class="theme-selector">
                     <div class="theme-card ${currentTheme === THEMES.AUTO ? 'active' : ''}" data-theme="${THEMES.AUTO}">
                         <div class="theme-preview theme-preview-auto"></div>
-                        <div class="theme-info">
-                            <h3>Auto</h3>
-                            <p>Automatically switches between Default and Legacy based on screen size and display settings.</p>
-                            <span class="theme-badge">${currentTheme === THEMES.AUTO ? 'Active' : 'Select'}</span>
-                        </div>
-                    </div>
+                                                                                    <div class="theme-info">
+                                                                                        <h3>Auto</h3>
+                                                                                        <p>Automatic theme selection.</p>
+                                                                                        <span class="theme-badge">${currentTheme === THEMES.AUTO ? 'Active' : 'Select'}</span>
+                                                                                    </div>                    </div>
                     <div class="theme-card ${currentTheme === THEMES.DEFAULT ? 'active' : ''}" data-theme="${THEMES.DEFAULT}">
                         <div class="theme-preview theme-preview-default"></div>
-                        <div class="theme-info">
-                            <h3>Default</h3>
-                            <p>Clean, minimalist dark theme with solid black background.</p>
-                            <span class="theme-badge">${currentTheme === THEMES.DEFAULT ? 'Active' : 'Select'}</span>
-                        </div>
-                    </div>
+                                                                <div class="theme-info">
+                                                                    <h3>Default</h3>
+                                                                    <p>Simple, black, default.</p>
+                                                                    <span class="theme-badge">${currentTheme === THEMES.DEFAULT ? 'Active' : 'Select'}</span>
+                                                                </div>                    </div>
                     <div class="theme-card ${currentTheme === THEMES.ANIMATED ? 'active' : ''}" data-theme="${THEMES.ANIMATED}">
                         <div class="theme-preview theme-preview-animated"></div>
-                        <div class="theme-info">
-                            <h3>Legacy</h3>
-                            <p>Beautiful GPU-accelerated rainbow gradient background animation.</p>
-                            <span class="theme-badge">${currentTheme === THEMES.ANIMATED ? 'Active' : 'Select'}</span>
-                        </div>
-                    </div>
+                                                                <div class="theme-info">
+                                                                    <h3>Legacy</h3>
+                                                                    <p>Colourful, not bright.</p>
+                                                                    <span class="theme-badge">${currentTheme === THEMES.ANIMATED ? 'Active' : 'Select'}</span>
+                                                                </div>                    </div>
                 </div>
     
                 <div class="settings-divider"></div>
@@ -349,43 +346,52 @@ function onReady() {
             
                             const promises = services.map(service => {
                                 const domain = service.domain === '0.0.0.0' ? 'localhost' : service.domain;
-                                const metricsUrl = `http://${domain}:${service.port}/service`;
-                                return fetch(metricsUrl)
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            return { name: service.id, status: 'offline' };
-                                        }
-                                        return response.json().then(data => ({ name: service.id, status: 'online', version: data.version.str, ...data }));
-                                    })
-                                    .catch(() => ({ name: service.id, status: 'offline' }));
-                            });            
-                    const results = await Promise.all(promises);
-            
-                    const totalServices = results.length;
-                    const onlineServices = results.filter(s => s.status === 'online').length;
-                    const offlineServices = totalServices - onlineServices;
-            
-                    let metricsHtml = `
-                        <div class="metric-item">
-                            <span class="metric-label">Total Services</span>
-                            <span class="metric-value">${totalServices}</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Online Services</span>
-                            <span class="metric-value ${onlineServices > 0 ? 'metric-value-active' : ''}">${onlineServices}</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Offline Services</span>
-                            <span class="metric-value ${offlineServices > 0 ? 'metric-value-error' : ''}">${offlineServices}</span>
-                        </div>
-                    `;
-            
-                    const serviceVersions = results.filter(s => s.status === 'online').map(s => `
-                        <div class="metric-item">
-                            <span class="metric-label">${s.name} Version</span>
-                            <span class="metric-value">${s.version || 'unknown'}</span>
-                        </div>
-                    `).join('');
+                                            const metricsUrl = `http://${domain}:${service.port}/service`;
+                                            return fetch(metricsUrl)
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        return { name: service.id, status: 'offline' };
+                                                    }
+                                                    return response.json().then(data => ({ name: service.id, status: 'online', version: data.version, ...data }));
+                                                })
+                                                .catch(() => ({ name: service.id, status: 'offline' }));
+                                        });
+                                
+                                        const results = await Promise.all(promises);
+                                
+                                        const totalServices = results.length;
+                                        const onlineServices = results.filter(s => s.status === 'online').length;
+                                        const offlineServices = totalServices - onlineServices;
+                                
+                                        let metricsHtml = `
+                                            <div class="metric-item">
+                                                <span class="metric-label">Total Services</span>
+                                                <span class="metric-value">${totalServices}</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Online Services</span>
+                                                <span class="metric-value ${onlineServices > 0 ? 'metric-value-active' : ''}">${onlineServices}</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Offline Services</span>
+                                                <span class="metric-value ${offlineServices > 0 ? 'metric-value-error' : ''}">${offlineServices}</span>
+                                            </div>
+                                        `;
+                                
+                                        const serviceVersions = results.filter(s => s.status === 'online').map(s => {
+                                            const versionObj = s.version && s.version.obj;
+                                            const majorMinorPatch = versionObj ? `${versionObj.major}.${versionObj.minor}.${versionObj.patch}` : 'unknown';
+                                            const branchCommit = versionObj ? `${versionObj.branch} ${versionObj.commit}` : '';
+                                
+                                                        return `
+                                                            <div class="metric-item">
+                                                                <span class="metric-label">${s.name} Version</span>
+                                                                <span class="metric-value">
+                                                                    <span class="metric-version-monospace" style="font-size: 1.2em; font-weight: bold; color: white;">${majorMinorPatch}</span>
+                                                                    ${branchCommit ? `<span class="metric-version-monospace" style="font-size: 0.8em; color: #aaa; margin-left: 5px;">${branchCommit}</span>` : ''}
+                                                                </span>
+                                                            </div>
+                                                        `;                                        }).join('');
             
                     metricsContainer.innerHTML = metricsHtml + serviceVersions;
                 }    // Function to attach theme selector event listeners
@@ -974,6 +980,14 @@ function onReady() {
                     attachAnalyticsListener();
                     updateMicrophoneToggleState();
                     attachMicrophoneListener();
+
+                    // Check if we need to load metrics
+                    const serviceMapString = localStorage.getItem('service_map');
+                    const serverMapString = localStorage.getItem('server_map');
+                    const userOptionsString = localStorage.getItem('user_options');
+                    if (serviceMapString && serverMapString && userOptionsString) {
+                        updateMetricsDashboard();
+                    }
                 }, 100);
             });
         }
