@@ -3,6 +3,7 @@ import { applyBaseStyles, injectNavbar, injectFooter } from './styler.js';
 import { createWindow } from './Window.js';
 import { isLoggedIn, login, getUserEmail } from './auth.js';
 import { initTheme, setTheme, getCurrentTheme, THEMES } from './theme.js';
+import { getLogsContent, updateLogs } from './logs.js';
 
 function onReady() {
     console.log("Welcome to Easter Company.");
@@ -35,11 +36,11 @@ function onReady() {
     // Login window
     const loginWindow = createWindow({
         id: 'login-window',
+        title: 'Welcome',
         content: `
             <div class="login-split-container">
                 <div class="login-top-section">
                     <div class="login-form">
-                        <h1>Welcome</h1>
                         <p>Enter your email to continue</p>
                         <form id="login-form">
                             <input
@@ -67,21 +68,503 @@ function onReady() {
         onClose: onWindowClose
     });
 
+    // System Monitor Functions
+    let lastSystemMonitorUpdate = null;
+
+    function getSystemMonitorContent() {
+        const serviceMapString = localStorage.getItem('service_map');
+
+        if (!serviceMapString) {
+            return `
+                <div class="system-monitor-placeholder">
+                    <p>No service map configured.</p>
+                    <p>Please upload your service-map.json in Settings to enable live monitoring.</p>
+                </div>
+            `;
+        }
+
+        return `
+            <div id="system-monitor-widgets" class="system-monitor-widgets">
+                <p>Loading services...</p>
+            </div>
+        `;
+    }
+
+    async function updateSystemMonitor() {
+        const widgetsContainer = document.getElementById('system-monitor-widgets');
+        if (!widgetsContainer) return;
+
+        const serviceMapString = localStorage.getItem('service_map');
+        if (!serviceMapString) {
+            widgetsContainer.innerHTML = '<p>No service map configured. Please upload your service-map.json in Settings to enable live monitoring.</p>';
+            return;
+        }
+
+        let serviceMapData;
+        try {
+            serviceMapData = JSON.parse(serviceMapString);
+        } catch (e) {
+            console.error("Error parsing service_map from localStorage:", e);
+            widgetsContainer.innerHTML = '<p>Error: Invalid service map data.</p>';
+            return;
+        }
+
+        // Find the event service to get its URL
+        let eventService = null;
+        if (serviceMapData && typeof serviceMapData.services === 'object') {
+            const serviceGroups = ['cs', 'be', 'th']; // Assuming event service is in one of these
+            for (const group of serviceGroups) {
+                if (Array.isArray(serviceMapData.services[group])) {
+                    const found = serviceMapData.services[group].find(s => s.id === 'dex-event-service');
+                    if (found) {
+                        eventService = found;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!eventService) {
+            widgetsContainer.innerHTML = '<p>Error: dex-event-service not found in service map. Cannot fetch system metrics.</p>';
+            return;
+        }
+
+        const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+        const systemMonitorUrl = `http://${domain}:${eventService.port}/system_monitor_metrics`;
+
+        let results = [];
+        try {
+            const response = await fetch(systemMonitorUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            results = await response.json();
+        } catch (error) {
+            console.error('Error fetching system monitor metrics:', error);
+            widgetsContainer.innerHTML = `<p>Failed to load system metrics: ${error.message}.</p>`;
+            return;
+        }
+
+        // Update timestamp after all services have been checked
+        lastSystemMonitorUpdate = Date.now();
+        updateTabTimestamp(3, lastSystemMonitorUpdate); // System Monitor is tab index 3
+
+        // Helper function to sanitize values - replace N/A, unknown, empty with dash
+        function sanitizeValue(value) {
+            if (!value || value === 'N/A' || value === 'unknown' || value.trim() === '') {
+                return '-';
+            }
+            return value;
+        }
+
+        // Helper function to extract major.minor.patch from any version string
+        function extractMajorMinorPatch(versionStr) {
+            if (!versionStr || versionStr === 'N/A' || versionStr === 'unknown' || versionStr.trim() === '') {
+                return '-';
+            }
+
+            // Match the first three numeric segments separated by dots
+            // This handles formats like:
+            // - "2.7.1.main.adf" -> "2.7.1"
+            // - "0.8.0" -> "0.8.0"
+            // - "7.2.4-alpine" -> "7.2.4"
+            // - "1.0.0-rc1" -> "1.0.0"
+            const match = versionStr.match(/^(\d+)\.(\d+)\.(\d+)/);
+            if (match) {
+                return `${match[1]}.${match[2]}.${match[3]}`;
+            }
+
+            // If we can't extract major.minor.patch, try major.minor
+            const shortMatch = versionStr.match(/^(\d+)\.(\d+)/);
+            if (shortMatch) {
+                return `${shortMatch[1]}.${shortMatch[2]}.0`;
+            }
+
+            // If we can't extract anything, return the original or dash
+            return versionStr.split('.').slice(0, 3).join('.') || '-';
+        }
+
+        // Helper function to truncate address to max 28 characters
+        function truncateAddress(address) {
+            if (!address || address === '-') {
+                return address;
+            }
+            if (address.length > 28) {
+                return address.substring(0, 28) + '...';
+            }
+            return address;
+        }
+
+        // Helper function to get color based on percentage value
+        function getStatColor(value) {
+            if (!value || value === '-' || value === 'N/A') {
+                return '#666'; // Gray for no data
+            }
+
+            // Extract percentage value
+            const percentMatch = value.match(/([\d.]+)%/);
+            if (!percentMatch) {
+                return '#666'; // Gray if not a percentage
+            }
+
+            const percent = parseFloat(percentMatch[1]);
+
+            // Color coding based on usage levels
+            if (percent < 30) {
+                return '#00ff00'; // Green - low usage
+            } else if (percent < 60) {
+                return '#88ff00'; // Yellow-green - moderate
+            } else if (percent < 80) {
+                return '#ffaa00'; // Orange - high
+            } else {
+                return '#ff0000'; // Red - critical
+            }
+        }
+
+        // Helper function to format uptime (moved from global for local access)
+        function formatUptime(uptimeStr) {
+            if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-';
+
+            // Parse the Go duration string (e.g., "14m28.364693775s" or "1d4h")
+            const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);
+            if (!match) return '-';
+
+            const days = parseInt(match[1]) || 0;
+            const hours = parseInt(match[2]) || 0;
+            const minutes = parseInt(match[3]) || 0;
+            const seconds = parseFloat(match[4]) || 0;
+
+            // Calculate total time in different units
+            const totalSeconds = (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalSeconds / 3600);
+            const totalDays = Math.floor(totalSeconds / 86400);
+            const totalMonths = Math.floor(totalDays / 30);
+            const totalYears = Math.floor(totalDays / 365);
+
+            // Format based on magnitude
+            if (totalYears >= 1) {
+                return totalYears === 1 ? '1 year' : `${totalYears} years`;
+            } else if (totalMonths >= 1) {
+                return totalMonths === 1 ? '1 month' : `${totalMonths} months`;
+            } else if (totalDays >= 1) {
+                return totalDays === 1 ? '1 day' : `${totalDays} days`;
+            } else if (totalHours >= 1) {
+                return totalHours === 1 ? '1 hour' : `${totalHours} hours`;
+            } else if (totalMinutes >= 1) {
+                return totalMinutes === 1 ? '1 minute' : `${totalMinutes} minutes`;
+            } else {
+                return Math.floor(totalSeconds) === 1 ? '1 second' : `${Math.floor(totalSeconds)} seconds`;
+            }
+        }
+
+        // Helper function to generate widget HTML
+        function generateWidgetHtml(service) {
+            const isOnline = service.status === 'online';
+            const statusClass = isOnline ? 'service-widget-online' : 'service-widget-offline';
+            const statusIcon = isOnline ? 'bx-check-circle' : 'bx-x-circle';
+            const statusText = isOnline ? 'OK' : 'BAD';
+
+            let detailsHtml = '';
+            let footerHtml = '';
+
+            if (isOnline) {
+                // Determine version display - always extract major.minor.patch
+                let versionDisplay = '-';
+
+                if (service.version && service.version.str && service.version.str.trim() !== '') {
+                    // Parse the version string to extract major.minor.patch
+                    versionDisplay = extractMajorMinorPatch(service.version.str);
+                } else if (service.version && service.version.obj) {
+                    const versionObj = service.version.obj;
+                    // Build version from parts if they exist
+                    if (versionObj.major || versionObj.minor || versionObj.patch) {
+                        const major = sanitizeValue(versionObj.major);
+                        const minor = sanitizeValue(versionObj.minor);
+                        const patch = sanitizeValue(versionObj.patch);
+
+                        if (major !== '-' || minor !== '-' || patch !== '-') {
+                            versionDisplay = `${major !== '-' ? major : '0'}.${minor !== '-' ? minor : '0'}.${patch !== '-' ? patch : '0'}`;
+                        }
+                    }
+                }
+
+                detailsHtml = `
+                    <div class="service-widget-info">
+                        <span class="info-label">Version:</span>
+                        <span class="info-value">
+                            <span class="metric-version-monospace" style="font-size: 1.2em; font-weight: bold; color: white;">${versionDisplay}</span>
+                        </span>
+                    </div>
+                `;
+
+                const cpuValue = sanitizeValue(service.cpu);
+                const memoryValue = sanitizeValue(service.memory);
+                const cpuColor = getStatColor(cpuValue);
+                const memoryColor = getStatColor(memoryValue);
+
+                footerHtml = `
+                    <div class="service-widget-footer">
+                        <div class="service-widget-item">
+                            <i class="bx bx-time-five" style="color: #00bfff;"></i>
+                            <span>${formatUptime(service.uptime)}</span>
+                        </div>
+                        <div class="service-widget-item">
+                            <i class="bx bxs-microchip" style="color: ${cpuColor};"></i>
+                            <span style="color: ${cpuColor};">${cpuValue}</span>
+                        </div>
+                        <div class="service-widget-item">
+                            <i class="bx bxs-chip" style="color: ${memoryColor};"></i>
+                            <span style="color: ${memoryColor};">${memoryValue}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                detailsHtml = ``; // No details for offline services
+                footerHtml = `
+                    <div class="service-widget-footer offline">
+                        <span>OFFLINE</span>
+                    </div>
+                `;
+            }
+
+            const displayName = service.short_name || service.id;
+            const rawAddress = service.domain && service.port ? `${service.domain}:${service.port}` : service.domain || service.port || '';
+            const address = truncateAddress(sanitizeValue(rawAddress));
+
+            return `
+                <div class="service-widget ${statusClass}" data-service-id="${service.id}">
+                    <div class="service-widget-header">
+                        <i class="bx ${statusIcon}"></i>
+                        <h3>${displayName}</h3>
+                        <span class="service-widget-status">${statusText}</span>
+                    </div>
+                    <div class="service-widget-body">
+                        <div class="service-widget-info">
+                            <span class="info-label">Address:</span>
+                            <span class="info-value">${address}</span>
+                        </div>
+                        ${detailsHtml}
+                    </div>
+                    ${footerHtml}
+                </div>
+            `;
+        }
+
+        // Update widgets in place or create new ones
+        const existingWidgets = widgetsContainer.querySelectorAll('.service-widget');
+        const existingWidgetsMap = new Map();
+
+        // Remove any non-widget elements (like loading messages)
+        Array.from(widgetsContainer.children).forEach(child => {
+            if (!child.classList.contains('service-widget')) {
+                child.remove();
+            }
+        });
+
+        // Build map of existing widgets by service ID
+        existingWidgets.forEach(widget => {
+            const serviceId = widget.getAttribute('data-service-id');
+            if (serviceId) {
+                existingWidgetsMap.set(serviceId, widget);
+            }
+        });
+
+        // Update or create widgets based on new data
+        results.forEach((service, index) => {
+            const existingWidget = existingWidgetsMap.get(service.id);
+
+            if (existingWidget) {
+                // Update existing widget in place
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = generateWidgetHtml(service);
+                const newWidget = tempDiv.firstElementChild;
+
+                // Replace content while maintaining DOM position
+                existingWidget.className = newWidget.className;
+                existingWidget.innerHTML = newWidget.innerHTML;
+
+                // Mark as processed
+                existingWidgetsMap.delete(service.id);
+            } else {
+                // Create new widget
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = generateWidgetHtml(service);
+                const newWidget = tempDiv.firstElementChild;
+
+                // Insert at the correct position
+                if (index < widgetsContainer.children.length) {
+                    widgetsContainer.insertBefore(newWidget, widgetsContainer.children[index]);
+                } else {
+                    widgetsContainer.appendChild(newWidget);
+                }
+            }
+        });
+
+        // Remove widgets that no longer exist in the data
+        existingWidgetsMap.forEach(widget => {
+            widget.remove();
+        });
+    }
+
     // Authenticated windows
     const userWindow = createWindow({
         id: 'user-window',
-        content: `<h1>User Profile</h1><p>Logged in as: ${getUserEmail() || 'Unknown'}</p>`,
+        title: 'User Profile',
+        content: `<p>Logged in as: ${getUserEmail() || 'Unknown'}</p>`,
         icon: 'bx-user',
         onClose: onWindowClose
     });
+
+    // Events Timeline Functions
+    let lastEventsUpdate = null;
+    let lastLogsUpdate = null;
+
+    function getEventsContent() {
+        return `
+            <div id="events-timeline" class="events-timeline">
+                <p>Loading events...</p>
+            </div>
+        `;
+    }
+
+    function updateTabTimestamp(tabIndex, timestamp) {
+        const subtitleElement = document.querySelector(`[data-tab-subtitle="${tabIndex}"]`);
+        if (!subtitleElement || !timestamp) return;
+
+        const now = Date.now();
+        const diff = now - timestamp;
+        const ms = diff;
+        const seconds = diff / 1000;
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+
+        let timeStr;
+        if (seconds < 10) {
+            // Show seconds 0-9 with 2 decimal places (format: 0.00s)
+            const paddedSeconds = seconds.toFixed(2);
+            timeStr = `${paddedSeconds}s ago`;
+        } else if (seconds < 100) {
+            // Show seconds 10-99 with 2 decimal places (format: XX.XXs)
+            const paddedSeconds = seconds.toFixed(2);
+            timeStr = `${paddedSeconds}s ago`;
+        } else if (minutes < 60) {
+            timeStr = minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
+        } else {
+            timeStr = hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+        }
+
+        subtitleElement.textContent = `Last updated: ${timeStr}`;
+    }
+
+    async function updateEventsTimeline() {
+        const eventsContainer = document.getElementById('events-timeline');
+        if (!eventsContainer) return;
+
+        const serviceMapString = localStorage.getItem('service_map');
+        if (!serviceMapString) {
+            eventsContainer.innerHTML = '<p class="events-placeholder">No service map configured. Please upload your service-map.json in Settings.</p>';
+            return;
+        }
+
+        let serviceMapData;
+        try {
+            serviceMapData = JSON.parse(serviceMapString);
+        } catch (e) {
+            console.error("Error parsing service_map from localStorage:", e);
+            eventsContainer.innerHTML = '<p class="events-placeholder">Error: Invalid service map data.</p>';
+            return;
+        }
+
+        // Find the event service
+        let eventService = null;
+        if (serviceMapData && typeof serviceMapData.services === 'object') {
+            const serviceGroups = ['cs', 'be', 'th'];
+            for (const group of serviceGroups) {
+                if (Array.isArray(serviceMapData.services[group])) {
+                    const found = serviceMapData.services[group].find(s => s.short_name === 'event' || s.id === 'event' || s.id === 'dex-event-service');
+                    if (found) {
+                        eventService = found;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!eventService) {
+            eventsContainer.innerHTML = '<p class="events-placeholder">Event service not found in service map.</p>';
+            return;
+        }
+
+        const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+        const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=text`;
+
+        try {
+            const response = await fetch(eventsUrl);
+            if (!response.ok) {
+                eventsContainer.innerHTML = '<p class="events-placeholder">Event service is offline.</p>';
+                return;
+            }
+
+            const textData = await response.text();
+            if (!textData || textData.trim() === '') {
+                eventsContainer.innerHTML = '<p class="events-placeholder">No events found.</p>';
+                return;
+            }
+
+            // Parse the text format: "2025-11-28 23:15:24 UTC | dex-discord-service | Dexter changed status to joined Admin voice channel"
+            const lines = textData.trim().split('\n');
+            const eventsHtml = lines.map(line => {
+                const parts = line.split(' | ');
+                if (parts.length < 3) return '';
+
+                const timestampStr = parts[0].trim(); // "2025-11-28 23:15:24 UTC"
+                const service = parts[1].trim();
+                const message = parts[2].trim();
+
+                // Parse the UTC timestamp and convert to local time
+                const utcDate = new Date(timestampStr.replace(' UTC', '') + ' UTC');
+                const timeStr = utcDate.toLocaleTimeString(navigator.language, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                const dateStr = utcDate.toLocaleDateString(navigator.language, {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                return `
+                    <div class="event-item">
+                        <div class="event-time">
+                            <span class="event-time-main">${timeStr}</span>
+                            <span class="event-date">${dateStr}</span>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-service">${service}</div>
+                            <div class="event-message">${message}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            eventsContainer.innerHTML = eventsHtml;
+            lastEventsUpdate = Date.now();
+            updateTabTimestamp(2, lastEventsUpdate); // Events is tab index 2
+        } catch (error) {
+            console.error('Error fetching events:', error);
+            eventsContainer.innerHTML = '<p class="events-placeholder">Failed to load events.</p>';
+        }
+    }
 
     const messageWindow = createWindow({
         id: 'message-window',
         tabs: [
             { icon: 'bx-bell', title: 'Notifications', content: '<h1>Notifications</h1><p>This is the notifications tab.</p>' },
-            { icon: 'bx-history', title: 'Logs', content: '<h1>Logs</h1><p>This is the logs tab.</p>' },
-            { icon: 'bx-calendar-event', title: 'Events', content: '<h1>Events</h1><p>This is the events tab.</p>' },
-            { icon: 'bx-line-chart', title: 'System Monitor', content: '<h1>System Monitor</h1><p>This is the system monitor tab.</p>' }
+            { icon: 'bx-history', title: 'Logs', content: getLogsContent() },
+            { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent() },
+            { icon: 'bx-line-chart', title: 'System Monitor', content: getSystemMonitorContent() }
         ],
         icon: 'bxs-message-dots',
         onClose: onWindowClose
@@ -175,25 +658,9 @@ function onReady() {
             const userEmail = getUserEmail() || 'user@easter.company';
             const notificationState = getNotificationState();
             const analyticsEnabled = isAnalyticsEnabled();
-    
-            // Get data from localStorage
-            const serviceMapString = localStorage.getItem('service_map');
-            const serverMapString = localStorage.getItem('server_map');
-            const userOptionsString = localStorage.getItem('user_options');
-    
-            let metricsHtml;
-    
-            if (serviceMapString && serverMapString && userOptionsString) {
-                metricsHtml = `<p>Loading metrics...</p>`;
-            } else {
-                metricsHtml = `<p>Please upload your config files to enable metrics.</p>`;
-            }
-    
-    
-            return `
-                <h1 style="text-align: center; margin-bottom: 30px;">Settings</h1>
-                <div class="theme-selector">
-                    <div class="theme-card ${currentTheme === THEMES.AUTO ? 'active' : ''}" data-theme="${THEMES.AUTO}">
+
+                        return `
+                        <div class="theme-selector">                    <div class="theme-card ${currentTheme === THEMES.AUTO ? 'active' : ''}" data-theme="${THEMES.AUTO}">
                         <div class="theme-preview theme-preview-auto"></div>
                                                                                     <div class="theme-info">
                                                                                         <h3>Auto</h3>
@@ -300,101 +767,10 @@ function onReady() {
                         </div>
                     </div>
                 </div>
-    
-                <div class="settings-divider"></div>
-    
-                <div class="settings-section">
-                    <h2 class="settings-section-title">Metrics</h2>
-                    <div class="settings-metrics">
-                        ${metricsHtml}
-                    </div>
-                </div>
             `;
         }
-    
-                async function updateMetricsDashboard() {
-                    const serviceMapString = localStorage.getItem('service_map');
-                    if (!serviceMapString) return;
-            
-                    let serviceMapData;
-                    try {
-                        serviceMapData = JSON.parse(serviceMapString);
-                    } catch (e) {
-                        console.error("Error parsing service_map from localStorage:", e);
-                        return;
-                    }
-            
-                    const metricsContainer = document.querySelector('.settings-metrics');
-                    if (!metricsContainer) return;
-            
-                    let services = [];
-                    if (serviceMapData && typeof serviceMapData.services === 'object') {
-                        const serviceGroupsToInclude = ['cs', 'be', 'th'];
-                        for (const group of serviceGroupsToInclude) {
-                            if (Array.isArray(serviceMapData.services[group])) {
-                                services.push(...serviceMapData.services[group]);
-                            }
-                        }
-                    } else {
-                        const errorMessage = "Error: service-map.json does not contain a valid 'services' object.";
-                        console.error(errorMessage, serviceMapData);
-                        metricsContainer.innerHTML = `<p>${errorMessage}</p>`;
-                        return;
-                    }
-            
-                    metricsContainer.innerHTML = '<p>Loading metrics...</p>';
-            
-                            const promises = services.map(service => {
-                                const domain = service.domain === '0.0.0.0' ? 'localhost' : service.domain;
-                                            const metricsUrl = `http://${domain}:${service.port}/service`;
-                                            return fetch(metricsUrl)
-                                                .then(response => {
-                                                    if (!response.ok) {
-                                                        return { name: service.id, status: 'offline' };
-                                                    }
-                                                    return response.json().then(data => ({ name: service.id, status: 'online', version: data.version, ...data }));
-                                                })
-                                                .catch(() => ({ name: service.id, status: 'offline' }));
-                                        });
-                                
-                                        const results = await Promise.all(promises);
-                                
-                                        const totalServices = results.length;
-                                        const onlineServices = results.filter(s => s.status === 'online').length;
-                                        const offlineServices = totalServices - onlineServices;
-                                
-                                        let metricsHtml = `
-                                            <div class="metric-item">
-                                                <span class="metric-label">Total Services</span>
-                                                <span class="metric-value">${totalServices}</span>
-                                            </div>
-                                            <div class="metric-item">
-                                                <span class="metric-label">Online Services</span>
-                                                <span class="metric-value ${onlineServices > 0 ? 'metric-value-active' : ''}">${onlineServices}</span>
-                                            </div>
-                                            <div class="metric-item">
-                                                <span class="metric-label">Offline Services</span>
-                                                <span class="metric-value ${offlineServices > 0 ? 'metric-value-error' : ''}">${offlineServices}</span>
-                                            </div>
-                                        `;
-                                
-                                        const serviceVersions = results.filter(s => s.status === 'online').map(s => {
-                                            const versionObj = s.version && s.version.obj;
-                                            const majorMinorPatch = versionObj ? `${versionObj.major}.${versionObj.minor}.${versionObj.patch}` : 'unknown';
-                                            const branchCommit = versionObj ? `${versionObj.branch} ${versionObj.commit}` : '';
-                                
-                                                        return `
-                                                            <div class="metric-item">
-                                                                <span class="metric-label">${s.name} Version</span>
-                                                                <span class="metric-value">
-                                                                    <span class="metric-version-monospace" style="font-size: 1.2em; font-weight: bold; color: white;">${majorMinorPatch}</span>
-                                                                    ${branchCommit ? `<span class="metric-version-monospace" style="font-size: 0.8em; color: #aaa; margin-left: 5px;">${branchCommit}</span>` : ''}
-                                                                </span>
-                                                            </div>
-                                                        `;                                        }).join('');
-            
-                    metricsContainer.innerHTML = metricsHtml + serviceVersions;
-                }    // Function to attach theme selector event listeners
+
+    // Function to attach theme selector event listeners
     function attachThemeListeners() {
         const themeCards = document.querySelectorAll('.theme-card');
         themeCards.forEach(card => {
@@ -754,6 +1130,7 @@ function onReady() {
 
     const settingsWindow = createWindow({
         id: 'settings-window',
+        title: 'Settings',
         content: getSettingsContent(),
         icon: 'bx-cog',
         onClose: onWindowClose
@@ -963,7 +1340,51 @@ function onReady() {
         }
 
         if (messageIcon) {
-            messageIcon.addEventListener('click', () => handleWindow(messageWindow, messageIcon));
+            messageIcon.addEventListener('click', async () => {
+                handleWindow(messageWindow, messageIcon);
+
+                // Wait for window to open, then update system monitor and events
+                setTimeout(async () => {
+                    const serviceMapString = localStorage.getItem('service_map');
+                    if (serviceMapString) {
+                        await updateSystemMonitor();
+                        await updateEventsTimeline();
+                        await updateLogs();
+                        lastLogsUpdate = Date.now();
+
+                        // Update tab timestamps every 100ms for smooth millisecond counting
+                        const timestampInterval = setInterval(() => {
+                            if (messageWindow.isOpen()) {
+                                updateTabTimestamp(1, lastLogsUpdate); // Logs tab
+                                updateTabTimestamp(2, lastEventsUpdate); // Events tab
+                                updateTabTimestamp(3, lastSystemMonitorUpdate); // System Monitor tab
+                            } else {
+                                clearInterval(timestampInterval);
+                            }
+                        }, 100);
+
+                        // Set up auto-refresh for Events and Logs every 5 seconds
+                        const refreshInterval = setInterval(async () => {
+                            if (messageWindow.isOpen()) {
+                                await updateEventsTimeline();
+                                await updateLogs();
+                                lastLogsUpdate = Date.now();
+                            } else {
+                                clearInterval(refreshInterval);
+                            }
+                        }, 5000);
+
+                        // Set up auto-refresh for System Monitor every 30 seconds
+                        const systemMonitorRefreshInterval = setInterval(async () => {
+                            if (messageWindow.isOpen()) {
+                                await updateSystemMonitor();
+                            } else {
+                                clearInterval(systemMonitorRefreshInterval);
+                            }
+                        }, 30000);
+                    }
+                }, 100);
+            });
         }
 
         if (settingsIcon) {
@@ -980,14 +1401,6 @@ function onReady() {
                     attachAnalyticsListener();
                     updateMicrophoneToggleState();
                     attachMicrophoneListener();
-
-                    // Check if we need to load metrics
-                    const serviceMapString = localStorage.getItem('service_map');
-                    const serverMapString = localStorage.getItem('server_map');
-                    const userOptionsString = localStorage.getItem('user_options');
-                    if (serviceMapString && serverMapString && userOptionsString) {
-                        updateMetricsDashboard();
-                    }
                 }, 100);
             });
         }
