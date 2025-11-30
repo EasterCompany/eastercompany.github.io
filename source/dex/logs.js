@@ -1,4 +1,26 @@
 // Easter Company - Logs
+
+// Standardized error/placeholder message component
+function createPlaceholderMessage(type, message, actionText = null) {
+    const iconMap = {
+        'config': 'bx-cog',
+        'error': 'bx-error-circle',
+        'empty': 'bx-info-circle',
+        'offline': 'bx-wifi-off'
+    };
+
+    const icon = iconMap[type] || 'bx-info-circle';
+    const actionHtml = actionText ? `<p class="placeholder-action">${actionText}</p>` : '';
+
+    return `
+        <div class="tab-placeholder">
+            <i class='bx ${icon} placeholder-icon'></i>
+            <p class="placeholder-message">${message}</p>
+            ${actionHtml}
+        </div>
+    `;
+}
+
 export function getLogsContent() {
     return `
         <div id="logs-container" class="logs-container">
@@ -13,7 +35,11 @@ export async function updateLogs() {
 
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
-        logsContainer.innerHTML = '<p class="logs-placeholder">No service map configured. Please upload your service-map.json in Settings.</p>';
+        logsContainer.innerHTML = createPlaceholderMessage(
+            'config',
+            'No service map configured.',
+            'Please upload your service-map.json in Settings to enable log monitoring.'
+        );
         return;
     }
 
@@ -22,7 +48,11 @@ export async function updateLogs() {
         serviceMapData = JSON.parse(serviceMapString);
     } catch (e) {
         console.error("Error parsing service_map from localStorage:", e);
-        logsContainer.innerHTML = '<p class="logs-placeholder">Error: Invalid service map data.</p>';
+        logsContainer.innerHTML = createPlaceholderMessage(
+            'error',
+            'Invalid service map data.',
+            'Please re-upload a valid service-map.json file in Settings.'
+        );
         return;
     }
 
@@ -42,7 +72,11 @@ export async function updateLogs() {
     }
 
     if (!eventService) {
-        logsContainer.innerHTML = '<p class="logs-placeholder">Event service not found in service map.</p>';
+        logsContainer.innerHTML = createPlaceholderMessage(
+            'error',
+            'Event service not found in service map.',
+            'Please ensure dex-event-service is configured in your service-map.json.'
+        );
         return;
     }
 
@@ -52,13 +86,21 @@ export async function updateLogs() {
     try {
         const response = await fetch(logsUrl);
         if (!response.ok) {
-            logsContainer.innerHTML = '<p class="logs-placeholder">Event service is offline.</p>';
+            logsContainer.innerHTML = createPlaceholderMessage(
+                'offline',
+                'Event service is offline.',
+                'Please ensure the event service is running.'
+            );
             return;
         }
 
         const logsData = await response.json();
         if (!logsData || logsData.length === 0) {
-            logsContainer.innerHTML = '<p class="logs-placeholder">No logs found.</p>';
+            logsContainer.innerHTML = createPlaceholderMessage(
+                'empty',
+                'No logs found.',
+                'Service logs will appear here when available.'
+            );
             return;
         }
 
@@ -107,6 +149,10 @@ export async function updateLogs() {
 
     } catch (error) {
         console.error('Error fetching logs:', error);
-        logsContainer.innerHTML = '<p class="logs-placeholder">Failed to load logs.</p>';
+        logsContainer.innerHTML = createPlaceholderMessage(
+            'offline',
+            'Failed to load logs.',
+            'The event service may be offline or unreachable.'
+        );
     }
 }
