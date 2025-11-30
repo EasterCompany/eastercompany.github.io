@@ -5,7 +5,7 @@
  * @param {object} options - Configuration for the window.
  * @param {string} options.id - A unique ID for the window.
  * @param {string} [options.content] - The initial HTML content for the window (if not using tabs).
- * @param {Array<object>} [options.tabs] - An array of tab objects, each with a 'title' and 'content'.
+ * @param {Array<object>} [options.tabs] - An array of tab objects, each with a 'title', 'content', and optional 'scrollable' (default true).
  * @param {string} options.icon - Optional boxicon class for the header icon (e.g., 'bx-user', 'bxs-message-dots')
  * @param {function} options.onClose - Optional callback when window is closed
  */
@@ -33,6 +33,7 @@ export function createWindow(options) {
 
         const iconClass = options.icon || 'bx-window';
         let tabBarHTML = '';
+        let windowTitleHTML = ''; // New variable for window title
         let contentHTML;
 
         if (options.tabs && options.tabs.length > 0) {
@@ -51,18 +52,23 @@ export function createWindow(options) {
                     <div class="tab ${index === 0 ? 'active' : ''}" data-tab-index="${index}">
                         ${iconHtml}
                         <span class="tab-title">${tab.title}</span>
+                        <span class="tab-subtitle" data-tab-subtitle="${index}">Last updated: never</span>
                     </div>
                 `;
             }).join('');
 
             tabBarHTML = `<div class="tab-bar">${tabTitles}</div>`;
 
-            const tabContents = options.tabs.map((tab, index) => `
-                <div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>
-            `).join('');
+            const tabContents = options.tabs.map((tab, index) => {
+                return `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>`;
+            }).join('');
             contentHTML = `<div class="window-content">${tabContents}</div>`;
 
         } else {
+            // No tabs, so render a window title if provided
+            if (options.title) {
+                windowTitleHTML = `<div class="window-title">${options.title}</div>`;
+            }
             contentHTML = `<div class="window-content">${options.content}</div>`;
         }
 
@@ -70,6 +76,7 @@ export function createWindow(options) {
             <div class="window-header">
                 <i class="bx ${iconClass}"></i>
                 ${tabBarHTML}
+                ${windowTitleHTML}
                 <i class="bx bx-x window-close"></i>
             </div>
         `;
