@@ -8,14 +8,20 @@
  * @param {Array<object>} [options.tabs] - An array of tab objects, each with a 'title', 'content', and optional 'scrollable' (default true).
  * @param {string} options.icon - Optional boxicon class for the header icon (e.g., 'bx-user', 'bxs-message-dots')
  * @param {function} options.onClose - Optional callback when window is closed
+ * @param {function} options.onOpen - Optional callback when window is opened
  */
 export function createWindow(options) {
     let windowEl = null;
     let closeCallback = options.onClose || null;
+    let openCallback = options.onOpen || null;
 
     function open() {
         if (windowEl) {
             windowEl.classList.add('open');
+            // Call onOpen callback when reopening existing window
+            if (openCallback) {
+                setTimeout(openCallback, 10);
+            }
             return;
         }
 
@@ -110,6 +116,10 @@ export function createWindow(options) {
 
         setTimeout(() => {
             windowEl.classList.add('open');
+            // Call onOpen callback after window is opened
+            if (openCallback) {
+                openCallback();
+            }
         }, 10);
     }
 

@@ -68,6 +68,27 @@ function onReady() {
         onClose: onWindowClose
     });
 
+    // Standardized error/placeholder message component
+    function createPlaceholderMessage(type, message, actionText = null) {
+        const iconMap = {
+            'config': 'bx-cog',
+            'error': 'bx-error-circle',
+            'empty': 'bx-info-circle',
+            'offline': 'bx-wifi-off'
+        };
+
+        const icon = iconMap[type] || 'bx-info-circle';
+        const actionHtml = actionText ? `<p class="placeholder-action">${actionText}</p>` : '';
+
+        return `
+            <div class="tab-placeholder">
+                <i class='bx ${icon} placeholder-icon'></i>
+                <p class="placeholder-message">${message}</p>
+                ${actionHtml}
+            </div>
+        `;
+    }
+
     // System Monitor Functions
     let lastSystemMonitorUpdate = null;
 
@@ -75,12 +96,11 @@ function onReady() {
         const serviceMapString = localStorage.getItem('service_map');
 
         if (!serviceMapString) {
-            return `
-                <div class="system-monitor-placeholder">
-                    <p>No service map configured.</p>
-                    <p>Please upload your service-map.json in Settings to enable live monitoring.</p>
-                </div>
-            `;
+            return createPlaceholderMessage(
+                'config',
+                'No service map configured.',
+                'Please upload your service-map.json in Settings to enable live monitoring.'
+            );
         }
 
         return `
@@ -96,7 +116,11 @@ function onReady() {
 
         const serviceMapString = localStorage.getItem('service_map');
         if (!serviceMapString) {
-            widgetsContainer.innerHTML = '<p>No service map configured. Please upload your service-map.json in Settings to enable live monitoring.</p>';
+            widgetsContainer.innerHTML = createPlaceholderMessage(
+                'config',
+                'No service map configured.',
+                'Please upload your service-map.json in Settings to enable live monitoring.'
+            );
             return;
         }
 
@@ -105,7 +129,11 @@ function onReady() {
             serviceMapData = JSON.parse(serviceMapString);
         } catch (e) {
             console.error("Error parsing service_map from localStorage:", e);
-            widgetsContainer.innerHTML = '<p>Error: Invalid service map data.</p>';
+            widgetsContainer.innerHTML = createPlaceholderMessage(
+                'error',
+                'Invalid service map data.',
+                'Please re-upload a valid service-map.json file in Settings.'
+            );
             return;
         }
 
@@ -125,7 +153,11 @@ function onReady() {
         }
 
         if (!eventService) {
-            widgetsContainer.innerHTML = '<p>Error: dex-event-service not found in service map. Cannot fetch system metrics.</p>';
+            widgetsContainer.innerHTML = createPlaceholderMessage(
+                'error',
+                'Event service not found in service map.',
+                'Please ensure dex-event-service is configured in your service-map.json.'
+            );
             return;
         }
 
@@ -141,7 +173,11 @@ function onReady() {
             results = await response.json();
         } catch (error) {
             console.error('Error fetching system monitor metrics:', error);
-            widgetsContainer.innerHTML = `<p>Failed to load system metrics: ${error.message}.</p>`;
+            widgetsContainer.innerHTML = createPlaceholderMessage(
+                'offline',
+                'Failed to load system metrics.',
+                'The event service may be offline or unreachable.'
+            );
             return;
         }
 
@@ -463,7 +499,11 @@ function onReady() {
 
         const serviceMapString = localStorage.getItem('service_map');
         if (!serviceMapString) {
-            eventsContainer.innerHTML = '<p class="events-placeholder">No service map configured. Please upload your service-map.json in Settings.</p>';
+            eventsContainer.innerHTML = createPlaceholderMessage(
+                'config',
+                'No service map configured.',
+                'Please upload your service-map.json in Settings to enable event monitoring.'
+            );
             return;
         }
 
@@ -472,7 +512,11 @@ function onReady() {
             serviceMapData = JSON.parse(serviceMapString);
         } catch (e) {
             console.error("Error parsing service_map from localStorage:", e);
-            eventsContainer.innerHTML = '<p class="events-placeholder">Error: Invalid service map data.</p>';
+            eventsContainer.innerHTML = createPlaceholderMessage(
+                'error',
+                'Invalid service map data.',
+                'Please re-upload a valid service-map.json file in Settings.'
+            );
             return;
         }
 
@@ -492,7 +536,11 @@ function onReady() {
         }
 
         if (!eventService) {
-            eventsContainer.innerHTML = '<p class="events-placeholder">Event service not found in service map.</p>';
+            eventsContainer.innerHTML = createPlaceholderMessage(
+                'error',
+                'Event service not found in service map.',
+                'Please ensure dex-event-service is configured in your service-map.json.'
+            );
             return;
         }
 
@@ -502,13 +550,21 @@ function onReady() {
         try {
             const response = await fetch(eventsUrl);
             if (!response.ok) {
-                eventsContainer.innerHTML = '<p class="events-placeholder">Event service is offline.</p>';
+                eventsContainer.innerHTML = createPlaceholderMessage(
+                    'offline',
+                    'Event service is offline.',
+                    'Please ensure the event service is running.'
+                );
                 return;
             }
 
             const textData = await response.text();
             if (!textData || textData.trim() === '') {
-                eventsContainer.innerHTML = '<p class="events-placeholder">No events found.</p>';
+                eventsContainer.innerHTML = createPlaceholderMessage(
+                    'empty',
+                    'No events found.',
+                    'Events will appear here as they occur.'
+                );
                 return;
             }
 
@@ -554,20 +610,78 @@ function onReady() {
             updateTabTimestamp(2, lastEventsUpdate); // Events is tab index 2
         } catch (error) {
             console.error('Error fetching events:', error);
-            eventsContainer.innerHTML = '<p class="events-placeholder">Failed to load events.</p>';
+            eventsContainer.innerHTML = createPlaceholderMessage(
+                'offline',
+                'Failed to load events.',
+                'The event service may be offline or unreachable.'
+            );
+        }
+    }
+
+    // Function to initialize message window intervals and updates
+    async function initializeMessageWindow() {
+        const serviceMapString = localStorage.getItem('service_map');
+        if (serviceMapString) {
+            await updateSystemMonitor();
+            await updateEventsTimeline();
+            await updateLogs();
+            lastLogsUpdate = Date.now();
+
+            // Update tab timestamps every 100ms for smooth millisecond counting
+            const timestampInterval = setInterval(() => {
+                if (messageWindow.isOpen()) {
+                    updateTabTimestamp(1, lastLogsUpdate); // Logs tab
+                    updateTabTimestamp(2, lastEventsUpdate); // Events tab
+                    updateTabTimestamp(3, lastSystemMonitorUpdate); // System Monitor tab
+                } else {
+                    clearInterval(timestampInterval);
+                }
+            }, 100);
+
+            // Set up auto-refresh for Events and Logs every 5 seconds
+            const refreshInterval = setInterval(async () => {
+                if (messageWindow.isOpen()) {
+                    await updateEventsTimeline();
+                    await updateLogs();
+                    lastLogsUpdate = Date.now();
+                } else {
+                    clearInterval(refreshInterval);
+                }
+            }, 5000);
+
+            // Set up auto-refresh for System Monitor every 30 seconds
+            const systemMonitorRefreshInterval = setInterval(async () => {
+                if (messageWindow.isOpen()) {
+                    await updateSystemMonitor();
+                } else {
+                    clearInterval(systemMonitorRefreshInterval);
+                }
+            }, 30000);
         }
     }
 
     const messageWindow = createWindow({
         id: 'message-window',
         tabs: [
-            { icon: 'bx-bell', title: 'Notifications', content: '<h1>Notifications</h1><p>This is the notifications tab.</p>' },
+            {
+                icon: 'bx-bell',
+                title: 'Notifications',
+                content: createPlaceholderMessage(
+                    'empty',
+                    'No notifications yet.',
+                    'Notifications will appear here when available.'
+                )
+            },
             { icon: 'bx-history', title: 'Logs', content: getLogsContent() },
             { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent() },
             { icon: 'bx-line-chart', title: 'System Monitor', content: getSystemMonitorContent() }
         ],
         icon: 'bxs-message-dots',
-        onClose: onWindowClose
+        onClose: onWindowClose,
+        onOpen: () => {
+            // Initialize message window updates whenever it opens
+            setTimeout(initializeMessageWindow, 100);
+        }
     });
 
     // Analytics and Debug mode state
@@ -1340,50 +1454,8 @@ function onReady() {
         }
 
         if (messageIcon) {
-            messageIcon.addEventListener('click', async () => {
+            messageIcon.addEventListener('click', () => {
                 handleWindow(messageWindow, messageIcon);
-
-                // Wait for window to open, then update system monitor and events
-                setTimeout(async () => {
-                    const serviceMapString = localStorage.getItem('service_map');
-                    if (serviceMapString) {
-                        await updateSystemMonitor();
-                        await updateEventsTimeline();
-                        await updateLogs();
-                        lastLogsUpdate = Date.now();
-
-                        // Update tab timestamps every 100ms for smooth millisecond counting
-                        const timestampInterval = setInterval(() => {
-                            if (messageWindow.isOpen()) {
-                                updateTabTimestamp(1, lastLogsUpdate); // Logs tab
-                                updateTabTimestamp(2, lastEventsUpdate); // Events tab
-                                updateTabTimestamp(3, lastSystemMonitorUpdate); // System Monitor tab
-                            } else {
-                                clearInterval(timestampInterval);
-                            }
-                        }, 100);
-
-                        // Set up auto-refresh for Events and Logs every 5 seconds
-                        const refreshInterval = setInterval(async () => {
-                            if (messageWindow.isOpen()) {
-                                await updateEventsTimeline();
-                                await updateLogs();
-                                lastLogsUpdate = Date.now();
-                            } else {
-                                clearInterval(refreshInterval);
-                            }
-                        }, 5000);
-
-                        // Set up auto-refresh for System Monitor every 30 seconds
-                        const systemMonitorRefreshInterval = setInterval(async () => {
-                            if (messageWindow.isOpen()) {
-                                await updateSystemMonitor();
-                            } else {
-                                clearInterval(systemMonitorRefreshInterval);
-                            }
-                        }, 30000);
-                    }
-                }, 100);
             });
         }
 

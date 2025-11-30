@@ -1197,6 +1197,38 @@ footer.hide {
 }
 /* --- End Theme System --- */
 
+/* --- Standardized Tab Placeholder --- */
+.tab-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 200px;
+}
+
+.tab-placeholder .placeholder-icon {
+  font-size: 48px;
+  color: #666;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.tab-placeholder .placeholder-message {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ccc;
+  margin: 0 0 8px 0;
+}
+
+.tab-placeholder .placeholder-action {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+  line-height: 1.5;
+}
+
 /* --- System Monitor Widgets --- */
 .system-monitor-placeholder {
   display: flex;
