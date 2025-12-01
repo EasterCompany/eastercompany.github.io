@@ -31,7 +31,7 @@ export function getLogsContent() {
 
 export async function updateLogs() {
     const logsContainer = document.getElementById('logs-container');
-    if (!logsContainer) return;
+    if (!logsContainer) return false;
 
     // Reset class state
     logsContainer.classList.remove('placeholder-active');
@@ -44,7 +44,7 @@ export async function updateLogs() {
             'No service map configured.',
             'Please upload your service-map.json in Settings to enable log monitoring.'
         );
-        return;
+        return false;
     }
 
     let serviceMapData;
@@ -58,7 +58,7 @@ export async function updateLogs() {
             'Invalid service map data.',
             'Please re-upload a valid service-map.json file in Settings.'
         );
-        return;
+        return false;
     }
 
     // Find the event service
@@ -83,7 +83,7 @@ export async function updateLogs() {
             'Event service not found in service map.',
             'Please ensure dex-event-service is configured in your service-map.json.'
         );
-        return;
+        return false;
     }
 
     const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
@@ -98,7 +98,7 @@ export async function updateLogs() {
                 'Event service is offline.',
                 'Please ensure the event service is running.'
             );
-            return;
+            return false;
         }
 
         const logsData = await response.json();
@@ -109,7 +109,7 @@ export async function updateLogs() {
                 'No logs found.',
                 'Service logs will appear here when available.'
             );
-            return;
+            return false;
         }
 
         const hiddenServiceIDs = ["local-ollama-0", "local-cache-0", "cloud-cache-0", "cloud-cache-1"];
@@ -155,6 +155,8 @@ export async function updateLogs() {
             });
         });
 
+        return true;
+
     } catch (error) {
         console.error('Error fetching logs:', error);
         logsContainer.classList.add('placeholder-active');
@@ -163,5 +165,6 @@ export async function updateLogs() {
             'Failed to load logs.',
             'The event service may be offline or unreachable.'
         );
+        return false;
     }
 }
