@@ -624,8 +624,10 @@ function onReady() {
         if (serviceMapString) {
             await updateSystemMonitor();
             await updateEventsTimeline();
-            await updateLogs();
-            lastLogsUpdate = Date.now();
+            const logsUpdated = await updateLogs();
+            if (logsUpdated) {
+                lastLogsUpdate = Date.now();
+            }
 
             // Update tab timestamps every 100ms for smooth millisecond counting
             const timestampInterval = setInterval(() => {
@@ -642,8 +644,9 @@ function onReady() {
             const refreshInterval = setInterval(async () => {
                 if (messageWindow.isOpen()) {
                     await updateEventsTimeline();
-                    await updateLogs();
-                    lastLogsUpdate = Date.now();
+                    if (await updateLogs()) {
+                        lastLogsUpdate = Date.now();
+                    }
                 } else {
                     clearInterval(refreshInterval);
                 }
