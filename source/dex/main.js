@@ -234,9 +234,12 @@ function onReady() {
         const now = Date.now();
         const seconds = (now - timestamp) / 1000;
         let timeStr;
-        if (seconds < 10) timeStr = `${seconds.toFixed(1)}s ago`;
-        else if (seconds < 60) timeStr = `${Math.floor(seconds)}s ago`;
-        else timeStr = `${Math.floor(seconds / 60)}m ago`;
+        if (seconds < 30) { // Show whole seconds up to 29s
+            timeStr = `${Math.floor(seconds)}s ago`;
+        } else { // If seconds is 30 or more, it's considered too old
+            subtitleElement.textContent = 'Last updated: never';
+            return;
+        }
         subtitleElement.textContent = `Last updated: ${timeStr}`;
     }
 
