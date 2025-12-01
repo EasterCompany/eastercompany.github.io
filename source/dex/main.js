@@ -85,6 +85,7 @@ function onReady() {
             return;
         }
         lastSystemMonitorUpdate = Date.now();
+        updateTabTimestamp(4, lastSystemMonitorUpdate); // Immediate update
         const services = data.services || [];
         
         Array.from(widgetsContainer.children).forEach(child => {
@@ -218,6 +219,7 @@ function onReady() {
             }).join('');
             eventsContainer.innerHTML = eventsHtml;
             lastEventsUpdate = Date.now();
+            updateTabTimestamp(3, lastEventsUpdate); // Immediate update
         } catch (error) {
             console.error('Error fetching events:', error);
             eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline or unreachable.');
@@ -248,7 +250,12 @@ function onReady() {
             updateSystemMonitor(),
             updateModelsTab(),
             updateEventsTimeline(),
-            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); })
+            updateLogs().then(success => { 
+                if (success) {
+                    lastLogsUpdate = Date.now();
+                    updateTabTimestamp(1, lastLogsUpdate);
+                }
+            })
         ]);
 
         const timestampInterval = setInterval(() => {
@@ -261,7 +268,12 @@ function onReady() {
         const refreshInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(refreshInterval);
             updateEventsTimeline();
-            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); });
+            updateLogs().then(success => { 
+                if (success) {
+                    lastLogsUpdate = Date.now();
+                    updateTabTimestamp(1, lastLogsUpdate);
+                }
+            });
         }, 5000);
 
         const systemMonitorRefreshInterval = setInterval(() => {
