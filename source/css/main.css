@@ -1513,6 +1513,7 @@ footer.hide {
     display: flex;
     flex-direction: column;
     max-height: 400px;
+    overflow: hidden;
 }
 
 .log-report-header {
@@ -1545,7 +1546,6 @@ footer.hide {
 }
 
 .log-content {
-    overflow-y: auto;
     white-space: pre-wrap;
     word-break: break-all;
     font-family: monospace;
@@ -1555,5 +1555,6 @@ footer.hide {
     padding: 10px;
     border-radius: 4px;
     flex-grow: 1;
+    overflow: hidden;
 }
 /* --- End Logs --- */
