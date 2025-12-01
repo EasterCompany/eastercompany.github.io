@@ -145,22 +145,50 @@ function onReady() {
     async function updateModelsTab() {
         const widgetsContainer = document.getElementById('models-widgets');
         if (!widgetsContainer) return;
+        
         const data = await fetchSystemData();
-        if (!data || !data.models) {
+
+        if (!data) { // General fetch failure
             widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.');
             return;
         }
+
         lastModelsUpdate = Date.now();
         updateTabTimestamp(3, lastModelsUpdate);
+
         const models = data.models || [];
-        if (models.length === 0) {
-            widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No models found.');
-            return;
-        }
-        
+        const whisperStatus = data.whisper;
+
+        // Clear loading message before rendering
         Array.from(widgetsContainer.children).forEach(child => {
             if (!child.classList.contains('service-widget')) child.remove();
         });
+
+        function generateWhisperWidgetHtml(whisper) {
+            const isReady = whisper.status === 'Ready';
+            const statusClass = isReady ? 'service-widget-online' : 'service-widget-offline';
+            const statusText = isReady ? 'READY' : 'NOT FOUND';
+            const icon = 'bxs-microphone-alt';
+
+            return `
+                <div class="service-widget ${statusClass}" data-whisper-widget>
+                    <div class="service-widget-header">
+                        <i class="bx ${icon}"></i>
+                        <h3>Whisper</h3>
+                        <span class="service-widget-status">${statusText}</span>
+                    </div>
+                    <div class="service-widget-body">
+                        <div class="service-widget-info">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value">${whisper.status}</span>
+                        </div>
+                        <div class="service-widget-info">
+                            <span class="info-label">Model:</span>
+                            <span class="info-value">large-v3-turbo</span>
+                        </div>
+                    </div>
+                </div>`;
+        }
 
         function generateModelWidgetHtml(model) {
             const isDownloaded = model.status === 'Downloaded';
@@ -170,24 +198,21 @@ function onReady() {
             return `<div class="service-widget ${statusClass}" data-model-name="${model.name}"><div class="service-widget-header"><i class="bx ${isDownloaded ? 'bx-check-circle' : 'bx-x-circle'}"></i><h3>${model.name}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Type:</span><span class="info-value">${model.type}</span></div><div class="service-widget-info"><span class="info-label">Size:</span><span class="info-value">${sizeDisplay}</span></div></div></div>`;
         }
         
-        const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.service-widget')).map(widget => [widget.dataset.modelName, widget]));
-        const incomingModelNames = new Set(models.map(m => m.name));
-        
-        for (const [name, widget] of existingWidgetsMap) {
-            if (!incomingModelNames.has(name)) {
-                widget.remove();
-            }
+        let finalHtml = '';
+        if (whisperStatus) {
+            finalHtml += generateWhisperWidgetHtml(whisperStatus);
         }
-        
-        models.forEach(model => {
-            const newHtml = generateModelWidgetHtml(model);
-            const existingWidget = existingWidgetsMap.get(model.name);
-            if (existingWidget) {
-                if (existingWidget.outerHTML !== newHtml) existingWidget.outerHTML = newHtml;
-            } else {
-                widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
-            }
-        });
+        finalHtml += models.map(generateModelWidgetHtml).join('');
+
+        if (!finalHtml) {
+             widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No models found.');
+             return;
+        }
+
+        // Basic diffing to avoid re-rendering identical content
+        if (widgetsContainer.innerHTML !== finalHtml) {
+            widgetsContainer.innerHTML = finalHtml;
+        }
     }
 
     async function updateEventsTimeline() {
