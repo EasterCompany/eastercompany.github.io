@@ -53,7 +53,7 @@ function onReady() {
         return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
     }
 
-    let lastSystemMonitorUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null;
+    let lastSystemMonitorUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null;
     const getSystemMonitorContent = () => localStorage.getItem('service_map') ? `<div id="system-monitor-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getEventsContent = () => `<div id="events-timeline" class="events-timeline"><p>Loading events...</p></div>`;
@@ -146,6 +146,8 @@ function onReady() {
             widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.');
             return;
         }
+        lastModelsUpdate = Date.now();
+        updateTabTimestamp(2, lastModelsUpdate); // Immediate update for models tab
         const models = data.models || [];
         if (models.length === 0) {
             widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No models found.');
@@ -261,6 +263,7 @@ function onReady() {
         const timestampInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
             updateTabTimestamp(1, lastLogsUpdate);
+            updateTabTimestamp(2, lastModelsUpdate);
             updateTabTimestamp(3, lastEventsUpdate);
             updateTabTimestamp(4, lastSystemMonitorUpdate);
         }, 1000);
