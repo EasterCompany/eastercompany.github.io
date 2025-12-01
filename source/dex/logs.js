@@ -33,8 +33,12 @@ export async function updateLogs() {
     const logsContainer = document.getElementById('logs-container');
     if (!logsContainer) return;
 
+    // Reset class state
+    logsContainer.classList.remove('placeholder-active');
+
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
+        logsContainer.classList.add('placeholder-active');
         logsContainer.innerHTML = createPlaceholderMessage(
             'config',
             'No service map configured.',
@@ -48,6 +52,7 @@ export async function updateLogs() {
         serviceMapData = JSON.parse(serviceMapString);
     } catch (e) {
         console.error("Error parsing service_map from localStorage:", e);
+        logsContainer.classList.add('placeholder-active');
         logsContainer.innerHTML = createPlaceholderMessage(
             'error',
             'Invalid service map data.',
@@ -72,6 +77,7 @@ export async function updateLogs() {
     }
 
     if (!eventService) {
+        logsContainer.classList.add('placeholder-active');
         logsContainer.innerHTML = createPlaceholderMessage(
             'error',
             'Event service not found in service map.',
@@ -86,6 +92,7 @@ export async function updateLogs() {
     try {
         const response = await fetch(logsUrl);
         if (!response.ok) {
+            logsContainer.classList.add('placeholder-active');
             logsContainer.innerHTML = createPlaceholderMessage(
                 'offline',
                 'Event service is offline.',
@@ -96,6 +103,7 @@ export async function updateLogs() {
 
         const logsData = await response.json();
         if (!logsData || logsData.length === 0) {
+            logsContainer.classList.add('placeholder-active');
             logsContainer.innerHTML = createPlaceholderMessage(
                 'empty',
                 'No logs found.',
@@ -149,6 +157,7 @@ export async function updateLogs() {
 
     } catch (error) {
         console.error('Error fetching logs:', error);
+        logsContainer.classList.add('placeholder-active');
         logsContainer.innerHTML = createPlaceholderMessage(
             'offline',
             'Failed to load logs.',

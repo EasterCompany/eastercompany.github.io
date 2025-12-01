@@ -1503,6 +1503,13 @@ footer.hide {
     overflow-y: auto;
 }
 
+.logs-container.placeholder-active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .log-report {
     background-color: rgba(40, 40, 40, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
