@@ -53,8 +53,9 @@ function onReady() {
         return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
     }
 
-    let lastSystemMonitorUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null;
-    const getSystemMonitorContent = () => localStorage.getItem('service_map') ? `<div id="system-monitor-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+    let lastServicesUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null;
+    
+    const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getEventsContent = () => `<div id="events-timeline" class="events-timeline"><p>Loading events...</p></div>`;
 
@@ -77,15 +78,18 @@ function onReady() {
     }
 
     async function updateSystemMonitor() {
-        const widgetsContainer = document.getElementById('system-monitor-widgets');
+        const widgetsContainer = document.getElementById('services-widgets');
         if (!widgetsContainer) return;
+
         const data = await fetchSystemData();
+
         if (!data || !data.services) {
             widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline or unreachable.');
             return;
         }
-        lastSystemMonitorUpdate = Date.now();
-        updateTabTimestamp(4, lastSystemMonitorUpdate); // Immediate update
+
+        lastServicesUpdate = Date.now();
+        updateTabTimestamp(4, lastServicesUpdate);
         const services = data.services || [];
         
         Array.from(widgetsContainer.children).forEach(child => {
@@ -111,11 +115,11 @@ function onReady() {
             const uptime = formatUptime(service.uptime);
             let detailsHtml = '';
             if (isOnline) {
-                detailsHtml = `<div class="service-widget-info"><span class="info-label">Version:</span><span class="info-value metric-version-monospace">${versionDisplay}</span></div><div class="service-widget-footer"><div class="service-widget-item"><i class="bx bx-time-five"></i><span>${uptime}</span></div><div class="service-widget-item"><i class="bx bxs-microchip" style="color: ${cpuColor};"><\/i><span style="color: ${cpuColor};">${cpuValue}<\/span></div><div class="service-widget-item"><i class="bx bxs-chip" style="color: ${memoryColor};"><\/i><span style="color: ${memoryColor};">${memoryValue}<\/span></div></div>`;
+                detailsHtml = `<div class="service-widget-info"><span class="info-label">Version:</span><span class="info-value metric-version-monospace">${versionDisplay}</span></div><div class="service-widget-footer"><div class="service-widget-item"><i class="bx bx-time-five"></i><span>${uptime}</span></div><div class="service-widget-item"><i class="bx bxs-microchip" style="color: ${cpuColor};"></i><span style="color: ${cpuColor};">${cpuValue}</span></div><div class="service-widget-item"><i class="bx bxs-chip" style="color: ${memoryColor};"></i><span style="color: ${memoryColor};">${memoryValue}</span></div></div>`;
             } else {
                  detailsHtml = `<div class="service-widget-footer offline"><span>OFFLINE</span></div>`;
             }
-            return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}<\/span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '')}<\/span></div>${detailsHtml}<\/div><\/div>`;
+            return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '')}</span></div>${detailsHtml}</div></div>`;
         }
 
         const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.service-widget')).map(widget => [widget.dataset.serviceId, widget]));
@@ -147,7 +151,7 @@ function onReady() {
             return;
         }
         lastModelsUpdate = Date.now();
-        updateTabTimestamp(2, lastModelsUpdate); // Immediate update for models tab
+        updateTabTimestamp(3, lastModelsUpdate);
         const models = data.models || [];
         if (models.length === 0) {
             widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No models found.');
@@ -163,7 +167,7 @@ function onReady() {
             const statusClass = isDownloaded ? 'service-widget-online' : 'service-widget-offline';
             const statusText = isDownloaded ? 'OK' : 'MISSING';
             const sizeDisplay = isDownloaded && model.size > 0 ? `${(model.size / 1e9).toFixed(2)} GB` : '-';
-            return `<div class="service-widget ${statusClass}" data-model-name="${model.name}"><div class="service-widget-header"><i class="bx ${isDownloaded ? 'bx-check-circle' : 'bx-x-circle'}"></i><h3>${model.name}</h3><span class="service-widget-status">${statusText}<\/span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Type:</span><span class="info-value">${model.type}<\/span></div><div class="service-widget-info"><span class="info-label">Size:</span><span class="info-value">${sizeDisplay}<\/span></div></div></div>`;
+            return `<div class="service-widget ${statusClass}" data-model-name="${model.name}"><div class="service-widget-header"><i class="bx ${isDownloaded ? 'bx-check-circle' : 'bx-x-circle'}"></i><h3>${model.name}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Type:</span><span class="info-value">${model.type}</span></div><div class="service-widget-info"><span class="info-label">Size:</span><span class="info-value">${sizeDisplay}</span></div></div></div>`;
         }
         
         const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.service-widget')).map(widget => [widget.dataset.modelName, widget]));
@@ -217,11 +221,11 @@ function onReady() {
                 const utcDate = new Date(parts[0].trim().replace(' UTC', 'Z'));
                 const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
-                return `<div class="event-item"><div class="event-time"><span class="event-time-main">${timeStr}<\/span><span class="event-date">${dateStr}<\/span></div><div class="event-content"><div class="event-service">${parts[1].trim()}<\/div><div class="event-message">${parts[2].trim()}<\/div><\/div><\/div>`;
+                return `<div class="event-item"><div class="event-time"><span class="event-time-main">${timeStr}</span><span class="event-date">${dateStr}</span></div><div class="event-content"><div class="event-service">${parts[1].trim()}</div><div class="event-message">${parts[2].trim()}</div></div></div>`;
             }).join('');
             eventsContainer.innerHTML = eventsHtml;
             lastEventsUpdate = Date.now();
-            updateTabTimestamp(3, lastEventsUpdate); // Immediate update
+            updateTabTimestamp(1, lastEventsUpdate);
         } catch (error) {
             console.error('Error fetching events:', error);
             eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline or unreachable.');
@@ -238,10 +242,10 @@ function onReady() {
         const now = Date.now();
         const seconds = (now - timestamp) / 1000;
         let timeStr;
-        if (seconds < 30) { // Show whole seconds up to 29s
+        if (seconds < 30) { 
             timeStr = `${Math.floor(seconds)}s ago`;
-        } else { // If seconds is 30 or more, it's considered too old
-            subtitleElement.textContent = 'Last updated: never';
+        } else { 
+            subtitleElement.textContent = 'never';
             return;
         }
         subtitleElement.textContent = `Last updated: ${timeStr}`;
@@ -252,77 +256,53 @@ function onReady() {
             updateSystemMonitor(),
             updateModelsTab(),
             updateEventsTimeline(),
-            updateLogs().then(success => { 
-                if (success) {
-                    lastLogsUpdate = Date.now();
-                    updateTabTimestamp(1, lastLogsUpdate);
-                }
-            })
+            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); })
         ]);
 
         const timestampInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
-            updateTabTimestamp(1, lastLogsUpdate);
-            updateTabTimestamp(2, lastModelsUpdate);
-            updateTabTimestamp(3, lastEventsUpdate);
-            updateTabTimestamp(4, lastSystemMonitorUpdate);
+            updateTabTimestamp(2, lastLogsUpdate);
+            updateTabTimestamp(1, lastEventsUpdate);
+            updateTabTimestamp(3, lastModelsUpdate);
+            updateTabTimestamp(4, lastServicesUpdate);
         }, 1000);
 
         const refreshInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(refreshInterval);
             updateEventsTimeline();
-            updateLogs().then(success => { 
-                if (success) {
-                    lastLogsUpdate = Date.now();
-                    updateTabTimestamp(1, lastLogsUpdate);
-                }
-            });
+            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); });
         }, 5000);
 
-        const systemMonitorRefreshInterval = setInterval(() => {
-            if (!messageWindow.isOpen()) return clearInterval(systemMonitorRefreshInterval);
+        const servicesRefreshInterval = setInterval(() => {
+            if (!messageWindow.isOpen()) return clearInterval(servicesRefreshInterval);
             updateSystemMonitor();
             updateModelsTab();
         }, 30000);
     }
     
     // --- Window Definitions ---
-    const loginWindow = createWindow({ id: 'login-window', title: 'Welcome', content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"><\/div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`, icon: 'bx-log-in', onClose: onWindowClose });
-    const userWindow = createWindow({ id: 'user-window', title: 'User Profile', content: `<p>Logged in as: ${getUserEmail() || 'Unknown'}<\/p>`, icon: 'bx-user', onClose: onWindowClose });
+    const loginWindow = createWindow({ id: 'login-window', title: 'Welcome', content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"></div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`, icon: 'bx-log-in', onClose: onWindowClose });
+    const userWindow = createWindow({ id: 'user-window', title: 'User Profile', content: `<p>Logged in as: ${getUserEmail() || 'Unknown'}</p>`, icon: 'bx-user', onClose: onWindowClose });
     
     // Settings Window (Full Implementation)
     function getSettingsContent() {
         const currentTheme = getCurrentTheme();
-        const userEmail = getUserEmail() || 'user@easter.company'; // Assuming getUserEmail exists
-        const notificationState = { enabled: Notification.permission === 'granted', supported: 'Notification' in window }; // Simplified
-        const analyticsEnabled = localStorage.getItem('easter_analytics_enabled') !== 'false'; // Assuming localStorage key
+        const userEmail = getUserEmail() || 'user@easter.company';
+        const notificationState = { enabled: Notification.permission === 'granted', supported: 'Notification' in window };
+        const analyticsEnabled = localStorage.getItem('easter_analytics_enabled') !== 'false';
         
         return `
             <div class="theme-selector">
-                <div class="theme-card ${currentTheme === THEMES.AUTO ? 'active' : ''}" data-theme="${THEMES.AUTO}">
-                    <div class="theme-preview theme-preview-auto"></div>
-                    <div class="theme-info">
-                        <h3>Auto</h3>
-                        <p>Automatic theme selection.</p>
-                        <span class="theme-badge">${currentTheme === THEMES.AUTO ? 'Active' : 'Select'}</span>
+                ${Object.values(THEMES).map(theme => `
+                    <div class="theme-card ${currentTheme === theme ? 'active' : ''}" data-theme="${theme}">
+                        <div class="theme-preview theme-preview-${theme.toLowerCase()}"></div>
+                        <div class="theme-info">
+                            <h3>${theme}</h3>
+                            <p>${theme === THEMES.AUTO ? 'Automatic theme selection.' : theme === THEMES.DEFAULT ? 'Simple, black, default.' : 'Colourful, not bright.'}</p>
+                            <span class="theme-badge">${currentTheme === theme ? 'Active' : 'Select'}</span>
+                        </div>
                     </div>
-                </div>
-                <div class="theme-card ${currentTheme === THEMES.DEFAULT ? 'active' : ''}" data-theme="${THEMES.DEFAULT}">
-                    <div class="theme-preview theme-preview-default"></div>
-                    <div class="theme-info">
-                        <h3>Default</h3>
-                        <p>Simple, black, default.</p>
-                        <span class="theme-badge">${currentTheme === THEMES.DEFAULT ? 'Active' : 'Select'}</span>
-                    </div>
-                </div>
-                <div class="theme-card ${currentTheme === THEMES.ANIMATED ? 'active' : ''}" data-theme="${THEMES.ANIMATED}">
-                    <div class="theme-preview theme-preview-animated"></div>
-                    <div class="theme-info">
-                        <h3>Legacy</h3>
-                        <p>Colourful, not bright.</p>
-                        <span class="theme-badge">${currentTheme === THEMES.ANIMATED ? 'Active' : 'Select'}</span>
-                    </div>
-                </div>
+                `).join('')}
             </div>
 
             <div class="settings-divider"></div>
@@ -415,19 +395,16 @@ function onReady() {
         const settingsContent = document.querySelector('#settings-window .window-content');
         if (!settingsContent) return;
 
-        // Theme selectors
         settingsContent.querySelectorAll('.theme-card').forEach(card => {
             card.addEventListener('click', function() {
                 const newTheme = this.dataset.theme;
                 setTheme(newTheme);
-                // Re-render settings window to update active theme
                 settingsWindow.setContent(getSettingsContent());
-                attachSettingsListeners(); // Re-attach listeners after content change
+                attachSettingsListeners();
             });
         });
 
-        // File upload listeners (Service Map, Server Map, Options)
-        function attachFileUploadListeners(buttonId, inputId, nameId, errorId, deleteId, localStorageKey, fileName) {
+        function attachFileUploadListeners(buttonId, inputId, nameId, errorId, deleteId, localStorageKey, expectedFileName) {
             const uploadBtn = document.getElementById(buttonId);
             const fileInput = document.getElementById(inputId);
             const fileNameSpan = document.getElementById(nameId);
@@ -439,8 +416,8 @@ function onReady() {
                 fileInput.onchange = (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
-                    if (file.name !== fileName) {
-                        errorDiv.textContent = `File must be named "${fileName}"`;
+                    if (file.name !== expectedFileName) {
+                        errorDiv.textContent = `File must be named "${expectedFileName}"`;
                         errorDiv.style.display = 'block';
                         fileInput.value = '';
                         return;
@@ -450,7 +427,7 @@ function onReady() {
                         try {
                             const jsonContent = JSON.parse(event.target.result);
                             localStorage.setItem(localStorageKey, JSON.stringify(jsonContent));
-                            fileNameSpan.textContent = fileName;
+                            fileNameSpan.textContent = expectedFileName;
                             errorDiv.style.display = 'none';
                             settingsWindow.setContent(getSettingsContent());
                             attachSettingsListeners();
@@ -480,15 +457,15 @@ function onReady() {
         attachFileUploadListeners('server-map-upload-btn', 'server-map-input', 'server-map-file-name', 'server-map-error', 'server-map-delete-btn', 'server_map', 'server-map.json');
         attachFileUploadListeners('options-upload-btn', 'options-input', 'options-file-name', 'options-error', 'options-delete-btn', 'user_options', 'options.json');
         
-        // Notification toggle
         const notificationToggle = document.getElementById('notifications-toggle');
-        if (notificationToggle && !notificationToggle.disabled) {
+        if (notificationToggle) {
+            const micState = 'permissions' in navigator && navigator.permissions.query({ name: 'microphone' });
+            if (!micState || micState.state === 'denied') notificationToggle.disabled = true;
+
             notificationToggle.onclick = async (e) => {
                 if (e.target.checked) {
-                    try {
-                        const permission = await Notification.requestPermission();
-                        if (permission !== 'granted') e.target.checked = false;
-                    } catch (error) { e.target.checked = false; }
+                    try { const permission = await Notification.requestPermission(); if (permission !== 'granted') e.target.checked = false; }
+                    catch (error) { e.target.checked = false; }
                 } else if (Notification.permission === 'granted') {
                     alert('To disable notifications, please use your browser settings.');
                     e.target.checked = true;
@@ -496,21 +473,22 @@ function onReady() {
             };
         }
 
-        // Microphone toggle
         const microphoneToggle = document.getElementById('microphone-toggle');
         async function updateMicrophoneToggleState() {
-            const micState = 'permissions' in navigator && await navigator.permissions.query({ name: 'microphone' });
+            const micState = 'permissions' in navigator ? await navigator.permissions.query({ name: 'microphone' }) : null;
             if (microphoneToggle) {
-                microphoneToggle.disabled = !micState;
+                microphoneToggle.disabled = !micState || micState.state === 'denied';
                 microphoneToggle.checked = micState?.state === 'granted';
             }
+            const description = document.querySelector('#microphone-setting-item .settings-item-description');
+            if (description) description.textContent = micState ? (micState.state === 'granted' ? 'Microphone access granted' : 'Allow access to your microphone') : 'Not supported in this browser';
         }
-        updateMicrophoneToggleState(); // Initial state
+        updateMicrophoneToggleState(); 
         if (microphoneToggle && !microphoneToggle.disabled) {
             microphoneToggle.onclick = async (e) => {
                 if (e.target.checked) {
-                    try { await navigator.mediaDevices.getUserMedia({ audio: true }); } 
-                    catch (error) { e.target.checked = false; }
+                    try { await navigator.mediaDevices.getUserMedia({ audio: true }); updateMicrophoneToggleState(); }
+                    catch (error) { e.target.checked = false; updateMicrophoneToggleState(); }
                 } else {
                     const micState = 'permissions' in navigator && await navigator.permissions.query({ name: 'microphone' });
                     if (micState?.state === 'granted') {
@@ -521,7 +499,6 @@ function onReady() {
             };
         }
 
-        // Analytics toggle
         const analyticsToggle = document.getElementById('analytics-toggle');
         if (analyticsToggle) {
             analyticsToggle.checked = localStorage.getItem('easter_analytics_enabled') !== 'false';
@@ -540,8 +517,49 @@ function onReady() {
     }});
 
 
-    const messageWindow = createWindow({ id: 'message-window', tabs: [ { icon: 'bx-bell', title: 'Notifications', content: createPlaceholderMessage('empty', 'No notifications yet.') }, { icon: 'bx-history', title: 'Logs', content: getLogsContent() }, { icon: 'bx-brain', title: 'Models', content: getModelsContent() }, { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent() }, { icon: 'bx-line-chart', title: 'System Monitor', content: getSystemMonitorContent() } ], icon: 'bxs-message-dots', onClose: onWindowClose, onOpen: () => setTimeout(initializeMessageWindow, 100) });
+    const messageWindow = createWindow({
+        id: 'message-window',
+        tabs: [
+            { icon: 'bx-bell', title: 'Notifications', content: createPlaceholderMessage('empty', 'No notifications yet.'), 'data-tab-index': 0 },
+            { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 1 }, // Index 1 for Events
+            { icon: 'bx-history', title: 'Logs', content: getLogsContent(), 'data-tab-index': 2 },      // Index 2 for Logs
+            { icon: 'bx-brain', title: 'Models', content: getModelsContent(), 'data-tab-index': 3 },        // Index 3 for Models
+            { icon: 'bx-line-chart', title: 'Services', content: getServicesContent(), 'data-tab-index': 4 } // Index 4 for Services
+        ],
+        icon: 'bxs-message-dots',
+        onClose: onWindowClose,
+        onOpen: () => setTimeout(initializeMessageWindow, 100)
+    });
 
+    async function initializeMessageWindow() {
+        await Promise.all([
+            updateSystemMonitor(),
+            updateModelsTab(),
+            updateEventsTimeline(),
+            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); })
+        ]);
+
+        const timestampInterval = setInterval(() => {
+            if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
+            updateTabTimestamp(2, lastLogsUpdate); // Logs (now index 2)
+            updateTabTimestamp(1, lastEventsUpdate); // Events (now index 1)
+            updateTabTimestamp(3, lastModelsUpdate); // Models (now index 3)
+            updateTabTimestamp(4, lastServicesUpdate); // Services (now index 4)
+        }, 1000);
+
+        const refreshInterval = setInterval(() => {
+            if (!messageWindow.isOpen()) return clearInterval(refreshInterval);
+            updateEventsTimeline();
+            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); });
+        }, 5000);
+
+        const servicesRefreshInterval = setInterval(() => {
+            if (!messageWindow.isOpen()) return clearInterval(servicesRefreshInterval);
+            updateSystemMonitor();
+            updateModelsTab();
+        }, 30000);
+    }
+    
     // --- Final Event Listeners ---
     if (loggedIn) {
         document.getElementById('user-icon')?.addEventListener('click', (e) => handleWindow(userWindow, e.currentTarget));
