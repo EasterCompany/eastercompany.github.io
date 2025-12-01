@@ -163,7 +163,7 @@ export async function updateLogs() {
         logsContainer.innerHTML = createPlaceholderMessage(
             'offline',
             'Failed to load logs.',
-            'The event service may be offline or unreachable.'
+            'The event service may be offline, unreachable, or blocked by a browser extension (e.g., ad blocker).'
         );
         return false;
     }
