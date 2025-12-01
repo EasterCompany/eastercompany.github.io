@@ -1242,12 +1242,29 @@ function onReady() {
 
 
 
+    function attachSettingsListeners() {
+        attachThemeListeners();
+        attachServiceMapListeners();
+        attachServerMapListeners();
+        attachOptionsListeners();
+        attachNotificationListener();
+        attachAnalyticsListener();
+        updateMicrophoneToggleState();
+        attachMicrophoneListener();
+    }
+
     const settingsWindow = createWindow({
         id: 'settings-window',
         title: 'Settings',
         content: getSettingsContent(),
         icon: 'bx-cog',
-        onClose: onWindowClose
+        onClose: onWindowClose,
+        onOpen: () => {
+            // Update content before attaching listeners to ensure it's fresh
+            settingsWindow.setContent(getSettingsContent());
+            // Attach listeners every time the settings window is opened
+            setTimeout(attachSettingsListeners, 50);
+        }
     });
 
     function handleWindow(windowInstance, clickedIcon = null) {
@@ -1462,18 +1479,6 @@ function onReady() {
         if (settingsIcon) {
             settingsIcon.addEventListener('click', () => {
                 handleWindow(settingsWindow, settingsIcon);
-
-                // Wait for window to open, then attach all settings listeners
-                setTimeout(() => {
-                    attachThemeListeners();
-                    attachServiceMapListeners();
-                    attachServerMapListeners();
-                    attachOptionsListeners();
-                    attachNotificationListener();
-                    attachAnalyticsListener();
-                    updateMicrophoneToggleState();
-                    attachMicrophoneListener();
-                }, 100);
             });
         }
     } else {
