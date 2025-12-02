@@ -54,7 +54,6 @@ function onReady() {
     }
 
     let lastServicesUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null;
-    
     const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getEventsContent = () => `<div id="events-timeline" class="events-timeline"><p>Loading events...</p></div>`;
@@ -267,7 +266,7 @@ function onReady() {
         const subtitleElement = document.querySelector(`.tab[data-tab-index="${tabIndex}"] .tab-subtitle`);
         if (!subtitleElement) return;
         if (!timestamp) {
-            subtitleElement.textContent = 'never';
+            subtitleElement.textContent = 'Last updated: never';
             return;
         }
         const now = Date.now();
@@ -276,7 +275,7 @@ function onReady() {
         if (seconds < 30) { 
             timeStr = `${Math.floor(seconds)}s ago`;
         } else { 
-            subtitleElement.textContent = 'never';
+            subtitleElement.textContent = 'Last updated: never';
             return;
         }
         subtitleElement.textContent = `Last updated: ${timeStr}`;
