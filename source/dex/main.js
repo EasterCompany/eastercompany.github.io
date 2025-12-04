@@ -254,9 +254,9 @@ function onReady() {
                 
                 let message = parts[2].trim();
                 let translation = '';
-                // Regex to capture translation, handling optional trailing content (like audio link)
-                // Looks for " (Translation: <text>)" optionally followed by other stuff
-                const transMatch = message.match(/(.*)\s*\(Translation:\s*(.*?)\)(?:\s+🔊.*)?$/);
+                // Regex to capture translation
+                // Looks for " (Translation: <text>)" at the end
+                const transMatch = message.match(/(.*)\s*\(Translation:\s*(.*?)\)$/);
                 if (transMatch) {
                     message = transMatch[1];
                     translation = transMatch[2];
