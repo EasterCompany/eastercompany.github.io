@@ -251,7 +251,21 @@ function onReady() {
                 const utcDate = new Date(parts[0].trim().replace(' UTC', 'Z'));
                 const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
-                return `<div class="event-item"><div class="event-time"><span class="event-time-main">${timeStr}</span><span class="event-date">${dateStr}</span></div><div class="event-content"><div class="event-service">${parts[1].trim()}</div><div class="event-message">${parts[2].trim()}</div></div></div>`;
+                
+                let message = parts[2].trim();
+                let translation = '';
+                const transMatch = message.match(/(.*)\s*\(Translation:\s*(.*)\)$/);
+                if (transMatch) {
+                    message = transMatch[1];
+                    translation = transMatch[2];
+                }
+
+                let html = `<div class="event-item"><div class="event-time"><span class="event-time-main">${timeStr}</span><span class="event-date">${dateStr}</span></div><div class="event-content"><div class="event-service">${parts[1].trim()}</div><div class="event-message">${message}</div>`;
+                if (translation) {
+                    html += `<div class="event-translation">Translation: ${translation}</div>`;
+                }
+                html += `</div></div>`;
+                return html;
             }).join('');
             eventsContainer.innerHTML = eventsHtml;
             lastEventsUpdate = Date.now();

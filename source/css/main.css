@@ -1485,6 +1485,15 @@ footer.hide {
   line-height: 1.4;
 }
 
+.event-translation {
+  font-size: 0.85em;
+  color: #ccc;
+  font-style: italic;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 @media (min-width: 768px) {
   .event-time {
     min-width: 100px;
