@@ -69,6 +69,7 @@ function onReady() {
         "messaging.user.joined_voice": "{user_name} joined voice channel {channel_name}",
         "messaging.user.left_voice": "{user_name} left voice channel {channel_name}",
         "messaging.user.sent_message": "{user_name} in {channel_name}: {content}",
+        "messaging.bot.sent_message": "Bot sent in {channel_name}: {content}",
         "messaging.bot.status_update": "Bot status changed to {status}: {details}",
         "messaging.user.speaking_started": "{user_name} started speaking",
         "messaging.user.speaking_stopped": "{user_name} stopped speaking",
