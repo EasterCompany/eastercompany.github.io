@@ -76,35 +76,47 @@ function onReady() {
         "messaging.user.joined_server": "{user_name} joined {server_name}",
         "voice_speaking_started": "User {user_id} started speaking in voice channel {channel_id}",
         "voice_speaking_stopped": "User {user_id} stopped speaking in voice channel {channel_id}",
-        "voice_transcribed": "{user_name} said: {transcription}", // Updated to match messaging.user.transcribed style if user_name available, else fallbacks
+        "voice_transcribed": "{user_name} said: {transcription}",
         "engagement.decision": "Engagement Decision: {decision} ({reason})",
         "bot_response": "Bot Responded: {response}"
     };
 
     function formatEventSummary(type, data) {
         let template = EVENT_TEMPLATES[type];
-        
-        // Special handling for voice_transcribed to fallback to user_id if user_name missing
         if (type === 'voice_transcribed' && !data.user_name && data.user_id) {
              template = "User {user_id} said in voice channel {channel_id}: {transcription}";
         }
-
-        if (!template) return type; // Fallback to type name
-
+        if (!template) return type;
         let summary = template.replace(/\{(\w+)\}/g, (match, key) => {
             return data[key] !== undefined && data[key] !== null ? data[key] : match;
         });
-
-        // Add translation if available (mirroring backend logic)
         if ((type === 'messaging.user.transcribed' || type === 'voice_transcribed') && 
             data.detected_language && data.detected_language !== 'en' && data.english_translation) {
             summary += ` (Translation: ${data.english_translation})`;
         }
-
         return summary;
     }
 
     // --- Data Fetching & UI Updates ---
+    function updateTabTimestamp(tabIndex, timestamp) {
+        const subtitleElement = document.querySelector(`.tab[data-tab-index="${tabIndex}"] .tab-subtitle`);
+        if (!subtitleElement) return;
+        if (!timestamp) {
+            subtitleElement.textContent = 'Last updated: never';
+            return;
+        }
+        const now = Date.now();
+        const seconds = (now - timestamp) / 1000;
+        let timeStr;
+        if (seconds < 30) { 
+            timeStr = `${Math.floor(seconds)}s ago`;
+        } else { 
+            subtitleElement.textContent = 'Last updated: never';
+            return;
+        }
+        subtitleElement.textContent = `Last updated: ${timeStr}`;
+    }
+
     async function fetchSystemData() {
         if (!localStorage.getItem('service_map')) return null;
         try {
@@ -282,15 +294,13 @@ function onReady() {
         if (!eventService) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
         
         const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
-        // Fetch JSON instead of text
         const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json`;
         
         try {
-            // Capture currently expanded events before update
             const expandedEventIds = new Set(
                 Array.from(eventsContainer.querySelectorAll('.event-item.expanded'))
                     .map(el => el.dataset.eventId)
-                    .filter(id => id) // filter out nulls/undefined
+                    .filter(id => id)
             );
 
             const response = await fetch(eventsUrl);
@@ -304,14 +314,13 @@ function onReady() {
                 return;
             }
 
-            // Create a function to generate HTML for an event
             const createEventElement = (event) => {
                 let eventData = event.event;
                 if (typeof eventData === 'string') {
                     try {
                         eventData = JSON.parse(eventData);
                     } catch (e) {
-                        return null; // Skip malformed
+                        return null;
                     }
                 }
 
@@ -320,7 +329,6 @@ function onReady() {
                 const borderClass = isExpandable ? 'event-border-blue' : 'event-border-grey';
                 const cursorClass = isExpandable ? 'cursor-pointer' : '';
                 
-                // Check expansion state
                 const isExpanded = expandedEventIds.has(event.id);
                 const expandedClass = isExpanded ? 'expanded' : '';
                 const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
@@ -329,7 +337,6 @@ function onReady() {
                 const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
-                // Use template-based summary generation
                 const summary = formatEventSummary(type, eventData);
 
                 let detailsHtml = '';
@@ -368,7 +375,6 @@ function onReady() {
                 tempDiv.className = `event-item ${borderClass} ${cursorClass} ${expandedClass}`;
                 tempDiv.dataset.eventId = event.id;
                 tempDiv.onclick = function(e) {
-                    // Toggle expansion logic
                     if (!isExpandable) return;
                     this.classList.toggle('expanded');
                     const details = this.querySelector('.event-details');
@@ -387,7 +393,6 @@ function onReady() {
                     </div>
                 `;
 
-                // Re-attach close listener
                 if (isExpandable) {
                     const closeBtn = tempDiv.querySelector('.close-details-btn');
                     if (closeBtn) {
@@ -406,50 +411,30 @@ function onReady() {
                 return tempDiv;
             };
 
-            // Sync strategy: Iterate through fetched events and place them in DOM
-            // API returns events sorted by user preference (default descending/newest first)
-            // We want DOM to match this order.
-            
-            // We iterate through the *new* list. For each item, we check if it's in DOM.
-            // If it is, we ensure it's at the correct index.
-            // If not, we create and insert it.
-            // Finally, we remove any DOM elements that are not in the new list.
-
             const currentChildren = Array.from(eventsContainer.children);
             const currentMap = new Map(currentChildren.map(el => [el.dataset.eventId, el]));
             const newIds = new Set(events.map(e => e.id));
 
-            // 1. Remove old events not in the new list
             currentChildren.forEach(child => {
                 if (child.dataset.eventId && !newIds.has(child.dataset.eventId)) {
                     child.remove();
                 }
             });
 
-            // 2. Insert/Reorder new events
-            // We use a document fragment or direct insertion? Direct is fine for 50 items.
-            // We iterate through the events array and enforce order in the DOM.
-            
             let previousElement = null;
 
             events.forEach((event, index) => {
                 let el = currentMap.get(event.id);
-                
                 if (!el) {
-                    // Create new
                     el = createEventElement(event);
-                    if (!el) return; // Skip if creation failed
+                    if (!el) return;
                 }
-
-                // If it's the first element
                 if (index === 0) {
                     if (eventsContainer.firstElementChild !== el) {
                         eventsContainer.prepend(el);
                     }
                 } else {
-                    // Ensure it follows the previous element
                     if (previousElement && previousElement.nextElementSibling !== el) {
-                        // insertAfter logic: insertBefore next sibling of prev
                         previousElement.after(el);
                     }
                 }
@@ -461,30 +446,10 @@ function onReady() {
 
         } catch (error) {
             console.error('Error fetching events:', error);
-            // Only show error if empty, otherwise keep showing stale data
             if (eventsContainer.children.length === 0) {
                 eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline or unreachable.');
             }
         }
-    }
-    
-    function updateTabTimestamp(tabIndex, timestamp) {
-        const subtitleElement = document.querySelector(`.tab[data-tab-index="${tabIndex}"] .tab-subtitle`);
-        if (!subtitleElement) return;
-        if (!timestamp) {
-            subtitleElement.textContent = 'Last updated: never';
-            return;
-        }
-        const now = Date.now();
-        const seconds = (now - timestamp) / 1000;
-        let timeStr;
-        if (seconds < 30) { 
-            timeStr = `${Math.floor(seconds)}s ago`;
-        } else { 
-            subtitleElement.textContent = 'Last updated: never';
-            return;
-        }
-        subtitleElement.textContent = `Last updated: ${timeStr}`;
     }
 
     async function initializeMessageWindow() {
@@ -497,10 +462,10 @@ function onReady() {
 
         const timestampInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
-            updateTabTimestamp(2, lastLogsUpdate); // Logs (now index 2)
-            updateTabTimestamp(1, lastEventsUpdate); // Events (now index 1)
-            updateTabTimestamp(3, lastModelsUpdate); // Models (now index 3)
-            updateTabTimestamp(4, lastServicesUpdate); // Services (now index 4)
+            updateTabTimestamp(2, lastLogsUpdate);
+            updateTabTimestamp(1, lastEventsUpdate);
+            updateTabTimestamp(3, lastModelsUpdate);
+            updateTabTimestamp(4, lastServicesUpdate);
         }, 1000);
 
         const refreshInterval = setInterval(() => {
@@ -516,8 +481,234 @@ function onReady() {
         }, 30000);
     }
     
-    // --- Final Event Listeners ---
-    // Define windows first
+    // Settings Window (Full Implementation)
+    function getSettingsContent() {
+        const currentTheme = getCurrentTheme();
+        const userEmail = getUserEmail() || 'user@easter.company';
+        const notificationState = { enabled: Notification.permission === 'granted', supported: 'Notification' in window };
+        const analyticsEnabled = localStorage.getItem('easter_analytics_enabled') !== 'false';
+        
+        return `
+            <div class="theme-selector">
+                ${Object.values(THEMES).map(theme => `
+                    <div class="theme-card ${currentTheme === theme ? 'active' : ''}" data-theme="${theme}">
+                        <div class="theme-preview theme-preview-${theme.toLowerCase()}"></div>
+                        <div class="theme-info">
+                            <h3>${theme}</h3>
+                            <p>${theme === THEMES.AUTO ? 'Automatic theme selection.' : theme === THEMES.DEFAULT ? 'Simple, black, default.' : 'Colourful, not bright.'}</p>
+                            <span class="theme-badge">${currentTheme === theme ? 'Active' : 'Select'}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="settings-section">
+                <h2 class="settings-section-title">Configuration</h2>
+                <div class="settings-list">
+                    <div class="settings-item settings-item-input">
+                        <div>
+                            <label class="settings-item-label">Services</label>
+                            <span class="settings-item-description">Upload your service-map.json to connect this client to your services.</span>
+                        </div>
+                        <div class="file-upload-container">
+                            <button class="file-upload-btn" id="service-map-upload-btn">Choose File</button>
+                            <span class="file-upload-name" id="service-map-file-name">${localStorage.getItem('service_map') ? 'service-map.json' : 'No file selected'}</span>
+                            <input type="file" class="file-upload-input" id="service-map-input" accept=".json,application/json" hidden>
+                            ${localStorage.getItem('service_map') ? '<button class="file-delete-btn" id="service-map-delete-btn" title="Delete service map">×</button>' : ''}
+                        </div>
+                        <div class="file-upload-error" id="service-map-error" style="display: none;"></div>
+                    </div>
+                    <div class="settings-item settings-item-input">
+                        <div>
+                            <label class="settings-item-label">Servers</label>
+                            <span class="settings-item-description">Upload your server-map.json to connect this client to your servers.</span>
+                        </div>
+                        <div class="file-upload-container">
+                            <button class="file-upload-btn" id="server-map-upload-btn">Choose File</button>
+                            <span class="file-upload-name" id="server-map-file-name">${localStorage.getItem('server_map') ? 'server-map.json' : 'No file selected'}</span>
+                            <input type="file" class="file-upload-input" id="server-map-input" accept=".json,application/json" hidden>
+                            ${localStorage.getItem('server_map') ? '<button class="file-delete-btn" id="server-map-delete-btn" title="Delete server map">×</button>' : ''}
+                        </div>
+                        <div class="file-upload-error" id="server-map-error" style="display: none;"></div>
+                    </div>
+                    <div class="settings-item settings-item-input">
+                        <div>
+                            <label class="settings-item-label">User Settings</label>
+                            <span class="settings-item-description">Upload your options.json to configure user preferences.</span>
+                        </div>
+                        <div class="file-upload-container">
+                            <button class="file-upload-btn" id="options-upload-btn">Choose File</button>
+                            <span class="file-upload-name" id="options-file-name">${localStorage.getItem('user_options') ? 'options.json' : 'No file selected'}</span>
+                            <input type="file" class="file-upload-input" id="options-input" accept=".json,application/json" hidden>
+                            ${localStorage.getItem('user_options') ? '<button class="file-delete-btn" id="options-delete-btn" title="Delete user settings">×</button>' : ''}
+                        </div>
+                        <div class="file-upload-error" id="options-error" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="settings-section">
+                <h2 class="settings-section-title">Preferences</h2>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Notifications</span>
+                            <span class="settings-item-description">${notificationState.supported ? 'Receive desktop notifications' : 'Not supported in this browser'}</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notifications-toggle" ${notificationState.enabled ? 'checked' : ''} ${!notificationState.supported ? 'disabled' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item" id="microphone-setting-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Access Microphone</span>
+                            <span class="settings-item-description">Allow access to your microphone</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="microphone-toggle" disabled>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Analytics</span>
+                            <span class="settings-item-description">Help improve the platform (enables debug mode)</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="analytics-toggle" ${analyticsEnabled ? 'checked' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>`;
+    }
+    
+    function attachSettingsListeners() {
+        const settingsContent = document.querySelector('#settings-window .window-content');
+        if (!settingsContent) return;
+
+        settingsContent.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const newTheme = this.dataset.theme;
+                setTheme(newTheme);
+                settingsWindow.setContent(getSettingsContent());
+                attachSettingsListeners();
+            });
+        });
+
+        function attachFileUploadListeners(buttonId, inputId, nameId, errorId, deleteId, localStorageKey, expectedFileName) {
+            const uploadBtn = document.getElementById(buttonId);
+            const fileInput = document.getElementById(inputId);
+            const fileNameSpan = document.getElementById(nameId);
+            const errorDiv = document.getElementById(errorId);
+            const deleteBtn = document.getElementById(deleteId);
+
+            if (uploadBtn && fileInput) {
+                uploadBtn.onclick = () => fileInput.click();
+                fileInput.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    if (file.name !== expectedFileName) {
+                        errorDiv.textContent = `File must be named "${expectedFileName}"`;
+                        errorDiv.style.display = 'block';
+                        fileInput.value = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const jsonContent = JSON.parse(event.target.result);
+                            localStorage.setItem(localStorageKey, JSON.stringify(jsonContent));
+                            fileNameSpan.textContent = expectedFileName;
+                            errorDiv.style.display = 'none';
+                            settingsWindow.setContent(getSettingsContent());
+                            attachSettingsListeners();
+                        } catch (error) {
+                            errorDiv.textContent = 'Invalid JSON format';
+                            errorDiv.style.display = 'block';
+                            fileInput.value = '';
+                        }
+                    };
+                    reader.onerror = () => {
+                        errorDiv.textContent = 'Failed to read file';
+                        errorDiv.style.display = 'block';
+                        fileInput.value = '';
+                    };
+                    reader.readAsText(file);
+                };
+            }
+            if (deleteBtn) {
+                deleteBtn.onclick = () => {
+                    localStorage.removeItem(localStorageKey);
+                    settingsWindow.setContent(getSettingsContent());
+                    attachSettingsListeners();
+                };
+            }
+        }
+        attachFileUploadListeners('service-map-upload-btn', 'service-map-input', 'service-map-file-name', 'service-map-error', 'service-map-delete-btn', 'service_map', 'service-map.json');
+        attachFileUploadListeners('server-map-upload-btn', 'server-map-input', 'server-map-file-name', 'server-map-error', 'server-map-delete-btn', 'server_map', 'server-map.json');
+        attachFileUploadListeners('options-upload-btn', 'options-input', 'options-file-name', 'options-error', 'options-delete-btn', 'user_options', 'options.json');
+        
+        const notificationToggle = document.getElementById('notifications-toggle');
+        if (notificationToggle) {
+            const micState = 'permissions' in navigator && navigator.permissions.query({ name: 'microphone' });
+            if (!micState || micState.state === 'denied') notificationToggle.disabled = true;
+
+            notificationToggle.onclick = async (e) => {
+                if (e.target.checked) {
+                    try { const permission = await Notification.requestPermission(); if (permission !== 'granted') e.target.checked = false; }
+                    catch (error) { e.target.checked = false; }
+                } else if (Notification.permission === 'granted') {
+                    alert('To disable notifications, please use your browser settings.');
+                    e.target.checked = true;
+                }
+            };
+        }
+
+        const microphoneToggle = document.getElementById('microphone-toggle');
+        async function updateMicrophoneToggleState() {
+            const micState = 'permissions' in navigator ? await navigator.permissions.query({ name: 'microphone' }) : null;
+            if (microphoneToggle) {
+                microphoneToggle.disabled = !micState || micState.state === 'denied';
+                microphoneToggle.checked = micState?.state === 'granted';
+            }
+            const description = document.querySelector('#microphone-setting-item .settings-item-description');
+            if (description) description.textContent = micState ? (micState.state === 'granted' ? 'Microphone access granted' : 'Allow access to your microphone') : 'Not supported in this browser';
+        }
+        updateMicrophoneToggleState(); 
+        if (microphoneToggle && !microphoneToggle.disabled) {
+            microphoneToggle.onclick = async (e) => {
+                if (e.target.checked) {
+                    try { await navigator.mediaDevices.getUserMedia({ audio: true }); updateMicrophoneToggleState(); }
+                    catch (error) { e.target.checked = false; updateMicrophoneToggleState(); }
+                } else {
+                    const micState = 'permissions' in navigator && await navigator.permissions.query({ name: 'microphone' });
+                    if (micState?.state === 'granted') {
+                        alert('To disable microphone access, please use your browser settings.');
+                        e.target.checked = true;
+                    }
+                }
+            };
+        }
+
+        const analyticsToggle = document.getElementById('analytics-toggle');
+        if (analyticsToggle) {
+            analyticsToggle.checked = localStorage.getItem('easter_analytics_enabled') !== 'false';
+            analyticsToggle.onclick = (e) => {
+                const enabled = e.target.checked;
+                localStorage.setItem('easter_analytics_enabled', enabled);
+                window.EASTER_ANALYTICS_ENABLED = enabled;
+                window.EASTER_DEBUG_MODE = enabled;
+            };
+        }
+    }
+
+    // Define windows with definitions in scope
     const loginWindow = createWindow({ id: 'login-window', title: 'Welcome', content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"></div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`, icon: 'bx-log-in', onClose: onWindowClose });
     const userWindow = createWindow({ id: 'user-window', title: 'User Profile', content: `<p>Logged in as: ${getUserEmail() || 'Unknown'}</p>`, icon: 'bx-user', onClose: onWindowClose });
     
