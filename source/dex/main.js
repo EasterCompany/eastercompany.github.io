@@ -326,7 +326,7 @@ function onReady() {
                 }
 
                 const type = eventData.type;
-                const isExpandable = type === 'engagement.decision';
+                const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message';
                 const borderClass = isExpandable ? 'event-border-blue' : 'event-border-grey';
                 const cursorClass = isExpandable ? 'cursor-pointer' : '';
                 
@@ -342,19 +342,12 @@ function onReady() {
 
                 let detailsHtml = '';
                 if (isExpandable) {
-                    detailsHtml = `
-                        <div class="event-details" style="${detailsStyle}">
-                            <div class="event-details-header">
-                                <h4>Event Details</h4>
-                                <i class="bx bx-x close-details-btn"></i>
-                            </div>
+                    let detailsContent = '';
+                    if (type === 'engagement.decision') {
+                        detailsContent = `
                             <div class="event-detail-row">
                                 <span class="detail-label">Engagement Model:</span>
                                 <span class="detail-value">${eventData.engagement_model || 'N/A'}</span>
-                            </div>
-                            <div class="event-detail-row">
-                                <span class="detail-label">Response Model:</span>
-                                <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                             </div>
                             <div class="event-detail-block">
                                 <span class="detail-label">Context History:</span>
@@ -364,10 +357,27 @@ function onReady() {
                                 <span class="detail-label">Raw Engagement Output:</span>
                                 <pre class="detail-pre">${eventData.engagement_raw || 'None'}</pre>
                             </div>
+                        `;
+                    } else if (type === 'messaging.bot.sent_message') {
+                        detailsContent = `
+                            <div class="event-detail-row">
+                                <span class="detail-label">Response Model:</span>
+                                <span class="detail-value">${eventData.response_model || 'N/A'}</span>
+                            </div>
                             <div class="event-detail-block">
                                 <span class="detail-label">Raw Response Output:</span>
                                 <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
                             </div>
+                        `;
+                    }
+
+                    detailsHtml = `
+                        <div class="event-details" style="${detailsStyle}">
+                            <div class="event-details-header">
+                                <h4>Event Details</h4>
+                                <i class="bx bx-x close-details-btn"></i>
+                            </div>
+                            ${detailsContent}
                         </div>
                     `;
                 }
