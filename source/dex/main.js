@@ -240,6 +240,13 @@ function onReady() {
         const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json`;
         
         try {
+            // Capture currently expanded events before update
+            const expandedEventIds = new Set(
+                Array.from(eventsContainer.querySelectorAll('.event-item.expanded'))
+                    .map(el => el.dataset.eventId)
+                    .filter(id => id) // filter out nulls/undefined
+            );
+
             const response = await fetch(eventsUrl);
             if (!response.ok) throw new Error('Service is offline or unreachable.');
             
@@ -266,6 +273,11 @@ function onReady() {
                 const borderClass = isExpandable ? 'event-border-blue' : 'event-border-grey';
                 const cursorClass = isExpandable ? 'cursor-pointer' : '';
                 
+                // Check expansion state
+                const isExpanded = expandedEventIds.has(event.id);
+                const expandedClass = isExpanded ? 'expanded' : '';
+                const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
+                
                 const utcDate = new Date(event.timestamp * 1000);
                 const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
@@ -285,7 +297,7 @@ function onReady() {
                 let detailsHtml = '';
                 if (isExpandable) {
                     detailsHtml = `
-                        <div class="event-details" style="display: none;">
+                        <div class="event-details" style="${detailsStyle}">
                             <div class="event-details-header">
                                 <h4>Event Details</h4>
                                 <i class="bx bx-x close-details-btn"></i>
@@ -315,7 +327,7 @@ function onReady() {
                 }
 
                 return `
-                    <div class="event-item ${borderClass} ${cursorClass}" onclick="this.classList.toggle('expanded'); const details = this.querySelector('.event-details'); if(details) details.style.display = details.style.display === 'none' ? 'block' : 'none';">
+                    <div class="event-item ${borderClass} ${cursorClass} ${expandedClass}" data-event-id="${event.id}" onclick="this.classList.toggle('expanded'); const details = this.querySelector('.event-details'); if(details) details.style.display = details.style.display === 'none' ? 'block' : 'none';">
                         <div class="event-time">
                             <span class="event-time-main">${timeStr}</span>
                             <span class="event-date">${dateStr}</span>
