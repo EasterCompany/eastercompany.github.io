@@ -459,7 +459,7 @@ main a {
 .window-title {
     flex-grow: 1; /* Allows the title to fill space */
     text-align: center;
-    font-weight: bold;
+    font-weight: normal;
     color: white;
     font-size: 1.1em;
     white-space: nowrap; /* Prevent title from wrapping */
