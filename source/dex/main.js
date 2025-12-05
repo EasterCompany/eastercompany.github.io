@@ -234,44 +234,116 @@ function onReady() {
             eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
         } catch (e) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
         if (!eventService) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
+        
         const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
-        const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=text`;
+        // Fetch JSON instead of text
+        const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json`;
+        
         try {
             const response = await fetch(eventsUrl);
             if (!response.ok) throw new Error('Service is offline or unreachable.');
-            const textData = await response.text();
-            if (!textData || textData.trim() === '') {
+            
+            const data = await response.json();
+            const events = data.events || [];
+
+            if (events.length === 0) {
                 eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found.');
                 return;
             }
-            const lines = textData.trim().split('\n');
-            const eventsHtml = lines.map(line => {
-                const parts = line.split(' | ');
-                if (parts.length < 3) return '';
-                const utcDate = new Date(parts[0].trim().replace(' UTC', 'Z'));
-                const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
-                
-                let message = parts[2].trim();
-                let translation = '';
-                // Regex to capture translation
-                // Looks for " (Translation: <text>)" at the end
-                const transMatch = message.match(/(.*)\s*\(Translation:\s*(.*?)\)$/);
-                if (transMatch) {
-                    message = transMatch[1];
-                    translation = transMatch[2];
+
+            const eventsHtml = events.map(event => {
+                let eventData = {};
+                try {
+                    eventData = JSON.parse(event.event);
+                } catch (e) {
+                    return ''; // Skip malformed
                 }
 
-                let html = `<div class="event-item"><div class="event-time"><span class="event-time-main">${timeStr}</span><span class="event-date">${dateStr}</span></div><div class="event-content"><div class="event-service">${parts[1].trim()}</div><div class="event-message">${message}</div>`;
-                if (translation) {
-                    html += `<div class="event-translation">Translation: ${translation}</div>`;
+                const type = eventData.type;
+                const isExpandable = type === 'engagement.decision';
+                const borderClass = isExpandable ? 'event-border-blue' : 'event-border-grey';
+                const cursorClass = isExpandable ? 'cursor-pointer' : '';
+                
+                const utcDate = new Date(event.timestamp * 1000);
+                const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
+
+                // Simplified summary generation (fallback to type if no formatter)
+                let summary = `${type}`;
+                if (type === 'message_received' || type === 'messaging.user.sent_message') {
+                    summary = `${eventData.user_name || eventData.user} in ${eventData.channel_name || eventData.channel}: ${eventData.content || eventData.message}`;
+                } else if (type === 'engagement.decision') {
+                    summary = `Engagement Decision: ${eventData.decision} (${eventData.reason})`;
+                } else if (type === 'bot_response') {
+                    summary = `Bot Responded: ${eventData.response}`;
+                } else if (type === 'voice_transcribed' || type === 'messaging.user.transcribed') {
+                    summary = `${eventData.user_name || eventData.user_id} said: ${eventData.transcription}`;
                 }
-                html += `</div></div>`;
-                return html;
+
+                let detailsHtml = '';
+                if (isExpandable) {
+                    detailsHtml = `
+                        <div class="event-details" style="display: none;">
+                            <div class="event-details-header">
+                                <h4>Event Details</h4>
+                                <i class="bx bx-x close-details-btn"></i>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Engagement Model:</span>
+                                <span class="detail-value">${eventData.engagement_model || 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Response Model:</span>
+                                <span class="detail-value">${eventData.response_model || 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Context History:</span>
+                                <pre class="detail-pre">${eventData.context_history || 'None'}</pre>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Raw Engagement Output:</span>
+                                <pre class="detail-pre">${eventData.engagement_raw || 'None'}</pre>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Raw Response Output:</span>
+                                <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="event-item ${borderClass} ${cursorClass}" onclick="this.classList.toggle('expanded'); const details = this.querySelector('.event-details'); if(details) details.style.display = details.style.display === 'none' ? 'block' : 'none';">
+                        <div class="event-time">
+                            <span class="event-time-main">${timeStr}</span>
+                            <span class="event-date">${dateStr}</span>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-service">${event.service}</div>
+                            <div class="event-message">${summary}</div>
+                            ${detailsHtml}
+                        </div>
+                    </div>
+                `;
             }).join('');
+
             eventsContainer.innerHTML = eventsHtml;
             lastEventsUpdate = Date.now();
             updateTabTimestamp(1, lastEventsUpdate);
+            
+            // Add event listeners for close buttons to prevent bubbling
+            document.querySelectorAll('.close-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering the parent toggle
+                    const item = e.target.closest('.event-item');
+                    if (item) {
+                        item.classList.remove('expanded');
+                        const details = item.querySelector('.event-details');
+                        if (details) details.style.display = 'none';
+                    }
+                });
+            });
+
         } catch (error) {
             console.error('Error fetching events:', error);
             eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline or unreachable.');

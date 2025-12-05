@@ -1438,11 +1438,24 @@ footer.hide {
   border-left: 3px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   transition: all 0.3s ease;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 .event-item:hover {
   background-color: rgba(40, 40, 40, 0.5);
-  border-left-color: rgba(255, 255, 255, 0.4);
+}
+
+.event-border-blue {
+    border-left-color: #4444FF;
+}
+
+.event-border-grey {
+    border-left-color: rgba(255, 255, 255, 0.2);
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .event-time {
@@ -1471,6 +1484,7 @@ footer.hide {
   flex-direction: column;
   gap: 6px;
   flex: 1;
+  min-width: 0; /* Allow text truncation */
 }
 
 .event-service {
@@ -1483,6 +1497,7 @@ footer.hide {
   font-size: 0.9em;
   color: #eee;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .event-translation {
@@ -1492,6 +1507,87 @@ footer.hide {
   margin-top: 4px;
   padding-top: 4px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Expanded Details */
+.event-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.event-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.event-details-header h4 {
+    font-size: 0.9em;
+    color: #aaa;
+    margin: 0;
+    font-weight: 500;
+    text-align: left;
+}
+
+.close-details-btn {
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #777;
+    transition: color 0.2s;
+}
+
+.close-details-btn:hover {
+    color: #fff;
+}
+
+.event-detail-row {
+    display: flex;
+    gap: 10px;
+    font-size: 0.85em;
+    margin-bottom: 6px;
+}
+
+.detail-label {
+    color: #888;
+    min-width: 120px;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    color: #eee;
+    font-family: monospace;
+}
+
+.event-detail-block {
+    margin-top: 10px;
+}
+
+.event-detail-block .detail-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.85em;
+}
+
+.detail-pre {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.8em;
+    color: #ccc;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
 }
 
 @media (min-width: 768px) {
