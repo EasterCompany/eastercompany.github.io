@@ -416,8 +416,9 @@ function onReady() {
             const currentMap = new Map(currentChildren.map(el => [el.dataset.eventId, el]));
             const newIds = new Set(events.map(e => e.id));
 
+            // 1. Remove old events not in the new list
             currentChildren.forEach(child => {
-                if (child.dataset.eventId && !newIds.has(child.dataset.eventId)) {
+                if (!child.dataset.eventId || !newIds.has(child.dataset.eventId)) {
                     child.remove();
                 }
             });
