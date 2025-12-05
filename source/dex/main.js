@@ -252,11 +252,13 @@ function onReady() {
             }
 
             const eventsHtml = events.map(event => {
-                let eventData = {};
-                try {
-                    eventData = JSON.parse(event.event);
-                } catch (e) {
-                    return ''; // Skip malformed
+                let eventData = event.event;
+                if (typeof eventData === 'string') {
+                    try {
+                        eventData = JSON.parse(eventData);
+                    } catch (e) {
+                        return ''; // Skip malformed
+                    }
                 }
 
                 const type = eventData.type;
