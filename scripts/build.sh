@@ -13,6 +13,12 @@ ESBUILD_BIN="$HOME/go/bin/esbuild"
 echo "Cleaning up old build files..."
 rm -f "$ROOT_DIR"/dex.*.js "$ROOT_DIR"/dex.*.js.map "$ROOT_DIR"/dex.*.css
 
+# Write version if available
+if [ ! -z "$DEX_BUILD_VERSION" ]; then
+    echo "Writing version $DEX_BUILD_VERSION to version.txt"
+    echo "$DEX_BUILD_VERSION" > "$ROOT_DIR/version.txt"
+fi
+
 # 2. Generate a hash from the source file contents
 echo "Generating content hash..."
 # Find all source files and hash their combined content
