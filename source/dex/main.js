@@ -488,13 +488,13 @@ function onReady() {
             if (!messageWindow.isOpen()) return clearInterval(refreshInterval);
             updateEventsTimeline();
             updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); });
-        }, 5000);
+        }, 3000); // Events and Logs now update every 3 seconds
 
         const servicesRefreshInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(servicesRefreshInterval);
             updateSystemMonitor();
             updateModelsTab();
-        }, 30000);
+        }, 60000); // Services and Models now update every 60 seconds
     }
     
     // Settings Window (Full Implementation)
