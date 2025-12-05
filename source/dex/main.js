@@ -365,6 +365,10 @@ function onReady() {
                                 <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                             </div>
                             <div class="event-detail-block">
+                                <span class="detail-label">Raw Input (Prompt):</span>
+                                <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
+                            </div>
+                            <div class="event-detail-block">
                                 <span class="detail-label">Raw Response Output:</span>
                                 <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
                             </div>
