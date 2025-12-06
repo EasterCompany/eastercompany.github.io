@@ -326,7 +326,7 @@ function onReady() {
                 }
 
                 const type = eventData.type;
-                const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message';
+                const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message';
                 const borderClass = isExpandable ? 'event-border-blue' : 'event-border-grey';
                 const cursorClass = isExpandable ? 'cursor-pointer' : '';
                 
@@ -373,6 +373,40 @@ function onReady() {
                                 <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
                             </div>
                         `;
+                    } else if (type === 'messaging.user.sent_message') {
+                         let attachmentsHtml = '';
+                         if (eventData.attachments && eventData.attachments.length > 0) {
+                             const attachmentsList = eventData.attachments.map(att => {
+                                 const isImage = att.content_type && att.content_type.startsWith('image/');
+                                 const sizeStr = (att.size / 1024).toFixed(1) + ' KB';
+                                 return `
+                                    <div class="attachment-item">
+                                        ${isImage ? `<div class="attachment-thumb-container"><img src="${att.url}" alt="${att.filename}" class="attachment-thumb"></div>` : `<div class="attachment-icon-container"><i class='bx bx-file attachment-icon'></i></div>`}
+                                        <div class="attachment-info">
+                                            <a href="${att.url}" target="_blank" class="attachment-link">${att.filename}</a>
+                                            <span class="attachment-meta">${att.content_type} • ${sizeStr}</span>
+                                        </div>
+                                    </div>`;
+                             }).join('');
+                             
+                             attachmentsHtml = `
+                                <div class="event-detail-block">
+                                    <span class="detail-label">Attachments:</span>
+                                    <div class="attachments-grid">${attachmentsList}</div>
+                                </div>`;
+                         }
+                         
+                         detailsContent = `
+                            <div class="event-detail-row">
+                                <span class="detail-label">Message ID:</span>
+                                <span class="detail-value">${eventData.message_id || 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Raw Content:</span>
+                                <pre class="detail-pre">${eventData.content || '(empty)'}</pre>
+                            </div>
+                            ${attachmentsHtml}
+                         `;
                     }
 
                     detailsHtml = `

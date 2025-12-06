@@ -1669,4 +1669,84 @@ footer.hide {
     flex-grow: 1;
     overflow: hidden;
 }
-/* --- End Logs --- */
+/* Attachments Grid */
+.attachments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    background: rgba(60, 60, 60, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.attachment-thumb-container {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-icon-container {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.attachment-icon {
+    font-size: 24px;
+    color: #aaa;
+}
+
+.attachment-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.attachment-link {
+    color: #4444FF;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.attachment-link:hover {
+    text-decoration: underline;
+    color: #6666FF;
+}
+
+.attachment-meta {
+    font-size: 0.75em;
+    color: #999;
+    margin-top: 2px;
+}
