@@ -1412,6 +1412,24 @@ footer.hide {
   color: #5eff5e; /* Green for active metrics */
 }
 
+/* --- Process Widgets (Inherits from Service Widget) --- */
+.process-widget {
+    border-left: 3px solid #4444FF; /* Blue for active process */
+}
+
+.process-widget .service-widget-header i {
+    color: #4444FF;
+}
+
+.process-retry-badge {
+    background-color: rgba(255, 170, 0, 0.2);
+    color: #ffaa00;
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-left: auto;
+}
 /* --- End System Monitor Widgets --- */
 
 /* --- Events Timeline --- */

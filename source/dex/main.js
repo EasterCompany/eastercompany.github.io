@@ -53,9 +53,10 @@ function onReady() {
         return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
     }
 
-    let lastServicesUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null;
+    let lastServicesUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null, lastProcessesUpdate = null;
     const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+    const getProcessesContent = () => localStorage.getItem('service_map') ? `<div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     const getEventsContent = () => `<div id="events-timeline" class="events-timeline"><p>Loading events...</p></div>`;
 
     // --- Event Templates & Formatting ---
@@ -277,6 +278,95 @@ function onReady() {
         if (widgetsContainer.innerHTML !== finalHtml) {
             widgetsContainer.innerHTML = finalHtml;
         }
+    }
+
+    async function fetchProcessData() {
+        if (!localStorage.getItem('service_map')) return null;
+        try {
+            const serviceMap = JSON.parse(localStorage.getItem('service_map'));
+            const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
+            if (!eventService) return null;
+            const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+            const url = `http://${domain}:${eventService.port}/processes`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching process data:', error);
+            return null;
+        }
+    }
+
+    async function updateProcessesTab() {
+        const widgetsContainer = document.getElementById('processes-widgets');
+        if (!widgetsContainer) return;
+
+        const processes = await fetchProcessData();
+
+        if (processes === null) {
+             widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.');
+             return;
+        }
+
+        lastProcessesUpdate = Date.now();
+        updateTabTimestamp(2, lastProcessesUpdate); // Index 2
+
+        if (processes.length === 0) {
+            widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+            return;
+        }
+
+        // Clear loading/placeholder messages
+        if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('p')) {
+            widgetsContainer.innerHTML = '';
+        }
+
+        function generateProcessWidgetHtml(proc) {
+            const duration = Math.floor((Date.now() / 1000) - proc.start_time);
+            const retryBadge = proc.retries > 0 ? `<span class="process-retry-badge">Retry ${proc.retries}</span>` : '';
+            
+            return `
+                <div class="service-widget process-widget" data-channel-id="${proc.channel_id}">
+                    <div class="service-widget-header">
+                        <i class="bx bx-loader-alt bx-spin"></i>
+                        <h3>Channel ${proc.channel_id}</h3>
+                        ${retryBadge}
+                    </div>
+                    <div class="service-widget-body">
+                        <div class="service-widget-info">
+                            <span class="info-label">State:</span>
+                            <span class="info-value">${proc.state}</span>
+                        </div>
+                        <div class="service-widget-info">
+                            <span class="info-label">Duration:</span>
+                            <span class="info-value">${duration}s</span>
+                        </div>
+                         <div class="service-widget-info">
+                            <span class="info-label">PID:</span>
+                            <span class="info-value">${proc.pid}</span>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.process-widget')).map(widget => [widget.dataset.channelId, widget]));
+        const incomingIds = new Set(processes.map(p => p.channel_id));
+
+        for (const [id, widget] of existingWidgetsMap) {
+            if (!incomingIds.has(id)) {
+                widget.remove();
+            }
+        }
+
+        processes.forEach(proc => {
+            const newHtml = generateProcessWidgetHtml(proc);
+            const existingWidget = existingWidgetsMap.get(proc.channel_id);
+            if (existingWidget) {
+                if (existingWidget.outerHTML !== newHtml) existingWidget.outerHTML = newHtml;
+            } else {
+                widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
+            }
+        });
     }
 
     async function updateEventsTimeline() {
@@ -507,21 +597,24 @@ function onReady() {
             updateSystemMonitor(),
             updateModelsTab(),
             updateEventsTimeline(),
-            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); })
+            updateProcessesTab(),
+            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(3, lastLogsUpdate); })
         ]);
 
         const timestampInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
-            updateTabTimestamp(2, lastLogsUpdate);
+            updateTabTimestamp(3, lastLogsUpdate);
             updateTabTimestamp(1, lastEventsUpdate);
-            updateTabTimestamp(3, lastModelsUpdate);
-            updateTabTimestamp(4, lastServicesUpdate);
+            updateTabTimestamp(4, lastModelsUpdate);
+            updateTabTimestamp(5, lastServicesUpdate);
+            updateTabTimestamp(2, lastProcessesUpdate);
         }, 1000);
 
         const refreshInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(refreshInterval);
             updateEventsTimeline();
-            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(2, lastLogsUpdate); });
+            updateProcessesTab();
+            updateLogs().then(success => { if (success) lastLogsUpdate = Date.now(); updateTabTimestamp(3, lastLogsUpdate); });
         }, 3000); // Events and Logs now update every 3 seconds
 
         const servicesRefreshInterval = setInterval(() => {
@@ -772,9 +865,10 @@ function onReady() {
         tabs: [
             { icon: 'bx-bell', title: 'Notifications', content: createPlaceholderMessage('empty', 'No notifications yet.'), 'data-tab-index': 0 },
             { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 1 }, // Index 1 for Events
-            { icon: 'bx-history', title: 'Logs', content: getLogsContent(), 'data-tab-index': 2 },      // Index 2 for Logs
-            { icon: 'bx-brain', title: 'Models', content: getModelsContent(), 'data-tab-index': 3 },        // Index 3 for Models
-            { icon: 'bx-line-chart', title: 'Services', content: getServicesContent(), 'data-tab-index': 4 } // Index 4 for Services
+            { icon: 'bx-cog', title: 'Processes', content: getProcessesContent(), 'data-tab-index': 2 },      // Index 2 for Processes
+            { icon: 'bx-history', title: 'Logs', content: getLogsContent(), 'data-tab-index': 3 },      // Index 3 for Logs
+            { icon: 'bx-brain', title: 'Models', content: getModelsContent(), 'data-tab-index': 4 },        // Index 4 for Models
+            { icon: 'bx-line-chart', title: 'Services', content: getServicesContent(), 'data-tab-index': 5 } // Index 5 for Services
         ],
         icon: 'bxs-message-dots',
         onClose: onWindowClose,
