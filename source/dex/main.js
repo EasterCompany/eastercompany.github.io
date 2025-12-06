@@ -126,7 +126,7 @@ function onReady() {
             const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
             if (!eventService) return null;
             const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
-            const url = `http://${domain}:${eventService.port}/system_monitor_metrics`;
+            const url = `http://${domain}:${eventService.port}/system_monitor`;
             const response = await fetch(url);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return await response.json();
