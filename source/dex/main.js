@@ -604,10 +604,10 @@ function onReady() {
         const timestampInterval = setInterval(() => {
             if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
             updateTabTimestamp(3, lastLogsUpdate);
-            updateTabTimestamp(1, lastEventsUpdate);
+            updateTabTimestamp(2, lastEventsUpdate);
             updateTabTimestamp(4, lastModelsUpdate);
             updateTabTimestamp(5, lastServicesUpdate);
-            updateTabTimestamp(2, lastProcessesUpdate);
+            updateTabTimestamp(1, lastProcessesUpdate);
         }, 1000);
 
         const refreshInterval = setInterval(() => {
@@ -864,8 +864,8 @@ function onReady() {
         id: 'message-window',
         tabs: [
             { icon: 'bx-bell', title: 'Notifications', content: createPlaceholderMessage('empty', 'No notifications yet.'), 'data-tab-index': 0 },
-            { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 1 }, // Index 1 for Events
-            { icon: 'bx-cog', title: 'Processes', content: getProcessesContent(), 'data-tab-index': 2 },      // Index 2 for Processes
+            { icon: 'bx-cog', title: 'Processes', content: getProcessesContent(), 'data-tab-index': 1 },      // Index 1 for Processes
+            { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 2 }, // Index 2 for Events
             { icon: 'bx-history', title: 'Logs', content: getLogsContent(), 'data-tab-index': 3 },      // Index 3 for Logs
             { icon: 'bx-brain', title: 'Models', content: getModelsContent(), 'data-tab-index': 4 },        // Index 4 for Models
             { icon: 'bx-line-chart', title: 'Services', content: getServicesContent(), 'data-tab-index': 5 } // Index 5 for Services
