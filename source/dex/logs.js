@@ -118,7 +118,11 @@ export async function updateLogs() {
 
         // Reverse the order of log reports so newest appear at the top
         filteredLogsData.forEach(logReport => {
-            logReport.logs.reverse();
+            if (logReport.logs && Array.isArray(logReport.logs)) {
+                logReport.logs.reverse();
+            } else {
+                logReport.logs = [];
+            }
         });
         filteredLogsData.reverse();
 
