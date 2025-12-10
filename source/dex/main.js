@@ -78,6 +78,8 @@ function onReady() {
     "messaging.user.speaking.stopped": "{user_name} stopped speaking",
     "messaging.user.transcribed": "{user_name} said: {transcription}",
     "messaging.user.joined_server": "{user_name} joined {server_name}",
+    "messaging.webhook.message": "{user_name} (Webhook): {content}",
+    "webhook.processed": "Webhook processed: {status}",
     "voice_speaking_started": "User {user_id} started speaking in voice channel {channel_id}",
     "voice_speaking_stopped": "User {user_id} stopped speaking in voice channel {channel_id}",
     "voice_transcribed": "{user_name} said: {transcription}",
