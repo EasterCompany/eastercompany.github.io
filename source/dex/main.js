@@ -173,8 +173,25 @@ function onReady() {
     function sanitizeValue(value) { if (!value || value === 'N/A' || value === 'unknown' || value.trim() === '') { return '-'; } return value; }
     function extractMajorMinorPatch(versionStr) { if (!versionStr || versionStr === 'N/A' || versionStr === 'unknown') { return '-'; } const match = versionStr.match(/^(\d+\.\d+\.\d+)/); if (match) return match[0]; return versionStr.split('.').slice(0, 3).join('.') || '-'; }
     function truncateAddress(address) { if (!address || address.length <= 28) return address; return address.substring(0, 28) + '...'; }
-    function getStatColor(value) { if (!value || !value.includes('%')) return '#666'; const percent = parseFloat(value); if (percent < 30) return '#00ff00'; if (percent < 60) return '#88ff00'; if (percent < 80) return '#ffaa00'; return '#ff0000'; }
+
     function formatUptime(uptimeStr) { if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-'; const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/); if (!match) return '-'; const days = parseInt(match[1]) || 0; const hours = parseInt(match[2]) || 0; const minutes = parseInt(match[3]) || 0; const seconds = parseFloat(match[4]) || 0; const totalSeconds = (days * 86400) + (hours * 3600) + (minutes * 60) + seconds; const totalDays = Math.floor(totalSeconds / 86400); if (totalDays > 0) return `${totalDays}d`; const totalHours = Math.floor(totalSeconds / 3600); if (totalHours > 0) return `${totalHours}h`; const totalMinutes = Math.floor(totalSeconds / 60); if (totalMinutes > 0) return `${totalMinutes}m`; return `${Math.floor(totalSeconds)}s`; }
+
+    function getStatColor(value, isPercentage = true) {
+      if (typeof value !== 'number' || isNaN(value)) return '#666'; // Default grey for invalid numbers
+
+      if (isPercentage) {
+        if (value < 30) return '#00ff00'; // Green
+        if (value < 60) return '#88ff00'; // Light Green
+        if (value < 80) return '#ffaa00'; // Orange
+        return '#ff0000'; // Red
+      } else { // Assume MB for memory
+        // Thresholds in MB
+        if (value < 256) return '#00ff00'; // Green (< 256MB)
+        if (value < 512) return '#88ff00'; // Light Green (< 512MB)
+        if (value < 1024) return '#ffaa00'; // Orange (< 1GB)
+        return '#ff0000'; // Red (> 1GB)
+      }
+    }
 
     function generateWidgetHtml(service) {
       const isOnline = service.status === 'online';
@@ -182,14 +199,23 @@ function onReady() {
       const statusIcon = isOnline ? 'bx-check-circle' : 'bx-x-circle';
       const statusText = isOnline ? 'OK' : 'BAD';
       let versionDisplay = service.version ? extractMajorMinorPatch(service.version.str) : '-';
-      const cpuValue = sanitizeValue(service.cpu);
-      const memoryValue = sanitizeValue(service.memory);
-      const cpuColor = getStatColor(cpuValue);
-      const memoryColor = getStatColor(memoryValue);
+
+      // Extract numeric values for CPU and Memory
+      const cpuValueNum = parseFloat(service.cpu?.avg); // Use optional chaining for safety
+      const memoryValueNum = parseFloat(service.memory?.avg); // Use optional chaining for safety
+
+      // Format values with units
+      const cpuValueFormatted = isNaN(cpuValueNum) ? '-' : `${cpuValueNum.toFixed(1)}%`;
+      const memoryValueFormatted = isNaN(memoryValueNum) ? '-' : `${memoryValueNum.toFixed(1)} MB`;
+
+      // Get colors based on numeric values
+      const cpuColor = getStatColor(cpuValueNum, true);
+      const memoryColor = getStatColor(memoryValueNum, false);
+
       const uptime = formatUptime(service.uptime);
       let detailsHtml = '';
       if (isOnline) {
-        detailsHtml = `<div class="service-widget-info"><span class="info-label">Version:</span><span class="info-value metric-version-monospace">${versionDisplay}</span></div><div class="service-widget-footer"><div class="service-widget-item"><i class="bx bx-time-five"></i><span>${uptime}</span></div><div class="service-widget-item"><i class="bx bxs-microchip" style="color: ${cpuColor};"></i><span style="color: ${cpuColor};">${cpuValue}</span></div><div class="service-widget-item"><i class="bx bxs-chip" style="color: ${memoryColor};"></i><span style="color: ${memoryColor};">${memoryValue}</span></div></div>`;
+        detailsHtml = `<div class="service-widget-info"><span class="info-label">Version:</span><span class="info-value metric-version-monospace">${versionDisplay}</span></div><div class="service-widget-footer"><div class="service-widget-item"><i class="bx bx-time-five"></i><span>${uptime}</span></div><div class="service-widget-item"><i class="bx bxs-microchip" style="color: ${cpuColor};"></i><span style="color: ${cpuColor};">${cpuValueFormatted}</span></div><div class="service-widget-item"><i class="bx bxs-chip" style="color: ${memoryColor};"></i><span style="color: ${memoryColor};">${memoryValueFormatted}</span></div></div>`;
       } else {
         detailsHtml = `<div class="service-widget-footer offline"><span>OFFLINE</span></div>`;
       }
