@@ -53,6 +53,16 @@ function onReady() {
     return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
   }
 
+  function escapeHtml(text) {
+    if (!text) return text;
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+  }
+
   let lastServicesUpdate = null, lastEventsUpdate = null, lastLogsUpdate = null, lastModelsUpdate = null, lastProcessesUpdate = null;
   const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
   const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
@@ -483,7 +493,7 @@ function onReady() {
                             </div>
                             <div class="event-detail-block">
                                 <span class="detail-label">Raw Model Output:</span>
-                                <pre class="detail-pre">${eventData.raw_output || 'None'}</pre>
+                                <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
                             </div>
                         `;
           } else if (type === 'messaging.user.sent_message') {

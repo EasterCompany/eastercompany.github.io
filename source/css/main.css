@@ -1472,6 +1472,10 @@ footer.hide {
     border-left-color: rgba(255, 255, 255, 0.2);
 }
 
+.event-border-red {
+    border-left-color: #ff6b6b;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
