@@ -84,7 +84,8 @@ function onReady() {
     "voice_speaking_stopped": "User {user_id} stopped speaking in voice channel {channel_id}",
     "voice_transcribed": "{user_name} said: {transcription}",
     "engagement.decision": "Engagement Decision: {decision} ({reason})",
-    "bot_response": "Bot Responded: {response}"
+    "bot_response": "Bot Responded: {response}",
+    "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}"
   };
 
   function formatEventSummary(type, data) {
@@ -420,8 +421,11 @@ function onReady() {
         }
 
         const type = eventData.type;
-        const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message';
-        const borderClass = isExpandable ? 'event-border-blue' : 'event-border-grey';
+        const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted';
+        let borderClass = 'event-border-grey';
+        if (isExpandable) {
+            borderClass = type === 'moderation.explicit_content.deleted' ? 'event-border-red' : 'event-border-blue';
+        }
         const cursorClass = isExpandable ? 'cursor-pointer' : '';
 
         const isExpanded = expandedEventIds.has(event.id);
@@ -465,6 +469,21 @@ function onReady() {
                             <div class="event-detail-block">
                                 <span class="detail-label">Raw Response Output:</span>
                                 <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
+                            </div>
+                        `;
+          } else if (type === 'moderation.explicit_content.deleted') {
+            detailsContent = `
+                            <div class="event-detail-row">
+                                <span class="detail-label">Message ID:</span>
+                                <span class="detail-value">${eventData.message_id || 'N/A'}</span>
+                            </div>
+                             <div class="event-detail-row">
+                                <span class="detail-label">Reason:</span>
+                                <span class="detail-value">${eventData.reason || 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Raw Model Output:</span>
+                                <pre class="detail-pre">${eventData.raw_output || 'None'}</pre>
                             </div>
                         `;
           } else if (type === 'messaging.user.sent_message') {
