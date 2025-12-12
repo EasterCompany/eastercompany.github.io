@@ -95,7 +95,9 @@ function onReady() {
     "voice_transcribed": "{user_name} said: {transcription}",
     "engagement.decision": "Engagement Decision: {decision} ({reason})",
     "bot_response": "Bot Responded: {response}",
-    "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}"
+    "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}",
+    "analysis.link.completed": "Analyzed link: {url}",
+    "analysis.visual.completed": "Analyzed image: {filename}"
   };
 
   function formatEventSummary(type, data) {
@@ -457,10 +459,16 @@ function onReady() {
         }
 
         const type = eventData.type;
-        const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted';
+        const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed';
         let borderClass = 'event-border-grey';
         if (isExpandable) {
-            borderClass = type === 'moderation.explicit_content.deleted' ? 'event-border-red' : 'event-border-blue';
+            if (type === 'moderation.explicit_content.deleted') {
+                borderClass = 'event-border-red';
+            } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed') {
+                borderClass = 'event-border-purple';
+            } else {
+                borderClass = 'event-border-blue';
+            }
         }
         const cursorClass = isExpandable ? 'cursor-pointer' : '';
 
@@ -520,6 +528,32 @@ function onReady() {
                             <div class="event-detail-block">
                                 <span class="detail-label">Raw Model Output:</span>
                                 <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
+                            </div>
+                        `;
+          } else if (type === 'analysis.link.completed') {
+            detailsContent = `
+                            <div class="event-detail-row">
+                                <span class="detail-label">URL:</span>
+                                <span class="detail-value"><a href="${eventData.url}" target="_blank" class="attachment-link">${eventData.url}</a></span>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Title:</span>
+                                <span class="detail-value">${escapeHtml(eventData.title) || 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Description:</span>
+                                <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
+                            </div>
+                        `;
+          } else if (type === 'analysis.visual.completed') {
+            detailsContent = `
+                            <div class="event-detail-row">
+                                <span class="detail-label">Filename:</span>
+                                <span class="detail-value">${eventData.filename}</span>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Visual Description:</span>
+                                <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
                             </div>
                         `;
           } else if (type === 'messaging.user.sent_message') {

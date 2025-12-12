@@ -1476,6 +1476,10 @@ footer.hide {
     border-left-color: #ff6b6b;
 }
 
+.event-border-purple {
+    border-left-color: #bf40bf;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
