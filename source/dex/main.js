@@ -544,13 +544,25 @@ function onReady() {
                                 <span class="detail-label">Description:</span>
                                 <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
                             </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Content Summary:</span>
+                                <pre class="detail-pre">${escapeHtml(eventData.summary) || 'None'}</pre>
+                            </div>
                         `;
           } else if (type === 'analysis.visual.completed') {
+            let imageHtml = '';
+            if (eventData.base64_preview) {
+                imageHtml = `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+            } else if (eventData.url) {
+                imageHtml = `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+            }
+
             detailsContent = `
                             <div class="event-detail-row">
                                 <span class="detail-label">Filename:</span>
                                 <span class="detail-value">${eventData.filename}</span>
                             </div>
+                            ${imageHtml}
                             <div class="event-detail-block">
                                 <span class="detail-label">Visual Description:</span>
                                 <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
