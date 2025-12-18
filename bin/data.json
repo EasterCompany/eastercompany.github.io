@@ -1,22 +1,14 @@
 {
   "latest": {
-    "user": "2.8.80.main.8919321.2025-12-18.linux-amd64.8919321",
-    "dev": "2.8.80.main.8919321.2025-12-18.linux-amd64.8919321"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-18T02:33:16Z",
-      "commit": "b63ef15",
-      "binaries": {
-        "cli": {
-          "linux-amd64": {
-            "path": "/bin/0.0.0/dex",
-            "size": 16511112,
-            "checksum": "32b7a85d56da992f9d21d70bd2dad0ce7ce19377d393f6953a92a6bd16ef85f8"
-          }
-        }
-      }
+      "date": "2025-12-18T03:15:10Z",
+      "commit": "f35dd78",
+      "binaries": {}
     },
     "2.11.0": {
       "type": "minor",
