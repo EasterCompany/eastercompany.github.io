@@ -6,17 +6,9 @@
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-18T09:21:39Z",
-      "commit": "7cd0c82",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/0.0.0/dex-event-service",
-            "size": 12566108,
-            "checksum": "ae1382d39be396a0cbaeb1c124019189170ad773d7c76616f72df5439ceaac52"
-          }
-        }
-      }
+      "date": "2025-12-18T11:31:39Z",
+      "commit": "6c65fcc",
+      "binaries": {}
     },
     "2.11.0": {
       "type": "minor",
