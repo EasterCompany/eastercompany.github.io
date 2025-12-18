@@ -29,6 +29,8 @@ export function getLogsContent() {
     `;
 }
 
+export let lastLogsUpdate = null;
+
 export async function updateLogs() {
     const logsContainer = document.getElementById('logs-container');
     if (!logsContainer) return false;
@@ -159,6 +161,7 @@ export async function updateLogs() {
             });
         });
 
+        lastLogsUpdate = Date.now();
         return true;
 
     } catch (error) {
