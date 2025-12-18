@@ -97,7 +97,9 @@ function onReady() {
     "bot_response": "Bot Responded: {response}",
     "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}",
     "analysis.link.completed": "Analyzed link: {url}",
-    "analysis.visual.completed": "Analyzed image: {filename}"
+    "analysis.visual.completed": "Analyzed image: {filename}",
+    "system.cli.command": "CLI Command: {command} {args} ({status})",
+    "system.cli.status": "CLI Status: {message}"
   };
 
   function formatEventSummary(type, data) {
