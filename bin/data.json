@@ -1,14 +1,29 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.82.main.8d9c78a.2025-12-22.linux-amd64.8d9c78a",
+    "dev": "2.8.82.main.8d9c78a.2025-12-22.linux-amd64.8d9c78a"
   },
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-22T17:18:01Z",
-      "commit": "10303e6",
-      "binaries": {}
+      "date": "2025-12-22T17:31:19Z",
+      "commit": "4214ed7",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/0.0.0/dex",
+            "size": 16520329,
+            "checksum": "f2463904af5dc1cafbbc69fc937c20266c6bd109a009984962164c268200f099"
+          }
+        },
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/0.0.0/dex-event-service",
+            "size": 12583228,
+            "checksum": "97e5141f96252e37dfdb68467d650d033b5f4f5425c6f7ad4a979bdad3411532"
+          }
+        }
+      }
     },
     "2.11.0": {
       "type": "minor",
