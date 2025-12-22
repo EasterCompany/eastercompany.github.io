@@ -49,8 +49,8 @@ export function updateUnreadNotificationCount() {
     // This depends on Window.js implementation details, but usually tabs are rendered in order.
     // Let's assume we can find it via data attribute if we add it, or just find the icon.
     
-    // Window.js renders tabs as <div class="window-tab" data-tab-index="0">...</div>
-    const tabBtn = document.querySelector(`.window-tab[data-tab-index="0"]`);
+    // Window.js renders tabs as <div class="tab" data-tab-index="0">...</div>
+    const tabBtn = document.querySelector(`.tab[data-tab-index="0"]`);
     if (tabBtn) {
         let badge = tabBtn.querySelector('.notification-badge');
         if (unreadCount > 0) {
