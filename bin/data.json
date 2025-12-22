@@ -6,8 +6,8 @@
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-22T17:34:59Z",
-      "commit": "e96d2cf",
+      "date": "2025-12-22T17:54:00Z",
+      "commit": "26c37f2",
       "binaries": {
         "cli": {
           "linux-amd64": {
@@ -34,7 +34,7 @@
           "linux-amd64": {
             "path": "/bin/0.0.0/dex-tts-service",
             "size": 15652345,
-            "checksum": "5d78e6f0d39334c5c9b2c9af83a5d003ba6330b55d0d4e341a4435357e9bae7a"
+            "checksum": "d53ee3661fff832f2529ee44bdfb8bc8a6f8cee19fc34eccf13eda1d566c91a4"
           }
         },
         "web": {
