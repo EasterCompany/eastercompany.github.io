@@ -1,19 +1,19 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.81.main.b444b97.2025-12-22.linux-amd64.b444b97",
+    "dev": "2.8.81.main.b444b97.2025-12-22.linux-amd64.b444b97"
   },
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-22T06:52:43Z",
-      "commit": "f5d1eff",
+      "date": "2025-12-22T17:13:25Z",
+      "commit": "ee1782f",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/0.0.0/dex-event-service",
-            "size": 12583220,
-            "checksum": "c5079f4f6c639b8ed7fc543ee420b9439d00fe9df9b36e7c32230d4c2fa1cb72"
+            "path": "/bin/0.0.0/dex",
+            "size": 16519577,
+            "checksum": "34ed26295b4e79992ad75a7a3ad3dcaf9737a300d88e151eac56b296e59fa286"
           }
         }
       }
@@ -56,8 +56,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.80.main.8919321.2025-12-18.linux-amd64.8919321",
-      "user": "2.8.80.main.8919321.2025-12-18.linux-amd64.8919321",
+      "current": "2.8.81.main.b444b97.2025-12-22.linux-amd64.b444b97",
+      "user": "2.8.81.main.b444b97.2025-12-22.linux-amd64.b444b97",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
