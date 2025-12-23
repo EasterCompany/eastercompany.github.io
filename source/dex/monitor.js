@@ -68,22 +68,6 @@ export async function updateSystemMonitor() {
 
     function formatUptime(uptimeStr) { if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-'; const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/); if (!match) return '-'; const days = parseInt(match[1]) || 0; const hours = parseInt(match[2]) || 0; const minutes = parseInt(match[3]) || 0; const seconds = parseFloat(match[4]) || 0; const totalSeconds = (days * 86400) + (hours * 3600) + (minutes * 60) + seconds; const totalDays = Math.floor(totalSeconds / 86400); if (totalDays > 0) return `${totalDays}d`; const totalHours = Math.floor(totalSeconds / 3600); if (totalHours > 0) return `${totalHours}h`; const totalMinutes = Math.floor(totalSeconds / 60); if (totalMinutes > 0) return `${totalMinutes}m`; return `${Math.floor(totalSeconds)}s`; }
 
-    function getStatColor(value, isPercentage = true) {
-        if (typeof value !== 'number' || isNaN(value)) return '#666';
-
-        if (isPercentage) {
-            if (value < 30) return '#00ff00';
-            if (value < 60) return '#88ff00';
-            if (value < 80) return '#ffaa00';
-            return '#ff0000';
-        } else {
-            if (value < 256) return '#00ff00';
-            if (value < 512) return '#88ff00';
-            if (value < 1024) return '#ffaa00';
-            return '#ff0000';
-        }
-    }
-
     function generateWidgetHtml(service) {
         const isOnline = service.status === 'online';
         const statusClass = isOnline ? 'service-widget-online' : 'service-widget-offline';
@@ -91,19 +75,37 @@ export async function updateSystemMonitor() {
         const statusText = isOnline ? 'OK' : 'BAD';
         let versionDisplay = service.version ? extractMajorMinorPatch(service.version.str) : '-';
 
-        const cpuValueNum = parseFloat(service.cpu?.avg);
-        const memoryValueNum = parseFloat(service.memory?.avg);
+        const cpuDisplay = service.cpu && service.cpu !== 'N/A' ? service.cpu : '-';
+        const memDisplay = service.memory && service.memory !== 'N/A' ? service.memory : '-';
 
-        const cpuValueFormatted = isNaN(cpuValueNum) ? '-' : `${cpuValueNum.toFixed(1)}%`;
-        const memoryValueFormatted = isNaN(memoryValueNum) ? '-' : `${memoryValueNum.toFixed(1)} MB`;
+        const cpuIconColor = cpuDisplay !== '-' ? '#00ff00' : '#666';
+        const cpuTextColor = cpuDisplay !== '-' ? '#fff' : '#666';
 
-        const cpuColor = getStatColor(cpuValueNum, true);
-        const memoryColor = getStatColor(memoryValueNum, false);
+        const memIconColor = memDisplay !== '-' ? '#00ff00' : '#666';
+        const memTextColor = memDisplay !== '-' ? '#fff' : '#666';
 
         const uptime = formatUptime(service.uptime);
         let detailsHtml = '';
         if (isOnline) {
-            detailsHtml = `<div class="service-widget-info"><span class="info-label">Version:</span><span class="info-value metric-version-monospace">${versionDisplay}</span></div><div class="service-widget-footer"><div class="service-widget-item"><i class="bx bx-time-five"></i><span>${uptime}</span></div><div class="service-widget-item"><i class="bx bxs-microchip" style="color: ${cpuColor};"></i><span style="color: ${cpuColor};">${cpuValueFormatted}</span></div><div class="service-widget-item"><i class="bx bxs-chip" style="color: ${memoryColor};"></i><span style="color: ${memoryColor};">${memoryValueFormatted}</span></div></div>`;
+            detailsHtml = `
+                <div class="service-widget-info">
+                    <span class="info-label">Version:</span>
+                    <span class="info-value metric-version-monospace">${versionDisplay}</span>
+                </div>
+                <div class="service-widget-footer">
+                    <div class="service-widget-item">
+                        <i class="bx bx-time-five" style="color: #00ff00;"></i>
+                        <span style="color: #fff;">${uptime}</span>
+                    </div>
+                    <div class="service-widget-item">
+                        <i class="bx bxs-microchip" style="color: ${cpuIconColor};"></i>
+                        <span style="color: ${cpuTextColor};">${cpuDisplay}</span>
+                    </div>
+                    <div class="service-widget-item">
+                        <i class="bx bxs-chip" style="color: ${memIconColor};"></i>
+                        <span style="color: ${memTextColor};">${memDisplay}</span>
+                    </div>
+                </div>`;
         } else {
             detailsHtml = `<div class="service-widget-footer offline"><span>OFFLINE</span></div>`;
         }
