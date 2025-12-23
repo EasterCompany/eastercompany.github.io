@@ -1,19 +1,47 @@
 {
   "latest": {
-    "user": "2.8.84.main.cb11340.2025-12-23.linux-amd64.cb11340",
-    "dev": "2.8.84.main.cb11340.2025-12-23.linux-amd64.cb11340"
+    "user": "2.8.85.main.f38992f.2025-12-23.linux-amd64.f38992f",
+    "dev": "2.8.85.main.f38992f.2025-12-23.linux-amd64.f38992f"
   },
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-23T16:22:00Z",
-      "commit": "c2b13d5",
+      "date": "2025-12-23T17:54:20Z",
+      "commit": "f36ef72",
       "binaries": {
         "cli": {
           "linux-amd64": {
             "path": "/bin/0.0.0/dex",
             "size": 16519113,
-            "checksum": "b0d666db23d49baccade66c4b9153761a3a9742c9110b9fa87d058003a731fcd"
+            "checksum": "fa583414f7959584eee68fc9291a8ac131b464ee3178518389694da4498ed46b"
+          }
+        },
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/0.0.0/dex-discord-service",
+            "size": 13453120,
+            "checksum": "8a82aabd37b7ee1017a242f8d3c75978e40617445b3687d19320ed707ef4e51d"
+          }
+        },
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/0.0.0/dex-event-service",
+            "size": 12585611,
+            "checksum": "d23505048a7eb3c474d7ec558d269218b26135a2d084f618264d10767282a210"
+          }
+        },
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/0.0.0/dex-tts-service",
+            "size": 15652345,
+            "checksum": "cb27b79f52ef7991aba0f035ffb9d321b84dba9aeb4c378d692ad3163587ddc1"
+          }
+        },
+        "web": {
+          "linux-amd64": {
+            "path": "/bin/0.0.0/dex-web-service",
+            "size": 12641782,
+            "checksum": "4f470d4825e8225d29d08500460c9f450c51c4578a8e8a6a47406806378589a0"
           }
         }
       }
@@ -56,8 +84,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.84.main.cb11340.2025-12-23.linux-amd64.cb11340",
-      "user": "2.8.84.main.cb11340.2025-12-23.linux-amd64.cb11340",
+      "current": "2.8.85.main.f38992f.2025-12-23.linux-amd64.f38992f",
+      "user": "2.8.85.main.f38992f.2025-12-23.linux-amd64.f38992f",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
