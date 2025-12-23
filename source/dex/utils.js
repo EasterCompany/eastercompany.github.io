@@ -43,13 +43,8 @@ export function updateUnreadNotificationCount() {
     // Count .notification-unread elements
     const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
     
-    // Update badge in tab button
-    // The tab button is likely inside .window-tabs associated with message-window
-    // We need to find the tab button for index 0
-    // This depends on Window.js implementation details, but usually tabs are rendered in order.
-    // Let's assume we can find it via data attribute if we add it, or just find the icon.
-    
     // Window.js renders tabs as <div class="tab" data-tab-index="0">...</div>
+    // The message window is usually the one with index 0 as Notifications
     const tabBtn = document.querySelector(`.tab[data-tab-index="0"]`);
     if (tabBtn) {
         let badge = tabBtn.querySelector('.notification-badge');

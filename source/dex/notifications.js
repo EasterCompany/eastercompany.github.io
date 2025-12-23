@@ -23,7 +23,7 @@ export async function updateNotificationsTab() {
 
     const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
     // Fetch only notifications
-    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json&event.type=system.notification.generated`;
+    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=100&format=json&event.type=system.notification.generated`;
 
     try {
         const response = await fetch(notificationsUrl);
