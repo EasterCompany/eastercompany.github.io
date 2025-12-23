@@ -6,42 +6,14 @@
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-23T05:23:50Z",
-      "commit": "9e9d925",
+      "date": "2025-12-23T16:22:00Z",
+      "commit": "c2b13d5",
       "binaries": {
         "cli": {
           "linux-amd64": {
             "path": "/bin/0.0.0/dex",
             "size": 16519113,
-            "checksum": "6d86e43513fcb33520df87b723d20966c0d5b858baf38f1c8a8779e6097a1c97"
-          }
-        },
-        "discord": {
-          "linux-amd64": {
-            "path": "/bin/0.0.0/dex-discord-service",
-            "size": 13446088,
-            "checksum": "a08ca515dd28931b2dceade1429a30d5c04b28110801379bc0acd7a20bb70d7c"
-          }
-        },
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/0.0.0/dex-event-service",
-            "size": 12583228,
-            "checksum": "1f0664b38285733cb408ff6c6ee60d0783095363ebf7f2626a48ef35c8470eeb"
-          }
-        },
-        "tts": {
-          "linux-amd64": {
-            "path": "/bin/0.0.0/dex-tts-service",
-            "size": 15652345,
-            "checksum": "2a35ab1aefe1bb9c7f41027c0e67b5b5cd042e84c41b20903d21c7915265f614"
-          }
-        },
-        "web": {
-          "linux-amd64": {
-            "path": "/bin/0.0.0/dex-web-service",
-            "size": 12641782,
-            "checksum": "4f470d4825e8225d29d08500460c9f450c51c4578a8e8a6a47406806378589a0"
+            "checksum": "b0d666db23d49baccade66c4b9153761a3a9742c9110b9fa87d058003a731fcd"
           }
         }
       }
