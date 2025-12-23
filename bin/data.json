@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.87.main.6bbedfe.2025-12-23.linux-amd64.6bbedfe",
-    "dev": "2.8.87.main.6bbedfe.2025-12-23.linux-amd64.6bbedfe"
+    "user": "2.8.88.main.635c212.2025-12-23.linux-amd64.635c212",
+    "dev": "2.8.88.main.635c212.2025-12-23.linux-amd64.635c212"
   },
   "releases": {
     "0.0.0": {
@@ -164,12 +164,54 @@
           }
         }
       }
+    },
+    "2.8.88": {
+      "type": "patch",
+      "date": "2025-12-23T22:17:55Z",
+      "commit": "9c606bb",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.88/dex",
+            "size": 16535959,
+            "checksum": "fcb0a8fd4c0a9d7000d2415be11650b65508e582fbccbcb794fd71239c361c82"
+          }
+        },
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/2.8.88/dex-discord-service",
+            "size": 13453888,
+            "checksum": "ff88229fed1073e8c6981c5da04b3a5ff77c6d0efe1c5899be8a59fa0523ef8c"
+          }
+        },
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.8.88/dex-event-service",
+            "size": 12591503,
+            "checksum": "6253123a9b3942f6886fd46d701e44702a85104aea268e16dab244a8e65881a9"
+          }
+        },
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/2.8.88/dex-tts-service",
+            "size": 15652345,
+            "checksum": "96ea2d33c563cbcf8cbd1616b33c90b4a9b04c9228cbfee38ee87f1f0f70e345"
+          }
+        },
+        "web": {
+          "linux-amd64": {
+            "path": "/bin/2.8.88/dex-web-service",
+            "size": 12641782,
+            "checksum": "4f470d4825e8225d29d08500460c9f450c51c4578a8e8a6a47406806378589a0"
+          }
+        }
+      }
     }
   },
   "services": {
     "cli": {
-      "current": "2.8.87.main.6bbedfe.2025-12-23.linux-amd64.6bbedfe",
-      "user": "2.8.87.main.6bbedfe.2025-12-23.linux-amd64.6bbedfe",
+      "current": "2.8.88.main.635c212.2025-12-23.linux-amd64.635c212",
+      "user": "2.8.88.main.635c212.2025-12-23.linux-amd64.635c212",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
