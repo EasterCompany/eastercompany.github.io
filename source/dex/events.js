@@ -53,13 +53,15 @@ export async function updateEventsTimeline() {
         }
 
         const type = eventData.type;
-        const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed';
+        const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command';
         let borderClass = 'event-border-grey';
         if (isExpandable) {
             if (type === 'moderation.explicit_content.deleted') {
                 borderClass = 'event-border-red';
             } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed') {
                 borderClass = 'event-border-purple';
+            } else if (type === 'system.cli.command') {
+                borderClass = 'event-border-orange';
             } else {
                 borderClass = 'event-border-blue';
             }
@@ -160,6 +162,33 @@ export async function updateEventsTimeline() {
                             <div class="event-detail-block">
                                 <span class="detail-label">Visual Description:</span>
                                 <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
+                            </div>
+                        `;
+          } else if (type === 'system.cli.command') {
+            detailsContent = `
+                            <div class="event-detail-row">
+                                <span class="detail-label">Command:</span>
+                                <span class="detail-value">dex ${eventData.command || 'unknown'}</span>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Arguments:</span>
+                                <span class="detail-value">${eventData.args || 'None'}</span>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">${eventData.status || 'unknown'}</span>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Duration:</span>
+                                <span class="detail-value">${eventData.duration || 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-row">
+                                <span class="detail-label">Exit Code:</span>
+                                <span class="detail-value">${eventData.exit_code !== undefined ? eventData.exit_code : 'N/A'}</span>
+                            </div>
+                            <div class="event-detail-block">
+                                <span class="detail-label">Output:</span>
+                                <pre class="detail-pre">${escapeHtml(eventData.output) || 'No output recorded.'}</pre>
                             </div>
                         `;
           } else if (type === 'messaging.user.sent_message') {
