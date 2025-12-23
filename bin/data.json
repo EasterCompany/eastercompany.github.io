@@ -6,8 +6,8 @@
   "releases": {
     "0.0.0": {
       "type": "patch",
-      "date": "2025-12-23T17:54:20Z",
-      "commit": "f36ef72",
+      "date": "2025-12-23T19:41:34Z",
+      "commit": "b6007c0",
       "binaries": {
         "cli": {
           "linux-amd64": {
@@ -20,14 +20,14 @@
           "linux-amd64": {
             "path": "/bin/0.0.0/dex-discord-service",
             "size": 13453120,
-            "checksum": "8a82aabd37b7ee1017a242f8d3c75978e40617445b3687d19320ed707ef4e51d"
+            "checksum": "28f3860eacc9e5983d69706375760ce9937fb46cf764412fb1c0795930fbf23e"
           }
         },
         "event": {
           "linux-amd64": {
             "path": "/bin/0.0.0/dex-event-service",
-            "size": 12585611,
-            "checksum": "d23505048a7eb3c474d7ec558d269218b26135a2d084f618264d10767282a210"
+            "size": 12584808,
+            "checksum": "e458504ca3c860037e8002dfb5c9c99df04486f6e95e0f9e27d4af1791b85572"
           }
         },
         "tts": {
@@ -89,13 +89,13 @@
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "2.8.60.main.36fd436.2025-12-23..36fd436",
-      "user": "2.8.60.main.36fd436.2025-12-23..36fd436",
+      "current": "2.8.61.main.dfd9766.2025-12-23..dfd9766",
+      "user": "2.8.61.main.dfd9766.2025-12-23..dfd9766",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.8.116",
-      "user": "2.8.116",
+      "current": "2.8.117",
+      "user": "2.8.117",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
