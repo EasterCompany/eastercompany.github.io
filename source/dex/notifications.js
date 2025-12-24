@@ -22,18 +22,33 @@ export async function updateNotificationsTab() {
     if (!eventService) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
     const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
-    // Fetch only notifications
-    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=100&format=json&event.type=system.notification.generated`;
+    // Fetch a large batch of notifications to ensure we find older unread ones
+    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
 
     try {
         const response = await fetch(notificationsUrl);
         if (!response.ok) throw new Error('Service is offline or unreachable.');
 
         const data = await response.json();
-        const notifications = data.events || [];
+        const allNotifications = data.events || [];
 
-        if (notifications.length === 0) {
+        // Persistence Logic Filter:
+        // 1. Always keep UNREAD notifications.
+        // 2. Keep READ notifications for 24 hours after they were marked as read.
+        const now = Date.now();
+        const persistenceThreshold = 24 * 60 * 60 * 1000; // 24 hours
+
+        const filteredNotifications = allNotifications.filter(event => {
+            const readTSStr = localStorage.getItem(`notification_read_ts_${event.id}`);
+            if (!readTSStr) return true; // Keep unread
+
+            const readTS = parseInt(readTSStr);
+            return (now - readTS) < persistenceThreshold; // Keep if read within last 24h
+        });
+
+        if (filteredNotifications.length === 0) {
             notificationsContainer.innerHTML = createPlaceholderMessage('empty', 'No notifications yet.');
+            updateUnreadNotificationCount();
             return;
         }
 
@@ -50,7 +65,8 @@ export async function updateNotificationsTab() {
             const priority = notificationData.priority || 'low';
             const category = notificationData.category || 'system';
             const relatedEventIDs = notificationData.related_event_ids || [];
-            const isRead = localStorage.getItem(`notification_read_${notificationEvent.id}`) === 'true';
+            const readTS = localStorage.getItem(`notification_read_ts_${notificationEvent.id}`);
+            const isRead = !!readTS;
 
             const utcDate = new Date(notificationEvent.timestamp * 1000);
             const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -85,9 +101,9 @@ export async function updateNotificationsTab() {
             tempDiv.dataset.notificationId = notificationEvent.id;
             
             tempDiv.onclick = function(e) {
-                // Mark as read
-                if (!isRead) {
-                    localStorage.setItem(`notification_read_${notificationEvent.id}`, 'true');
+                // Mark as read with timestamp for 24h persistence
+                if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
+                    localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
                     this.classList.add('notification-read');
                     this.classList.remove('notification-unread');
                     updateUnreadNotificationCount();
@@ -120,13 +136,13 @@ export async function updateNotificationsTab() {
                             <h4>Notification Details</h4>
                             <i class="bx bx-x close-details-btn"></i>
                         </div>
-                        <div class="event-detail-block">
-                            <span class="detail-label">Insight:</span>
-                            <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px;">${escapeHtml(body)}</p>
-                        </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Priority:</span>
                             <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Insight:</span>
+                            <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px;">${escapeHtml(body)}</p>
                         </div>
                         ${relatedEventsHtml}
                     </div>
@@ -156,9 +172,9 @@ export async function updateNotificationsTab() {
         // Basic diffing and rendering logic for notifications
         const currentChildren = Array.from(notificationsContainer.children);
         const currentMap = new Map(currentChildren.map(el => [el.dataset.notificationId, el]));
-        const newIds = new Set(notifications.map(e => e.id));
+        const newIds = new Set(filteredNotifications.map(e => e.id));
 
-        // Remove old notifications not in the new list
+        // Remove old notifications not in the filtered list
         currentChildren.forEach(child => {
             if (!child.dataset.notificationId || !newIds.has(child.dataset.notificationId)) {
                 child.remove();
@@ -167,7 +183,7 @@ export async function updateNotificationsTab() {
 
         let previousElement = null;
 
-        notifications.forEach((notificationEvent, index) => {
+        filteredNotifications.forEach((notificationEvent, index) => {
             let el = currentMap.get(notificationEvent.id);
             if (!el) {
                 el = createNotificationElement(notificationEvent);
