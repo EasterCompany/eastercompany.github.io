@@ -113,7 +113,7 @@ export function createWindow(options) {
                     windowEl.querySelector(`.tab-content[data-tab-content="${tabIndex}"]`).classList.add('active');
 
                     // Automatically scroll the tab into view with optimized visibility for neighbors
-                    // Delaying by 50ms to allow the active tab expansion animation/reflow to complete
+                    // Delaying by 350ms to allow the active tab expansion animation/reflow to complete fully
                     setTimeout(() => {
                         const tabBar = windowEl.querySelector('.tab-bar');
                         if (tabBar) {
@@ -127,8 +127,9 @@ export function createWindow(options) {
 
                             // Use relative position within the scroll container
                             // Re-calculating after the timeout to get the new 'expanded' widths
-                            const leftPos = leftNeighbor.offsetLeft - tabBar.offsetLeft;
-                            const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft;
+                            // Adding a 25px buffer to the window to ensure neighbors aren't just at the edge
+                            const leftPos = (leftNeighbor.offsetLeft - tabBar.offsetLeft) - 25;
+                            const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft + 25;
                             const windowWidth = rightPos - leftPos;
 
                             let targetScroll;
@@ -142,7 +143,7 @@ export function createWindow(options) {
 
                             tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
                         }
-                    }, 50);
+                    }, 350);
                 });
             });
         }
