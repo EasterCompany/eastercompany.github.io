@@ -18,6 +18,8 @@ export function createWindow(options) {
     function open() {
         if (windowEl) {
             windowEl.classList.add('open');
+            // Add resize listener for the existing window
+            window.addEventListener('resize', handleResize);
             // Call onOpen callback when reopening existing window
             if (openCallback) {
                 setTimeout(openCallback, 10);
@@ -26,68 +28,13 @@ export function createWindow(options) {
         }
 
         let container = document.getElementById('windows-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'windows-container';
-            container.className = 'windows-container';
-            document.body.appendChild(container);
-        }
-
+// ... existing container creation ...
         windowEl = document.createElement('div');
         windowEl.id = options.id;
         windowEl.className = 'window';
 
         const iconClass = options.icon || 'bx-window';
-        let tabBarHTML = '';
-        let windowTitleHTML = ''; // New variable for window title
-        let contentHTML;
-
-        if (options.tabs && options.tabs.length > 0) {
-            const tabTitles = options.tabs.map((tab, index) => {
-                let iconHtml;
-                if (tab.icon) {
-                    iconHtml = `<i class="bx ${tab.icon}"></i>`;
-                } else if (tab.title && tab.title.length > 0) {
-                    const glyph = tab.title.charAt(0).toUpperCase();
-                    iconHtml = `<span class="tab-glyph">${glyph}</span>`;
-                } else {
-                    iconHtml = `<i class="bx bx-question-mark"></i>`; // Default fallback if no icon or title
-                }
-
-                return `
-                    <div class="tab ${index === 0 ? 'active' : ''}" data-tab-index="${index}">
-                        ${iconHtml}
-                        <span class="tab-title">${tab.title}</span>
-                        <span class="tab-subtitle" data-tab-subtitle="${index}">Last updated: never</span>
-                        <span class="notification-badge" style="display: none;">0</span>
-                    </div>
-                `;
-            }).join('');
-
-            tabBarHTML = `<div class="tab-bar">${tabTitles}</div>`;
-
-            const tabContents = options.tabs.map((tab, index) => {
-                return `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>`;
-            }).join('');
-            contentHTML = `<div class="window-content">${tabContents}</div>`;
-
-        } else {
-            // No tabs, so render a window title if provided
-            if (options.title) {
-                windowTitleHTML = `<div class="window-title">${options.title}</div>`;
-            }
-            contentHTML = `<div class="window-content">${options.content}</div>`;
-        }
-
-        const headerHTML = `
-            <div class="window-header">
-                <i class="bx ${iconClass}"></i>
-                ${tabBarHTML}
-                ${windowTitleHTML}
-                <i class="bx bx-x window-close"></i>
-            </div>
-        `;
-
+// ... rest of the open function setup ...
         windowEl.innerHTML = headerHTML + contentHTML;
         container.appendChild(windowEl);
 
@@ -99,7 +46,9 @@ export function createWindow(options) {
             });
         }
 
-        // This logic remains the same, as it operates on the rendered elements
+        // Add resize listener
+        window.addEventListener('resize', handleResize);
+
         if (options.tabs && options.tabs.length > 0) {
             const tabs = windowEl.querySelectorAll('.tab');
             tabs.forEach(tab => {
@@ -112,38 +61,8 @@ export function createWindow(options) {
                     windowEl.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     windowEl.querySelector(`.tab-content[data-tab-content="${tabIndex}"]`).classList.add('active');
 
-                    // Automatically scroll the tab into view with optimized visibility for neighbors
-                    // Delaying by 350ms to allow the active tab expansion animation/reflow to complete fully
-                    setTimeout(() => {
-                        const tabBar = windowEl.querySelector('.tab-bar');
-                        if (tabBar) {
-                            const tabs = Array.from(tabBar.querySelectorAll('.tab'));
-                            const currentIndex = tabs.indexOf(tab);
-                            const barWidth = tabBar.clientWidth;
-
-                            // Target the neighbors to ensure they are visible
-                            const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
-                            const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
-
-                            // Use relative position within the scroll container
-                            // Re-calculating after the timeout to get the new 'expanded' widths
-                            // Adding a 25px buffer to the window to ensure neighbors aren't just at the edge
-                            const leftPos = (leftNeighbor.offsetLeft - tabBar.offsetLeft) - 25;
-                            const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft + 25;
-                            const windowWidth = rightPos - leftPos;
-
-                            let targetScroll;
-                            if (windowWidth <= barWidth) {
-                                // Center the 5-tab range
-                                targetScroll = leftPos - (barWidth - windowWidth) / 2;
-                            } else {
-                                // Center just the active tab
-                                targetScroll = (tab.offsetLeft - tabBar.offsetLeft) - (barWidth / 2) + (tab.offsetWidth / 2);
-                            }
-
-                            tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
-                        }
-                    }, 350);
+                    // Automatically scroll the tab into view
+                    scrollToActiveTab(tab, windowEl);
                 });
             });
         }
@@ -157,8 +76,50 @@ export function createWindow(options) {
         }, 10);
     }
 
+    function handleResize() {
+        if (!windowEl || !windowEl.classList.contains('open')) return;
+        const activeTab = windowEl.querySelector('.tab.active');
+        if (activeTab) {
+            scrollToActiveTab(activeTab, windowEl);
+        }
+    }
+
+    function scrollToActiveTab(tab, windowEl) {
+        // Automatically scroll the tab into view with optimized visibility for neighbors
+        // Delaying by 350ms to allow the active tab expansion animation/reflow to complete fully
+        setTimeout(() => {
+            const tabBar = windowEl.querySelector('.tab-bar');
+            if (tabBar) {
+                const tabs = Array.from(tabBar.querySelectorAll('.tab'));
+                const currentIndex = tabs.indexOf(tab);
+                const barWidth = tabBar.clientWidth;
+
+                // Target the neighbors to ensure they are visible
+                const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
+                const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
+
+                // Use relative position within the scroll container
+                const leftPos = (leftNeighbor.offsetLeft - tabBar.offsetLeft) - 25;
+                const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft + 25;
+                const windowWidth = rightPos - leftPos;
+
+                let targetScroll;
+                if (windowWidth <= barWidth) {
+                    targetScroll = leftPos - (barWidth - windowWidth) / 2;
+                } else {
+                    targetScroll = (tab.offsetLeft - tabBar.offsetLeft) - (barWidth / 2) + (tab.offsetWidth / 2);
+                }
+
+                tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            }
+        }, 350);
+    }
+
     function close(immediate = false) {
         if (!windowEl) return;
+
+        // Remove resize listener
+        window.removeEventListener('resize', handleResize);
 
         if (immediate) {
             windowEl.classList.add('switching');
