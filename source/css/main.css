@@ -517,13 +517,13 @@ main a {
 .tab.active {
     color: #fff;
     border-bottom-color: #fff;
-    flex-grow: 1; /* Take up remaining space */
-    max-width: 100%; /* Allow it to grow fully */
+    flex-grow: 0; /* Changed: Don't fill space on mobile */
+    max-width: fit-content; /* Changed: Fit content only */
     opacity: 1;
 }
 
 /* Active tab with badge should also have padding */
-.tab.active:has(.notification-badge) {
+.tab.active:has(.notification-badge[style*="display: flex"]) {
     padding-right: 35px;
 }
 
@@ -532,7 +532,7 @@ main a {
 }
 
 .tab.active .tab-subtitle {
-    display: inline; /* Show subtitle on active tab */
+    display: none; /* Changed: Hide subtitle on mobile to save space */
 }
 
 .tab-content {
@@ -562,12 +562,24 @@ main a {
     height: 18px;
     padding: 0 5px;
     border-radius: 10px;
-    display: flex;
+    display: none; /* Default hidden */
     align-items: center;
     justify-content: center;
     z-index: 10;
     pointer-events: none;
 }
+
+@media (min-width: 768px) {
+    .tab.active {
+        flex-grow: 1; /* Restore fill on desktop */
+        max-width: 100%;
+    }
+
+    .tab.active .tab-subtitle {
+        display: inline; /* Restore subtitle on desktop */
+    }
+}
+
 
 /* --- End Window System --- */
 
