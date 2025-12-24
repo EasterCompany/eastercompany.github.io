@@ -54,6 +54,9 @@ export async function updateNotificationsTab(forceReRender = false) {
         const data = await response.json();
         const allNotifications = data.events || [];
 
+        lastNotificationsUpdate = Date.now();
+        updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
+
         // Persistence Logic Filter:
         // 1. Always keep UNREAD notifications.
         // 2. Keep READ notifications for 24 hours after they were marked as read.
