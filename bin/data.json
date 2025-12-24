@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a",
-    "dev": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -77,6 +77,20 @@
             "path": "/bin/2.11.0/event-test-handler",
             "size": 8971687,
             "checksum": "89b7c86642ad1ab734f6e572103e0bbc10758bc2586510903c4bd6962344efd9"
+          }
+        }
+      }
+    },
+    "2.8.134": {
+      "type": "patch",
+      "date": "2025-12-24T05:20:23Z",
+      "commit": "126bec9",
+      "binaries": {
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.8.134/dex-event-service",
+            "size": 12612456,
+            "checksum": "e95b13afd81c75c059ddfc7c510e36b0b0965a02982290e6bf6d422c88ba9ca4"
           }
         }
       }
