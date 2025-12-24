@@ -479,7 +479,7 @@ main a {
 .tab {
     display: flex;
     align-items: center;
-    gap: 8px; /* Space between icon and title */
+    gap: 8px; /* Space between icon, title, and badge */
     padding: 12px 15px; /* Adjust padding */
     cursor: pointer;
     color: #aaa;
@@ -490,12 +490,6 @@ main a {
     overflow: hidden;
     opacity: 0.7;
     transition: all 0.4s ease; /* Slower transition for a smoother effect */
-    position: relative;
-}
-
-/* Ensure tabs with badges have extra room on the right */
-.tab:has(.notification-badge) {
-    padding-right: 30px;
 }
 
 .tab .tab-title {
@@ -531,11 +525,6 @@ main a {
     opacity: 1;
 }
 
-/* Active tab with badge should also have padding */
-.tab.active:has(.notification-badge[style*="display: flex"]) {
-    padding-right: 35px;
-}
-
 .tab.active .tab-title {
     display: inline; /* Show title on active tab */
 }
@@ -559,10 +548,6 @@ main a {
 
 /* Badge Styling */
 .notification-badge {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
     background-color: #ff4444;
     color: white;
     font-size: 0.7em;
@@ -574,8 +559,8 @@ main a {
     display: none; /* Default hidden */
     align-items: center;
     justify-content: center;
-    z-index: 10;
-    pointer-events: none;
+    flex-shrink: 0; /* Don't squash the badge */
+    margin-left: 2px;
 }
 
 @media (min-width: 768px) {
@@ -588,6 +573,7 @@ main a {
         display: inline; /* Restore subtitle on desktop */
     }
 }
+
 
 
 /* --- End Window System --- */
