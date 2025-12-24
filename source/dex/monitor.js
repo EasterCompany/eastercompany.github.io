@@ -1,5 +1,5 @@
 // System Monitor Logic (Services, Models, Processes)
-import { createPlaceholderMessage, updateTabTimestamp } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount } from './utils.js';
 
 export const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
 export const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
@@ -221,10 +221,11 @@ export async function updateProcessesTab() {
     }
 
     lastProcessesUpdate = Date.now();
-    updateTabTimestamp(1, lastProcessesUpdate);
+    updateTabTimestamp(2, lastProcessesUpdate);
 
     if (processes.length === 0) {
         widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+        updateTabBadgeCount(2, 0);
         return;
     }
 
@@ -278,4 +279,6 @@ export async function updateProcessesTab() {
             widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
         }
     });
+
+    updateTabBadgeCount(2, processes.length);
 }

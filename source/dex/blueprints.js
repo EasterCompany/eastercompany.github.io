@@ -1,5 +1,5 @@
 // Blueprints Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, escapeHtml } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml } from './utils.js';
 
 export const getBlueprintsContent = () => `<div id="blueprints-list" class="blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;"><p>Loading blueprints...</p></div>`;
 
@@ -32,6 +32,7 @@ export async function updateBlueprintsTab() {
 
         if (allBlueprints.length === 0) {
             blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Analyst Worker will generate these when idle.');
+            updateTabBadgeCount(1, 0);
             return;
         }
 
@@ -137,6 +138,7 @@ export async function updateBlueprintsTab() {
 
         lastBlueprintsUpdate = Date.now();
         updateTabTimestamp(1, lastBlueprintsUpdate); 
+        updateTabBadgeCount(1, allBlueprints.length);
 
     } catch (error) {
       console.error('Error fetching blueprints:', error);
