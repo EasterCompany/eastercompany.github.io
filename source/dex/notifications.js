@@ -70,6 +70,10 @@ export async function updateNotificationsTab(forceReRender = false) {
 
         currentFilteredNotifications = filteredNotifications;
 
+        if (forceReRender) {
+            notificationsContainer.innerHTML = '';
+        }
+
         if (filteredNotifications.length === 0) {
             notificationsContainer.innerHTML = createPlaceholderMessage('empty', 'No notifications yet.');
             updateUnreadNotificationCount();

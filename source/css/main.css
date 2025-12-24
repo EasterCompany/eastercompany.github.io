@@ -1710,7 +1710,7 @@ footer.hide {
     gap: 10px;
     padding: 10px 15px;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     position: sticky;
     top: 0;
     z-index: 10;
