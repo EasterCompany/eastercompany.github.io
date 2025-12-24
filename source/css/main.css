@@ -429,6 +429,7 @@ main a {
     display: none; /* Fully removed from layout on mobile */
     cursor: pointer;
     padding: 8px 0;
+    margin-left: 10px; /* Added: Space between tabs and close button */
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
