@@ -486,7 +486,7 @@ main a {
     border-bottom: 2px solid transparent;
     flex-grow: 0; /* Don't grow by default */
     flex-shrink: 0;
-    max-width: 50px; /* Small width for inactive tabs */
+    max-width: 70px; /* Increased from 50px to fit badge */
     overflow: hidden;
     opacity: 0.7;
     transition: all 0.4s ease; /* Slower transition for a smoother effect */
