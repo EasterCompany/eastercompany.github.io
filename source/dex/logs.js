@@ -88,7 +88,7 @@ export async function updateLogs() {
         return false;
     }
 
-    const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
     const logsUrl = `http://${domain}:${eventService.port}/logs`;
 
     try {

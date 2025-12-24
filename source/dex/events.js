@@ -21,7 +21,7 @@ export async function updateEventsTimeline() {
     } catch (e) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
     if (!eventService) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
-    const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
     const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json&exclude_types=system.notification.generated`; // Exclude notifications from main timeline
 
     try {
