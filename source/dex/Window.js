@@ -119,21 +119,22 @@ export function createWindow(options) {
                         const currentIndex = tabs.indexOf(tab);
                         const barWidth = tabBar.clientWidth;
 
-                        // Goal: Keep 2 neighbors on each side visible
+                        // Target the neighbors to ensure they are visible
                         const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
                         const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
 
-                        const leftPos = leftNeighbor.offsetLeft;
-                        const rightPos = rightNeighbor.offsetLeft + rightNeighbor.offsetWidth;
+                        // Use relative position within the scroll container
+                        const leftPos = leftNeighbor.offsetLeft - tabBar.offsetLeft;
+                        const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft;
                         const windowWidth = rightPos - leftPos;
 
                         let targetScroll;
                         if (windowWidth <= barWidth) {
-                            // The 5-tab window fits, center the whole window
+                            // Center the 5-tab range
                             targetScroll = leftPos - (barWidth - windowWidth) / 2;
                         } else {
-                            // Doesn't fit, just center the active tab
-                            targetScroll = tab.offsetLeft - (barWidth / 2) + (tab.offsetWidth / 2);
+                            // Center just the active tab
+                            targetScroll = (tab.offsetLeft - tabBar.offsetLeft) - (barWidth / 2) + (tab.offsetWidth / 2);
                         }
 
                         tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
