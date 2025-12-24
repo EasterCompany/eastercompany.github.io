@@ -1706,16 +1706,14 @@ footer.hide {
 }
 /* --- Notifications Action Bar --- */
 .notifications-actions {
+    z-index: 10;
+    top: 0;
     display: flex;
     gap: 10px;
     padding: 10px 15px;
     flex-wrap: wrap;
     justify-content: center;
     position: sticky;
-    top: 0;
-    z-index: 10;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
 }
 
 .notif-action-btn {
