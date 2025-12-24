@@ -316,7 +316,7 @@
   border: unset !important;
 }
 
-/* Notification Badge */
+/* Notification Badge (Old styles commented out to avoid conflict)
 .notification-badge {
   display: none;
   position: absolute;
@@ -335,6 +335,7 @@
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+*/
 
 /* Notification List & Items */
 .notifications-list {
