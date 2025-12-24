@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.103.main.0243160.2025-12-24.linux-amd64.0243160",
+    "dev": "2.8.103.main.0243160.2025-12-24.linux-amd64.0243160"
   },
   "releases": {
     "0.0.0": {
@@ -312,6 +312,20 @@
             "path": "/bin/2.8.102/dex-tts-service",
             "size": 15652825,
             "checksum": "db0c12224ab3381b4a3e5e8501d3fee209cf589f7c3bdc1d49b1cef172b893a7"
+          }
+        }
+      }
+    },
+    "2.8.103": {
+      "type": "patch",
+      "date": "2025-12-24T14:53:11Z",
+      "commit": "9dfbc55",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.103/dex",
+            "size": 16568361,
+            "checksum": "4687a23f7371fad64ce5fdc7bfff5c29e72847fc498c343d24fc04a47bab212d"
           }
         }
       }
@@ -879,8 +893,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.102.main.aea8646.2025-12-24.linux-amd64.aea8646",
-      "user": "2.8.102.main.aea8646.2025-12-24.linux-amd64.aea8646",
+      "current": "2.8.103.main.0243160.2025-12-24.linux-amd64.0243160",
+      "user": "2.8.103.main.0243160.2025-12-24.linux-amd64.0243160",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
