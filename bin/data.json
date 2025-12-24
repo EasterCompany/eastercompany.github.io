@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.102.main.aea8646.2025-12-24.linux-amd64.aea8646",
-    "dev": "2.8.102.main.aea8646.2025-12-24.linux-amd64.aea8646"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -473,6 +473,20 @@
             "path": "/bin/2.8.144/dex-event-service",
             "size": 12634522,
             "checksum": "02a8c71374e1b0fe38f9afbb74d019315a5e6fe3d22ce6f6ccfb06ed736a7f46"
+          }
+        }
+      }
+    },
+    "2.8.145": {
+      "type": "patch",
+      "date": "2025-12-24T13:58:43Z",
+      "commit": "fa727c6",
+      "binaries": {
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.8.145/dex-event-service",
+            "size": 12634506,
+            "checksum": "fef0833b8da664faf21c3154127b608bb8bad1ea8eca9951070442209cafc12b"
           }
         }
       }
