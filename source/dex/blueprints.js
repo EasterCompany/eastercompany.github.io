@@ -30,13 +30,13 @@ export async function updateBlueprintsTab(forceReRender = false) {
 
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
-      blueprintsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-      return;
+        blueprintsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+        return;
     }
     let eventService = null;
     try {
-      const serviceMapData = JSON.parse(serviceMapString);
-      eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
+        const serviceMapData = JSON.parse(serviceMapString);
+        eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
     } catch (e) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
     if (!eventService) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
@@ -54,7 +54,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 const nextTS = statusData.strategist.next_run;
                 const now = Math.floor(Date.now() / 1000);
                 const diff = nextTS - now;
-                
+
                 if (diff <= 0) {
                     nextRunField.textContent = "Next T3: Ready (IDLE req)";
                     nextRunField.style.color = "#5eff5e";
@@ -77,7 +77,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
         currentFilteredBlueprints = allBlueprints;
 
         lastBlueprintsUpdate = Date.now();
-        updateTabTimestamp(1, lastBlueprintsUpdate); 
+        updateTabTimestamp(1, lastBlueprintsUpdate);
 
         if (allBlueprints.length === 0) {
             blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Analyst Worker will generate these when idle.');
@@ -103,7 +103,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
             const category = blueprintData.category || 'architecture';
             const affectedServices = blueprintData.affected_services || [];
             const implementationPath = blueprintData.implementation_path || [];
-            
+
             const utcDate = new Date(event.timestamp * 1000);
             const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
@@ -115,7 +115,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
             // Blueprints always use Purple border
             tempDiv.className = `event-item notification-item event-border-purple cursor-pointer ${isExpanded ? 'expanded' : ''}`;
             tempDiv.dataset.blueprintId = event.id;
-            
+
             tempDiv.onclick = function(e) {
                 const isCurrentlyExpanded = this.classList.contains('expanded');
                 if (isCurrentlyExpanded) {
@@ -131,8 +131,8 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 }
             };
 
-            let affectedHtml = affectedServices.length > 0 
-                ? `<div class="blueprint-meta-row"><strong>Affected:</strong> ${affectedServices.join(', ')}</div>` 
+            let affectedHtml = affectedServices.length > 0
+                ? `<div class="blueprint-meta-row"><strong>Affected:</strong> ${affectedServices.join(', ')}</div>`
                 : '';
 
             let pathHtml = '';
@@ -216,10 +216,10 @@ export async function updateBlueprintsTab(forceReRender = false) {
         updateTabBadgeCount(1, allBlueprints.length);
 
     } catch (error) {
-      console.error('Error fetching blueprints:', error);
-      if (blueprintsContainer.children.length === 0) {
-        blueprintsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load blueprints.', 'The event service may be offline or unreachable.');
-      }
+        console.error('Error fetching blueprints:', error);
+        if (blueprintsContainer.children.length === 0) {
+            blueprintsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load blueprints.', 'The event service may be offline or unreachable.');
+        }
     }
 }
 
@@ -230,7 +230,7 @@ function attachBlueprintActionListeners() {
 
     if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
         expandAllBtn.onclick = () => {
-            currentFilteredBlueprints.forEach(b => activeExpandedIds.add(e.id)); // Fix: e.id should be b.id
+            currentFilteredBlueprints.forEach(b => activeExpandedIds.add(b.id));
             updateBlueprintsTab(true);
         };
         expandAllBtn.dataset.listenerAttached = "true";
@@ -254,7 +254,7 @@ function attachBlueprintActionListeners() {
 
             const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
             const resetUrl = `http://${domain}:${eventService.port}/analyst/reset?tier=strategist`;
-            
+
             resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Resetting...";
             try {
                 await fetch(resetUrl, { method: 'POST' });

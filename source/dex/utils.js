@@ -25,14 +25,17 @@ export function updateTabTimestamp(tabIndex, timestamp) {
         return;
     }
     const now = Date.now();
-    const seconds = (now - timestamp) / 1000;
+    const seconds = Math.floor((now - timestamp) / 1000);
+    
     let timeStr;
-    if (seconds < 30) {
-        timeStr = `${Math.floor(seconds)}s ago`;
+    if (seconds < 60) {
+        timeStr = `${seconds}s ago`;
+    } else if (seconds < 3600) {
+        timeStr = `${Math.floor(seconds / 60)}m ago`;
     } else {
-        subtitleElement.textContent = 'Last updated: never';
-        return;
+        timeStr = `${Math.floor(seconds / 3600)}h ago`;
     }
+    
     subtitleElement.textContent = `Last updated: ${timeStr}`;
 }
 
@@ -41,7 +44,7 @@ export function updateTabBadgeCount(tabIndex, count) {
     if (!tabBtn) return;
 
     let badge = tabBtn.querySelector('.notification-badge');
-    if (!badge) return; // Should exist now due to Window.js changes
+    if (!badge) return;
 
     if (count > 0) {
         badge.textContent = count > 9 ? '9+' : count;
@@ -55,7 +58,6 @@ export function updateUnreadNotificationCount() {
     const notificationsList = document.getElementById('notifications-list');
     if (!notificationsList) return;
     
-    // Count .notification-unread elements
     const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
     updateTabBadgeCount(0, unreadCount);
 }

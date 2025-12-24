@@ -13,7 +13,6 @@ import { getSettingsContent, attachSettingsListeners } from './settings.js';
 import { getRoadmapContent, updateRoadmapTab } from './roadmap.js';
 
 function onReady() {
-// ... existing onReady logic ...
   initTheme();
   applyBaseStyles();
   const loggedIn = isLoggedIn();
@@ -94,32 +93,31 @@ function onReady() {
   }
 
   async function initializeUserWindow() {
-      await updateRoadmapTab();
-      
-      const refreshInterval = setInterval(() => {
-          if (!userWindow.isOpen()) return clearInterval(refreshInterval);
-          updateRoadmapTab();
-      }, 5000);
+    await updateRoadmapTab();
+    const refreshInterval = setInterval(() => {
+      if (!userWindow.isOpen()) return clearInterval(refreshInterval);
+      updateRoadmapTab();
+    }, 5000);
   }
 
   // Define windows
   const loginWindow = createWindow({ 
-      id: 'login-window', 
-      title: 'Welcome', 
-      content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"></div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`, 
-      icon: 'bx-log-in', 
-      onClose: onWindowClose 
+    id: 'login-window', 
+    title: 'Welcome', 
+    content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"></div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`, 
+    icon: 'bx-log-in', 
+    onClose: onWindowClose 
   });
   
   const userWindow = createWindow({ 
-      id: 'user-window', 
-      tabs: [
-          { icon: 'bx-user', title: 'Profile', content: `<p style="padding: 20px;">Logged in as: ${getUserEmail() || 'Unknown'}<br><br><span style="font-family: monospace; font-size: 0.8em; opacity: 0.6;">UUID: 313071000877137920</span></p>`, 'data-tab-index': 0 },
-          { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapContent(), 'data-tab-index': 1 }
-      ],
-      icon: 'bx-user', 
-      onClose: onWindowClose,
-      onOpen: () => setTimeout(initializeUserWindow, 100)
+    id: 'user-window', 
+    tabs: [
+      { icon: 'bx-user', title: 'Profile', content: `<p style="padding: 20px;">Logged in as: ${getUserEmail() || 'Unknown'}<br><br><span style="font-family: monospace; font-size: 0.8em; opacity: 0.6;">UUID: 313071000877137920</span></p>`, 'data-tab-index': 0 },
+      { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapContent(), 'data-tab-index': 1 }
+    ],
+    icon: 'bx-user', 
+    onClose: onWindowClose,
+    onOpen: () => setTimeout(initializeUserWindow, 100)
   });
 
   const settingsWindow = createWindow({
@@ -129,7 +127,6 @@ function onReady() {
     icon: 'bx-cog', 
     onClose: onWindowClose, 
     onOpen: () => {
-      // Refresh content to reflect current state
       settingsWindow.setContent(getSettingsContent());
       setTimeout(() => attachSettingsListeners(settingsWindow), 50);
     }

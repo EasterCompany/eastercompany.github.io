@@ -31,11 +31,11 @@ export async function updateRoadmapTab(forceReRender = false) {
 
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) return;
-    
+
     let eventService = null;
     try {
-      const serviceMapData = JSON.parse(serviceMapString);
-      eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
+        const serviceMapData = JSON.parse(serviceMapString);
+        eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
     } catch (e) { return; }
     if (!eventService) return;
 
@@ -56,171 +56,89 @@ export async function updateRoadmapTab(forceReRender = false) {
 
         if (forceReRender) roadmapContainer.innerHTML = '';
 
-                const createItemElement = (item) => {
+        const createItemElement = (item) => {
+            const isExpanded = activeExpandedIds.has(item.id);
+            const isDraft = item.state === 'draft';
+            const isPublished = item.state === 'published';
+            const isConsumed = item.state === 'consumed';
 
-                    const isExpanded = activeExpandedIds.has(item.id);
+            let borderClass = 'event-border-grey'; // Draft
+            if (isPublished) borderClass = 'event-border-blue';
+            if (isConsumed) borderClass = 'event-border-purple';
 
-                    const isDraft = item.state === 'draft';
+            const utcDate = new Date(item.created_at * 1000);
+            const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-                    const isPublished = item.state === 'published';
+            const tempDiv = document.createElement('div');
+            tempDiv.className = `event-item notification-item ${borderClass} cursor-pointer ${isExpanded ? 'expanded' : ''}`;
+            tempDiv.dataset.itemId = item.id;
 
-                    const isConsumed = item.state === 'consumed';
+            tempDiv.onclick = (e) => {
+                if (e.target.closest('button')) return;
+                const wasExpanded = tempDiv.classList.contains('expanded');
+                if (wasExpanded) {
+                    tempDiv.classList.remove('expanded');
+                    tempDiv.querySelector('.event-details').style.display = 'none';
+                    activeExpandedIds.delete(item.id);
+                } else {
+                    tempDiv.classList.add('expanded');
+                    tempDiv.querySelector('.event-details').style.display = 'block';
+                    activeExpandedIds.add(item.id);
+                }
+            };
 
-        
+            let statusBadge = `<span style="font-size: 0.7em; opacity: 0.6; margin-left: 10px;">[${item.state.toUpperCase()}]</span>`;
 
-                    let borderClass = 'event-border-grey'; // Draft
-
-                    if (isPublished) borderClass = 'event-border-blue';
-
-                    if (isConsumed) borderClass = 'event-border-purple';
-
-        
-
-                    const utcDate = new Date(item.created_at * 1000);
-
-                    const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-        
-
-                    const tempDiv = document.createElement('div');
-
-                    tempDiv.className = `event-item notification-item ${borderClass} cursor-pointer ${isExpanded ? 'expanded' : ''}`;
-
-                    tempDiv.dataset.itemId = item.id;
-
-        
-
-                    tempDiv.onclick = (e) => {
-
-                        if (e.target.closest('button')) return;
-
-                        const wasExpanded = tempDiv.classList.contains('expanded');
-
-                        if (wasExpanded) {
-
-                            tempDiv.classList.remove('expanded');
-
-                            tempDiv.querySelector('.event-details').style.display = 'none';
-
-                            activeExpandedIds.delete(item.id);
-
-                        } else {
-
-                            tempDiv.classList.add('expanded');
-
-                            tempDiv.querySelector('.event-details').style.display = 'block';
-
-                            activeExpandedIds.add(item.id);
-
-                        }
-
-                    };
-
-        
-
-                    let statusBadge = `<span style="font-size: 0.7em; opacity: 0.6; margin-left: 10px;">[${item.state.toUpperCase()}]</span>`;
-
-                    
-
-                    tempDiv.innerHTML = `
-
-                        <div class="event-time">
-
-                            <span class="event-time-main">${dateStr.split(',')[1]}</span>
-
-                            <span class="event-date">${dateStr.split(',')[0]}</span>
-
+            tempDiv.innerHTML = `
+                <div class="event-time">
+                    <span class="event-time-main">${dateStr.split(',')[1]}</span>
+                    <span class="event-date">${dateStr.split(',')[0]}</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-service">ROADMAP ${statusBadge}</div>
+                    <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
+                    <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
+                        <div class="event-details-header">
+                            <h4>Item Controls</h4>
+                            <i class="bx bx-x close-details-btn"></i>
                         </div>
-
-                        <div class="event-content">
-
-                            <div class="event-service">ROADMAP ${statusBadge}</div>
-
-                            <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
-
-                            <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'}">
-
-                                <div class="event-details-header">
-
-                                    <h4>Item Controls</h4>
-
-                                    <i class="bx bx-x close-details-btn"></i>
-
-                                </div>
-
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-
-                                    ${isConsumed ? '' : `<button class="notif-action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>`}
-
-                                    <button class="notif-action-btn publish-toggle-btn">
-
-                                        <i class='bx ${isPublished ? 'bx-pause' : 'bx-rocket'}'></i> ${isPublished ? 'Un-publish' : 'Publish'}
-
-                                    </button>
-
-                                    <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
-
-                                </div>
-
-                                ${isConsumed ? `<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(item.consumed_at * 1000).toLocaleString()}</div>` : ''}
-
-                            </div>
-
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            ${isConsumed ? '' : `<button class="notif-action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>`}
+                            <button class="notif-action-btn publish-toggle-btn">
+                                <i class='bx ${isPublished ? 'bx-pause' : 'bx-rocket'}'></i> ${isPublished ? 'Un-publish' : 'Publish'}
+                            </button>
+                            <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
                         </div>
+                        ${isConsumed ? `<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(item.consumed_at * 1000).toLocaleString()}</div>` : ''}
+                    </div>
+                </div>
+            `;
 
-                    `;
+            // Button listeners
+            tempDiv.querySelector('.edit-btn')?.addEventListener('click', () => startEditing(item));
+            tempDiv.querySelector('.publish-toggle-btn')?.addEventListener('click', () => togglePublish(item));
+            tempDiv.querySelector('.delete-btn')?.addEventListener('click', () => deleteItem(item.id));
+            tempDiv.querySelector('.close-details-btn')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                tempDiv.classList.remove('expanded');
+                tempDiv.querySelector('.event-details').style.display = 'none';
+                activeExpandedIds.delete(item.id);
+            });
 
-        
+            return tempDiv;
+        };
 
-                    // Button listeners
+        const currentChildren = Array.from(roadmapContainer.children);
+        const currentMap = new Map(currentChildren.map(el => [el.dataset.itemId, el]));
+        const newIds = new Set(items.map(e => e.id));
 
-                    tempDiv.querySelector('.edit-btn')?.addEventListener('click', () => startEditing(item));
-
-                    tempDiv.querySelector('.publish-toggle-btn')?.addEventListener('click', () => togglePublish(item));
-
-                    tempDiv.querySelector('.delete-btn')?.addEventListener('click', () => deleteItem(item.id));
-
-                    tempDiv.querySelector('.close-details-btn')?.addEventListener('click', (e) => {
-
-                        e.stopPropagation();
-
-                        tempDiv.classList.remove('expanded');
-
-                        tempDiv.querySelector('.event-details').style.display = 'none';
-
-                        activeExpandedIds.delete(item.id);
-
-                    });
-
-        
-
-                    return tempDiv;
-
-                };
-
-        
-
-                const currentChildren = Array.from(roadmapContainer.children);
-
-                const currentMap = new Map(currentChildren.map(el => [el.dataset.itemId, el]));
-
-                const newIds = new Set(items.map(e => e.id));
-
-        
-
-                // Remove old items OR placeholders
-
-                currentChildren.forEach(child => {
-
-                    const id = child.dataset.itemId;
-
-                    if (!id || !newIds.has(id)) {
-
-                        child.remove();
-
-                    }
-
-                });
+        // Remove old items OR placeholders
+        currentChildren.forEach(child => {
+            const id = child.dataset.itemId;
+            if (!id || !newIds.has(id)) {
+                child.remove();
+            }
+        });
 
         let previousElement = null;
         items.forEach((item, index) => {
@@ -275,11 +193,11 @@ function attachRoadmapListeners() {
             const serviceMapData = JSON.parse(localStorage.getItem('service_map'));
             const eventService = serviceMapData.services.cs.find(s => s.id === 'dex-event-service');
             const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-            
-            const url = editingItemId 
+
+            const url = editingItemId
                 ? `http://${domain}:${eventService.port}/roadmap/${editingItemId}`
                 : `http://${domain}:${eventService.port}/roadmap`;
-            
+
             const method = editingItemId ? 'PATCH' : 'POST';
 
             try {
