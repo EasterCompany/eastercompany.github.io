@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.112.main.a8e6882.2025-12-24.linux-amd64.a8e6882",
-    "dev": "2.8.112.main.a8e6882.2025-12-24.linux-amd64.a8e6882"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -283,6 +283,12 @@
       "type": "patch",
       "date": "2025-12-24T19:50:28Z",
       "commit": "696e735",
+      "binaries": {}
+    },
+    "2.11.97": {
+      "type": "patch",
+      "date": "2025-12-24T22:00:33Z",
+      "commit": "4b44f2e",
       "binaries": {}
     },
     "2.8.100": {
