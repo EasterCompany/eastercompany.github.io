@@ -111,6 +111,9 @@ export function createWindow(options) {
 
                     windowEl.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     windowEl.querySelector(`.tab-content[data-tab-content="${tabIndex}"]`).classList.add('active');
+
+                    // Automatically scroll the tab into view if the bar is scrollable
+                    tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                 });
             });
         }
