@@ -413,7 +413,7 @@ main a {
     display: flex; /* Is now a flex container */
     justify-content: space-between;
     align-items: center;
-    padding: 0 15px; /* Vertical padding will be on children */
+    padding: 0 0 0 10px; /* Changed: 10px left, 0px right */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgba(40, 40, 40, 0.5);
     flex-shrink: 0;
@@ -453,8 +453,7 @@ main a {
     display: flex;
     flex-grow: 1; /* Allows the tab bar to fill space */
     justify-content: flex-start; /* Changed: Left align tabs */
-    padding: 0 0 0 10px; /* Changed: 10px left, 0px elsewhere */
-    margin: 0; /* Changed: Removed margin to allow full width usage on mobile */
+    margin: 0 15px; /* Restored: Space between side icons and tabs */
     overflow-x: auto; /* Enable horizontal scrolling */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
