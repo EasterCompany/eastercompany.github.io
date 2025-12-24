@@ -453,10 +453,12 @@ main a {
     display: flex;
     flex-grow: 1; /* Allows the tab bar to fill space */
     justify-content: flex-start; /* Changed: Left align tabs */
+    padding: 0 0 0 10px; /* Changed: 10px left, 0px elsewhere */
     margin: 0 15px; /* Restored: Space between side icons and tabs */
     overflow-x: auto; /* Enable horizontal scrolling */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+    position: relative; /* Added: Ensure offsetParent for children */
 }
 
 .tab-bar::-webkit-scrollbar {
