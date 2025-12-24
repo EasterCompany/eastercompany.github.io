@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.111.main.090a569.2025-12-24.linux-amd64.090a569",
+    "dev": "2.8.111.main.090a569.2025-12-24.linux-amd64.090a569"
   },
   "releases": {
     "0.0.0": {
@@ -498,6 +498,27 @@
             "path": "/bin/2.8.110/dex",
             "size": 16558671,
             "checksum": "1882396063669e02eb3fcbc15a09ed33cda4186a062f6fdb3c9631c5b460828a"
+          }
+        }
+      }
+    },
+    "2.8.111": {
+      "type": "patch",
+      "date": "2025-12-24T21:42:20Z",
+      "commit": "b3e3c45",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.111/dex",
+            "size": 16558671,
+            "checksum": "65aed08458baef7076116936e008f6f318d62e2b8e41deb2894ef50f11e14ebb"
+          }
+        },
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.8.111/dex-event-service",
+            "size": 12663139,
+            "checksum": "0e5f510dab3355837034171af053c100d76f8134d6f8f0890c721a3a3ae2936e"
           }
         }
       }
@@ -1219,8 +1240,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.110.main.bb1ef22.2025-12-24.linux-amd64.bb1ef22",
-      "user": "2.8.110.main.bb1ef22.2025-12-24.linux-amd64.bb1ef22",
+      "current": "2.8.111.main.090a569.2025-12-24.linux-amd64.090a569",
+      "user": "2.8.111.main.090a569.2025-12-24.linux-amd64.090a569",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -1229,8 +1250,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.8.161",
-      "user": "2.8.161",
+      "current": "2.8.162",
+      "user": "2.8.162",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
