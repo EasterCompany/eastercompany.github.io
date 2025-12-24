@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a",
-    "dev": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a"
+    "user": "2.8.96.main.a984990.2025-12-24.linux-amd64.a984990",
+    "dev": "2.8.96.main.a984990.2025-12-24.linux-amd64.a984990"
   },
   "releases": {
     "0.0.0": {
@@ -416,12 +416,26 @@
           }
         }
       }
+    },
+    "2.8.96": {
+      "type": "patch",
+      "date": "2025-12-24T05:54:46Z",
+      "commit": "f3df5e4",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.96/dex",
+            "size": 16547905,
+            "checksum": "3f5fa4fb866cd59cb02a8fe0eb42892b5fc34509303ec484413e36f34a89070e"
+          }
+        }
+      }
     }
   },
   "services": {
     "cli": {
-      "current": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a",
-      "user": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a",
+      "current": "2.8.96.main.a984990.2025-12-24.linux-amd64.a984990",
+      "user": "2.8.96.main.a984990.2025-12-24.linux-amd64.a984990",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
