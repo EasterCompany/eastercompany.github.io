@@ -36,28 +36,29 @@ export function updateTabTimestamp(tabIndex, timestamp) {
     subtitleElement.textContent = `Last updated: ${timeStr}`;
 }
 
+export function updateTabBadgeCount(tabIndex, count) {
+    const tabBtn = document.querySelector(`.tab[data-tab-index="${tabIndex}"]`);
+    if (!tabBtn) return;
+
+    let badge = tabBtn.querySelector('.notification-badge');
+    if (count > 0) {
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            tabBtn.appendChild(badge);
+        }
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.style.display = 'flex';
+    } else {
+        if (badge) badge.style.display = 'none';
+    }
+}
+
 export function updateUnreadNotificationCount() {
     const notificationsList = document.getElementById('notifications-list');
     if (!notificationsList) return;
     
     // Count .notification-unread elements
     const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
-    
-    // Window.js renders tabs as <div class="tab" data-tab-index="0">...</div>
-    // The message window is usually the one with index 0 as Notifications
-    const tabBtn = document.querySelector(`.tab[data-tab-index="0"]`);
-    if (tabBtn) {
-        let badge = tabBtn.querySelector('.notification-badge');
-        if (unreadCount > 0) {
-            if (!badge) {
-                badge = document.createElement('span');
-                badge.className = 'notification-badge';
-                tabBtn.appendChild(badge);
-            }
-            badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-            badge.style.display = 'flex';
-        } else {
-            if (badge) badge.style.display = 'none';
-        }
-    }
+    updateTabBadgeCount(0, unreadCount);
 }
