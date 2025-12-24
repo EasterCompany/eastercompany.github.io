@@ -615,7 +615,7 @@ footer.hide {
     }
 
     nav {
-        width: max(600px, 30vw);
+        width: min(1200px, 90vw);
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
@@ -632,11 +632,12 @@ footer.hide {
     .window {
         border: 1px solid rgba(255, 255, 255, 0.1); /* Restore all borders */
         border-radius: 10px; /* Restore border-radius */
-        max-width: max(600px, 30vw); /* Constrain width on larger screens */
+        max-width: min(1200px, 90vw); /* Constrain width on larger screens */
+        width: 100%;
         height: auto; /* Allow natural height */
         min-height: 66vh; /* Minimum height of 66% viewport */
         max-height: calc(100vh - 140px); /* Navbar space (100px) + padding (40px) */
-        margin: 0; /* Center with flexbox, remove top margin */
+        margin: 0 auto; /* Center with flexbox, remove top margin */
     }
 
     .window-header .window-close {
