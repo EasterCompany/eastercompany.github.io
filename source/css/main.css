@@ -524,8 +524,8 @@ main a {
 .tab.active {
     color: #fff;
     border-bottom-color: #fff;
-    flex-grow: 0; /* Changed: Don't fill space on mobile */
-    max-width: fit-content; /* Changed: Fit content only */
+    flex-grow: 1; /* Restored: Fill space */
+    max-width: 100%; /* Restored: Grow fully */
     opacity: 1;
 }
 
