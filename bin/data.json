@@ -293,8 +293,8 @@
     },
     "2.8.93": {
       "type": "patch",
-      "date": "2025-12-24T02:45:07Z",
-      "commit": "e1bc993",
+      "date": "2025-12-24T03:10:53Z",
+      "commit": "a3f5f38",
       "binaries": {
         "cli": {
           "linux-amd64": {
@@ -313,8 +313,8 @@
         "event": {
           "linux-amd64": {
             "path": "/bin/2.8.93/dex-event-service",
-            "size": 12598306,
-            "checksum": "a9db0227e1986d84c09dca06d3daab1ce5337b070514b0fc32bf30558778e711"
+            "size": 12598730,
+            "checksum": "200b6cbc4f1172534145971f8f210057b62d810e9f4cbace6d295d5b6a8ced96"
           }
         },
         "tts": {
