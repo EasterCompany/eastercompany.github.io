@@ -219,6 +219,12 @@
       "commit": "3d1c737",
       "binaries": {}
     },
+    "2.11.79": {
+      "type": "patch",
+      "date": "2025-12-24T13:52:40Z",
+      "commit": "8fd31f0",
+      "binaries": {}
+    },
     "2.8.100": {
       "type": "patch",
       "date": "2025-12-24T12:45:31Z",
