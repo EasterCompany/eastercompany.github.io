@@ -41,16 +41,13 @@ export function updateTabBadgeCount(tabIndex, count) {
     if (!tabBtn) return;
 
     let badge = tabBtn.querySelector('.notification-badge');
+    if (!badge) return; // Should exist now due to Window.js changes
+
     if (count > 0) {
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'notification-badge';
-            tabBtn.appendChild(badge);
-        }
         badge.textContent = count > 9 ? '9+' : count;
         badge.style.display = 'flex';
     } else {
-        if (badge) badge.style.display = 'none';
+        badge.style.display = 'none';
     }
 }
 

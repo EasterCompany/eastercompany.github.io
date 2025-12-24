@@ -59,6 +59,7 @@ export function createWindow(options) {
                         ${iconHtml}
                         <span class="tab-title">${tab.title}</span>
                         <span class="tab-subtitle" data-tab-subtitle="${index}">Last updated: never</span>
+                        <span class="notification-badge" style="display: none;">0</span>
                     </div>
                 `;
             }).join('');
