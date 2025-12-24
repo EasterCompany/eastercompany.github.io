@@ -15,7 +15,7 @@ async function fetchSystemData() {
         const serviceMap = JSON.parse(localStorage.getItem('service_map'));
         const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
         if (!eventService) return null;
-        const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
         const url = `http://${domain}:${eventService.port}/system_monitor`;
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -32,7 +32,7 @@ async function fetchProcessData() {
         const serviceMap = JSON.parse(localStorage.getItem('service_map'));
         const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
         if (!eventService) return null;
-        const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
         const url = `http://${domain}:${eventService.port}/processes`;
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);

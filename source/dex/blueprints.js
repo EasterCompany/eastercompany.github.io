@@ -20,7 +20,7 @@ export async function updateBlueprintsTab() {
     } catch (e) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
     if (!eventService) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
-    const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
     const blueprintsUrl = `http://${domain}:${eventService.port}/events?ml=100&format=json&event.type=system.blueprint.generated`;
 
     try {

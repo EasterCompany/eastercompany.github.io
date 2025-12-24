@@ -21,7 +21,7 @@ export async function updateNotificationsTab() {
     } catch (e) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
     if (!eventService) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
-    const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
+    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
     // Fetch a large batch of notifications to ensure we find older unread ones
     const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
 
