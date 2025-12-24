@@ -33,13 +33,13 @@ export async function updateNotificationsTab(forceReRender = false) {
 
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
-      notificationsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-      return;
+        notificationsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+        return;
     }
     let eventService = null;
     try {
-      const serviceMapData = JSON.parse(serviceMapString);
-      eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
+        const serviceMapData = JSON.parse(serviceMapString);
+        eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
     } catch (e) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
     if (!eventService) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
@@ -100,7 +100,7 @@ export async function updateNotificationsTab(forceReRender = false) {
             const isAlert = !isAudit && !!notificationData.alert;
             const category = isAudit ? 'audit' : (notificationData.category || 'system');
             const relatedEventIDs = notificationData.related_event_ids || [];
-            
+
             const readTS = localStorage.getItem(`notification_read_ts_${notificationEvent.id}`);
             const isRead = !!readTS;
 
@@ -111,7 +111,7 @@ export async function updateNotificationsTab(forceReRender = false) {
             // Styling
             let borderClass = isRead ? 'event-border-grey' : 'event-border-blue';
             if (isAudit) borderClass = isRead ? 'event-border-grey' : 'event-border-purple';
-            
+
             if (!isRead && isAlert) borderClass = 'event-border-red';
 
             if (isRead && (priority === 'high' || priority === 'critical')) {
@@ -170,7 +170,7 @@ export async function updateNotificationsTab(forceReRender = false) {
             const tempDiv = document.createElement('div');
             tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer`;
             tempDiv.dataset.notificationId = notificationEvent.id;
-            
+
             tempDiv.onclick = function(e) {
                 const isCurrentlyExpanded = this.classList.contains('expanded');
                 if (isCurrentlyExpanded) {
@@ -183,12 +183,12 @@ export async function updateNotificationsTab(forceReRender = false) {
                     activeExpandedIds.add(notificationEvent.id);
                     const details = this.querySelector('.event-details');
                     if (details) details.style.display = 'block';
-                    
+
                     if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
                         localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
                         this.classList.add('notification-read');
                         this.classList.remove('notification-unread');
-                        
+
                         this.classList.remove('event-border-blue', 'event-border-red', 'event-border-purple');
                         let newBorder = 'event-border-grey';
                         if (priority === 'high' || priority === 'critical') newBorder = 'event-border-red';
@@ -271,10 +271,10 @@ export async function updateNotificationsTab(forceReRender = false) {
         updateUnreadNotificationCount(); // Update badge on each refresh
 
     } catch (error) {
-      console.error('Error fetching notifications:', error);
-      if (notificationsContainer.children.length === 0) {
-        notificationsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load notifications.', 'The event service may be offline or unreachable.');
-      }
+        console.error('Error fetching notifications:', error);
+        if (notificationsContainer.children.length === 0) {
+            notificationsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load notifications.', 'The event service may be offline or unreachable.');
+        }
     }
 }
 
@@ -329,4 +329,3 @@ function attachActionListeners() {
         clearBtn.dataset.listenerAttached = "true";
     }
 }
-
