@@ -56,85 +56,171 @@ export async function updateRoadmapTab(forceReRender = false) {
 
         if (forceReRender) roadmapContainer.innerHTML = '';
 
-        const createItemElement = (item) => {
-            const isExpanded = activeExpandedIds.has(item.id);
-            const isDraft = item.state === 'draft';
-            const isPublished = item.state === 'published';
-            const isConsumed = item.state === 'consumed';
+                const createItemElement = (item) => {
 
-            let borderClass = 'event-border-grey'; // Draft
-            if (isPublished) borderClass = 'event-border-blue';
-            if (isConsumed) borderClass = 'event-border-purple';
+                    const isExpanded = activeExpandedIds.has(item.id);
 
-            const utcDate = new Date(item.created_at * 1000);
-            const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    const isDraft = item.state === 'draft';
 
-            const tempDiv = document.createElement('div');
-            tempDiv.className = `event-item notification-item ${borderClass} cursor-pointer ${isExpanded ? 'expanded' : ''}`;
-            tempDiv.dataset.itemId = item.id;
+                    const isPublished = item.state === 'published';
 
-            tempDiv.onclick = (e) => {
-                if (e.target.closest('button')) return;
-                const wasExpanded = tempDiv.classList.contains('expanded');
-                if (wasExpanded) {
-                    tempDiv.classList.remove('expanded');
-                    tempDiv.querySelector('.event-details').style.display = 'none';
-                    activeExpandedIds.delete(item.id);
-                } else {
-                    tempDiv.classList.add('expanded');
-                    tempDiv.querySelector('.event-details').style.display = 'block';
-                    activeExpandedIds.add(item.id);
-                }
-            };
+                    const isConsumed = item.state === 'consumed';
 
-            let statusBadge = `<span style="font-size: 0.7em; opacity: 0.6; margin-left: 10px;">[${item.state.toUpperCase()}]</span>`;
-            
-            tempDiv.innerHTML = `
-                <div class="event-time">
-                    <span class="event-time-main">${dateStr.split(',')[1]}</span>
-                    <span class="event-date">${dateStr.split(',')[0]}</span>
-                </div>
-                <div class="event-content">
-                    <div class="event-service">ROADMAP ${statusBadge}</div>
-                    <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
-                    <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-                        <div class="event-details-header">
-                            <h4>Item Controls</h4>
-                            <i class="bx bx-x close-details-btn"></i>
+        
+
+                    let borderClass = 'event-border-grey'; // Draft
+
+                    if (isPublished) borderClass = 'event-border-blue';
+
+                    if (isConsumed) borderClass = 'event-border-purple';
+
+        
+
+                    const utcDate = new Date(item.created_at * 1000);
+
+                    const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        
+
+                    const tempDiv = document.createElement('div');
+
+                    tempDiv.className = `event-item notification-item ${borderClass} cursor-pointer ${isExpanded ? 'expanded' : ''}`;
+
+                    tempDiv.dataset.itemId = item.id;
+
+        
+
+                    tempDiv.onclick = (e) => {
+
+                        if (e.target.closest('button')) return;
+
+                        const wasExpanded = tempDiv.classList.contains('expanded');
+
+                        if (wasExpanded) {
+
+                            tempDiv.classList.remove('expanded');
+
+                            tempDiv.querySelector('.event-details').style.display = 'none';
+
+                            activeExpandedIds.delete(item.id);
+
+                        } else {
+
+                            tempDiv.classList.add('expanded');
+
+                            tempDiv.querySelector('.event-details').style.display = 'block';
+
+                            activeExpandedIds.add(item.id);
+
+                        }
+
+                    };
+
+        
+
+                    let statusBadge = `<span style="font-size: 0.7em; opacity: 0.6; margin-left: 10px;">[${item.state.toUpperCase()}]</span>`;
+
+                    
+
+                    tempDiv.innerHTML = `
+
+                        <div class="event-time">
+
+                            <span class="event-time-main">${dateStr.split(',')[1]}</span>
+
+                            <span class="event-date">${dateStr.split(',')[0]}</span>
+
                         </div>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            ${isConsumed ? '' : `<button class="notif-action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>`}
-                            <button class="notif-action-btn ${isPublished ? '' : 'publish-btn'}">
-                                <i class='bx ${isPublished ? 'bx-pause' : 'bx-rocket'}'></i> ${isPublished ? 'Un-publish' : 'Publish'}
-                            </button>
-                            <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
+
+                        <div class="event-content">
+
+                            <div class="event-service">ROADMAP ${statusBadge}</div>
+
+                            <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
+
+                            <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'}">
+
+                                <div class="event-details-header">
+
+                                    <h4>Item Controls</h4>
+
+                                    <i class="bx bx-x close-details-btn"></i>
+
+                                </div>
+
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+
+                                    ${isConsumed ? '' : `<button class="notif-action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>`}
+
+                                    <button class="notif-action-btn publish-toggle-btn">
+
+                                        <i class='bx ${isPublished ? 'bx-pause' : 'bx-rocket'}'></i> ${isPublished ? 'Un-publish' : 'Publish'}
+
+                                    </button>
+
+                                    <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
+
+                                </div>
+
+                                ${isConsumed ? `<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(item.consumed_at * 1000).toLocaleString()}</div>` : ''}
+
+                            </div>
+
                         </div>
-                        ${isConsumed ? `<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(item.consumed_at * 1000).toLocaleString()}</div>` : ''}
-                    </div>
-                </div>
-            `;
 
-            // Button listeners
-            tempDiv.querySelector('.edit-btn')?.addEventListener('click', () => startEditing(item));
-            tempDiv.querySelector(isPublished ? '.notif-action-btn' : '.publish-btn')?.addEventListener('click', () => togglePublish(item));
-            tempDiv.querySelector('.delete-btn')?.addEventListener('click', () => deleteItem(item.id));
-            tempDiv.querySelector('.close-details-btn')?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                tempDiv.classList.remove('expanded');
-                tempDiv.querySelector('.event-details').style.display = 'none';
-                activeExpandedIds.delete(item.id);
-            });
+                    `;
 
-            return tempDiv;
-        };
+        
 
-        const currentChildren = Array.from(roadmapContainer.children);
-        const currentMap = new Map(currentChildren.map(el => [el.dataset.itemId, el]));
-        const newIds = new Set(items.map(e => e.id));
+                    // Button listeners
 
-        currentChildren.forEach(child => {
-            if (child.dataset.itemId && !newIds.has(child.dataset.itemId)) child.remove();
-        });
+                    tempDiv.querySelector('.edit-btn')?.addEventListener('click', () => startEditing(item));
+
+                    tempDiv.querySelector('.publish-toggle-btn')?.addEventListener('click', () => togglePublish(item));
+
+                    tempDiv.querySelector('.delete-btn')?.addEventListener('click', () => deleteItem(item.id));
+
+                    tempDiv.querySelector('.close-details-btn')?.addEventListener('click', (e) => {
+
+                        e.stopPropagation();
+
+                        tempDiv.classList.remove('expanded');
+
+                        tempDiv.querySelector('.event-details').style.display = 'none';
+
+                        activeExpandedIds.delete(item.id);
+
+                    });
+
+        
+
+                    return tempDiv;
+
+                };
+
+        
+
+                const currentChildren = Array.from(roadmapContainer.children);
+
+                const currentMap = new Map(currentChildren.map(el => [el.dataset.itemId, el]));
+
+                const newIds = new Set(items.map(e => e.id));
+
+        
+
+                // Remove old items OR placeholders
+
+                currentChildren.forEach(child => {
+
+                    const id = child.dataset.itemId;
+
+                    if (!id || !newIds.has(id)) {
+
+                        child.remove();
+
+                    }
+
+                });
 
         let previousElement = null;
         items.forEach((item, index) => {
