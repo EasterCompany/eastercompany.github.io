@@ -93,6 +93,12 @@
       "commit": "913e843",
       "binaries": {}
     },
+    "2.11.56": {
+      "type": "patch",
+      "date": "2025-12-24T11:48:42Z",
+      "commit": "3acab21",
+      "binaries": {}
+    },
     "2.8.134": {
       "type": "patch",
       "date": "2025-12-24T05:20:23Z",
