@@ -50,54 +50,108 @@ export async function updateNotificationsTab() {
             const priority = notificationData.priority || 'low';
             const category = notificationData.category || 'system';
             const relatedEventIDs = notificationData.related_event_ids || [];
-            const isRead = localStorage.getItem(`notification_read_${notificationEvent.id}`) === 'true'; // Track read status locally
+            const isRead = localStorage.getItem(`notification_read_${notificationEvent.id}`) === 'true';
 
             const utcDate = new Date(notificationEvent.timestamp * 1000);
             const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
-            // Apply priority-based styling
-            let priorityClass = '';
+            // Apply priority-based styling (matching event borders)
+            let borderClass = 'event-border-grey';
             if (priority === 'high' || priority === 'critical') {
-                priorityClass = 'notification-priority-high';
+                borderClass = 'event-border-red';
             } else if (priority === 'medium') {
-                priorityClass = 'notification-priority-medium';
+                borderClass = 'event-border-orange';
             }
 
             const readClass = isRead ? 'notification-read' : 'notification-unread';
+            
+            // Check if it was already expanded
+            const isExpanded = expandedNotificationIds.has(notificationEvent.id);
+            const expandedClass = isExpanded ? 'expanded' : '';
+            const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
             let relatedEventsHtml = '';
             if (relatedEventIDs.length > 0) {
-                relatedEventsHtml = `<div class="notification-details-related">Related Events: ${relatedEventIDs.map(id => `<span class="related-event-id">${id.substring(0, 8)}...</span>`).join(', ')}</div>`;
+                relatedEventsHtml = `
+                    <div class="event-detail-row">
+                        <span class="detail-label">Related Events:</span>
+                        <span class="detail-value">${relatedEventIDs.map(id => `<span class="related-event-id" style="font-family: monospace; opacity: 0.7;">${id.substring(0, 8)}...</span>`).join(', ')}</span>
+                    </div>`;
             }
 
-
             const tempDiv = document.createElement('div');
-            tempDiv.className = `notification-item ${priorityClass} ${readClass}`;
+            tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer`;
             tempDiv.dataset.notificationId = notificationEvent.id;
-            tempDiv.onclick = () => {
-                localStorage.setItem(`notification_read_${notificationEvent.id}`, 'true');
-                tempDiv.classList.add('notification-read');
-                tempDiv.classList.remove('notification-unread');
-                updateUnreadNotificationCount(); // Update the count on click
+            
+            tempDiv.onclick = function(e) {
+                // Mark as read
+                if (!isRead) {
+                    localStorage.setItem(`notification_read_${notificationEvent.id}`, 'true');
+                    this.classList.add('notification-read');
+                    this.classList.remove('notification-unread');
+                    updateUnreadNotificationCount();
+                }
+
+                // Toggle expansion
+                this.classList.toggle('expanded');
+                const details = this.querySelector('.event-details');
+                if (details) {
+                    const becomingVisible = details.style.display === 'none';
+                    details.style.display = becomingVisible ? 'block' : 'none';
+                    if (becomingVisible) {
+                        expandedNotificationIds.add(notificationEvent.id);
+                    } else {
+                        expandedNotificationIds.delete(notificationEvent.id);
+                    }
+                }
             };
 
             tempDiv.innerHTML = `
-                <div class="notification-header">
-                    <span class="notification-priority">${priority.toUpperCase()}</span>
-                    <span class="notification-title">${title}</span>
+                <div class="event-time">
+                    <span class="event-time-main">${timeStr}</span>
+                    <span class="event-date">${dateStr}</span>
                 </div>
-                <div class="notification-body">
-                    <p>${body}</p>
-                    ${relatedEventsHtml}
-                </div>
-                <div class="notification-footer">
-                    <span class="notification-category">${category}</span>
-                    <span class="notification-timestamp">${dateStr} ${timeStr}</span>
+                <div class="event-content">
+                    <div class="event-service">${category.toUpperCase()}</div>
+                    <div class="event-message">${title}</div>
+                    <div class="event-details" style="${detailsStyle}">
+                        <div class="event-details-header">
+                            <h4>Notification Details</h4>
+                            <i class="bx bx-x close-details-btn"></i>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Insight:</span>
+                            <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px;">${escapeHtml(body)}</p>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Priority:</span>
+                            <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
+                        </div>
+                        ${relatedEventsHtml}
+                    </div>
                 </div>
             `;
+
+            const closeBtn = tempDiv.querySelector('.close-details-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    tempDiv.classList.remove('expanded');
+                    const details = tempDiv.querySelector('.event-details');
+                    if (details) details.style.display = 'none';
+                    expandedNotificationIds.delete(notificationEvent.id);
+                });
+            }
+
             return tempDiv;
         };
+
+        const expandedNotificationIds = new Set(
+            Array.from(notificationsContainer.querySelectorAll('.event-item.expanded'))
+              .map(el => el.dataset.notificationId)
+              .filter(id => id)
+        );
 
         // Basic diffing and rendering logic for notifications
         const currentChildren = Array.from(notificationsContainer.children);
