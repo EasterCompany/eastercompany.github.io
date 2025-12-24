@@ -1709,8 +1709,6 @@ footer.hide {
     display: flex;
     gap: 10px;
     padding: 10px 15px;
-    background-color: rgba(40, 40, 40, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     flex-wrap: wrap;
     justify-content: flex-start;
     position: sticky;
