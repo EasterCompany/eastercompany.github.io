@@ -129,6 +129,12 @@
       "commit": "3c016d1",
       "binaries": {}
     },
+    "2.11.62": {
+      "type": "patch",
+      "date": "2025-12-24T12:01:48Z",
+      "commit": "e1767aa",
+      "binaries": {}
+    },
     "2.8.134": {
       "type": "patch",
       "date": "2025-12-24T05:20:23Z",
