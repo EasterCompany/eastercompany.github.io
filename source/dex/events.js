@@ -48,6 +48,9 @@ export async function updateEventsTimeline(forceReRender = false) {
       const events = data.events || [];
       currentFilteredEvents = events;
 
+      lastEventsUpdate = Date.now();
+      updateTabTimestamp(3, lastEventsUpdate); // Index 3
+
       if (events.length === 0) {
         eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found.');
         return;

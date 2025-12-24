@@ -76,6 +76,9 @@ export async function updateBlueprintsTab(forceReRender = false) {
         const allBlueprints = data.events || [];
         currentFilteredBlueprints = allBlueprints;
 
+        lastBlueprintsUpdate = Date.now();
+        updateTabTimestamp(1, lastBlueprintsUpdate); 
+
         if (allBlueprints.length === 0) {
             blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Analyst Worker will generate these when idle.');
             updateTabBadgeCount(1, 0);
@@ -210,8 +213,6 @@ export async function updateBlueprintsTab(forceReRender = false) {
             previousElement = el;
         });
 
-        lastBlueprintsUpdate = Date.now();
-        updateTabTimestamp(1, lastBlueprintsUpdate); 
         updateTabBadgeCount(1, allBlueprints.length);
 
     } catch (error) {
