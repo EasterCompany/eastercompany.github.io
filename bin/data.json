@@ -293,8 +293,8 @@
     },
     "2.8.93": {
       "type": "patch",
-      "date": "2025-12-24T01:27:02Z",
-      "commit": "7460185",
+      "date": "2025-12-24T01:33:22Z",
+      "commit": "453c8b3",
       "binaries": {
         "cli": {
           "linux-amd64": {
@@ -313,8 +313,8 @@
         "event": {
           "linux-amd64": {
             "path": "/bin/2.8.93/dex-event-service",
-            "size": 12592443,
-            "checksum": "fa5ba40aa057d6d64d7cffe9306b57a973edd4c018ea3c84e8dabef5ede52cef"
+            "size": 12595191,
+            "checksum": "c76da7bb7a961906374895d847861b8e32ffe5d51d3fe936985b02ff0a3c9ac2"
           }
         },
         "tts": {
@@ -346,8 +346,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.8.125",
-      "user": "2.8.125",
+      "current": "2.8.126",
+      "user": "2.8.126",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
