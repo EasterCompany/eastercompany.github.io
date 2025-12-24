@@ -113,32 +113,36 @@ export function createWindow(options) {
                     windowEl.querySelector(`.tab-content[data-tab-content="${tabIndex}"]`).classList.add('active');
 
                     // Automatically scroll the tab into view with optimized visibility for neighbors
-                    const tabBar = windowEl.querySelector('.tab-bar');
-                    if (tabBar) {
-                        const tabs = Array.from(tabBar.querySelectorAll('.tab'));
-                        const currentIndex = tabs.indexOf(tab);
-                        const barWidth = tabBar.clientWidth;
+                    // Delaying by 50ms to allow the active tab expansion animation/reflow to complete
+                    setTimeout(() => {
+                        const tabBar = windowEl.querySelector('.tab-bar');
+                        if (tabBar) {
+                            const tabs = Array.from(tabBar.querySelectorAll('.tab'));
+                            const currentIndex = tabs.indexOf(tab);
+                            const barWidth = tabBar.clientWidth;
 
-                        // Target the neighbors to ensure they are visible
-                        const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
-                        const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
+                            // Target the neighbors to ensure they are visible
+                            const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
+                            const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
 
-                        // Use relative position within the scroll container
-                        const leftPos = leftNeighbor.offsetLeft - tabBar.offsetLeft;
-                        const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft;
-                        const windowWidth = rightPos - leftPos;
+                            // Use relative position within the scroll container
+                            // Re-calculating after the timeout to get the new 'expanded' widths
+                            const leftPos = leftNeighbor.offsetLeft - tabBar.offsetLeft;
+                            const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft;
+                            const windowWidth = rightPos - leftPos;
 
-                        let targetScroll;
-                        if (windowWidth <= barWidth) {
-                            // Center the 5-tab range
-                            targetScroll = leftPos - (barWidth - windowWidth) / 2;
-                        } else {
-                            // Center just the active tab
-                            targetScroll = (tab.offsetLeft - tabBar.offsetLeft) - (barWidth / 2) + (tab.offsetWidth / 2);
+                            let targetScroll;
+                            if (windowWidth <= barWidth) {
+                                // Center the 5-tab range
+                                targetScroll = leftPos - (barWidth - windowWidth) / 2;
+                            } else {
+                                // Center just the active tab
+                                targetScroll = (tab.offsetLeft - tabBar.offsetLeft) - (barWidth / 2) + (tab.offsetWidth / 2);
+                            }
+
+                            tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
                         }
-
-                        tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
-                    }
+                    }, 50);
                 });
             });
         }
