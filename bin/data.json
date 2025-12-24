@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.100.main.02c4728.2025-12-24.linux-amd64.02c4728",
-    "dev": "2.8.100.main.02c4728.2025-12-24.linux-amd64.02c4728"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -175,6 +175,12 @@
       "type": "patch",
       "date": "2025-12-24T12:17:55Z",
       "commit": "f894c76",
+      "binaries": {}
+    },
+    "2.11.71": {
+      "type": "patch",
+      "date": "2025-12-24T12:24:18Z",
+      "commit": "4866ebf",
       "binaries": {}
     },
     "2.8.100": {
