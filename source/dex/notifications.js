@@ -20,12 +20,16 @@ export let lastNotificationsUpdate = null;
 let activeExpandedIds = new Set();
 let currentFilteredNotifications = [];
 
-export async function updateNotificationsTab() {
+export async function updateNotificationsTab(forceReRender = false) {
     const notificationsContainer = document.getElementById('notifications-list');
     if (!notificationsContainer) return;
 
     // Attach button listeners if not already attached
     attachActionListeners();
+
+    if (forceReRender) {
+        notificationsContainer.innerHTML = '<p>Updating...</p>';
+    }
 
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
@@ -218,7 +222,8 @@ export async function updateNotificationsTab() {
 
         filteredNotifications.forEach((notificationEvent, index) => {
             let el = currentMap.get(notificationEvent.id);
-            if (!el) {
+            if (!el || forceReRender) {
+                if (el) el.remove();
                 el = createNotificationElement(notificationEvent);
                 if (!el) return;
             }
@@ -259,15 +264,20 @@ function attachActionListeners() {
                     localStorage.setItem(`notification_read_ts_${notif.id}`, Date.now().toString());
                 }
             });
-            updateNotificationsTab();
+            updateNotificationsTab(true);
         };
         readAllBtn.dataset.listenerAttached = "true";
     }
 
     if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
         expandAllBtn.onclick = () => {
-            currentFilteredNotifications.forEach(notif => activeExpandedIds.add(notif.id));
-            updateNotificationsTab();
+            currentFilteredNotifications.forEach(notif => {
+                activeExpandedIds.add(notif.id);
+                if (!localStorage.getItem(`notification_read_ts_${notif.id}`)) {
+                    localStorage.setItem(`notification_read_ts_${notif.id}`, Date.now().toString());
+                }
+            });
+            updateNotificationsTab(true);
         };
         expandAllBtn.dataset.listenerAttached = "true";
     }
@@ -275,7 +285,7 @@ function attachActionListeners() {
     if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
         closeAllBtn.onclick = () => {
             activeExpandedIds.clear();
-            updateNotificationsTab();
+            updateNotificationsTab(true);
         };
         closeAllBtn.dataset.listenerAttached = "true";
     }
@@ -287,7 +297,7 @@ function attachActionListeners() {
                 localStorage.setItem(`notification_read_ts_${notif.id}`, longAgo.toString());
             });
             activeExpandedIds.clear();
-            updateNotificationsTab();
+            updateNotificationsTab(true);
         };
         clearBtn.dataset.listenerAttached = "true";
     }
