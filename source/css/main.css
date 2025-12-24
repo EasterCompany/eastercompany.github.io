@@ -1511,24 +1511,56 @@ footer.hide {
   background-color: rgba(40, 40, 40, 0.5);
 }
 
-.event-border-blue {
-    border-left-color: #4444FF;
+/* Blueprint-specific styles */
+.blueprint-meta-row {
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 8px;
 }
 
-.event-border-grey {
-    border-left-color: rgba(255, 255, 255, 0.2);
+.blueprint-meta-row strong {
+    color: #bb86fc; /* Purple accent */
+    margin-right: 5px;
+}
+
+.blueprint-path {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.blueprint-path h5 {
+    color: #bb86fc;
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.blueprint-path ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: decimal;
+}
+
+.blueprint-path li {
+    font-size: 0.85em;
+    color: #ccc;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+/* Event Border Variants */
+.event-border-purple {
+    border-left: 4px solid #bb86fc !important;
+}
+
+.event-border-blue {
+    border-left: 4px solid #03dac6 !important;
 }
 
 .event-border-red {
-    border-left-color: #ff6b6b;
-}
-
-.event-border-orange {
-    border-left-color: #f97316;
-}
-
-.event-border-purple {
-    border-left-color: #bf40bf;
+    border-left: 4px solid #cf6679 !important;
 }
 
 .cursor-pointer {

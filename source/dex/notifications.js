@@ -23,7 +23,8 @@ export async function updateNotificationsTab() {
 
     const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
     // Fetch a large batch of notifications to ensure we find older unread ones
-    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
+    // Including both notification and alert types
+    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated,system.notification.alert`;
 
     try {
         const response = await fetch(notificationsUrl);
