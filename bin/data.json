@@ -255,6 +255,12 @@
       "commit": "d8abadf",
       "binaries": {}
     },
+    "2.11.88": {
+      "type": "patch",
+      "date": "2025-12-24T18:11:19Z",
+      "commit": "ca0ece8",
+      "binaries": {}
+    },
     "2.8.100": {
       "type": "patch",
       "date": "2025-12-24T12:45:31Z",
