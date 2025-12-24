@@ -237,11 +237,25 @@ export async function updateProcessesTab() {
         const duration = Math.floor((Date.now() / 1000) - proc.start_time);
         const retryBadge = proc.retries > 0 ? `<span class="process-retry-badge">Retry ${proc.retries}</span>` : '';
 
+        // Pretty-print common system IDs
+        let displayName = proc.channel_id;
+        const idMap = {
+            'system-discord': 'Discord Engine',
+            'system-analyst': 'Analyst Worker',
+            'system-cli-op': 'CLI Operation'
+        };
+        if (idMap[displayName]) {
+            displayName = idMap[displayName];
+        } else if (/^\d+$/.test(displayName)) {
+            // If it's a numeric ID, it's likely a Discord channel ID
+            displayName = `Channel ${displayName}`;
+        }
+
         return `
                 <div class="service-widget process-widget" data-channel-id="${proc.channel_id}">
                     <div class="service-widget-header">
                         <i class="bx bx-loader-alt bx-spin"></i>
-                        <h3>Channel ${proc.channel_id}</h3>
+                        <h3>${displayName}</h3>
                         ${retryBadge}
                     </div>
                     <div class="service-widget-body">
