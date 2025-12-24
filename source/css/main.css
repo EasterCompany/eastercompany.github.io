@@ -454,6 +454,13 @@ main a {
     flex-grow: 1; /* Allows the tab bar to fill space */
     justify-content: center; /* Center the tabs within the bar */
     margin: 0 15px; /* Add space between side icons and tabs */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+}
+
+.tab-bar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
 }
 
 .window-title {
