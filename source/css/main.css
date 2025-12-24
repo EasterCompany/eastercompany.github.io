@@ -481,6 +481,12 @@ main a {
     overflow: hidden;
     opacity: 0.7;
     transition: all 0.4s ease; /* Slower transition for a smoother effect */
+    position: relative;
+}
+
+/* Ensure tabs with badges have extra room on the right */
+.tab:has(.notification-badge) {
+    padding-right: 30px;
 }
 
 .tab .tab-title {
@@ -516,6 +522,11 @@ main a {
     opacity: 1;
 }
 
+/* Active tab with badge should also have padding */
+.tab.active:has(.notification-badge) {
+    padding-right: 35px;
+}
+
 .tab.active .tab-title {
     display: inline; /* Show title on active tab */
 }
@@ -536,6 +547,28 @@ main a {
     opacity: 1;
     transform: scaleY(1);
 }
+
+/* Badge Styling */
+.notification-badge {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ff4444;
+    color: white;
+    font-size: 0.7em;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
 /* --- End Window System --- */
 
 svg {
