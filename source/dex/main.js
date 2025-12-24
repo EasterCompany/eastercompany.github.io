@@ -7,6 +7,7 @@ import { getLogsContent, updateLogs, lastLogsUpdate } from './logs.js';
 import { createPlaceholderMessage, updateTabTimestamp } from './utils.js';
 import { getEventsContent, updateEventsTimeline, lastEventsUpdate } from './events.js';
 import { getNotificationsContent, updateNotificationsTab, lastNotificationsUpdate } from './notifications.js';
+import { getBlueprintsContent, updateBlueprintsTab, lastBlueprintsUpdate } from './blueprints.js';
 import { getServicesContent, getModelsContent, getProcessesContent, updateSystemMonitor, updateModelsTab, updateProcessesTab, lastServicesUpdate, lastModelsUpdate, lastProcessesUpdate } from './monitor.js';
 import { getSettingsContent, attachSettingsListeners } from './settings.js';
 
@@ -58,17 +59,19 @@ function onReady() {
       updateEventsTimeline(),
       updateProcessesTab(),
       updateNotificationsTab(),
+      updateBlueprintsTab(),
       updateLogs()
     ]);
 
     // Update timestamps every second
     const timestampInterval = setInterval(() => {
       if (!messageWindow.isOpen()) return clearInterval(timestampInterval);
-      updateTabTimestamp(3, lastLogsUpdate);
-      updateTabTimestamp(2, lastEventsUpdate);
-      updateTabTimestamp(4, lastModelsUpdate);
-      updateTabTimestamp(5, lastServicesUpdate);
-      updateTabTimestamp(1, lastProcessesUpdate);
+      updateTabTimestamp(4, lastLogsUpdate);
+      updateTabTimestamp(3, lastEventsUpdate);
+      updateTabTimestamp(5, lastModelsUpdate);
+      updateTabTimestamp(6, lastServicesUpdate);
+      updateTabTimestamp(2, lastProcessesUpdate);
+      updateTabTimestamp(1, lastBlueprintsUpdate);
       updateTabTimestamp(0, lastNotificationsUpdate);
     }, 1000);
 
@@ -78,6 +81,7 @@ function onReady() {
       updateEventsTimeline();
       updateProcessesTab();
       updateNotificationsTab();
+      updateBlueprintsTab();
       updateLogs();
     }, 3000);
 
@@ -123,11 +127,12 @@ function onReady() {
     id: 'message-window',
     tabs: [
       { icon: 'bx-bell', title: 'Notifications', content: getNotificationsContent(), 'data-tab-index': 0 },
-      { icon: 'bx-cog', title: 'Processes', content: getProcessesContent(), 'data-tab-index': 1 },
-      { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 2 },
-      { icon: 'bx-history', title: 'Logs', content: getLogsContent(), 'data-tab-index': 3 },
-      { icon: 'bx-brain', title: 'Models', content: getModelsContent(), 'data-tab-index': 4 },
-      { icon: 'bx-line-chart', title: 'Services', content: getServicesContent(), 'data-tab-index': 5 }
+      { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsContent(), 'data-tab-index': 1 },
+      { icon: 'bx-cog', title: 'Processes', content: getProcessesContent(), 'data-tab-index': 2 },
+      { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 3 },
+      { icon: 'bx-history', title: 'Logs', content: getLogsContent(), 'data-tab-index': 4 },
+      { icon: 'bx-brain', title: 'Models', content: getModelsContent(), 'data-tab-index': 5 },
+      { icon: 'bx-line-chart', title: 'Services', content: getServicesContent(), 'data-tab-index': 6 }
     ],
     icon: 'bxs-message-dots',
     onClose: onWindowClose,
