@@ -23,8 +23,7 @@ export async function updateNotificationsTab() {
 
     const domain = eventService.domain === '0.0.0.0' ? 'localhost' : eventService.domain;
     // Fetch a large batch of notifications to ensure we find older unread ones
-    // Including both notification and alert types
-    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated,system.notification.alert`;
+    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
 
     try {
         const response = await fetch(notificationsUrl);
@@ -64,6 +63,7 @@ export async function updateNotificationsTab() {
             const title = notificationData.title || 'Untitled Notification';
             const body = notificationData.body || 'No description provided.';
             const priority = notificationData.priority || 'low';
+            const isAlert = !!notificationData.alert; // Check for the alert flag
             const category = notificationData.category || 'system';
             const relatedEventIDs = notificationData.related_event_ids || [];
             const readTS = localStorage.getItem(`notification_read_ts_${notificationEvent.id}`);
@@ -73,11 +73,16 @@ export async function updateNotificationsTab() {
             const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
-            // Apply priority-based styling (matching event borders)
+            // Apply priority and alert-based styling
             // UNREAD = Blue border
-            // READ = Grey border (with red override for high priority)
+            // ALERT = Red border (if unread)
+            // READ = Grey border (with priority override)
             let borderClass = isRead ? 'event-border-grey' : 'event-border-blue';
             
+            if (!isRead && isAlert) {
+                borderClass = 'event-border-red';
+            }
+
             if (isRead && (priority === 'high' || priority === 'critical')) {
                 borderClass = 'event-border-red';
             } else if (isRead && priority === 'medium') {
@@ -121,8 +126,9 @@ export async function updateNotificationsTab() {
                             this.classList.add('notification-read');
                             this.classList.remove('notification-unread');
                             
-                            // Change border from Blue to Grey (or priority color)
+                            // Change border from Highlight to Grey (or priority color)
                             this.classList.remove('event-border-blue');
+                            this.classList.remove('event-border-red');
                             let newBorder = 'event-border-grey';
                             if (priority === 'high' || priority === 'critical') newBorder = 'event-border-red';
                             else if (priority === 'medium') newBorder = 'event-border-orange';
@@ -142,11 +148,11 @@ export async function updateNotificationsTab() {
                     <span class="event-date">${dateStr}</span>
                 </div>
                 <div class="event-content">
-                    <div class="event-service">${category.toUpperCase()}</div>
+                    <div class="event-service">${category.toUpperCase()} ${isAlert ? '<span class="alert-badge" style="color: #ff4d4d; font-size: 0.8em; margin-left: 5px;">[ALERT]</span>' : ''}</div>
                     <div class="event-message">${title}</div>
                     <div class="event-details" style="${detailsStyle}">
                         <div class="event-details-header">
-                            <h4>Notification Details</h4>
+                            <h4>${isAlert ? 'Alert' : 'Notification'} Details</h4>
                             <i class="bx bx-x close-details-btn"></i>
                         </div>
                         <div class="event-detail-row">
