@@ -115,13 +115,27 @@ export function createWindow(options) {
                     // Automatically scroll the tab into view with optimized visibility for neighbors
                     const tabBar = windowEl.querySelector('.tab-bar');
                     if (tabBar) {
-                        const tabOffsetLeft = tab.offsetLeft;
-                        const tabWidth = tab.offsetWidth;
+                        const tabs = Array.from(tabBar.querySelectorAll('.tab'));
+                        const currentIndex = tabs.indexOf(tab);
                         const barWidth = tabBar.clientWidth;
-                        
-                        // Center the tab, which usually leaves enough room for 2 neighbors on each side
-                        // given our current tab widths and min(1200px, 90vw) window width.
-                        const targetScroll = tabOffsetLeft - (barWidth / 2) + (tabWidth / 2);
+
+                        // Goal: Keep 2 neighbors on each side visible
+                        const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
+                        const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
+
+                        const leftPos = leftNeighbor.offsetLeft;
+                        const rightPos = rightNeighbor.offsetLeft + rightNeighbor.offsetWidth;
+                        const windowWidth = rightPos - leftPos;
+
+                        let targetScroll;
+                        if (windowWidth <= barWidth) {
+                            // The 5-tab window fits, center the whole window
+                            targetScroll = leftPos - (barWidth - windowWidth) / 2;
+                        } else {
+                            // Doesn't fit, just center the active tab
+                            targetScroll = tab.offsetLeft - (barWidth / 2) + (tab.offsetWidth / 2);
+                        }
+
                         tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
                     }
                 });
