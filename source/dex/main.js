@@ -10,10 +10,10 @@ import { getNotificationsContent, updateNotificationsTab, lastNotificationsUpdat
 import { getBlueprintsContent, updateBlueprintsTab, lastBlueprintsUpdate } from './blueprints.js';
 import { getServicesContent, getModelsContent, getProcessesContent, updateSystemMonitor, updateModelsTab, updateProcessesTab, lastServicesUpdate, lastModelsUpdate, lastProcessesUpdate } from './monitor.js';
 import { getSettingsContent, attachSettingsListeners } from './settings.js';
+import { getRoadmapContent, updateRoadmapTab } from './roadmap.js';
 
 function onReady() {
-  console.log("Welcome to Easter Company.");
-
+// ... existing onReady logic ...
   initTheme();
   applyBaseStyles();
   const loggedIn = isLoggedIn();
@@ -93,6 +93,15 @@ function onReady() {
     }, 60000);
   }
 
+  async function initializeUserWindow() {
+      await updateRoadmapTab();
+      
+      const refreshInterval = setInterval(() => {
+          if (!userWindow.isOpen()) return clearInterval(refreshInterval);
+          updateRoadmapTab();
+      }, 5000);
+  }
+
   // Define windows
   const loginWindow = createWindow({ 
       id: 'login-window', 
@@ -104,10 +113,13 @@ function onReady() {
   
   const userWindow = createWindow({ 
       id: 'user-window', 
-      title: 'User Profile', 
-      content: `<p>Logged in as: ${getUserEmail() || 'Unknown'}</p>`, 
+      tabs: [
+          { icon: 'bx-user', title: 'Profile', content: `<p style="padding: 20px;">Logged in as: ${getUserEmail() || 'Unknown'}<br><br><span style="font-family: monospace; font-size: 0.8em; opacity: 0.6;">UUID: 313071000877137920</span></p>`, 'data-tab-index': 0 },
+          { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapContent(), 'data-tab-index': 1 }
+      ],
       icon: 'bx-user', 
-      onClose: onWindowClose 
+      onClose: onWindowClose,
+      onOpen: () => setTimeout(initializeUserWindow, 100)
   });
 
   const settingsWindow = createWindow({
