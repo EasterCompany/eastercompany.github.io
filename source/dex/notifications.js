@@ -1,14 +1,32 @@
 // Notifications Tab Logic
 import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml } from './utils.js';
 
-export const getNotificationsContent = () => `<div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;"><p>Loading notifications...</p></div>`;
+export const getNotificationsContent = () => `
+    <div class="notifications-actions">
+        <button id="notif-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
+        <button id="notif-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
+        <button id="notif-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+        <button id="notif-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
+    </div>
+    <div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
+        <p>Loading notifications...</p>
+    </div>
+`;
 
 // Export this to track updates in main.js if needed, or manage it internally
 export let lastNotificationsUpdate = null;
 
+// Track expanded state globally within the module
+let activeExpandedIds = new Set();
+let currentFilteredNotifications = [];
+
 export async function updateNotificationsTab() {
     const notificationsContainer = document.getElementById('notifications-list');
     if (!notificationsContainer) return;
+
+    // Attach button listeners if not already attached
+    attachActionListeners();
+
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
       notificationsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
@@ -45,6 +63,8 @@ export async function updateNotificationsTab() {
             const readTS = parseInt(readTSStr);
             return (now - readTS) < persistenceThreshold; // Keep if read within last 24h
         });
+
+        currentFilteredNotifications = filteredNotifications;
 
         if (filteredNotifications.length === 0) {
             notificationsContainer.innerHTML = createPlaceholderMessage('empty', 'No notifications yet.');
@@ -92,7 +112,7 @@ export async function updateNotificationsTab() {
             const readClass = isRead ? 'notification-read' : 'notification-unread';
             
             // Check if it was already expanded
-            const isExpanded = expandedNotificationIds.has(notificationEvent.id);
+            const isExpanded = activeExpandedIds.has(notificationEvent.id);
             const expandedClass = isExpanded ? 'expanded' : '';
             const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
@@ -111,33 +131,33 @@ export async function updateNotificationsTab() {
             
             tempDiv.onclick = function(e) {
                 // Toggle expansion
-                this.classList.toggle('expanded');
-                const details = this.querySelector('.event-details');
-                if (details) {
-                    const becomingVisible = details.style.display === 'none';
-                    details.style.display = becomingVisible ? 'block' : 'none';
+                const isCurrentlyExpanded = this.classList.contains('expanded');
+                if (isCurrentlyExpanded) {
+                    this.classList.remove('expanded');
+                    activeExpandedIds.delete(notificationEvent.id);
+                    const details = this.querySelector('.event-details');
+                    if (details) details.style.display = 'none';
+                } else {
+                    this.classList.add('expanded');
+                    activeExpandedIds.add(notificationEvent.id);
+                    const details = this.querySelector('.event-details');
+                    if (details) details.style.display = 'block';
                     
-                    if (becomingVisible) {
-                        expandedNotificationIds.add(notificationEvent.id);
+                    // MARK AS READ ON EXPAND
+                    if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
+                        localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
+                        this.classList.add('notification-read');
+                        this.classList.remove('notification-unread');
                         
-                        // MARK AS READ ON EXPAND
-                        if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
-                            localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
-                            this.classList.add('notification-read');
-                            this.classList.remove('notification-unread');
-                            
-                            // Change border from Highlight to Grey (or priority color)
-                            this.classList.remove('event-border-blue');
-                            this.classList.remove('event-border-red');
-                            let newBorder = 'event-border-grey';
-                            if (priority === 'high' || priority === 'critical') newBorder = 'event-border-red';
-                            else if (priority === 'medium') newBorder = 'event-border-orange';
-                            this.classList.add(newBorder);
+                        // Change border from Highlight to Grey (or priority color)
+                        this.classList.remove('event-border-blue');
+                        this.classList.remove('event-border-red');
+                        let newBorder = 'event-border-grey';
+                        if (priority === 'high' || priority === 'critical') newBorder = 'event-border-red';
+                        else if (priority === 'medium') newBorder = 'event-border-orange';
+                        this.classList.add(newBorder);
 
-                            updateUnreadNotificationCount();
-                        }
-                    } else {
-                        expandedNotificationIds.delete(notificationEvent.id);
+                        updateUnreadNotificationCount();
                     }
                 }
             };
@@ -175,18 +195,12 @@ export async function updateNotificationsTab() {
                     tempDiv.classList.remove('expanded');
                     const details = tempDiv.querySelector('.event-details');
                     if (details) details.style.display = 'none';
-                    expandedNotificationIds.delete(notificationEvent.id);
+                    activeExpandedIds.delete(notificationEvent.id);
                 });
             }
 
             return tempDiv;
         };
-
-        const expandedNotificationIds = new Set(
-            Array.from(notificationsContainer.querySelectorAll('.event-item.expanded'))
-              .map(el => el.dataset.notificationId)
-              .filter(id => id)
-        );
 
         // Basic diffing and rendering logic for notifications
         const currentChildren = Array.from(notificationsContainer.children);
@@ -195,7 +209,7 @@ export async function updateNotificationsTab() {
 
         // Remove old notifications not in the filtered list
         currentChildren.forEach(child => {
-            if (!child.dataset.notificationId || !newIds.has(child.dataset.notificationId)) {
+            if (child.dataset.notificationId && !newIds.has(child.dataset.notificationId)) {
                 child.remove();
             }
         });
@@ -231,3 +245,51 @@ export async function updateNotificationsTab() {
       }
     }
 }
+
+function attachActionListeners() {
+    const readAllBtn = document.getElementById('notif-read-all');
+    const expandAllBtn = document.getElementById('notif-expand-all');
+    const closeAllBtn = document.getElementById('notif-close-all');
+    const clearBtn = document.getElementById('notif-clear');
+
+    if (readAllBtn && !readAllBtn.dataset.listenerAttached) {
+        readAllBtn.onclick = () => {
+            currentFilteredNotifications.forEach(notif => {
+                if (!localStorage.getItem(`notification_read_ts_${notif.id}`)) {
+                    localStorage.setItem(`notification_read_ts_${notif.id}`, Date.now().toString());
+                }
+            });
+            updateNotificationsTab();
+        };
+        readAllBtn.dataset.listenerAttached = "true";
+    }
+
+    if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
+        expandAllBtn.onclick = () => {
+            currentFilteredNotifications.forEach(notif => activeExpandedIds.add(notif.id));
+            updateNotificationsTab();
+        };
+        expandAllBtn.dataset.listenerAttached = "true";
+    }
+
+    if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
+        closeAllBtn.onclick = () => {
+            activeExpandedIds.clear();
+            updateNotificationsTab();
+        };
+        closeAllBtn.dataset.listenerAttached = "true";
+    }
+
+    if (clearBtn && !clearBtn.dataset.listenerAttached) {
+        clearBtn.onclick = () => {
+            const longAgo = Date.now() - (48 * 60 * 60 * 1000); // 48 hours ago
+            currentFilteredNotifications.forEach(notif => {
+                localStorage.setItem(`notification_read_ts_${notif.id}`, longAgo.toString());
+            });
+            activeExpandedIds.clear();
+            updateNotificationsTab();
+        };
+        clearBtn.dataset.listenerAttached = "true";
+    }
+}
+
