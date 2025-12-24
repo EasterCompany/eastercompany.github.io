@@ -112,8 +112,18 @@ export function createWindow(options) {
                     windowEl.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     windowEl.querySelector(`.tab-content[data-tab-content="${tabIndex}"]`).classList.add('active');
 
-                    // Automatically scroll the tab into view if the bar is scrollable
-                    tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    // Automatically scroll the tab into view with optimized visibility for neighbors
+                    const tabBar = windowEl.querySelector('.tab-bar');
+                    if (tabBar) {
+                        const tabOffsetLeft = tab.offsetLeft;
+                        const tabWidth = tab.offsetWidth;
+                        const barWidth = tabBar.clientWidth;
+                        
+                        // Center the tab, which usually leaves enough room for 2 neighbors on each side
+                        // given our current tab widths and min(1200px, 90vw) window width.
+                        const targetScroll = tabOffsetLeft - (barWidth / 2) + (tabWidth / 2);
+                        tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                    }
                 });
             });
         }
