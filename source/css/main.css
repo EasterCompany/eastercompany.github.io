@@ -413,7 +413,7 @@ main a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 15px; /* Restored: Balanced padding for both sides */
+    padding: 0 0 0 15px; /* Changed: 15px left, 0px right for mobile */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgba(40, 40, 40, 0.5);
     flex-shrink: 0;
@@ -680,6 +680,10 @@ footer.hide {
         min-height: 66vh; /* Minimum height of 66% viewport */
         max-height: calc(100vh - 140px); /* Navbar space (100px) + padding (40px) */
         margin: 0 auto; /* Center with flexbox, remove top margin */
+    }
+
+    .window-header {
+        padding-right: 15px; /* Added: Restore balanced padding on desktop */
     }
 
     .window-header .window-close {
