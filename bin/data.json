@@ -153,6 +153,12 @@
       "commit": "2e97366",
       "binaries": {}
     },
+    "2.11.66": {
+      "type": "patch",
+      "date": "2025-12-24T12:12:22Z",
+      "commit": "6173bdc",
+      "binaries": {}
+    },
     "2.8.134": {
       "type": "patch",
       "date": "2025-12-24T05:20:23Z",
