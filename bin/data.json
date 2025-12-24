@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.100.main.02c4728.2025-12-24.linux-amd64.02c4728",
+    "dev": "2.8.100.main.02c4728.2025-12-24.linux-amd64.02c4728"
   },
   "releases": {
     "0.0.0": {
@@ -221,14 +221,14 @@
     },
     "2.8.100": {
       "type": "patch",
-      "date": "2025-12-24T12:21:20Z",
-      "commit": "72d2f1a",
+      "date": "2025-12-24T12:45:31Z",
+      "commit": "301b245",
       "binaries": {
         "cli": {
           "linux-amd64": {
             "path": "/bin/2.8.100/dex",
-            "size": 16547953,
-            "checksum": "a19ced5abd9aa8ec405c0b0562ff8634575b38b476fdb6a28ae9346fa3512c19"
+            "size": 16552049,
+            "checksum": "b6c1816d0d223eb9a9ee9f659c1a643f92011dca6266eab6babd35ee5fd0d595"
           }
         },
         "discord": {
