@@ -215,9 +215,10 @@ export async function updateNotificationsTab(forceReRender = false) {
         const currentMap = new Map(currentChildren.map(el => [el.dataset.notificationId, el]));
         const newIds = new Set(filteredNotifications.map(e => e.id));
 
-        // Remove old notifications not in the filtered list
+        // Remove old notifications OR placeholders (anything without a valid current ID)
         currentChildren.forEach(child => {
-            if (child.dataset.notificationId && !newIds.has(child.dataset.notificationId)) {
+            const id = child.dataset.notificationId;
+            if (!id || !newIds.has(id)) {
                 child.remove();
             }
         });
