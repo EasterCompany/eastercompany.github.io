@@ -243,6 +243,12 @@
       "commit": "59c66b8",
       "binaries": {}
     },
+    "2.11.86": {
+      "type": "patch",
+      "date": "2025-12-24T18:08:22Z",
+      "commit": "bebd8dc",
+      "binaries": {}
+    },
     "2.8.100": {
       "type": "patch",
       "date": "2025-12-24T12:45:31Z",
