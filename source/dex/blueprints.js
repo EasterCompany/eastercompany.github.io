@@ -45,10 +45,14 @@ export async function updateBlueprintsTab() {
             }
 
             const title = blueprintData.title || 'Untitled Blueprint';
-            const body = blueprintData.body || 'No details provided.';
+            const summary = blueprintData.summary || blueprintData.body || 'No summary provided.';
+            const content = blueprintData.content || '';
             const category = blueprintData.category || 'architecture';
+            const affectedServices = blueprintData.affected_services || [];
+            const implementationPath = blueprintData.implementation_path || [];
             
             const utcDate = new Date(event.timestamp * 1000);
+// ... existing date logic ...
             const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
@@ -60,6 +64,7 @@ export async function updateBlueprintsTab() {
             tempDiv.className = `event-item notification-item event-border-purple cursor-pointer ${isExpanded ? 'expanded' : ''}`;
             tempDiv.dataset.blueprintId = event.id;
             
+// ... existing click handler ...
             tempDiv.onclick = function(e) {
                 this.classList.toggle('expanded');
                 const details = this.querySelector('.event-details');
@@ -70,6 +75,22 @@ export async function updateBlueprintsTab() {
                     else expandedBlueprintIds.delete(event.id);
                 }
             };
+
+            let affectedHtml = affectedServices.length > 0 
+                ? `<div class="blueprint-meta-row"><strong>Affected:</strong> ${affectedServices.join(', ')}</div>` 
+                : '';
+
+            let pathHtml = '';
+            if (implementationPath.length > 0) {
+                pathHtml = `
+                    <div class="blueprint-path">
+                        <h5>Implementation Path</h5>
+                        <ul>
+                            ${implementationPath.map(step => `<li>${escapeHtml(step)}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
 
             tempDiv.innerHTML = `
                 <div class="event-time">
@@ -84,9 +105,14 @@ export async function updateBlueprintsTab() {
                             <h4>Blueprint Design</h4>
                             <i class="bx bx-x close-details-btn"></i>
                         </div>
-                        <div class="event-detail-block" style="text-align: left;">
-                            <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; text-align: left;">${escapeHtml(body)}</p>
+                        <div class="blueprint-summary" style="margin-bottom: 10px; font-weight: 500; color: #fff;">
+                            ${escapeHtml(summary)}
                         </div>
+                        ${affectedHtml}
+                        <div class="event-detail-block" style="text-align: left; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; margin: 10px 0;">
+                            <p class="detail-pre" style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; text-align: left; color: #ccc;">${escapeHtml(content)}</p>
+                        </div>
+                        ${pathHtml}
                     </div>
                 </div>
             `;
