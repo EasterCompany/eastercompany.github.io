@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a",
+    "dev": "2.8.95.main.14a550a.2025-12-24.linux-amd64.14a550a"
   },
   "releases": {
     "0.0.0": {
@@ -405,42 +405,14 @@
     },
     "2.8.95": {
       "type": "patch",
-      "date": "2025-12-24T05:17:10Z",
-      "commit": "b27cf6a",
+      "date": "2025-12-24T05:54:18Z",
+      "commit": "fe9068f",
       "binaries": {
         "cli": {
           "linux-amd64": {
             "path": "/bin/2.8.95/dex",
-            "size": 16527101,
-            "checksum": "5f7dde29dd19a31f39d2711d3c75c0b9587e371343fcc7a694763e013698b894"
-          }
-        },
-        "discord": {
-          "linux-amd64": {
-            "path": "/bin/2.8.95/dex-discord-service",
-            "size": 13453888,
-            "checksum": "38626779077d09e589b3bce6db4bf6b107d352b74c4488f716a702c055743b5a"
-          }
-        },
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.8.95/dex-event-service",
-            "size": 12612456,
-            "checksum": "a54da8778b1d00d47969d152108b70ee268662c94a36ae32e631422f131917a7"
-          }
-        },
-        "tts": {
-          "linux-amd64": {
-            "path": "/bin/2.8.95/dex-tts-service",
-            "size": 15652825,
-            "checksum": "586f423e492bd457d9ddb4a352a13d3d213fb606d536b2e5c69bbdc3d644ef48"
-          }
-        },
-        "web": {
-          "linux-amd64": {
-            "path": "/bin/2.8.95/dex-web-service",
-            "size": 12641782,
-            "checksum": "3377a3404050c4a44e4d7ab2f4be9698dadcec547b9384d068e5930281f9d9be"
+            "size": 16552425,
+            "checksum": "6def3f0b7a86d8bece9f0e23e8fa340560ad2b885678f977381711b0a50e256e"
           }
         }
       }
