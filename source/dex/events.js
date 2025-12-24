@@ -2,13 +2,29 @@
 import { createPlaceholderMessage, updateTabTimestamp, escapeHtml } from './utils.js';
 import { formatEventSummary } from './templates.js';
 
-export const getEventsContent = () => `<div id="events-timeline" class="events-timeline"><p>Loading events...</p></div>`;
+export const getEventsContent = () => `
+    <div class="notifications-actions">
+        <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
+        <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+    </div>
+    <div id="events-timeline" class="events-timeline">
+        <p>Loading events...</p>
+    </div>
+`;
 
 export let lastEventsUpdate = null;
 
-export async function updateEventsTimeline() {
+// Track expanded state globally within the module
+let activeExpandedIds = new Set();
+let currentFilteredEvents = [];
+
+export async function updateEventsTimeline(forceReRender = false) {
     const eventsContainer = document.getElementById('events-timeline');
     if (!eventsContainer) return;
+
+    // Attach button listeners if not already attached
+    attachEventActionListeners();
+
     const serviceMapString = localStorage.getItem('service_map');
     if (!serviceMapString) {
       eventsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
@@ -25,21 +41,20 @@ export async function updateEventsTimeline() {
     const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json&exclude_types=system.notification.generated`; // Exclude notifications from main timeline
 
     try {
-      const expandedEventIds = new Set(
-        Array.from(eventsContainer.querySelectorAll('.event-item.expanded'))
-          .map(el => el.dataset.eventId)
-          .filter(id => id)
-      );
-
       const response = await fetch(eventsUrl);
       if (!response.ok) throw new Error('Service is offline or unreachable.');
 
       const data = await response.json();
       const events = data.events || [];
+      currentFilteredEvents = events;
 
       if (events.length === 0) {
         eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found.');
         return;
+      }
+
+      if (forceReRender) {
+          eventsContainer.innerHTML = '';
       }
 
       const createEventElement = (event) => {
@@ -68,7 +83,7 @@ export async function updateEventsTimeline() {
         }
         const cursorClass = isExpandable ? 'cursor-pointer' : '';
 
-        const isExpanded = expandedEventIds.has(event.id);
+        const isExpanded = activeExpandedIds.has(event.id);
         const expandedClass = isExpanded ? 'expanded' : '';
         const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
@@ -243,9 +258,18 @@ export async function updateEventsTimeline() {
         tempDiv.dataset.eventId = event.id;
         tempDiv.onclick = function (e) {
           if (!isExpandable) return;
-          this.classList.toggle('expanded');
-          const details = this.querySelector('.event-details');
-          if (details) details.style.display = details.style.display === 'none' ? 'block' : 'none';
+          const isCurrentlyExpanded = this.classList.contains('expanded');
+          if (isCurrentlyExpanded) {
+              this.classList.remove('expanded');
+              activeExpandedIds.delete(event.id);
+              const details = this.querySelector('.event-details');
+              if (details) details.style.display = 'none';
+          } else {
+              this.classList.add('expanded');
+              activeExpandedIds.add(event.id);
+              const details = this.querySelector('.event-details');
+              if (details) details.style.display = 'block';
+          }
         };
 
         tempDiv.innerHTML = `
@@ -268,6 +292,7 @@ export async function updateEventsTimeline() {
               const item = e.target.closest('.event-item');
               if (item) {
                 item.classList.remove('expanded');
+                activeExpandedIds.delete(event.id);
                 const details = item.querySelector('.event-details');
                 if (details) details.style.display = 'none';
               }
@@ -282,9 +307,10 @@ export async function updateEventsTimeline() {
       const currentMap = new Map(currentChildren.map(el => [el.dataset.eventId, el]));
       const newIds = new Set(events.map(e => e.id));
 
-      // 1. Remove old events not in the new list
+      // 1. Remove old events or placeholders
       currentChildren.forEach(child => {
-        if (!child.dataset.eventId || !newIds.has(child.dataset.eventId)) {
+        const id = child.dataset.eventId;
+        if (!id || !newIds.has(id)) {
           child.remove();
         }
       });
@@ -293,7 +319,8 @@ export async function updateEventsTimeline() {
 
       events.forEach((event, index) => {
         let el = currentMap.get(event.id);
-        if (!el) {
+        if (!el || forceReRender) {
+          if (el) el.remove();
           el = createEventElement(event);
           if (!el) return;
         }
@@ -310,7 +337,7 @@ export async function updateEventsTimeline() {
       });
 
       lastEventsUpdate = Date.now();
-      updateTabTimestamp(2, lastEventsUpdate); // Index 2
+      updateTabTimestamp(3, lastEventsUpdate); // Index 3
 
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -318,4 +345,25 @@ export async function updateEventsTimeline() {
         eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline or unreachable.');
       }
     }
-  }
+}
+
+function attachEventActionListeners() {
+    const expandAllBtn = document.getElementById('events-expand-all');
+    const closeAllBtn = document.getElementById('events-close-all');
+
+    if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
+        expandAllBtn.onclick = () => {
+            currentFilteredEvents.forEach(e => activeExpandedIds.add(e.id));
+            updateEventsTimeline(true);
+        };
+        expandAllBtn.dataset.listenerAttached = "true";
+    }
+
+    if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
+        closeAllBtn.onclick = () => {
+            activeExpandedIds.clear();
+            updateEventsTimeline(true);
+        };
+        closeAllBtn.dataset.listenerAttached = "true";
+    }
+}
