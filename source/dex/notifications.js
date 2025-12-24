@@ -73,10 +73,13 @@ export async function updateNotificationsTab() {
             const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
             // Apply priority-based styling (matching event borders)
-            let borderClass = 'event-border-grey';
-            if (priority === 'high' || priority === 'critical') {
+            // UNREAD = Blue border
+            // READ = Grey border (with red override for high priority)
+            let borderClass = isRead ? 'event-border-grey' : 'event-border-blue';
+            
+            if (isRead && (priority === 'high' || priority === 'critical')) {
                 borderClass = 'event-border-red';
-            } else if (priority === 'medium') {
+            } else if (isRead && priority === 'medium') {
                 borderClass = 'event-border-orange';
             }
 
@@ -101,22 +104,31 @@ export async function updateNotificationsTab() {
             tempDiv.dataset.notificationId = notificationEvent.id;
             
             tempDiv.onclick = function(e) {
-                // Mark as read with timestamp for 24h persistence
-                if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
-                    localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
-                    this.classList.add('notification-read');
-                    this.classList.remove('notification-unread');
-                    updateUnreadNotificationCount();
-                }
-
                 // Toggle expansion
                 this.classList.toggle('expanded');
                 const details = this.querySelector('.event-details');
                 if (details) {
                     const becomingVisible = details.style.display === 'none';
                     details.style.display = becomingVisible ? 'block' : 'none';
+                    
                     if (becomingVisible) {
                         expandedNotificationIds.add(notificationEvent.id);
+                        
+                        // MARK AS READ ON EXPAND
+                        if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
+                            localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
+                            this.classList.add('notification-read');
+                            this.classList.remove('notification-unread');
+                            
+                            // Change border from Blue to Grey (or priority color)
+                            this.classList.remove('event-border-blue');
+                            let newBorder = 'event-border-grey';
+                            if (priority === 'high' || priority === 'critical') newBorder = 'event-border-red';
+                            else if (priority === 'medium') newBorder = 'event-border-orange';
+                            this.classList.add(newBorder);
+
+                            updateUnreadNotificationCount();
+                        }
                     } else {
                         expandedNotificationIds.delete(notificationEvent.id);
                     }
