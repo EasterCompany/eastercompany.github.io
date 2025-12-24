@@ -1,5 +1,5 @@
 // Notifications Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml } from './utils.js';
 
 export const getNotificationsContent = () => `<div id="notifications-list" class="notifications-list"><p>Loading notifications...</p></div>`;
 
