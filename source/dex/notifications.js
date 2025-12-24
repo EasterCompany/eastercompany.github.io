@@ -1,7 +1,7 @@
 // Notifications Tab Logic
 import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml } from './utils.js';
 
-export const getNotificationsContent = () => `<div id="notifications-list" class="notifications-list"><p>Loading notifications...</p></div>`;
+export const getNotificationsContent = () => `<div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;"><p>Loading notifications...</p></div>`;
 
 // Export this to track updates in main.js if needed, or manage it internally
 export let lastNotificationsUpdate = null;
@@ -140,9 +140,9 @@ export async function updateNotificationsTab() {
                             <span class="detail-label">Priority:</span>
                             <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
                         </div>
-                        <div class="event-detail-block">
+                        <div class="event-detail-block" style="text-align: left;">
                             <span class="detail-label">Insight:</span>
-                            <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px;">${escapeHtml(body)}</p>
+                            <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; text-align: left;">${escapeHtml(body)}</p>
                         </div>
                         ${relatedEventsHtml}
                     </div>
