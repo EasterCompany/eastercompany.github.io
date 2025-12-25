@@ -29,6 +29,7 @@ export const EVENT_TEMPLATES = {
     "analysis.link.completed": "Analyzed link: {url}",
     "analysis.visual.completed": "Analyzed image: {filename}",
     "system.analysis.audit": "Analysis Audit: {tier}",
+    "system.blueprint.generated": "Blueprint Generated: {title}",
     "system.cli.command": "CLI Command: {command} {args} ({status})",
     "system.cli.status": "CLI Status: {message}",
     "system.notification.generated": "Notification ({priority}): {title}"
