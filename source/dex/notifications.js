@@ -3,16 +3,10 @@ import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationC
 
 export const getNotificationsContent = () => `
     <div class="notifications-actions">
-        <div id="guardian-next-run" style="font-size: 0.7em; color: #888; display: flex; align-items: center; margin-right: 10px;">
-            Next T1: Loading...
-        </div>
         <button id="notif-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
         <button id="notif-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="notif-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
         <button id="notif-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
-        <div id="architect-next-run" style="font-size: 0.7em; color: #888; display: flex; align-items: center; margin-left: 10px;">
-            Next T2: Loading...
-        </div>
     </div>
     <div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
         <p>Loading notifications...</p>
@@ -52,46 +46,6 @@ export async function updateNotificationsTab(forceReRender = false) {
     const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
     // Fetch only notifications
     const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
-    const statusUrl = `http://${domain}:${eventService.port}/analyst/status`;
-
-    // Fetch analyst status for T1 and T2
-    try {
-        const statusResponse = await fetch(statusUrl);
-        if (statusResponse.ok) {
-            const statusData = await statusResponse.json();
-            const now = Math.floor(Date.now() / 1000);
-
-            // T1 Guardian
-            const t1Field = document.getElementById('guardian-next-run');
-            if (t1Field && statusData.guardian) {
-                const diff = statusData.guardian.next_run - now;
-                if (diff <= 0) {
-                    t1Field.textContent = "Next T1: Ready";
-                    t1Field.style.color = "#5eff5e";
-                } else {
-                    const mins = Math.floor(diff / 60);
-                    const secs = diff % 60;
-                    t1Field.textContent = `Next T1: ${mins}m ${secs}s`;
-                    t1Field.style.color = "#888";
-                }
-            }
-
-            // T2 Architect
-            const t2Field = document.getElementById('architect-next-run');
-            if (t2Field && statusData.architect) {
-                const diff = statusData.architect.next_run - now;
-                if (diff <= 0) {
-                    t2Field.textContent = "Next T2: Ready";
-                    t2Field.style.color = "#5eff5e";
-                } else {
-                    const mins = Math.floor(diff / 60);
-                    const secs = diff % 60;
-                    t2Field.textContent = `Next T2: ${mins}m ${secs}s`;
-                    t2Field.style.color = "#888";
-                }
-            }
-        }
-    } catch (e) { console.error("Failed to fetch analyst status", e); }
 
     try {
         const response = await fetch(notificationsUrl);

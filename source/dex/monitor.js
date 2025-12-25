@@ -3,7 +3,38 @@ import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount } fro
 
 export const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
 export const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-export const getProcessesContent = () => localStorage.getItem('service_map') ? `<div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+export const getProcessesContent = () => {
+    if (!localStorage.getItem('service_map')) {
+        return createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+    }
+    return `
+        <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 1em; color: #fff;">Analyst Status</h3>
+                <button id="analyst-reset-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Reset Analyst</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                <div class="analyst-indicator">
+                    <span style="color: #888; font-size: 0.8em;">Next T1 (Guardian)</span>
+                    <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
+                </div>
+                <div class="analyst-indicator">
+                    <span style="color: #888; font-size: 0.8em;">Next T2 (Architect)</span>
+                    <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
+                </div>
+                <div class="analyst-indicator">
+                    <span style="color: #888; font-size: 0.8em;">Next T3 (Strategist)</span>
+                    <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
+                </div>
+                <div class="analyst-indicator">
+                    <span style="color: #888; font-size: 0.8em;">System Idle</span>
+                    <span id="analyst-idle-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>
+    `;
+};
 
 export let lastServicesUpdate = null;
 export let lastModelsUpdate = null;
@@ -39,6 +70,22 @@ async function fetchProcessData() {
         return await response.json();
     } catch (error) {
         console.error('Error fetching process data:', error);
+        return null;
+    }
+}
+
+async function fetchAnalystStatus() {
+    if (!localStorage.getItem('service_map')) return null;
+    try {
+        const serviceMap = JSON.parse(localStorage.getItem('service_map'));
+        const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
+        if (!eventService) return null;
+        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
+        const url = `http://${domain}:${eventService.port}/analyst/status`;
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        return await response.json();
+    } catch (error) {
         return null;
     }
 }
@@ -213,6 +260,76 @@ export async function updateProcessesTab() {
     const widgetsContainer = document.getElementById('processes-widgets');
     if (!widgetsContainer) return;
 
+    // --- Update Analyst Status ---
+    const t1Val = document.getElementById('analyst-t1-val');
+    const t2Val = document.getElementById('analyst-t2-val');
+    const t3Val = document.getElementById('analyst-t3-val');
+    const idleVal = document.getElementById('analyst-idle-val');
+    const resetBtn = document.getElementById('analyst-reset-btn');
+
+    if (resetBtn && !resetBtn.dataset.listenerAttached) {
+        resetBtn.onclick = async () => {
+            if (!localStorage.getItem('service_map')) return;
+            const serviceMap = JSON.parse(localStorage.getItem('service_map'));
+            const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
+            if (!eventService) return;
+            const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
+            const url = `http://${domain}:${eventService.port}/analyst/reset?tier=all`;
+
+            resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Resetting...";
+            try {
+                await fetch(url, { method: 'POST' });
+                setTimeout(() => {
+                    resetBtn.innerHTML = "<i class='bx bx-check'></i> Done";
+                    setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset Analyst"; }, 2000);
+                }, 500);
+                updateProcessesTab(); // refresh immediately
+            } catch (e) {
+                resetBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
+            }
+        };
+        resetBtn.dataset.listenerAttached = "true";
+    }
+
+    const analystStatus = await fetchAnalystStatus();
+    if (analystStatus) {
+        const now = Math.floor(Date.now() / 1000);
+        
+        const updateTimer = (el, nextRun) => {
+            const diff = nextRun - now;
+            if (diff <= 0) {
+                el.textContent = "Ready";
+                el.style.color = "#5eff5e";
+            } else {
+                const mins = Math.floor(diff / 60);
+                const secs = diff % 60;
+                el.textContent = `${mins}m ${secs}s`;
+                el.style.color = "#fff";
+            }
+        };
+
+        if (t1Val && analystStatus.guardian) updateTimer(t1Val, analystStatus.guardian.next_run);
+        if (t2Val && analystStatus.architect) updateTimer(t2Val, analystStatus.architect.next_run);
+        if (t3Val && analystStatus.strategist) updateTimer(t3Val, analystStatus.strategist.next_run);
+        
+        if (idleVal && analystStatus.system_idle_time !== undefined) {
+            const idle = analystStatus.system_idle_time;
+            const mins = Math.floor(idle / 60);
+            const secs = idle % 60;
+            idleVal.textContent = `${mins}m ${secs}s`;
+            // Color code idle time: Green if > 5 mins (300s), Orange if > 1 min, Red otherwise (just an example, or keep white)
+            if (idle > 300) idleVal.style.color = "#5eff5e";
+            else if (idle > 60) idleVal.style.color = "#ffa500";
+            else idleVal.style.color = "#fff";
+        }
+    } else {
+        if(t1Val) t1Val.textContent = "Offline";
+        if(t2Val) t2Val.textContent = "Offline";
+        if(t3Val) t3Val.textContent = "Offline";
+        if(idleVal) idleVal.textContent = "Offline";
+    }
+
+    // --- Update Processes List ---
     const processes = await fetchProcessData();
 
     if (processes === null) {
@@ -224,6 +341,26 @@ export async function updateProcessesTab() {
     updateTabTimestamp(2, lastProcessesUpdate);
 
     if (processes.length === 0) {
+        // Only clear if we actually have the widgets container and no processes, 
+        // but we want to KEEP the analyst status section intact.
+        // So we should target a specific container for processes OR handle the HTML append carefully.
+        // The current structure is: Analyst Section -> Processes Container.
+        // wait, getProcessesContent returns TWO divs: .analyst-status-section and #processes-widgets.
+        // BUT widgetsContainer IS #processes-widgets based on existing code: const widgetsContainer = document.getElementById('processes-widgets');
+        
+        // Correct logic: getProcessesContent is used in the main template. 
+        // In updateProcessesTab, we look for #processes-widgets.
+        // If I change getProcessesContent to return multiple root elements, I need to make sure they are inserted correctly.
+        // Actually, window.js puts the content into .window-content.
+        
+        // Problem: getProcessesContent returns a template string with multiple top-level elements. 
+        // window.js puts this into .window-content. 
+        // updateProcessesTab grabs #processes-widgets.
+        // So my new Analyst section is OUTSIDE #processes-widgets. This is GOOD.
+        // But wait, if processes.length === 0, the existing code does:
+        // widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+        // This is fine, it only clears the process list, not the analyst status!
+        
         widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
         updateTabBadgeCount(2, 0);
         return;
