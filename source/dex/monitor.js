@@ -330,10 +330,13 @@ export async function updateProcessesTab() {
             else idleVal.style.color = "#fff";
         }
     } else {
-        if(t1Val) t1Val.textContent = "Offline";
-        if(t2Val) t2Val.textContent = "Offline";
-        if(t3Val) t3Val.textContent = "Offline";
-        if(idleVal) idleVal.textContent = "Offline";
+        const indicators = [t1Val, t2Val, t3Val, idleVal];
+        indicators.forEach(el => {
+            if (el) {
+                el.textContent = "Offline";
+                el.style.color = "#ff4d4d"; // Red for Offline
+            }
+        });
     }
 
     // --- Update Processes List ---
