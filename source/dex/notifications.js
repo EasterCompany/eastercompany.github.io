@@ -99,6 +99,31 @@ export async function updateNotificationsTab(forceReRender = false) {
 
         currentFilteredNotifications = filteredNotifications;
 
+        const getPriority = (evt) => {
+             let data = evt.event;
+             if (typeof data === 'string') {
+                 try { data = JSON.parse(data); } catch (e) { return 'low'; }
+             }
+             return (data.priority || 'low').toLowerCase();
+        };
+
+        // Build Display List with Dividers
+        const displayList = [];
+        const uniquePriorities = new Set(filteredNotifications.map(n => getPriority(n)));
+        const showDividers = uniquePriorities.size > 1;
+
+        if (filteredNotifications.length > 0) {
+            let lastPriority = null;
+            filteredNotifications.forEach(n => {
+                const p = getPriority(n);
+                if (showDividers && p !== lastPriority) {
+                    displayList.push({ id: `divider-${p}`, type: 'divider', label: p.toUpperCase() });
+                    lastPriority = p;
+                }
+                displayList.push(n);
+            });
+        }
+
         if (forceReRender) {
             notificationsContainer.innerHTML = '';
         }
@@ -235,10 +260,25 @@ export async function updateNotificationsTab(forceReRender = false) {
             return tempDiv;
         };
 
+        const createDividerElement = (item) => {
+            const div = document.createElement('div');
+            div.className = 'notification-divider';
+            div.dataset.notificationId = item.id;
+            
+            let color = '#888';
+            if (item.label === 'CRITICAL') color = '#ff4d4d';
+            else if (item.label === 'HIGH') color = '#ff8888';
+            else if (item.label === 'MEDIUM') color = '#ffa500';
+
+            div.style.cssText = `display: flex; align-items: center; gap: 15px; color: ${color}; font-size: 0.7em; font-weight: 700; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8;`;
+            div.innerHTML = `<span style="white-space: nowrap;">${item.label} PRIORITY</span><div style="height: 1px; background: linear-gradient(to right, ${color}44, transparent); flex-grow: 1;"></div>`;
+            return div;
+        };
+
         // Basic diffing and rendering logic for notifications
         const currentChildren = Array.from(notificationsContainer.children);
         const currentMap = new Map(currentChildren.map(el => [el.dataset.notificationId, el]));
-        const newIds = new Set(filteredNotifications.map(e => e.id));
+        const newIds = new Set(displayList.map(e => e.id));
 
         // Remove old notifications OR placeholders (anything without a valid current ID)
         currentChildren.forEach(child => {
@@ -250,11 +290,15 @@ export async function updateNotificationsTab(forceReRender = false) {
 
         let previousElement = null;
 
-        filteredNotifications.forEach((notificationEvent, index) => {
-            let el = currentMap.get(notificationEvent.id);
+        displayList.forEach((item, index) => {
+            let el = currentMap.get(item.id);
             if (!el || forceReRender) {
                 if (el) el.remove();
-                el = createNotificationElement(notificationEvent);
+                if (item.type === 'divider') {
+                    el = createDividerElement(item);
+                } else {
+                    el = createNotificationElement(item);
+                }
                 if (!el) return;
             }
             if (index === 0) {
