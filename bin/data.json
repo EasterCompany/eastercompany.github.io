@@ -99,6 +99,12 @@
       "commit": "30b7781",
       "binaries": {}
     },
+    "2.11.104": {
+      "type": "patch",
+      "date": "2025-12-25T18:44:13Z",
+      "commit": "5a6a6a7",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
