@@ -28,6 +28,7 @@ export const EVENT_TEMPLATES = {
     "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}",
     "analysis.link.completed": "Analyzed link: {url}",
     "analysis.visual.completed": "Analyzed image: {filename}",
+    "system.analysis.audit": "Analysis Audit: {tier}",
     "system.cli.command": "CLI Command: {command} {args} ({status})",
     "system.cli.status": "CLI Status: {message}",
     "system.notification.generated": "Notification ({priority}): {title}"
@@ -42,6 +43,11 @@ export function formatEventSummary(type, data) {
     if (type === 'system.notification.generated') {
         const priority = data.priority ? data.priority.charAt(0).toUpperCase() + data.priority.slice(1) : 'Low';
         template = `Notification (${priority}): ${data.title}`;
+    }
+    // Specific formatting for system.analysis.audit
+    if (type === 'system.analysis.audit') {
+        const tier = data.tier ? data.tier.toUpperCase() : 'UNKNOWN';
+        template = `Analysis Audit: ${tier}`;
     }
     if (!template) return type;
     let summary = template.replace(/\{(\w+)\}/g, (match, key) => {
