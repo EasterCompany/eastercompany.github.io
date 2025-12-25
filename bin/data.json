@@ -117,6 +117,12 @@
       "commit": "b55b05f",
       "binaries": {}
     },
+    "2.11.107": {
+      "type": "patch",
+      "date": "2025-12-25T18:53:23Z",
+      "commit": "7f790c7",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
