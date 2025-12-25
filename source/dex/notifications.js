@@ -44,8 +44,8 @@ export async function updateNotificationsTab(forceReRender = false) {
     if (!eventService) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
     const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    // Fetch both notifications and audits
-    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated,system.analysis.audit`;
+    // Fetch only notifications
+    const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
 
     try {
         const response = await fetch(notificationsUrl);
@@ -91,14 +91,11 @@ export async function updateNotificationsTab(forceReRender = false) {
                 } catch (e) { return null; }
             }
 
-            const type = notificationData.type;
-            const isAudit = type === 'system.analysis.audit';
-
-            const title = isAudit ? `Analysis Audit: ${notificationData.tier?.toUpperCase()}` : (notificationData.title || 'Untitled Notification');
-            const body = isAudit ? 'Raw analyst input and output logs.' : (notificationData.body || 'No description provided.');
-            const priority = isAudit ? 'low' : (notificationData.priority || 'low');
-            const isAlert = !isAudit && !!notificationData.alert;
-            const category = isAudit ? 'audit' : (notificationData.category || 'system');
+            const title = notificationData.title || 'Untitled Notification';
+            const body = notificationData.body || 'No description provided.';
+            const priority = notificationData.priority || 'low';
+            const isAlert = !!notificationData.alert;
+            const category = notificationData.category || 'system';
             const relatedEventIDs = notificationData.related_event_ids || [];
 
             const readTS = localStorage.getItem(`notification_read_ts_${notificationEvent.id}`);
@@ -110,8 +107,7 @@ export async function updateNotificationsTab(forceReRender = false) {
 
             // Styling
             let borderClass = isRead ? 'event-border-grey' : 'event-border-blue';
-            if (isAudit) borderClass = isRead ? 'event-border-grey' : 'event-border-purple';
-
+            
             if (!isRead && isAlert) borderClass = 'event-border-red';
 
             if (isRead && (priority === 'high' || priority === 'critical')) {
@@ -126,46 +122,27 @@ export async function updateNotificationsTab(forceReRender = false) {
             const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
             let detailsContent = '';
-            if (isAudit) {
-                detailsContent = `
+            
+            let relatedEventsHtml = '';
+            if (relatedEventIDs.length > 0) {
+                relatedEventsHtml = `
                     <div class="event-detail-row">
-                        <span class="detail-label">Tier:</span>
-                        <span class="detail-value">${notificationData.tier}</span>
-                    </div>
-                    <div class="event-detail-row">
-                        <span class="detail-label">Model:</span>
-                        <span class="detail-value">${notificationData.model}</span>
-                    </div>
-                    <div class="event-detail-block">
-                        <span class="detail-label">Raw Output:</span>
-                        <pre class="detail-pre">${escapeHtml(notificationData.raw_output)}</pre>
-                    </div>
-                    <div class="event-detail-block">
-                        <span class="detail-label">Raw Input (Prompt):</span>
-                        <pre class="detail-pre">${escapeHtml(notificationData.raw_input)}</pre>
-                    </div>
-                `;
-            } else {
-                let relatedEventsHtml = '';
-                if (relatedEventIDs.length > 0) {
-                    relatedEventsHtml = `
-                        <div class="event-detail-row">
-                            <span class="detail-label">Related Events:</span>
-                            <span class="detail-value">${relatedEventIDs.map(id => `<span class="related-event-id" style="font-family: monospace; opacity: 0.7;">${id.substring(0, 8)}...</span>`).join(', ')}</span>
-                        </div>`;
-                }
-                detailsContent = `
-                    <div class="event-detail-row">
-                        <span class="detail-label">Priority:</span>
-                        <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
-                    </div>
-                    <div class="event-detail-block" style="text-align: left;">
-                        <span class="detail-label">Insight:</span>
-                        <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; text-align: left;">${escapeHtml(body)}</p>
-                    </div>
-                    ${relatedEventsHtml}
-                `;
+                        <span class="detail-label">Related Events:</span>
+                        <span class="detail-value">${relatedEventIDs.map(id => `<span class="related-event-id" style="font-family: monospace; opacity: 0.7;">${id.substring(0, 8)}...</span>`).join(', ')}</span>
+                    </div>`;
             }
+            detailsContent = `
+                <div class="event-detail-row">
+                    <span class="detail-label">Priority:</span>
+                    <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
+                </div>
+                <div class="event-detail-block" style="text-align: left;">
+                    <span class="detail-label">Insight:</span>
+                    <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; text-align: left;">${escapeHtml(body)}</p>
+                </div>
+                ${relatedEventsHtml}
+            `;
+            
 
             const tempDiv = document.createElement('div');
             tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer`;
@@ -210,7 +187,7 @@ export async function updateNotificationsTab(forceReRender = false) {
                     <div class="event-message">${title}</div>
                     <div class="event-details" style="${detailsStyle}">
                         <div class="event-details-header">
-                            <h4>${isAudit ? 'Audit' : (isAlert ? 'Alert' : 'Notification')} Details</h4>
+                            <h4>${isAlert ? 'Alert' : 'Notification'} Details</h4>
                             <i class="bx bx-x close-details-btn"></i>
                         </div>
                         ${detailsContent}
