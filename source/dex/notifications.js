@@ -71,6 +71,32 @@ export async function updateNotificationsTab(forceReRender = false) {
             return (now - readTS) < persistenceThreshold; // Keep if read within last 24h
         });
 
+        // Sort: Priority (Desc) -> Time (Desc)
+        filteredNotifications.sort((a, b) => {
+            const getPriority = (evt) => {
+                let data = evt.event;
+                if (typeof data === 'string') {
+                    try { data = JSON.parse(data); } catch (e) { return 'low'; }
+                }
+                return (data.priority || 'low').toLowerCase();
+            };
+
+            const score = (p) => {
+                if (p === 'critical') return 4;
+                if (p === 'high') return 3;
+                if (p === 'medium') return 2;
+                return 1;
+            };
+
+            const scoreA = score(getPriority(a));
+            const scoreB = score(getPriority(b));
+
+            if (scoreA !== scoreB) {
+                return scoreB - scoreA; // Higher priority first
+            }
+            return b.timestamp - a.timestamp; // Newer timestamp first
+        });
+
         currentFilteredNotifications = filteredNotifications;
 
         if (forceReRender) {
