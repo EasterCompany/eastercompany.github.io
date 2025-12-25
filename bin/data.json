@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.115.main.d63fc90.2025-12-25.linux-amd64.d63fc90",
-    "dev": "2.8.115.main.d63fc90.2025-12-25.linux-amd64.d63fc90"
+    "user": "2.8.116.main.dff0cec.2025-12-25.linux-amd64.dff0cec",
+    "dev": "2.8.116.main.dff0cec.2025-12-25.linux-amd64.dff0cec"
   },
   "releases": {
     "0.0.0": {
@@ -676,6 +676,20 @@
             "path": "/bin/2.8.115/dex-tts-service",
             "size": 15648737,
             "checksum": "d43d2e5beb8d9dde43f9e81b5c16be6bb96f5d10e46dbc6e33a26eca7d2f92a8"
+          }
+        }
+      }
+    },
+    "2.8.116": {
+      "type": "patch",
+      "date": "2025-12-25T21:25:38Z",
+      "commit": "d256d19",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.116/dex",
+            "size": 16561679,
+            "checksum": "4d7fc3c27264b91e70ec640d1d2223ccac2beb9d3fef0b2d8cb590b9790bc21d"
           }
         }
       }
@@ -1628,8 +1642,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.115.main.d63fc90.2025-12-25.linux-amd64.d63fc90",
-      "user": "2.8.115.main.d63fc90.2025-12-25.linux-amd64.d63fc90",
+      "current": "2.8.116.main.dff0cec.2025-12-25.linux-amd64.dff0cec",
+      "user": "2.8.116.main.dff0cec.2025-12-25.linux-amd64.dff0cec",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
