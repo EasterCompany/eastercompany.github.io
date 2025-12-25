@@ -37,7 +37,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
     if (!eventService) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
     const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    const blueprintsUrl = `http://${domain}:${eventService.port}/events?ml=100&format=json&event.type=system.blueprint.generated`;
+    const blueprintsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.blueprint.generated`;
 
     try {
         const response = await fetch(blueprintsUrl);
