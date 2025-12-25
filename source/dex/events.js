@@ -71,12 +71,12 @@ export async function updateEventsTimeline(forceReRender = false) {
             }
 
             const type = eventData.type;
-            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command';
+            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command' || type === 'system.analysis.audit';
             let borderClass = 'event-border-grey';
             if (isExpandable) {
                 if (type === 'moderation.explicit_content.deleted') {
                     borderClass = 'event-border-red';
-                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed') {
+                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.analysis.audit') {
                     borderClass = 'event-border-purple';
                 } else if (type === 'system.cli.command') {
                     borderClass = 'event-border-orange';
@@ -207,6 +207,25 @@ export async function updateEventsTimeline(forceReRender = false) {
                         <div class="event-detail-block">
                             <span class="detail-label">Output:</span>
                             <pre class="detail-pre">${escapeHtml(eventData.output) || 'No output recorded.'}</pre>
+                        </div>
+                    `;
+                } else if (type === 'system.analysis.audit') {
+                     detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Tier:</span>
+                            <span class="detail-value">${eventData.tier}</span>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Model:</span>
+                            <span class="detail-value">${eventData.model}</span>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Raw Output:</span>
+                            <pre class="detail-pre">${escapeHtml(eventData.raw_output)}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Raw Input (Prompt):</span>
+                            <pre class="detail-pre">${escapeHtml(eventData.raw_input)}</pre>
                         </div>
                     `;
                 } else if (type === 'messaging.user.sent_message') {
