@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.116.main.dff0cec.2025-12-25.linux-amd64.dff0cec",
-    "dev": "2.8.116.main.dff0cec.2025-12-25.linux-amd64.dff0cec"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -127,6 +127,12 @@
       "type": "patch",
       "date": "2025-12-25T18:54:18Z",
       "commit": "34f206a",
+      "binaries": {}
+    },
+    "2.11.110": {
+      "type": "patch",
+      "date": "2025-12-25T23:16:52Z",
+      "commit": "d1d6c68",
       "binaries": {}
     },
     "2.11.54": {
