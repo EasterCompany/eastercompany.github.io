@@ -294,8 +294,15 @@ export async function updateProcessesTab() {
     const analystStatus = await fetchAnalystStatus();
     if (analystStatus) {
         const now = Math.floor(Date.now() / 1000);
+        const activeTier = analystStatus.active_tier;
         
-        const updateTimer = (el, nextRun) => {
+        const updateTimer = (el, nextRun, tierName) => {
+            if (activeTier === tierName || (tierName === 'guardian' && activeTier === 'tests')) {
+                el.textContent = "Working";
+                el.style.color = "#bb86fc"; // Purple for Analyst activity
+                return;
+            }
+
             const diff = nextRun - now;
             if (diff <= 0) {
                 el.textContent = "Ready";
@@ -308,9 +315,9 @@ export async function updateProcessesTab() {
             }
         };
 
-        if (t1Val && analystStatus.guardian) updateTimer(t1Val, analystStatus.guardian.next_run);
-        if (t2Val && analystStatus.architect) updateTimer(t2Val, analystStatus.architect.next_run);
-        if (t3Val && analystStatus.strategist) updateTimer(t3Val, analystStatus.strategist.next_run);
+        if (t1Val && analystStatus.guardian) updateTimer(t1Val, analystStatus.guardian.next_run, 'guardian');
+        if (t2Val && analystStatus.architect) updateTimer(t2Val, analystStatus.architect.next_run, 'architect');
+        if (t3Val && analystStatus.strategist) updateTimer(t3Val, analystStatus.strategist.next_run, 'strategist');
         
         if (idleVal && analystStatus.system_idle_time !== undefined) {
             const idle = analystStatus.system_idle_time;
