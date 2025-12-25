@@ -87,6 +87,12 @@
       "commit": "a0aea4e",
       "binaries": {}
     },
+    "2.11.101": {
+      "type": "patch",
+      "date": "2025-12-25T17:59:51Z",
+      "commit": "026f271",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
