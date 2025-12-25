@@ -265,7 +265,7 @@ export async function updateNotificationsTab(forceReRender = false) {
             div.className = 'notification-divider';
             div.dataset.notificationId = item.id;
             
-            let color = '#888';
+            let color = '#aaa';
             if (item.label === 'CRITICAL') color = '#ff4d4d';
             else if (item.label === 'HIGH') color = '#ff8888';
             else if (item.label === 'MEDIUM') color = '#ffa500';
