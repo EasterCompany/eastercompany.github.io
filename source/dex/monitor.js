@@ -1,5 +1,5 @@
 // System Monitor Logic (Services, Models, Processes)
-import { createPlaceholderMessage, smartFetch, LOCAL_EVENT_SERVICE } from './utils.js';
+import { createPlaceholderMessage, smartFetch, LOCAL_EVENT_SERVICE, getGlassyLoader } from './utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 
 export const getSystemContent = () => {
@@ -46,19 +46,19 @@ export const getSystemContent = () => {
             <i class='bx bxs-component' style="color: #03dac6;"></i>
             <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Live Processes</h2>
         </div>
-        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p>Loading processes...</p></div>
+        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;">${getGlassyLoader()}</div>
 
         <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Services</h2>
         </div>
-        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p>Loading services...</p></div>
+        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;">${getGlassyLoader()}</div>
 
         <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
             <i class='bx bxs-brain' style="color: #03dac6;"></i>
             <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Cognitive Models</h2>
         </div>
-        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p>Loading models...</p></div>
+        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;">${getGlassyLoader()}</div>
 
         <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
@@ -66,7 +66,7 @@ export const getSystemContent = () => {
             <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
         <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
-            <p style="color: #ccc; font-size: 0.9em; margin: 0;">Loading hardware info...</p>
+            ${getGlassyLoader()}
         </div>
 
         <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
@@ -88,9 +88,9 @@ export async function updateSystemTab() {
     await updateLogs();
 }
 
-export const getServicesContent = () => `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>`;
-export const getModelsContent = () => `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>`;
-export const getProcessesContent = () => `<div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>`;
+export const getServicesContent = () => `<div id="services-widgets" class="system-monitor-widgets">${getGlassyLoader()}</div>`;
+export const getModelsContent = () => `<div id="models-widgets" class="system-monitor-widgets">${getGlassyLoader()}</div>`;
+export const getProcessesContent = () => `<div id="processes-widgets" class="system-monitor-widgets">${getGlassyLoader()}</div>`;
 
 export let lastServicesUpdate = null;
 export let lastModelsUpdate = null;
@@ -223,8 +223,9 @@ export async function updateSystemMonitor() {
             };
             hardwareRefreshBtn.dataset.listenerAttached = "true";
         }
-        const loadingP = hardwareContainer.querySelector('p');
-        if (loadingP && loadingP.textContent === "Loading hardware info...") {
+        
+        // Initial Load (only if showing the glassy loader placeholder)
+        if (hardwareContainer.querySelector('.glassy-loader-container')) {
             const hwData = await fetchHardwareData();
             renderHardwareWidgets(hwData);
         }
@@ -398,7 +399,7 @@ export async function updateProcessesTab() {
     if (processes === null) { widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.'); return; }
     lastProcessesUpdate = Date.now();
     if (processes.length === 0) { widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.'); return; }
-    if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('p')) widgetsContainer.innerHTML = '';
+    if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('.glassy-loader-container')) widgetsContainer.innerHTML = '';
 
     function generateProcessWidgetHtml(proc) {
         const duration = Math.floor((Date.now() / 1000) - proc.start_time);

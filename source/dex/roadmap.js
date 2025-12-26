@@ -1,5 +1,5 @@
 // Roadmap Tab Logic
-import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch, getGlassyLoader } from './utils.js';
 
 export const getRoadmapContent = () => `
   <div class="notifications-actions">
@@ -15,7 +15,7 @@ export const getRoadmapContent = () => `
     </div>
   </div>
   <div id="roadmap-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-    <p>Loading roadmap...</p>
+    ${getGlassyLoader()}
   </div>
 `;
 
