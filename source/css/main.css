@@ -1713,7 +1713,7 @@ footer.hide {
     padding: 10px 15px;
     flex-wrap: wrap;
     justify-content: center;
-    position: sticky;
+    position: static;
 }
 
 .notif-action-btn {

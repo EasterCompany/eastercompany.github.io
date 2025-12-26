@@ -1,25 +1,5 @@
 // Easter Company - Logs
-
-// Standardized error/placeholder message component
-function createPlaceholderMessage(type, message, actionText = null) {
-    const iconMap = {
-        'config': 'bx-cog',
-        'error': 'bx-error-circle',
-        'empty': 'bx-info-circle',
-        'offline': 'bx-wifi-off'
-    };
-
-    const icon = iconMap[type] || 'bx-info-circle';
-    const actionHtml = actionText ? `<p class="placeholder-action">${actionText}</p>` : '';
-
-    return `
-        <div class="tab-placeholder">
-            <i class='bx ${icon} placeholder-icon'></i>
-            <p class="placeholder-message">${message}</p>
-            ${actionHtml}
-        </div>
-    `;
-}
+import { smartFetch, ansiToHtml } from './utils.js';
 
 export function getLogsContent() {
     return `
@@ -38,84 +18,17 @@ export async function updateLogs() {
     // Reset class state
     logsContainer.classList.remove('placeholder-active');
 
-    const serviceMapString = localStorage.getItem('service_map');
-    if (!serviceMapString) {
-        logsContainer.classList.add('placeholder-active');
-        logsContainer.innerHTML = createPlaceholderMessage(
-            'config',
-            'No service map configured.',
-            'Please upload your service-map.json in Settings to enable log monitoring.'
-        );
-        return false;
-    }
-
-    let serviceMapData;
     try {
-        serviceMapData = JSON.parse(serviceMapString);
-    } catch (e) {
-        console.error("Error parsing service_map from localStorage:", e);
-        logsContainer.classList.add('placeholder-active');
-        logsContainer.innerHTML = createPlaceholderMessage(
-            'error',
-            'Invalid service map data.',
-            'Please re-upload a valid service-map.json file in Settings.'
-        );
-        return false;
-    }
-
-    // Find the event service
-    let eventService = null;
-    if (serviceMapData && typeof serviceMapData.services === 'object') {
-        const serviceGroups = ['cs', 'be', 'th'];
-        for (const group of serviceGroups) {
-            if (Array.isArray(serviceMapData.services[group])) {
-                const found = serviceMapData.services[group].find(s => s.short_name === 'event' || s.id === 'event' || s.id === 'dex-event-service');
-                if (found) {
-                    eventService = found;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!eventService) {
-        logsContainer.classList.add('placeholder-active');
-        logsContainer.innerHTML = createPlaceholderMessage(
-            'error',
-            'Event service not found in service map.',
-            'Please ensure dex-event-service is configured in your service-map.json.'
-        );
-        return false;
-    }
-
-    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    const logsUrl = `http://${domain}:${eventService.port}/logs`;
-
-    try {
-        const response = await fetch(logsUrl);
-        if (!response.ok) {
-            logsContainer.classList.add('placeholder-active');
-            logsContainer.innerHTML = createPlaceholderMessage(
-                'offline',
-                'Event service is offline.',
-                'Please ensure the event service is running.'
-            );
-            return false;
-        }
+        const response = await smartFetch('/logs');
+        if (!response.ok) throw new Error('Logs offline');
 
         const logsData = await response.json();
         if (!logsData || logsData.length === 0) {
-            logsContainer.classList.add('placeholder-active');
-            logsContainer.innerHTML = createPlaceholderMessage(
-                'empty',
-                'No logs found.',
-                'Service logs will appear here when available.'
-            );
+            logsContainer.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 20px;">No logs found.</p>';
             return false;
         }
 
         const hiddenServiceIDs = ["local-ollama-0", "local-cache-0", "cloud-cache-0", "cloud-cache-1"];
-
         const filteredLogsData = logsData.filter(logReport => !hiddenServiceIDs.includes(logReport.id));
 
         // Reverse the order of log reports so newest appear at the top
@@ -129,13 +42,15 @@ export async function updateLogs() {
         filteredLogsData.reverse();
 
         const logsHtml = filteredLogsData.map(logReport => {
-            const logs = logReport.logs.join('\n');
+            const rawLogs = logReport.logs.join('\n');
+            const styledLogs = logReport.logs.map(line => ansiToHtml(line)).join('\n');
+            
             return `
                 <div class="log-report">
                     <div class="log-report-header">
                         <h3>${logReport.id}</h3>
                         <div style="display: flex; gap: 5px;">
-                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(logs)}" title="Copy Logs">
+                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(rawLogs)}" title="Copy Logs">
                                 <i class="bx bx-copy"></i>
                             </button>
                             <button class="log-action-btn delete clear-logs-btn" data-service-id="${logReport.id}" title="Clear Logs">
@@ -143,7 +58,7 @@ export async function updateLogs() {
                             </button>
                         </div>
                     </div>
-                    <pre class="log-content">${logs}</pre>
+                    <pre class="log-content">${styledLogs}</pre>
                 </div>
             `;
         }).join('');
@@ -172,13 +87,10 @@ export async function updateLogs() {
                 const serviceId = btn.dataset.serviceId;
                 if (!confirm(`Are you sure you want to clear logs for ${serviceId}?`)) return;
 
-                const clearUrl = `http://${domain}:${eventService.port}/logs?service_id=${serviceId}`;
                 try {
-                    const res = await fetch(clearUrl, { method: 'DELETE' });
+                    const res = await smartFetch(`/logs?service_id=${serviceId}`, { method: 'DELETE' });
                     if (res.ok) {
                         updateLogs(); // Refresh
-                    } else {
-                        console.error("Failed to clear logs");
                     }
                 } catch (e) {
                     console.error("Error clearing logs:", e);
@@ -191,12 +103,7 @@ export async function updateLogs() {
 
     } catch (error) {
         console.error('Error fetching logs:', error);
-        logsContainer.classList.add('placeholder-active');
-        logsContainer.innerHTML = createPlaceholderMessage(
-            'offline',
-            'Failed to load logs.',
-            'The event service may be offline, unreachable, or blocked by a browser extension (e.g., ad blocker).'
-        );
+        logsContainer.innerHTML = '<p style="text-align: center; color: #cf6679; padding: 20px;">Failed to load logs.</p>';
         return false;
     }
 }
