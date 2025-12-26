@@ -80,12 +80,15 @@ function onReady() {
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
           if (isStretched) {
-              navbar?.classList.add('window-open'); // 'window-open' now acts as 'stretched' in CSS
+              navbar?.classList.add('window-open');
+              if (container) container.style.paddingTop = '60px'; // SNAP
           } else {
               navbar?.classList.remove('window-open');
+              if (container) container.style.paddingTop = '100px'; // FLOAT
           }
       } else {
           navbar?.classList.remove('window-open');
+          if (container) container.style.paddingTop = '100px';
           // Only show footer on specific pages when no windows are open
           if (isRoot || isErrorPage) {
               footer?.classList.remove('hide');
