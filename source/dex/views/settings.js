@@ -62,7 +62,7 @@ export function getSettingsContent() {
 }
 
 export function attachSettingsListeners(settingsWindowInstance) {
-    const settingsContent = document.querySelector('#main-window .window-content');
+    const settingsContent = document.querySelector('#settings-window .window-content');
     if (!settingsContent) return;
 
     settingsContent.querySelectorAll('.theme-card').forEach(card => {
