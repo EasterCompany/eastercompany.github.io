@@ -1,6 +1,7 @@
 // Events Timeline Logic
 import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } from './utils.js';
 import { formatEventSummary } from './templates.js';
+import { updateContactsTab } from './contacts.js';
 
 export const getEventsContent = () => `
     <div class="notifications-actions">
@@ -111,6 +112,18 @@ export async function updateEventsTimeline(forceReRender = false) {
 
         const data = await response.json();
         const allEvents = data.events || [];
+
+        // Check for join server events to trigger contact refresh
+        const hasJoinEvent = allEvents.some(e => {
+            let eventData = e.event;
+            if (typeof eventData === 'string') {
+                try { eventData = JSON.parse(eventData); } catch (err) { return false; }
+            }
+            return eventData.type === 'messaging.user.joined_server';
+        });
+        if (hasJoinEvent) {
+            updateContactsTab();
+        }
         
         // Filter events client-side based on category
         let filteredEvents = allEvents;
@@ -252,11 +265,9 @@ export async function updateEventsTimeline(forceReRender = false) {
                 } else if (type === 'analysis.visual.completed') {
                     let imageHtml = '';
                     if (eventData.base64_preview) {
-                        imageHtml = 
-                        `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`
+                        imageHtml = `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
                     } else if (eventData.url) {
-                        imageHtml = 
-                        `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`
+                        imageHtml = `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
                     }
 
                     detailsContent = `

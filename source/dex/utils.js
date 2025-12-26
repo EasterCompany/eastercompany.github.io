@@ -69,6 +69,8 @@ export function getEventServiceUrl() {
     return 'https://event.easter.company';
 }
 
+export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
+
 /**
  * Resolves the primary production URL or the local fallback for Discord service.
  */

@@ -93,8 +93,21 @@ function onReady() {
     }
   }
 
+  async function refreshActiveTabData(forceReRender = false) {
+    if (!mainWindow.isOpen()) return;
+    
+    const activeIndex = mainWindow.getActiveTabIndex();
+    switch (activeIndex) {
+      case 0: await updateNotificationsTab(forceReRender); break;
+      case 1: await updateEventsTimeline(forceReRender); break;
+      case 2: await updateIdeasTab(forceReRender); break;
+      case 3: await updateSystemTab(forceReRender); break;
+      // case 4 (Contacts) is now handled by a 10m interval or event-driven triggers
+    }
+  }
+
   async function initializeMainWindow() {
-    // Initial fetch for all tabs
+    // Initial fetch for everything once on open
     await Promise.all([
       updateNotificationsTab(),
       updateEventsTimeline(),
@@ -106,24 +119,28 @@ function onReady() {
     // Update timestamps every second
     const timestampInterval = setInterval(() => {
       if (!mainWindow.isOpen()) return clearInterval(timestampInterval);
-      updateTabTimestamp(0, lastNotificationsUpdate);
-      updateTabTimestamp(1, lastEventsUpdate);
-      // Ideas uses Roadmap/Blueprints timestamps internally
-      updateTabTimestamp(3, lastProcessesUpdate);
-      updateTabTimestamp(3, lastServicesUpdate);
-      updateTabTimestamp(3, lastModelsUpdate);
-      updateTabTimestamp(4, lastContactsUpdate);
+      const activeIndex = mainWindow.getActiveTabIndex();
+      if (activeIndex === 0) updateTabTimestamp(0, lastNotificationsUpdate);
+      if (activeIndex === 1) updateTabTimestamp(1, lastEventsUpdate);
+      if (activeIndex === 3) {
+          updateTabTimestamp(3, lastProcessesUpdate);
+          updateTabTimestamp(3, lastServicesUpdate);
+          updateTabTimestamp(3, lastModelsUpdate);
+      }
+      if (activeIndex === 4) updateTabTimestamp(4, lastContactsUpdate);
     }, 1000);
 
-    // Frequent updates (3s)
+    // Frequent updates (3s) - ONLY for high-velocity data
     const refreshInterval = setInterval(() => {
       if (!mainWindow.isOpen()) return clearInterval(refreshInterval);
-      updateNotificationsTab();
-      updateEventsTimeline();
-      updateIdeasTab();
-      updateSystemTab();
-      updateContactsTab();
+      refreshActiveTabData();
     }, 3000);
+
+    // Infrequent updates (10m) - For Contacts
+    const contactsInterval = setInterval(() => {
+      if (!mainWindow.isOpen()) return clearInterval(contactsInterval);
+      updateContactsTab();
+    }, 600000);
   }
 
   // Define windows
@@ -150,6 +167,9 @@ function onReady() {
     onOpen: () => {
         initializeMainWindow();
         setTimeout(() => attachSettingsListeners(mainWindow), 50);
+    },
+    onTabChange: () => {
+        refreshActiveTabData(true);
     }
   });
 
