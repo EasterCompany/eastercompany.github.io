@@ -40,6 +40,8 @@ function onReady() {
 
   // --- Advanced Grid Window Manager Logic ---
   let activeWindows = [];
+  const container = document.getElementById('windows-container');
+  if (container) container.setAttribute('data-count', '0');
 
   function getWindowLimit() {
       const w = window.innerWidth;
