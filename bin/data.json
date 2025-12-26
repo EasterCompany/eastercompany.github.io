@@ -46,6 +46,20 @@
         }
       }
     },
+    "0.0.21": {
+      "type": "patch",
+      "date": "2025-12-26T01:05:28Z",
+      "commit": "aaaf317",
+      "binaries": {
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/0.0.21/dex-tts-service",
+            "size": 15648775,
+            "checksum": "fe1ffd47fb31218ad40298d7fc69f0bb40d8f1e63f70c9d4c2ff9aafd933c97f"
+          }
+        }
+      }
+    },
     "2.11.0": {
       "type": "minor",
       "date": "2025-12-08T22:28:20Z",
@@ -1663,8 +1677,8 @@
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
-      "current": "0.0.17",
-      "user": "0.0.17",
+      "current": "0.0.21",
+      "user": "0.0.21",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
