@@ -1,7 +1,21 @@
 // System Monitor Logic (Services, Models, Processes)
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount } from './utils.js';
 
-export const getServicesContent = () => localStorage.getItem('service_map') ? `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+export const getServicesContent = () => {
+    if (!localStorage.getItem('service_map')) {
+        return createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+    }
+    return `
+        <div class="hardware-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 1em; color: #fff;">System Hardware</h3>
+                <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Refresh</button>
+            </div>
+            <pre id="hardware-info-content" style="color: #ccc; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; white-space: pre-wrap; margin: 0; max-height: 200px; overflow-y: auto;">Loading hardware info...</pre>
+        </div>
+        <div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>
+    `;
+};
 export const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
 export const getProcessesContent = () => {
     if (!localStorage.getItem('service_map')) {
@@ -57,6 +71,23 @@ async function fetchSystemData() {
     }
 }
 
+async function fetchHardwareData() {
+    if (!localStorage.getItem('service_map')) return null;
+    try {
+        const serviceMap = JSON.parse(localStorage.getItem('service_map'));
+        const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
+        if (!eventService) return null;
+        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
+        const url = `http://${domain}:${eventService.port}/system/hardware`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching hardware data:', error);
+        return null;
+    }
+}
+
 async function fetchProcessData() {
     if (!localStorage.getItem('service_map')) return null;
     try {
@@ -92,6 +123,40 @@ async function fetchAnalystStatus() {
 
 export async function updateSystemMonitor() {
     const widgetsContainer = document.getElementById('services-widgets');
+    const hardwareContainer = document.getElementById('hardware-info-content');
+    const hardwareRefreshBtn = document.getElementById('hardware-refresh-btn');
+
+    // Handle Hardware Widget
+    if (hardwareContainer && hardwareRefreshBtn) {
+        // Setup Refresh Button
+        if (!hardwareRefreshBtn.dataset.listenerAttached) {
+            hardwareRefreshBtn.onclick = async () => {
+                hardwareRefreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Refreshing...";
+                const hwData = await fetchHardwareData();
+                if (hwData && hwData.output) {
+                    hardwareContainer.textContent = hwData.output;
+                    hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
+                    setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
+                } else {
+                    hardwareContainer.textContent = "Failed to load hardware info.";
+                    hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
+                    setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
+                }
+            };
+            hardwareRefreshBtn.dataset.listenerAttached = "true";
+        }
+
+        // Initial Load (only if showing "Loading...")
+        if (hardwareContainer.textContent === "Loading hardware info...") {
+            const hwData = await fetchHardwareData();
+            if (hwData && hwData.output) {
+                hardwareContainer.textContent = hwData.output;
+            } else {
+                hardwareContainer.textContent = "Failed to load hardware info.";
+            }
+        }
+    }
+
     if (!widgetsContainer) return;
 
     const data = await fetchSystemData();
