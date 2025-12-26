@@ -48,6 +48,18 @@ export function getSettingsContent() {
                         </div>
                     </div>
 
+                    <!-- Contributor Profile -->
+                    <div class="user-profile-section" style="background: rgba(255, 165, 0, 0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 165, 0, 0.2); display: flex; align-items: center; gap: 15px;">
+                        <div class="user-avatar" style="width: 50px; height: 50px; background: #ffa500; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #000; font-weight: bold; flex-shrink: 0;">
+                            C
+                        </div>
+                        <div class="user-info" style="text-align: left; overflow: hidden;">
+                            <h3 style="margin: 0; font-size: 1em; color: #eee; text-align: left;">Contributor</h3>
+                            <p style="margin: 2px 0 0 0; font-size: 0.85em; color: #ffa500; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">dev@easter.company</p>
+                            <p style="margin: 6px 0 0 0; font-family: monospace; font-size: 0.7em; opacity: 0.5; text-align: left;">UUID: 294857103462109285</p>
+                        </div>
+                    </div>
+
                     <!-- User Profile -->
                     <div class="user-profile-section" style="background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 15px;">
                         <div class="user-avatar" style="width: 50px; height: 50px; background: #666; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #000; font-weight: bold; flex-shrink: 0;">
@@ -57,6 +69,18 @@ export function getSettingsContent() {
                             <h3 style="margin: 0; font-size: 1em; color: #eee; text-align: left;">User</h3>
                             <p style="margin: 2px 0 0 0; font-size: 0.85em; color: #888; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">bashful@bashful.sh</p>
                             <p style="margin: 6px 0 0 0; font-family: monospace; font-size: 0.7em; opacity: 0.5; text-align: left;">UUID: 742895103462109285</p>
+                        </div>
+                    </div>
+
+                    <!-- Anyone Profile -->
+                    <div class="user-profile-section" style="background: rgba(255, 255, 255, 0.01); padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.03); display: flex; align-items: center; gap: 15px;">
+                        <div class="user-avatar" style="width: 50px; height: 50px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: #666; font-weight: bold; flex-shrink: 0;">
+                            *
+                        </div>
+                        <div class="user-info" style="text-align: left; overflow: hidden;">
+                            <h3 style="margin: 0; font-size: 1em; color: #888; text-align: left;">Anyone</h3>
+                            <p style="margin: 2px 0 0 0; font-size: 0.85em; color: #555; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">public@easter.company</p>
+                            <p style="margin: 6px 0 0 0; font-family: monospace; font-size: 0.7em; opacity: 0.3; text-align: left;">UUID: 000000000000000000</p>
                         </div>
                     </div>
                 </div>

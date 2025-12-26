@@ -180,6 +180,7 @@ export async function updateEventsTimeline(forceReRender = false) {
             const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
             const summary = formatEventSummary(type, eventData);
+            const userLevel = eventData.user_level ? `<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${eventData.user_level})</span>` : '';
 
             let detailsHtml = '';
             if (isExpandable) {
@@ -439,7 +440,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                 <div class="event-content">
                     <div class="event-service">
                         <span class="event-category-tag cat-${category}">${category}</span>
-                        ${event.service}
+                        ${event.service} ${userLevel}
                     </div>
                     <div class="event-message">${summary}</div>
                     ${detailsHtml}
