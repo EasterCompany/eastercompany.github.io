@@ -1,5 +1,5 @@
 // Easter Company - Universal JS Entrypoint
-import { applyBaseStyles, injectNavbar, injectFooter } from './styler.js';
+import { applyBaseStyles, injectNavbar } from './styler.js';
 import { createWindow } from './Window.js';
 import { isLoggedIn, login } from './auth.js';
 import { initTheme } from './theme.js';
@@ -9,6 +9,8 @@ import { getContactsContent, updateContactsTab } from './contacts.js';
 import { getEventsContent, updateEventsTimeline } from './events.js';
 import { getSystemContent, updateSystemTab } from './monitor.js';
 import { getSettingsContent, attachSettingsListeners } from './settings.js';
+import { getErrorContent, attachErrorListeners } from './ErrorView.js';
+import { injectSocialsBar } from './SocialsBar.js';
 import { initCliDashboard } from './cli.js';
 import { getEventServiceUrl } from './utils.js';
 
@@ -30,68 +32,95 @@ function onReady() {
   initTheme();
   applyBaseStyles();
   
-  // Initialize CLI Dashboard if on dex.html
+  // If we are on a 404 page, render the ErrorView component
+  const errorContainer = document.getElementById('error-main-view');
+  if (errorContainer) {
+      errorContainer.innerHTML = getErrorContent();
+      attachErrorListeners();
+  }
+
   if (window.location.pathname.includes('/dex')) {
       initCliDashboard();
   }
 
   const loggedIn = isLoggedIn();
   injectNavbar(loggedIn);
-  injectFooter();
+  injectSocialsBar();
 
-  // --- Window Management ---
-  const footer = document.querySelector('footer');
+  // --- Window & State Management ---
+  const footer = document.getElementById('main-socials-bar');
+  const navbar = document.getElementById('main-navbar');
+  const closeBtn = document.getElementById('nav-window-close');
   let openWindow = null;
+  let activeRefreshInterval = null;
+  let activeContactsInterval = null;
+
+  function stopAllIntervals() {
+      if (activeRefreshInterval) clearInterval(activeRefreshInterval);
+      if (activeContactsInterval) clearInterval(activeContactsInterval);
+      activeRefreshInterval = null;
+      activeContactsInterval = null;
+  }
 
   function onWindowClose() {
+    stopAllIntervals();
     openWindow = null;
     footer?.classList.remove('hide');
-    document.querySelectorAll('.nav-right i').forEach(icon => icon.classList.remove('active', 'inactive'));
+    navbar?.classList.remove('window-open');
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
   }
+
+  // Navbar Close Listener
+  closeBtn?.addEventListener('click', () => {
+      if (openWindow) openWindow.close();
+  });
 
   function handleWindow(windowInstance, clickedIcon = null, tabIndex = null) {
     const isCurrentlyOpen = openWindow && openWindow.id === windowInstance.id;
+    const isSameTab = openWindow && openWindow.activeTabIndex === tabIndex;
+
+    if (isCurrentlyOpen && isSameTab) {
+        windowInstance.close();
+        return;
+    }
     
-    // In the new tab-less system, we just set the content directly
+    // Smooth transition between windows/tabs
     if (openWindow) {
-      openWindow.close(isCurrentlyOpen ? false : true);
+      openWindow.close(true); // Immediate-style transition
     }
 
-    if (!isCurrentlyOpen) {
-      setTimeout(() => {
-        // Set content BEFORE opening
-        if (tabIndex === 0) windowInstance.setContent(getNotificationsContent());
-        else if (tabIndex === 1) windowInstance.setContent(getEventsContent());
-        else if (tabIndex === 2) windowInstance.setContent(getIdeasContent());
-        else if (tabIndex === 3) windowInstance.setContent(getSystemContent());
-        else if (tabIndex === 4) windowInstance.setContent(getContactsContent());
-        else if (tabIndex === 5) windowInstance.setContent(getSettingsContent());
+    if (!isCurrentlyOpen || !isSameTab) {
+      navbar?.classList.add('window-open');
+      
+      // Load content
+      if (tabIndex === 0) windowInstance.setContent(getNotificationsContent());
+      else if (tabIndex === 1) windowInstance.setContent(getEventsContent());
+      else if (tabIndex === 2) windowInstance.setContent(getIdeasContent());
+      else if (tabIndex === 3) windowInstance.setContent(getSystemContent());
+      else if (tabIndex === 4) windowInstance.setContent(getContactsContent());
+      else if (tabIndex === 5) windowInstance.setContent(getSettingsContent());
 
-        windowInstance.open();
-        openWindow = windowInstance;
-        windowInstance.activeTabIndex = tabIndex; // Store for refresh logic
+      windowInstance.activeTabIndex = tabIndex;
+      windowInstance.open();
+      openWindow = windowInstance;
 
-        document.querySelectorAll('.nav-right i').forEach(icon => {
-          const isActive = icon === clickedIcon;
-          icon.classList.toggle('active', isActive);
-          icon.classList.toggle('inactive', !isActive && clickedIcon);
-        });
-        footer?.classList.add('hide');
-        
-        // Immediate refresh for the new "tab"
-        refreshActiveTabData();
-        if (tabIndex === 5) attachSettingsListeners(windowInstance);
-      }, openWindow ? 220 : 0);
-    } else {
-      // If clicking same icon while open, close it
-      openWindow = null;
+      // Update navbar state
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        const isActive = parseInt(tab.dataset.tabIndex) === tabIndex;
+        tab.classList.toggle('active', isActive);
+      });
+
+      footer?.classList.add('hide');
+      refreshActiveTabData();
+      
+      if (tabIndex === 5) attachSettingsListeners(windowInstance);
     }
   }
 
   async function refreshActiveTabData(forceReRender = false) {
-    if (!mainWindow.isOpen()) return;
+    if (!openWindow || !openWindow.isOpen()) return;
     
-    const activeIndex = mainWindow.activeTabIndex;
+    const activeIndex = openWindow.activeTabIndex;
     switch (activeIndex) {
       case 0: await updateNotificationsTab(forceReRender); break;
       case 1: await updateEventsTimeline(forceReRender); break;
@@ -101,25 +130,23 @@ function onReady() {
     }
   }
 
-  async function initializeMainWindow() {
-    // Frequent updates (3s) - ONLY for high-velocity data
-    const refreshInterval = setInterval(() => {
-      if (!mainWindow.isOpen()) return clearInterval(refreshInterval);
-      refreshActiveTabData();
+  function startMainWindowPolling() {
+    stopAllIntervals();
+    
+    // Frequent updates (3s)
+    activeRefreshInterval = setInterval(() => {
+      if (openWindow) refreshActiveTabData();
     }, 3000);
 
     // Infrequent updates (10m) - For Contacts
-    const contactsInterval = setInterval(() => {
-      if (!mainWindow.isOpen()) return clearInterval(contactsInterval);
-      updateContactsTab();
+    activeContactsInterval = setInterval(() => {
+      if (openWindow && openWindow.activeTabIndex === 4) updateContactsTab();
     }, 600000);
   }
 
-  // Define windows
   const loginWindow = createWindow({
     id: 'login-window',
     title: 'Welcome',
-    content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"></div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`,
     icon: 'bx-log-in',
     onClose: onWindowClose
   });
@@ -128,18 +155,16 @@ function onReady() {
     id: 'main-window',
     icon: 'bx-layer',
     onClose: onWindowClose,
-    onOpen: () => {
-        initializeMainWindow();
-    }
+    onOpen: startMainWindowPolling
   });
 
   if (loggedIn) {
-    document.getElementById('notif-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 0));
-    document.getElementById('events-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 1));
-    document.getElementById('ideas-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 2));
-    document.getElementById('system-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 3));
-    document.getElementById('contacts-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 4));
-    document.getElementById('settings-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 5));
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            const index = parseInt(e.currentTarget.dataset.tabIndex);
+            handleWindow(mainWindow, e.currentTarget, index);
+        });
+    });
   } else {
     document.getElementById('login-btn')?.addEventListener('click', () => {
       handleWindow(loginWindow);

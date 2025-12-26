@@ -1,5 +1,21 @@
 // Shared Utility Functions
 
+/**
+ * Returns a high-fidelity glassy abstract loader HTML.
+ */
+export function getGlassyLoader() {
+    return `
+        <div class="glassy-loader-container">
+            <div class="glassy-loader">
+                <div class="glassy-orbit"></div>
+                <div class="glassy-core"></div>
+                <div class="glassy-pulse"></div>
+            </div>
+            <p class="loader-text">DEXTER IS THINKING</p>
+        </div>
+    `;
+}
+
 export function createPlaceholderMessage(type, message, actionText = null) {
     const iconMap = { config: 'bx-cog', error: 'bx-error-circle', empty: 'bx-info-circle', offline: 'bx-wifi-off' };
     const icon = iconMap[type] || 'bx-info-circle';

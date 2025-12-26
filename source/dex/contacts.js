@@ -1,27 +1,13 @@
 // Contacts Tab Logic (Synced with Discord)
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartDiscordFetch } from './utils.js';
+import { createPlaceholderMessage, smartDiscordFetch, getGlassyLoader } from './utils.js';
 
-export const getContactsContent = () => `
-    <div class="notifications-actions">
-        <button id="contacts-refresh" class="notif-action-btn"><i class='bx bx-refresh'></i> Refresh</button>
-    </div>
-    <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
-        <p>Loading contacts...</p>
-    </div>
-`;
+export const getContactsContent = () => `<div id="contacts-grid" class="system-monitor-widgets">${getGlassyLoader()}</div>`;
 
 export let lastContactsUpdate = null;
 
 export async function updateContactsTab() {
-    const container = document.getElementById('contacts-list');
+    const container = document.getElementById('contacts-grid');
     if (!container) return;
-
-    // Attach refresh listener
-    const refreshBtn = document.getElementById('contacts-refresh');
-    if (refreshBtn && !refreshBtn.dataset.listenerAttached) {
-        refreshBtn.onclick = () => updateContactsTab();
-        refreshBtn.dataset.listenerAttached = "true";
-    }
 
     try {
         const response = await smartDiscordFetch('/contacts');
@@ -55,12 +41,10 @@ export async function updateContactsTab() {
             return a.username.localeCompare(b.username);
         });
 
-        container.innerHTML = members.map(m => {
-            // Convert decimal color to hex
+        const html = members.map(m => {
             const hexColor = m.color ? '#' + m.color.toString(16).padStart(6, '0') : 'rgba(255,255,255,0.1)';
             const statusColor = m.status === 'online' ? '#5eff5e' : m.status === 'idle' ? '#ffa500' : m.status === 'dnd' ? '#ff4d4d' : '#666';
             
-            // Branding colors for specific levels
             let levelColor = '#888';
             if (m.level === 'Me') levelColor = '#bb86fc';
             else if (m.level === 'Master User') levelColor = '#bb86fc';
@@ -89,6 +73,10 @@ export async function updateContactsTab() {
                 </div>
             `;
         }).join('');
+
+        if (container.innerHTML !== html) {
+            container.innerHTML = html;
+        }
 
     } catch (e) {
         container.innerHTML = createPlaceholderMessage('offline', 'Failed to fetch contacts.', 'The Discord service may be offline.');

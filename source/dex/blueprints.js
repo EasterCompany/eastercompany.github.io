@@ -1,5 +1,5 @@
 // Blueprints Tab Logic
-import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch, getGlassyLoader } from './utils.js';
 
 export const getBlueprintsContent = () => `
     <div class="notifications-actions">
@@ -7,7 +7,7 @@ export const getBlueprintsContent = () => `
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
     <div id="blueprints-list" class="blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-        <p>Loading blueprints...</p>
+        ${getGlassyLoader()}
     </div>
 `;
 

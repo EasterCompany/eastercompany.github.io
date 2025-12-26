@@ -1,5 +1,5 @@
 // Notifications Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml, smartFetch } from './utils.js';
+import { createPlaceholderMessage, updateUnreadNotificationCount, escapeHtml, smartFetch, getGlassyLoader } from './utils.js';
 
 export const getNotificationsContent = () => `
     <div class="notifications-actions">
@@ -9,7 +9,7 @@ export const getNotificationsContent = () => `
         <button id="notif-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
     </div>
     <div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-        <p>Loading notifications...</p>
+        ${getGlassyLoader()}
     </div>
 `;
 
