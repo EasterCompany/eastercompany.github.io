@@ -69,7 +69,14 @@ export function getEventServiceUrl() {
     return 'https://event.easter.company';
 }
 
-export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
+/**
+ * Resolves the primary production URL or the local fallback for Discord service.
+ */
+export function getDiscordServiceUrl() {
+    return 'https://discord.easter.company';
+}
+
+export const LOCAL_DISCORD_SERVICE = 'http://127.0.0.1:8300';
 
 const ANSI_MAP = {
     '31': 'ansi-red',
@@ -109,7 +116,9 @@ export function ansiToHtml(text) {
 }
 
 let resolvedBaseUrl = null;
+let resolvedDiscordBaseUrl = null;
 let isFallingBack = false;
+let isDiscordFallingBack = false;
 
 /**
  * Executes a fetch against the primary domain, falling back to local on failure.
@@ -151,6 +160,53 @@ export async function smartFetch(endpoint, options = {}) {
             const response = await fetch(fallback + endpoint, options);
             if (response.ok) {
                 resolvedBaseUrl = fallback;
+                return response;
+            }
+            throw new Error('Fallback failed');
+        } catch (e2) {
+            throw e2;
+        }
+    }
+}
+
+/**
+ * Executes a fetch against the primary Discord domain, falling back to local on failure.
+ */
+export async function smartDiscordFetch(endpoint, options = {}) {
+    if (resolvedDiscordBaseUrl) {
+        try {
+            const response = await fetch(resolvedDiscordBaseUrl + endpoint, options);
+            if (response.ok) return response;
+            resolvedDiscordBaseUrl = null;
+        } catch (e) {
+            resolvedDiscordBaseUrl = null;
+        }
+    }
+
+    const primary = getDiscordServiceUrl();
+    const fallback = LOCAL_DISCORD_SERVICE;
+
+    try {
+        const response = await fetch(primary + endpoint, options);
+        if (response.ok) {
+            resolvedDiscordBaseUrl = primary;
+            if (isDiscordFallingBack) {
+                console.log('✨ Production discord service restored.');
+                isDiscordFallingBack = false;
+            }
+            return response;
+        }
+        throw new Error('Primary failed');
+    } catch (e) {
+        if (!isDiscordFallingBack) {
+            console.warn(`🌐 Production discord service unreachable. Falling back to local: ${fallback}`);
+            isDiscordFallingBack = true;
+        }
+        
+        try {
+            const response = await fetch(fallback + endpoint, options);
+            if (response.ok) {
+                resolvedDiscordBaseUrl = fallback;
                 return response;
             }
             throw new Error('Fallback failed');

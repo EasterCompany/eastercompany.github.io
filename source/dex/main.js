@@ -6,6 +6,7 @@ import { initTheme } from './theme.js';
 import { updateTabTimestamp } from './utils.js';
 import { getNotificationsContent, updateNotificationsTab, lastNotificationsUpdate } from './notifications.js';
 import { getIdeasContent, updateIdeasTab } from './ideas.js';
+import { getContactsContent, updateContactsTab, lastContactsUpdate } from './contacts.js';
 import { getEventsContent, updateEventsTimeline, lastEventsUpdate } from './events.js';
 import { getSystemContent, updateSystemTab, lastServicesUpdate, lastModelsUpdate, lastProcessesUpdate } from './monitor.js';
 import { getSettingsContent, attachSettingsListeners } from './settings.js';
@@ -98,7 +99,8 @@ function onReady() {
       updateNotificationsTab(),
       updateEventsTimeline(),
       updateIdeasTab(),
-      updateSystemTab()
+      updateSystemTab(),
+      updateContactsTab()
     ]);
 
     // Update timestamps every second
@@ -110,6 +112,7 @@ function onReady() {
       updateTabTimestamp(3, lastProcessesUpdate);
       updateTabTimestamp(3, lastServicesUpdate);
       updateTabTimestamp(3, lastModelsUpdate);
+      updateTabTimestamp(4, lastContactsUpdate);
     }, 1000);
 
     // Frequent updates (3s)
@@ -119,6 +122,7 @@ function onReady() {
       updateEventsTimeline();
       updateIdeasTab();
       updateSystemTab();
+      updateContactsTab();
     }, 3000);
   }
 
@@ -138,7 +142,8 @@ function onReady() {
       { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent(), 'data-tab-index': 1 },
       { icon: 'bx-bulb', title: 'Ideas', content: getIdeasContent(), 'data-tab-index': 2 },
       { icon: 'bx-server', title: 'System', content: getSystemContent(), 'data-tab-index': 3 },
-      { icon: 'bx-cog', title: 'Settings', content: getSettingsContent(), 'data-tab-index': 4 }
+      { icon: 'bx-book-content', title: 'Contacts', content: getContactsContent(), 'data-tab-index': 4 },
+      { icon: 'bx-cog', title: 'Settings', content: getSettingsContent(), 'data-tab-index': 5 }
     ],
     icon: 'bx-layer',
     onClose: onWindowClose,
@@ -153,7 +158,8 @@ function onReady() {
     document.getElementById('events-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 1));
     document.getElementById('ideas-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 2));
     document.getElementById('system-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 3));
-    document.getElementById('settings-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 4));
+    document.getElementById('contacts-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 4));
+    document.getElementById('settings-icon')?.addEventListener('click', (e) => handleWindow(mainWindow, e.currentTarget, 5));
   } else {
     document.getElementById('login-btn')?.addEventListener('click', () => {
       handleWindow(loginWindow);
