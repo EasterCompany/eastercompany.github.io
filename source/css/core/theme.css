@@ -16,8 +16,8 @@
   to { background-position: 350% 50%, 350% 50%; }
 }
 
-@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 0.25; } }
-@keyframes fadeOutBackground { from { opacity: 0.25; } to { opacity: 0; } }
+@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 0.45; } }
+@keyframes fadeOutBackground { from { opacity: 0.45; } to { opacity: 0; } }
 
 .background {
   z-index: -1;
