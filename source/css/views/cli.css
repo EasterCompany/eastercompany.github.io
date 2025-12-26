@@ -212,7 +212,7 @@
 
 .cli-terminal-window {
     width: 90%;
-    max-width: 900px;
+    max-width: 1400px;
     height: 80%;
     background: rgba(10, 10, 10, 0.98);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -225,39 +225,45 @@
     transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.cli-execution-overlay.active .cli-terminal-window {
-    transform: scale(1) translateY(0);
-}
-
-.cli-terminal-header {
-    padding: 15px 25px;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.cli-terminal-split {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex: 1;
+    overflow: hidden;
 }
 
-.terminal-title {
+/* Horizontal split on small views */
+@media (max-width: 1199px) {
+    .cli-terminal-split {
+        flex-direction: column;
+    }
+    .cli-terminal-pane {
+        width: 100% !important;
+        height: 50%;
+    }
+    .cli-terminal-pane:first-child {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* Vertical split on big views */
+@media (min-width: 1200px) {
+    .cli-terminal-split {
+        flex-direction: row;
+    }
+    .cli-terminal-pane {
+        width: 50%;
+        height: 100%;
+    }
+    .cli-terminal-pane:first-child {
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+.cli-terminal-pane {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9em;
-    color: #eee;
+    flex-direction: column;
+    overflow: hidden;
 }
-
-.terminal-status {
-    font-size: 0.75em;
-    padding: 3px 10px;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-}
-
-.status-running { background: rgba(3, 218, 198, 0.2); color: #03dac6; }
-.status-success { background: rgba(94, 255, 94, 0.2); color: #5eff5e; }
-.status-error { background: rgba(207, 102, 121, 0.2); color: #cf6679; }
 
 .cli-terminal-body {
     flex: 1;
@@ -269,6 +275,71 @@
     color: #ccc;
     background: #050505;
     scrollbar-width: thin;
+}
+
+.cli-docs-pane {
+    background: rgba(15, 15, 15, 0.5);
+    padding: 30px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.cli-docs-pane h2 {
+    font-size: 1.5em;
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.cli-docs-section {
+    margin-bottom: 25px;
+}
+
+.cli-docs-section h4 {
+    color: #bb86fc;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.cli-docs-section p {
+    font-size: 0.95em;
+    color: #bbb;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.cli-docs-list {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.cli-docs-list li {
+    font-size: 0.95em;
+    color: #bbb;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.cli-docs-list li::before {
+    content: '→';
+    position: absolute;
+    left: -20px;
+    color: #bb86fc;
+}
+
+.cli-docs-usage {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    color: #03dac6;
+    font-size: 0.85em;
+    white-space: pre-wrap;
+    border: 1px solid rgba(3, 218, 198, 0.1);
 }
 
 .terminal-line { margin-bottom: 6px; white-space: pre-wrap; }
@@ -303,7 +374,7 @@
 
 .cli-install-section {
     max-width: 800px;
-    margin: 0 auto 60px auto;
+    margin: 0 auto 100px auto;
     background: rgba(187, 134, 252, 0.03);
     border: 1px solid rgba(187, 134, 252, 0.1);
     border-radius: 20px;

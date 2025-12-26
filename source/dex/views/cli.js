@@ -8,7 +8,16 @@ const CLI_COMMANDS = [
         description: 'Placeholder for the future Dexter chat interface.',
         usage: 'Coming soon...', 
         category: 'cognitive',
-        dummy: true
+        dummy: true,
+        docs: {
+            overview: 'The Cognitive Chat interface will allow direct, natural language interaction with Dexter\'s strategic layer.',
+            details: [
+                'Context-aware reasoning based on system-wide events.',
+                'Multi-modal input support (text, voice, images).',
+                'Deep integration with the Roadmap and Blueprint systems.'
+            ],
+            extended_usage: 'Coming in Dexter v3.0'
+        }
     },
     {
         id: 'guardian',
@@ -16,7 +25,17 @@ const CLI_COMMANDS = [
         icon: 'bx-shield-quarter',
         description: 'Trigger a manual Tier 1 Guardian system audit.',
         usage: 'dex guardian',
-        category: 'cognitive'
+        category: 'cognitive',
+        docs: {
+            overview: 'Guardian is the Technical Sentry of the ecosystem. It performs automated health checks, log analysis, and technical audits.',
+            details: [
+                'Scans for service crashes and restarts.',
+                'Analyzes logs for high-severity errors.',
+                'Verifies system-wide resource availability (Redis, Ollama).',
+                'Triggers immediate notifications if anomalies are detected.'
+            ],
+            extended_usage: 'dex guardian [--force] [--quiet]'
+        }
     },
     {
         id: 'status',
@@ -24,7 +43,17 @@ const CLI_COMMANDS = [
         icon: 'bx-pulse',
         description: 'Check the real-time health of all system services.',
         usage: 'dex status [service]',
-        category: 'system'
+        category: 'system',
+        docs: {
+            overview: 'The Status command provides a high-level overview of the health, versioning, and connectivity of all services in the Dexter network.',
+            details: [
+                'Reports status (online/offline/degraded).',
+                'Displays version strings and build hashes.',
+                'Shows network addresses and ports.',
+                'Validates internal service-to-service communication.'
+            ],
+            extended_usage: 'dex status [service_id] [--json]'
+        }
     },
     {
         id: 'build',
@@ -32,7 +61,18 @@ const CLI_COMMANDS = [
         icon: 'bx-package',
         description: 'Build and install the entire ecosystem from source.',
         usage: 'dex build [major|minor|patch]',
-        category: 'lifecycle'
+        category: 'lifecycle',
+        docs: {
+            overview: 'The Build command is the primary entry point for ecosystem evolution. It handles versioning, bundling, and deployment.',
+            details: [
+                'Increments semantic versioning automatically.',
+                'Bundles JavaScript and CSS assets for the frontend.',
+                'Builds Go binaries and Python environments.',
+                'Creates Git tags and pushes to remote repositories.',
+                'Handles post-build cleanup and Ollama model synchronization.'
+            ],
+            extended_usage: 'dex build [patch|minor|major] [--force] [--skip-git]'
+        }
     },
     {
         id: 'update',
@@ -40,7 +80,16 @@ const CLI_COMMANDS = [
         icon: 'bx-cloud-download',
         description: 'Fetch and apply the latest updates for all components.',
         usage: 'dex update',
-        category: 'lifecycle'
+        category: 'lifecycle',
+        docs: {
+            overview: 'Update pulls the latest changes from the central repositories and synchronizes your local environment.',
+            details: [
+                'Performs git fetch/pull for all configured services.',
+                'Verifies compatibility between local and remote versions.',
+                'Triggers a rebuild if significant changes are detected.'
+            ],
+            extended_usage: 'dex update [--service=name]'
+        }
     },
     {
         id: 'test',
@@ -48,7 +97,17 @@ const CLI_COMMANDS = [
         icon: 'bx-check-shield',
         description: 'Execute the comprehensive system-wide test suite.',
         usage: 'dex test [service]',
-        category: 'lifecycle'
+        category: 'lifecycle',
+        docs: {
+            overview: 'Test ensures the integrity of the codebase by running unit tests, linters, and integration checks.',
+            details: [
+                'Runs go test for backend services.',
+                'Executes linting via golangci-lint and ruff.',
+                'Validates JSON configurations and schemas.',
+                'Reports duration and pass/fail metrics.'
+            ],
+            extended_usage: 'dex test [service_id] [--bench] [--coverage]'
+        }
     },
     {
         id: 'logs',
@@ -56,7 +115,17 @@ const CLI_COMMANDS = [
         icon: 'bx-terminal',
         description: 'Stream or tail logs from any manageable service.',
         usage: 'dex logs <service> [-f]',
-        category: 'system'
+        category: 'system',
+        docs: {
+            overview: 'Logs provides real-time observability into the background processes of the Dexter services.',
+            details: [
+                'Tail live output from systemd services.',
+                'Support for following (-f) and history limiting.',
+                'ANSI color support for terminal readability.',
+                'Aggregated view for multi-instance deployments.'
+            ],
+            extended_usage: 'dex logs <service_id> [-f] [-n lines]'
+        }
     },
     {
         id: 'system',
@@ -64,7 +133,17 @@ const CLI_COMMANDS = [
         icon: 'bx-info-square',
         description: 'View detailed hardware vitals and OS-level info.',
         usage: 'dex system [--json]',
-        category: 'system'
+        category: 'system',
+        docs: {
+            overview: 'System provides detailed hardware observability, focused on AI performance metrics (CPU/GPU/VRAM).',
+            details: [
+                'CPU Core/Thread count and current utilization.',
+                'RAM and VRAM (GPU) availability.',
+                'Storage usage for local model weights.',
+                'OS-level environment variable validation.'
+            ],
+            extended_usage: 'dex system [--json] [--vitals-only]'
+        }
     },
     {
         id: 'config',
@@ -72,7 +151,16 @@ const CLI_COMMANDS = [
         icon: 'bx-slider-alt',
         description: 'View or modify the central service-map.json.',
         usage: 'dex config <service> [field]',
-        category: 'system'
+        category: 'system',
+        docs: {
+            overview: 'Config manages the central registry that defines how services find and interact with each other.',
+            details: [
+                'View service definitions (domains, ports, IDs).',
+                'Modify environment-specific parameters.',
+                'Update authentication secrets and API endpoints.'
+            ],
+            extended_usage: 'dex config get <service> [field]\ndex config set <service> <field> <value>'
+        }
     }
 ];
 
@@ -154,7 +242,14 @@ function openTerminal(cmdInfo) {
                     </div>
                     <i class='bx bx-x' id="close-terminal-btn" style="cursor: pointer; font-size: 1.5em; color: #666; transition: color 0.2s;"></i>
                 </div>
-                <div id="cli-terminal-body" class="cli-terminal-body"></div>
+                <div class="cli-terminal-split">
+                    <div class="cli-terminal-pane">
+                        <div id="cli-terminal-body" class="cli-terminal-body"></div>
+                    </div>
+                    <div class="cli-terminal-pane">
+                        <div id="cli-docs-pane" class="cli-docs-pane"></div>
+                    </div>
+                </div>
                 <div class="cli-terminal-footer">
                     <button id="terminal-action-btn" class="notif-action-btn" style="display: none;">Done</button>
                 </div>
@@ -167,7 +262,32 @@ function openTerminal(cmdInfo) {
     }
 
     const body = document.getElementById('cli-terminal-body');
+    const docs = document.getElementById('cli-docs-pane');
+    
     body.innerHTML = '';
+    
+    // Render Documentation
+    const docData = cmdInfo.docs || { overview: cmdInfo.description, details: [], extended_usage: cmdInfo.usage };
+    docs.innerHTML = `
+        <div class="cli-docs-section">
+            <h4>Command Overview</h4>
+            <h2>${cmdInfo.title}</h2>
+            <p>${docData.overview}</p>
+        </div>
+        ${docData.details.length > 0 ? `
+            <div class="cli-docs-section">
+                <h4>Core Features</h4>
+                <ul class="cli-docs-list">
+                    ${docData.details.map(d => `<li>${d}</li>`).join('')}
+                </ul>
+            </div>
+        ` : ''}
+        <div class="cli-docs-section">
+            <h4>Detailed Usage</h4>
+            <pre class="cli-docs-usage">${docData.extended_usage}</pre>
+        </div>
+    `;
+
     document.getElementById('terminal-cmd-name').textContent = `dex ${cmdInfo.id}`;
     document.getElementById('terminal-status-badge').className = 'terminal-status status-running';
     document.getElementById('terminal-status-badge').textContent = 'Running';
