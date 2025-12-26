@@ -1191,8 +1191,8 @@
     },
     "2.8.143": {
       "type": "patch",
-      "date": "2025-12-26T22:13:52Z",
-      "commit": "bef5284",
+      "date": "2025-12-26T22:16:11Z",
+      "commit": "4299145",
       "binaries": {
         "cli": {
           "linux-amd64": {
