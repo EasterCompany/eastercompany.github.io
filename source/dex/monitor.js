@@ -1,5 +1,6 @@
 // System Monitor Logic (Services, Models, Processes)
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE } from './utils.js';
+import { getLogsContent, updateLogs } from './logs.js';
 
 export const getSystemContent = () => {
     return `
@@ -64,8 +65,16 @@ export const getSystemContent = () => {
             <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Hardware</h2>
             <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
-        <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+        <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
             <p style="color: #ccc; font-size: 0.9em; margin: 0;">Loading hardware info...</p>
+        </div>
+
+        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class='bx bxs-terminal' style="color: #03dac6;"></i>
+            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Service Logs</h2>
+        </div>
+        <div id="logs-container-wrapper" style="margin-bottom: 20px;">
+            ${getLogsContent()}
         </div>
     `;
 };
@@ -77,6 +86,10 @@ export async function updateSystemTab() {
         updateSystemMonitor(),
         updateModelsTab()
     ]);
+    
+    // Update logs separately to ensure DOM is ready if needed, 
+    // although Promise.all above is fine.
+    await updateLogs();
 }
 
 export const getServicesContent = () => {
