@@ -42,7 +42,6 @@ export async function updateNotificationsTab(forceReRender = false) {
     const allNotifications = data.events || [];
 
     lastNotificationsUpdate = Date.now();
-    updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
 
     // Persistence Logic Filter:
     // 1. Always keep UNREAD notifications.
@@ -301,7 +300,6 @@ export async function updateNotificationsTab(forceReRender = false) {
     });
 
     lastNotificationsUpdate = Date.now();
-    updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
     updateUnreadNotificationCount(); // Update badge on each refresh
 
   } catch (error) {

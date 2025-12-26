@@ -93,20 +93,30 @@ function getCleanHostname() {
  * @param {boolean} isLoggedIn - Whether the user is logged in
  */
 export function injectNavbar(isLoggedIn = false) {
-    const navRightContent = isLoggedIn
-        ? `
+    const authIcons = loggedIn ? `
         <div class="nav-right">
-            <i class='bx bx-bell' id="notif-icon" title="Notifications"></i>
-            <i class='bx bx-calendar-event' id="events-icon" title="Events"></i>
-            <i class='bx bx-bulb' id="ideas-icon" title="Ideas"></i>
-            <i class='bx bx-server' id="system-icon" title="System"></i>
-            <i class='bx bx-book-content' id="contacts-icon" title="Contacts"></i>
+            <div class="nav-icon-container">
+                <i class='bx bx-bell' id="notif-icon" title="Notifications"></i>
+                <div class="nav-dot" id="notif-dot"></div>
+            </div>
+            <div class="nav-icon-container">
+                <i class='bx bx-calendar-event' id="events-icon" title="Events"></i>
+                <div class="nav-dot" id="events-dot"></div>
+            </div>
+            <div class="nav-icon-container">
+                <i class='bx bx-bulb' id="ideas-icon" title="Ideas"></i>
+                <div class="nav-dot" id="ideas-dot"></div>
+            </div>
+            <div class="nav-icon-container">
+                <i class='bx bx-server' id="system-icon" title="System"></i>
+                <div class="nav-dot" id="system-dot"></div>
+            </div>
+            <div class="nav-icon-container">
+                <i class='bx bx-book-content' id="contacts-icon" title="Contacts"></i>
+                <div class="nav-dot" id="contacts-dot"></div>
+            </div>
             <i class='bx bx-cog' id="settings-icon" title="Settings"></i>
-        </div>
-        `
-        : `
-            <button id="login-btn" class="login-btn">LOGIN</button>
-        `;
+        </div>` : `<button id="login-btn" class="login-btn">Login</button>`;
 
     const navbarHTML = `
         <div class="nav-left">

@@ -1,11 +1,12 @@
-import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from './utils.js';
+import { smartFetch, ansiToHtml } from './utils.js';
 
 const CLI_COMMANDS = [
+    // --- Cognitive Core ---
     {
         id: 'chat',
         title: 'Chat',
         icon: 'bx-message-rounded-dots',
-        description: 'Placeholder for the future Dexter chat interface.',
+        description: 'Engage with Dexter\'s internal cognitive core directly from the browser.',
         usage: 'Coming soon...',
         category: 'cognitive',
         dummy: true
@@ -14,23 +15,33 @@ const CLI_COMMANDS = [
         id: 'guardian',
         title: 'Guardian',
         icon: 'bx-shield-quarter',
-        description: 'Trigger a manual Tier 1 Guardian system audit.',
+        description: 'Manually trigger a Tier 1 technical audit. Analyzes vitals, logs, and events for system anomalies.',
         usage: 'dex guardian',
         category: 'cognitive'
     },
     {
-        id: 'status',
-        title: 'Status',
-        icon: 'bx-pulse',
-        description: 'Check the real-time health of all system services.',
-        usage: 'dex status [service]',
-        category: 'system'
+        id: 'whisper',
+        title: 'Whisper',
+        icon: 'bx-microphone',
+        description: 'Access the local OpenAI Whisper model for high-fidelity speech-to-text transcription.',
+        usage: 'dex whisper transcribe -k <redis_key>',
+        category: 'cognitive'
     },
+    {
+        id: 'ollama',
+        title: 'Ollama',
+        icon: 'bx-brain',
+        description: 'Direct proxy to the underlying Ollama instance managing local large language models.',
+        usage: 'dex ollama [pull|run|ps|list]',
+        category: 'cognitive'
+    },
+
+    // --- Development Lifecycle ---
     {
         id: 'build',
         title: 'Build',
         icon: 'bx-package',
-        description: 'Build and install the entire ecosystem from source.',
+        description: 'Ecosystem-wide build system. Increments versions, compiles binaries, and updates the dashboard.',
         usage: 'dex build [major|minor|patch]',
         category: 'lifecycle'
     },
@@ -38,7 +49,7 @@ const CLI_COMMANDS = [
         id: 'update',
         title: 'Update',
         icon: 'bx-cloud-download',
-        description: 'Fetch and apply the latest updates for all components.',
+        description: 'Syncs all service repositories and applies the latest patches from source.',
         usage: 'dex update',
         category: 'lifecycle'
     },
@@ -46,15 +57,41 @@ const CLI_COMMANDS = [
         id: 'test',
         title: 'Test',
         icon: 'bx-check-shield',
-        description: 'Execute the comprehensive system-wide test suite.',
-        usage: 'dex test [service]',
+        description: 'Executes the unified test suite across all services (Format, Lint, and Unit Tests).',
+        usage: 'dex test [service] [--models]',
         category: 'lifecycle'
+    },
+    {
+        id: 'add',
+        title: 'Add Service',
+        icon: 'bx-plus-circle',
+        description: 'Registers and installs a new service into the Dexter ecosystem from a remote repository.',
+        usage: 'dex add <repo_url>',
+        category: 'lifecycle'
+    },
+    {
+        id: 'remove',
+        title: 'Remove Service',
+        icon: 'bx-minus-circle',
+        description: 'Uninstalls a service and removes its registration from the global service map.',
+        usage: 'dex remove <service_id>',
+        category: 'lifecycle'
+    },
+
+    // --- System Management ---
+    {
+        id: 'status',
+        title: 'Status',
+        icon: 'bx-pulse',
+        description: 'Real-time health check for all system components, including networking and version info.',
+        usage: 'dex status [service|all]',
+        category: 'system'
     },
     {
         id: 'logs',
         title: 'Logs',
         icon: 'bx-terminal',
-        description: 'Stream or tail logs from any manageable service.',
+        description: 'High-performance log streaming. Connects directly to localized service log files.',
         usage: 'dex logs <service> [-f]',
         category: 'system'
     },
@@ -62,17 +99,93 @@ const CLI_COMMANDS = [
         id: 'system',
         title: 'System Info',
         icon: 'bx-info-square',
-        description: 'View detailed hardware vitals and OS-level info.',
-        usage: 'dex system [--json]',
+        description: 'Hardware introspection. Reports CPU, GPU, Memory, and OS package dependencies.',
+        usage: 'dex system [info|scan|validate|install]',
         category: 'system'
     },
     {
         id: 'config',
         title: 'Config',
         icon: 'bx-slider-alt',
-        description: 'View or modify the central service-map.json.',
+        description: 'Low-level configuration management for the centralized service-map.json.',
         usage: 'dex config <service> [field]',
         category: 'system'
+    },
+    {
+        id: 'cache',
+        title: 'Cache',
+        icon: 'bx-data',
+        description: 'Manages the local Redis-backed cognitive and ephemeral data cache.',
+        usage: 'dex cache [clear|list]',
+        category: 'system'
+    },
+    {
+        id: 'serve',
+        title: 'Serve',
+        icon: 'bx-broadcast',
+        description: 'Internal static file server for local development and dashboard hosting.',
+        usage: 'dex serve -d <dir> -p <port>',
+        category: 'system'
+    },
+    {
+        id: 'event',
+        title: 'Event Bus',
+        icon: 'bx-share-alt',
+        description: 'Direct interaction with the core event service. Manage the system-wide event stream.',
+        usage: 'dex event [service|log|delete|analyst]',
+        category: 'system'
+    },
+    {
+        id: 'discord',
+        title: 'Discord',
+        icon: 'bx-message-square-dots',
+        description: 'Manages the Discord engine, including channel mapping and contact synchronization.',
+        usage: 'dex discord [contacts|channels|service|quiet]',
+        category: 'system'
+    },
+
+    // --- Service Lifecycle ---
+    {
+        id: 'restart',
+        title: 'Restart',
+        icon: 'bx-refresh',
+        description: 'Gracefully restarts all manageable systemd services in the ecosystem.',
+        usage: 'dex restart [service|all]',
+        category: 'service'
+    },
+    {
+        id: 'start',
+        title: 'Start',
+        icon: 'bx-play',
+        description: 'Initiates service execution for all stopped manageable components.',
+        usage: 'dex start [service|all]',
+        category: 'service'
+    },
+    {
+        id: 'stop',
+        title: 'Stop',
+        icon: 'bx-stop',
+        description: 'Gracefully terminates the execution of manageable systemd services.',
+        usage: 'dex stop [service|all]',
+        category: 'service'
+    },
+
+    // --- Proxy Proxies ---
+    {
+        id: 'python',
+        title: 'Python Env',
+        icon: 'bx-code-curly',
+        description: 'Proxy command to run executables within Dexter\'s managed Python virtual environments.',
+        usage: 'dex python <command>',
+        category: 'proxy'
+    },
+    {
+        id: 'bun',
+        title: 'Bun Runtime',
+        icon: 'bx-bolt-circle',
+        description: 'Proxy command to the local Bun runtime for high-performance JavaScript execution.',
+        usage: 'dex bun <args>',
+        category: 'proxy'
     }
 ];
 
@@ -80,14 +193,16 @@ export const getCliInterfaceContent = () => {
     const categories = {
         cognitive: { title: 'Cognitive Core', icon: 'bx-brain', color: '#bb86fc' },
         lifecycle: { title: 'Development Lifecycle', icon: 'bx-git-branch', color: '#03dac6' },
-        system: { title: 'System Management', icon: 'bx-cog', color: '#aaa' }
+        service: { title: 'Service Control', icon: 'bx-power-off', color: '#ffa500' },
+        system: { title: 'System Management', icon: 'bx-cog', color: '#aaa' },
+        proxy: { title: 'Runtime Proxies', icon: 'bx-code-alt', color: '#666' }
     };
 
     let html = `
         <div class="cli-dashboard">
-            <div class="cli-hero" style="text-align: center; padding: 40px 20px; margin-bottom: 20px;">
-                <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #fff;">DEX CLI</h1>
-                <p style="color: #888; max-width: 600px; margin: 0 auto;">The unified command-line interface for the Dexter ecosystem. Manage, monitor, and evolve your AI infrastructure.</p>
+            <div class="cli-hero" style="text-align: center; padding: 60px 20px; margin-bottom: 40px;">
+                <h1 style="font-size: 3em; margin-bottom: 15px; color: #fff; letter-spacing: -1px;">DEX CLI</h1>
+                <p style="color: #888; max-width: 700px; margin: 0 auto; font-size: 1.1em; line-height: 1.6;">The unified command-line interface for the Dexter ecosystem. A high-fidelity toolset designed to manage, monitor, and evolve your autonomous infrastructure.</p>
             </div>
     `;
 
@@ -96,22 +211,22 @@ export const getCliInterfaceContent = () => {
         if (commands.length === 0) continue;
 
         html += `
-            <div class="cli-category-section" style="margin-bottom: 40px;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 20px;">
-                    <i class='bx ${catInfo.icon}' style="color: ${catInfo.color}; font-size: 1.5em;"></i>
-                    <h2 style="font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; color: #eee; margin: 0;">${catInfo.title}</h2>
+            <div class="cli-category-section" style="margin-bottom: 60px;">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px; padding: 0 20px;">
+                    <i class='bx ${catInfo.icon}' style="color: ${catInfo.color}; font-size: 1.8em;"></i>
+                    <h2 style="font-size: 1.4em; text-transform: uppercase; letter-spacing: 3px; color: #eee; margin: 0;">${catInfo.title}</h2>
                 </div>
-                <div class="cli-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 20px;">
+                <div class="cli-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; padding: 0 20px;">
                     ${commands.map(cmd => `
-                        <div class="cli-command-card ${cmd.dummy ? 'dummy' : ''}" data-cmd="${cmd.id}" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 25px; transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden;">
+                        <div class="cli-command-card ${cmd.dummy ? 'dummy' : ''}" data-cmd="${cmd.id}" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); cursor: pointer; position: relative; overflow: hidden; display: flex; flex-direction: column;">
                             <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, ${catInfo.color}11, transparent 70%); pointer-events: none;"></div>
-                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; position: relative; z-index: 1;">
-                                <i class='bx ${cmd.icon}' style="font-size: 2em; color: ${catInfo.color};"></i>
-                                <h3 style="font-size: 1.3em; color: #fff; margin: 0;">${cmd.title}</h3>
+                            <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 20px; position: relative; z-index: 1;">
+                                <i class='bx ${cmd.icon}' style="font-size: 2.2em; color: ${catInfo.color};"></i>
+                                <h3 style="font-size: 1.4em; color: #fff; margin: 0; letter-spacing: -0.5px;">${cmd.title}</h3>
                             </div>
-                            <p style="font-size: 0.9em; color: #aaa; margin-bottom: 20px; line-height: 1.5; text-align: left; position: relative; z-index: 1;">${cmd.description}</p>
-                            <div class="usage-block" style="background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; color: ${catInfo.color}; position: relative; z-index: 1;">
-                                <span style="opacity: 0.5;">$</span> ${cmd.usage}
+                            <p style="font-size: 0.95em; color: #999; margin-bottom: 25px; line-height: 1.6; text-align: left; position: relative; z-index: 1; flex: 1;">${cmd.description}</p>
+                            <div class="usage-block" style="background: rgba(0,0,0,0.4); padding: 12px 18px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${catInfo.color}; position: relative; z-index: 1; border: 1px solid rgba(255,255,255,0.03);">
+                                <span style="opacity: 0.4; margin-right: 8px;">$</span>${cmd.usage}
                             </div>
                         </div>
                     `).join('')}
@@ -144,7 +259,7 @@ function openTerminal(cmdInfo) {
                 </div>
                 <div id="cli-terminal-body" class="cli-terminal-body"></div>
                 <div class="cli-terminal-footer">
-                    <button id="terminal-action-btn" class="notif-action-btn" style="display: none;">Done</button>
+                    <button id="terminal-action-btn" class="notif-action-btn" style="display: none; padding: 6px 20px;">Done</button>
                 </div>
             </div>
         `;
@@ -244,14 +359,14 @@ export function initCliDashboard() {
     // Add interactivity
     container.querySelectorAll('.cli-command-card').forEach(card => {
         card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-5px)';
+            card.style.transform = 'translateY(-8px)';
             card.style.borderColor = 'rgba(255,255,255,0.15)';
-            card.style.backgroundColor = 'rgba(255,255,255,0.05)';
+            card.style.backgroundColor = 'rgba(255,255,255,0.04)';
         });
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'translateY(0)';
             card.style.borderColor = 'rgba(255,255,255,0.05)';
-            card.style.backgroundColor = 'rgba(255,255,255,0.03)';
+            card.style.backgroundColor = 'rgba(255,255,255,0.02)';
         });
         card.addEventListener('click', () => {
             const cmd = card.dataset.cmd;

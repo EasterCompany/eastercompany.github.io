@@ -1,5 +1,5 @@
 // Blueprints Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml, smartFetch } from './utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
 
 export const getBlueprintsContent = () => `
     <div class="notifications-actions">
@@ -35,11 +35,9 @@ export async function updateBlueprintsTab(forceReRender = false) {
         currentFilteredBlueprints = allBlueprints;
 
         lastBlueprintsUpdate = Date.now();
-        updateTabTimestamp(2, lastBlueprintsUpdate); // Index 2 (Ideas) in mainWindow
 
         if (allBlueprints.length === 0) {
             blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Analyst Worker will generate these when idle.');
-            updateTabBadgeCount(1, 0);
             return;
         }
 
@@ -170,8 +168,6 @@ export async function updateBlueprintsTab(forceReRender = false) {
             }
             previousElement = el;
         });
-
-        updateTabBadgeCount(2, allBlueprints.length);
 
     } catch (error) {
         console.error('Error fetching blueprints:', error);
