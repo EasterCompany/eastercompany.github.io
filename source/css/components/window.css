@@ -54,8 +54,8 @@ nav.window-open + .windows-container {
         margin-top: 20px; /* Aesthetic gap only in focus mode */
         height: calc(100% - 40px); /* Leave space at bottom too */
         border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background-color: rgba(255, 255, 255, 0.08); /* Much lighter glass for focus mode */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: rgba(20, 20, 20, 0.8); /* Unified background */
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
     }
 }
@@ -76,7 +76,7 @@ nav.window-open + .windows-container {
 
 .window {
     position: relative;
-    background-color: rgba(30, 30, 30, 0.8); /* Glassy & Lightened */
+    background-color: rgba(20, 20, 20, 0.8); /* Unified technical background */
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -119,7 +119,7 @@ nav.window-open + .windows-container {
     align-items: center;
     padding: 15px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background-color: rgba(30, 30, 30, 0.8);
+    background-color: rgba(20, 20, 20, 0.8); /* Unified header background */
     flex-shrink: 0;
 }
 
