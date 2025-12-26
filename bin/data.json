@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.117.main.da7044b.2025-12-26.linux-amd64.da7044b",
-    "dev": "2.8.117.main.da7044b.2025-12-26.linux-amd64.da7044b"
+    "user": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b",
+    "dev": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b"
   },
   "releases": {
     "0.0.0": {
@@ -765,6 +765,20 @@
             "path": "/bin/2.8.117/dex-event-service",
             "size": 12684456,
             "checksum": "e5c06f23cef093d98f8fa238036f9613d7c4c190b69201004063384d7755d2cb"
+          }
+        }
+      }
+    },
+    "2.8.118": {
+      "type": "patch",
+      "date": "2025-12-26T03:47:42Z",
+      "commit": "da64d89",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.118/dex",
+            "size": 16560903,
+            "checksum": "fbd4691287b24e958ae210ea69cd6247dab122e5615af69691b9711dd1cf1058"
           }
         }
       }
@@ -1787,8 +1801,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.117.main.da7044b.2025-12-26.linux-amd64.da7044b",
-      "user": "2.8.117.main.da7044b.2025-12-26.linux-amd64.da7044b",
+      "current": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b",
+      "user": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
