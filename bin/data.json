@@ -163,6 +163,12 @@
       "commit": "d1d6c68",
       "binaries": {}
     },
+    "2.11.111": {
+      "type": "patch",
+      "date": "2025-12-26T01:32:36Z",
+      "commit": "7c17be7",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
