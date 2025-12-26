@@ -95,9 +95,11 @@ function getCleanHostname() {
 export function injectNavbar(isLoggedIn = false) {
     const navRightContent = isLoggedIn
         ? `
-            <i id="message-icon" class='bx bxs-message-dots'></i>
-            <i id="user-icon" class='bx bx-user'></i>
-            <i id="settings-icon" class='bx bx-cog'></i>
+            <i id="notif-icon" class='bx bx-bell' title="Notifications"></i>
+            <i id="events-icon" class='bx bx-calendar-event' title="Events"></i>
+            <i id="ideas-icon" class='bx bx-bulb' title="Ideas"></i>
+            <i id="system-icon" class='bx bx-server' title="System"></i>
+            <i id="settings-icon" class='bx bx-cog' title="Settings"></i>
         `
         : `
             <button id="login-btn" class="login-btn">LOGIN</button>
