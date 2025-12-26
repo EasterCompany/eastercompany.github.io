@@ -36,4 +36,25 @@
 .service-widget-info .info-label { color: #999; }
 .service-widget-info .info-value { color: #eee; font-family: monospace; }
 
+.service-widget-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.service-widget-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85em;
+    font-family: monospace;
+}
+
+.service-widget-item i {
+    font-size: 1.1em;
+}
+
 .process-widget { border-left: 3px solid #4444FF; }

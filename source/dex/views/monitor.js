@@ -11,7 +11,7 @@ export const getSystemContent = () => {
         <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 style="margin: 0; font-size: 0.9em; color: #888; text-transform: uppercase; letter-spacing: 1px;">Analyst Tiers</h3>
-                <button id="analyst-reset-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Reset</button>
+                <button id="analyst-reset-btn" class="notif-action-btn"><i class='bx bx-refresh'></i> Reset</button>
             </div>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                 <div class="analyst-indicator">
@@ -63,7 +63,7 @@ export const getSystemContent = () => {
         <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
             <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Hardware</h2>
-            <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
+            <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
         <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
             <p style="color: #ccc; font-size: 0.9em; margin: 0;">Loading hardware info...</p>
