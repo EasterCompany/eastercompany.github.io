@@ -203,6 +203,12 @@
       "commit": "4f1e67a",
       "binaries": {}
     },
+    "2.11.166": {
+      "type": "patch",
+      "date": "2025-12-26T23:48:23Z",
+      "commit": "d56ad31",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
