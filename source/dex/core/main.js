@@ -92,6 +92,20 @@ function onReady() {
           }
       });
 
+      // Sync navbar active icons
+      const icons = {
+          'feed-window': 'feed-icon',
+          'monitor-window': 'monitor-icon',
+          'workspace-window': 'workspace-icon',
+          'settings-window': 'settings-icon'
+      };
+      
+      Object.values(icons).forEach(id => document.getElementById(id)?.classList.remove('active'));
+      activeWindows.forEach(win => {
+          const iconId = icons[win.id];
+          if (iconId) document.getElementById(iconId)?.classList.add('active');
+      });
+
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
           document.getElementById('close-all-windows')?.style.setProperty('display', 'block');
