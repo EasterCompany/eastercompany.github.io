@@ -123,6 +123,10 @@ nav.window-open + .windows-container {
     flex-shrink: 0;
 }
 
+.window.header-hidden .window-header {
+    display: none !important;
+}
+
 .window-header .bx:first-child {
     font-size: 1.2em;
     color: #bb86fc;
