@@ -14,6 +14,7 @@ export function createWindow(options) {
     let windowEl = null;
     let closeCallback = options.onClose || null;
     let openCallback = options.onOpen || null;
+    let tabChangeCallback = options.onTabChange || null;
 
     function open() {
         if (windowEl) {
@@ -118,6 +119,11 @@ export function createWindow(options) {
 
                     // Automatically scroll the tab into view
                     scrollToActiveTab(tab, windowEl);
+
+                    // Call tab change callback
+                    if (tabChangeCallback) {
+                        tabChangeCallback(parseInt(tabIndex));
+                    }
                 });
             });
         }
@@ -213,11 +219,18 @@ export function createWindow(options) {
         return windowEl && windowEl.classList.contains('open');
     }
 
+    function getActiveTabIndex() {
+        if (!windowEl) return -1;
+        const activeTab = windowEl.querySelector('.tab.active');
+        return activeTab ? parseInt(activeTab.getAttribute('data-tab-index')) : -1;
+    }
+
     return {
         open,
         close,
         setContent,
         isOpen,
+        getActiveTabIndex,
         id: options.id,
     };
 }
