@@ -1801,6 +1801,24 @@ footer.hide {
     text-align: left;
 }
 
+.log-action-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.log-action-btn:hover {
+    color: #fff;
+}
+
+.log-action-btn.delete:hover {
+    color: #ff6b6b;
+}
+
 .copy-logs-btn {
     background: none;
     border: none;
