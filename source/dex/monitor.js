@@ -1,10 +1,7 @@
 // System Monitor Logic (Services, Models, Processes)
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE } from './utils.js';
 
 export const getSystemContent = () => {
-    if (!localStorage.getItem('service_map')) {
-        return createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-    }
     return `
         <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
             <i class='bx bxs-zap' style="color: #bb86fc;"></i>
@@ -85,7 +82,7 @@ export async function updateSystemTab() {
 export const getServicesContent = () => {
     return `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>`;
 };
-export const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
+export const getModelsContent = () => `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>`;
 export const getProcessesContent = () => {
     return `<div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>`;
 };
@@ -95,66 +92,35 @@ export let lastModelsUpdate = null;
 export let lastProcessesUpdate = null;
 
 async function fetchSystemData() {
-    if (!localStorage.getItem('service_map')) return null;
     try {
-        const serviceMap = JSON.parse(localStorage.getItem('service_map'));
-        const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
-        if (!eventService) return null;
-        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-        const url = `http://${domain}:${eventService.port}/system_monitor`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await smartFetch('/system_monitor');
         return await response.json();
     } catch (error) {
-        console.error('Error fetching system data:', error);
         return null;
     }
 }
 
 async function fetchHardwareData() {
-    if (!localStorage.getItem('service_map')) return null;
     try {
-        const serviceMap = JSON.parse(localStorage.getItem('service_map'));
-        const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
-        if (!eventService) return null;
-        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-        const url = `http://${domain}:${eventService.port}/system/hardware`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await smartFetch('/system/hardware');
         return await response.json();
     } catch (error) {
-        console.error('Error fetching hardware data:', error);
         return null;
     }
 }
 
 async function fetchProcessData() {
-    if (!localStorage.getItem('service_map')) return null;
     try {
-        const serviceMap = JSON.parse(localStorage.getItem('service_map'));
-        const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
-        if (!eventService) return null;
-        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-        const url = `http://${domain}:${eventService.port}/processes`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await smartFetch('/processes');
         return await response.json();
     } catch (error) {
-        console.error('Error fetching process data:', error);
         return null;
     }
 }
 
 async function fetchAnalystStatus() {
-    if (!localStorage.getItem('service_map')) return null;
     try {
-        const serviceMap = JSON.parse(localStorage.getItem('service_map'));
-        const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
-        if (!eventService) return null;
-        const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-        const url = `http://${domain}:${eventService.port}/analyst/status`;
-        const response = await fetch(url);
-        if (!response.ok) return null;
+        const response = await smartFetch('/analyst/status');
         return await response.json();
     } catch (error) {
         return null;
@@ -459,16 +425,9 @@ export async function updateProcessesTab() {
 
     if (resetBtn && !resetBtn.dataset.listenerAttached) {
         resetBtn.onclick = async () => {
-            if (!localStorage.getItem('service_map')) return;
-            const serviceMap = JSON.parse(localStorage.getItem('service_map'));
-            const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
-            if (!eventService) return;
-            const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-            const url = `http://${domain}:${eventService.port}/analyst/reset?tier=all`;
-
             resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Resetting...";
             try {
-                await fetch(url, { method: 'POST' });
+                await smartFetch('/analyst/reset?tier=all', { method: 'POST' });
                 setTimeout(() => {
                     resetBtn.innerHTML = "<i class='bx bx-check'></i> Done";
                     setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset Analyst"; }, 2000);

@@ -1,5 +1,5 @@
 // Notifications Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml, smartFetch } from './utils.js';
 
 export const getNotificationsContent = () => `
     <div class="notifications-actions">
@@ -31,24 +31,11 @@ export async function updateNotificationsTab(forceReRender = false) {
     notificationsContainer.innerHTML = '<p>Updating...</p>';
   }
 
-  const serviceMapString = localStorage.getItem('service_map');
-  if (!serviceMapString) {
-    notificationsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-    return;
-  }
-  let eventService = null;
-  try {
-    const serviceMapData = JSON.parse(serviceMapString);
-    eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
-  } catch (e) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
-  if (!eventService) { notificationsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
-
-  const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
   // Fetch only notifications
-  const notificationsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.notification.generated`;
+  const url = `/events?ml=1000&format=json&event.type=system.notification.generated`;
 
   try {
-    const response = await fetch(notificationsUrl);
+    const response = await smartFetch(url);
     if (!response.ok) throw new Error('Service is offline or unreachable.');
 
     const data = await response.json();
