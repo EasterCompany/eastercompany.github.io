@@ -1,13 +1,13 @@
 /* --- High-Fidelity Gapless Grid Window System --- */
 .windows-container {
     position: fixed;
-    top: 60px; /* Mobile/Standard navbar height */
+    top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 60px);
+    height: 100%;
     display: grid;
     gap: 2px; /* Minimal technical divider */
-    padding: 0;
+    padding: 100px 0 0 0; /* Default padding for floating navbar */
     box-sizing: border-box;
     z-index: 900;
     pointer-events: none;
@@ -15,20 +15,17 @@
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-@media (min-width: 768px) {
-    .windows-container {
-        top: 80px; /* Default Desktop floating state */
-        height: calc(100% - 80px);
-    }
+/* No backdrop needed, keep background visible */
+.windows-container[data-count]:not([data-count="0"]) {
+    background: transparent;
 }
 
-/* Force top: 60px when navbar is stretched/darkened */
+/* Snapped State: When navbar darkens and stretches, windows must fill the gap */
 nav.window-open + .windows-container,
 .windows-container[data-count]:not([data-count="1"]),
 @media (max-width: 1899px) {
     .windows-container {
-        top: 60px !important;
-        height: calc(100% - 60px) !important;
+        padding-top: 60px !important; /* Move windows up to touch the snapped navbar */
     }
 }
 
@@ -42,42 +39,29 @@ nav.window-open + .windows-container,
     align-items: center;
 }
 
-/* Single window centering logic */
-.windows-container[data-count="1"] .window {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-}
-
-/* Single window width limit on desktop */
+/* Single window centering logic (Wide Screens Only) */
 @media (min-width: 1900px) {
     .windows-container[data-count="1"] .window {
         width: 70%;
         max-width: 1400px;
+        height: 90%;
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
+}
+
+/* Default/Snapped single window (fills space) */
+.windows-container[data-count="1"] .window {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border: none;
 }
 
 /* 2 Windows: Side-by-Side (2x1) */
 .windows-container[data-count="2"] {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
-}
-
-/* 3 Windows: [1, 2] over [ 3 ] */
-.windows-container[data-count="3"] {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-}
-.windows-container[data-count="3"] .window:nth-child(1) { grid-column: 1; grid-row: 1; }
-.windows-container[data-count="3"] .window:nth-child(2) { grid-column: 2; grid-row: 1; }
-.windows-container[data-count="3"] .window:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; }
-
-/* 4 Windows: 2x2 Square */
-.windows-container[data-count="4"] {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
 }
 
 .window {
@@ -102,7 +86,11 @@ nav.window-open + .windows-container,
 }
 
 /* Force border-radius reset for all multi-window configurations or small views */
-.windows-container[data-count]:not([data-count="1"]) .window,
+.windows-container[data-count]:not([data-count="1"]) .window {
+    border-radius: 0 !important;
+    border: none;
+}
+
 @media (max-width: 1899px) {
     .windows-container[data-count="1"] .window {
         border-radius: 0 !important;
