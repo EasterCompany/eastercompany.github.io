@@ -44,8 +44,9 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     background-color: #111;
