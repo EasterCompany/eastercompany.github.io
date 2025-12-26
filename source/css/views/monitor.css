@@ -1,0 +1,39 @@
+/* --- System Monitor & Grid Widgets --- */
+.system-monitor-widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.service-widget {
+  background-color: rgba(40, 40, 40, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.service-widget-online { border-left: 3px solid #5eff5e; }
+.service-widget-offline { border-left: 3px solid #ff6b6b; }
+
+.service-widget-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.service-widget-header h3 { font-size: 1em; font-weight: 500; color: #eee; flex: 1; text-align: left; }
+
+.service-widget-status {
+  font-size: 0.75em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.service-widget-online .service-widget-status { background-color: rgba(94, 255, 94, 0.2); color: #5eff5e; }
+.service-widget-offline .service-widget-status { background-color: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+
+.service-widget-info { display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; margin-bottom: 8px;}
+.service-widget-info .info-label { color: #999; }
+.service-widget-info .info-value { color: #eee; font-family: monospace; }
+
+.process-widget { border-left: 3px solid #4444FF; }

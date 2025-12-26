@@ -1,0 +1,38 @@
+/* --- CLI Dashboard & Terminal --- */
+.cli-terminal-window {
+    width: 90%;
+    max-width: 800px;
+    height: 80%;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.cli-terminal-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    color: #ccc;
+    background: #050505;
+}
+
+.ansi-red { color: #cf6679; }
+.ansi-green { color: #5eff5e; }
+.ansi-yellow { color: #ffff00; }
+.ansi-blue { color: #4444ff; }
+.ansi-purple { color: #bb86fc; }
+.ansi-cyan { color: #03dac6; }
+
+.cli-terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: #bb86fc;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink { from, to { opacity: 1; } 50% { opacity: 0; } }

@@ -1,0 +1,28 @@
+/* --- Logs View --- */
+.logs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.log-report {
+    background-color: rgba(40, 40, 40, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    flex: 1 1 400px;
+    min-width: 300px;
+}
+
+.log-content {
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 0.85em;
+    color: #ccc;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 400px;
+}
