@@ -1,38 +1,4 @@
-import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
-
-const ANSI_MAP = {
-    '31': 'ansi-red',
-    '91': 'ansi-bright-red',
-    '32': 'ansi-green',
-    '33': 'ansi-yellow',
-    '34': 'ansi-blue',
-    '35': 'ansi-purple',
-    '36': 'ansi-cyan',
-    '37': 'ansi-white',
-    '90': 'ansi-dark-gray'
-};
-
-function ansiToHtml(text) {
-    let escaped = escapeHtml(text);
-    
-    // Handle Reset
-    escaped = escaped.replace(/\x1b\[0m/g, '</span>');
-
-    // Handle Colors
-    escaped = escaped.replace(/\x1b\[(\d+)m/g, (match, code) => {
-        const className = ANSI_MAP[code];
-        return className ? `<span class="${className}">` : '';
-    });
-
-    // Cleanup unclosed spans
-    const openCount = (escaped.match(/<span/g) || []).length;
-    const closeCount = (escaped.match(/<\/span/g) || []).length;
-    if (openCount > closeCount) {
-        escaped += '</span>'.repeat(openCount - closeCount);
-    }
-
-    return escaped;
-}
+import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from './utils.js';
 
 const CLI_COMMANDS = [
     {

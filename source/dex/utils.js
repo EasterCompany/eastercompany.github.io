@@ -71,20 +71,89 @@ export function getEventServiceUrl() {
 
 export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
 
+const ANSI_MAP = {
+    '31': 'ansi-red',
+    '91': 'ansi-bright-red',
+    '32': 'ansi-green',
+    '33': 'ansi-yellow',
+    '34': 'ansi-blue',
+    '35': 'ansi-purple',
+    '36': 'ansi-cyan',
+    '37': 'ansi-white',
+    '90': 'ansi-dark-gray'
+};
+
+/**
+ * Converts ANSI escape sequences to HTML spans with color classes.
+ */
+export function ansiToHtml(text) {
+    let escaped = escapeHtml(text);
+    
+    // Handle Reset
+    escaped = escaped.replace(/\x1b\[0m/g, '</span>');
+
+    // Handle Colors
+    escaped = escaped.replace(/\x1b\[(\d+)m/g, (match, code) => {
+        const className = ANSI_MAP[code];
+        return className ? `<span class="${className}">` : '';
+    });
+
+    // Cleanup unclosed spans
+    const openCount = (escaped.match(/<span/g) || []).length;
+    const closeCount = (escaped.match(/<\/span/g) || []).length;
+    if (openCount > closeCount) {
+        escaped += '</span>'.repeat(openCount - closeCount);
+    }
+
+    return escaped;
+}
+
+let resolvedBaseUrl = null;
+let isFallingBack = false;
+
 /**
  * Executes a fetch against the primary domain, falling back to local on failure.
+ * Remembers the working endpoint to prevent console spam.
  */
 export async function smartFetch(endpoint, options = {}) {
-    const primary = getEventServiceUrl() + endpoint;
-    const fallback = LOCAL_EVENT_SERVICE + endpoint;
+    if (resolvedBaseUrl) {
+        try {
+            const response = await fetch(resolvedBaseUrl + endpoint, options);
+            if (response.ok) return response;
+            // If the cached URL starts failing, clear it and try full discovery again
+            resolvedBaseUrl = null;
+        } catch (e) {
+            resolvedBaseUrl = null;
+        }
+    }
+
+    const primary = getEventServiceUrl();
+    const fallback = LOCAL_EVENT_SERVICE;
 
     try {
-        const response = await fetch(primary, options);
-        if (response.ok) return response;
+        const response = await fetch(primary + endpoint, options);
+        if (response.ok) {
+            resolvedBaseUrl = primary;
+            if (isFallingBack) {
+                console.log('✨ Production event service restored.');
+                isFallingBack = false;
+            }
+            return response;
+        }
         throw new Error('Primary failed');
     } catch (e) {
+        if (!isFallingBack) {
+            console.warn(`🌐 Production service unreachable. Falling back to local: ${fallback}`);
+            isFallingBack = true;
+        }
+        
         try {
-            return await fetch(fallback, options);
+            const response = await fetch(fallback + endpoint, options);
+            if (response.ok) {
+                resolvedBaseUrl = fallback;
+                return response;
+            }
+            throw new Error('Fallback failed');
         } catch (e2) {
             throw e2;
         }
