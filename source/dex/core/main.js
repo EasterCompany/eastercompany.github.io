@@ -38,6 +38,13 @@ function onReady() {
   injectNavbar(loggedIn);
   injectFooter();
 
+  // Initialize visibility
+  const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
+  const isErrorPage = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
+  if (!isRoot && !isErrorPage) {
+      document.querySelector('footer')?.classList.add('hide');
+  }
+
   // --- Advanced Grid Window Manager Logic ---
   let activeWindows = [];
   const container = document.getElementById('windows-container');
@@ -58,8 +65,27 @@ function onReady() {
       }
 
       const container = document.getElementById('windows-container');
+      const navbar = document.querySelector('nav');
+      const footer = document.querySelector('footer');
+      const isDashboardPage = window.location.pathname.includes('/dex');
+      const isErrorPage = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
+      const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
       if (container) {
           container.setAttribute('data-count', activeWindows.length);
+      }
+
+      if (activeWindows.length > 0) {
+          navbar?.classList.add('window-open');
+          footer?.classList.add('hide');
+      } else {
+          navbar?.classList.remove('window-open');
+          // Only show footer on specific pages when no windows are open
+          if (isRoot || isErrorPage) {
+              footer?.classList.remove('hide');
+          } else {
+              footer?.classList.add('hide');
+          }
       }
   }
 
