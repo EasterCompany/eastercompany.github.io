@@ -7,7 +7,16 @@
     height: 100%;
     display: grid;
     gap: 2px; /* Minimal technical divider */
-    padding: 100px 0 0 0; /* Default padding for floating navbar on Wide Desktop */
+    
+    /* Pinned to the top of the content area */
+    align-items: stretch;
+    justify-items: stretch;
+    
+    /* Default padding for floating navbar on Wide Desktop */
+    /* Floating nav is top: 20px, height: 60px. Bottom is at 80px. */
+    /* We use 80px here to have 0 gap by default. */
+    padding: 80px 0 0 0;
+    
     box-sizing: border-box;
     z-index: 900;
     pointer-events: none;
@@ -15,13 +24,13 @@
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Snapped State: When navbar darkens and stretches (Small screen OR 2+ windows) */
-/* Keying off the JS-driven 'window-open' class on the navbar */
+/* Snapped State: Eliminate the gap when navbar darkens and stretches */
+/* JS triggers 'window-open' on the nav when it should be snapped/stretched */
 nav.window-open + .windows-container {
     padding-top: 60px !important;
 }
 
-/* Fallback for small screens regardless of sibling class */
+/* Force snap for standard/small screens regardless of JS class */
 @media (max-width: 1899px) {
     .windows-container {
         padding-top: 60px !important;
@@ -30,26 +39,26 @@ nav.window-open + .windows-container {
 
 /* Grid Layout Configurations */
 
-/* 1 Window: Centered Focus or Full */
+/* 1 Window: Centered Focus */
 .windows-container[data-count="1"] {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    justify-items: center;
-    align-items: center;
 }
 
-/* Single window centering logic (Wide Screens Only) */
+/* Single window width limit on Wide Screens Only (Focus Mode) */
 @media (min-width: 1900px) {
     .windows-container[data-count="1"] .window {
         width: 70%;
         max-width: 1400px;
-        height: 90%;
+        justify-self: center;
+        margin-top: 20px; /* Aesthetic gap only in focus mode */
+        height: calc(100% - 40px); /* Leave space at bottom too */
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
 }
 
-/* Default/Snapped single window (fills space) */
+/* Default/Snapped window (fills space entirely) */
 .windows-container[data-count="1"] .window {
     width: 100%;
     height: 100%;
@@ -65,13 +74,13 @@ nav.window-open + .windows-container {
 
 .window {
     position: relative;
-    background-color: rgba(30, 30, 30, 0.8); /* Less dark, more glassy */
+    background-color: rgba(30, 30, 30, 0.8); /* Glassy & Lightened */
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     
     width: 100%;
-    height: 100%;
+    height: 100%; /* Fill the grid quadrant */
     display: flex;
     flex-direction: column;
     overflow: hidden;
