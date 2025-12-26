@@ -190,10 +190,8 @@ export async function updateSystemMonitor() {
             let totalUsed = 0;
             let totalSize = 0;
             data.STORAGE.forEach(disk => {
-                if (disk.MOUNT_POINT && disk.MOUNT_POINT !== "" && disk.MOUNT_POINT !== "unmounted") {
-                   totalUsed += disk.USED;
-                   totalSize += disk.SIZE;
-                }
+                totalUsed += disk.USED;
+                totalSize += disk.SIZE;
             });
             const usedGB = (totalUsed / (1024 * 1024 * 1024)).toFixed(1);
             const sizeGB = (totalSize / (1024 * 1024 * 1024)).toFixed(1);
