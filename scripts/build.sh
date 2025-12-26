@@ -66,6 +66,21 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         # Full title with site name
         full_title="$page_title - Easter Company"
 
+        # Generate canonical URL
+        if [ "$filename" = "index" ]; then
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ]; then
+                canonical_url="https://easter.company"
+            else
+                canonical_url="https://easter.company/$parent_dir"
+            fi
+        else
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ]; then
+                canonical_url="https://easter.company/$filename"
+            else
+                canonical_url="https://easter.company/$parent_dir/$filename"
+            fi
+        fi
+
         # Remove old tags
         sed -i 's|<link rel="stylesheet" href="/dex\..*\.css">||g' "$html_file"
         sed -i 's|<script src="/dex\..*\.js" defer></script>||g' "$html_file"
@@ -75,8 +90,8 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
 
         # Inject head template after <head> tag using a temp file approach
         if [ -f "$TEMPLATES_DIR/head.html" ]; then
-            # Create a temporary file with the injection, replacing the title
-            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" '
+            # Create a temporary file with the injection, replacing title and canonical
+            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" -v canonical="$canonical_url" '
                 /<head>/ {
                     print
                     print "<!-- HEAD_START -->"
@@ -84,6 +99,10 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
                         # Replace title with page-specific title
                         if (line ~ /<title>/) {
                             print "  <title>" title "</title>"
+                        } else if (line ~ /og:url/) {
+                            print "  <meta property=\"og:url\" content=\"" canonical "\">"
+                        } else if (line ~ /link rel=\"canonical\"/) {
+                            print "  <link rel=\"canonical\" href=\"" canonical "\">"
                         } else {
                             print line
                         }
