@@ -11,7 +11,9 @@ export const getServicesContent = () => {
                 <h3 style="margin: 0; font-size: 1em; color: #fff;">System Hardware</h3>
                 <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Refresh</button>
             </div>
-            <pre id="hardware-info-content" style="color: #ccc; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; white-space: pre-wrap; margin: 0; max-height: 200px; overflow-y: auto;">Loading hardware info...</pre>
+            <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <p style="color: #ccc; font-size: 0.9em; margin: 0;">Loading hardware info...</p>
+            </div>
         </div>
         <div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>
     `;
@@ -126,6 +128,95 @@ export async function updateSystemMonitor() {
     const hardwareContainer = document.getElementById('hardware-info-content');
     const hardwareRefreshBtn = document.getElementById('hardware-refresh-btn');
 
+    // Helper to render hardware widgets
+    const renderHardwareWidgets = (data) => {
+        if (!data) {
+            hardwareContainer.innerHTML = '<p style="color: #ff4d4d;">Failed to load hardware info.</p>';
+            return;
+        }
+
+        let html = '';
+
+        // RAM
+        const ramGB = (data.MEMORY_BYTES / (1024 * 1024 * 1024)).toFixed(1);
+        html += `
+            <div class="service-widget" style="padding: 10px; min-height: 80px;">
+                <div class="service-widget-header" style="margin-bottom: 5px;">
+                    <i class='bx bxs-chip'></i>
+                    <h3 style="font-size: 0.9em;">Memory</h3>
+                </div>
+                <div class="service-widget-body">
+                    <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${ramGB} GB</span>
+                    <span style="font-size: 0.8em; color: #888;">Total RAM</span>
+                </div>
+            </div>`;
+
+        // CPU
+        if (data.CPU && data.CPU.length > 0) {
+            const cpu = data.CPU[0]; // Assuming single CPU for simplicity
+            html += `
+                <div class="service-widget" style="padding: 10px; min-height: 80px;">
+                    <div class="service-widget-header" style="margin-bottom: 5px;">
+                        <i class='bx bxs-microchip'></i>
+                        <h3 style="font-size: 0.9em;">CPU</h3>
+                    </div>
+                    <div class="service-widget-body">
+                        <span style="font-size: 0.9em; color: #fff; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${cpu.LABEL}">${cpu.LABEL}</span>
+                        <span style="font-size: 0.8em; color: #888;">${cpu.COUNT} Cores / ${cpu.THREADS} Threads</span>
+                    </div>
+                </div>`;
+        }
+
+        // GPU
+        if (data.GPU && data.GPU.length > 0) {
+            data.GPU.forEach((gpu, idx) => {
+                const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
+                html += `
+                    <div class="service-widget" style="padding: 10px; min-height: 80px;">
+                        <div class="service-widget-header" style="margin-bottom: 5px;">
+                            <i class='bx bxs-component'></i>
+                            <h3 style="font-size: 0.9em;">GPU ${idx}</h3>
+                        </div>
+                        <div class="service-widget-body">
+                            <span style="font-size: 0.9em; color: #fff; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${gpu.LABEL}">${gpu.LABEL}</span>
+                            <span style="font-size: 0.8em; color: #888;">${vramGB} GB VRAM</span>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // Storage
+        if (data.STORAGE && data.STORAGE.length > 0) {
+            let totalUsed = 0;
+            let totalSize = 0;
+            data.STORAGE.forEach(disk => {
+                if (disk.MOUNT_POINT && disk.MOUNT_POINT !== "" && disk.MOUNT_POINT !== "unmounted") {
+                   totalUsed += disk.USED;
+                   totalSize += disk.SIZE;
+                }
+            });
+            const usedGB = (totalUsed / (1024 * 1024 * 1024)).toFixed(1);
+            const sizeGB = (totalSize / (1024 * 1024 * 1024)).toFixed(1);
+            const percent = totalSize > 0 ? ((totalUsed / totalSize) * 100).toFixed(0) : 0;
+            
+            html += `
+                <div class="service-widget" style="padding: 10px; min-height: 80px;">
+                    <div class="service-widget-header" style="margin-bottom: 5px;">
+                        <i class='bx bxs-hdd'></i>
+                        <h3 style="font-size: 0.9em;">Storage</h3>
+                    </div>
+                    <div class="service-widget-body">
+                        <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${usedGB} / ${sizeGB} GB</span>
+                        <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; margin-top: 5px;">
+                             <div style="background: ${percent > 90 ? '#ff4d4d' : '#00ff00'}; width: ${percent}%; height: 100%; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        hardwareContainer.innerHTML = html;
+    };
+
     // Handle Hardware Widget
     if (hardwareContainer && hardwareRefreshBtn) {
         // Setup Refresh Button
@@ -133,12 +224,12 @@ export async function updateSystemMonitor() {
             hardwareRefreshBtn.onclick = async () => {
                 hardwareRefreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Refreshing...";
                 const hwData = await fetchHardwareData();
-                if (hwData && hwData.output) {
-                    hardwareContainer.textContent = hwData.output;
+                if (hwData) {
+                    renderHardwareWidgets(hwData);
                     hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
                     setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
                 } else {
-                    hardwareContainer.textContent = "Failed to load hardware info.";
+                    hardwareContainer.innerHTML = '<p style="color: #ff4d4d;">Failed to refresh.</p>';
                     hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
                     setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
                 }
@@ -146,14 +237,12 @@ export async function updateSystemMonitor() {
             hardwareRefreshBtn.dataset.listenerAttached = "true";
         }
 
-        // Initial Load (only if showing "Loading...")
-        if (hardwareContainer.textContent === "Loading hardware info...") {
+        // Initial Load (only if showing "Loading..." text)
+        // Check if it has the initial loading paragraph
+        const loadingP = hardwareContainer.querySelector('p');
+        if (loadingP && loadingP.textContent === "Loading hardware info...") {
             const hwData = await fetchHardwareData();
-            if (hwData && hwData.output) {
-                hardwareContainer.textContent = hwData.output;
-            } else {
-                hardwareContainer.textContent = "Failed to load hardware info.";
-            }
+            renderHardwareWidgets(hwData);
         }
     }
 
