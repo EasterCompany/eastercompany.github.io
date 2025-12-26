@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.132.main.81bae9d.2025-12-26.linux-amd64.81bae9d",
-    "dev": "2.8.132.main.81bae9d.2025-12-26.linux-amd64.81bae9d"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -84,6 +84,20 @@
             "path": "/bin/0.0.23/dex-tts-service",
             "size": 15651217,
             "checksum": "975dbbbb772681f06bcff9df7d0de17cbcca5242946abb560c782b0f126a4160"
+          }
+        }
+      }
+    },
+    "0.0.24": {
+      "type": "patch",
+      "date": "2025-12-26T05:34:12Z",
+      "commit": "171dd32",
+      "binaries": {
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/0.0.24/dex-tts-service",
+            "size": 15641103,
+            "checksum": "a72edb97e996c8142f6b20b0f7c72dfe3f44dc7890b3fa6d6d6abec4778a6370"
           }
         }
       }
