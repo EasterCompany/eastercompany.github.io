@@ -1,21 +1,5 @@
 // Shared Utility Functions
 
-/**
- * Returns a high-fidelity glassy abstract loader HTML.
- */
-export function getGlassyLoader() {
-    return `
-        <div class="glassy-loader-container">
-            <div class="glassy-loader">
-                <div class="glassy-orbit"></div>
-                <div class="glassy-core"></div>
-                <div class="glassy-pulse"></div>
-            </div>
-            <p class="loader-text">DEXTER IS THINKING</p>
-        </div>
-    `;
-}
-
 export function createPlaceholderMessage(type, message, actionText = null) {
     const iconMap = { config: 'bx-cog', error: 'bx-error-circle', empty: 'bx-info-circle', offline: 'bx-wifi-off' };
     const icon = iconMap[type] || 'bx-info-circle';
@@ -33,15 +17,40 @@ export function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
-/**
- * Updates a notification dot on the navbar.
- * @param {string} dotId - The ID of the dot element (e.g., "notif-dot")
- * @param {boolean} show - Whether to show the dot
- */
-export function updateNavDot(dotId, show) {
-    const dot = document.getElementById(dotId);
-    if (dot) {
-        dot.style.display = show ? 'block' : 'none';
+export function updateTabTimestamp(tabIndex, timestamp) {
+    const subtitleElement = document.querySelector(`.tab[data-tab-index="${tabIndex}"] .tab-subtitle`);
+    if (!subtitleElement) return;
+    if (!timestamp) {
+        subtitleElement.textContent = 'Last updated: never';
+        return;
+    }
+    const now = Date.now();
+    const seconds = Math.floor((now - timestamp) / 1000);
+    
+    let timeStr;
+    if (seconds < 60) {
+        timeStr = `${seconds}s ago`;
+    } else if (seconds < 3600) {
+        timeStr = `${Math.floor(seconds / 60)}m ago`;
+    } else {
+        timeStr = `${Math.floor(seconds / 3600)}h ago`;
+    }
+    
+    subtitleElement.textContent = `Last updated: ${timeStr}`;
+}
+
+export function updateTabBadgeCount(tabIndex, count) {
+    const tabBtn = document.querySelector(`.tab[data-tab-index="${tabIndex}"]`);
+    if (!tabBtn) return;
+
+    let badge = tabBtn.querySelector('.notification-badge');
+    if (!badge) return;
+
+    if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
     }
 }
 
@@ -50,7 +59,7 @@ export function updateUnreadNotificationCount() {
     if (!notificationsList) return;
     
     const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
-    updateNavDot('notif-dot', unreadCount > 0);
+    updateTabBadgeCount(0, unreadCount);
 }
 
 /**
@@ -60,8 +69,6 @@ export function getEventServiceUrl() {
     return 'https://event.easter.company';
 }
 
-export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
-
 /**
  * Resolves the primary production URL or the local fallback for Discord service.
  */
@@ -69,6 +76,7 @@ export function getDiscordServiceUrl() {
     return 'https://discord.easter.company';
 }
 
+export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
 export const LOCAL_DISCORD_SERVICE = 'http://127.0.0.1:8300';
 
 const ANSI_MAP = {
@@ -122,6 +130,7 @@ export async function smartFetch(endpoint, options = {}) {
         try {
             const response = await fetch(resolvedBaseUrl + endpoint, options);
             if (response.ok) return response;
+            // If the cached URL starts failing, clear it and try full discovery again
             resolvedBaseUrl = null;
         } catch (e) {
             resolvedBaseUrl = null;

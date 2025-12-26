@@ -31,7 +31,7 @@ CSS_OUTPUT_FILE="$ROOT_DIR/dex.$HASH.css"
 
 # 3. Bundle, minify, and obfuscate the JavaScript
 echo "Bundling JavaScript..."
-"$ESBUILD_BIN" "$JS_ENTRY_POINT" --bundle --minify --sourcemap --outfile="$JS_OUTPUT_FILE"
+"$ESBUILD_BIN" "$JS_ENTRY_POINT" --bundle --minify --outfile="$JS_OUTPUT_FILE"
 
 # 4. Bundle and minify the CSS
 echo "Bundling CSS..."

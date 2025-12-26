@@ -1,6 +1,6 @@
 // Settings Window Logic
-import { getCurrentTheme, setTheme, THEMES } from './theme.js';
-import { getUserEmail } from './auth.js';
+import { getCurrentTheme, setTheme, THEMES } from '../core/theme.js';
+import { getUserEmail } from '../core/auth.js';
 
 export function getSettingsContent() {
     const currentTheme = getCurrentTheme();

@@ -1,0 +1,83 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row; 
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: rgba(40, 40, 40, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    transform: scaleY(1); /* Default state for animation */
+    transform-origin: bottom center; /* Animate from the bottom */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+footer.hide {
+    transform: scaleY(0); /* Scale down to hide */
+    opacity: 0;
+    pointer-events: none;
+}
+
+.socials-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.socials-section a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.2em;
+    height: 2.2em;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.socials-section a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 1px;
+    transition: width 0.3s ease;
+}
+
+.socials-section a:hover::after {
+    width: 100%;
+}
+
+.socials-section a i {
+    font-size: 1.5em;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.socials-section a:hover i {
+    color: #fff;
+}
+
+@media (min-width: 768px) {
+    footer {
+        width: fit-content; 
+        left: 50%;
+        bottom: 20px; 
+        transform: translateX(-50%) scaleY(1);
+        border-radius: 15px; 
+        padding: 12px 20px;
+    }
+
+    footer.hide {
+        transform: translateX(-50%) scaleY(0);
+    }
+}

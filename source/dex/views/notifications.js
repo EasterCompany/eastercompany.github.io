@@ -1,5 +1,5 @@
 // Notifications Tab Logic
-import { createPlaceholderMessage, updateUnreadNotificationCount, escapeHtml, smartFetch, getGlassyLoader } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml, smartFetch } from '../core/utils.js';
 
 export const getNotificationsContent = () => `
     <div class="notifications-actions">
@@ -9,7 +9,7 @@ export const getNotificationsContent = () => `
         <button id="notif-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
     </div>
     <div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-        ${getGlassyLoader()}
+        <p>Loading notifications...</p>
     </div>
 `;
 
@@ -42,6 +42,7 @@ export async function updateNotificationsTab(forceReRender = false) {
     const allNotifications = data.events || [];
 
     lastNotificationsUpdate = Date.now();
+    updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
 
     // Persistence Logic Filter:
     // 1. Always keep UNREAD notifications.
@@ -300,6 +301,7 @@ export async function updateNotificationsTab(forceReRender = false) {
     });
 
     lastNotificationsUpdate = Date.now();
+    updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
     updateUnreadNotificationCount(); // Update badge on each refresh
 
   } catch (error) {
