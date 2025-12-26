@@ -2,18 +2,13 @@
 import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } from './utils.js';
 import { formatEventSummary } from './templates.js';
 
-import { getLogsContent, updateLogs } from './logs.js';
-
 export const getEventsContent = () => `
     <div class="notifications-actions">
         <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-        <div style=\"width: 1px; background: rgba(255,255,255,0.1); margin: 0 5px;\"></div>
-        <button id=\"events-toggle-view\" class=\"notif-action-btn active\" data-view=\"timeline\"><i class='bx bx-list-ul'></i> Timeline</button>
-        <button id=\"events-toggle-view-logs\" class=\"notif-action-btn\" data-view=\"logs\"><i class='bx bx-history'></i> Service Logs</button>
     </div>
     
-    <div id=\"timeline-view-container\">
+    <div id="timeline-view-container">
         <div id="event-filters" class="event-filters">
             <button class="notif-action-btn filter-btn active" data-filter="all">All</button>
             <button class="notif-action-btn filter-btn" data-filter="messaging">Messaging</button>
@@ -24,10 +19,6 @@ export const getEventsContent = () => `
         <div id="events-timeline" class="events-timeline">
             <p>Loading events...</p>
         </div>
-    </div>
-
-    <div id=\"logs-view-container\" style=\"display: none;\">
-        ${getLogsContent()}
     </div>
 `;
 
@@ -106,11 +97,6 @@ function getEventIcon(type) {
 export async function updateEventsTimeline(forceReRender = false) {
     const eventsContainer = document.getElementById('events-timeline');
     if (!eventsContainer) return;
-
-    // Update logs if the view is active
-    if (document.getElementById('logs-view-container')?.style.display !== 'none') {
-        updateLogs();
-    }
 
     // Attach button listeners if not already attached
     attachEventActionListeners();
@@ -265,9 +251,11 @@ export async function updateEventsTimeline(forceReRender = false) {
                 } else if (type === 'analysis.visual.completed') {
                     let imageHtml = '';
                     if (eventData.base64_preview) {
-                        imageHtml = `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+                        imageHtml = 
+                        `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`
                     } else if (eventData.url) {
-                        imageHtml = `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+                        imageHtml = 
+                        `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`
                     }
 
                     detailsContent = `
@@ -511,7 +499,7 @@ export async function updateEventsTimeline(forceReRender = false) {
         });
 
         lastEventsUpdate = Date.now();
-        updateTabTimestamp(3, lastEventsUpdate); // Index 3
+        updateTabTimestamp(1, lastEventsUpdate); // Index 1
 
     } catch (error) {
         console.error('Error fetching events:', error);
@@ -525,25 +513,6 @@ function attachEventActionListeners() {
     const expandAllBtn = document.getElementById('events-expand-all');
     const closeAllBtn = document.getElementById('events-close-all');
     const filterContainer = document.getElementById('event-filters');
-    const toggleTimelineBtn = document.getElementById('events-toggle-view');
-    const toggleLogsBtn = document.getElementById('events-toggle-view-logs');
-
-    if (toggleTimelineBtn && toggleLogsBtn && !toggleTimelineBtn.dataset.listenerAttached) {
-        toggleTimelineBtn.onclick = () => {
-            toggleTimelineBtn.classList.add('active');
-            toggleLogsBtn.classList.remove('active');
-            document.getElementById('timeline-view-container').style.display = 'block';
-            document.getElementById('logs-view-container').style.display = 'none';
-        };
-        toggleLogsBtn.onclick = () => {
-            toggleLogsBtn.classList.add('active');
-            toggleTimelineBtn.classList.remove('active');
-            document.getElementById('timeline-view-container').style.display = 'none';
-            document.getElementById('logs-view-container').style.display = 'block';
-            updateLogs();
-        };
-        toggleTimelineBtn.dataset.listenerAttached = "true";
-    }
 
     if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
         expandAllBtn.onclick = () => {

@@ -1968,11 +1968,10 @@ footer.hide {
     min-width: 300px;
     display: flex;
     flex-direction: column;
-    height: 500px; /* Increased from 400px */
+    height: auto; /* Allow auto height based on content */
     overflow: hidden;
 }
-...
-...
+
 .log-content {
     white-space: pre-wrap;
     word-break: break-all;
@@ -1983,7 +1982,8 @@ footer.hide {
     padding: 10px;
     border-radius: 4px;
     flex-grow: 1;
-    overflow-y: auto; /* Enable scrolling */
+    overflow-y: hidden; /* Disable scrolling */
+    min-height: 450px; /* Approximate height for 25 lines */
 }
 /* Attachments Grid */
 .attachments-grid {

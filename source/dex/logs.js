@@ -43,7 +43,19 @@ export async function updateLogs() {
 
         const logsHtml = filteredLogsData.map(logReport => {
             const rawLogs = logReport.logs.join('\n');
-            const styledLogs = logReport.logs.map(line => ansiToHtml(line)).join('\n');
+            
+            // Ensure exactly 25 lines
+            let lines = [...logReport.logs];
+            if (lines.length < 25) {
+                const paddingNeeded = 25 - lines.length;
+                for (let i = 0; i < paddingNeeded; i++) {
+                    lines.push(''); // Add empty lines
+                }
+            } else if (lines.length > 25) {
+                lines = lines.slice(-25); // Take last 25 if somehow more
+            }
+
+            const styledLogs = lines.map(line => ansiToHtml(line)).join('\n');
             
             return `
                 <div class="log-report">
