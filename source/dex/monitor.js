@@ -31,15 +31,15 @@ export const getProcessesContent = () => {
             </div>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                 <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Next T1 (Guardian)</span>
+                    <span style="color: #888; font-size: 0.8em;">Guardian</span>
                     <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
                 </div>
                 <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Next T2 (Architect)</span>
+                    <span style="color: #888; font-size: 0.8em;">Architect</span>
                     <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
                 </div>
                 <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Next T3 (Strategist)</span>
+                    <span style="color: #888; font-size: 0.8em;">Strategist</span>
                     <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
                 </div>
             </div>
