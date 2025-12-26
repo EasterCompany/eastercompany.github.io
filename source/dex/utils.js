@@ -17,40 +17,15 @@ export function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
-export function updateTabTimestamp(tabIndex, timestamp) {
-    const subtitleElement = document.querySelector(`.tab[data-tab-index="${tabIndex}"] .tab-subtitle`);
-    if (!subtitleElement) return;
-    if (!timestamp) {
-        subtitleElement.textContent = 'Last updated: never';
-        return;
-    }
-    const now = Date.now();
-    const seconds = Math.floor((now - timestamp) / 1000);
-    
-    let timeStr;
-    if (seconds < 60) {
-        timeStr = `${seconds}s ago`;
-    } else if (seconds < 3600) {
-        timeStr = `${Math.floor(seconds / 60)}m ago`;
-    } else {
-        timeStr = `${Math.floor(seconds / 3600)}h ago`;
-    }
-    
-    subtitleElement.textContent = `Last updated: ${timeStr}`;
-}
-
-export function updateTabBadgeCount(tabIndex, count) {
-    const tabBtn = document.querySelector(`.tab[data-tab-index="${tabIndex}"]`);
-    if (!tabBtn) return;
-
-    let badge = tabBtn.querySelector('.notification-badge');
-    if (!badge) return;
-
-    if (count > 0) {
-        badge.textContent = count > 9 ? '9+' : count;
-        badge.style.display = 'flex';
-    } else {
-        badge.style.display = 'none';
+/**
+ * Updates a notification dot on the navbar.
+ * @param {string} dotId - The ID of the dot element (e.g., "notif-dot")
+ * @param {boolean} show - Whether to show the dot
+ */
+export function updateNavDot(dotId, show) {
+    const dot = document.getElementById(dotId);
+    if (dot) {
+        dot.style.display = show ? 'block' : 'none';
     }
 }
 
@@ -59,7 +34,7 @@ export function updateUnreadNotificationCount() {
     if (!notificationsList) return;
     
     const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
-    updateTabBadgeCount(0, unreadCount);
+    updateNavDot('notif-dot', unreadCount > 0);
 }
 
 /**
@@ -131,7 +106,6 @@ export async function smartFetch(endpoint, options = {}) {
         try {
             const response = await fetch(resolvedBaseUrl + endpoint, options);
             if (response.ok) return response;
-            // If the cached URL starts failing, clear it and try full discovery again
             resolvedBaseUrl = null;
         } catch (e) {
             resolvedBaseUrl = null;

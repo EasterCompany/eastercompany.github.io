@@ -148,6 +148,26 @@ nav.recording {
     gap: 20px;
 }
 
+.nav-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: #ff4444;
+    border-radius: 50%;
+    border: 2px solid #1a1a1a;
+    display: none;
+    pointer-events: none;
+}
+
 .nav-right i {
     font-size: 1.4em;
     color: #ccc;

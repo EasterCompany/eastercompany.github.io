@@ -1,5 +1,5 @@
 // Events Timeline Logic
-import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } from './utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
 import { formatEventSummary } from './templates.js';
 import { updateContactsTab } from './contacts.js';
 
