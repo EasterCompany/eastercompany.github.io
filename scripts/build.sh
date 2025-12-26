@@ -91,17 +91,17 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         # Inject head template after <head> tag using a temp file approach
         if [ -f "$TEMPLATES_DIR/head.html" ]; then
             # Create a temporary file with the injection, replacing title and canonical
+            # Using index() for literal matches instead of ~ for regex to avoid escape issues
             awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" -v canonical="$canonical_url" '
                 /<head>/ {
                     print
                     print "<!-- HEAD_START -->"
                     while ((getline line < head_file) > 0) {
-                        # Replace title with page-specific title
-                        if (line ~ /<title>/) {
+                        if (index(line, "<title>") > 0) {
                             print "  <title>" title "</title>"
-                        } else if (line ~ /og:url/) {
+                        } else if (index(line, "og:url") > 0) {
                             print "  <meta property=\"og:url\" content=\"" canonical "\">"
-                        } else if (line ~ /link rel=\"canonical\"/) {
+                        } else if (index(line, "rel=\"canonical\"") > 0) {
                             print "  <link rel=\"canonical\" href=\"" canonical "\">"
                         } else {
                             print line
