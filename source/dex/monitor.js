@@ -29,7 +29,7 @@ export const getProcessesContent = () => {
                 <h3 style="margin: 0; font-size: 1em; color: #fff;">Analyst Status</h3>
                 <button id="analyst-reset-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Reset Analyst</button>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                 <div class="analyst-indicator">
                     <span style="color: #888; font-size: 0.8em;">Next T1 (Guardian)</span>
                     <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
@@ -42,12 +42,27 @@ export const getProcessesContent = () => {
                     <span style="color: #888; font-size: 0.8em;">Next T3 (Strategist)</span>
                     <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
                 </div>
-                <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">System Idle</span>
+            </div>
+        </div>
+
+        <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 20px 0;"></div>
+
+        <div class="system-vitals-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 1em; color: #fff;">System Vitals</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                 <div class="analyst-indicator">
+                    <span style="color: #888; font-size: 0.8em;">Cognitive Idle Time</span>
                     <span id="analyst-idle-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
+                </div>
+                 <div class="analyst-indicator">
+                    <span style="color: #888; font-size: 0.8em;">Active Processes</span>
+                    <span id="vitals-processes-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
                 </div>
             </div>
         </div>
+
         <div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>
     `;
 };
@@ -493,6 +508,18 @@ export async function updateProcessesTab() {
 
     // --- Update Processes List ---
     const processes = await fetchProcessData();
+
+    const vitalsProcVal = document.getElementById('vitals-processes-val');
+    if (vitalsProcVal) {
+        if (processes) {
+            const count = processes.length;
+            vitalsProcVal.textContent = count > 0 ? `${count} Active` : "Idle";
+            vitalsProcVal.style.color = count > 0 ? "#bb86fc" : "#fff";
+        } else {
+            vitalsProcVal.textContent = "-";
+            vitalsProcVal.style.color = "#888";
+        }
+    }
 
     if (processes === null) {
         widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.');
