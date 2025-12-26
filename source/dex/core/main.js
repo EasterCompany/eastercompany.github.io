@@ -75,7 +75,10 @@ function onReady() {
           container.setAttribute('data-count', activeWindows.length);
       }
 
-      const isStretched = activeWindows.length > 1 || (activeWindows.length === 1 && window.innerWidth < 1900);
+      // ONLY STRETCH/SNAP IF:
+      // 1. More than 1 window is open
+      // 2. OR 1 window is open but we are on a smaller screen (< 1200px)
+      const isStretched = activeWindows.length > 1 || (activeWindows.length === 1 && window.innerWidth < 1200);
 
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
