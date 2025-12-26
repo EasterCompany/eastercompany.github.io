@@ -75,9 +75,15 @@ function onReady() {
           container.setAttribute('data-count', activeWindows.length);
       }
 
+      const isStretched = activeWindows.length > 1 || (activeWindows.length === 1 && window.innerWidth < 1900);
+
       if (activeWindows.length > 0) {
-          navbar?.classList.add('window-open');
           footer?.classList.add('hide');
+          if (isStretched) {
+              navbar?.classList.add('window-open'); // 'window-open' now acts as 'stretched' in CSS
+          } else {
+              navbar?.classList.remove('window-open');
+          }
       } else {
           navbar?.classList.remove('window-open');
           // Only show footer on specific pages when no windows are open

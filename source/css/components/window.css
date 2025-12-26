@@ -44,11 +44,11 @@
     border-radius: 0;
 }
 
-@media (min-width: 1200px) {
+/* Single window width limit on desktop */
+@media (min-width: 1900px) {
     .windows-container[data-count="1"] .window {
         width: 70%;
         max-width: 1400px;
-        height: 95%;
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
@@ -96,10 +96,13 @@
                 transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Force border-radius reset for all multi-window configurations */
-.windows-container[data-count]:not([data-count="1"]) .window {
-    border-radius: 0 !important;
-    border: none;
+/* Force border-radius reset for all multi-window configurations or small views */
+.windows-container[data-count]:not([data-count="1"]) .window,
+@media (max-width: 1899px) {
+    .windows-container[data-count="1"] .window {
+        border-radius: 0 !important;
+        border: none;
+    }
 }
 
 .window.open {
