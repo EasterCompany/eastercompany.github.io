@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.140.main.9695615.2025-12-26.linux-amd64.9695615",
-    "dev": "2.8.140.main.9695615.2025-12-26.linux-amd64.9695615"
+    "user": "2.8.141.main.b72b4a4.2025-12-26.linux-amd64.b72b4a4",
+    "dev": "2.8.141.main.b72b4a4.2025-12-26.linux-amd64.b72b4a4"
   },
   "releases": {
     "0.0.0": {
@@ -1163,14 +1163,14 @@
     },
     "2.8.141": {
       "type": "patch",
-      "date": "2025-12-24T13:20:40Z",
-      "commit": "5efa3c5",
+      "date": "2025-12-26T20:29:21Z",
+      "commit": "1aded10",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.8.141/dex-event-service",
-            "size": 12639978,
-            "checksum": "1122b04615a3f1bca6eb199fd25e479bca6c12fb0b00cae49ae7d68943cd5330"
+            "path": "/bin/2.8.141/dex",
+            "size": 16610083,
+            "checksum": "1e4221603c2919b34d141dbc9b21b235d5f87e7b8e2d3b6e1b824c017a5b263c"
           }
         }
       }
@@ -2221,8 +2221,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.140.main.9695615.2025-12-26.linux-amd64.9695615",
-      "user": "2.8.140.main.9695615.2025-12-26.linux-amd64.9695615",
+      "current": "2.8.141.main.b72b4a4.2025-12-26.linux-amd64.b72b4a4",
+      "user": "2.8.141.main.b72b4a4.2025-12-26.linux-amd64.b72b4a4",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
