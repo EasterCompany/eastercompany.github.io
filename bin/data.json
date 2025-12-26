@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.122.main.b76af7c.2025-12-26.linux-amd64.b76af7c",
-    "dev": "2.8.122.main.b76af7c.2025-12-26.linux-amd64.b76af7c"
+    "user": "2.8.123.main.472e59a.2025-12-26.linux-amd64.472e59a",
+    "dev": "2.8.123.main.472e59a.2025-12-26.linux-amd64.472e59a"
   },
   "releases": {
     "0.0.0": {
@@ -863,6 +863,20 @@
             "path": "/bin/2.8.122/dex",
             "size": 16560555,
             "checksum": "88be29ea07414bd73d15a9fd527a970ba025fc47e5fe04ecaa618730569270b1"
+          }
+        }
+      }
+    },
+    "2.8.123": {
+      "type": "patch",
+      "date": "2025-12-26T04:27:14Z",
+      "commit": "9a375e3",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.123/dex",
+            "size": 16560019,
+            "checksum": "bf3119dd4da155ac3691fab49e7f6eff3ab9c1088c77d1cf25d188d3244aa651"
           }
         }
       }
@@ -1885,8 +1899,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.122.main.b76af7c.2025-12-26.linux-amd64.b76af7c",
-      "user": "2.8.122.main.b76af7c.2025-12-26.linux-amd64.b76af7c",
+      "current": "2.8.123.main.472e59a.2025-12-26.linux-amd64.472e59a",
+      "user": "2.8.123.main.472e59a.2025-12-26.linux-amd64.472e59a",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
