@@ -42,17 +42,22 @@ echo "Injecting head content and build tags into HTML files..."
 SCRIPT_TAG="<script src=\"/dex.$HASH.js\" defer></script>"
 LINK_TAG="<link rel=\"stylesheet\" href=\"/dex.$HASH.css\">"
 
-for html_file in "$ROOT_DIR"/*.html; do
+find "$ROOT_DIR" -name "*.html" | while read html_file; do
     if [ -f "$html_file" ]; then
         # Get filename without path and extension
         filename=$(basename "$html_file" .html)
+        parent_dir=$(basename $(dirname "$html_file"))
 
         # Generate page title from filename
         # Replace hyphens and underscores with spaces, capitalize words
         if [ "$filename" = "404" ]; then
             page_title="404 - Page Not Found"
         elif [ "$filename" = "index" ]; then
-            page_title="Home"
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ]; then
+                page_title="Home"
+            else
+                page_title=$(echo "$parent_dir" | sed 's/[-_]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
+            fi
         else
             # Convert filename: replace - and _ with spaces, then capitalize each word
             page_title=$(echo "$filename" | sed 's/[-_]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
