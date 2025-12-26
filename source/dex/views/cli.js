@@ -6,7 +6,7 @@ const CLI_COMMANDS = [
         title: 'Chat',
         icon: 'bx-message-rounded-dots',
         description: 'Placeholder for the future Dexter chat interface.',
-        usage: 'Coming soon...',
+        usage: 'Coming soon...', 
         category: 'cognitive',
         dummy: true
     },
@@ -179,7 +179,7 @@ function logToTerminal(body, text, type = 'output') {
     line.className = `terminal-line terminal-${type}`;
     
     if (type === 'prompt') {
-        line.innerHTML = `<span class=\"terminal-prompt\">$</span> ${text}`;
+        line.innerHTML = `<span class="terminal-prompt">$</span> ${text}`;
     } else {
         line.innerHTML = ansiToHtml(text);
     }
