@@ -11,13 +11,13 @@
     box-sizing: border-box;
     z-index: 900;
     pointer-events: none;
-    background: transparent; /* Changed to transparent by default */
+    background: transparent;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Only show black backdrop when windows are actually open */
+/* No backdrop needed, keep background visible */
 .windows-container[data-count]:not([data-count="0"]) {
-    background: #000;
+    background: transparent;
 }
 
 @media (min-width: 768px) {
