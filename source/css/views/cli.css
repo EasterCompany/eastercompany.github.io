@@ -225,6 +225,36 @@
     transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+.cli-terminal-header {
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: #eee;
+}
+
+.terminal-status {
+    font-size: 0.75em;
+    padding: 3px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.status-running { background: rgba(3, 218, 198, 0.2); color: #03dac6; }
+.status-success { background: rgba(94, 255, 94, 0.2); color: #5eff5e; }
+.status-error { background: rgba(207, 102, 121, 0.2); color: #cf6679; }
+
 .cli-terminal-split {
     display: flex;
     flex: 1;
