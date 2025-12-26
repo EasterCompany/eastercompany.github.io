@@ -1,0 +1,69 @@
+/* --- Events Timeline & Notifications --- */
+.events-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.event-item {
+  display: flex;
+  gap: 15px;
+  padding: 12px;
+  background-color: rgba(40, 40, 40, 0.3);
+  border-left: 3px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.event-item:hover { background-color: rgba(40, 40, 40, 0.5); }
+
+.event-border-purple { border-left: 4px solid #bb86fc !important; }
+.event-border-blue { border-left: 4px solid #03dac6 !important; }
+.event-border-red { border-left: 4px solid #cf6679 !important; }
+
+.event-time { display: flex; flex-direction: column; align-items: flex-end; min-width: 80px; flex-shrink: 0; }
+.event-time-main { font-size: 0.95em; font-weight: 500; color: #eee; font-family: monospace; }
+.event-date { font-size: 0.75em; color: #999; margin-top: 2px; }
+
+.event-content { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.event-service { font-size: 0.8em; color: #aaa; font-weight: 500; }
+.event-message { font-size: 0.9em; color: #eee; line-height: 1.4; word-wrap: break-word; }
+
+.event-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.notifications-actions {
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.notif-action-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #aaa;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.notif-action-btn:hover { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
