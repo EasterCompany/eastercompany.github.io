@@ -1,5 +1,5 @@
 // Blueprints Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml, smartFetch } from './utils.js';
 
 export const getBlueprintsContent = () => `
     <div class="notifications-actions">
@@ -24,23 +24,10 @@ export async function updateBlueprintsTab(forceReRender = false) {
     // Attach button listeners if not already attached
     attachBlueprintActionListeners();
 
-    const serviceMapString = localStorage.getItem('service_map');
-    if (!serviceMapString) {
-        blueprintsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-        return;
-    }
-    let eventService = null;
-    try {
-        const serviceMapData = JSON.parse(serviceMapString);
-        eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
-    } catch (e) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
-    if (!eventService) { blueprintsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
-
-    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    const blueprintsUrl = `http://${domain}:${eventService.port}/events?ml=1000&format=json&event.type=system.blueprint.generated`;
+    const url = `/events?ml=1000&format=json&event.type=system.blueprint.generated`;
 
     try {
-        const response = await fetch(blueprintsUrl);
+        const response = await smartFetch(url);
         if (!response.ok) throw new Error('Service is offline or unreachable.');
 
         const data = await response.json();

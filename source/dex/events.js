@@ -1,5 +1,5 @@
 // Events Timeline Logic
-import { createPlaceholderMessage, updateTabTimestamp, escapeHtml } from './utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } from './utils.js';
 import { formatEventSummary } from './templates.js';
 
 import { getLogsContent, updateLogs } from './logs.js';
@@ -115,26 +115,12 @@ export async function updateEventsTimeline(forceReRender = false) {
     // Attach button listeners if not already attached
     attachEventActionListeners();
 
-    const serviceMapString = localStorage.getItem('service_map');
-    if (!serviceMapString) {
-        eventsContainer.innerHTML = createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-        return;
-    }
-    let eventService = null;
-    try {
-        const serviceMapData = JSON.parse(serviceMapString);
-        eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
-    } catch (e) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Invalid service map data.'); return; }
-    if (!eventService) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
-
-    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    
     // Fetch MORE events if we are filtering, to ensure we have enough data
     const fetchCount = currentFilter === 'all' ? 100 : 250;
-    const eventsUrl = `http://${domain}:${eventService.port}/events?ml=${fetchCount}&format=json&exclude_types=system.notification.generated`;
+    const url = `/events?ml=${fetchCount}&format=json&exclude_types=system.notification.generated`;
 
     try {
-        const response = await fetch(eventsUrl);
+        const response = await smartFetch(url);
         if (!response.ok) throw new Error('Service is offline or unreachable.');
 
         const data = await response.json();

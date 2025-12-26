@@ -10,8 +10,23 @@ import { getEventsContent, updateEventsTimeline, lastEventsUpdate } from './even
 import { getSystemContent, updateSystemTab, lastServicesUpdate, lastModelsUpdate, lastProcessesUpdate } from './monitor.js';
 import { getSettingsContent, attachSettingsListeners } from './settings.js';
 import { initCliDashboard } from './cli.js';
+import { getEventServiceUrl } from './utils.js';
+
+async function checkServiceHealth() {
+  const isProduction = window.location.hostname === 'easter.company';
+  if (!isProduction) return;
+
+  try {
+    const response = await fetch(`${getEventServiceUrl()}/system/status`, { method: 'HEAD' });
+    if (!response.ok) throw new Error('Service unhealthy');
+  } catch (e) {
+    console.error('Production event service unreachable. Redirecting to 404.');
+    window.location.href = '/404.html';
+  }
+}
 
 function onReady() {
+  checkServiceHealth();
   initTheme();
   applyBaseStyles();
   

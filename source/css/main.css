@@ -1904,6 +1904,18 @@ footer.hide {
 .terminal-success { color: #5eff5e; }
 .terminal-warning { color: #ffa500; }
 
+/* ANSI Color Palette Mapping */
+.ansi-red { color: #cf6679; }
+.ansi-bright-red { color: #ff80ab; }
+.ansi-green { color: #5eff5e; }
+.ansi-yellow { color: #ffff00; }
+.ansi-blue { color: #4444ff; }
+.ansi-purple { color: #bb86fc; }
+.ansi-cyan { color: #03dac6; }
+.ansi-white { color: #ffffff; }
+.ansi-gray { color: #666666; }
+.ansi-dark-gray { color: #444444; }
+
 .cli-terminal-footer {
     padding: 10px 20px;
     background: rgba(20, 20, 20, 0.8);

@@ -1,5 +1,5 @@
 // Roadmap Tab Logic
-import { createPlaceholderMessage, escapeHtml } from './utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
 
 export const getRoadmapContent = () => `
   <div class="notifications-actions">
@@ -29,21 +29,8 @@ export async function updateRoadmapTab(forceReRender = false) {
 
   attachRoadmapListeners();
 
-  const serviceMapString = localStorage.getItem('service_map');
-  if (!serviceMapString) return;
-
-  let eventService = null;
   try {
-    const serviceMapData = JSON.parse(serviceMapString);
-    eventService = (serviceMapData.services?.cs || []).find(s => s.id === 'dex-event-service');
-  } catch (e) { return; } 
-  if (!eventService) return;
-
-  const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-  const roadmapUrl = `http://${domain}:${eventService.port}/roadmap`;
-
-  try {
-    const response = await fetch(roadmapUrl);
+    const response = await smartFetch('/roadmap');
     if (!response.ok) throw new Error('Offline');
 
     const items = await response.json();
@@ -190,18 +177,14 @@ function attachRoadmapListeners() {
       const content = document.getElementById('roadmap-editor-input').value;
       if (!content.trim()) return;
 
-      const serviceMapData = JSON.parse(localStorage.getItem('service_map'));
-      const eventService = serviceMapData.services.cs.find(s => s.id === 'dex-event-service');
-      const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-
       const url = editingItemId
-        ? `http://${domain}:${eventService.port}/roadmap/${editingItemId}`
-        : `http://${domain}:${eventService.port}/roadmap`;
+        ? `/roadmap/${editingItemId}`
+        : `/roadmap`;
 
       const method = editingItemId ? 'PATCH' : 'POST';
 
       try {
-        await fetch(url, {
+        await smartFetch(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ content })
@@ -239,12 +222,9 @@ function startEditing(item) {
 
 async function togglePublish(item) {
   const newState = item.state === 'published' ? 'draft' : 'published';
-  const serviceMapData = JSON.parse(localStorage.getItem('service_map'));
-  const eventService = serviceMapData.services.cs.find(s => s.id === 'dex-event-service');
-  const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
 
   try {
-    await fetch(`http://${domain}:${eventService.port}/roadmap/${item.id}`, {
+    await smartFetch(`/roadmap/${item.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ state: newState })
@@ -255,12 +235,9 @@ async function togglePublish(item) {
 
 async function deleteItem(id) {
   if (!confirm("Delete this roadmap item?")) return;
-  const serviceMapData = JSON.parse(localStorage.getItem('service_map'));
-  const eventService = serviceMapData.services.cs.find(s => s.id === 'dex-event-service');
-  const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
 
   try {
-    await fetch(`http://${domain}:${eventService.port}/roadmap/${id}`, { method: 'DELETE' });
+    await smartFetch(`/roadmap/${id}`, { method: 'DELETE' });
     activeExpandedIds.delete(id);
     updateRoadmapTab(true);
   } catch (e) { console.error(e); }

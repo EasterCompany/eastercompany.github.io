@@ -1,5 +1,38 @@
-// CLI Dashboard Logic for /dex.html
-import { createPlaceholderMessage } from './utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch } from './utils.js';
+
+const ANSI_MAP = {
+    '31': 'ansi-red',
+    '91': 'ansi-bright-red',
+    '32': 'ansi-green',
+    '33': 'ansi-yellow',
+    '34': 'ansi-blue',
+    '35': 'ansi-purple',
+    '36': 'ansi-cyan',
+    '37': 'ansi-white',
+    '90': 'ansi-dark-gray'
+};
+
+function ansiToHtml(text) {
+    let escaped = escapeHtml(text);
+    
+    // Handle Reset
+    escaped = escaped.replace(/\x1b\[0m/g, '</span>');
+
+    // Handle Colors
+    escaped = escaped.replace(/\x1b\[(\d+)m/g, (match, code) => {
+        const className = ANSI_MAP[code];
+        return className ? `<span class="${className}">` : '';
+    });
+
+    // Cleanup unclosed spans
+    const openCount = (escaped.match(/<span/g) || []).length;
+    const closeCount = (escaped.match(/<\/span/g) || []).length;
+    if (openCount > closeCount) {
+        escaped += '</span>'.repeat(openCount - closeCount);
+    }
+
+    return escaped;
+}
 
 const CLI_COMMANDS = [
     {
@@ -180,9 +213,9 @@ function logToTerminal(body, text, type = 'output') {
     line.className = `terminal-line terminal-${type}`;
     
     if (type === 'prompt') {
-        line.innerHTML = `<span class="terminal-prompt">$</span> ${text}`;
+        line.innerHTML = `<span class=\"terminal-prompt\">$</span> ${text}`;
     } else {
-        line.textContent = text;
+        line.innerHTML = ansiToHtml(text);
     }
     
     body.appendChild(line);
@@ -196,28 +229,12 @@ async function executeRealCommand(cmdId) {
     const body = openTerminal(cmdInfo);
     logToTerminal(body, `dex ${cmdId}`, 'prompt');
 
-    const serviceMap = JSON.parse(localStorage.getItem('service_map'));
-    const eventService = (serviceMap.services?.cs || []).find(s => s.id === 'dex-event-service');
-    if (!eventService) {
-        logToTerminal(body, 'Error: Event service not found in service map.', 'error');
-        return;
-    }
-
-    const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    const url = `http://${domain}:${eventService.port}/cli/execute`;
-
     try {
-        const response = await fetch(url, {
+        const response = await smartFetch('/cli/execute', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ command: cmdId, args: [] })
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            logToTerminal(body, `Server Error: ${errorText}`, 'error');
-            return;
-        }
 
         const reader = response.body.getReader();
         const decoder = new TextDecoder();

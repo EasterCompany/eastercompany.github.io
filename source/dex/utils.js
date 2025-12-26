@@ -61,3 +61,32 @@ export function updateUnreadNotificationCount() {
     const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
     updateTabBadgeCount(0, unreadCount);
 }
+
+/**
+ * Resolves the primary production URL or the local fallback.
+ */
+export function getEventServiceUrl() {
+    return 'https://event.easter.company';
+}
+
+export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
+
+/**
+ * Executes a fetch against the primary domain, falling back to local on failure.
+ */
+export async function smartFetch(endpoint, options = {}) {
+    const primary = getEventServiceUrl() + endpoint;
+    const fallback = LOCAL_EVENT_SERVICE + endpoint;
+
+    try {
+        const response = await fetch(primary, options);
+        if (response.ok) return response;
+        throw new Error('Primary failed');
+    } catch (e) {
+        try {
+            return await fetch(fallback, options);
+        } catch (e2) {
+            throw e2;
+        }
+    }
+}
