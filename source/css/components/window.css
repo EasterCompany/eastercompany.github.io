@@ -148,6 +148,10 @@ nav.window-open + .windows-container {
     color: #ff4444;
 }
 
+.window.hide-close .window-close {
+    display: none !important;
+}
+
 .window-content {
     flex-grow: 1;
     overflow-y: auto;
