@@ -83,11 +83,13 @@ function onReady() {
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
           document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
+          
+          // ALWAYS synchronize navbar state if any window is open
+          navbar?.classList.add('window-open');
+          
           if (isStretched) {
-              navbar?.classList.add('window-open');
               if (container) container.style.paddingTop = '60px'; // SNAP
           } else {
-              navbar?.classList.remove('window-open');
               if (container) container.style.paddingTop = '100px'; // FLOAT
           }
       } else {

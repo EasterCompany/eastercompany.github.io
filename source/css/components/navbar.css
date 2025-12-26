@@ -21,7 +21,7 @@ nav {
 
 /* Navbar when windows are open: Matches Window Aesthetic */
 nav.window-open {
-    background-color: rgba(30, 30, 30, 0.85);
+    background-color: rgba(20, 20, 20, 0.8);
     backdrop-filter: blur(25px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
