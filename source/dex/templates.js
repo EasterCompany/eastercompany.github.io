@@ -28,11 +28,18 @@ export const EVENT_TEMPLATES = {
     "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}",
     "analysis.link.completed": "Analyzed link: {url}",
     "analysis.visual.completed": "Analyzed image: {filename}",
+    "system.status.change": "{entity} changed status to {new_status}",
+    "system.test.completed": "Tests completed for {service_name} ({duration})",
+    "system.build.completed": "Build completed for {service_name}: {status}",
     "system.analysis.audit": "Analysis Audit: {tier}",
     "system.blueprint.generated": "Blueprint Generated: {title}",
     "system.cli.command": "CLI Command: {command} {args} ({status})",
     "system.cli.status": "CLI Status: {message}",
-    "system.notification.generated": "Notification ({priority}): {title}"
+    "system.notification.generated": "Notification ({priority}): {title}",
+    "system.roadmap.created": "Roadmap item created: {content}",
+    "system.roadmap.updated": "Roadmap item {id} changed to {state}",
+    "system.process.registered": "Process {id} started: {state}",
+    "system.process.unregistered": "Process {id} completed"
 };
 
 export function formatEventSummary(type, data) {
@@ -49,6 +56,11 @@ export function formatEventSummary(type, data) {
     if (type === 'system.analysis.audit') {
         const tier = data.tier ? data.tier.toUpperCase() : 'UNKNOWN';
         template = `Analysis Audit: ${tier}`;
+    }
+    // Specific formatting for system.test.completed
+    if (type === 'system.test.completed') {
+        const status = (data.test?.status === 'OK' && data.lint?.status === 'OK' && data.format?.status === 'OK') ? 'PASSED' : 'FAILED';
+        return `Tests ${status} for ${data.service_name} (${data.duration})`;
     }
     if (!template) return type;
     let summary = template.replace(/\{(\w+)\}/g, (match, key) => {
