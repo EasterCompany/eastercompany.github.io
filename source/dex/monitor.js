@@ -580,7 +580,7 @@ export async function updateProcessesTab() {
         return `
                 <div class="service-widget process-widget" data-channel-id="${proc.channel_id}">
                     <div class="service-widget-header">
-                        <i class="bx bx-loader-alt bx-spin"></i>
+                        <i class="bx bx-cog"></i>
                         <h3>${displayName}</h3>
                         ${retryBadge}
                     </div>
