@@ -2,20 +2,32 @@
 import { createPlaceholderMessage, updateTabTimestamp, escapeHtml } from './utils.js';
 import { formatEventSummary } from './templates.js';
 
+import { getLogsContent, updateLogs } from './logs.js';
+
 export const getEventsContent = () => `
     <div class="notifications-actions">
         <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+        <div style=\"width: 1px; background: rgba(255,255,255,0.1); margin: 0 5px;\"></div>
+        <button id=\"events-toggle-view\" class=\"notif-action-btn active\" data-view=\"timeline\"><i class='bx bx-list-ul'></i> Timeline</button>
+        <button id=\"events-toggle-view-logs\" class=\"notif-action-btn\" data-view=\"logs\"><i class='bx bx-history'></i> Service Logs</button>
     </div>
-    <div id="event-filters" class="event-filters">
-        <button class="notif-action-btn filter-btn active" data-filter="all">All</button>
-        <button class="notif-action-btn filter-btn" data-filter="messaging">Messaging</button>
-        <button class="notif-action-btn filter-btn" data-filter="system">System</button>
-        <button class="notif-action-btn filter-btn" data-filter="cognitive">Cognitive</button>
-        <button class="notif-action-btn filter-btn" data-filter="moderation">Moderation</button>
+    
+    <div id=\"timeline-view-container\">
+        <div id="event-filters" class="event-filters">
+            <button class="notif-action-btn filter-btn active" data-filter="all">All</button>
+            <button class="notif-action-btn filter-btn" data-filter="messaging">Messaging</button>
+            <button class="notif-action-btn filter-btn" data-filter="system">System</button>
+            <button class="notif-action-btn filter-btn" data-filter="cognitive">Cognitive</button>
+            <button class="notif-action-btn filter-btn" data-filter="moderation">Moderation</button>
+        </div>
+        <div id="events-timeline" class="events-timeline">
+            <p>Loading events...</p>
+        </div>
     </div>
-    <div id="events-timeline" class="events-timeline">
-        <p>Loading events...</p>
+
+    <div id=\"logs-view-container\" style=\"display: none;\">
+        ${getLogsContent()}
     </div>
 `;
 
@@ -95,6 +107,11 @@ export async function updateEventsTimeline(forceReRender = false) {
     const eventsContainer = document.getElementById('events-timeline');
     if (!eventsContainer) return;
 
+    // Update logs if the view is active
+    if (document.getElementById('logs-view-container')?.style.display !== 'none') {
+        updateLogs();
+    }
+
     // Attach button listeners if not already attached
     attachEventActionListeners();
 
@@ -139,7 +156,7 @@ export async function updateEventsTimeline(forceReRender = false) {
         currentFilteredEvents = filteredEvents.slice(0, 50);
 
         lastEventsUpdate = Date.now();
-        updateTabTimestamp(3, lastEventsUpdate); // Index 3
+        updateTabTimestamp(1, lastEventsUpdate); // Index 1 in mainWindow
 
         if (currentFilteredEvents.length === 0) {
             eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found for this filter.');
@@ -522,6 +539,25 @@ function attachEventActionListeners() {
     const expandAllBtn = document.getElementById('events-expand-all');
     const closeAllBtn = document.getElementById('events-close-all');
     const filterContainer = document.getElementById('event-filters');
+    const toggleTimelineBtn = document.getElementById('events-toggle-view');
+    const toggleLogsBtn = document.getElementById('events-toggle-view-logs');
+
+    if (toggleTimelineBtn && toggleLogsBtn && !toggleTimelineBtn.dataset.listenerAttached) {
+        toggleTimelineBtn.onclick = () => {
+            toggleTimelineBtn.classList.add('active');
+            toggleLogsBtn.classList.remove('active');
+            document.getElementById('timeline-view-container').style.display = 'block';
+            document.getElementById('logs-view-container').style.display = 'none';
+        };
+        toggleLogsBtn.onclick = () => {
+            toggleLogsBtn.classList.add('active');
+            toggleTimelineBtn.classList.remove('active');
+            document.getElementById('timeline-view-container').style.display = 'none';
+            document.getElementById('logs-view-container').style.display = 'block';
+            updateLogs();
+        };
+        toggleTimelineBtn.dataset.listenerAttached = "true";
+    }
 
     if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
         expandAllBtn.onclick = () => {

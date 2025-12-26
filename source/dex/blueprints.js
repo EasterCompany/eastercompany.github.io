@@ -48,7 +48,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
         currentFilteredBlueprints = allBlueprints;
 
         lastBlueprintsUpdate = Date.now();
-        updateTabTimestamp(1, lastBlueprintsUpdate);
+        updateTabTimestamp(2, lastBlueprintsUpdate); // Index 2 (Ideas) in mainWindow
 
         if (allBlueprints.length === 0) {
             blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Analyst Worker will generate these when idle.');
@@ -184,7 +184,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
             previousElement = el;
         });
 
-        updateTabBadgeCount(1, allBlueprints.length);
+        updateTabBadgeCount(2, allBlueprints.length);
 
     } catch (error) {
         console.error('Error fetching blueprints:', error);

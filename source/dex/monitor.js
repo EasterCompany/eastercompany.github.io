@@ -1,70 +1,93 @@
 // System Monitor Logic (Services, Models, Processes)
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount } from './utils.js';
 
-export const getServicesContent = () => {
+export const getSystemContent = () => {
     if (!localStorage.getItem('service_map')) {
         return createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
     }
     return `
-        <div class="hardware-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="margin: 0; font-size: 1em; color: #fff;">System Hardware</h3>
-                <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Refresh</button>
+        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class='bx bxs-zap' style="color: #bb86fc;"></i>
+            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Analyst & Vitals</h2>
+        </div>
+        <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-size: 0.9em; color: #888; text-transform: uppercase; letter-spacing: 1px;">Analyst Tiers</h3>
+                <button id="analyst-reset-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Reset</button>
             </div>
-            <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-                <p style="color: #ccc; font-size: 0.9em; margin: 0;">Loading hardware info...</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div class="analyst-indicator">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Guardian</span>
+                    <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                </div>
+                <div class="analyst-indicator">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Architect</span>
+                    <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                </div>
+                <div class="analyst-indicator">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Strategist</span>
+                    <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                </div>
+            </div>
+            
+            <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                 <div class="analyst-indicator">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Cognitive Idle</span>
+                    <span id="analyst-idle-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                </div>
+                 <div class="analyst-indicator">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Active Procs</span>
+                    <span id="vitals-processes-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                </div>
             </div>
         </div>
-        <div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>
+
+        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class='bx bxs-component' style="color: #03dac6;"></i>
+            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Live Processes</h2>
+        </div>
+        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p>Loading processes...</p></div>
+
+        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class='bx bxs-server' style="color: #03dac6;"></i>
+            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Services</h2>
+        </div>
+        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p>Loading services...</p></div>
+
+        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class='bx bxs-brain' style="color: #03dac6;"></i>
+            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Cognitive Models</h2>
+        </div>
+        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p>Loading models...</p></div>
+
+        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class='bx bxs-hdd' style="color: #03dac6;"></i>
+            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Hardware</h2>
+            <button id="hardware-refresh-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
+        </div>
+        <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+            <p style="color: #ccc; font-size: 0.9em; margin: 0;">Loading hardware info...</p>
+        </div>
     `;
+};
+
+export async function updateSystemTab() {
+    // Initial fetch for all system components
+    await Promise.all([
+        updateProcessesTab(),
+        updateSystemMonitor(),
+        updateModelsTab()
+    ]);
+}
+
+export const getServicesContent = () => {
+    return `<div id="services-widgets" class="system-monitor-widgets"><p>Loading services...</p></div>`;
 };
 export const getModelsContent = () => localStorage.getItem('service_map') ? `<div id="models-widgets" class="system-monitor-widgets"><p>Loading models...</p></div>` : createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
 export const getProcessesContent = () => {
-    if (!localStorage.getItem('service_map')) {
-        return createPlaceholderMessage('config', 'No service map configured.', 'Upload service-map.json in Settings.');
-    }
-    return `
-        <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="margin: 0; font-size: 1em; color: #fff;">Analyst Status</h3>
-                <button id="analyst-reset-btn" class="notif-action-btn" style="padding: 4px 10px; font-size: 0.8em;"><i class='bx bx-refresh'></i> Reset Analyst</button>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Guardian</span>
-                    <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
-                </div>
-                <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Architect</span>
-                    <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
-                </div>
-                <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Strategist</span>
-                    <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
-                </div>
-            </div>
-        </div>
-
-        <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 20px 0;"></div>
-
-        <div class="system-vitals-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="margin: 0; font-size: 1em; color: #fff;">System Vitals</h3>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                 <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Cognitive Idle Time</span>
-                    <span id="analyst-idle-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
-                </div>
-                 <div class="analyst-indicator">
-                    <span style="color: #888; font-size: 0.8em;">Active Processes</span>
-                    <span id="vitals-processes-val" style="color: #fff; font-family: monospace; display: block;">Loading...</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>
-    `;
+    return `<div id="processes-widgets" class="system-monitor-widgets"><p>Loading processes...</p></div>`;
 };
 
 export let lastServicesUpdate = null;
@@ -269,7 +292,7 @@ export async function updateSystemMonitor() {
     }
 
     lastServicesUpdate = Date.now();
-    updateTabTimestamp(5, lastServicesUpdate);
+    updateTabTimestamp(3, lastServicesUpdate);
     const services = data.services || [];
 
     Array.from(widgetsContainer.children).forEach(child => {
@@ -358,7 +381,7 @@ export async function updateModelsTab() {
     }
 
     lastModelsUpdate = Date.now();
-    updateTabTimestamp(4, lastModelsUpdate);
+    updateTabTimestamp(3, lastModelsUpdate);
 
     const models = data.models || [];
     const whisperStatus = data.whisper;
@@ -527,7 +550,7 @@ export async function updateProcessesTab() {
     }
 
     lastProcessesUpdate = Date.now();
-    updateTabTimestamp(2, lastProcessesUpdate);
+    updateTabTimestamp(3, lastProcessesUpdate);
 
     if (processes.length === 0) {
         // Only clear if we actually have the widgets container and no processes, 
@@ -551,7 +574,7 @@ export async function updateProcessesTab() {
         // This is fine, it only clears the process list, not the analyst status!
         
         widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
-        updateTabBadgeCount(2, 0);
+        updateTabBadgeCount(3, 0);
         return;
     }
 
@@ -620,5 +643,5 @@ export async function updateProcessesTab() {
         }
     });
 
-    updateTabBadgeCount(2, processes.length);
+    updateTabBadgeCount(3, processes.length);
 }

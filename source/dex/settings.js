@@ -9,6 +9,17 @@ export function getSettingsContent() {
     const analyticsEnabled = localStorage.getItem('easter_analytics_enabled') !== 'false';
 
     return `
+            <div class="user-profile-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 20px;">
+                <div class="user-avatar" style="width: 60px; height: 60px; background: #bb86fc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; color: #000; font-weight: bold;">
+                    ${userEmail.charAt(0).toUpperCase()}
+                </div>
+                <div class="user-info" style="text-align: left;">
+                    <h3 style="margin: 0; font-size: 1.1em; color: #fff; text-align: left;">Master User</h3>
+                    <p style="margin: 4px 0 0 0; font-size: 0.9em; color: #888; text-align: left;">${userEmail}</p>
+                    <p style="margin: 8px 0 0 0; font-family: monospace; font-size: 0.75em; opacity: 0.5; text-align: left;">UUID: 313071000877137920</p>
+                </div>
+            </div>
+
             <div class="theme-selector">
                 ${Object.values(THEMES).map(theme => `
                     <div class="theme-card ${currentTheme === theme ? 'active' : ''}" data-theme="${theme}">
