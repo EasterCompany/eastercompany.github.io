@@ -80,23 +80,6 @@ function onReady() {
       // 2. OR 1 window is open but we are on a smaller screen (< 1200px)
       const isStretched = activeWindows.length > 1 || (activeWindows.length === 1 && window.innerWidth < 1200);
 
-      // Window Header Visibility Logic:
-      // Only show window headers if:
-      // 1. There is more than 1 window open
-      // 2. OR there is only 1 window but it has multiple tabs
-      activeWindows.forEach(win => {
-          const winEl = document.getElementById(win.id);
-          if (!winEl) return;
-          const tabs = winEl.querySelectorAll('.tab');
-          const hasMultipleTabs = tabs.length > 1;
-          
-          if (activeWindows.length > 1 || hasMultipleTabs) {
-              winEl.classList.remove('header-hidden');
-          } else {
-              winEl.classList.add('header-hidden');
-          }
-      });
-
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
           document.getElementById('close-all-windows')?.style.setProperty('display', 'block');
