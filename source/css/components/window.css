@@ -15,18 +15,17 @@
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Snapped State: Eliminate the gap when navbar darkens and stretches */
-@media (max-width: 1899px), 
-       .windows-container[data-count]:not([data-count="1"]),
-       .windows-container[data-count="1"]:not(@media (min-width: 1900px)) {
-    .windows-container {
-        padding-top: 60px !important; /* Strictly match snapped navbar height */
-    }
-}
-
-/* Specific override for the sibling selector logic if needed */
+/* Snapped State: When navbar darkens and stretches (Small screen OR 2+ windows) */
+/* Keying off the JS-driven 'window-open' class on the navbar */
 nav.window-open + .windows-container {
     padding-top: 60px !important;
+}
+
+/* Fallback for small screens regardless of sibling class */
+@media (max-width: 1899px) {
+    .windows-container {
+        padding-top: 60px !important;
+    }
 }
 
 /* Grid Layout Configurations */
@@ -66,7 +65,7 @@ nav.window-open + .windows-container {
 
 .window {
     position: relative;
-    background-color: rgba(30, 30, 30, 0.8);
+    background-color: rgba(30, 30, 30, 0.8); /* Less dark, more glassy */
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     border: 1px solid rgba(255, 255, 255, 0.1);
