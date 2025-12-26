@@ -1826,6 +1826,20 @@
         }
       }
     },
+    "2.8.65": {
+      "type": "patch",
+      "date": "2025-12-26T19:45:54Z",
+      "commit": "6f825f1",
+      "binaries": {
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/2.8.65/dex-discord-service",
+            "size": 13469184,
+            "checksum": "570eca7fba13fc71d20417c40e68a7dc6b930ae17bd2029310d9e04354c9fb8f"
+          }
+        }
+      }
+    },
     "2.8.86": {
       "type": "patch",
       "date": "2025-12-23T21:14:28Z",
