@@ -7,6 +7,13 @@ export const getEventsContent = () => `
         <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
+    <div id="event-filters" class="event-filters">
+        <button class="notif-action-btn filter-btn active" data-filter="all">All</button>
+        <button class="notif-action-btn filter-btn" data-filter="messaging">Messaging</button>
+        <button class="notif-action-btn filter-btn" data-filter="system">System</button>
+        <button class="notif-action-btn filter-btn" data-filter="cognitive">Cognitive</button>
+        <button class="notif-action-btn filter-btn" data-filter="moderation">Moderation</button>
+    </div>
     <div id="events-timeline" class="events-timeline">
         <p>Loading events...</p>
     </div>
@@ -17,6 +24,72 @@ export let lastEventsUpdate = null;
 // Track expanded state globally within the module
 let activeExpandedIds = new Set();
 let currentFilteredEvents = [];
+let currentFilter = 'all';
+
+const CATEGORIES = {
+    messaging: [
+        'message_received', 'messaging.user.sent_message', 'messaging.bot.sent_message',
+        'messaging.user.transcribed', 'voice_transcribed', 'bot_response',
+        'messaging.user.joined_voice', 'messaging.user.left_voice',
+        'messaging.bot.joined_voice', 'messaging.bot.voice_response',
+        'messaging.user.speaking.started', 'messaging.user.speaking.stopped',
+        'messaging.webhook.message'
+    ],
+    system: [
+        'system.cli.command', 'system.cli.status', 'system.status.change',
+        'metric_recorded', 'log_entry', 'error_occurred', 'webhook.processed',
+        'messaging.bot.status_update', 'messaging.user.joined_server',
+        'system.test.completed', 'system.build.completed',
+        'system.roadmap.created', 'system.roadmap.updated',
+        'system.process.registered', 'system.process.unregistered'
+    ],
+    cognitive: [
+        'engagement.decision', 'system.analysis.audit', 'system.blueprint.generated',
+        'analysis.link.completed', 'analysis.visual.completed'
+    ],
+    moderation: [
+        'moderation.explicit_content.deleted'
+    ]
+};
+
+const EVENT_ICONS = {
+    'message_received': 'bx-message-detail',
+    'messaging.user.sent_message': 'bx-message-rounded-dots',
+    'messaging.bot.sent_message': 'bx-bot',
+    'messaging.user.transcribed': 'bx-microphone',
+    'voice_transcribed': 'bx-microphone',
+    'messaging.user.joined_voice': 'bx-phone-incoming',
+    'messaging.user.left_voice': 'bx-phone-outgoing',
+    'messaging.webhook.message': 'bx-cloud-lightning',
+    'system.cli.command': 'bx-terminal',
+    'system.cli.status': 'bx-info-circle',
+    'system.test.completed': 'bx-check-shield',
+    'system.build.completed': 'bx-package',
+    'system.roadmap.created': 'bx-map-pin',
+    'system.roadmap.updated': 'bx-map-alt',
+    'system.process.registered': 'bx-play-circle',
+    'system.process.unregistered': 'bx-stop-circle',
+    'error_occurred': 'bx-error-alt',
+    'engagement.decision': 'bx-brain',
+    'system.analysis.audit': 'bx-search-alt',
+    'system.blueprint.generated': 'bx-paint',
+    'analysis.link.completed': 'bx-link',
+    'analysis.visual.completed': 'bx-image',
+    'moderation.explicit_content.deleted': 'bx-shield-x',
+    'system.status.change': 'bx-refresh',
+    'metric_recorded': 'bx-line-chart'
+};
+
+function getEventCategory(type) {
+    for (const [cat, types] of Object.entries(CATEGORIES)) {
+        if (types.includes(type)) return cat;
+    }
+    return 'system'; // Default
+}
+
+function getEventIcon(type) {
+    return EVENT_ICONS[type] || 'bx-square-rounded';
+}
 
 export async function updateEventsTimeline(forceReRender = false) {
     const eventsContainer = document.getElementById('events-timeline');
@@ -38,21 +111,38 @@ export async function updateEventsTimeline(forceReRender = false) {
     if (!eventService) { eventsContainer.innerHTML = createPlaceholderMessage('error', 'Event service not found in service map.'); return; }
 
     const domain = eventService.domain === '0.0.0.0' ? '127.0.0.1' : eventService.domain;
-    const eventsUrl = `http://${domain}:${eventService.port}/events?ml=50&format=json&exclude_types=system.notification.generated`; // Exclude notifications from main timeline
+    
+    // Fetch MORE events if we are filtering, to ensure we have enough data
+    const fetchCount = currentFilter === 'all' ? 100 : 250;
+    const eventsUrl = `http://${domain}:${eventService.port}/events?ml=${fetchCount}&format=json&exclude_types=system.notification.generated`;
 
     try {
         const response = await fetch(eventsUrl);
         if (!response.ok) throw new Error('Service is offline or unreachable.');
 
         const data = await response.json();
-        const events = data.events || [];
-        currentFilteredEvents = events;
+        const allEvents = data.events || [];
+        
+        // Filter events client-side based on category
+        let filteredEvents = allEvents;
+        if (currentFilter !== 'all') {
+            filteredEvents = allEvents.filter(e => {
+                let eventData = e.event;
+                if (typeof eventData === 'string') {
+                    try { eventData = JSON.parse(eventData); } catch (err) { return false; }
+                }
+                return getEventCategory(eventData.type) === currentFilter;
+            });
+        }
+        
+        // Limit to 50 for display
+        currentFilteredEvents = filteredEvents.slice(0, 50);
 
         lastEventsUpdate = Date.now();
         updateTabTimestamp(3, lastEventsUpdate); // Index 3
 
-        if (events.length === 0) {
-            eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found.');
+        if (currentFilteredEvents.length === 0) {
+            eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found for this filter.');
             return;
         }
 
@@ -71,15 +161,21 @@ export async function updateEventsTimeline(forceReRender = false) {
             }
 
             const type = eventData.type;
-            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command' || type === 'system.analysis.audit';
+            const category = getEventCategory(type);
+            const icon = getEventIcon(type);
+
+            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type.startsWith('system.roadmap') || type.startsWith('system.process');
             let borderClass = 'event-border-grey';
             if (isExpandable) {
-                if (type === 'moderation.explicit_content.deleted') {
+                if (type === 'moderation.explicit_content.deleted' || type === 'error_occurred') {
                     borderClass = 'event-border-red';
                 } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.analysis.audit') {
                     borderClass = 'event-border-purple';
-                } else if (type === 'system.cli.command') {
+                } else if (type === 'system.cli.command' || type === 'system.cli.status') {
                     borderClass = 'event-border-orange';
+                } else if (type === 'system.test.completed') {
+                    const passed = (eventData.test?.status === 'OK' && eventData.lint?.status === 'OK' && eventData.format?.status === 'OK');
+                    borderClass = passed ? 'event-border-blue' : 'event-border-red';
                 } else {
                     borderClass = 'event-border-blue';
                 }
@@ -228,6 +324,55 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.raw_input)}</pre>
                         </div>
                     `;
+                } else if (type === 'system.test.completed') {
+                    detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Service:</span>
+                            <span class="detail-value">${eventData.service_name}</span>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Duration:</span>
+                            <span class="detail-value">${eventData.duration}</span>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Format:</span>
+                            <pre class="detail-pre">${eventData.format?.status || 'N/A'}: ${eventData.format?.message || 'OK'}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Lint:</span>
+                            <pre class="detail-pre">${eventData.lint?.status || 'N/A'}: ${eventData.lint?.message || 'OK'}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Tests:</span>
+                            <pre class="detail-pre">${eventData.test?.status || 'N/A'}: ${eventData.test?.details || eventData.test?.message || 'OK'}</pre>
+                        </div>
+                    `;
+                } else if (type === 'error_occurred') {
+                    detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Severity:</span>
+                            <span class="detail-value" style="color: #ff4d4d;">${eventData.severity || 'high'}</span>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Error Message:</span>
+                            <pre class="detail-pre">${escapeHtml(eventData.error)}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Context:</span>
+                            <pre class="detail-pre">${JSON.stringify(eventData.context || {}, null, 2)}</pre>
+                        </div>
+                    `;
+                } else if (type === 'system.cli.status') {
+                    detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">${eventData.status}</span>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Message:</span>
+                            <pre class="detail-pre">${escapeHtml(eventData.message)}</pre>
+                        </div>
+                    `;
                 } else if (type === 'messaging.user.sent_message') {
                     let attachmentsHtml = '';
                     if (eventData.attachments && eventData.attachments.length > 0) {
@@ -299,8 +444,12 @@ export async function updateEventsTimeline(forceReRender = false) {
                     <span class="event-time-main">${timeStr}</span>
                     <span class="event-date">${dateStr}</span>
                 </div>
+                <div class="event-icon"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
-                    <div class="event-service">${event.service}</div>
+                    <div class="event-service">
+                        <span class="event-category-tag cat-${category}">${category}</span>
+                        ${event.service}
+                    </div>
                     <div class="event-message">${summary}</div>
                     ${detailsHtml}
                 </div>
@@ -327,7 +476,7 @@ export async function updateEventsTimeline(forceReRender = false) {
 
         const currentChildren = Array.from(eventsContainer.children);
         const currentMap = new Map(currentChildren.map(el => [el.dataset.eventId, el]));
-        const newIds = new Set(events.map(e => e.id));
+        const newIds = new Set(currentFilteredEvents.map(e => e.id));
 
         // 1. Remove old events or placeholders
         currentChildren.forEach(child => {
@@ -339,7 +488,7 @@ export async function updateEventsTimeline(forceReRender = false) {
 
         let previousElement = null;
 
-        events.forEach((event, index) => {
+        currentFilteredEvents.forEach((event, index) => {
             let el = currentMap.get(event.id);
             if (!el || forceReRender) {
                 if (el) el.remove();
@@ -372,6 +521,7 @@ export async function updateEventsTimeline(forceReRender = false) {
 function attachEventActionListeners() {
     const expandAllBtn = document.getElementById('events-expand-all');
     const closeAllBtn = document.getElementById('events-close-all');
+    const filterContainer = document.getElementById('event-filters');
 
     if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
         expandAllBtn.onclick = () => {
@@ -387,5 +537,17 @@ function attachEventActionListeners() {
             updateEventsTimeline(true);
         };
         closeAllBtn.dataset.listenerAttached = "true";
+    }
+
+    if (filterContainer && !filterContainer.dataset.listenerAttached) {
+        filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.onclick = () => {
+                filterContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                updateEventsTimeline(true);
+            };
+        });
+        filterContainer.dataset.listenerAttached = "true";
     }
 }
