@@ -56,8 +56,8 @@
 }
 
 .cli-command-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 15, 15, 0.8); /* Significantly darker for readability */
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 30px;
     display: flex;
@@ -65,16 +65,16 @@
     gap: 15px;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     position: relative;
     overflow: hidden;
 }
 
 .cli-command-card:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(25, 25, 25, 0.9);
+    border-color: rgba(187, 134, 252, 0.3); /* Purple brand glow */
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .cli-command-card.dummy {
@@ -101,7 +101,7 @@
 
 .command-description {
     font-size: 0.95em;
-    color: #aaa;
+    color: #bbb; /* Slightly brighter for contrast */
     line-height: 1.6;
     text-align: left;
     margin: 0;
@@ -112,9 +112,10 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85em;
     padding: 12px 18px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.6); /* Darker usage block */
     border-radius: 10px;
     margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .command-usage span {
