@@ -80,6 +80,18 @@ function onReady() {
       // 2. OR 1 window is open but we are on a smaller screen (< 1200px)
       const isStretched = activeWindows.length > 1 || (activeWindows.length === 1 && window.innerWidth < 1200);
 
+      // Manage per-window header close button visibility
+      activeWindows.forEach(win => {
+          const winEl = document.getElementById(win.id);
+          if (winEl) {
+              if (activeWindows.length === 1) {
+                  winEl.classList.add('hide-close');
+              } else {
+                  winEl.classList.remove('hide-close');
+              }
+          }
+      });
+
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
           document.getElementById('close-all-windows')?.style.setProperty('display', 'block');
