@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.143.main.240fc38.2025-12-26.linux-amd64.240fc38",
-    "dev": "2.8.143.main.240fc38.2025-12-26.linux-amd64.240fc38"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -195,6 +195,12 @@
       "type": "patch",
       "date": "2025-12-26T01:32:36Z",
       "commit": "7c17be7",
+      "binaries": {}
+    },
+    "2.11.165": {
+      "type": "patch",
+      "date": "2025-12-26T23:42:01Z",
+      "commit": "4f1e67a",
       "binaries": {}
     },
     "2.11.54": {
