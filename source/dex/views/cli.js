@@ -89,6 +89,18 @@ export const getCliInterfaceContent = () => {
                 <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #fff;">DEX CLI</h1>
                 <p style="color: #888; max-width: 600px; margin: 0 auto;">The unified command-line interface for the Dexter ecosystem. Manage, monitor, and evolve your AI infrastructure.</p>
             </div>
+
+            <div class="cli-install-section">
+                <div class="cli-install-header">
+                    <i class='bx bxs-download'></i>
+                    <h2>One-Step Installation</h2>
+                </div>
+                <div class="cli-install-command" id="install-command-copy">
+                    <code>curl -sSL https://easter.company/scripts/install_dex-cli.sh | bash</code>
+                    <i class='bx bx-copy'></i>
+                </div>
+                <p class="cli-install-note">Installs the latest pre-built binary for Linux/macOS and configures your environment.</p>
+            </div>
     `;
 
     for (const [catId, catInfo] of Object.entries(categories)) {
@@ -240,6 +252,23 @@ export function initCliDashboard() {
     if (!container) return;
 
     container.innerHTML = getCliInterfaceContent();
+
+    // Add copy-to-clipboard for install command
+    const copyBtn = document.getElementById('install-command-copy');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            const command = copyBtn.querySelector('code').textContent;
+            navigator.clipboard.writeText(command).then(() => {
+                const icon = copyBtn.querySelector('i');
+                icon.className = 'bx bx-check';
+                icon.style.color = '#5eff5e';
+                setTimeout(() => {
+                    icon.className = 'bx bx-copy';
+                    icon.style.color = '#bb86fc';
+                }, 2000);
+            });
+        });
+    }
 
     // Add interactivity
     container.querySelectorAll('.cli-command-card').forEach(card => {

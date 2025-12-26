@@ -301,6 +301,74 @@
 }
 @keyframes blink { from, to { opacity: 1; } 50% { opacity: 0; } }
 
+.cli-install-section {
+    max-width: 800px;
+    margin: 0 auto 60px auto;
+    background: rgba(187, 134, 252, 0.03);
+    border: 1px solid rgba(187, 134, 252, 0.1);
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.cli-install-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cli-install-header i {
+    font-size: 2em;
+    color: #bb86fc;
+}
+
+.cli-install-header h2 {
+    font-size: 1.4em;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.cli-install-command {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 18px 25px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1em;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.cli-install-command:hover {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(187, 134, 252, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.cli-install-command i {
+    font-size: 1.3em;
+    color: #bb86fc;
+}
+
+.cli-install-note {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 18px;
+    font-weight: 400;
+}
+
 @media (max-width: 768px) {
     .cli-hero h1 { font-size: 2.5em; }
     .cli-interface-container { padding: 80px 20px 40px 20px; }
