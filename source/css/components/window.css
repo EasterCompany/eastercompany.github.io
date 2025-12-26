@@ -1,0 +1,202 @@
+/* --- High-Fidelity CSS Grid Window System --- */
+.windows-container {
+    position: fixed;
+    top: 55px; /* Mobile navbar height approximation */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 55px);
+    display: grid;
+    gap: 0; /* No gaps for true split-screen feel */
+    padding: 0;
+    box-sizing: border-box;
+    z-index: 900;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #000; /* Backdrop for gapless split */
+}
+
+@media (min-width: 768px) {
+    .windows-container {
+        top: 80px; /* Desktop navbar top + height + small gap */
+        height: calc(100% - 80px);
+    }
+}
+
+/* Grid Layout Configurations */
+.windows-container[data-count="1"] {
+    grid-template-columns: 1fr;
+    justify-items: center;
+}
+
+/* Single window width limit on desktop */
+@media (min-width: 1200px) {
+    .windows-container[data-count="1"] .window {
+        width: 70%;
+        max-width: 1400px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Multi-window layouts always fill entire container (split-fullscreen) */
+.windows-container[data-count="2"] {
+    grid-template-columns: 1fr 1fr;
+}
+
+.windows-container[data-count="3"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.windows-container[data-count="3"] .window:nth-child(3) {
+    grid-column: 1 / span 2;
+}
+
+.windows-container[data-count="4"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.window {
+    position: relative;
+    background-color: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    pointer-events: auto;
+    
+    /* Transition only for opacity and entry */
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Split-fullscreen specific: Remove borders and radius for grid members */
+.windows-container[data-count]:not([data-count="1"]) .window {
+    border-radius: 0;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Final column/row borders cleanup */
+.windows-container[data-count="2"] .window:nth-child(2),
+.windows-container[data-count="4"] .window:nth-child(2),
+.windows-container[data-count="4"] .window:nth-child(4) {
+    border-right: none;
+}
+
+@media (max-width: 1199px) {
+    .window {
+        border-radius: 0 !important;
+        border: none;
+    }
+}
+
+.window.open {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.window-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: rgba(30, 30, 30, 0.8);
+    flex-shrink: 0;
+}
+
+.window-header .bx:first-child {
+    font-size: 1.2em;
+    color: #bb86fc;
+}
+
+.window-title {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: 500;
+    color: #fff;
+    font-size: 0.95em;
+    padding: 0 15px;
+}
+
+.window-close {
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.window-close:hover {
+    color: #ff4444;
+}
+
+.window-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 25px;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.window-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Tab Bar */
+.tab-bar {
+    display: flex;
+    gap: 10px;
+    margin: 0 15px;
+}
+
+.tab {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #888;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.3s;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid #bb86fc;
+}
+
+.tab-content {
+    display: none;
+    height: 100%;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Badge Styling */
+.notification-badge {
+    background-color: #ff4444;
+    color: white;
+    font-size: 0.7em;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

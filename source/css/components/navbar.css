@@ -1,0 +1,145 @@
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background-color: rgba(40, 40, 40, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    position: relative; /* Needed for absolute positioning of children */
+}
+
+.nav-left .navbar-favicon,
+.nav-left #navbar-microphone {
+    height: 30px;
+    width: 30px;
+    transition: opacity 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.nav-left #navbar-microphone {
+    position: absolute;
+    opacity: 0;
+    font-size: 24px; /* Adjust size as needed */
+    color: #fff;
+    line-height: 30px; /* Center vertically */
+}
+
+.nav-left:not(.recording):hover .navbar-favicon {
+    opacity: 0;
+}
+
+.nav-left:not(.recording):hover #navbar-microphone {
+    opacity: 1;
+}
+
+.nav-left.recording .navbar-favicon {
+    opacity: 0;
+}
+
+.nav-left.recording #navbar-microphone {
+    opacity: 1;
+}
+
+.nav-left h1 {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #eee;
+    margin: 0;
+}
+
+nav.recording {
+    animation: shimmer 2s infinite;
+    box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+}
+
+@keyframes shimmer {
+    0% {
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+    }
+    50% {
+        box-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff;
+    }
+    100% {
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+    }
+}
+
+#audio-canvas {
+    width: 100%;
+    height: 100px;
+    display: block;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-right i {
+    font-size: 1.4em;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-right i:hover {
+    color: #fff;
+}
+
+.nav-right i.active {
+    color: #fff;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+.nav-right i.inactive {
+    opacity: 0.4;
+    transform: scale(0.9);
+}
+
+.login-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #eee;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.login-btn:active {
+    transform: scale(0.95);
+}
+
+@media (min-width: 768px) {
+    nav {
+        width: min(1200px, 90vw);
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 15px;
+    }
+}

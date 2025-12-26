@@ -1,10 +1,10 @@
 // Easter Company - Logs
-import { smartFetch, ansiToHtml, getGlassyLoader } from './utils.js';
+import { smartFetch, ansiToHtml } from '../core/utils.js';
 
 export function getLogsContent() {
     return `
         <div id="logs-container" class="logs-container">
-            ${getGlassyLoader()}
+            <p>Loading logs...</p>
         </div>
     `;
 }

@@ -1,0 +1,109 @@
+@import url('https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.4);
+    background-clip: content-box;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: #111;
+    color: #bbb;
+    transition: opacity 0.3s ease;
+}
+
+body.theme-transitioning {
+    opacity: 0.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #eee;
+    margin: 0;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+a {
+    color: #888;
+    text-decoration: none;
+    display: block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+main h1 {
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+main h2 {
+    font-size: 0.9em;
+    font-weight: 400;
+    color: #999;
+}
+
+svg {
+    display: block;
+    margin: 0 auto;
+    width: 90vw;
+    max-width: 800px;
+    max-height: 25vh;
+    user-select: none;
+    background-color: transparent;
+}
