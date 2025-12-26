@@ -45,10 +45,8 @@ function onReady() {
 
   function getWindowLimit() {
       const w = window.innerWidth;
-      if (w >= 2500) return 4; // High Res
-      if (w >= 1800) return 3; // Ultra Wide / FHD+
-      if (w >= 1200) return 2; // Laptop / Desktop
-      return 1; // Tablet / Mobile
+      if (w >= 1200) return 2; // Maximum 2 on Desktop
+      return 1; // 1 on Tablet / Mobile
   }
 
   function recalculateLayout() {
