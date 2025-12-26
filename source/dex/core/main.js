@@ -82,6 +82,7 @@ function onReady() {
 
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
+          document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
           if (isStretched) {
               navbar?.classList.add('window-open');
               if (container) container.style.paddingTop = '60px'; // SNAP
@@ -92,6 +93,7 @@ function onReady() {
       } else {
           navbar?.classList.remove('window-open');
           if (container) container.style.paddingTop = '100px';
+          document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
           // Only show footer on specific pages when no windows are open
           if (isRoot || isErrorPage) {
               footer?.classList.remove('hide');

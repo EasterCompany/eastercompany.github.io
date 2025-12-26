@@ -54,7 +54,9 @@ nav.window-open + .windows-container {
         margin-top: 20px; /* Aesthetic gap only in focus mode */
         height: calc(100% - 40px); /* Leave space at bottom too */
         border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background-color: rgba(255, 255, 255, 0.08); /* Much lighter glass for focus mode */
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
     }
 }
 
