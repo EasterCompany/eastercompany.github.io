@@ -56,25 +56,57 @@
 }
 
 .cli-command-card {
-    background: rgba(15, 15, 15, 0.8); /* Significantly darker for readability */
+    background: rgba(15, 15, 15, 0.85); /* Dark base for contrast */
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 30px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
     backdrop-filter: blur(20px);
     position: relative;
     overflow: hidden;
+    z-index: 1;
+}
+
+.cli-command-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        125deg,
+        rgba(50, 255, 170, 0) 0%,
+        rgba(50, 255, 170, 0.08) 25%,
+        rgba(255, 50, 170, 0.08) 50%,
+        rgba(68, 68, 255, 0.08) 75%,
+        rgba(50, 255, 170, 0) 100%
+    );
+    background-size: 400% 400%;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .cli-command-card:hover {
-    background: rgba(25, 25, 25, 0.9);
-    border-color: rgba(187, 134, 252, 0.3); /* Purple brand glow */
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    background: rgba(20, 20, 20, 0.95);
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(187, 134, 252, 0.1);
+}
+
+.cli-command-card:hover::before {
+    opacity: 1;
+    animation: hallucinatoryFlow 6s linear infinite;
+}
+
+@keyframes hallucinatoryFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .cli-command-card.dummy {
@@ -86,10 +118,18 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    z-index: 2;
 }
 
 .command-card-header i {
     font-size: 2.2em;
+    transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.cli-command-card:hover .command-card-header i {
+    transform: rotate(5deg) scale(1.1);
+    color: #fff;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
 }
 
 .command-card-header h3 {
@@ -101,21 +141,45 @@
 
 .command-description {
     font-size: 0.95em;
-    color: #bbb; /* Slightly brighter for contrast */
+    color: #bbb;
     line-height: 1.6;
     text-align: left;
     margin: 0;
     min-height: 3em;
+    z-index: 2;
 }
 
 .command-usage {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85em;
     padding: 12px 18px;
-    background: rgba(0, 0, 0, 0.6); /* Darker usage block */
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 10px;
     margin-top: 10px;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 2;
+    position: relative;
+    overflow: hidden;
+}
+
+.command-usage::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    transition: left 0.6s ease;
+}
+
+.cli-command-card:hover .command-usage::after {
+    left: 150%;
 }
 
 .command-usage span {
