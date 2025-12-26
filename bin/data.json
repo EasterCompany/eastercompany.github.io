@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b",
-    "dev": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b"
+    "user": "2.8.119.main.0699761.2025-12-26.linux-amd64.0699761",
+    "dev": "2.8.119.main.0699761.2025-12-26.linux-amd64.0699761"
   },
   "releases": {
     "0.0.0": {
@@ -779,6 +779,20 @@
             "path": "/bin/2.8.118/dex",
             "size": 16560903,
             "checksum": "fbd4691287b24e958ae210ea69cd6247dab122e5615af69691b9711dd1cf1058"
+          }
+        }
+      }
+    },
+    "2.8.119": {
+      "type": "patch",
+      "date": "2025-12-26T03:51:35Z",
+      "commit": "79030f3",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.119/dex",
+            "size": 16561383,
+            "checksum": "d58df01592b5e0632bbf222ff684f37eb92a6d3a3be47b969dba457979670890"
           }
         }
       }
@@ -1801,8 +1815,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b",
-      "user": "2.8.118.main.595990b.2025-12-26.linux-amd64.595990b",
+      "current": "2.8.119.main.0699761.2025-12-26.linux-amd64.0699761",
+      "user": "2.8.119.main.0699761.2025-12-26.linux-amd64.0699761",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
