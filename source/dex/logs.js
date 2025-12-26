@@ -134,9 +134,14 @@ export async function updateLogs() {
                 <div class="log-report">
                     <div class="log-report-header">
                         <h3>${logReport.id}</h3>
-                        <button class="copy-logs-btn" data-logs="${escape(logs)}">
-                            <i class="bx bx-copy"></i>
-                        </button>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(logs)}" title="Copy Logs">
+                                <i class="bx bx-copy"></i>
+                            </button>
+                            <button class="log-action-btn delete clear-logs-btn" data-service-id="${logReport.id}" title="Clear Logs">
+                                <i class="bx bx-trash"></i>
+                            </button>
+                        </div>
                     </div>
                     <pre class="log-content">${logs}</pre>
                 </div>
@@ -158,6 +163,26 @@ export async function updateLogs() {
                         icon.classList.add('bx-copy');
                     }, 2000);
                 });
+            });
+        });
+
+        // Add event listeners for clear buttons
+        document.querySelectorAll('.clear-logs-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const serviceId = btn.dataset.serviceId;
+                if (!confirm(`Are you sure you want to clear logs for ${serviceId}?`)) return;
+
+                const clearUrl = `http://${domain}:${eventService.port}/logs?service_id=${serviceId}`;
+                try {
+                    const res = await fetch(clearUrl, { method: 'DELETE' });
+                    if (res.ok) {
+                        updateLogs(); // Refresh
+                    } else {
+                        console.error("Failed to clear logs");
+                    }
+                } catch (e) {
+                    console.error("Error clearing logs:", e);
+                }
             });
         });
 
