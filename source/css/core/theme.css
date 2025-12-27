@@ -40,6 +40,11 @@ body.theme-light {
     --gradient-5: #FFFFFF;
 }
 
+/* Light Theme Specific Overrides */
+body.theme-light .dropdown-item i {
+    color: #FFFFFF !important;
+}
+
 /* Legacy Theme (Original Animated) */
 body.theme-legacy {
     --bg-blur: 25px;
