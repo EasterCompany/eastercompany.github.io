@@ -1,8 +1,16 @@
 /* --- Theme Engine & Background --- */
 :root {
+  /* Default/Dark Theme (No background variables needed as element is removed) */
+  --bg-blur: 0px;
+  --bg-opacity: 0;
+  --bg-blend: normal;
+  --bg-filter: none;
+  --gradient-1: #000;
+  --gradient-2: #000;
+  --gradient-3: #000;
+  --gradient-4: #000;
+  --gradient-5: #000;
   --stripe-color: #FFF;
-  --bg: var(--stripe-color);
-  --maincolor: var(--bg);
 }
 
 @property --blink-opacity {
@@ -16,8 +24,47 @@
   to { background-position: 350% 50%, 350% 50%; }
 }
 
-@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 0.5; } }
-@keyframes fadeOutBackground { from { opacity: 0.5; } to { opacity: 0; } }
+@keyframes fadeInBackground { from { opacity: 0; } to { opacity: var(--bg-opacity); } }
+@keyframes fadeOutBackground { from { opacity: var(--bg-opacity); } to { opacity: 0; } }
+
+/* Light Theme (Heavenly) */
+body.theme-light {
+    --bg-blur: 80px;
+    --bg-opacity: 0.5;
+    --bg-blend: screen;
+    --bg-filter: none;
+    --gradient-1: #FFFFFF;
+    --gradient-2: #D4F1F9;
+    --gradient-3: #E1BEE7;
+    --gradient-4: #F8BBD0;
+    --gradient-5: #FFFFFF;
+}
+
+/* Legacy Theme (Original Animated) */
+body.theme-legacy {
+    --bg-blur: 25px;
+    --bg-opacity: 0.45;
+    --bg-blend: difference;
+    --bg-filter: invert(100%);
+    --gradient-1: #32FFaa;
+    --gradient-2: #FF32aa;
+    --gradient-3: #4444FF;
+    --gradient-4: #6666FF;
+    --gradient-5: #ddddFF;
+}
+
+/* Lucid Theme (Dark/Green) */
+body.theme-lucid {
+    --bg-blur: 60px;
+    --bg-opacity: 0.3;
+    --bg-blend: difference; /* Using difference to get the inverted look without the filter brightness issues */
+    --bg-filter: invert(100%); /* Keeps the dark green/magenta vibe */
+    --gradient-1: #32FFaa;
+    --gradient-2: #FF32aa;
+    --gradient-3: #4444FF;
+    --gradient-4: #6666FF;
+    --gradient-5: #ddddFF;
+}
 
 .background {
   z-index: -1;
@@ -32,6 +79,7 @@
   place-content: center;
   place-items: center;
   animation: fadeInBackground 0.6s ease forwards;
+  
   --stripes: repeating-linear-gradient(
     100deg,
     var(--stripe-color) 0%,
@@ -40,18 +88,20 @@
     transparent 12%,
     var(--stripe-color) 16%
   );
+  
   --rainbow: repeating-linear-gradient(
     -60deg,
-    #FFFFFF 10%,
-    #D4F1F9 15%,
-    #E1BEE7 20%,
-    #F8BBD0 25%,
-    #FFFFFF 30%
+    var(--gradient-1) 10%,
+    var(--gradient-2) 15%,
+    var(--gradient-3) 20%,
+    var(--gradient-4) 25%,
+    var(--gradient-5) 30%
   );
+  
   background-image: var(--stripes), var(--rainbow);
   background-size: 300%, 200%;
   background-position: 50% 50%, 50% 50%;
-  filter: blur(80px);
+  filter: blur(var(--bg-blur)) var(--bg-filter);
   -webkit-mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
 }
@@ -64,7 +114,7 @@
   background-size: 200%, 100%;
   animation: smoothBg 60s linear infinite;
   background-attachment: fixed;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--bg-blend);
 }
 
 /* Theme Selector Cards */

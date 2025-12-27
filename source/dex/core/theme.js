@@ -3,9 +3,10 @@
 const THEME_KEY = 'easter_theme';
 
 export const THEMES = {
-    AUTO: 'auto',
-    DEFAULT: 'default',
-    ANIMATED: 'animated'
+    DARK: 'dark',
+    LIGHT: 'light',
+    LEGACY: 'legacy',
+    LUCID: 'lucid'
 };
 
 /**
@@ -13,29 +14,7 @@ export const THEMES = {
  * @returns {string}
  */
 export function getCurrentTheme() {
-    return localStorage.getItem(THEME_KEY) || THEMES.AUTO;
-}
-
-/**
- * Determine which theme to apply based on Auto rules
- * @returns {string} Either THEMES.DEFAULT or THEMES.ANIMATED
- */
-function resolveAutoTheme() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const isFullscreen = window.innerHeight === window.screen.height && window.innerWidth === window.screen.width;
-
-    // Use Legacy if window is above 1920x1080
-    if (width > 1920 && height > 1080) {
-        return THEMES.ANIMATED;
-    }
-
-    // Use Default if equal to 1920x1080 AND fullscreen, OR below 1920x1080
-    if ((width === 1920 && height === 1080 && isFullscreen) || width <= 1920 || height <= 1080) {
-        return THEMES.DEFAULT;
-    }
-
-    return THEMES.DEFAULT;
+    return localStorage.getItem(THEME_KEY) || THEMES.DARK;
 }
 
 /**
@@ -52,20 +31,11 @@ export function setTheme(theme) {
 
 /**
  * Apply the theme to the document
- * @param {string} theme - The theme preference (can be AUTO, DEFAULT, or ANIMATED)
+ * @param {string} theme - The theme preference
  * @param {boolean} skipTransition - Whether to skip the transition animation
- * @param {boolean} isWindowOpen - Whether a window is currently open (affects AUTO logic)
  */
-export function applyTheme(theme, skipTransition = false, isWindowOpen = false) {
+export function applyTheme(theme, skipTransition = false) {
     const body = document.body;
-
-    // Resolve AUTO theme to actual theme
-    let resolvedTheme = theme === THEMES.AUTO ? resolveAutoTheme() : theme;
-
-    // If AUTO and a window is open, ALWAYS use ANIMATED background regardless of screen size
-    if (theme === THEMES.AUTO && isWindowOpen) {
-        resolvedTheme = THEMES.ANIMATED;
-    }
 
     if (!skipTransition) {
         // Add transition class for fade effect
@@ -85,8 +55,10 @@ export function applyTheme(theme, skipTransition = false, isWindowOpen = false) 
     // Add current theme class
     body.classList.add(`theme-${theme}`);
 
-    // Handle background element with smooth transition
-    if (resolvedTheme === THEMES.ANIMATED) {
+    // Manage background element
+    const needsBackground = [THEMES.LIGHT, THEMES.LEGACY, THEMES.LUCID].includes(theme);
+
+    if (needsBackground) {
         body.classList.add('is-animated');
         // Create background element if it doesn't exist
         if (!document.querySelector('.background')) {
@@ -117,15 +89,4 @@ export function applyTheme(theme, skipTransition = false, isWindowOpen = false) 
 export function initTheme() {
     const currentTheme = getCurrentTheme();
     applyTheme(currentTheme, true); // Skip transition on initial load
-
-    // Add resize listener for auto theme
-    if (currentTheme === THEMES.AUTO) {
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                applyTheme(THEMES.AUTO);
-            }, 300); // Debounce resize events
-        });
-    }
 }
