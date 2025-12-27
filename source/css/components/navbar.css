@@ -115,6 +115,13 @@ nav.window-open {
     color: #bb86fc;
 }
 
+#dexter-menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Dexter Dropdown */
 .dexter-dropdown {
     position: absolute;
