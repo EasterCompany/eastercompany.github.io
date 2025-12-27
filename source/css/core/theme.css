@@ -40,8 +40,9 @@ body.theme-light {
     --gradient-5: #FFFFFF;
 }
 
-/* Light Theme Specific Overrides */
-body.theme-light .dropdown-item i {
+/* Light & Legacy Theme Specific Overrides */
+body.theme-light .dropdown-item i,
+body.theme-legacy .dropdown-item i {
     color: #FFFFFF !important;
 }
 
