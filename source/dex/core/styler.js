@@ -100,7 +100,7 @@ export function injectNavbar(isLoggedIn = false) {
             <i class='bx bx-pulse' id="monitor-icon" title="Monitor"></i>
             <i class='bx bx-brain' id="workspace-icon" title="Workspace"></i>
             <i class='bx bx-cog' id="settings-icon" title="Settings"></i>
-            <i class='bx bx-x-circle' id="close-all-windows" title="Close All Windows" style="color: #ff4444; margin-left: 10px; opacity: 0.6;"></i>
+            <i class='bx bx-x-circle' id="close-all-windows" title="Close All Windows" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"></i>
         </div>
         `
         : `
