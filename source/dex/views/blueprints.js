@@ -2,7 +2,7 @@
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml, smartFetch } from '../core/utils.js';
 
 export const getBlueprintActions = () => `
-    <div class="notifications-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none;">
+    <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
         <button id="blueprints-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
