@@ -23,6 +23,25 @@ footer.hide {
     pointer-events: none;
 }
 
+.footer-brand-left,
+.footer-brand-right {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75em;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.footer-brand-left {
+    left: 20px;
+}
+
+.footer-brand-right {
+    right: 20px;
+}
+
 .socials-section {
     display: flex;
     justify-content: center;

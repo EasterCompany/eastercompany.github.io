@@ -30,15 +30,17 @@
             <!-- Window buttons injected here by main.js -->
         </div>
         ${o}
-    `,c=document.createElement("nav");if(c.innerHTML=r,document.body.prepend(c),!a){let b=document.getElementById("nav-back-btn");b&&(b.addEventListener("click",()=>{let g=window.location.pathname,w=(g.endsWith("/")&&g.length>1?g.slice(0,-1):g).split("/");w.pop();let u=w.join("/")||"/";window.location.href=u}),b.addEventListener("mouseenter",()=>{b.style.transform="translateX(-3px)"}),b.addEventListener("mouseleave",()=>{b.style.transform="translateX(0)"}))}}function Me(){let t=`
+    `,c=document.createElement("nav");if(c.innerHTML=r,document.body.prepend(c),!a){let b=document.getElementById("nav-back-btn");b&&(b.addEventListener("click",()=>{let g=window.location.pathname,w=(g.endsWith("/")&&g.length>1?g.slice(0,-1):g).split("/");w.pop();let u=w.join("/")||"/";window.location.href=u}),b.addEventListener("mouseenter",()=>{b.style.transform="translateX(-3px)"}),b.addEventListener("mouseleave",()=>{b.style.transform="translateX(0)"}))}}function Me(){if(document.querySelector("footer"))return;let t=`
+        <span class="footer-brand-left">DEXTER</span>
         <div class="socials-section">
-            <a href="https://facebook.com/eastercompany" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="bx bxl-facebook-square"></i></a>
-            <a href="https://linkedin.com/company/72223947" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="bx bxl-linkedin"></i></a>
-            <a href="https://instagram.com/eastercompany" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bx bxl-instagram-alt"></i></a>
-            <a href="https://x.com/eastercompany" aria-label="X" target="_blank" rel="noopener noreferrer"><i class="bx bxl-twitter"></i></a>
-            <a href="https://github.com/eastercompany" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="bx bxl-github"></i></a>
-            <a href="https://youtube.com/@eastercompany" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bx bxl-youtube"></i></a>
+            <a href="https://facebook.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-facebook'></i></a>
+            <a href="https://linkedin.com/company/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
+            <a href="https://instagram.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-instagram'></i></a>
+            <a href="https://twitter.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-twitter'></i></a>
+            <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i></a>
+            <a href="https://youtube.com/@eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-youtube'></i></a>
         </div>
+        <span class="footer-brand-right">DEX CLI</span>
     `,e=document.createElement("footer");e.innerHTML=t,document.body.appendChild(e)}var De=1e3;function F(t){let e=null,a=t.onClose||null,o=t.onOpen||null;function s(){e&&(e.style.zIndex=++De)}function r(){if(e){e.classList.add("open"),s(),window.addEventListener("resize",c),o&&setTimeout(o,10);return}let u=document.getElementById("windows-container");u||(u=document.createElement("div"),u.id="windows-container",u.className="windows-container",document.body.appendChild(u)),e=document.createElement("div"),e.id=t.id,e.className="window",t.tabs&&t.tabs.length>0&&e.classList.add("has-tabs"),e.style.zIndex=++De,e.addEventListener("mousedown",s);let p=t.icon||"bx-window",n="",i="",l;t.tabs&&t.tabs.length>0?(n=`<div class="tab-bar">${t.tabs.map((m,d)=>{let f=m.icon?`<i class="bx ${m.icon}"></i>`:`<span class="tab-glyph">${m.title?.charAt(0).toUpperCase()||"?"}</span>`;return`
                     <div class="tab ${d===0?"active":""}" data-tab-index="${d}">
                         ${f}
