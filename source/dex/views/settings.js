@@ -14,8 +14,8 @@ export function getSettingsContent() {
                     <div class="theme-card ${currentTheme === theme ? 'active' : ''}" data-theme="${theme}">
                         <div class="theme-preview theme-preview-${theme.toLowerCase()}"></div>
                         <div class="theme-info">
-                            <h3>${theme}</h3>
-                            <p>${theme === THEMES.AUTO ? 'Automatic theme selection.' : theme === THEMES.DEFAULT ? 'Simple, black, default.' : 'Colourful, not bright.'}</p>
+                            <h3>${theme.charAt(0).toUpperCase() + theme.slice(1)}</h3>
+                            <p>${theme === THEMES.DARK ? 'Simple, clean, dark.' : theme === THEMES.LIGHT ? 'Heavenly, bright, and glowy.' : 'The original animated style.'}</p>
                             <span class="theme-badge">${currentTheme === theme ? 'Active' : 'Select'}</span>
                         </div>
                     </div>
