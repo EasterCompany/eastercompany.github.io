@@ -16,8 +16,8 @@
   to { background-position: 350% 50%, 350% 50%; }
 }
 
-@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 0.3; } }
-@keyframes fadeOutBackground { from { opacity: 0.3; } to { opacity: 0; } }
+@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 0.5; } }
+@keyframes fadeOutBackground { from { opacity: 0.5; } to { opacity: 0; } }
 
 .background {
   z-index: -1;
@@ -42,16 +42,16 @@
   );
   --rainbow: repeating-linear-gradient(
     -60deg,
-    #32FFaa 10%,
-    #FF32aa 15%,
-    #4444FF 20%,
-    #6666FF 25%,
-    #ddddFF 30%
+    #FFFFFF 10%,
+    #D4F1F9 15%,
+    #E1BEE7 20%,
+    #F8BBD0 25%,
+    #FFFFFF 30%
   );
   background-image: var(--stripes), var(--rainbow);
   background-size: 300%, 200%;
   background-position: 50% 50%, 50% 50%;
-  filter: blur(60px);
+  filter: blur(80px);
   -webkit-mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
 }
@@ -64,7 +64,7 @@
   background-size: 200%, 100%;
   animation: smoothBg 60s linear infinite;
   background-attachment: fixed;
-  mix-blend-mode: difference;
+  mix-blend-mode: screen;
 }
 
 /* Theme Selector Cards */
