@@ -318,13 +318,12 @@ export async function updateNotificationsTab(forceReRender = false) {
     updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
     updateUnreadNotificationCount(); // Update badge on each refresh
 
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-    if (notificationsContainer.children.length === 0) {
-      notificationsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load notifications.', 'The event service may be offline or unreachable.');
-    }
-  }
-}
+      } catch (error) {
+          console.error('Error fetching notifications:', error);
+          if (notificationsContainer.children.length === 0) {
+              notificationsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load notifications.', 'The event service may be offline.');
+          }
+      }}
 
 function attachActionListeners() {
   const readAllBtn = document.getElementById('notif-read-all');
