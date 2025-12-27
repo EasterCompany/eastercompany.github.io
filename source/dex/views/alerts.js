@@ -1,40 +1,40 @@
-// Notifications Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadNotificationCount, escapeHtml, smartFetch } from '../core/utils.js';
+// Alerts Tab Logic
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch } from '../core/utils.js';
 
-export const getNotificationsContent = () => `
-    <div class="notifications-actions">
-        <button id="notif-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
-        <button id="notif-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
-        <button id="notif-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-        <button id="notif-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
+export const getAlertsContent = () => `
+    <div class="alerts-actions">
+        <button id="alerts-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
+        <button id="alerts-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
+        <button id="alerts-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+        <button id="alerts-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
     </div>
-    <div id="notifications-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
+    <div id="alerts-list" class="alerts-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
         <div class="tab-placeholder">
             <i class='bx bx-bell placeholder-icon'></i>
-            <p class="placeholder-message">Loading notifications...</p>
+            <p class="placeholder-message">Loading alerts...</p>
         </div>
     </div>
 `;
 
 // Export this to track updates in main.js if needed, or manage it internally
-export let lastNotificationsUpdate = null;
+export let lastAlertsUpdate = null;
 
 // Track expanded state globally within the module
 let activeExpandedIds = new Set();
-let currentFilteredNotifications = [];
+let currentFilteredAlerts = [];
 
-export async function updateNotificationsTab(forceReRender = false) {
-  const notificationsContainer = document.getElementById('notifications-list');
-  if (!notificationsContainer) return;
+export async function updateAlertsTab(forceReRender = false) {
+  const alertsContainer = document.getElementById('alerts-list');
+  if (!alertsContainer) return;
 
   // Attach button listeners if not already attached
   attachActionListeners();
 
   if (forceReRender) {
-    notificationsContainer.innerHTML = '<p>Updating...</p>';
+    alertsContainer.innerHTML = '<p>Updating...</p>';
   }
 
-  // Fetch only notifications
+  // Fetch only notifications (now alerts)
   const url = `/events?ml=1000&format=json&event.type=system.notification.generated`;
 
   try {
@@ -42,19 +42,19 @@ export async function updateNotificationsTab(forceReRender = false) {
     if (!response.ok) throw new Error('Service is offline or unreachable.');
 
     const data = await response.json();
-    const allNotifications = data.events || [];
+    const allAlerts = data.events || [];
 
-    lastNotificationsUpdate = Date.now();
-    updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
+    lastAlertsUpdate = Date.now();
+    updateTabTimestamp(0, lastAlertsUpdate); // Index 0 for Alerts
 
     // Persistence Logic Filter:
-    // 1. Always keep UNREAD notifications.
-    // 2. Keep READ notifications for 24 hours after they were marked as read.
+    // 1. Always keep UNREAD alerts.
+    // 2. Keep READ alerts for 24 hours after they were marked as read.
     const now = Date.now();
     const persistenceThreshold = 24 * 60 * 60 * 1000; // 24 hours
 
-    const filteredNotifications = allNotifications.filter(event => {
-      const readTSStr = localStorage.getItem(`notification_read_ts_${event.id}`);
+    const filteredAlerts = allAlerts.filter(event => {
+      const readTSStr = localStorage.getItem(`alert_read_ts_${event.id}`);
       if (!readTSStr) return true; // Keep unread
 
       const readTS = parseInt(readTSStr);
@@ -62,7 +62,7 @@ export async function updateNotificationsTab(forceReRender = false) {
     });
 
     // Sort: Priority (Desc) -> Time (Desc)
-    filteredNotifications.sort((a, b) => {
+    filteredAlerts.sort((a, b) => {
       const getPriority = (evt) => {
         let data = evt.event;
         if (typeof data === 'string') {
@@ -87,7 +87,7 @@ export async function updateNotificationsTab(forceReRender = false) {
       return b.timestamp - a.timestamp; // Newer timestamp first
     });
 
-    currentFilteredNotifications = filteredNotifications;
+    currentFilteredAlerts = filteredAlerts;
 
     const getPriority = (evt) => {
       let data = evt.event;
@@ -99,12 +99,12 @@ export async function updateNotificationsTab(forceReRender = false) {
 
     // Build Display List with Dividers
     const displayList = [];
-    const uniquePriorities = new Set(filteredNotifications.map(n => getPriority(n)));
+    const uniquePriorities = new Set(filteredAlerts.map(n => getPriority(n)));
     const showDividers = uniquePriorities.size > 1;
 
-    if (filteredNotifications.length > 0) {
+    if (filteredAlerts.length > 0) {
       let lastPriority = null;
-      filteredNotifications.forEach(n => {
+      filteredAlerts.forEach(n => {
         const p = getPriority(n);
         if (showDividers && p !== lastPriority) {
           displayList.push({ id: `divider-${p}`, type: 'divider', label: p.toUpperCase() });
@@ -115,34 +115,34 @@ export async function updateNotificationsTab(forceReRender = false) {
     }
 
     if (forceReRender) {
-      notificationsContainer.innerHTML = '';
+      alertsContainer.innerHTML = '';
     }
 
-    if (filteredNotifications.length === 0) {
-      notificationsContainer.innerHTML = createPlaceholderMessage('empty', 'No notifications yet.');
-      updateUnreadNotificationCount();
+    if (filteredAlerts.length === 0) {
+      alertsContainer.innerHTML = createPlaceholderMessage('empty', 'No alerts yet.');
+      updateUnreadAlertCount();
       return;
     }
 
-    const createNotificationElement = (notificationEvent) => {
-      let notificationData = notificationEvent.event;
-      if (typeof notificationData === 'string') {
+    const createAlertElement = (alertEvent) => {
+      let alertData = alertEvent.event;
+      if (typeof alertData === 'string') {
         try {
-          notificationData = JSON.parse(notificationData);
+          alertData = JSON.parse(alertData);
         } catch (e) { return null; }
       }
 
-      const title = notificationData.title || 'Untitled Notification';
-      const body = notificationData.body || 'No description provided.';
-      const priority = notificationData.priority || 'low';
-      const isAlert = !!notificationData.alert;
-      const category = notificationData.category || 'system';
-      const relatedEventIDs = notificationData.related_event_ids || [];
+      const title = alertData.title || 'Untitled Alert';
+      const body = alertData.body || 'No description provided.';
+      const priority = alertData.priority || 'low';
+      const isAlert = !!alertData.alert;
+      const category = alertData.category || 'system';
+      const relatedEventIDs = alertData.related_event_ids || [];
 
-      const readTS = localStorage.getItem(`notification_read_ts_${notificationEvent.id}`);
+      const readTS = localStorage.getItem(`alert_read_ts_${alertEvent.id}`);
       const isRead = !!readTS;
 
-      const utcDate = new Date(notificationEvent.timestamp * 1000);
+      const utcDate = new Date(alertEvent.timestamp * 1000);
       const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
 
@@ -157,8 +157,8 @@ export async function updateNotificationsTab(forceReRender = false) {
         borderClass = 'event-border-orange';
       }
 
-      const readClass = isRead ? 'notification-read' : 'notification-unread';
-      const isExpanded = activeExpandedIds.has(notificationEvent.id);
+      const readClass = isRead ? 'alert-read' : 'alert-unread';
+      const isExpanded = activeExpandedIds.has(alertEvent.id);
       const expandedClass = isExpanded ? 'expanded' : '';
       const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
@@ -187,25 +187,25 @@ export async function updateNotificationsTab(forceReRender = false) {
 
       const tempDiv = document.createElement('div');
       tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer`;
-      tempDiv.dataset.notificationId = notificationEvent.id;
+      tempDiv.dataset.alertId = alertEvent.id;
 
       tempDiv.onclick = function (e) {
         const isCurrentlyExpanded = this.classList.contains('expanded');
         if (isCurrentlyExpanded) {
           this.classList.remove('expanded');
-          activeExpandedIds.delete(notificationEvent.id);
+          activeExpandedIds.delete(alertEvent.id);
           const details = this.querySelector('.event-details');
           if (details) details.style.display = 'none';
         } else {
           this.classList.add('expanded');
-          activeExpandedIds.add(notificationEvent.id);
+          activeExpandedIds.add(alertEvent.id);
           const details = this.querySelector('.event-details');
           if (details) details.style.display = 'block';
 
-          if (!localStorage.getItem(`notification_read_ts_${notificationEvent.id}`)) {
-            localStorage.setItem(`notification_read_ts_${notificationEvent.id}`, Date.now().toString());
-            this.classList.add('notification-read');
-            this.classList.remove('notification-unread');
+          if (!localStorage.getItem(`alert_read_ts_${alertEvent.id}`)) {
+            localStorage.setItem(`alert_read_ts_${alertEvent.id}`, Date.now().toString());
+            this.classList.add('alert-read');
+            this.classList.remove('alert-unread');
 
             this.classList.remove('event-border-blue', 'event-border-red', 'event-border-purple');
             let newBorder = 'event-border-grey';
@@ -213,12 +213,12 @@ export async function updateNotificationsTab(forceReRender = false) {
             else if (priority === 'medium') newBorder = 'event-border-orange';
             this.classList.add(newBorder);
 
-            updateUnreadNotificationCount();
+            updateUnreadAlertCount();
           }
         }
       };
 
-      const summary = title; // Using title as summary for icon selection
+      const summary = title;
       const iconMap = {
           'system': 'bx-cog',
           'messaging': 'bx-message-detail',
@@ -254,7 +254,7 @@ export async function updateNotificationsTab(forceReRender = false) {
           tempDiv.classList.remove('expanded');
           const details = tempDiv.querySelector('.event-details');
           if (details) details.style.display = 'none';
-          activeExpandedIds.delete(notificationEvent.id);
+          activeExpandedIds.delete(alertEvent.id);
         });
       }
 
@@ -264,7 +264,7 @@ export async function updateNotificationsTab(forceReRender = false) {
     const createDividerElement = (item) => {
       const div = document.createElement('div');
       div.className = 'notification-divider';
-      div.dataset.notificationId = item.id;
+      div.dataset.alertId = item.id;
 
       let color = '#888888';
       if (item.label === 'CRITICAL') color = '#ff4d4d';
@@ -276,14 +276,14 @@ export async function updateNotificationsTab(forceReRender = false) {
       return div;
     };
 
-    // Basic diffing and rendering logic for notifications
-    const currentChildren = Array.from(notificationsContainer.children);
-    const currentMap = new Map(currentChildren.map(el => [el.dataset.notificationId, el]));
+    // Basic diffing and rendering logic for alerts
+    const currentChildren = Array.from(alertsContainer.children);
+    const currentMap = new Map(currentChildren.map(el => [el.dataset.alertId, el]));
     const newIds = new Set(displayList.map(e => e.id));
 
-    // Remove old notifications OR placeholders (anything without a valid current ID)
+    // Remove old alerts OR placeholders (anything without a valid current ID)
     currentChildren.forEach(child => {
-      const id = child.dataset.notificationId;
+      const id = child.dataset.alertId;
       if (!id || !newIds.has(id)) {
         child.remove();
       }
@@ -298,13 +298,13 @@ export async function updateNotificationsTab(forceReRender = false) {
         if (item.type === 'divider') {
           el = createDividerElement(item);
         } else {
-          el = createNotificationElement(item);
+          el = createAlertElement(item);
         }
         if (!el) return;
       }
       if (index === 0) {
-        if (notificationsContainer.firstElementChild !== el) {
-          notificationsContainer.prepend(el);
+        if (alertsContainer.firstElementChild !== el) {
+          alertsContainer.prepend(el);
         }
       } else {
         if (previousElement && previousElement.nextElementSibling !== el) {
@@ -314,44 +314,44 @@ export async function updateNotificationsTab(forceReRender = false) {
       previousElement = el;
     });
 
-    lastNotificationsUpdate = Date.now();
-    updateTabTimestamp(0, lastNotificationsUpdate); // Index 0 for Notifications
-    updateUnreadNotificationCount(); // Update badge on each refresh
+    lastAlertsUpdate = Date.now();
+    updateTabTimestamp(0, lastAlertsUpdate); // Index 0 for Alerts
+    updateUnreadAlertCount(); // Update badge on each refresh
 
       } catch (error) {
-          console.error('Error fetching notifications:', error);
-          if (notificationsContainer.children.length === 0) {
-              notificationsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load notifications.', 'The event service may be offline.');
+          console.error('Error fetching alerts:', error);
+          if (alertsContainer.children.length === 0) {
+              alertsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load alerts.', 'The event service may be offline.');
           }
       }}
 
 function attachActionListeners() {
-  const readAllBtn = document.getElementById('notif-read-all');
-  const expandAllBtn = document.getElementById('notif-expand-all');
-  const closeAllBtn = document.getElementById('notif-close-all');
-  const clearBtn = document.getElementById('notif-clear');
+  const readAllBtn = document.getElementById('alerts-read-all');
+  const expandAllBtn = document.getElementById('alerts-expand-all');
+  const closeAllBtn = document.getElementById('alerts-close-all');
+  const clearBtn = document.getElementById('alerts-clear');
 
   if (readAllBtn && !readAllBtn.dataset.listenerAttached) {
     readAllBtn.onclick = () => {
-      currentFilteredNotifications.forEach(notif => {
-        if (!localStorage.getItem(`notification_read_ts_${notif.id}`)) {
-          localStorage.setItem(`notification_read_ts_${notif.id}`, Date.now().toString());
+      currentFilteredAlerts.forEach(notif => {
+        if (!localStorage.getItem(`alert_read_ts_${notif.id}`)) {
+          localStorage.setItem(`alert_read_ts_${notif.id}`, Date.now().toString());
         }
       });
-      updateNotificationsTab(true);
+      updateAlertsTab(true);
     };
     readAllBtn.dataset.listenerAttached = "true";
   }
 
   if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
     expandAllBtn.onclick = () => {
-      currentFilteredNotifications.forEach(notif => {
+      currentFilteredAlerts.forEach(notif => {
         activeExpandedIds.add(notif.id);
-        if (!localStorage.getItem(`notification_read_ts_${notif.id}`)) {
-          localStorage.setItem(`notification_read_ts_${notif.id}`, Date.now().toString());
+        if (!localStorage.getItem(`alert_read_ts_${notif.id}`)) {
+          localStorage.setItem(`alert_read_ts_${notif.id}`, Date.now().toString());
         }
       });
-      updateNotificationsTab(true);
+      updateAlertsTab(true);
     };
     expandAllBtn.dataset.listenerAttached = "true";
   }
@@ -359,7 +359,7 @@ function attachActionListeners() {
   if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
     closeAllBtn.onclick = () => {
       activeExpandedIds.clear();
-      updateNotificationsTab(true);
+      updateAlertsTab(true);
     };
     closeAllBtn.dataset.listenerAttached = "true";
   }
@@ -367,11 +367,11 @@ function attachActionListeners() {
   if (clearBtn && !clearBtn.dataset.listenerAttached) {
     clearBtn.onclick = () => {
       const longAgo = Date.now() - (48 * 60 * 60 * 1000); // 48 hours ago
-      currentFilteredNotifications.forEach(notif => {
-        localStorage.setItem(`notification_read_ts_${notif.id}`, longAgo.toString());
+      currentFilteredAlerts.forEach(notif => {
+        localStorage.setItem(`alert_read_ts_${notif.id}`, longAgo.toString());
       });
       activeExpandedIds.clear();
-      updateNotificationsTab(true);
+      updateAlertsTab(true);
     };
     clearBtn.dataset.listenerAttached = "true";
   }

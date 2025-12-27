@@ -3,7 +3,7 @@ import { injectNavbar, injectFooter, applyBaseStyles } from './styler.js';
 import { createWindow } from './Window.js';
 import { isLoggedIn, login } from './auth.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
-import { getNotificationsContent, updateNotificationsTab } from '../views/notifications.js';
+import { getAlertsContent, updateAlertsTab } from '../views/alerts.js';
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
 import { getEventsContent, updateEventsTimeline } from '../views/events.js';
@@ -121,12 +121,12 @@ function onReady() {
               const currentWinId = activeWindows[0].id;
               
               // Only show switcher if the active window is one of the main dropdown windows
-              const dropdownWindows = ['feed-window', 'events-window', 'monitor-window', 'contacts-window', 'workspace-window'];
+              const dropdownWindows = ['alerts-window', 'events-window', 'monitor-window', 'contacts-window', 'workspace-window'];
               const isMainWindow = dropdownWindows.includes(currentWinId);
               
               if (isMainWindow) {
                   navWindowSwitcher.innerHTML = `
-                      <div class="nav-switch-btn ${currentWinId === 'feed-window' ? 'active' : ''}" id="switch-feed"><i class='bx bx-news'></i> Feed</div>
+                      <div class="nav-switch-btn ${currentWinId === 'alerts-window' ? 'active' : ''}" id="switch-alerts"><i class='bx bx-bell'></i> Alerts</div>
                       <div class="nav-switch-btn ${currentWinId === 'events-window' ? 'active' : ''}" id="switch-events"><i class='bx bx-calendar-event'></i> Events</div>
                       <div class="nav-switch-btn ${currentWinId === 'monitor-window' ? 'active' : ''}" id="switch-monitor"><i class='bx bx-pulse'></i> Monitor</div>
                       <div class="nav-switch-btn ${currentWinId === 'contacts-window' ? 'active' : ''}" id="switch-contacts"><i class='bx bx-book-content'></i> Contacts</div>
@@ -134,7 +134,7 @@ function onReady() {
                   `;
                   
                   // Re-attach listeners to new DOM elements
-                  document.getElementById('switch-feed').addEventListener('click', () => { saveWindowState('feed-window'); toggleWindow(feedWindow); });
+                  document.getElementById('switch-alerts').addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
                   document.getElementById('switch-events').addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
                   document.getElementById('switch-monitor').addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
                   document.getElementById('switch-contacts').addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
@@ -190,14 +190,14 @@ function onReady() {
 
   // --- Window Definitions ---
   
-  const feedWindow = createWindow({
-    id: 'feed-window',
-    title: 'Feed',
-    icon: 'bx-news',
-    content: getNotificationsContent(),
-    onOpen: () => updateNotificationsTab(),
+  const alertsWindow = createWindow({
+    id: 'alerts-window',
+    title: 'Alerts',
+    icon: 'bx-bell',
+    content: getAlertsContent(),
+    onOpen: () => updateAlertsTab(),
     onClose: () => {
-        const idx = activeWindows.indexOf(feedWindow);
+        const idx = activeWindows.indexOf(alertsWindow);
         if (idx > -1) activeWindows.splice(idx, 1);
         recalculateLayout();
     }
@@ -291,7 +291,7 @@ function onReady() {
     const dropdown = document.getElementById('dexter-dropdown');
     if (dropdown) {
         dropdown.innerHTML = `
-            <div class="dropdown-item" id="feed-menu-item"><i class='bx bx-news'></i> Feed</div>
+            <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
             <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
             <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
             <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
@@ -318,11 +318,11 @@ function onReady() {
         // Click to toggle last active window
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const lastWindowId = localStorage.getItem('dex_last_window') || 'feed-window';
+            const lastWindowId = localStorage.getItem('dex_last_window') || 'alerts-window';
             
             // Find the window object by ID
             let targetWindow = null;
-            if (lastWindowId === 'feed-window') targetWindow = feedWindow;
+            if (lastWindowId === 'alerts-window') targetWindow = alertsWindow;
             else if (lastWindowId === 'events-window') targetWindow = eventsWindow;
             else if (lastWindowId === 'monitor-window') targetWindow = monitorWindow;
             else if (lastWindowId === 'contacts-window') targetWindow = contactsWindow;
@@ -335,7 +335,7 @@ function onReady() {
     }
 
     // Dropdown Item Listeners - Update to save state
-    document.getElementById('feed-menu-item')?.addEventListener('click', () => { saveWindowState('feed-window'); toggleWindow(feedWindow); });
+    document.getElementById('alerts-menu-item')?.addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
     document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
     document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
     document.getElementById('contacts-menu-item')?.addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
@@ -349,7 +349,7 @@ function onReady() {
     
     // Refresh loop (only if relevant window is open)
     setInterval(() => {
-        if (feedWindow.isOpen()) updateNotificationsTab();
+        if (alertsWindow.isOpen()) updateAlertsTab();
         if (eventsWindow.isOpen()) updateEventsTimeline();
         if (contactsWindow.isOpen()) updateContactsTab();
         if (monitorWindow.isOpen()) {
