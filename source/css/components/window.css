@@ -227,3 +227,21 @@ nav.window-open + .windows-container {
     align-items: center;
     justify-content: center;
 }
+
+/* Small View Adaptations */
+@media (max-width: 768px) {
+    /* Hide header if no tabs */
+    .window:not(.has-tabs) .window-header {
+        display: none !important;
+    }
+
+    /* If tabs exist, show header but hide the close button (redundant with navbar close) */
+    .window.has-tabs .window-close {
+        display: none !important;
+    }
+    
+    /* Adjust padding if header is hidden to prevent content from hitting top edge too hard */
+    .window:not(.has-tabs) .window-content {
+        padding-top: 15px;
+    }
+}
