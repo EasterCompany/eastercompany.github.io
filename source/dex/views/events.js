@@ -3,7 +3,7 @@ import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } 
 import { formatEventSummary } from '../core/templates.js';
 
 export const getEventsContent = () => `
-    <div class="notifications-actions">
+    <div class="alerts-actions">
         <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
