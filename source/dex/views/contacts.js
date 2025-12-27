@@ -6,10 +6,6 @@ export const getContactsContent = () => `
         <button id="contacts-refresh" class="notif-action-btn"><i class='bx bx-refresh'></i> Refresh</button>
     </div>
     <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
-        <div class="tab-placeholder">
-            <i class='bx bx-book-content placeholder-icon'></i>
-            <p class="placeholder-message">Loading contacts...</p>
-        </div>
     </div>
 `;
 
@@ -97,6 +93,8 @@ export async function updateContactsTab() {
         updateTabBadgeCount(4, members.filter(m => m.status !== 'offline').length);
 
     } catch (e) {
-        container.innerHTML = createPlaceholderMessage('offline', 'Failed to fetch contacts.', 'The Discord service may be offline.');
+        if (container.children.length === 0) {
+            container.innerHTML = createPlaceholderMessage('offline', 'Failed to fetch contacts.', 'The Discord service may be offline.');
+        }
     }
 }
