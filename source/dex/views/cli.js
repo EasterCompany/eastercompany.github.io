@@ -1,5 +1,7 @@
 import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from '../core/utils.js';
 
+const CLI_VERSION = '2.8.143';
+
 const CLI_COMMANDS = [
     {
         id: 'chat',
@@ -10,7 +12,7 @@ const CLI_COMMANDS = [
         category: 'cognitive',
         dummy: true,
         docs: {
-            overview: 'The Cognitive Chat interface allows direct interaction with Dexter\'s strategic layer using natural language.',
+            overview: 'The Cognitive Chat interface (Alpha) allows direct interaction with Dexter\'s strategic layer using natural language.',
             details: [
                 'Context-aware reasoning based on system-wide events.',
                 'Multi-modal input support (text, voice, images).',
@@ -34,7 +36,7 @@ const CLI_COMMANDS = [
         id: 'guardian',
         title: 'Guardian',
         icon: 'bx-shield-quarter',
-        description: 'Trigger a manual Tier 1 Guardian system audit.',
+        description: 'Run the Tier 1 Guardian Analyst technical sentry.',
         usage: 'dex guardian',
         category: 'cognitive',
         docs: {
@@ -48,24 +50,71 @@ const CLI_COMMANDS = [
             extended_usage: 'dex guardian [--force] [--quiet]'
         },
         demo_output: [
-            '\x1b[35m[GUARDIAN]\x1b[0m Starting Tier 1 System Audit...', 
-            '→ Probing 6 active services...', 
-            '\x1b[32m✓\x1b[0m Service: dex-event-service (Healthy)',
-            '\x1b[32m✓\x1b[0m Service: dex-discord-service (Healthy)',
-            '\x1b[32m✓\x1b[0m Service: dex-tts-service (Healthy)',
-            '→ Analyzing recent error logs (last 60 mins)...', 
-            '\x1b[32m✓\x1b[0m 0 critical, 2 minor anomalies found.',
-            '→ Verifying Redis consistency...', 
-            '\x1b[32m✓\x1b[0m All process IDs synchronized.',
-            '\x1b[32m✓\x1b[0m \x1b[1mAudit Complete: System Integrity 100%\x1b[0m'
+            '█ \x1b[1mGUARDIAN ANALYST\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'Initializing Tier 1 Analysis...', 
+            ' ⚙️ Fetching system context...', 
+            ' ⚙️ Running Guardian Analysis...', 
+            '',
+            '\x1b[32mNo significant insights found.\x1b[0m', 
+            ' ⚙️ Resetting Guardian timer...', 
+            '\x1b[32m✓ Guardian timer reset.\x1b[0m'
+        ]
+    },
+    {
+        id: 'test',
+        title: 'Test',
+        icon: 'bx-check-shield',
+        description: 'Run service tests (Format, Lint, Unit).',
+        usage: 'dex test [service]',
+        category: 'lifecycle',
+        docs: {
+            overview: 'Ensures code quality by running the full system test suite.',
+            details: [
+                'Runs go test for all backend services.',
+                'Executes static analysis via golangci-lint.',
+                'Runs Python unit tests for TTS logic.',
+                'Validates configuration schemas.'
+            ],
+            extended_usage: 'dex test [service] [--models]'
+        },
+        demo_output: [
+            '█ \x1b[1mTESTING ALL SERVICES\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            '',
+            '\x1b[36mTesting cli\x1b[0m',
+            'Checking formatting...', 
+            'Linting...', 
+            'Running tests...', 
+            '\x1b[32m✓ Format (all files formatted) [12ms]\x1b[0m', 
+            '\x1b[32m✓ Lint (no issues) [842ms]\x1b[0m', 
+            '\x1b[32m✓ Test (12 passed) [42ms]\x1b[0m', 
+            '\x1b[90m  Total Duration: 896ms\x1b[0m', 
+            '',
+            '\x1b[36mTesting event\x1b[0m',
+            'Checking formatting...', 
+            'Linting...', 
+            'Running tests...', 
+            '\x1b[32m✓ Format (all files formatted) [15ms]\x1b[0m', 
+            '\x1b[32m✓ Lint (no issues) [1.2s]\x1b[0m', 
+            '\x1b[32m✓ Test (48 passed, 72.4% coverage) [156ms]\x1b[0m', 
+            '\x1b[90m  Total Duration: 1.37s\x1b[0m', 
+            '',
+            '█ \x1b[1mTEST SUMMARY\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'SERVICE         FORMAT       LINT         TEST         DURATION  ',
+            'cli             \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       896.2ms   ',
+            'event           \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       1.37s     ',
+            '',
+            '\x1b[32m✓ All tests passed!\x1b[0m'
         ]
     },
     {
         id: 'build',
         title: 'Build',
         icon: 'bx-package',
-        description: 'Increment version and build entire ecosystem.',
-        usage: 'dex build [patch|minor|major]',
+        description: 'Build and install CLI and services from source.',
+        usage: 'dex build [major|minor|patch]',
         category: 'lifecycle',
         docs: {
             overview: 'The primary entry point for ecosystem evolution. Handles versioning and deployment.',
@@ -76,82 +125,79 @@ const CLI_COMMANDS = [
                 'Creates Git tags and pushes to remotes.',
                 'Handles post-build service restarts.'
             ],
-            extended_usage: 'dex build patch --force --skip-git'
+            extended_usage: 'dex build [patch|minor|major] [--force]'
         },
         demo_output: [
-            '# \x1b[1mBuilding Dexter Ecosystem\x1b[0m', 
-            '→ Version: 2.11.177 -> \x1b[32m2.11.178\x1b[0m (patch)',
-            '→ Cleaning old artifacts...', 
-            '→ Bundling frontend assets... \x1b[32m[DONE]\x1b[0m',
-            '→ Compiling dex-cli (Go 1.23)... \x1b[32m[DONE]\x1b[0m',
-            '→ Verifying Python venv (3.13)... \x1b[32m[DONE]\x1b[0m',
-            '→ Pushing Git tag v2.11.178...', 
-            '→ \x1b[34mPublishing to https://easter.company...\x1b[0m',
-            '\x1b[32m✓ Successfully built and deployed version 2.11.178!\x1b[0m'
+            '█ \x1b[1mBUILDING ALL SERVICES FROM LOCAL SOURCE\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'Building cli with patch increment',
+            'Capturing current versions...', 
+            '',
+            '█ \x1b[1mBUILD PHASE\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            '\x1b[36m# Building cli\x1b[0m',
+            'Incrementing version: 2.8.142 -> 2.8.143 (patch)',
+            'Cleaning old build files...', 
+            'Compiling binary...', 
+            '\x1b[32m✓ Successfully built cli!\x1b[0m', 
+            '',
+            '█ \x1b[1mINSTALL PHASE\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            '\x1b[32m✓ Successfully installed cli!\x1b[0m', 
+            '',
+            '█ \x1b[1mGIT PHASE\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            '[cli] Adding, committing, and pushing changes...', 
+            '[cli] Creating tag 2.8.143...', 
+            '\x1b[32m✓ [cli] Tag 2.8.143 created and pushed\x1b[0m', 
+            '',
+            '█ \x1b[1mSUMMARY\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'Service  Version Change        Size Change  Note                                   ',
+            '───────  ────────────────────  ───────────  ───────────────────────────────────────',
+            'cli      2.8.142 -> 2.8.143    +12 KB       release: publish patch version 2.8.143 ',
+            '',
+            '\x1b[32m✓ Build complete.\x1b[0m'
         ]
     },
     {
         id: 'update',
         title: 'Update',
         icon: 'bx-cloud-download',
-        description: 'Fetch and apply the latest updates for all components.',
+        description: 'Update CLI and services from source or pre-built binaries.',
         usage: 'dex update',
         category: 'lifecycle',
         docs: {
-            overview: 'Update pulls the latest changes from the central repositories and synchronizes your local environment.',
+            overview: 'Synchronizes your environment with the latest releases.',
             details: [
-                'Performs git fetch/pull for all configured services.',
-                'Verifies compatibility between local and remote versions.',
-                'Triggers a rebuild if significant changes are detected.'
+                'In DEV mode: Clones fresh source and rebuilds everything.',
+                'In USER mode: Downloads latest binaries from easter.company.',
+                'Verifies checksums for all downloads.',
+                'Automatically updates environment paths.'
             ],
-            extended_usage: 'dex update [--service=name]'
+            extended_usage: 'dex update'
         },
         demo_output: [
-            'Fetching updates from remote repositories...', 
-            '→ dex-cli: Already up to date.',
-            '→ dex-event-service: Pulled 3 commits.',
-            '→ dex-discord-service: Already up to date.',
-            '✓ Environment synchronized successfully.'
+            '█ \x1b[1mDEVELOPER UPDATE - NUCLEAR FRESH INSTALL\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            '\x1b[33m! Cloning fresh source and rebuilding everything from scratch...\x1b[0m',
+            'Fetching latest dev version from easter.company...', 
+            'Latest dev version: 2.8.143',
+            'Updating 6 services from source...', 
+            'Updating cli...', 
+            '  Cloning dex-cli...', 
+            '  Building cli via Makefile...', 
+            '\x1b[32m  ✓ cli updated (all binaries installed)\x1b[0m', 
+            '\x1b[32m✓ Update complete!\x1b[0m',
+            'Run \'dex version\' to verify'
         ]
     },
     {
-        id: 'test',
-        title: 'Test',
-        icon: 'bx-check-shield',
-        description: 'Run unit tests, linters, and integration checks.',
-        usage: 'dex test',
-        category: 'lifecycle',
-        docs: {
-            overview: 'Ensures code quality by running the full system test suite.',
-            details: [
-                'Runs go test for all backend services.',
-                'Executes static analysis via golangci-lint.',
-                'Runs Python unit tests for TTS logic.',
-                'Validates configuration schemas.'
-            ],
-            extended_usage: 'dex test [service] [--coverage]'
-        },
-        demo_output: [
-            '\x1b[1mRunning System Test Suite...\x1b[0m', 
-            '',
-            '\x1b[32mPASS\x1b[0m  dex-cli/utils/version_parser_test.go', 
-            '\x1b[32mPASS\x1b[0m  dex-event-service/endpoints/roadmap_test.go', 
-            '\x1b[32mPASS\x1b[0m  dex-discord-service/audio/redis_test.go', 
-            '\x1b[33mWARN\x1b[0m  dex-tts-service (Lint): line 42 has long line', 
-            '',
-            '\x1b[1mTest Summary:\x1b[0m', 
-            '  Passed:  \x1b[32m48\x1b[0m', 
-            '  Failed:  \x1b[31m0\x1b[0m', 
-            '  Skipped: \x1b[33m2\x1b[0m', 
-            '\x1b[32m✓ All critical path tests passed (2.4s)\x1b[0m'
-        ]
-    },
-    {
-        id: 'service',
-        title: 'Service',
-        icon: 'bx-server',
-        description: 'Manage individual systemd background services.',
-        usage: 'dex service [start|stop|restart]',
+        id: 'restart',
+        title: 'Restart',
+        icon: 'bx-refresh',
+        description: 'Restart all manageable services.',
+        usage: 'dex restart',
         category: 'lifecycle',
         docs: {
             overview: 'Direct control over the background processes that power the Dexter ecosystem.',
@@ -161,7 +207,7 @@ const CLI_COMMANDS = [
                 'Displays detailed uptime and PID info.',
                 'Monitors resource consumption per service.'
             ],
-            extended_usage: 'dex service restart all\ndex service stop discord'
+            extended_usage: 'dex start\ndex stop\ndex restart'
         },
         demo_output: [
             '→ Restarting dex-event-service...', 
@@ -177,47 +223,49 @@ const CLI_COMMANDS = [
         id: 'status',
         title: 'Status',
         icon: 'bx-pulse',
-        description: 'Real-time health overview of all Dexter services.',
-        usage: 'dex status',
+        description: 'Check the status of CLI and services.',
+        usage: 'dex status [service]',
         category: 'system',
         docs: {
-            overview: 'Provides a high-level overview of the health, versioning, and connectivity of all network nodes.',
+            overview: 'The Status command provides a high-level overview of the health, versioning, and connectivity of all services in the Dexter network.',
             details: [
                 'Reports status (online/offline/degraded).',
                 'Displays version strings and build hashes.',
                 'Shows network addresses and ports.',
-                'Validates cross-service communication tokens.'
+                'Validates internal service-to-service communication.'
             ],
-            extended_usage: 'dex status [service_id] [--json]'
+            extended_usage: 'dex status [service_id|all]'
         },
         demo_output: [
-            '\x1b[1mID       NAME      STATUS    VERSION    ADDRESS\x1b[0m', 
-            '───      ────      ──────    ───────    ───────', 
-            'cli      CLI       \x1b[32mONLINE\x1b[0m    2.8.143    local', 
-            'event    Events    \x1b[32mONLINE\x1b[0m    2.8.198    127.0.0.1:8100', 
-            'discord  Discord   \x1b[32mONLINE\x1b[0m    2.8.68     127.0.0.1:8300', 
-            'tts      TTS       \x1b[32mONLINE\x1b[0m    0.0.25     127.0.0.1:8200', 
-            'web      Web       \x1b[32mONLINE\x1b[0m    0.0.5      127.0.0.1:8400', 
-            '',
-            '\x1b[34m[NET]\x1b[0m All internal gateways verified via 127.0.0.1.'
+            '█ \x1b[1mSERVICE STATUS\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'SERVICE  ADDRESS          VERSION  BRANCH   COMMIT   STATUS   UPTIME           CPU      MEM',
+            '───────  ───────          ───────  ──────   ──────   ──────   ──────           ───      ───',
+            'cli      local            2.8.143  main     240fc38  \x1b[32mOK\x1b[0m       \x1b[90m--\x1b[0m               \x1b[90m--\x1b[0m       \x1b[90m--\x1b[0m',
+            'event    127.0.0.1:8100   2.8.198  main     a8f2b1c  \x1b[32mOK\x1b[0m       14h22m           0.2%     12.4 MB',
+            'discord  127.0.0.1:8300   2.8.68   main     6e2d1a4  \x1b[32mOK\x1b[0m       14h22m           0.1%     24.8 MB',
+            'tts      127.0.0.1:8200   0.0.25   main     f2e1d0c  \x1b[32mOK\x1b[0m       14h22m           0.0%     1.2 GB',
+            'web      127.0.0.1:8400   0.0.5    main     b1c2d3e  \x1b[32mOK\x1b[0m       14h22m           0.0%     42.1 MB',
+            'ollama   127.0.0.1:11434  0.5.4    \x1b[90m--\x1b[0m       \x1b[90m--\x1b[0m       \x1b[32mOK\x1b[0m       4d12h            0.5%     8.4 GB',
+            'cache    127.0.0.1:6379   7.4.1    \x1b[90m--\x1b[0m       \x1b[90m--\x1b[0m       \x1b[32mOK\x1b[0m       32d              0.1%     4.2 MB'
         ]
     },
     {
         id: 'logs',
         title: 'Logs',
         icon: 'bx-terminal',
-        description: 'Aggregated real-time log streaming for all nodes.',
+        description: 'View or tail service logs.',
         usage: 'dex logs <service> [-f]',
         category: 'system',
         docs: {
-            overview: 'Observability tool for monitoring live service output.',
+            overview: 'Logs provides real-time observability into the background processes of the Dexter services.',
             details: [
-                'Aggregates logs from distributed nodes.',
-                'Full ANSI color support.',
-                'Follow mode (-f) for active debugging.',
-                'Filter by severity or service ID.'
+                'Tail live output from systemd services.',
+                'Support for following (-f) and history limiting.',
+                'ANSI color support for terminal readability.',
+                'Aggregated view for multi-instance deployments.'
             ],
-            extended_usage: 'dex logs discord -f --n 50'
+            extended_usage: 'dex logs <service_id> [-f]'
         },
         demo_output: [
             '\x1b[34m[DISCORD]\x1b[0m \x1b[90m14:30:05\x1b[0m [INFO] Joined voice channel: 1437617331...', 
@@ -229,39 +277,130 @@ const CLI_COMMANDS = [
         ]
     },
     {
+        id: 'event',
+        title: 'Event',
+        icon: 'bx-broadcast',
+        description: 'Interact with the Event Service.',
+        usage: 'dex event [log|service|analyst|delete]',
+        category: 'system',
+        docs: {
+            overview: 'The event bus interface for manual debugging and data extraction.',
+            details: [
+                'Query the history of the system event log.',
+                'Manually reset analyst tier timers.',
+                'Filter events by type, service, or count.',
+                'Delete historical events matching patterns.'
+            ],
+            extended_usage: 'dex event log [-n count] [-t type]\ndex event analyst [status|reset]\ndex event delete <pattern>'
+        },
+        demo_output: [
+            '█ \x1b[1mLAST 20 EVENTS\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            '\x1b[90m14:42:01\x1b[0m \x1b[90mcli            \x1b[0m | \x1b[38;5;208mCMD: dex guardian [] (success)\x1b[0m',
+            '\x1b[90m14:42:02\x1b[0m \x1b[90mevent          \x1b[0m | \x1b[35m[INFO] Analysis complete: No significant insights found.\x1b[0m',
+            '\x1b[90m14:45:10\x1b[0m \x1b[90mdiscord        \x1b[0m | \x1b[34moweneaster: Dexter, run a system scan.\x1b[0m',
+            '\x1b[90m14:45:12\x1b[0m \x1b[90mevent          \x1b[0m | \x1b[32mPROC+: system-cli-op (started)\x1b[0m',
+            '\x1b[90m14:45:15\x1b[0m \x1b[90mcli            \x1b[0m | \x1b[31m[ERROR] Connection timeout to Redis.\x1b[0m'
+        ]
+    },
+    {
+        id: 'discord',
+        title: 'Discord',
+        icon: 'bx-bot',
+        description: 'Interact with the Discord Service.',
+        usage: 'dex discord [contacts|channels|service|quiet]',
+        category: 'system',
+        docs: {
+            overview: 'Direct control over the Discord bot integration and audio engine.',
+            details: [
+                'List all guild members and their permission levels.',
+                'Inspect channel structures and user presence.',
+                'Toggle "Quiet Mode" for public interactions.',
+                'Check raw service state and gateway health.'
+            ],
+            extended_usage: 'dex discord contacts\ndex discord quiet [on|off]'
+        },
+        demo_output: [
+            '█ \x1b[1mDISCORD CONTACTS\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'Fetching guild members...', 
+            '',
+            '█ Server: Easter Company (12 members) █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'LEVEL           USERNAME        STATUS   DISCORD ID',
+            '─────           ────────        ──────   ──────────',
+            '\x1b[35mDEXTER (ME)\x1b[0m     Dexter          \x1b[32monline\x1b[0m   \x1b[90m1313...0432\x1b[0m',
+            '\x1b[35mMASTER USER\x1b[0m     oweneaster      \x1b[32monline\x1b[0m   \x1b[90m3130...7920\x1b[0m',
+            '\x1b[31mADMIN\x1b[0m           Developer       \x1b[33midle\x1b[0m     \x1b[90m4242...8181\x1b[0m',
+            '\x1b[37mUSER\x1b[0m            GuestUser       \x1b[90moffline\x1b[0m  \x1b[90m9999...9999\x1b[0m'
+        ]
+    },
+    {
+        id: 'ollama',
+        title: 'Ollama',
+        icon: 'bx-brain',
+        description: 'Run the system \'ollama\' executable or sync models.',
+        usage: 'dex ollama [pull|sync|list]',
+        category: 'system',
+        docs: {
+            overview: 'Proxy command for managing local LLMs and neural vision models.',
+            details: [
+                'Wraps the system ollama binary.',
+                'Added \'pull\' subcommand to sync all Dexter-required models.',
+                'Synchronizes custom model templates automatically.',
+                'Validates model weight checksums.'
+            ],
+            extended_usage: 'dex ollama pull\ndex ollama run gemma3:12b'
+        },
+        demo_output: [
+            '\x1b[34m[OLLAMA]\x1b[0m Synchronizing custom Dexter models...', 
+            'Pulling base models...', 
+            'Pulling gemma3:12b... \x1b[32m[100%]\x1b[0m',
+            '\x1b[32m✓ Successfully pulled model: gemma3:12b\x1b[0m',
+            'Creating custom Dexter models...', 
+            '  Rebuilding dex-analyst-guardian from gpt-oss:20b...', 
+            '\x1b[32m✓   Created dex-analyst-guardian\x1b[0m',
+            '\x1b[32m✓ Ollama models are up-to-date.\x1b[0m'
+        ]
+    },
+    {
         id: 'system',
         title: 'System Info',
         icon: 'bx-info-square',
-        description: 'Detailed hardware and OS-level performance vitals.',
-        usage: 'dex system',
+        description: 'Show system info and manage packages.',
+        usage: 'dex system [info|scan|validate|install]',
         category: 'system',
         docs: {
             overview: 'Performance observability tool focused on AI resource availability.',
             details: [
-                'CPU Core/Thread count and current utilization.',
-                'RAM and VRAM (GPU) availability for LLM inference.',
-                'Storage usage for local model weights and logs.',
-                'OS environment validation.'
+                'Scans and reports CPU, GPU, RAM, and Storage vitals.',
+                'Validates presence of required system packages.',
+                'Handles automatic installation of missing dependencies.',
+                'Exports telemetry data in JSON format.'
             ],
-            extended_usage: 'dex system [--json] [--vitals-only]'
+            extended_usage: 'dex system scan\ndex system validate\ndex system install <package>'
         },
         demo_output: [
-            '\x1b[1mDEXTER SYSTEM VITALS\x1b[0m', 
-            'OS: Linux (6.12.0-generic)',
-            'CPU: AMD Ryzen 9 7950X (32 Threads) \x1b[32m[4.2%]\x1b[0m', 
-            'RAM: 64.0 GB total / \x1b[32m12.4 GB used\x1b[0m', 
-            'GPU: NVIDIA RTX 4090 (24 GB VRAM) \x1b[32m[8.1 GB used]\x1b[0m', 
-            'STORAGE: 2.0 TB NVMe \x1b[32m[450 GB used]\x1b[0m', 
-            '',
-            '\x1b[34m[IO]\x1b[0m Local Ollama server connected via 127.0.0.1:11434'
+            '█ \x1b[1mSYSTEM CONFIGURATION\x1b[0m █',
+            '────────────────────────────────────────────────────────────────────────────────',
+            'Category        Value',
+            '────────        ─────',
+            'CPU (Generic)   Cores: 16, Threads: 32',
+            '                Avg Clock: 4.20 GHz',
+            'GPU 0           NVIDIA GeForce RTX 4090, VRAM: 24.0 GB, CUDA: 1204',
+            'Memory          64.0 GB',
+            'Storage         2.0 TB (1 devices)',
+            '                /dev/nvme0n1p3: 450.2 GB / 1862.4 GB (/)',
+            'Packages        ',
+            '                \x1b[32m✓ 12 checks passed\x1b[0m'
         ]
     },
     {
         id: 'config',
         title: 'Config',
         icon: 'bx-slider-alt',
-        description: 'View or modify the central service-map.json.',
-        usage: 'dex config',
+        description: 'Show service config or a specific field.',
+        usage: 'dex config <service> [field...]',
         category: 'system',
         docs: {
             overview: 'Manages the central registry that defines service interaction.',
@@ -269,108 +408,19 @@ const CLI_COMMANDS = [
                 'View service definitions (domains, ports, IDs).',
                 'Modify environment-specific parameters.',
                 'Update authentication secrets and API endpoints.',
-                'Synchronize configuration across the network.'
+                'Supports JSON path traversal for deep fields.'
             ],
-            extended_usage: 'dex config get <service> [field]\ndex config set <service> <field> <value>'
+            extended_usage: 'dex config <service> [field]\ndex config reset'
         },
         demo_output: [
-            '\x1b[1mService Map Configuration [event-service]:\x1b[0m', 
             '{',
             '  "id": "event-service",',
-            '  "port": \x1b[33m8100\x1b[0m,',
+            '  "short_name": "event",',
+            '  "type": "be",',
+            '  "port": 8100,',
             '  "domain": "127.0.0.1",',
-            '  "log_level": "info",',
-            '  "max_events": 10000',
-            '}', 
-            '',
-            '\x1b[34m[TIP]\x1b[0m Use `dex config set event-service port 8101` to modify.'
-        ]
-    },
-    {
-        id: 'event',
-        title: 'Event',
-        icon: 'bx-broadcast',
-        description: 'Manually query or emit system-wide events.',
-        usage: 'dex event [list|emit|query]',
-        category: 'system',
-        docs: {
-            overview: 'The event bus interface for manual debugging and data extraction.',
-            details: [
-                'Query the history of the system event log.',
-                'Manually emit mock events for testing.',
-                'Filter events by type, service, or timestamp.',
-                'Export event data to JSON for analysis.'
-            ],
-            extended_usage: 'dex event query --type system.cli.command\ndex event emit custom.alert "Hello World"'
-        },
-        demo_output: [
-            '\x1b[1mRecent Events (Limit 5):\x1b[0m', 
-            '1. system.build.completed    \x1b[90m2 mins ago\x1b[0m', 
-            '2. log_entry                 \x1b[90m1 min ago\x1b[0m', 
-            '3. metric_recorded           \x1b[90m45 secs ago\x1b[0m', 
-            '4. system.cli.command        \x1b[90m12 secs ago\x1b[0m', 
-            '5. error_occurred            \x1b[31m5 secs ago\x1b[0m', 
-            '',
-            '\x1b[34m[CMD]\x1b[0m Use --json for full data payload.'
-        ]
-    },
-    {
-        id: 'discord',
-        title: 'Discord',
-        icon: 'bx-bot',
-        description: 'Control the Discord engine and bot status.',
-        usage: 'dex discord [ping|reconnect|status]',
-        category: 'system',
-        docs: {
-            overview: 'Direct control over the Discord bot integration and audio engine.',
-            details: [
-                'Checks API latency and gateway health.',
-                'Forces a gateway reconnection.',
-                'Displays active users and voice channel status.',
-                'Manages bot status text and activity presence.'
-            ],
-            extended_usage: 'dex discord ping\ndex discord status'
-        },
-        demo_output: [
-            '\x1b[34m[DISCORD]\x1b[0m Querying Discord API health...', 
-            '→ Gateway Latency: \x1b[32m42ms\x1b[0m', 
-            '→ API Latency: \x1b[32m88ms\x1b[0m', 
-            '→ Active Guilds: 1', 
-            '→ Bot Status: \x1b[32mONLINE\x1b[0m', 
-            '→ Current Presence: "Managing the Nerve Center"', 
-            '',
-            '\x1b[32m✓ Bot is functioning correctly.\x1b[0m'
-        ]
-    },
-    {
-        id: 'ollama',
-        title: 'Ollama',
-        icon: 'bx-brain',
-        description: 'Manage local LLMs and neural vision models.',
-        usage: 'dex ollama [sync|pull|list]',
-        category: 'system',
-        docs: {
-            overview: 'Ollama management tools for controlling local model weights and custom neural configurations.',
-            details: [
-                'Synchronizes custom Dexter model templates.',
-                'Pulls latest base weights (Gemma 3, Qwen 3).',
-                'Verifies VRAM availability for target models.',
-                'Manages vision-language model (VLM) attachments.'
-            ],
-            extended_usage: 'dex ollama sync\ndex ollama pull <model>\ndex ollama list'
-        },
-        demo_output: [
-            '\x1b[34m[OLLAMA]\x1b[0m Synchronizing custom Dexter models...', 
-            '→ Pulling base: gemma3:12b... \x1b[32m[100%]\x1b[0m', 
-            '→ Creating dex-analyst-guardian...', 
-            '\x1b[32m✓\x1b[0m Model weights verified (SHA256: 8f3b5...)', 
-            '→ Creating dex-vision-model...', 
-            '\x1b[32m✓\x1b[0m VLM integration complete.', 
-            '',
-            '\x1b[1mACTIVE MODELS:\x1b[0m', 
-            'dex-commit-model       12b    \x1b[32mREADY\x1b[0m', 
-            'dex-analyst-guardian   20b    \x1b[32mREADY\x1b[0m', 
-            'dex-vision-model       8b     \x1b[32mREADY\x1b[0m'
+            '  "log_path": "~/Dexter/logs/event-service.log"',
+            '}'
         ]
     }
 ];
@@ -403,7 +453,7 @@ export const getCliInterfaceContent = () => {
 
             <div class="cli-divider">
                 <i class='bx bx-chevron-down'></i>
-                <span>Interactive Demos</span>
+                <span>Interactive Demos (v${CLI_VERSION})</span>
                 <i class='bx bx-chevron-down'></i>
             </div>
     `;
