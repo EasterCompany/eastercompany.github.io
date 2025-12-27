@@ -137,6 +137,37 @@ body.theme-legacy {
 }
 
 .theme-preview { width: 120px; min-width: 120px; position: relative; overflow: hidden; }
+
+/* Theme Previews */
+.theme-preview-dark {
+    background-color: #1a1a1a;
+}
+
+.theme-preview-light {
+    background: repeating-linear-gradient(
+        -60deg,
+        #FFFFFF 10%,
+        #D4F1F9 15%,
+        #E1BEE7 20%,
+        #F8BBD0 25%,
+        #FFFFFF 30%
+    );
+    background-size: 200% 200%;
+}
+
+.theme-preview-legacy {
+    background: repeating-linear-gradient(
+        -60deg,
+        #32FFaa 10%,
+        #FF32aa 15%,
+        #4444FF 20%,
+        #6666FF 25%,
+        #ddddFF 30%
+    );
+    filter: invert(100%);
+    background-size: 200% 200%;
+}
+
 .theme-info { padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; }
 .theme-info h3 { font-size: 1em; margin-bottom: 6px; color: #eee; text-align: left; }
 .theme-info p { font-size: 0.8em; color: #999; line-height: 1.3; text-align: left; margin-bottom: 8px; }

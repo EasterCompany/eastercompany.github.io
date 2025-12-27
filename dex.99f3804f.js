@@ -633,8 +633,8 @@
                     <div class="theme-card ${t===s?"active":""}" data-theme="${s}">
                         <div class="theme-preview theme-preview-${s.toLowerCase()}"></div>
                         <div class="theme-info">
-                            <h3>${s}</h3>
-                            <p>${s===R.AUTO?"Automatic theme selection.":s===R.DEFAULT?"Simple, black, default.":"Colourful, not bright."}</p>
+                            <h3>${s.charAt(0).toUpperCase()+s.slice(1)}</h3>
+                            <p>${s===R.DARK?"Simple, clean, dark.":s===R.LIGHT?"Heavenly, bright, and glowy.":"The original animated style."}</p>
                             <span class="theme-badge">${t===s?"Active":"Select"}</span>
                         </div>
                     </div>
