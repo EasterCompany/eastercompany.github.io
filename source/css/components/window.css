@@ -219,7 +219,7 @@ nav.window-open + .windows-container {
 }
 
 .window:not(.has-tabs) .window-content {
-    padding-top: 15px;
+    padding-top: 40px;
 }
 
 /* Hide secondary close button globally */
