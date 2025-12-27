@@ -15,10 +15,6 @@ export const getRoadmapContent = () => `
     </div>
   </div>
   <div id="roadmap-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-    <div class="tab-placeholder">
-        <i class='bx bx-map-alt placeholder-icon'></i>
-        <p class="placeholder-message">Loading roadmap...</p>
-    </div>
   </div>
 `;
 
@@ -147,7 +143,9 @@ export async function updateRoadmapTab(forceReRender = false) {
     });
 
   } catch (e) {
-    roadmapContainer.innerHTML = createPlaceholderMessage('error', 'Failed to load roadmap.');
+    if (roadmapContainer.children.length === 0) {
+        roadmapContainer.innerHTML = createPlaceholderMessage('error', 'Failed to load roadmap.');
+    }
   }
 }
 
