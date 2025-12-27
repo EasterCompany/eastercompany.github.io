@@ -129,11 +129,11 @@ function onReady() {
                   `;
                   
                   // Re-attach listeners to new DOM elements
-                  document.getElementById('switch-feed').addEventListener('click', () => toggleWindow(feedWindow));
-                  document.getElementById('switch-events').addEventListener('click', () => toggleWindow(eventsWindow));
-                  document.getElementById('switch-monitor').addEventListener('click', () => toggleWindow(monitorWindow));
-                  document.getElementById('switch-contacts').addEventListener('click', () => toggleWindow(contactsWindow));
-                  document.getElementById('switch-workspace').addEventListener('click', () => toggleWindow(workspaceWindow));
+                  document.getElementById('switch-feed').addEventListener('click', () => { saveWindowState('feed-window'); toggleWindow(feedWindow); });
+                  document.getElementById('switch-events').addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
+                  document.getElementById('switch-monitor').addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
+                  document.getElementById('switch-contacts').addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
+                  document.getElementById('switch-workspace').addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
               } else {
                   navWindowSwitcher.innerHTML = '';
               }
@@ -295,30 +295,55 @@ function onReady() {
     }
 
     // Dropdown Logic
+    const menuContainer = document.getElementById('dexter-menu-container');
     const menuBtn = document.getElementById('dexter-menu-btn');
     
-    if (menuBtn && dropdown) {
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle('active');
-            menuBtn.classList.toggle('active');
+    if (menuContainer && dropdown && menuBtn) {
+        // Hover to show
+        menuContainer.addEventListener('mouseenter', () => {
+            dropdown.classList.add('active');
+            menuBtn.classList.add('active');
         });
 
-        document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target) && e.target !== menuBtn) {
-                dropdown.classList.remove('active');
-                menuBtn.classList.remove('active');
+        menuContainer.addEventListener('mouseleave', () => {
+            dropdown.classList.remove('active');
+            menuBtn.classList.remove('active');
+        });
+
+        // Click to toggle last active window
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const lastWindowId = localStorage.getItem('dex_last_window') || 'feed-window';
+            
+            // Find the window object by ID
+            let targetWindow = null;
+            if (lastWindowId === 'feed-window') targetWindow = feedWindow;
+            else if (lastWindowId === 'events-window') targetWindow = eventsWindow;
+            else if (lastWindowId === 'monitor-window') targetWindow = monitorWindow;
+            else if (lastWindowId === 'contacts-window') targetWindow = contactsWindow;
+            else if (lastWindowId === 'workspace-window') targetWindow = workspaceWindow;
+
+            if (targetWindow) {
+                toggleWindow(targetWindow);
             }
         });
     }
 
-    // Dropdown Item Listeners
-    document.getElementById('feed-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(feedWindow); });
-    document.getElementById('events-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(eventsWindow); });
-    document.getElementById('monitor-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(monitorWindow); });
-    document.getElementById('contacts-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(contactsWindow); });
-    document.getElementById('workspace-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(workspaceWindow); });
+    // Helper to save state
+    const saveWindowState = (winId) => {
+        localStorage.setItem('dex_last_window', winId);
+    };
+
+    // Dropdown Item Listeners - Update to save state
+    document.getElementById('feed-menu-item')?.addEventListener('click', () => { saveWindowState('feed-window'); toggleWindow(feedWindow); });
+    document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
+    document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
+    document.getElementById('contacts-menu-item')?.addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
+    document.getElementById('workspace-menu-item')?.addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
     
+    // Switcher Listeners - Update to save state (handled in recalculateLayout where these are created)
+    // We need to update the creation logic below to attach the saveWindowState call.
+
     document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
     document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
     
