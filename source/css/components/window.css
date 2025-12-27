@@ -228,8 +228,8 @@ nav.window-open + .windows-container {
     justify-content: center;
 }
 
-/* Small View Adaptations */
-@media (max-width: 768px) {
+/* Small View Adaptations (Below 1900px) */
+@media (max-width: 1899px) {
     /* Hide header if no tabs */
     .window:not(.has-tabs) .window-header {
         display: none !important;
