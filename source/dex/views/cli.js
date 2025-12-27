@@ -261,6 +261,12 @@ export const getCliInterfaceContent = () => {
                 </div>
                 <p class="cli-install-note">Installs the latest pre-built binary for Linux/macOS and configures your environment.</p>
             </div>
+
+            <div class="cli-divider">
+                <i class='bx bx-chevron-down'></i>
+                <span>Interactive Demos</span>
+                <i class='bx bx-chevron-down'></i>
+            </div>
     `;
 
     for (const [catId, catInfo] of Object.entries(categories)) {
@@ -268,7 +274,7 @@ export const getCliInterfaceContent = () => {
         if (commands.length === 0) continue;
 
         html += `
-            <div class="cli-category-section" style="margin-bottom: 40px;">
+            <div class="cli-category-section">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 20px;">
                     <i class='bx ${catInfo.icon}' style="color: ${catInfo.color}; font-size: 1.5em;"></i>
                     <h2 style="font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; color: #eee; margin: 0;">${catInfo.title}</h2>
@@ -292,7 +298,28 @@ export const getCliInterfaceContent = () => {
         `;
     }
 
-    html += `</div>`;
+    html += `
+        <div class="cli-divider">
+            <i class='bx bx-chevron-down'></i>
+            <span>Join the Evolution</span>
+            <i class='bx bx-chevron-down'></i>
+        </div>
+
+        <div class="cli-contribute-section">
+            <div class="cli-contribute-card">
+                <i class='bx bxl-github'></i>
+                <h3>For Developers</h3>
+                <p>Dexter is open-source and built for the community. Help us refine the neural architecture or add new command modules.</p>
+                <a href="https://github.com/eastercompany" target="_blank" class="notif-action-btn active">Contribute on GitHub</a>
+            </div>
+            <div class="cli-contribute-card">
+                <i class='bx bxl-discord-alt'></i>
+                <h3>For Users</h3>
+                <p>Join our Discord to stay updated, suggest new features, and interact with the community using the Dexter engine.</p>
+                <a href="https://discord.gg/eastercompany" target="_blank" class="notif-action-btn active">Join Discord</a>
+            </div>
+        </div>
+    </div>`;
     return html;
 };
 
