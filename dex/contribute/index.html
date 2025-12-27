@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!doctype html>
+<html lang="en-GB">
+  <head>
 <!-- HEAD_START -->
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -39,160 +39,187 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/contribute">
 <!-- HEAD_END -->
-<link rel="stylesheet" href="/dex.ef144f9b.css"></head>
-<body class="theme-transitioning">
-  <div class="background"></div>
-  <div id="windows-container" class="windows-container"></div>
   
-  <main id="main">
-    <div id="hero" class="hero">
-      <img src="/static/assets/logo/easter_logo.svg" alt="Easter Company Logo" />
-      <h1 class="nav-title">Contribute</h1>
-      <h2 class="radialGlow">Join the Dexter Ecosystem</h2>
-    </div>
-
-    <section class="content-section">
-      <div class="about-bashful-sh glass">
-        <div class="about-content">
-          <h2>Contributing to the Community</h2>
-          <p>
-            At Easter Company, we believe in the power of open collaboration. Most of the core infrastructure that powers Dexter is open source and available for the community to inspect, use, and improve.
-          </p>
-          <p>
-            <strong>How to get involved:</strong>
-          </p>
-          <ul>
-            <li><strong>GitHub:</strong> Star our repositories, report bugs via issues, or submit Pull Requests for new features and fixes.</li>
-            <li><strong>Discord:</strong> Join our community to discuss development, share ideas, and get help from other contributors.</li>
-            <li><strong>Early Access:</strong> Active contributors on GitHub are regularly granted early access to new features and invited to our private developer channels on Discord.</li>
-          </ul>
-        </div>
-        <div class="bashful-sh-btns">
-          <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer">
-            <button><i class="bx bxl-github"></i>&nbsp;GitHub Organization</button>
-          </a>
-          <a href="https://discord.gg/eastercompany" target="_blank" rel="noopener noreferrer">
-            <button><i class="bx bxl-discord"></i>&nbsp;Join Discord</button>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <h2>Our Services & Repositories</h2>
-    <h3>The core components of the Dexter ecosystem.</h3>
-
-    <!-- dex-cli -->
-    <div class="project glass">
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <i class="bx bx-terminal" style="font-size: 2rem; margin-right: 1rem;"></i>
-              <h2>dex-cli <p>Unified Management Tool</p></h2>
+  <style>
+      .contribute-container {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 6rem 2rem 4rem;
+          color: rgba(255, 255, 255, 0.9);
+          font-family: 'JetBrains Mono', monospace; 
+      }
+      .contribute-header {
+          text-align: center;
+          margin-bottom: 4rem;
+      }
+      .contribute-header h1 {
+          font-size: 2.5rem;
+          margin-bottom: 0.5rem;
+          font-weight: 700;
+          letter-spacing: -0.05em;
+      }
+      .contribute-header p {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 1.1rem;
+      }
+      .project-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 1.5rem;
+          margin-top: 2rem;
+      }
+      .project-card {
+          background: rgba(20, 20, 20, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          padding: 1.5rem;
+          transition: all 0.2s ease;
+          display: flex;
+          flex-direction: column;
+          backdrop-filter: blur(10px);
+      }
+      .project-card:hover {
+          transform: translateY(-2px);
+          border-color: rgba(167, 139, 250, 0.3);
+          background: rgba(30, 30, 30, 0.8);
+      }
+      .project-card h3 {
+          margin-top: 0;
+          color: #fff;
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+      }
+      .project-card p {
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.6);
+          line-height: 1.5;
+          flex-grow: 1;
+          margin-bottom: 1.5rem;
+      }
+      .project-links {
+          display: flex;
+          gap: 0.75rem;
+      }
+      .btn {
+          padding: 0.5rem 1rem;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 6px;
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+      }
+      .btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
+          border-color: rgba(255, 255, 255, 0.2);
+      }
+      .community-section {
+          background: linear-gradient(180deg, rgba(167, 139, 250, 0.05) 0%, rgba(20, 20, 20, 0) 100%);
+          border: 1px solid rgba(167, 139, 250, 0.1);
+          border-radius: 12px;
+          padding: 2rem;
+          margin-bottom: 4rem;
+      }
+      .community-section h2 {
+          margin-top: 0;
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+      }
+      .community-section p {
+          color: rgba(255, 255, 255, 0.7);
+          max-width: 600px;
+          line-height: 1.6;
+      }
+      h2.section-title {
+          font-size: 1.2rem;
+          color: rgba(255, 255, 255, 0.4);
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          margin-bottom: 1.5rem;
+          font-weight: 500;
+      }
+  </style>
+  <link rel="stylesheet" href="/dex.ef144f9b.css"></head>
+  <body class="dex-page">
+    <main id="main">
+        <div class="contribute-container">
+            <div class="contribute-header">
+                <h1>Contribute</h1>
+                <p>Join the Dexter Ecosystem</p>
             </div>
-            <p>
-              The central command-line interface for the Dexter ecosystem. 
-              Manage service lifecycles, builds, deployments, and system health with a single tool.
-            </p>
-          </div>
-        </div>
-        <div class="options">
-          <a href="https://github.com/eastercompany/dex-cli" target="_blank"><button><i class="bx bx-code-alt"></i>Source</button></a>
-          <a href="https://github.com/eastercompany/dex-cli#commands--usage" target="_blank"><button><i class="bx bx-file"></i>Docs</button></a>
-        </div>
-      </div>
-    </div>
 
-    <!-- dex-event-service -->
-    <div class="project glass">
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <i class="bx bx-git-merge" style="font-size: 2rem; margin-right: 1rem;"></i>
-              <h2>dex-event-service <p>Central Nervous System</p></h2>
+            <div class="community-section">
+                <h2>Contributing to the Community</h2>
+                <p>At Easter Company, we believe in the power of open collaboration. Most of the core infrastructure that powers Dexter is open source and available for the community to inspect, use, and improve.</p>
+                
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="https://github.com/eastercompany" target="_blank" class="btn">
+                        <span>GitHub Organization</span>
+                    </a>
+                    <a href="https://discord.gg/eastercompany" target="_blank" class="btn">
+                        <span>Join Discord</span>
+                    </a>
+                </div>
             </div>
-            <p>
-              A high-performance, Redis-backed asynchronous event bus. 
-              It decouples Dexter's services and manages all internal communication flows.
-            </p>
-          </div>
-        </div>
-        <div class="options">
-          <a href="https://github.com/eastercompany/dex-event-service" target="_blank"><button><i class="bx bx-code-alt"></i>Source</button></a>
-          <a href="https://github.com/eastercompany/dex-event-service#api-documentation" target="_blank"><button><i class="bx bx-file"></i>API Docs</button></a>
-        </div>
-      </div>
-    </div>
 
-    <!-- dex-discord-service -->
-    <div class="project glass">
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <i class="bx bxl-discord" style="font-size: 2rem; margin-right: 1rem;"></i>
-              <h2>dex-discord-service <p>Discord Integration Bridge</p></h2>
+            <h2 class="section-title">Open Source Repositories</h2>
+            <div class="project-grid">
+                <!-- dex-cli -->
+                <div class="project-card">
+                    <h3>dex-cli</h3>
+                    <p>The central command-line interface for the Dexter ecosystem. Manage service lifecycles, builds, and system health.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/eastercompany/dex-cli" target="_blank" class="btn">Source</a>
+                        <a href="https://github.com/eastercompany/dex-cli#commands--usage" target="_blank" class="btn">Docs</a>
+                    </div>
+                </div>
+
+                <!-- dex-event-service -->
+                <div class="project-card">
+                    <h3>dex-event-service</h3>
+                    <p>Central Nervous System. A Redis-backed asynchronous event bus that decouples services and manages communication.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/eastercompany/dex-event-service" target="_blank" class="btn">Source</a>
+                        <a href="https://github.com/eastercompany/dex-event-service#api-documentation" target="_blank" class="btn">Docs</a>
+                    </div>
+                </div>
+
+                <!-- dex-discord-service -->
+                <div class="project-card">
+                    <h3>dex-discord-service</h3>
+                    <p>Integrates Discord with the Dexter ecosystem. Acts as both an event producer and consumer for chat interactions.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/eastercompany/dex-discord-service" target="_blank" class="btn">Source</a>
+                        <a href="https://github.com/eastercompany/dex-discord-service#architecture" target="_blank" class="btn">Docs</a>
+                    </div>
+                </div>
+
+                <!-- dex-tts-service -->
+                <div class="project-card">
+                    <h3>dex-tts-service</h3>
+                    <p>High-quality Text-to-Speech powered by Coqui XTTS-v2. Enables Dexter to speak with voice cloning capabilities.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/eastercompany/dex-tts-service" target="_blank" class="btn">Source</a>
+                        <a href="https://github.com/eastercompany/dex-tts-service#usage" target="_blank" class="btn">Usage</a>
+                    </div>
+                </div>
+
+                 <!-- dex-web-service -->
+                <div class="project-card">
+                    <h3>dex-web-service</h3>
+                    <p>Web Intelligence & Rendering. Provides headless browser rendering for link unfurling and content extraction.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/eastercompany/dex-web-service" target="_blank" class="btn">Source</a>
+                    </div>
+                </div>
             </div>
-            <p>
-              Integrates Discord with the Dexter ecosystem. 
-              Acts as both an event producer (monitoring Discord) and an event consumer (executing actions).
-            </p>
-          </div>
         </div>
-        <div class="options">
-          <a href="https://github.com/eastercompany/dex-discord-service" target="_blank"><button><i class="bx bx-code-alt"></i>Source</button></a>
-          <a href="https://github.com/eastercompany/dex-discord-service#architecture" target="_blank"><button><i class="bx bx-file"></i>Docs</button></a>
-        </div>
-      </div>
-    </div>
-
-    <!-- dex-tts-service -->
-    <div class="project glass">
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <i class="bx bx-volume-full" style="font-size: 2rem; margin-right: 1rem;"></i>
-              <h2>dex-tts-service <p>Text-to-Speech Engine</p></h2>
-            </div>
-            <p>
-              High-quality TTS powered by Coqui XTTS-v2. 
-              Enables Dexter to speak with zero-shot voice cloning capabilities.
-            </p>
-          </div>
-        </div>
-        <div class="options">
-          <a href="https://github.com/eastercompany/dex-tts-service" target="_blank"><button><i class="bx bx-code-alt"></i>Source</button></a>
-          <a href="https://github.com/eastercompany/dex-tts-service#usage" target="_blank"><button><i class="bx bx-file"></i>Usage</button></a>
-        </div>
-      </div>
-    </div>
-
-    <!-- dex-web-service -->
-    <div class="project glass">
-      <div class="content">
-        <div class="preview">
-          <div class="info">
-            <div class="header">
-              <i class="bx bx-globe" style="font-size: 2rem; margin-right: 1rem;"></i>
-              <h2>dex-web-service <p>Web Intelligence & Rendering</p></h2>
-            </div>
-            <p>
-              Provides headless browser rendering and metadata extraction. 
-              Allows Dexter to "see" and understand web content for link unfurling and browsing.
-            </p>
-          </div>
-        </div>
-        <div class="options">
-          <a href="https://github.com/eastercompany/dex-web-service" target="_blank"><button><i class="bx bx-code-alt"></i>Source</button></a>
-        </div>
-      </div>
-    </div>
-
-    <footer>
-      <p>&copy; 2025 Easter Company. Built for the community.</p>
-    </footer>
-  </main>
-<script src="/dex.ef144f9b.js" defer></script></body>
+    </main>
+  <script src="/dex.ef144f9b.js" defer></script></body>
 </html>
