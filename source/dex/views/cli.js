@@ -66,7 +66,7 @@ const CLI_COMMANDS = [
         icon: 'bx-brain',
         description: 'Manage local LLMs and neural vision models.',
         usage: 'dex ollama [sync|pull|list]',
-        category: 'cognitive',
+        category: 'system',
         docs: {
             overview: 'Ollama management tools for controlling local model weights and custom neural configurations.',
             details: [
