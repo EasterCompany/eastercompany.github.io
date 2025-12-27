@@ -120,10 +120,14 @@ nav.window-open {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 30px; /* Match icon height for explicit centering context */
 }
 
 #dexter-menu-btn {
-    padding-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0;
 }
 
 /* Dexter Dropdown */
