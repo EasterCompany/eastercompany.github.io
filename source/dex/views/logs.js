@@ -1,14 +1,9 @@
 // Easter Company - Logs
-import { smartFetch, ansiToHtml } from '../core/utils.js';
+import { smartFetch, ansiToHtml, createPlaceholderMessage } from '../core/utils.js';
 
 export function getLogsContent() {
     return `
-        <div id="logs-container" class="logs-container">
-            <div class="tab-placeholder">
-                <i class='bx bx-terminal placeholder-icon'></i>
-                <p class="placeholder-message">Loading logs...</p>
-            </div>
-        </div>
+        <div id="logs-container" class="logs-container"></div>
     `;
 }
 
@@ -18,7 +13,7 @@ export async function updateLogs() {
     const logsContainer = document.getElementById('logs-container');
     if (!logsContainer) return false;
 
-    // Reset class state
+    // Reset class state - grid layout should be active when content is present
     logsContainer.classList.remove('placeholder-active');
 
     try {
@@ -27,7 +22,8 @@ export async function updateLogs() {
 
         const logsData = await response.json();
         if (!logsData || logsData.length === 0) {
-            logsContainer.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 20px;">No logs found.</p>';
+            logsContainer.innerHTML = createPlaceholderMessage('empty', 'No logs found.', 'Services are quiet.');
+            logsContainer.classList.add('placeholder-active'); // Enable center layout
             return false;
         }
 
@@ -118,7 +114,10 @@ export async function updateLogs() {
 
     } catch (error) {
         console.error('Error fetching logs:', error);
-        logsContainer.innerHTML = '<p style="text-align: center; color: #cf6679; padding: 20px;">Failed to load logs.</p>';
+        if (logsContainer.children.length === 0) {
+            logsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load logs.', 'The event service may be offline.');
+            logsContainer.classList.add('placeholder-active'); // Ensure layout switches to center the error
+        }
         return false;
     }
 }
