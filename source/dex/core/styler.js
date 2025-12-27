@@ -178,7 +178,7 @@ export function injectFooter() {
         <span class="footer-brand-left">DEXTER</span>
         <div class="socials-section">
             <a href="https://facebook.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-facebook'></i></a>
-            <a href="https://linkedin.com/company/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
+            <a href="https://linkedin.com/company/72223947" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
             <a href="https://instagram.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-instagram'></i></a>
             <a href="https://twitter.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-twitter'></i></a>
             <a href="https://github.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i></a>
