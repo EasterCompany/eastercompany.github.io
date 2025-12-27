@@ -53,17 +53,17 @@ body.theme-legacy {
     --gradient-5: #ddddFF;
 }
 
-/* Lucid Theme (Dark/Green) */
+/* Lucid Theme (Dark/Green - Manual Dark Colors) */
 body.theme-lucid {
     --bg-blur: 60px;
-    --bg-opacity: 0.3;
-    --bg-blend: difference; /* Using difference to get the inverted look without the filter brightness issues */
-    --bg-filter: invert(100%); /* Keeps the dark green/magenta vibe */
-    --gradient-1: #32FFaa;
-    --gradient-2: #FF32aa;
-    --gradient-3: #4444FF;
-    --gradient-4: #6666FF;
-    --gradient-5: #ddddFF;
+    --bg-opacity: 0.4;
+    --bg-blend: normal; /* Normal blend for controlled darkness */
+    --bg-filter: none;
+    --gradient-1: #003300; /* Dark Green */
+    --gradient-2: #330033; /* Dark Magenta */
+    --gradient-3: #000044; /* Dark Blue */
+    --gradient-4: #004444; /* Dark Cyan */
+    --gradient-5: #1a1a1a; /* Dark Grey */
 }
 
 .background {
