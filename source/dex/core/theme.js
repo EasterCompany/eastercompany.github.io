@@ -31,23 +31,9 @@ export function setTheme(theme) {
 /**
  * Apply the theme to the document
  * @param {string} theme - The theme preference
- * @param {boolean} skipTransition - Whether to skip the transition animation
  */
-export function applyTheme(theme, skipTransition = false) {
+export function applyTheme(theme) {
     const body = document.body;
-
-    if (!skipTransition) {
-        // Add transition class for fade effect
-        body.classList.add('theme-transitioning');
-
-        // Remove transition class after animation
-        setTimeout(() => {
-            body.classList.remove('theme-transitioning');
-        }, 800);
-    } else {
-        // Ensure class is removed if skipping transition (e.g. initial load)
-        body.classList.remove('theme-transitioning');
-    }
 
     // Remove all theme classes
     Object.values(THEMES).forEach(t => {
@@ -70,18 +56,8 @@ export function applyTheme(theme, skipTransition = false) {
         }
     } else {
         body.classList.remove('is-animated');
-        // Remove background element with fade out
-        const bg = document.querySelector('.background');
-        if (bg) {
-            if (skipTransition) {
-                bg.remove();
-            } else {
-                bg.style.animation = 'fadeOutBackground 0.4s ease forwards';
-                setTimeout(() => {
-                    bg.remove();
-                }, 400);
-            }
-        }
+        // Remove background element immediately
+        document.querySelector('.background')?.remove();
     }
 }
 
@@ -90,5 +66,5 @@ export function applyTheme(theme, skipTransition = false) {
  */
 export function initTheme() {
     const currentTheme = getCurrentTheme();
-    applyTheme(currentTheme, true); // Skip transition on initial load
+    applyTheme(currentTheme); 
 }

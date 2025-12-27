@@ -101,7 +101,7 @@ function onReady() {
       });
 
       // Synchronize theme background
-      applyTheme(getCurrentTheme(), true, activeWindows.length > 0);
+      applyTheme(getCurrentTheme());
 
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
