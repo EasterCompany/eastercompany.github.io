@@ -105,6 +105,7 @@ function onReady() {
 
       const navMenuContainer = document.getElementById('dexter-menu-container');
       const navWindowSwitcher = document.getElementById('nav-window-switcher');
+      const settingsIcon = document.getElementById('settings-icon');
 
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
@@ -117,6 +118,7 @@ function onReady() {
 
           // Navbar Transformation
           if (navMenuContainer) navMenuContainer.style.display = 'none';
+          if (settingsIcon) settingsIcon.style.display = 'none';
           if (navWindowSwitcher) {
               const currentWinId = activeWindows[0].id;
               
@@ -156,6 +158,7 @@ function onReady() {
 
           // Navbar Revert
           if (navMenuContainer) navMenuContainer.style.display = 'block';
+          if (settingsIcon) settingsIcon.style.display = 'block';
           if (navWindowSwitcher) navWindowSwitcher.innerHTML = '';
       }
   }
