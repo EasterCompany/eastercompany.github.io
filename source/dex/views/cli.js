@@ -17,7 +17,12 @@ const CLI_COMMANDS = [
                 'Deep integration with the Roadmap and Blueprint systems.'
             ],
             extended_usage: 'Coming in Dexter v3.0'
-        }
+        },
+        demo_output: [
+            'Initializing Cognitive Bridge...',
+            '[ERROR] Neural uplink not established.',
+            'Reason: Core deployment pending v3.0 release.'
+        ]
     },
     {
         id: 'guardian',
@@ -35,7 +40,19 @@ const CLI_COMMANDS = [
                 'Triggers immediate notifications if anomalies are detected.'
             ],
             extended_usage: 'dex guardian [--force] [--quiet]'
-        }
+        },
+        demo_output: [
+            'Running Tier 1 Guardian Audit...',
+            '→ Checking service health...',
+            '✓ dex-event-service: ONLINE (v2.8.198)',
+            '✓ dex-discord-service: ONLINE (v2.8.68)',
+            '→ Analyzing system logs...',
+            '✓ No critical errors detected in last 500 lines.',
+            '→ Verifying resource availability...',
+            '✓ Redis cluster reachable.',
+            '✓ Ollama server responsive.',
+            '✓ Audit complete. System is healthy.'
+        ]
     },
     {
         id: 'status',
@@ -53,7 +70,16 @@ const CLI_COMMANDS = [
                 'Validates internal service-to-service communication.'
             ],
             extended_usage: 'dex status [service_id] [--json]'
-        }
+        },
+        demo_output: [
+            'ID       NAME      STATUS    VERSION    ADDRESS',
+            '───      ────      ──────    ───────    ───────',
+            'cli      CLI       ONLINE    2.8.143    local',
+            'event    Events    ONLINE    2.8.198    127.0.0.1:8100',
+            'discord  Discord   ONLINE    2.8.68     127.0.0.1:8300',
+            'tts      TTS       ONLINE    0.0.25     127.0.0.1:8200',
+            'web      Web       ONLINE    0.0.5      127.0.0.1:8400'
+        ]
     },
     {
         id: 'build',
@@ -72,7 +98,16 @@ const CLI_COMMANDS = [
                 'Handles post-build cleanup and Ollama model synchronization.'
             ],
             extended_usage: 'dex build [patch|minor|major] [--force] [--skip-git]'
-        }
+        },
+        demo_output: [
+            'Incrementing version: 2.11.173 -> 2.11.174 (patch)',
+            'Cleaning up old build files...',
+            'Bundling JavaScript (97.3kb)...',
+            'Bundling CSS (24.8kb)...',
+            'Building binaries for target architecture: linux/amd64',
+            '✓ Successfully built easter-company!',
+            '✓ Release 2.11.174 published to https://easter.company'
+        ]
     },
     {
         id: 'update',
@@ -89,7 +124,14 @@ const CLI_COMMANDS = [
                 'Triggers a rebuild if significant changes are detected.'
             ],
             extended_usage: 'dex update [--service=name]'
-        }
+        },
+        demo_output: [
+            'Fetching updates from remote repositories...',
+            '→ dex-cli: Already up to date.',
+            '→ dex-event-service: Pulled 3 commits.',
+            '→ dex-discord-service: Already up to date.',
+            '✓ Environment synchronized successfully.'
+        ]
     },
     {
         id: 'test',
@@ -107,7 +149,14 @@ const CLI_COMMANDS = [
                 'Reports duration and pass/fail metrics.'
             ],
             extended_usage: 'dex test [service_id] [--bench] [--coverage]'
-        }
+        },
+        demo_output: [
+            'Running system-wide test suite...',
+            'PASS  dex-cli/utils/version_test.go (0.042s)',
+            'PASS  dex-event-service/handlers/event_test.go (0.156s)',
+            'PASS  dex-discord-service/audio/mixer_test.go (0.892s)',
+            '✓ All 42 tests passed (1.09s)'
+        ]
     },
     {
         id: 'logs',
@@ -125,7 +174,13 @@ const CLI_COMMANDS = [
                 'Aggregated view for multi-instance deployments.'
             ],
             extended_usage: 'dex logs <service_id> [-f] [-n lines]'
-        }
+        },
+        demo_output: [
+            '[2025-12-26 14:20:01] [INFO] event-service: Processed webhook from Discord.',
+            '[2025-12-26 14:20:05] [DEBUG] discord-service: Voice channel activity detected.',
+            '[2025-12-26 14:20:10] [INFO] analyst-worker: Triggering Tier 1 audit...',
+            '[2025-12-26 14:20:12] [SUCCESS] analyst-worker: Tier 1 audit completed.'
+        ]
     },
     {
         id: 'system',
@@ -143,7 +198,14 @@ const CLI_COMMANDS = [
                 'OS-level environment variable validation.'
             ],
             extended_usage: 'dex system [--json] [--vitals-only]'
-        }
+        },
+        demo_output: [
+            'OS: Linux (6.12.0-generic)',
+            'CPU: AMD Ryzen 9 7950X (16 Cores / 32 Threads)',
+            'RAM: 64.0 GB (12.4 GB Used)',
+            'GPU: NVIDIA GeForce RTX 4090 (24.0 GB VRAM)',
+            'STORAGE: 2.0 TB NVMe (450 GB Used)'
+        ]
     },
     {
         id: 'config',
@@ -160,7 +222,17 @@ const CLI_COMMANDS = [
                 'Update authentication secrets and API endpoints.'
             ],
             extended_usage: 'dex config get <service> [field]\ndex config set <service> <field> <value>'
-        }
+        },
+        demo_output: [
+            'Current configuration for [event-service]:',
+            '{',
+            '  "id": "event-service",',
+            '  "port": 8100,',
+            '  "domain": "127.0.0.1",',
+            '  "log_level": "info",',
+            '  "max_events": 10000',
+            '}'
+        ]
     }
 ];
 
@@ -320,95 +392,138 @@ function logToTerminal(body, text, type = 'output') {
     body.scrollTop = body.scrollHeight;
 }
 
-async function executeRealCommand(cmdId) {
+async function showDemoCommand(cmdId) {
+
     const cmdInfo = CLI_COMMANDS.find(c => c.id === cmdId);
+
     if (!cmdInfo) return;
 
+
+
     const body = openTerminal(cmdInfo);
+
     logToTerminal(body, `dex ${cmdId}`, 'prompt');
 
-    try {
-        const response = await smartFetch('/cli/execute', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ command: cmdId, args: [] })
-        });
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
 
-        while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-            
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
-            lines.forEach(line => {
-                if (line.trim() === '') return;
-                
-                let type = 'output';
-                if (line.includes('[ERROR]')) type = 'error';
-                else if (line.includes('[SUCCESS]')) type = 'success';
-                else if (line.includes('✓')) type = 'success';
-                else if (line.includes('!')) type = 'warning';
-                
-                logToTerminal(body, line, type);
-            });
-        }
+    const demoLines = cmdInfo.demo_output || ['Executing command...', '✓ Done.'];
 
-        document.getElementById('terminal-status-badge').className = 'terminal-status status-success';
-        document.getElementById('terminal-status-badge').textContent = 'Completed';
-    } catch (err) {
-        logToTerminal(body, `Connection Error: ${err.message}`, 'error');
-        document.getElementById('terminal-status-badge').className = 'terminal-status status-error';
-        document.getElementById('terminal-status-badge').textContent = 'Failed';
-    } finally {
-        document.getElementById('terminal-action-btn').style.display = 'block';
+    
+
+    // Simulate realistic terminal output with delays
+
+    for (const line of demoLines) {
+
+        await new Promise(resolve => setTimeout(resolve, 400 + Math.random() * 600));
+
+        
+
+        let type = 'output';
+
+        if (line.includes('[ERROR]')) type = 'error';
+
+        else if (line.includes('[SUCCESS]')) type = 'success';
+
+        else if (line.includes('✓')) type = 'success';
+
+        else if (line.includes('!')) type = 'warning';
+
+        
+
+        logToTerminal(body, line, type);
+
     }
+
+
+
+    document.getElementById('terminal-status-badge').className = 'terminal-status status-success';
+
+    document.getElementById('terminal-status-badge').textContent = 'Completed (Demo)';
+
+    document.getElementById('terminal-action-btn').style.display = 'block';
+
 }
 
+
+
 export function initCliDashboard() {
+
     const container = document.getElementById('cli-interface-container');
+
     if (!container) return;
+
+
 
     container.innerHTML = getCliInterfaceContent();
 
+
+
     // Add copy-to-clipboard for install command
+
     const copyBtn = document.getElementById('install-command-copy');
+
     if (copyBtn) {
+
         copyBtn.addEventListener('click', () => {
+
             const command = copyBtn.querySelector('code').textContent;
+
             navigator.clipboard.writeText(command).then(() => {
+
                 const icon = copyBtn.querySelector('i');
+
                 icon.className = 'bx bx-check';
+
                 icon.style.color = '#5eff5e';
+
                 setTimeout(() => {
+
                     icon.className = 'bx bx-copy';
+
                     icon.style.color = '#bb86fc';
+
                 }, 2000);
+
             });
+
         });
+
     }
 
+
+
     // Add interactivity
+
     container.querySelectorAll('.cli-command-card').forEach(card => {
+
         card.addEventListener('mouseenter', () => {
+
             card.style.transform = 'translateY(-5px)';
+
             card.style.borderColor = 'rgba(255,255,255,0.15)';
+
             card.style.backgroundColor = 'rgba(255,255,255,0.05)';
+
         });
+
         card.addEventListener('mouseleave', () => {
+
             card.style.transform = 'translateY(0)';
+
             card.style.borderColor = 'rgba(255,255,255,0.05)';
+
             card.style.backgroundColor = 'rgba(255,255,255,0.03)';
+
         });
+
         card.addEventListener('click', () => {
+
             const cmd = card.dataset.cmd;
-            if (cmd === 'chat') {
-                alert('Connection to cognitive core pending deployment...');
-                return;
-            }
-            executeRealCommand(cmd);
+
+            showDemoCommand(cmd);
+
         });
+
     });
+
 }
