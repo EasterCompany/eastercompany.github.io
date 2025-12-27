@@ -271,7 +271,10 @@ function onReady() {
     title: 'Settings',
     icon: 'bx-cog',
     content: getSettingsContent(),
-    onOpen: () => attachSettingsListeners(settingsWindow),
+    onOpen: () => {
+        settingsWindow.setContent(getSettingsContent());
+        attachSettingsListeners(settingsWindow);
+    },
     onClose: () => {
         const idx = activeWindows.indexOf(settingsWindow);
         if (idx > -1) activeWindows.splice(idx, 1);
