@@ -46,7 +46,18 @@
 <body class="error-page theme-transitioning">
     <div class="background"></div>
     <div id="windows-container" class="windows-container"></div>
-    <main id="error-main-view"></main>
+    <main id="error-main-view" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center; padding: 20px;">
+        <svg viewBox="0 0 400 200" style="width: 100%; max-width: 600px; height: auto; user-select: none;">
+            <text x="50%" y="50%" dy=".35em" text-anchor="middle"
+                  style="font-family: 'Poppins', sans-serif; font-size: 140px; font-weight: 700; fill: transparent; stroke: rgba(255,255,255,0.7); stroke-width: 3px; letter-spacing: 10px;">
+                404
+            </text>
+        </svg>
+        <h2 style="font-size: 1.5rem; color: #ccc; margin: -20px 0 30px; font-weight: 400; letter-spacing: 1px;">Page Not Found</h2>
+        <a href="/" style="color: #888; text-decoration: none; font-size: 1rem; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(0,0,0,0.2); transition: all 0.3s ease;">
+            Click here to go back home
+        </a>
+    </main>
     
     <!-- Build script will inject dex.$HASH.js and dex.$HASH.css here -->
 <script src="/dex.8ca1aec3.js" defer></script></body>
