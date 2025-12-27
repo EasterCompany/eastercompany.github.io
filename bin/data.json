@@ -377,6 +377,12 @@
       "commit": "f88c3c7",
       "binaries": {}
     },
+    "2.11.198": {
+      "type": "patch",
+      "date": "2025-12-27T20:52:37Z",
+      "commit": "ab24016",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
