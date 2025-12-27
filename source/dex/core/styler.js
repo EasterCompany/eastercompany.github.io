@@ -93,6 +93,10 @@ function getCleanHostname() {
  * @param {boolean} isLoggedIn - Whether the user is logged in
  */
 export function injectNavbar(isLoggedIn = false) {
+    const currentPath = window.location.pathname;
+    // Check if we are effectively on the root page
+    const isRoot = currentPath === '/' || currentPath === '/index.html';
+
     const navRightContent = isLoggedIn
         ? `
         <div class="nav-right">
@@ -107,10 +111,26 @@ export function injectNavbar(isLoggedIn = false) {
             <button id="login-btn" class="login-btn">LOGIN</button>
         `;
 
+    let navLeftContent;
+    
+    if (isRoot) {
+        // Root: Logo only, no hover effect (forced opacity), no microphone, no cursor pointer
+        navLeftContent = `
+            <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; cursor: default;">
+        `;
+    } else {
+        // Non-root: Back button behavior
+        navLeftContent = `
+            <div id="nav-back-btn" style="cursor: pointer; display: flex; align-items: center; transition: transform 0.2s ease;">
+                <i class='bx bx-chevron-left' style="font-size: 28px; color: #fff;"></i>
+                <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; height: 24px; width: 24px;">
+            </div>
+        `;
+    }
+
     const navbarHTML = `
-        <div class="nav-left">
-            <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon">
-            <i class='bx bx-microphone' id="navbar-microphone"></i>
+        <div class="nav-left" style="gap: 0;">
+            ${navLeftContent}
         </div>
         <div class="nav-right">
             ${navRightContent}
@@ -120,6 +140,28 @@ export function injectNavbar(isLoggedIn = false) {
     const navbar = document.createElement('nav');
     navbar.innerHTML = navbarHTML;
     document.body.prepend(navbar);
+
+    // Attach event listener for back button if it exists
+    if (!isRoot) {
+        const backBtn = document.getElementById('nav-back-btn');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                const path = window.location.pathname;
+                const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+                const parts = cleanPath.split('/');
+                parts.pop(); // Remove last segment
+                const parentPath = parts.join('/') || '/';
+                window.location.href = parentPath;
+            });
+            
+            backBtn.addEventListener('mouseenter', () => {
+                backBtn.style.transform = 'translateX(-3px)';
+            });
+            backBtn.addEventListener('mouseleave', () => {
+                backBtn.style.transform = 'translateX(0)';
+            });
+        }
+    }
 }
 
 export function injectFooter() {
