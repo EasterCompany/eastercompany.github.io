@@ -467,6 +467,12 @@
       "commit": "ff69b4f",
       "binaries": {}
     },
+    "2.11.213": {
+      "type": "patch",
+      "date": "2025-12-27T21:48:48Z",
+      "commit": "4f546be",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
