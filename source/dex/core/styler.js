@@ -100,26 +100,31 @@ export function injectNavbar(isLoggedIn = false) {
     const navRightContent = isLoggedIn
         ? `
         <div class="nav-right">
-            <i class='bx bx-news' id="feed-icon" title="Feed"></i>
-            <i class='bx bx-pulse' id="monitor-icon" title="Monitor"></i>
-            <i class='bx bx-brain' id="workspace-icon" title="Workspace"></i>
+            <div id="dexter-menu-container" style="position: relative;">
+                <i class='bx bx-bot' id="dexter-menu-btn" title="Dexter Menu"></i>
+                <div id="dexter-dropdown" class="dexter-dropdown">
+                    <div class="dropdown-item" id="feed-menu-item"><i class='bx bx-news'></i> Feed</div>
+                    <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
+                    <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
+                </div>
+            </div>
             <i class='bx bx-cog' id="settings-icon" title="Settings"></i>
-            <i class='bx bx-x-circle' id="close-all-windows" title="Close All Windows" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"></i>
+            <i class='bx bx-x-circle' id="close-all-windows" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"></i>
         </div>
         `
         : `
-            <button id="login-btn" class="login-btn">LOGIN</button>
+            <div class="nav-right">
+                <button id="login-btn" class="login-btn">LOGIN</button>
+            </div>
         `;
 
     let navLeftContent;
     
     if (isRoot) {
-        // Root: Logo only, no hover effect (forced opacity), no microphone, no cursor pointer
         navLeftContent = `
             <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; cursor: default;">
         `;
     } else {
-        // Non-root: Back button behavior
         navLeftContent = `
             <div id="nav-back-btn" style="cursor: pointer; display: flex; align-items: center; transition: transform 0.2s ease;">
                 <i class='bx bx-chevron-left' style="font-size: 28px; color: #fff;"></i>
@@ -132,9 +137,10 @@ export function injectNavbar(isLoggedIn = false) {
         <div class="nav-left" style="gap: 0;">
             ${navLeftContent}
         </div>
-        <div class="nav-right">
-            ${navRightContent}
+        <div class="nav-center" id="nav-window-switcher">
+            <!-- Window buttons injected here by main.js -->
         </div>
+        ${navRightContent}
     `;
 
     const navbar = document.createElement('nav');
