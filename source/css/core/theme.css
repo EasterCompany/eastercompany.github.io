@@ -16,8 +16,8 @@
   to { background-position: 350% 50%, 350% 50%; }
 }
 
-@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 0.45; } }
-@keyframes fadeOutBackground { from { opacity: 0.45; } to { opacity: 0; } }
+@keyframes fadeInBackground { from { opacity: 0; } to { opacity: 1.0; } }
+@keyframes fadeOutBackground { from { opacity: 1.0; } to { opacity: 0; } }
 
 .background {
   z-index: -1;
@@ -51,7 +51,7 @@
   background-image: var(--stripes), var(--rainbow);
   background-size: 300%, 200%;
   background-position: 50% 50%, 50% 50%;
-  filter: blur(25px) invert(100%);
+  filter: blur(10px);
   -webkit-mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
 }
