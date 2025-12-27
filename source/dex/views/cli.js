@@ -499,7 +499,7 @@ export const getCliInterfaceContent = () => {
                 <i class='bx bxl-github'></i>
                 <h3>For Developers</h3>
                 <p>Dexter is open-source and built for the community. Help us refine the neural architecture or add new command modules.</p>
-                <a href="https://github.com/eastercompany" target="_blank" class="notif-action-btn active">Contribute on GitHub</a>
+                <a href="/opensource" target="_blank" class="notif-action-btn active">Contribute on GitHub</a>
             </div>
             <div class="cli-contribute-card">
                 <i class='bx bxl-discord-alt'></i>
