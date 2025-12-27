@@ -6,8 +6,8 @@ export const getBlueprintsContent = () => `
         <button id="blueprints-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
-    <div id="blueprints-list" class="blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-        <p>Loading blueprints...</p>
+    <div id="blueprints-list" class="blueprints-list blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
+        <p style="text-align: center; padding: 40px; color: #666;">Loading blueprints...</p>
     </div>
 `;
 

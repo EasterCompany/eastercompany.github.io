@@ -4,7 +4,7 @@ import { smartFetch, ansiToHtml } from '../core/utils.js';
 export function getLogsContent() {
     return `
         <div id="logs-container" class="logs-container">
-            <p>Loading logs...</p>
+            <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">Loading logs...</p>
         </div>
     `;
 }
