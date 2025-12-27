@@ -49,7 +49,7 @@ export const getProcessesContent = () => {
             <i class='bx bxs-component' style="color: #03dac6;"></i>
             <h2>Live Processes</h2>
         </div>
-        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading processes...</p></div>`;
+        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;
 };
 
 export const getServicesContent = () => {
@@ -58,7 +58,7 @@ export const getServicesContent = () => {
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2>Services</h2>
         </div>
-        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading services...</p></div>`;
+        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;
 };
 
 export const getModelsContent = () => {
@@ -67,7 +67,7 @@ export const getModelsContent = () => {
             <i class='bx bxs-brain' style="color: #03dac6;"></i>
             <h2>Cognitive Models</h2>
         </div>
-        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading models...</p></div>`;
+        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;
 };
 
 export const getHardwareContent = () => {
@@ -78,7 +78,6 @@ export const getHardwareContent = () => {
             <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
         <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
-            <p style="grid-column: 1 / -1; color: #666; font-size: 0.9em; margin: 0; text-align: center; padding: 20px;">Loading hardware info...</p>
         </div>`;
 };
 
@@ -158,7 +157,9 @@ export async function updateSystemMonitor() {
     // Helper to render hardware widgets
     const renderHardwareWidgets = (data) => {
         if (!data) {
-            hardwareContainer.innerHTML = '<p style="color: #ff4d4d;">Failed to load hardware info.</p>';
+            if (hardwareContainer.children.length === 0) {
+                hardwareContainer.innerHTML = '<p style="color: #ff4d4d;">Failed to load hardware info.</p>';
+            }
             return;
         }
 
@@ -276,7 +277,9 @@ export async function updateSystemMonitor() {
     const data = await fetchSystemData();
 
     if (!data || !data.services) {
-        widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline or unreachable.');
+        if (widgetsContainer.children.length === 0) {
+            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline or unreachable.');
+        }
         return;
     }
 
@@ -365,7 +368,9 @@ export async function updateModelsTab() {
     const data = await fetchSystemData();
 
     if (!data) {
-        widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.');
+        if (widgetsContainer.children.length === 0) {
+            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.');
+        }
         return;
     }
 
@@ -527,7 +532,9 @@ export async function updateProcessesTab() {
     }
 
     if (processes === null) {
-        widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.');
+        if (widgetsContainer.children.length === 0) {
+            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.');
+        }
         return;
     }
 
