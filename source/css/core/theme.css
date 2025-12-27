@@ -140,18 +140,19 @@ body.theme-legacy {
 
 /* Theme Previews */
 .theme-preview-dark {
-    background-color: #0a0a0a;
+    background-color: #0a0a0a !important;
+    background-image: none !important;
 }
 
 .theme-preview-light {
-    background-color: #ffffff;
+    background-color: #ffffff !important;
     background-image: linear-gradient(
         135deg,
         #D4F1F9 0%,
         #E1BEE7 50%,
         #F8BBD0 100%
-    );
-    opacity: 0.8;
+    ) !important;
+    opacity: 0.8 !important;
 }
 
 .theme-preview-legacy {
@@ -162,9 +163,9 @@ body.theme-legacy {
         #4444FF 20%,
         #6666FF 25%,
         #ddddFF 30%
-    );
-    background-size: 200% 200%;
-    animation: smoothBg 10s linear infinite;
+    ) !important;
+    background-size: 200% 200% !important;
+    animation: smoothBg 10s linear infinite !important;
 }
 
 .theme-info { padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; }
