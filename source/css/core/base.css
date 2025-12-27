@@ -108,3 +108,37 @@ svg {
     user-select: none;
     background-color: transparent;
 }
+
+/* Placeholder messages (Errors, Empty states) */
+.tab-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    width: 100%;
+    flex: 1;
+    grid-column: 1 / -1; /* Span across all columns in grid layouts */
+    animation: fadeIn 0.4s ease;
+}
+
+.placeholder-icon {
+    font-size: 4em; /* Large iconic presence */
+    color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+.placeholder-message {
+    font-size: 1.1em;
+    color: #888;
+    margin: 0;
+    max-width: 400px;
+}
+
+.placeholder-action {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 12px;
+    max-width: 400px;
+}
