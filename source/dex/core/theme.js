@@ -5,8 +5,7 @@ const THEME_KEY = 'easter_theme';
 export const THEMES = {
     DARK: 'dark',
     LIGHT: 'light',
-    LEGACY: 'legacy',
-    LUCID: 'lucid'
+    LEGACY: 'legacy'
 };
 
 /**
@@ -56,7 +55,7 @@ export function applyTheme(theme, skipTransition = false) {
     body.classList.add(`theme-${theme}`);
 
     // Manage background element
-    const needsBackground = [THEMES.LIGHT, THEMES.LEGACY, THEMES.LUCID].includes(theme);
+    const needsBackground = [THEMES.LIGHT, THEMES.LEGACY].includes(theme);
 
     if (needsBackground) {
         body.classList.add('is-animated');
