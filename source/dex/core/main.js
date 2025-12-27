@@ -7,8 +7,20 @@ import { getNotificationsContent, updateNotificationsTab } from '../views/notifi
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
 import { getEventsContent, updateEventsTimeline } from '../views/events.js';
-import { getSystemContent, updateSystemTab } from '../views/monitor.js';
+import { 
+    updateSystemTab, 
+    updateSystemMonitor,
+    updateModelsTab,
+    updateProcessesTab,
+    getAnalystContent, 
+    getProcessesContent, 
+    getServicesContent, 
+    getModelsContent, 
+    getHardwareContent, 
+    getServiceLogsContent 
+} from '../views/monitor.js';
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
+import { getLogsContent, updateLogs } from '../views/logs.js';
 import { initCliDashboard } from '../views/cli.js';
 import { getEventServiceUrl } from './utils.js';
 
@@ -75,29 +87,10 @@ function onReady() {
       // Always snap/stretch if a window is open
       const isStretched = activeWindows.length > 0;
 
-      // Manage per-window header close button visibility (always hide close if it's the only window, or show? Logic says hide if forced 1, but maybe user wants to close it?)
-      // Actually, if it's the ONLY window, we might want to allow closing it to return to "desktop".
-      // Previous logic: if (activeWindows.length === 1) winEl.classList.add('hide-close');
-      // Let's allow closing the single window so user can see the background/widgets if we add them later.
-      // But wait, if we hide the close button, they can toggle via navbar.
-      // Let's keep the close button visible so interaction is clear.
+      // Manage per-window header close button visibility
       activeWindows.forEach(win => {
           const winEl = document.getElementById(win.id);
           if (winEl) winEl.classList.remove('hide-close');
-      });
-
-      // Sync navbar active icons
-      const icons = {
-          'feed-window': 'feed-icon',
-          'monitor-window': 'monitor-icon',
-          'workspace-window': 'workspace-icon',
-          'settings-window': 'settings-icon'
-      };
-      
-      Object.values(icons).forEach(id => document.getElementById(id)?.classList.remove('active'));
-      activeWindows.forEach(win => {
-          const iconId = icons[win.id];
-          if (iconId) document.getElementById(iconId)?.classList.add('active');
       });
 
       // Synchronize theme background
@@ -123,23 +116,25 @@ function onReady() {
               const currentWinId = activeWindows[0].id;
               
               // Only show switcher if the active window is one of the main dropdown windows
-              const isMainWindow = ['feed-window', 'monitor-window', 'workspace-window'].includes(currentWinId);
+              const dropdownWindows = ['feed-window', 'events-window', 'monitor-window', 'contacts-window', 'workspace-window'];
+              const isMainWindow = dropdownWindows.includes(currentWinId);
               
               if (isMainWindow) {
                   navWindowSwitcher.innerHTML = `
                       <div class="nav-switch-btn ${currentWinId === 'feed-window' ? 'active' : ''}" id="switch-feed"><i class='bx bx-news'></i> Feed</div>
+                      <div class="nav-switch-btn ${currentWinId === 'events-window' ? 'active' : ''}" id="switch-events"><i class='bx bx-calendar-event'></i> Events</div>
                       <div class="nav-switch-btn ${currentWinId === 'monitor-window' ? 'active' : ''}" id="switch-monitor"><i class='bx bx-pulse'></i> Monitor</div>
+                      <div class="nav-switch-btn ${currentWinId === 'contacts-window' ? 'active' : ''}" id="switch-contacts"><i class='bx bx-book-content'></i> Contacts</div>
                       <div class="nav-switch-btn ${currentWinId === 'workspace-window' ? 'active' : ''}" id="switch-workspace"><i class='bx bx-brain'></i> Workspace</div>
                   `;
                   
                   // Re-attach listeners to new DOM elements
                   document.getElementById('switch-feed').addEventListener('click', () => toggleWindow(feedWindow));
+                  document.getElementById('switch-events').addEventListener('click', () => toggleWindow(eventsWindow));
                   document.getElementById('switch-monitor').addEventListener('click', () => toggleWindow(monitorWindow));
+                  document.getElementById('switch-contacts').addEventListener('click', () => toggleWindow(contactsWindow));
                   document.getElementById('switch-workspace').addEventListener('click', () => toggleWindow(workspaceWindow));
               } else {
-                  // If Settings or other window is open, keep center empty? Or just show title?
-                  // Prompt implied only "other windows from the same drop down" appear. 
-                  // If Settings is open, it's not in the dropdown.
                   navWindowSwitcher.innerHTML = '';
               }
           }
@@ -157,7 +152,7 @@ function onReady() {
           }
 
           // Navbar Revert
-          if (navMenuContainer) navMenuContainer.style.display = 'block';
+          if (navMenuContainer) navMenuContainer.style.display = 'flex';
           if (settingsIcon) settingsIcon.style.display = 'block';
           if (navWindowSwitcher) navWindowSwitcher.innerHTML = '';
       }
@@ -181,7 +176,6 @@ function onReady() {
   }
 
   function closeAll() {
-      // Create a copy to iterate safely while closing
       const windowsToClose = [...activeWindows];
       windowsToClose.forEach(win => win.close());
       activeWindows = [];
@@ -193,17 +187,38 @@ function onReady() {
   
   const feedWindow = createWindow({
     id: 'feed-window',
+    title: 'Feed',
     icon: 'bx-news',
-    tabs: [
-      { icon: 'bx-bell', title: 'Notifications', content: getNotificationsContent() },
-      { icon: 'bx-calendar-event', title: 'Events', content: getEventsContent() }
-    ],
-    onOpen: () => {
-        updateNotificationsTab();
-        updateEventsTimeline();
-    },
+    content: getNotificationsContent(),
+    onOpen: () => updateNotificationsTab(),
     onClose: () => {
         const idx = activeWindows.indexOf(feedWindow);
+        if (idx > -1) activeWindows.splice(idx, 1);
+        recalculateLayout();
+    }
+  });
+
+  const eventsWindow = createWindow({
+    id: 'events-window',
+    title: 'Events',
+    icon: 'bx-calendar-event',
+    content: getEventsContent(),
+    onOpen: () => updateEventsTimeline(),
+    onClose: () => {
+        const idx = activeWindows.indexOf(eventsWindow);
+        if (idx > -1) activeWindows.splice(idx, 1);
+        recalculateLayout();
+    }
+  });
+
+  const contactsWindow = createWindow({
+    id: 'contacts-window',
+    title: 'Contacts',
+    icon: 'bx-book-content',
+    content: getContactsContent(),
+    onOpen: () => updateContactsTab(),
+    onClose: () => {
+        const idx = activeWindows.indexOf(contactsWindow);
         if (idx > -1) activeWindows.splice(idx, 1);
         recalculateLayout();
     }
@@ -213,12 +228,18 @@ function onReady() {
     id: 'monitor-window',
     icon: 'bx-pulse',
     tabs: [
-      { icon: 'bx-server', title: 'System', content: getSystemContent() },
-      { icon: 'bx-book-content', title: 'Contacts', content: getContactsContent() }
+      { icon: 'bx-server', title: 'Services', content: getServicesContent() },
+      { icon: 'bx-component', title: 'Processes', content: getProcessesContent() },
+      { icon: 'bx-brain', title: 'Models', content: getModelsContent() },
+      { icon: 'bx-hdd', title: 'Hardware', content: getHardwareContent() },
+      { icon: 'bx-terminal', title: 'Logs', content: getServiceLogsContent() },
+      { icon: 'bx-zap', title: 'Analyst', content: getAnalystContent() }
     ],
     onOpen: () => {
-        updateSystemTab();
-        updateContactsTab();
+        updateSystemMonitor();
+        updateProcessesTab();
+        updateModelsTab();
+        updateLogs();
     },
     onClose: () => {
         const idx = activeWindows.indexOf(monitorWindow);
@@ -261,9 +282,20 @@ function onReady() {
   });
 
   if (loggedIn) {
+    // Populate Dropdown
+    const dropdown = document.getElementById('dexter-dropdown');
+    if (dropdown) {
+        dropdown.innerHTML = `
+            <div class="dropdown-item" id="feed-menu-item"><i class='bx bx-news'></i> Feed</div>
+            <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
+            <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
+            <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
+            <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
+        `;
+    }
+
     // Dropdown Logic
     const menuBtn = document.getElementById('dexter-menu-btn');
-    const dropdown = document.getElementById('dexter-dropdown');
     
     if (menuBtn && dropdown) {
         menuBtn.addEventListener('click', (e) => {
@@ -282,22 +314,27 @@ function onReady() {
 
     // Dropdown Item Listeners
     document.getElementById('feed-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(feedWindow); });
+    document.getElementById('events-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(eventsWindow); });
     document.getElementById('monitor-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(monitorWindow); });
+    document.getElementById('contacts-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(contactsWindow); });
     document.getElementById('workspace-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(workspaceWindow); });
     
     document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
     document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
     
+    // Refresh loop (only if relevant window is open)
     setInterval(() => {
-        if (feedWindow.isOpen()) {
-            updateNotificationsTab();
-            updateEventsTimeline();
+        if (feedWindow.isOpen()) updateNotificationsTab();
+        if (eventsWindow.isOpen()) updateEventsTimeline();
+        if (contactsWindow.isOpen()) updateContactsTab();
+        if (monitorWindow.isOpen()) {
+            updateSystemTab(); // This triggers the component updates internally
         }
-        if (monitorWindow.isOpen()) updateSystemTab();
         if (workspaceWindow.isOpen()) updateIdeasTab();
     }, 5000);
 
   } else {
+    // ... Login logic remains ...
     document.getElementById('login-btn')?.addEventListener('click', () => {
       loginWindow.open();
       setTimeout(() => {

@@ -2,7 +2,7 @@
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 
-export const getSystemContent = () => {
+export const getAnalystContent = () => {
     return `
         <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #bb86fc;"></i>
@@ -40,26 +40,38 @@ export const getSystemContent = () => {
                     <span id="vitals-processes-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
                 </div>
             </div>
-        </div>
+        </div>`;
+};
 
+export const getProcessesContent = () => {
+    return `
         <div class="system-section-header">
             <i class='bx bxs-component' style="color: #03dac6;"></i>
             <h2>Live Processes</h2>
         </div>
-        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading processes...</p></div>
+        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading processes...</p></div>`;
+};
 
+export const getServicesContent = () => {
+    return `
         <div class="system-section-header">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2>Services</h2>
         </div>
-        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading services...</p></div>
+        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading services...</p></div>`;
+};
 
+export const getModelsContent = () => {
+    return `
         <div class="system-section-header">
             <i class='bx bxs-brain' style="color: #03dac6;"></i>
             <h2>Cognitive Models</h2>
         </div>
-        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading models...</p></div>
+        <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading models...</p></div>`;
+};
 
+export const getHardwareContent = () => {
+    return `
         <div class="system-section-header">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
             <h2>Hardware</h2>
@@ -67,16 +79,23 @@ export const getSystemContent = () => {
         </div>
         <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
             <p style="grid-column: 1 / -1; color: #666; font-size: 0.9em; margin: 0; text-align: center; padding: 20px;">Loading hardware info...</p>
-        </div>
+        </div>`;
+};
 
+export const getServiceLogsContent = () => {
+    return `
         <div class="system-section-header">
             <i class='bx bxs-terminal' style="color: #03dac6;"></i>
             <h2>Service Logs</h2>
         </div>
         <div id="logs-container-wrapper" style="margin-bottom: 20px;">
             ${getLogsContent()}
-        </div>
-    `;
+        </div>`;
+};
+
+// Deprecated, but kept for safety if referenced elsewhere temporarily
+export const getSystemContent = () => {
+    return getAnalystContent() + getProcessesContent() + getServicesContent() + getModelsContent() + getHardwareContent() + getServiceLogsContent();
 };
 
 export async function updateSystemTab() {
@@ -87,18 +106,9 @@ export async function updateSystemTab() {
         updateModelsTab()
     ]);
     
-    // Update logs separately to ensure DOM is ready if needed, 
-    // although Promise.all above is fine.
+    // Update logs separately
     await updateLogs();
 }
-
-export const getServicesContent = () => {
-    return `<div id="services-widgets" class="system-monitor-widgets"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading services...</p></div>`;
-};
-export const getModelsContent = () => `<div id="models-widgets" class="system-monitor-widgets"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading models...</p></div>`;
-export const getProcessesContent = () => {
-    return `<div id="processes-widgets" class="system-monitor-widgets"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading processes...</p></div>`;
-};
 
 export let lastServicesUpdate = null;
 export let lastModelsUpdate = null;
