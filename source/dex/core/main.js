@@ -63,6 +63,11 @@ function onReady() {
   const container = document.getElementById('windows-container');
   if (container) container.setAttribute('data-count', '0');
 
+  // Helper to save state - Moved to top level of onReady for visibility
+  const saveWindowState = (winId) => {
+      localStorage.setItem('dex_last_window', winId);
+  };
+
   function getWindowLimit() {
       return 1; // Strict limit of 1 window always
   }
@@ -328,11 +333,6 @@ function onReady() {
             }
         });
     }
-
-    // Helper to save state
-    const saveWindowState = (winId) => {
-        localStorage.setItem('dex_last_window', winId);
-    };
 
     // Dropdown Item Listeners - Update to save state
     document.getElementById('feed-menu-item')?.addEventListener('click', () => { saveWindowState('feed-window'); toggleWindow(feedWindow); });
