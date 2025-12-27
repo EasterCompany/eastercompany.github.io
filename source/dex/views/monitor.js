@@ -42,36 +42,36 @@ export const getSystemContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-component' style="color: #03dac6;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Live Processes</h2>
+            <h2>Live Processes</h2>
         </div>
         <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading processes...</p></div>
 
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Services</h2>
+            <h2>Services</h2>
         </div>
         <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading services...</p></div>
 
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-brain' style="color: #03dac6;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Cognitive Models</h2>
+            <h2>Cognitive Models</h2>
         </div>
         <div id="models-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"><p style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">Loading models...</p></div>
 
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Hardware</h2>
+            <h2>Hardware</h2>
             <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
         <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
             <p style="grid-column: 1 / -1; color: #666; font-size: 0.9em; margin: 0; text-align: center; padding: 20px;">Loading hardware info...</p>
         </div>
 
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-terminal' style="color: #03dac6;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Service Logs</h2>
+            <h2>Service Logs</h2>
         </div>
         <div id="logs-container-wrapper" style="margin-bottom: 20px;">
             ${getLogsContent()}

@@ -6,7 +6,10 @@ export const getContactsContent = () => `
         <button id="contacts-refresh" class="notif-action-btn"><i class='bx bx-refresh'></i> Refresh</button>
     </div>
     <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
-        <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">Loading contacts...</p>
+        <div class="tab-placeholder">
+            <i class='bx bx-book-content placeholder-icon'></i>
+            <p class="placeholder-message">Loading contacts...</p>
+        </div>
     </div>
 `;
 

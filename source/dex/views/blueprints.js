@@ -7,7 +7,10 @@ export const getBlueprintsContent = () => `
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
     <div id="blueprints-list" class="blueprints-list blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-        <p style="text-align: center; padding: 40px; color: #666;">Loading blueprints...</p>
+        <div class="tab-placeholder">
+            <i class='bx bx-paint placeholder-icon'></i>
+            <p class="placeholder-message">Loading blueprints...</p>
+        </div>
     </div>
 `;
 
@@ -74,6 +77,14 @@ export async function updateBlueprintsTab(forceReRender = false) {
             tempDiv.className = `event-item notification-item event-border-purple cursor-pointer ${isExpanded ? 'expanded' : ''}`;
             tempDiv.dataset.blueprintId = event.id;
 
+            const iconMap = {
+                'architecture': 'bx-vector',
+                'optimization': 'bx-trending-up',
+                'feature': 'bx-extension',
+                'security': 'bx-shield-lock'
+            };
+            const icon = iconMap[category] || 'bx-paint';
+
             tempDiv.onclick = function(e) {
                 const isCurrentlyExpanded = this.classList.contains('expanded');
                 if (isCurrentlyExpanded) {
@@ -110,6 +121,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                     <span class="event-time-main">${timeStr}</span>
                     <span class="event-date">${dateStr}</span>
                 </div>
+                <div class="event-icon"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
                     <div class="event-service">${category.toUpperCase()}</div>
                     <div class="event-message">${title}</div>

@@ -15,7 +15,10 @@ export const getRoadmapContent = () => `
     </div>
   </div>
   <div id="roadmap-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-    <p style="text-align: center; padding: 40px; color: #666;">Loading roadmap...</p>
+    <div class="tab-placeholder">
+        <i class='bx bx-map-alt placeholder-icon'></i>
+        <p class="placeholder-message">Loading roadmap...</p>
+    </div>
   </div>
 `;
 
