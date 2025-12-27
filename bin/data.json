@@ -575,6 +575,12 @@
       "commit": "d524fef",
       "binaries": {}
     },
+    "2.11.231": {
+      "type": "patch",
+      "date": "2025-12-27T22:48:17Z",
+      "commit": "5dcec0a",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
