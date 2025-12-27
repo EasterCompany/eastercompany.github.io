@@ -122,6 +122,10 @@ nav.window-open {
     justify-content: center;
 }
 
+#dexter-menu-btn {
+    padding-top: 2px;
+}
+
 /* Dexter Dropdown */
 .dexter-dropdown {
     position: absolute;
