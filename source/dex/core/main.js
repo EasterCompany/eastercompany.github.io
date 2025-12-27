@@ -46,21 +46,18 @@ function onReady() {
       document.querySelector('footer')?.classList.add('hide');
   }
 
-  // --- Advanced Grid Window Manager Logic ---
+  // --- Single Window Manager Logic ---
   let activeWindows = [];
   const container = document.getElementById('windows-container');
   if (container) container.setAttribute('data-count', '0');
 
   function getWindowLimit() {
-      const w = window.innerWidth;
-      if (w >= 1900) return 2; // Maximum 2 on UltraWide/4K
-      return 1; // 1 on standard Desktop / Tablet / Mobile
+      return 1; // Strict limit of 1 window always
   }
 
   function recalculateLayout() {
-      const limit = getWindowLimit();
-      
-      while (activeWindows.length > limit) {
+      // Ensure only 1 window is active
+      while (activeWindows.length > 1) {
           const oldest = activeWindows.shift();
           oldest.close(true);
       }
@@ -68,29 +65,25 @@ function onReady() {
       const container = document.getElementById('windows-container');
       const navbar = document.querySelector('nav');
       const footer = document.querySelector('footer');
-      const isDashboardPage = window.location.pathname.includes('/dex');
-      const isErrorPage = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
       const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
+      const isErrorPage = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
 
       if (container) {
           container.setAttribute('data-count', activeWindows.length);
       }
 
-      // ONLY STRETCH/SNAP IF:
-      // 1. More than 1 window is open
-      // 2. OR 1 window is open but we are on a smaller screen (< 1200px)
-      const isStretched = activeWindows.length > 1 || (activeWindows.length === 1 && window.innerWidth < 1200);
+      // Always snap/stretch if a window is open
+      const isStretched = activeWindows.length > 0;
 
-      // Manage per-window header close button visibility
+      // Manage per-window header close button visibility (always hide close if it's the only window, or show? Logic says hide if forced 1, but maybe user wants to close it?)
+      // Actually, if it's the ONLY window, we might want to allow closing it to return to "desktop".
+      // Previous logic: if (activeWindows.length === 1) winEl.classList.add('hide-close');
+      // Let's allow closing the single window so user can see the background/widgets if we add them later.
+      // But wait, if we hide the close button, they can toggle via navbar.
+      // Let's keep the close button visible so interaction is clear.
       activeWindows.forEach(win => {
           const winEl = document.getElementById(win.id);
-          if (winEl) {
-              if (activeWindows.length === 1) {
-                  winEl.classList.add('hide-close');
-              } else {
-                  winEl.classList.remove('hide-close');
-              }
-          }
+          if (winEl) winEl.classList.remove('hide-close');
       });
 
       // Sync navbar active icons
@@ -107,28 +100,23 @@ function onReady() {
           if (iconId) document.getElementById(iconId)?.classList.add('active');
       });
 
-      // Synchronize theme background (AUTO mode uses animated if windows are open)
+      // Synchronize theme background
       applyTheme(getCurrentTheme(), false, activeWindows.length > 0);
 
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
-          document.getElementById('close-all-windows')?.style.setProperty('display', 'block');
+          document.getElementById('close-all-windows')?.style.setProperty('display', 'block'); // Optional now since count is 1, but "Close" is still valid
           document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
           
-          // ALWAYS synchronize navbar state if any window is open
           navbar?.classList.add('window-open');
           
-          if (isStretched) {
-              if (container) container.style.paddingTop = '60px'; // SNAP
-          } else {
-              if (container) container.style.paddingTop = '100px'; // FLOAT
-          }
+          if (container) container.style.paddingTop = '60px'; // Always SNAP when open
       } else {
           navbar?.classList.remove('window-open');
           document.getElementById('close-all-windows')?.style.setProperty('display', 'none');
           if (container) container.style.paddingTop = '100px';
           document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-          // Only show footer on specific pages when no windows are open
+          
           if (isRoot || isErrorPage) {
               footer?.classList.remove('hide');
           } else {
@@ -139,14 +127,14 @@ function onReady() {
 
   function toggleWindow(win) {
       if (win.isOpen()) {
-          win.close(); // Standard close handles removal via callback
+          win.close(); 
           return;
       }
 
-      const limit = getWindowLimit();
-      if (activeWindows.length >= limit) {
-          const oldest = activeWindows.shift();
-          oldest.close(true); // Close immediately without standard callback cleanup logic if we are replacing
+      // Close any existing window before opening new one
+      while (activeWindows.length > 0) {
+          const existing = activeWindows.pop();
+          existing.close(true);
       }
 
       activeWindows.push(win);
