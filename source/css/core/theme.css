@@ -24,8 +24,8 @@
   to { background-position: 350% 50%, 350% 50%; }
 }
 
-@keyframes fadeInBackground { from { opacity: 0; } to { opacity: var(--bg-opacity); } }
-@keyframes fadeOutBackground { from { opacity: var(--bg-opacity); } to { opacity: 0; } }
+@keyframes fadeInBackground { from { opacity: 0; } to { opacity: var(--bg-opacity, 0.5); } }
+@keyframes fadeOutBackground { from { opacity: var(--bg-opacity, 0.5); } to { opacity: 0; } }
 
 /* Light Theme (Heavenly) */
 body.theme-light {
