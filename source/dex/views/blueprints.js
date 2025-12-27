@@ -187,7 +187,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
     } catch (error) {
         console.error('Error fetching blueprints:', error);
         if (blueprintsContainer.children.length === 0) {
-            blueprintsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load blueprints.', 'The event service may be offline or unreachable.');
+            blueprintsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load blueprints.', 'The event service may be offline.');
         }
     }
 }

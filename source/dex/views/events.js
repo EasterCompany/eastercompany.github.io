@@ -508,7 +508,7 @@ export async function updateEventsTimeline(forceReRender = false) {
     } catch (error) {
         console.error('Error fetching events:', error);
         if (eventsContainer.children.length === 0) {
-            eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline or unreachable.');
+            eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline.');
         }
     }
 }

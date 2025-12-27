@@ -147,7 +147,7 @@ export async function updateRoadmapTab(forceReRender = false) {
 
   } catch (e) {
     if (roadmapContainer.children.length === 0) {
-        roadmapContainer.innerHTML = createPlaceholderMessage('error', 'Failed to load roadmap.');
+        roadmapContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load roadmap.', 'The event service may be offline.');
     }
   }
 }
