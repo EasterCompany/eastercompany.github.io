@@ -213,6 +213,20 @@ nav.window-open + .windows-container {
     display: block;
 }
 
+/* Window Header Logic */
+.window:not(.has-tabs) .window-header {
+    display: none !important;
+}
+
+.window:not(.has-tabs) .window-content {
+    padding-top: 15px;
+}
+
+/* Hide secondary close button globally */
+.window-close {
+    display: none !important;
+}
+
 /* Badge Styling */
 .notification-badge {
     background-color: #ff4444;
