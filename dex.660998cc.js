@@ -451,9 +451,9 @@
                     <pre class="log-content">${f}</pre>
                 </div>
             `}).join("");return t.innerHTML=r,document.querySelectorAll(".copy-logs-btn").forEach(c=>{c.addEventListener("click",()=>{let g=unescape(c.dataset.logs);navigator.clipboard.writeText(g).then(()=>{let u=c.querySelector("i");u.classList.remove("bx-copy"),u.classList.add("bx-check"),setTimeout(()=>{u.classList.remove("bx-check"),u.classList.add("bx-copy")},2e3)})})}),document.querySelectorAll(".clear-logs-btn").forEach(c=>{c.addEventListener("click",async()=>{let g=c.dataset.serviceId;if(confirm(`Are you sure you want to clear logs for ${g}?`))try{(await T(`/logs?service_id=${g}`,{method:"DELETE"})).ok&&xe()}catch(u){console.error("Error clearing logs:",u)}})}),St=Date.now(),!0}catch(e){return console.error("Error fetching logs:",e),t.innerHTML='<p style="text-align: center; color: #cf6679; padding: 20px;">Failed to load logs.</p>',!1}}var it=()=>`
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #bb86fc;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Analyst & Vitals</h2>
+            <h2>Analyst & Vitals</h2>
         </div>
         <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">

@@ -4,9 +4,9 @@ import { getLogsContent, updateLogs } from './logs.js';
 
 export const getSystemContent = () => {
     return `
-        <div class="system-section-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #bb86fc;"></i>
-            <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Analyst & Vitals</h2>
+            <h2>Analyst & Vitals</h2>
         </div>
         <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
