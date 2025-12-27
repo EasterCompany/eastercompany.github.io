@@ -4,7 +4,10 @@ import { smartFetch, ansiToHtml } from '../core/utils.js';
 export function getLogsContent() {
     return `
         <div id="logs-container" class="logs-container">
-            <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">Loading logs...</p>
+            <div class="tab-placeholder">
+                <i class='bx bx-terminal placeholder-icon'></i>
+                <p class="placeholder-message">Loading logs...</p>
+            </div>
         </div>
     `;
 }

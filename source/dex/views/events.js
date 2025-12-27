@@ -17,7 +17,10 @@ export const getEventsContent = () => `
             <button class="notif-action-btn filter-btn" data-filter="moderation">Moderation</button>
         </div>
         <div id="events-timeline" class="events-timeline">
-            <p style="text-align: center; padding: 40px; color: #666;">Loading events...</p>
+            <div class="tab-placeholder">
+                <i class='bx bx-calendar-event placeholder-icon'></i>
+                <p class="placeholder-message">Loading events...</p>
+            </div>
         </div>
     </div>
 `;

@@ -58,3 +58,28 @@
 }
 
 .process-widget { border-left: 3px solid #4444FF; }
+
+.system-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 0 5px;
+}
+
+.system-section-header i {
+    font-size: 1.6em; /* Large iconic presence */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.system-section-header h2 {
+    font-size: 1.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    margin: 0;
+    text-align: left;
+}
