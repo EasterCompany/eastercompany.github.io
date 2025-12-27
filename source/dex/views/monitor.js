@@ -158,7 +158,7 @@ export async function updateSystemMonitor() {
     const renderHardwareWidgets = (data) => {
         if (!data) {
             if (hardwareContainer.children.length === 0) {
-                hardwareContainer.innerHTML = '<p style="color: #ff4d4d;">Failed to load hardware info.</p>';
+                hardwareContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load hardware info.', 'The event service may be offline.');
             }
             return;
         }
@@ -255,7 +255,9 @@ export async function updateSystemMonitor() {
                     hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
                     setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
                 } else {
-                    hardwareContainer.innerHTML = '<p style="color: #ff4d4d;">Failed to refresh.</p>';
+                    if (hardwareContainer.children.length === 0) {
+                        hardwareContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to refresh.', 'The event service may be offline.');
+                    }
                     hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
                     setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
                 }
@@ -278,7 +280,7 @@ export async function updateSystemMonitor() {
 
     if (!data || !data.services) {
         if (widgetsContainer.children.length === 0) {
-            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline or unreachable.');
+            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline.');
         }
         return;
     }
@@ -369,7 +371,7 @@ export async function updateModelsTab() {
 
     if (!data) {
         if (widgetsContainer.children.length === 0) {
-            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.');
+            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.', 'The event service may be offline.');
         }
         return;
     }
@@ -533,7 +535,7 @@ export async function updateProcessesTab() {
 
     if (processes === null) {
         if (widgetsContainer.children.length === 0) {
-            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.');
+            widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.', 'The event service may be offline.');
         }
         return;
     }
