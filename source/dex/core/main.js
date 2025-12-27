@@ -30,7 +30,8 @@ function onReady() {
   initTheme();
   applyBaseStyles();
   
-  if (window.location.pathname.includes('/dex')) {
+  const path = window.location.pathname;
+  if ((path === '/dex' || path === '/dex/' || path.includes('/dex/index.html')) && !path.includes('/contribute')) {
       initCliDashboard();
   }
 
