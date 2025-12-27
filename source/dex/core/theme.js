@@ -54,12 +54,18 @@ export function setTheme(theme) {
  * Apply the theme to the document
  * @param {string} theme - The theme preference (can be AUTO, DEFAULT, or ANIMATED)
  * @param {boolean} skipTransition - Whether to skip the transition animation
+ * @param {boolean} isWindowOpen - Whether a window is currently open (affects AUTO logic)
  */
-export function applyTheme(theme, skipTransition = false) {
+export function applyTheme(theme, skipTransition = false, isWindowOpen = false) {
     const body = document.body;
 
     // Resolve AUTO theme to actual theme
-    const resolvedTheme = theme === THEMES.AUTO ? resolveAutoTheme() : theme;
+    let resolvedTheme = theme === THEMES.AUTO ? resolveAutoTheme() : theme;
+
+    // If AUTO and a window is open, ALWAYS use ANIMATED background regardless of screen size
+    if (theme === THEMES.AUTO && isWindowOpen) {
+        resolvedTheme = THEMES.ANIMATED;
+    }
 
     if (!skipTransition) {
         // Add transition class for fade effect
