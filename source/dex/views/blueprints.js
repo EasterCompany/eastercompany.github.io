@@ -1,16 +1,15 @@
 // Blueprints Tab Logic
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml, smartFetch } from '../core/utils.js';
 
-export const getBlueprintsContent = () => `
-    <div class="notifications-actions">
+export const getBlueprintActions = () => `
+    <div class="notifications-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none;">
         <button id="blueprints-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
     </div>
+`;
+
+export const getBlueprintsContent = () => `
     <div id="blueprints-list" class="blueprints-list blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
-        <div class="tab-placeholder">
-            <i class='bx bx-paint placeholder-icon'></i>
-            <p class="placeholder-message">Loading blueprints...</p>
-        </div>
     </div>
 `;
 
