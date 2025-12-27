@@ -87,6 +87,7 @@ export function applyTheme(theme, skipTransition = false, isWindowOpen = false) 
 
     // Handle background element with smooth transition
     if (resolvedTheme === THEMES.ANIMATED) {
+        body.classList.add('is-animated');
         // Create background element if it doesn't exist
         if (!document.querySelector('.background')) {
             const bg = document.createElement('div');
@@ -94,6 +95,7 @@ export function applyTheme(theme, skipTransition = false, isWindowOpen = false) 
             document.body.prepend(bg);
         }
     } else {
+        body.classList.remove('is-animated');
         // Remove background element with fade out
         const bg = document.querySelector('.background');
         if (bg) {
