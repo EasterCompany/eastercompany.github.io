@@ -54,11 +54,11 @@ export function updateTabBadgeCount(tabIndex, count) {
     }
 }
 
-export function updateUnreadNotificationCount() {
-    const notificationsList = document.getElementById('notifications-list');
-    if (!notificationsList) return;
+export function updateUnreadAlertCount() {
+    const alertsList = document.getElementById('alerts-list');
+    if (!alertsList) return;
     
-    const unreadCount = notificationsList.querySelectorAll('.notification-unread').length;
+    const unreadCount = alertsList.querySelectorAll('.alert-unread').length;
     updateTabBadgeCount(0, unreadCount);
 }
 
