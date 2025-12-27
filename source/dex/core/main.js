@@ -233,12 +233,12 @@ function onReady() {
     id: 'monitor-window',
     icon: 'bx-pulse',
     tabs: [
-      { icon: 'bx-server', title: 'Services', content: getServicesContent() },
-      { icon: 'bx-component', title: 'Processes', content: getProcessesContent() },
-      { icon: 'bx-brain', title: 'Models', content: getModelsContent() },
-      { icon: 'bx-hdd', title: 'Hardware', content: getHardwareContent() },
-      { icon: 'bx-terminal', title: 'Logs', content: getServiceLogsContent() },
-      { icon: 'bx-zap', title: 'Analyst', content: getAnalystContent() }
+      { icon: 'bxs-server', title: 'Services', content: getServicesContent() },
+      { icon: 'bxs-component', title: 'Processes', content: getProcessesContent() },
+      { icon: 'bxs-brain', title: 'Models', content: getModelsContent() },
+      { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
+      { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
+      { icon: 'bxs-zap', title: 'Analyst', content: getAnalystContent() }
     ],
     onOpen: () => {
         updateSystemMonitor();
