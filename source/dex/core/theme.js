@@ -44,6 +44,9 @@ export function applyTheme(theme, skipTransition = false) {
         setTimeout(() => {
             body.classList.remove('theme-transitioning');
         }, 300);
+    } else {
+        // Ensure class is removed if skipping transition (e.g. initial load)
+        body.classList.remove('theme-transitioning');
     }
 
     // Remove all theme classes
