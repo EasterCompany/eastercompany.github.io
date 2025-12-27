@@ -37,6 +37,9 @@ export function createWindow(options) {
         windowEl = document.createElement('div');
         windowEl.id = options.id;
         windowEl.className = 'window';
+        if (options.tabs && options.tabs.length > 0) {
+            windowEl.classList.add('has-tabs');
+        }
         windowEl.style.zIndex = ++windowZIndex;
 
         // Add focus listener
