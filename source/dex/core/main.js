@@ -1,8 +1,8 @@
 // Easter Company - Universal JS Entrypoint
-import { applyBaseStyles, injectNavbar, injectFooter } from './styler.js';
+import { injectNavbar, injectFooter, applyBaseStyles } from './styler.js';
 import { createWindow } from './Window.js';
 import { isLoggedIn, login } from './auth.js';
-import { initTheme } from './theme.js';
+import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
 import { getNotificationsContent, updateNotificationsTab } from '../views/notifications.js';
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
@@ -105,6 +105,9 @@ function onReady() {
           const iconId = icons[win.id];
           if (iconId) document.getElementById(iconId)?.classList.add('active');
       });
+
+      // Synchronize theme background (AUTO mode uses animated if windows are open)
+      applyTheme(getCurrentTheme(), false, activeWindows.length > 0);
 
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
