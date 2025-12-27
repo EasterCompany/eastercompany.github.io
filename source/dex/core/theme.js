@@ -43,7 +43,7 @@ export function applyTheme(theme, skipTransition = false) {
         // Remove transition class after animation
         setTimeout(() => {
             body.classList.remove('theme-transitioning');
-        }, 300);
+        }, 800);
     } else {
         // Ensure class is removed if skipping transition (e.g. initial load)
         body.classList.remove('theme-transitioning');

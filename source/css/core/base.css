@@ -51,7 +51,7 @@ body {
     flex-direction: column;
     background-color: #1a1a1a;
     color: #bbb;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.8s ease;
 }
 
 body.theme-transitioning {
