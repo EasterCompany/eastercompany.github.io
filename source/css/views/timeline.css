@@ -30,6 +30,19 @@
 .event-time-main { font-size: 0.95em; font-weight: 500; color: #eee; font-family: monospace; }
 .event-date { font-size: 0.75em; color: #999; margin-top: 2px; }
 
+.event-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
+
 .event-content { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
 .event-service { font-size: 0.8em; color: #aaa; font-weight: 500; }
 .event-message { font-size: 0.9em; color: #eee; line-height: 1.4; word-wrap: break-word; }

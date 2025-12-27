@@ -439,7 +439,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                 <div class="event-icon"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
                     <div class="event-service">
-                        <span class="event-category-tag cat-${category}">${category}</span>
+                        <span class="event-category-tag cat-${category}" style="font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); color: #888; text-transform: uppercase; margin-right: 8px;">${category}</span>
                         ${event.service} ${userLevel}
                     </div>
                     <div class="event-message">${summary}</div>

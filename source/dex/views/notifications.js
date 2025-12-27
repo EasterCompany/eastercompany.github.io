@@ -215,11 +215,22 @@ export async function updateNotificationsTab(forceReRender = false) {
         }
       };
 
+      const summary = title; // Using title as summary for icon selection
+      const iconMap = {
+          'system': 'bx-cog',
+          'messaging': 'bx-message-detail',
+          'cognitive': 'bx-brain',
+          'moderation': 'bx-shield-x',
+          'lifecycle': 'bx-git-branch'
+      };
+      const icon = iconMap[category] || 'bx-bell';
+
       tempDiv.innerHTML = `
                 <div class="event-time">
                     <span class="event-time-main">${timeStr}</span>
                     <span class="event-date">${dateStr}</span>
                 </div>
+                <div class="event-icon"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
                     <div class="event-service">${category.toUpperCase()} ${isAlert ? '<span class="alert-badge" style="color: #ff4d4d; font-size: 0.8em; margin-left: 5px;">[ALERT]</span>' : ''}</div>
                     <div class="event-message">${title}</div>
