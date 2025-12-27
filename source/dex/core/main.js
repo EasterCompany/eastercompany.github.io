@@ -103,14 +103,45 @@ function onReady() {
       // Synchronize theme background
       applyTheme(getCurrentTheme());
 
+      const navMenuContainer = document.getElementById('dexter-menu-container');
+      const navWindowSwitcher = document.getElementById('nav-window-switcher');
+
       if (activeWindows.length > 0) {
           footer?.classList.add('hide');
-          document.getElementById('close-all-windows')?.style.setProperty('display', 'block'); // Optional now since count is 1, but "Close" is still valid
+          document.getElementById('close-all-windows')?.style.setProperty('display', 'block'); 
           document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
           
           navbar?.classList.add('window-open');
           
           if (container) container.style.paddingTop = '60px'; // Always SNAP when open
+
+          // Navbar Transformation
+          if (navMenuContainer) navMenuContainer.style.display = 'none';
+          if (navWindowSwitcher) {
+              const currentWinId = activeWindows[0].id;
+              
+              // Only show switcher if the active window is one of the main dropdown windows
+              const isMainWindow = ['feed-window', 'monitor-window', 'workspace-window'].includes(currentWinId);
+              
+              if (isMainWindow) {
+                  navWindowSwitcher.innerHTML = `
+                      <div class="nav-switch-btn ${currentWinId === 'feed-window' ? 'active' : ''}" id="switch-feed"><i class='bx bx-news'></i> Feed</div>
+                      <div class="nav-switch-btn ${currentWinId === 'monitor-window' ? 'active' : ''}" id="switch-monitor"><i class='bx bx-pulse'></i> Monitor</div>
+                      <div class="nav-switch-btn ${currentWinId === 'workspace-window' ? 'active' : ''}" id="switch-workspace"><i class='bx bx-brain'></i> Workspace</div>
+                  `;
+                  
+                  // Re-attach listeners to new DOM elements
+                  document.getElementById('switch-feed').addEventListener('click', () => toggleWindow(feedWindow));
+                  document.getElementById('switch-monitor').addEventListener('click', () => toggleWindow(monitorWindow));
+                  document.getElementById('switch-workspace').addEventListener('click', () => toggleWindow(workspaceWindow));
+              } else {
+                  // If Settings or other window is open, keep center empty? Or just show title?
+                  // Prompt implied only "other windows from the same drop down" appear. 
+                  // If Settings is open, it's not in the dropdown.
+                  navWindowSwitcher.innerHTML = '';
+              }
+          }
+
       } else {
           navbar?.classList.remove('window-open');
           document.getElementById('close-all-windows')?.style.setProperty('display', 'none');
@@ -122,6 +153,10 @@ function onReady() {
           } else {
               footer?.classList.add('hide');
           }
+
+          // Navbar Revert
+          if (navMenuContainer) navMenuContainer.style.display = 'block';
+          if (navWindowSwitcher) navWindowSwitcher.innerHTML = '';
       }
   }
 
@@ -223,9 +258,30 @@ function onReady() {
   });
 
   if (loggedIn) {
-    document.getElementById('feed-icon')?.addEventListener('click', () => toggleWindow(feedWindow));
-    document.getElementById('monitor-icon')?.addEventListener('click', () => toggleWindow(monitorWindow));
-    document.getElementById('workspace-icon')?.addEventListener('click', () => toggleWindow(workspaceWindow));
+    // Dropdown Logic
+    const menuBtn = document.getElementById('dexter-menu-btn');
+    const dropdown = document.getElementById('dexter-dropdown');
+    
+    if (menuBtn && dropdown) {
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && e.target !== menuBtn) {
+                dropdown.classList.remove('active');
+                menuBtn.classList.remove('active');
+            }
+        });
+    }
+
+    // Dropdown Item Listeners
+    document.getElementById('feed-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(feedWindow); });
+    document.getElementById('monitor-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(monitorWindow); });
+    document.getElementById('workspace-menu-item')?.addEventListener('click', () => { dropdown?.classList.remove('active'); toggleWindow(workspaceWindow); });
+    
     document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
     document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
     
