@@ -123,6 +123,16 @@ nav.window-open {
     height: 30px; /* Match icon height for explicit centering context */
 }
 
+/* Invisible bridge to prevent hover loss */
+#dexter-menu-container::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 20px; /* Covers the gap to the dropdown at top: 50px */
+}
+
 #dexter-menu-btn {
     display: flex;
     align-items: center;
