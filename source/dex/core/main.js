@@ -263,7 +263,7 @@ function onReady() {
       { icon: 'bxs-brain', title: 'Models', content: getModelsContent() },
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
-      { icon: 'bxs-zap', title: 'Analyst', content: getAnalystContent() }
+      { icon: 'bxs-zap', title: 'Agents', content: getAnalystContent() }
     ],
     onOpen: () => {
       updateSystemMonitor();
