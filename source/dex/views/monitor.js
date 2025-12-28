@@ -8,10 +8,22 @@ export const getAnalystContent = () => {
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
             <h2>Summary</h2>
         </div>
-        <div style="margin-bottom: 30px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
              <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
-                <span style="color: #888; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Cognitive Idle</span>
-                <span id="analyst-idle-val" style="color: #fff; font-family: monospace; font-size: 1.5em; font-weight: bold;">-</span>
+                <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Current Idle</span>
+                <span id="analyst-idle-val" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+            </div>
+             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Idle</span>
+                <span id="analyst-total-idle" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+            </div>
+             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Active</span>
+                <span id="analyst-total-active" style="color: #03dac6; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+            </div>
+             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Waste</span>
+                <span id="analyst-total-waste" style="color: #cf6679; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
             </div>
         </div>
 
@@ -453,6 +465,9 @@ export async function updateProcessesTab() {
     const t2Val = document.getElementById('analyst-t2-val');
     const t3Val = document.getElementById('analyst-t3-val');
     const idleVal = document.getElementById('analyst-idle-val');
+    const totalIdleVal = document.getElementById('analyst-total-idle');
+    const totalActiveVal = document.getElementById('analyst-total-active');
+    const totalWasteVal = document.getElementById('analyst-total-waste');
     const resetBtn = document.getElementById('analyst-reset-btn');
 
     if (resetBtn && !resetBtn.dataset.listenerAttached) {
@@ -462,7 +477,7 @@ export async function updateProcessesTab() {
                 await smartFetch('/analyst/reset?tier=all', { method: 'POST' });
                 setTimeout(() => {
                     resetBtn.innerHTML = "<i class='bx bx-check'></i> Done";
-                    setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset Analyst"; }, 2000);
+                    setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset"; }, 2000);
                 }, 500);
                 updateProcessesTab(); // refresh immediately
             } catch (e) {
@@ -477,6 +492,16 @@ export async function updateProcessesTab() {
         const now = Math.floor(Date.now() / 1000);
         const activeTier = analystStatus.active_tier;
         
+        const formatDuration = (seconds) => {
+            if (seconds < 0) seconds = 0;
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            if (h > 0) return `${h}h ${m}m`;
+            if (m > 0) return `${m}m ${s}s`;
+            return `${s}s`;
+        };
+
         const updateTimer = (el, nextRun, tierName) => {
             if (activeTier === tierName || (tierName === 'guardian' && activeTier === 'tests')) {
                 el.textContent = "Working";
@@ -502,20 +527,22 @@ export async function updateProcessesTab() {
         
         if (idleVal && analystStatus.system_idle_time !== undefined) {
             const idle = analystStatus.system_idle_time;
-            const mins = Math.floor(idle / 60);
-            const secs = idle % 60;
-            idleVal.textContent = `${mins}m ${secs}s`;
-            // Color code idle time: Green if > 5 mins (300s), Orange if > 1 min, Red otherwise (just an example, or keep white)
+            idleVal.textContent = formatDuration(idle);
             if (idle > 300) idleVal.style.color = "#5eff5e";
             else if (idle > 60) idleVal.style.color = "#ffa500";
             else idleVal.style.color = "#fff";
         }
+
+        if (totalIdleVal) totalIdleVal.textContent = formatDuration(analystStatus.total_idle_time || 0);
+        if (totalActiveVal) totalActiveVal.textContent = formatDuration(analystStatus.total_active_time || 0);
+        if (totalWasteVal) totalWasteVal.textContent = formatDuration(analystStatus.total_waste_time || 0);
+
     } else {
-        const indicators = [t1Val, t2Val, t3Val, idleVal];
+        const indicators = [t1Val, t2Val, t3Val, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
         indicators.forEach(el => {
             if (el) {
-                el.textContent = "Offline";
-                el.style.color = "#ff4d4d"; // Red for Offline
+                el.textContent = "-";
+                el.style.color = "#666"; 
             }
         });
     }
