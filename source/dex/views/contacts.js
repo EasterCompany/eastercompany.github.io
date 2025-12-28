@@ -2,8 +2,10 @@
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartDiscordFetch } from '../core/utils.js';
 
 export const getContactsContent = () => `
-    <div class="alerts-actions">
-        <button id="contacts-refresh" class="notif-action-btn"><i class='bx bx-refresh'></i> Refresh</button>
+    <div class="system-section-header">
+        <i class='bx bx-book-content' style="color: #03dac6;"></i>
+        <h2>Contacts</h2>
+        <button id="contacts-refresh" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
     </div>
     <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
     </div>
