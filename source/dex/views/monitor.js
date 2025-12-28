@@ -83,7 +83,23 @@ export const getHardwareContent = () => {
             <h2>Hardware</h2>
             <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
-        <div id="hardware-info-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+        <div id="hardware-metrics" class="hardware-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div class="hardware-section" id="hw-cpu">
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bx-chip'></i> CPU</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 15px;"></div>
+            </div>
+            <div class="hardware-section" id="hw-ram">
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bx-memory-card'></i> RAM</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 15px;"></div>
+            </div>
+            <div class="hardware-section" id="hw-gpu">
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bxs-card'></i> GPU</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 15px;"></div>
+            </div>
+            <div class="hardware-section full-width" id="hw-storage" style="grid-column: 1 / -1;">
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bxs-hdd'></i> Storage</h3>
+                <div class="hw-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;"></div>
+            </div>
         </div>`;
 };
 
@@ -157,100 +173,90 @@ async function fetchAnalystStatus() {
 
 export async function updateSystemMonitor() {
     const widgetsContainer = document.getElementById('services-widgets');
-    const hardwareContainer = document.getElementById('hardware-info-content');
     const hardwareRefreshBtn = document.getElementById('hardware-refresh-btn');
+    
+    // Hardware Containers
+    const cpuContainer = document.querySelector('#hw-cpu .hw-content');
+    const ramContainer = document.querySelector('#hw-ram .hw-content');
+    const gpuContainer = document.querySelector('#hw-gpu .hw-content');
+    const storageContainer = document.querySelector('#hw-storage .hw-content');
 
     // Helper to render hardware widgets
     const renderHardwareWidgets = (data) => {
-        if (!data) {
-            if (hardwareContainer.children.length === 0) {
-                hardwareContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load hardware info.', 'The event service may be offline.');
-            }
-            return;
-        }
-
-        let html = '';
+        if (!data) return;
 
         // RAM
-        const ramGB = (data.MEMORY_BYTES / (1024 * 1024 * 1024)).toFixed(1);
-        html += `
-            <div class="service-widget" style="padding: 10px; min-height: 80px;">
-                <div class="service-widget-header" style="margin-bottom: 5px;">
-                    <i class='bx bxs-chip'></i>
-                    <h3 style="font-size: 0.9em;">Memory</h3>
-                </div>
-                <div class="service-widget-body">
-                    <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${ramGB} GB</span>
-                    <span style="font-size: 0.8em; color: #888;">Total RAM</span>
-                </div>
-            </div>`;
+        if (ramContainer) {
+            const ramGB = (data.MEMORY_BYTES / (1024 * 1024 * 1024)).toFixed(1);
+            ramContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <span style="font-size: 2.5em; font-weight: bold; color: #fff; display: block;">${ramGB} <span style="font-size: 0.4em; color: #888;">GB</span></span>
+                    <span style="font-size: 0.9em; color: #888;">Total System Memory</span>
+                </div>`;
+        }
 
         // CPU
-        if (data.CPU && data.CPU.length > 0) {
-            const cpu = data.CPU[0]; // Assuming single CPU for simplicity
-            html += `
-                <div class="service-widget" style="padding: 10px; min-height: 80px;">
-                    <div class="service-widget-header" style="margin-bottom: 5px;">
-                        <i class='bx bxs-microchip'></i>
-                        <h3 style="font-size: 0.9em;">CPU</h3>
-                    </div>
-                    <div class="service-widget-body">
-                        <span style="font-size: 0.9em; color: #fff; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${cpu.LABEL}">${cpu.LABEL}</span>
-                        <span style="font-size: 0.8em; color: #888;">${cpu.COUNT} Cores / ${cpu.THREADS} Threads</span>
+        if (cpuContainer && data.CPU && data.CPU.length > 0) {
+            const cpu = data.CPU[0];
+            cpuContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <span style="font-size: 1.1em; color: #fff; display: block; margin-bottom: 5px; font-weight: 600;">${cpu.LABEL}</span>
+                    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+                        <div><span style="display: block; font-size: 1.2em; color: #03dac6;">${cpu.COUNT}</span><span style="font-size: 0.7em; color: #888; text-transform: uppercase;">Cores</span></div>
+                        <div><span style="display: block; font-size: 1.2em; color: #bb86fc;">${cpu.THREADS}</span><span style="font-size: 0.7em; color: #888; text-transform: uppercase;">Threads</span></div>
                     </div>
                 </div>`;
         }
 
         // GPU
-        if (data.GPU && data.GPU.length > 0) {
-            data.GPU.forEach((gpu, idx) => {
-                const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
-                html += `
-                    <div class="service-widget" style="padding: 10px; min-height: 80px;">
-                        <div class="service-widget-header" style="margin-bottom: 5px;">
-                            <i class='bx bxs-component'></i>
-                            <h3 style="font-size: 0.9em;">GPU ${idx}</h3>
+        if (gpuContainer) {
+            if (data.GPU && data.GPU.length > 0) {
+                gpuContainer.innerHTML = data.GPU.map(gpu => {
+                    const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
+                    return `
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <span style="font-size: 1.1em; color: #fff; display: block; margin-bottom: 5px; font-weight: 600;">${gpu.LABEL}</span>
+                            <span style="font-size: 0.9em; color: #888;">${vramGB} GB VRAM</span>
+                        </div>`;
+                }).join('<div style="height: 1px; background: rgba(255,255,255,0.1); margin: 10px 0;"></div>');
+            } else {
+                gpuContainer.innerHTML = `<p style="text-align: center; color: #666;">No GPU detected</p>`;
+            }
+        }
+
+        // Storage - Individual Devices
+        if (storageContainer && data.STORAGE && data.STORAGE.length > 0) {
+            storageContainer.innerHTML = data.STORAGE.map(disk => {
+                const usedGB = (disk.USED / (1024 * 1024 * 1024)).toFixed(1);
+                const sizeGB = (disk.SIZE / (1024 * 1024 * 1024)).toFixed(1);
+                const percent = disk.SIZE > 0 ? ((disk.USED / disk.SIZE) * 100).toFixed(0) : 0;
+                const mount = disk.MOUNT_POINT || 'Unmounted';
+                
+                return `
+                    <div class="service-widget" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bxs-hdd' style="color: #888;"></i>
+                                <span style="font-weight: 600; color: #fff;">${disk.DEVICE}</span>
+                            </div>
+                            <span style="font-size: 0.8em; color: #666; font-family: monospace;">${mount}</span>
                         </div>
-                        <div class="service-widget-body">
-                            <span style="font-size: 0.9em; color: #fff; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${gpu.LABEL}">${gpu.LABEL}</span>
-                            <span style="font-size: 0.8em; color: #888;">${vramGB} GB VRAM</span>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: #aaa; margin-bottom: 5px;">
+                            <span>${usedGB} GB used</span>
+                            <span>${sizeGB} GB total</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                             <div style="background: ${percent > 90 ? '#ff4d4d' : '#03dac6'}; width: ${percent}%; height: 100%;"></div>
                         </div>
                     </div>`;
-            });
+            }).join('');
+        } else if (storageContainer) {
+            storageContainer.innerHTML = `<p style="text-align: center; color: #666;">No storage devices found</p>`;
         }
-
-        // Storage
-        if (data.STORAGE && data.STORAGE.length > 0) {
-            let totalUsed = 0;
-            let totalSize = 0;
-            data.STORAGE.forEach(disk => {
-                totalUsed += disk.USED;
-                totalSize += disk.SIZE;
-            });
-            const usedGB = (totalUsed / (1024 * 1024 * 1024)).toFixed(1);
-            const sizeGB = (totalSize / (1024 * 1024 * 1024)).toFixed(1);
-            const percent = totalSize > 0 ? ((totalUsed / totalSize) * 100).toFixed(0) : 0;
-            
-            html += `
-                <div class="service-widget" style="padding: 10px; min-height: 80px;">
-                    <div class="service-widget-header" style="margin-bottom: 5px;">
-                        <i class='bx bxs-hdd'></i>
-                        <h3 style="font-size: 0.9em;">Storage</h3>
-                    </div>
-                    <div class="service-widget-body">
-                        <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${usedGB} / ${sizeGB} GB</span>
-                        <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; margin-top: 5px;">
-                             <div style="background: ${percent > 90 ? '#ff4d4d' : '#00ff00'}; width: ${percent}%; height: 100%; border-radius: 2px;"></div>
-                        </div>
-                    </div>
-                </div>`;
-        }
-
-        hardwareContainer.innerHTML = html;
     };
 
     // Handle Hardware Widget
-    if (hardwareContainer && hardwareRefreshBtn) {
+    if (hardwareRefreshBtn) {
         // Setup Refresh Button
         if (!hardwareRefreshBtn.dataset.listenerAttached) {
             hardwareRefreshBtn.onclick = async () => {
@@ -261,9 +267,6 @@ export async function updateSystemMonitor() {
                     hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
                     setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
                 } else {
-                    if (hardwareContainer.children.length === 0) {
-                        hardwareContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to refresh.', 'The event service may be offline.');
-                    }
                     hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
                     setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
                 }
@@ -271,8 +274,8 @@ export async function updateSystemMonitor() {
             hardwareRefreshBtn.dataset.listenerAttached = "true";
         }
 
-        // Initial Load (only if empty)
-        if (hardwareContainer.children.length === 0) {
+        // Initial Load (if CPU container is empty)
+        if (cpuContainer && !cpuContainer.hasChildNodes()) {
             const hwData = await fetchHardwareData();
             renderHardwareWidgets(hwData);
         }
