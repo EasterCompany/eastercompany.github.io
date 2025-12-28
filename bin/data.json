@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.145.main.f3bb532.2025-12-28.linux-amd64.f3bb532",
-    "dev": "2.8.145.main.f3bb532.2025-12-28.linux-amd64.f3bb532"
+    "user": "2.8.146.main.5b11987.2025-12-28.linux-amd64.5b11987",
+    "dev": "2.8.146.main.5b11987.2025-12-28.linux-amd64.5b11987"
   },
   "releases": {
     "0.0.0": {
@@ -2048,14 +2048,42 @@
     },
     "2.8.146": {
       "type": "patch",
-      "date": "2025-12-24T14:19:47Z",
-      "commit": "802e5e9",
+      "date": "2025-12-28T23:28:53Z",
+      "commit": "83ae5bd",
       "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.146/dex",
+            "size": 16619991,
+            "checksum": "35c956596f40e24200806b8b571f512ef223183e8ffc17f87beee005b449c8cd"
+          }
+        },
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/2.8.146/dex-discord-service",
+            "size": 13504568,
+            "checksum": "41b9833ece94f9e81a5763cf63773d95d573f5dd8171580a6585cdccbe5f3467"
+          }
+        },
         "event": {
           "linux-amd64": {
             "path": "/bin/2.8.146/dex-event-service",
-            "size": 12629979,
-            "checksum": "3ad270ef561dcf9251592291e49daf07cb4710f47447e910d6dcbcd0439f33e6"
+            "size": 12821113,
+            "checksum": "4d3747ec6f6e90377b3c6059835516050b5f87146d223cff1d8f628a55f9e1e7"
+          }
+        },
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/2.8.146/dex-tts-service",
+            "size": 15641103,
+            "checksum": "7a02bd21bd0e3d19a65b99a124b4d8309b2c5c3ae775570499f7f45b1711dd50"
+          }
+        },
+        "web": {
+          "linux-amd64": {
+            "path": "/bin/2.8.146/dex-web-service",
+            "size": 12641782,
+            "checksum": "b61d95d3cf1455ab0816b3f8ed70006623228994ddb590bb5bdd2f15d0d0a7db"
           }
         }
       }
@@ -3218,8 +3246,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.145.main.f3bb532.2025-12-28.linux-amd64.f3bb532",
-      "user": "2.8.145.main.f3bb532.2025-12-28.linux-amd64.f3bb532",
+      "current": "2.8.146.main.5b11987.2025-12-28.linux-amd64.5b11987",
+      "user": "2.8.146.main.5b11987.2025-12-28.linux-amd64.5b11987",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -3228,8 +3256,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.8.208",
-      "user": "2.8.208",
+      "current": "2.8.209",
+      "user": "2.8.209",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
