@@ -815,6 +815,12 @@
       "commit": "8bdaf1e",
       "binaries": {}
     },
+    "2.11.275": {
+      "type": "patch",
+      "date": "2025-12-28T03:02:34Z",
+      "commit": "9d45631",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
