@@ -30,7 +30,6 @@ export async function updateContactsTab() {
         const members = data.members || [];
 
         lastContactsUpdate = Date.now();
-        updateTabTimestamp(4, lastContactsUpdate); // Index 4 in mainWindow (will update main.js after)
 
         if (members.length === 0) {
             container.innerHTML = createPlaceholderMessage('empty', 'No contacts found.', 'Check your Discord connection.');
@@ -89,8 +88,6 @@ export async function updateContactsTab() {
                 </div>
             `;
         }).join('');
-
-        updateTabBadgeCount(4, members.filter(m => m.status !== 'offline').length);
 
     } catch (e) {
         if (container.children.length === 0) {
