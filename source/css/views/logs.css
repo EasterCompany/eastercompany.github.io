@@ -81,6 +81,6 @@
     background-color: rgba(0, 0, 0, 0.2);
     padding: 15px;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: hidden;
     scrollbar-width: thin;
 }
