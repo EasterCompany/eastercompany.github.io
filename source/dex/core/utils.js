@@ -195,6 +195,17 @@ export function renderMarkdown(text) {
     html = html.replace(/^## (.*$)/gm, '<h4 class="md-header">$1</h4>');
     html = html.replace(/^### (.*$)/gm, '<h5 class="md-header">$1</h5>');
 
+    // Tables
+    html = html.replace(/^\|(.+)\|$/gm, (match, content) => {
+        const cells = content.split('|').map(c => c.trim());
+        if (cells.every(c => c.match(/^:?-+:?$/))) {
+            return ''; // Hide the separator row
+        }
+        // If it's the first row, we might want to style it as a header, 
+        // but for now, we'll just make them all rows.
+        return `<div class="md-table-row">${cells.map(c => `<span class="md-table-cell">${c}</span>`).join('')}</div>`;
+    });
+
     // Bullet Points
     html = html.replace(/^- (.*$)/gm, '<div class="md-list-item"><span class="md-bullet">•</span> $1</div>');
 
