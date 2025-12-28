@@ -536,7 +536,7 @@
             <i class='bx bx-history' style="color: #888;"></i>
             <h2>Process History</h2>
         </div>
-        <div id="processes-history-widgets" class="system-monitor-widgets" style="margin-bottom: 30px; opacity: 0.7;"></div>`,bt=()=>`
+        <div id="processes-history-widgets" class="system-monitor-widgets" style="margin-bottom: 30px; opacity: 0.7; flex-direction: row-reverse;"></div>`,bt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2>Services</h2>
