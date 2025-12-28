@@ -102,6 +102,7 @@ export function injectNavbar(isLoggedIn = false) {
         <div class="nav-right">
             <div id="dexter-menu-container" style="position: relative;">
                 <i class='bx bx-bot' id="dexter-menu-btn" title="Dexter Menu"></i>
+                <div id="dexter-nav-badge" class="notification-badge" style="position: absolute; top: 0; right: -2px; width: 8px; height: 8px; padding: 0; min-width: 0; display: none; box-shadow: 0 0 5px #ff4444;"></div>
                 <div id="dexter-dropdown" class="dexter-dropdown">
                     <div class="dropdown-item" id="feed-menu-item"><i class='bx bx-news'></i> Feed</div>
                     <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>

@@ -1,5 +1,5 @@
 // Alerts Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown, updateGlobalBadgeCount } from '../core/utils.js';
 
 export const getAlertsContent = () => `
     <div class="alerts-actions">
@@ -378,4 +378,24 @@ function attachActionListeners() {
     };
     clearBtn.dataset.listenerAttached = "true";
   }
+}
+
+export async function checkBackgroundAlerts() {
+    const url = `/events?ml=1000&format=json&event.type=system.notification.generated`;
+    try {
+        const response = await smartFetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        const allAlerts = data.events || [];
+        
+        let unreadCount = 0;
+        allAlerts.forEach(event => {
+             const readTS = localStorage.getItem(`alert_read_ts_${event.id}`);
+             if (!readTS) unreadCount++;
+        });
+        
+        updateGlobalBadgeCount(unreadCount);
+    } catch (e) {
+        // Silent fail in background
+    }
 }

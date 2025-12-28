@@ -54,12 +54,62 @@ export function updateTabBadgeCount(tabIndex, count) {
     }
 }
 
+export function updateGlobalBadgeCount(count) {
+    // 1. Robot Icon Badge
+    const navBadge = document.getElementById('dexter-nav-badge');
+    if (navBadge) {
+        if (count > 0) {
+            navBadge.style.display = 'flex';
+        } else {
+            navBadge.style.display = 'none';
+        }
+    }
+
+    // 2. Dropdown Menu Badge
+    const dropdownItem = document.getElementById('alerts-menu-item');
+    if (dropdownItem) {
+        let badge = dropdownItem.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = 'auto'; // Push to right
+            dropdownItem.appendChild(badge);
+        }
+        
+        if (count > 0) {
+            badge.textContent = count > 9 ? '9+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    // 3. Window Switcher Badge
+    const switcherBtn = document.getElementById('switch-alerts');
+    if (switcherBtn) {
+        let badge = switcherBtn.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = '8px';
+            switcherBtn.appendChild(badge);
+        }
+
+        if (count > 0) {
+            badge.textContent = count > 9 ? '9+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
 export function updateUnreadAlertCount() {
     const alertsList = document.getElementById('alerts-list');
     if (!alertsList) return;
     
     const unreadCount = alertsList.querySelectorAll('.alert-unread').length;
-    updateTabBadgeCount(0, unreadCount);
+    updateGlobalBadgeCount(unreadCount);
 }
 
 /**

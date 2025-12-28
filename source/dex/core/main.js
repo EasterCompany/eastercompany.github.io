@@ -3,7 +3,7 @@ import { injectNavbar, injectFooter, applyBaseStyles } from './styler.js';
 import { createWindow } from './Window.js';
 import { isLoggedIn, login } from './auth.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
-import { getAlertsContent, updateAlertsTab } from '../views/alerts.js';
+import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.js';
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
 import { getEventsContent, updateEventsTimeline } from '../views/events.js';
@@ -352,7 +352,11 @@ function onReady() {
 
     // Refresh loop (only if relevant window is open)
     setInterval(() => {
-      if (alertsWindow.isOpen()) updateAlertsTab();
+      if (alertsWindow.isOpen()) {
+        updateAlertsTab();
+      } else {
+        checkBackgroundAlerts();
+      }
       if (eventsWindow.isOpen()) updateEventsTimeline();
       if (contactsWindow.isOpen()) updateContactsTab();
       if (monitorWindow.isOpen()) {
