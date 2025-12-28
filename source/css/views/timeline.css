@@ -167,6 +167,15 @@ h5.md-header { font-size: 0.9em; color: #bbb; text-transform: uppercase; letter-
     min-width: 15px;
 }
 
+@keyframes flashHighlight {
+    0% { background-color: rgba(187, 134, 252, 0.5); }
+    100% { background-color: rgba(40, 40, 40, 0.3); }
+}
+
+.flash-highlight {
+    animation: flashHighlight 1.5s ease-out;
+}
+
 .detail-pre {
     background: rgba(0, 0, 0, 0.25);
     padding: 15px;
