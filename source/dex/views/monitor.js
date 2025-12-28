@@ -83,22 +83,22 @@ export const getHardwareContent = () => {
             <h2>Hardware</h2>
             <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
-        <div id="hardware-metrics" class="hardware-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div id="hardware-metrics" class="hardware-grid" style="display: flex; flex-direction: column; gap: 25px; margin-bottom: 30px;">
             <div class="hardware-section" id="hw-cpu">
-                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bx-chip'></i> CPU</h3>
-                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 15px;"></div>
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;"><i class='bx bx-chip'></i> CPU</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);"></div>
             </div>
             <div class="hardware-section" id="hw-ram">
-                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bx-memory-card'></i> RAM</h3>
-                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 15px;"></div>
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;"><i class='bx bx-memory-card'></i> RAM</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);"></div>
             </div>
             <div class="hardware-section" id="hw-gpu">
-                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bxs-card'></i> GPU</h3>
-                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 15px;"></div>
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;"><i class='bx bxs-card'></i> GPU</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);"></div>
             </div>
-            <div class="hardware-section full-width" id="hw-storage" style="grid-column: 1 / -1;">
-                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;"><i class='bx bxs-hdd'></i> Storage</h3>
-                <div class="hw-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;"></div>
+            <div class="hardware-section full-width" id="hw-storage">
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;"><i class='bx bxs-hdd'></i> Storage</h3>
+                <div class="hw-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
             </div>
         </div>`;
 };
@@ -189,9 +189,9 @@ export async function updateSystemMonitor() {
         if (ramContainer) {
             const ramGB = (data.MEMORY_BYTES / (1024 * 1024 * 1024)).toFixed(1);
             ramContainer.innerHTML = `
-                <div style="text-align: center;">
-                    <span style="font-size: 2.5em; font-weight: bold; color: #fff; display: block;">${ramGB} <span style="font-size: 0.4em; color: #888;">GB</span></span>
-                    <span style="font-size: 0.9em; color: #888;">Total System Memory</span>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 0.9em; color: #888; font-weight: 500;">Total System Memory</span>
+                    <span style="font-size: 1.8em; font-weight: bold; color: #fff;">${ramGB} <span style="font-size: 0.5em; color: #888; font-weight: normal; margin-left: 2px;">GB</span></span>
                 </div>`;
         }
 
@@ -199,11 +199,11 @@ export async function updateSystemMonitor() {
         if (cpuContainer && data.CPU && data.CPU.length > 0) {
             const cpu = data.CPU[0];
             cpuContainer.innerHTML = `
-                <div style="text-align: center;">
-                    <span style="font-size: 1.1em; color: #fff; display: block; margin-bottom: 5px; font-weight: 600;">${cpu.LABEL}</span>
-                    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
-                        <div><span style="display: block; font-size: 1.2em; color: #03dac6;">${cpu.COUNT}</span><span style="font-size: 0.7em; color: #888; text-transform: uppercase;">Cores</span></div>
-                        <div><span style="display: block; font-size: 1.2em; color: #bb86fc;">${cpu.THREADS}</span><span style="font-size: 0.7em; color: #888; text-transform: uppercase;">Threads</span></div>
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    <span style="font-size: 1.1em; color: #fff; font-weight: 600; letter-spacing: 0.5px;">${cpu.LABEL}</span>
+                    <div style="display: flex; gap: 30px;">
+                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${cpu.COUNT}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Cores</span></div>
+                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #bb86fc; line-height: 1;">${cpu.THREADS}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Threads</span></div>
                     </div>
                 </div>`;
         }
@@ -214,13 +214,13 @@ export async function updateSystemMonitor() {
                 gpuContainer.innerHTML = data.GPU.map(gpu => {
                     const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
                     return `
-                        <div style="text-align: center; margin-bottom: 10px;">
-                            <span style="font-size: 1.1em; color: #fff; display: block; margin-bottom: 5px; font-weight: 600;">${gpu.LABEL}</span>
-                            <span style="font-size: 0.9em; color: #888;">${vramGB} GB VRAM</span>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                            <span style="font-size: 1.1em; color: #fff; font-weight: 600;">${gpu.LABEL}</span>
+                            <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${vramGB} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
                         </div>`;
-                }).join('<div style="height: 1px; background: rgba(255,255,255,0.1); margin: 10px 0;"></div>');
+                }).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>');
             } else {
-                gpuContainer.innerHTML = `<p style="text-align: center; color: #666;">No GPU detected</p>`;
+                gpuContainer.innerHTML = `<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>`;
             }
         }
 
@@ -233,25 +233,25 @@ export async function updateSystemMonitor() {
                 const mount = disk.MOUNT_POINT || 'Unmounted';
                 
                 return `
-                    <div class="service-widget" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <i class='bx bxs-hdd' style="color: #888;"></i>
-                                <span style="font-weight: 600; color: #fff;">${disk.DEVICE}</span>
+                                <i class='bx bxs-hdd' style="color: #03dac6; font-size: 1.1em;"></i>
+                                <span style="font-weight: 600; color: #fff; font-size: 0.95em;">${disk.DEVICE}</span>
                             </div>
-                            <span style="font-size: 0.8em; color: #666; font-family: monospace;">${mount}</span>
+                            <span style="font-size: 0.75em; color: #666; font-family: monospace; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">${mount}</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: #aaa; margin-bottom: 5px;">
-                            <span>${usedGB} GB used</span>
-                            <span>${sizeGB} GB total</span>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #888; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">
+                            <span>${usedGB} GB Used</span>
+                            <span>${sizeGB} GB Total</span>
                         </div>
-                        <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                             <div style="background: ${percent > 90 ? '#ff4d4d' : '#03dac6'}; width: ${percent}%; height: 100%;"></div>
+                        <div style="background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden;">
+                             <div style="background: ${percent > 90 ? '#cf6679' : '#03dac6'}; width: ${percent}%; height: 100%; box-shadow: 0 0 10px ${percent > 90 ? '#cf667944' : '#03dac644'};"></div>
                         </div>
                     </div>`;
             }).join('');
         } else if (storageContainer) {
-            storageContainer.innerHTML = `<p style="text-align: center; color: #666;">No storage devices found</p>`;
+            storageContainer.innerHTML = `<p style="text-align: center; color: #666; margin: 0;">No storage devices found</p>`;
         }
     };
 
