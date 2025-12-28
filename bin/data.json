@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.8.144.main.50cece5.2025-12-28.linux-amd64.50cece5",
+    "dev": "2.8.144.main.50cece5.2025-12-28.linux-amd64.50cece5"
   },
   "releases": {
     "0.0.0": {
@@ -1992,14 +1992,14 @@
     },
     "2.8.144": {
       "type": "patch",
-      "date": "2025-12-24T13:48:48Z",
-      "commit": "b21c9db",
+      "date": "2025-12-28T07:21:32Z",
+      "commit": "e6fc377",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.8.144/dex-event-service",
-            "size": 12634522,
-            "checksum": "02a8c71374e1b0fe38f9afbb74d019315a5e6fe3d22ce6f6ccfb06ed736a7f46"
+            "path": "/bin/2.8.144/dex",
+            "size": 16611691,
+            "checksum": "d4abd7d6d0c90931e9d6b5f929f4897554a5aea790943842fabe5d8e21c56860"
           }
         }
       }
@@ -3190,8 +3190,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.143.main.240fc38.2025-12-28.linux-amd64.240fc38",
-      "user": "2.8.143.main.240fc38.2025-12-28.linux-amd64.240fc38",
+      "current": "2.8.144.main.50cece5.2025-12-28.linux-amd64.50cece5",
+      "user": "2.8.144.main.50cece5.2025-12-28.linux-amd64.50cece5",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
