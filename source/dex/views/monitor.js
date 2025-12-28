@@ -560,7 +560,9 @@ export async function updateProcessesTab() {
 
     // Active Processes Rendering
     if (processes.length === 0) {
-        widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+        if (!widgetsContainer.querySelector('.tab-placeholder')) {
+            widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+        }
     } else {
         if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('p')) {
             widgetsContainer.innerHTML = '';
@@ -572,8 +574,13 @@ export async function updateProcessesTab() {
     const historyContainer = document.getElementById('processes-history-widgets');
     if (historyContainer) {
         if (history.length === 0) {
-            historyContainer.innerHTML = createPlaceholderMessage('empty', 'No recent history.');
+            if (!historyContainer.querySelector('.tab-placeholder')) {
+                historyContainer.innerHTML = createPlaceholderMessage('empty', 'No recent history.');
+            }
         } else {
+            if (historyContainer.querySelector('.tab-placeholder')) {
+                historyContainer.innerHTML = '';
+            }
             renderProcessList(historyContainer, history, true);
         }
     }
