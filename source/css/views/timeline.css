@@ -166,3 +166,17 @@ h5.md-header { font-size: 0.9em; color: #bbb; text-transform: uppercase; letter-
     font-weight: bold;
     min-width: 15px;
 }
+
+.detail-pre {
+    background: rgba(0, 0, 0, 0.25);
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    color: #ccc;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+}
