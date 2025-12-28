@@ -22,7 +22,7 @@ import {
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
 import { getLogsContent, updateLogs } from '../views/logs.js';
 import { initCliDashboard } from '../views/cli.js';
-import { getEventServiceUrl } from './utils.js';
+import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount } from './utils.js';
 
 async function checkServiceHealth() {
   const isProduction = window.location.hostname === 'easter.company';
@@ -161,6 +161,9 @@ function onReady() {
       if (settingsIcon) settingsIcon.style.display = 'block';
       if (navWindowSwitcher) navWindowSwitcher.innerHTML = '';
     }
+
+    // Restore global badges after layout change
+    updateGlobalBadgeCount(getLastBadgeCount());
   }
 
   function toggleWindow(win) {
