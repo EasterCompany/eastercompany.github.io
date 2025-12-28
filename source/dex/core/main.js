@@ -27,6 +27,9 @@ import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount } from '.
 async function checkServiceHealth() {
   const isProduction = window.location.hostname === 'easter.company';
   if (!isProduction) return;
+  
+  // Prevent redirect loop if already on 404 page
+  if (window.location.pathname.includes('/404.html')) return;
 
   try {
     const response = await fetch(`${getEventServiceUrl()}/system/status`, { method: 'HEAD' });
