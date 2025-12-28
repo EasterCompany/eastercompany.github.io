@@ -330,7 +330,7 @@ const CLI_COMMANDS = [
       'LEVEL           USERNAME        STATUS   DISCORD ID',
       '─────           ────────        ──────   ──────────',
       '\x1b[35mDEXTER (ME)\x1b[0m     Dexter          \x1b[32monline\x1b[0m   \x1b[90m1313...0432\x1b[0m',
-      '\x1b[35mMASTER USER\x1b[0m     oweneaster      \x1b[32monline\x1b[0m   \x1b[90m3130...7920\x1b[0m',
+      '\x1b[35mMASTER\x1b[0m          oweneaster      \x1b[32monline\x1b[0m   \x1b[90m3130...7920\x1b[0m',
       '\x1b[31mADMIN\x1b[0m           Developer       \x1b[33midle\x1b[0m     \x1b[90m4242...8181\x1b[0m',
       '\x1b[37mUSER\x1b[0m            GuestUser       \x1b[90moffline\x1b[0m  \x1b[90m9999...9999\x1b[0m'
     ]
