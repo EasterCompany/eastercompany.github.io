@@ -314,6 +314,34 @@ function onReady() {
     icon: 'bx-log-in'
   });
 
+  // Global API for cross-linking
+  window.dexter = {
+      viewEvent: (id) => {
+          if (!eventsWindow.isOpen()) toggleWindow(eventsWindow);
+          setTimeout(() => {
+              const el = document.querySelector(`.event-item[data-event-id="${id}"]`);
+              if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  el.classList.add('flash-highlight');
+                  if (!el.classList.contains('expanded')) el.click();
+                  setTimeout(() => el.classList.remove('flash-highlight'), 2000);
+              }
+          }, 500);
+      },
+      viewAlert: (id) => {
+          if (!alertsWindow.isOpen()) toggleWindow(alertsWindow);
+          setTimeout(() => {
+              const el = document.querySelector(`.event-item[data-alert-id="${id}"]`);
+              if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  el.classList.add('flash-highlight');
+                  if (!el.classList.contains('expanded')) el.click();
+                  setTimeout(() => el.classList.remove('flash-highlight'), 2000);
+              }
+          }, 500);
+      }
+  };
+
   if (loggedIn) {
     // Populate Dropdown
     const dropdown = document.getElementById('dexter-dropdown');
