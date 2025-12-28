@@ -408,7 +408,6 @@ export async function updateEventsTimeline(forceReRender = false) {
                     <div class="event-details" style="${detailsStyle}">
                         <div class="event-details-header">
                             <h4>Event Details</h4>
-                            <i class="bx bx-x close-details-btn"></i>
                         </div>
                         ${detailsContent}
                     </div>
