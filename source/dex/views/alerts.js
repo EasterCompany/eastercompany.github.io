@@ -1,5 +1,5 @@
 // Alerts Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown } from '../core/utils.js';
 
 export const getAlertsContent = () => `
     <div class="alerts-actions">
@@ -177,11 +177,11 @@ export async function updateAlertsTab(forceReRender = false) {
                     <span class="detail-label">Priority:</span>
                     <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
                 </div>
+                ${relatedEventsHtml}
                 <div class="event-detail-block" style="text-align: left;">
                     <span class="detail-label">Insight:</span>
-                    <p class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; text-align: left;">${escapeHtml(body)}</p>
+                    <div class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; text-align: left;">${renderMarkdown(body)}</div>
                 </div>
-                ${relatedEventsHtml}
             `;
 
 

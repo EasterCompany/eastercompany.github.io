@@ -119,3 +119,50 @@
     border-color: rgba(255, 77, 77, 0.4);
     color: #ff4d4d;
 }
+
+/* Markdown Rendering Styles */
+.md-code-block {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    color: #ccc;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    margin: 10px 0;
+}
+
+.md-inline-code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: #bb86fc;
+}
+
+.md-header {
+    margin: 15px 0 5px 0;
+    color: #fff;
+    font-weight: 600;
+}
+
+h3.md-header { font-size: 1.1em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+h4.md-header { font-size: 1em; color: #ddd; }
+h5.md-header { font-size: 0.9em; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
+
+.md-list-item {
+    margin-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.md-bullet, .md-number {
+    color: #bb86fc;
+    font-weight: bold;
+    min-width: 15px;
+}
