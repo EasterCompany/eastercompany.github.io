@@ -36,15 +36,14 @@ export async function updateContactsTab() {
             return;
         }
 
-        // Sort: Me > Master > Admin > Moderator > Contributor > User > Anyone
+        // Sort: Me > Master > Admin > Moderator > Contributor > User
         const levelOrder = {
             'Me': 0,
-            'Master User': 1,
+            'Master': 1,
             'Admin': 2,
             'Moderator': 3,
             'Contributor': 4,
-            'User': 5,
-            'Anyone': 6
+            'User': 5
         };
 
         members.sort((a, b) => {
@@ -62,7 +61,7 @@ export async function updateContactsTab() {
             // Branding colors for specific levels
             let levelColor = '#888';
             if (m.level === 'Me') levelColor = '#bb86fc';
-            else if (m.level === 'Master User') levelColor = '#bb86fc';
+            else if (m.level === 'Master') levelColor = '#bb86fc';
             else if (m.level === 'Admin') levelColor = '#cf6679';
             else if (m.level === 'Moderator') levelColor = '#03dac6';
             else if (m.level === 'Contributor') levelColor = '#ffa500';
