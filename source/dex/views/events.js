@@ -449,6 +449,14 @@ export async function updateEventsTimeline(forceReRender = false) {
                 </div>
             `;
 
+            // Prevent close on detail interaction
+            const detailsContentEl = tempDiv.querySelector('.event-details');
+            if (detailsContentEl) {
+                detailsContentEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
             if (isExpandable) {
                 const closeBtn = tempDiv.querySelector('.close-details-btn');
                 if (closeBtn) {
