@@ -1,5 +1,5 @@
 // Events Timeline Logic
-import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch, renderMarkdown } from '../core/utils.js';
 import { formatEventSummary } from '../core/templates.js';
 
 export const getEventsContent = () => `
@@ -160,13 +160,15 @@ export async function updateEventsTimeline(forceReRender = false) {
             const category = getEventCategory(type);
             const icon = getEventIcon(type);
 
-            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type.startsWith('system.roadmap') || type.startsWith('system.process');
+            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type === 'system.attention.expired' || type.startsWith('system.roadmap') || type.startsWith('system.process');
             let borderClass = 'event-border-grey';
             if (isExpandable) {
                 if (type === 'moderation.explicit_content.deleted' || type === 'error_occurred') {
                     borderClass = 'event-border-red';
                 } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.analysis.audit') {
                     borderClass = 'event-border-purple';
+                } else if (type === 'system.attention.expired') {
+                    borderClass = 'event-border-orange';
                 } else if (type === 'system.cli.command' || type === 'system.cli.status') {
                     borderClass = 'event-border-orange';
                 } else if (type === 'system.test.completed') {
@@ -205,6 +207,28 @@ export async function updateEventsTimeline(forceReRender = false) {
                         <div class="event-detail-block">
                             <span class="detail-label">Raw Engagement Output:</span>
                             <pre class="detail-pre">${eventData.engagement_raw || 'None'}</pre>
+                        </div>
+                    `;
+                } else if (type === 'system.attention.expired') {
+                    const idleTime = eventData.timestamp - eventData.last_active;
+                    const idleMinutes = Math.floor(idleTime / 60);
+                    
+                    detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Tier:</span>
+                            <span class="detail-value" style="color: #bb86fc;">${eventData.tier}</span>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Idle Time:</span>
+                            <span class="detail-value">${idleMinutes} minutes</span>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Context (Last Input):</span>
+                            <div class="detail-pre">${renderMarkdown(eventData.last_input || 'None')}</div>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Thought Process (Last Output):</span>
+                            <div class="detail-pre">${renderMarkdown(eventData.last_output || 'None')}</div>
                         </div>
                     `;
                 } else if (type === 'messaging.bot.sent_message') {
