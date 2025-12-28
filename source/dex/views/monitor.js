@@ -5,39 +5,34 @@ import { getLogsContent, updateLogs } from './logs.js';
 export const getAnalystContent = () => {
     return `
         <div class="system-section-header">
-            <i class='bx bxs-zap' style="color: #bb86fc;"></i>
-            <h2>Analyst & Vitals</h2>
+            <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
+            <h2>Summary</h2>
         </div>
-        <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0; font-size: 0.9em; color: #888; text-transform: uppercase; letter-spacing: 1px;">Analyst Tiers</h3>
-                <button id="analyst-reset-btn" class="notif-action-btn"><i class='bx bx-refresh'></i> Reset</button>
+        <div style="margin-bottom: 30px;">
+             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                <span style="color: #888; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Cognitive Idle</span>
+                <span id="analyst-idle-val" style="color: #fff; font-family: monospace; font-size: 1.5em; font-weight: bold;">-</span>
             </div>
+        </div>
+
+        <div class="system-section-header">
+            <i class='bx bxs-zap' style="color: #bb86fc;"></i>
+            <h2>Analyst</h2>
+            <button id="analyst-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+        </div>
+        <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                <div class="analyst-indicator">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Guardian</span>
+                <div class="analyst-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Guardian</span>
                     <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
                 </div>
-                <div class="analyst-indicator">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Architect</span>
+                <div class="analyst-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect</span>
                     <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
                 </div>
-                <div class="analyst-indicator">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Strategist</span>
+                <div class="analyst-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Strategist</span>
                     <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
-                </div>
-            </div>
-            
-            <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>
-            
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                 <div class="analyst-indicator">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Cognitive Idle</span>
-                    <span id="analyst-idle-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
-                </div>
-                 <div class="analyst-indicator">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase;">Active Procs</span>
-                    <span id="vitals-processes-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
                 </div>
             </div>
         </div>`;
