@@ -445,9 +445,6 @@
                         ${T}
                     `}B=`
                     <div class="event-details" style="${E}">
-                        <div class="event-details-header">
-                            <h4>Event Details</h4>
-                        </div>
                         ${S}
                     </div>
                 `}let D=document.createElement("div");D.className=`event-item ${a} ${m} ${C}`,D.dataset.eventId=n.id,D.onclick=function(S){if(!w)return;if(this.classList.contains("expanded")){this.classList.remove("expanded"),Q.delete(n.id);let H=this.querySelector(".event-details");H&&(H.style.display="none")}else{this.classList.add("expanded"),Q.add(n.id);let H=this.querySelector(".event-details");H&&(H.style.display="block")}},D.innerHTML=`
