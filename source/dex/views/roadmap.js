@@ -103,6 +103,14 @@ export async function updateRoadmapTab(forceReRender = false) {
         </div>
       `;
 
+      // Prevent close on detail interaction
+      const detailsContentEl = tempDiv.querySelector('.event-details');
+      if (detailsContentEl) {
+          detailsContentEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+          });
+      }
+
       // Button listeners
       tempDiv.querySelector('.edit-btn')?.addEventListener('click', () => startEditing(item));
       tempDiv.querySelector('.publish-toggle-btn')?.addEventListener('click', () => togglePublish(item));

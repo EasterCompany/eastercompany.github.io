@@ -140,6 +140,14 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 </div>
             `;
 
+            // Prevent close on detail interaction
+            const detailsContentEl = tempDiv.querySelector('.event-details');
+            if (detailsContentEl) {
+                detailsContentEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
             const closeBtn = tempDiv.querySelector('.close-details-btn');
             if (closeBtn) {
                 closeBtn.addEventListener('click', (e) => {

@@ -238,13 +238,18 @@ export async function updateAlertsTab(forceReRender = false) {
                     <div class="event-service">${category.toUpperCase()} ${isAlert ? '<span class="alert-badge" style="color: #ff4d4d; font-size: 0.8em; margin-left: 5px;">[ALERT]</span>' : ''}</div>
                     <div class="event-message">${title}</div>
                     <div class="event-details" style="${detailsStyle}">
-                        <div class="event-details-header">
-                            <h4>${isAlert ? 'Alert' : 'Notification'} Details</h4>
-                        </div>
                         ${detailsContent}
                     </div>
                 </div>
             `;
+
+            // Prevent close on detail interaction
+            const detailsContentEl = tempDiv.querySelector('.event-details');
+            if (detailsContentEl) {
+                detailsContentEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
 
       const closeBtn = tempDiv.querySelector('.close-details-btn');
       if (closeBtn) {
