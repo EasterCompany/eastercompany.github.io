@@ -1,5 +1,5 @@
 // Easter Company - Universal JS Entrypoint
-import { injectNavbar, injectFooter, applyBaseStyles } from './styler.js';
+import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from './styler.js';
 import { createWindow } from './Window.js';
 import { isLoggedIn, login } from './auth.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
@@ -50,6 +50,26 @@ function onReady() {
   const loggedIn = isLoggedIn();
   injectNavbar(loggedIn);
   injectFooter();
+
+  // Handle Back Button / Logo Logic
+  const navLeftBtn = document.getElementById('nav-left-container');
+  if (navLeftBtn) {
+      navLeftBtn.addEventListener('click', () => {
+          if (activeWindows.length > 0) {
+              closeAll();
+          } else {
+              const path = window.location.pathname;
+              const isRoot = path === '/' || path === '/index.html';
+              if (!isRoot) {
+                  const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+                  const parts = cleanPath.split('/');
+                  parts.pop();
+                  const parentPath = parts.join('/') || '/';
+                  window.location.href = parentPath;
+              }
+          }
+      });
+  }
 
   // Initialize visibility
   const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
@@ -104,6 +124,8 @@ function onReady() {
     const navMenuContainer = document.getElementById('dexter-menu-container');
     const navWindowSwitcher = document.getElementById('nav-window-switcher');
     const settingsIcon = document.getElementById('settings-icon');
+
+    updateNavbarState(activeWindows.length > 0);
 
     if (activeWindows.length > 0) {
       footer?.classList.add('hide');

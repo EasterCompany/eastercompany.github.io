@@ -119,23 +119,15 @@ export function injectNavbar(isLoggedIn = false) {
             </div>
         `;
 
-    let navLeftContent;
-    
-    if (isRoot) {
-        navLeftContent = `
-            <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; cursor: default;">
-        `;
-    } else {
-        navLeftContent = `
-            <div id="nav-back-btn" style="cursor: pointer; display: flex; align-items: center; transition: transform 0.2s ease;">
-                <i class='bx bx-chevron-left' style="font-size: 28px; color: #fff;"></i>
-                <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; height: 24px; width: 24px;">
-            </div>
-        `;
-    }
+    const navLeftContent = `
+        <div id="nav-left-container" style="display: flex; align-items: center; transition: transform 0.2s ease; gap: 5px; cursor: ${isRoot ? 'default' : 'pointer'};">
+            <i class='bx bx-chevron-left' id="nav-chevron" style="font-size: 28px; color: #fff; display: ${isRoot ? 'none' : 'block'};"></i>
+            <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; height: 24px; width: 24px;">
+        </div>
+    `;
 
     const navbarHTML = `
-        <div class="nav-left" style="gap: 0;">
+        <div class="nav-left" id="nav-left-wrapper" style="gap: 0;">
             ${navLeftContent}
         </div>
         <div class="nav-center" id="nav-window-switcher">
@@ -147,27 +139,34 @@ export function injectNavbar(isLoggedIn = false) {
     const navbar = document.createElement('nav');
     navbar.innerHTML = navbarHTML;
     document.body.prepend(navbar);
+}
 
-    // Attach event listener for back button if it exists
-    if (!isRoot) {
-        const backBtn = document.getElementById('nav-back-btn');
-        if (backBtn) {
-            backBtn.addEventListener('click', () => {
-                const path = window.location.pathname;
-                const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
-                const parts = cleanPath.split('/');
-                parts.pop(); // Remove last segment
-                const parentPath = parts.join('/') || '/';
-                window.location.href = parentPath;
-            });
-            
-            backBtn.addEventListener('mouseenter', () => {
-                backBtn.style.transform = 'translateX(-3px)';
-            });
-            backBtn.addEventListener('mouseleave', () => {
-                backBtn.style.transform = 'translateX(0)';
-            });
-        }
+export function updateNavbarState(isWindowOpen) {
+    const currentPath = window.location.pathname;
+    const isRoot = currentPath === '/' || currentPath === '/index.html';
+    
+    const chevron = document.getElementById('nav-chevron');
+    const container = document.querySelector('.nav-left');
+    
+    if (!chevron || !container) return;
+
+    if (isWindowOpen || !isRoot) {
+        // Show back state
+        chevron.style.display = 'block';
+        container.style.cursor = 'pointer';
+        container.classList.add('recording'); // Reuse existing hover effect class or add new one
+        
+        // Ensure hover effect works for back button
+        container.onmouseenter = () => { chevron.style.transform = 'translateX(-3px)'; };
+        container.onmouseleave = () => { chevron.style.transform = 'translateX(0)'; };
+    } else {
+        // Root state (Logo only)
+        chevron.style.display = 'none';
+        container.style.cursor = 'default';
+        container.classList.remove('recording');
+        
+        container.onmouseenter = null;
+        container.onmouseleave = null;
     }
 }
 
