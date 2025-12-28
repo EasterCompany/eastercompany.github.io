@@ -197,7 +197,7 @@ export async function updateSystemMonitor() {
       const ramGB = (data.MEMORY_BYTES / (1024 * 1024 * 1024)).toFixed(1);
       ramContainer.innerHTML = `
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-size: 0.9em; color: #888; font-weight: 500;">Total System Memory</span>
+                    <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">Total System Memory</span>
                     <span style="font-size: 1.8em; font-weight: bold; color: #fff;">${ramGB} <span style="font-size: 0.5em; color: #888; font-weight: normal; margin-left: 2px;">GB</span></span>
                 </div>`;
     }
