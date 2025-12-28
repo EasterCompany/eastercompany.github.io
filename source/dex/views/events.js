@@ -3,9 +3,13 @@ import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch } 
 import { formatEventSummary } from '../core/templates.js';
 
 export const getEventsContent = () => `
-    <div class="alerts-actions">
-        <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
-        <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+    <div class="system-section-header" style="margin-bottom: 20px;">
+        <i class='bx bx-calendar-event' style="color: #03dac6;"></i>
+        <h2>Events</h2>
+        <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
+            <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
+            <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+        </div>
     </div>
     
     <div id="timeline-view-container">
