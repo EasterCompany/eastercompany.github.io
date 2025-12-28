@@ -411,7 +411,6 @@ function onReady() {
         checkBackgroundAlerts();
       }
       if (eventsWindow.isOpen()) updateEventsTimeline();
-      if (contactsWindow.isOpen()) updateContactsTab();
       if (monitorWindow.isOpen()) {
         updateSystemTab(); // This triggers the component updates internally
       }
