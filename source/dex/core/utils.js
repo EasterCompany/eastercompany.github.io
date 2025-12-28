@@ -39,6 +39,12 @@ export function updateTabTimestamp(tabIndex, timestamp) {
     subtitleElement.textContent = `Last updated: ${timeStr}`;
 }
 
+let lastGlobalBadgeCount = 0;
+
+export function getLastBadgeCount() {
+    return lastGlobalBadgeCount;
+}
+
 export function updateTabBadgeCount(tabIndex, count) {
     const tabBtn = document.querySelector(`.tab[data-tab-index="${tabIndex}"]`);
     if (!tabBtn) return;
@@ -55,6 +61,8 @@ export function updateTabBadgeCount(tabIndex, count) {
 }
 
 export function updateGlobalBadgeCount(count) {
+    lastGlobalBadgeCount = count;
+
     // 1. Robot Icon Badge
     const navBadge = document.getElementById('dexter-nav-badge');
     if (navBadge) {
