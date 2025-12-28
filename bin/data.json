@@ -725,6 +725,12 @@
       "commit": "e3fac10",
       "binaries": {}
     },
+    "2.11.257": {
+      "type": "patch",
+      "date": "2025-12-28T00:18:42Z",
+      "commit": "155120a",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
