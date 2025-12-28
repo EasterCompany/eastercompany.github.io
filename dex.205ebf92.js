@@ -761,7 +761,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                                 <h3 style="font-size: 1.3em; color: #fff; margin: 0;">${o.title}</h3>
                             </div>
                             <p style="font-size: 0.9em; color: #aaa; margin-bottom: 20px; line-height: 1.5; text-align: left; position: relative; z-index: 1;">${o.description}</p>
-                            <div class="usage-block" style="background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; color: ${i.color}; position: relative; z-index: 1;">
+                            <div class="usage-block" style="background: rgba(0,0,0,0.3); overflow: hidden; padding: 10px 15px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; color: ${i.color}; position: relative; z-index: 1;">
                                 <span style="opacity: 0.5;">$</span> ${o.usage}
                             </div>
                         </div>
