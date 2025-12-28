@@ -593,7 +593,7 @@ function renderProcessList(container, list, isHistory) {
         let durationStr = '';
         if (proc.end_time) {
              const dur = proc.end_time - proc.start_time;
-             durationStr = `${dur}s (Completed)`;
+             durationStr = `${dur}s`;
         } else {
              const dur = Math.floor((Date.now() / 1000) - proc.start_time);
              durationStr = `${dur}s`;
