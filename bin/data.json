@@ -707,6 +707,12 @@
       "commit": "ac29b8a",
       "binaries": {}
     },
+    "2.11.254": {
+      "type": "patch",
+      "date": "2025-12-28T00:04:19Z",
+      "commit": "69865c9",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
