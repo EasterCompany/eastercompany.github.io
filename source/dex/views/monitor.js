@@ -49,7 +49,13 @@ export const getProcessesContent = () => {
             <i class='bx bxs-component' style="color: #03dac6;"></i>
             <h2>Live Processes</h2>
         </div>
-        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;
+        <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>
+        
+        <div class="system-section-header">
+            <i class='bx bx-history' style="color: #888;"></i>
+            <h2>Process History</h2>
+        </div>
+        <div id="processes-history-widgets" class="system-monitor-widgets" style="margin-bottom: 30px; opacity: 0.7;"></div>`;
 };
 
 export const getServicesContent = () => {
@@ -517,11 +523,22 @@ export async function updateProcessesTab() {
     }
 
     // --- Update Processes List ---
-    const processes = await fetchProcessData();
+    const processesData = await fetchProcessData();
+    let processes = [];
+    let history = [];
+
+    if (processesData) {
+        if (Array.isArray(processesData)) {
+            processes = processesData;
+        } else {
+            processes = processesData.active || [];
+            history = processesData.history || [];
+        }
+    }
 
     const vitalsProcVal = document.getElementById('vitals-processes-val');
     if (vitalsProcVal) {
-        if (processes) {
+        if (processesData) {
             const count = processes.length;
             vitalsProcVal.textContent = count > 0 ? `${count} Active` : "Idle";
             vitalsProcVal.style.color = count > 0 ? "#bb86fc" : "#fff";
@@ -531,7 +548,7 @@ export async function updateProcessesTab() {
         }
     }
 
-    if (processes === null) {
+    if (processesData === null) {
         if (widgetsContainer.children.length === 0) {
             widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.', 'The event service may be offline.');
         }
@@ -541,38 +558,40 @@ export async function updateProcessesTab() {
     lastProcessesUpdate = Date.now();
     updateTabTimestamp(1, lastProcessesUpdate);
 
+    // Active Processes Rendering
     if (processes.length === 0) {
-        // Only clear if we actually have the widgets container and no processes, 
-        // but we want to KEEP the analyst status section intact.
-        // So we should target a specific container for processes OR handle the HTML append carefully.
-        // The current structure is: Analyst Section -> Processes Container.
-        // wait, getProcessesContent returns TWO divs: .analyst-status-section and #processes-widgets.
-        // BUT widgetsContainer IS #processes-widgets based on existing code: const widgetsContainer = document.getElementById('processes-widgets');
-        
-        // Correct logic: getProcessesContent is used in the main template. 
-        // In updateProcessesTab, we look for #processes-widgets.
-        // If I change getProcessesContent to return multiple root elements, I need to make sure they are inserted correctly.
-        // Actually, window.js puts the content into .window-content.
-        
-        // Problem: getProcessesContent returns a template string with multiple top-level elements. 
-        // window.js puts this into .window-content. 
-        // updateProcessesTab grabs #processes-widgets.
-        // So my new Analyst section is OUTSIDE #processes-widgets. This is GOOD.
-        // But wait, if processes.length === 0, the existing code does:
-        // widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
-        // This is fine, it only clears the process list, not the analyst status!
-        
         widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
-        updateTabBadgeCount(1, 0);
-        return;
+    } else {
+        if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('p')) {
+            widgetsContainer.innerHTML = '';
+        }
+        renderProcessList(widgetsContainer, processes, false);
     }
 
-    if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('p')) {
-        widgetsContainer.innerHTML = '';
+    // History Processes Rendering
+    const historyContainer = document.getElementById('processes-history-widgets');
+    if (historyContainer) {
+        if (history.length === 0) {
+            historyContainer.innerHTML = createPlaceholderMessage('empty', 'No recent history.');
+        } else {
+            renderProcessList(historyContainer, history, true);
+        }
     }
 
+    updateTabBadgeCount(1, processes.length);
+}
+
+function renderProcessList(container, list, isHistory) {
     function generateProcessWidgetHtml(proc) {
-        const duration = Math.floor((Date.now() / 1000) - proc.start_time);
+        let durationStr = '';
+        if (proc.end_time) {
+             const dur = proc.end_time - proc.start_time;
+             durationStr = `${dur}s (Completed)`;
+        } else {
+             const dur = Math.floor((Date.now() / 1000) - proc.start_time);
+             durationStr = `${dur}s`;
+        }
+        
         const retryBadge = proc.retries > 0 ? `<span class="process-retry-badge">Retry ${proc.retries}</span>` : '';
 
         // Pretty-print common system IDs
@@ -585,36 +604,40 @@ export async function updateProcessesTab() {
         if (idMap[displayName]) {
             displayName = idMap[displayName];
         } else if (/^\d+$/.test(displayName)) {
-            // If it's a numeric ID, it's likely a Discord channel ID
             displayName = `Channel ${displayName}`;
         }
 
+        const stateColor = isHistory ? '#888' : '#fff';
+        const borderColor = isHistory ? 'border-left: 3px solid #666;' : ''; // Default uses class style, override if history
+
         return `
-                <div class="service-widget process-widget" data-channel-id="${proc.channel_id}">
+                <div class="service-widget process-widget" data-channel-id="${proc.channel_id}-${proc.start_time}" style="${borderColor}">
                     <div class="service-widget-header">
-                        <i class="bx bx-cog"></i>
-                        <h3>${displayName}</h3>
+                        <i class="bx bx-cog" style="color: ${stateColor}"></i>
+                        <h3 style="color: ${stateColor}">${displayName}</h3>
                         ${retryBadge}
                     </div>
                     <div class="service-widget-body">
                         <div class="service-widget-info">
                             <span class="info-label">State:</span>
-                            <span class="info-value">${proc.state}</span>
+                            <span class="info-value" style="color: ${stateColor}">${proc.state}</span>
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Duration:</span>
-                            <span class="info-value">${duration}s</span>
+                            <span class="info-value" style="color: ${stateColor}">${durationStr}</span>
                         </div>
                          <div class="service-widget-info">
                             <span class="info-label">PID:</span>
-                            <span class="info-value">${proc.pid}</span>
+                            <span class="info-value" style="color: ${stateColor}">${proc.pid}</span>
                         </div>
                     </div>
                 </div>`;
     }
 
-    const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.process-widget')).map(widget => [widget.dataset.channelId, widget]));
-    const incomingIds = new Set(processes.map(p => p.channel_id));
+    const existingWidgetsMap = new Map(Array.from(container.querySelectorAll('.process-widget')).map(widget => [widget.dataset.channelId, widget]));
+    
+    // Map list to unique IDs (channel_id + start_time to distinguish history items)
+    const incomingIds = new Set(list.map(p => `${p.channel_id}-${p.start_time}`));
 
     for (const [id, widget] of existingWidgetsMap) {
         if (!incomingIds.has(id)) {
@@ -622,15 +645,36 @@ export async function updateProcessesTab() {
         }
     }
 
-    processes.forEach(proc => {
+    list.forEach(proc => {
+        const uniqueId = `${proc.channel_id}-${proc.start_time}`;
         const newHtml = generateProcessWidgetHtml(proc);
-        const existingWidget = existingWidgetsMap.get(proc.channel_id);
+        const existingWidget = existingWidgetsMap.get(uniqueId);
         if (existingWidget) {
             if (existingWidget.outerHTML !== newHtml) existingWidget.outerHTML = newHtml;
         } else {
-            widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
+            container.insertAdjacentHTML('beforeend', newHtml);
         }
     });
-
-    updateTabBadgeCount(1, processes.length);
 }
+// End of updateProcessesTab logic replacement (helper function outside)
+// Wait, I cannot put renderProcessList outside if I am replacing the inside of updateProcessesTab.
+// I must inline it or define it before/after.
+// The replace tool replaces a specific string.
+// I'll replace the entire body of `updateProcessesTab` or the relevant part.
+
+// Current code structure:
+// export async function updateProcessesTab() {
+//    ...
+//    // --- Update Processes List ---
+//    const processes = await fetchProcessData();
+//    ...
+//    // Logic
+//    ...
+//    function generateProcessWidgetHtml(proc) { ... }
+//    ...
+//    processes.forEach(...)
+//    updateTabBadgeCount(...)
+// }
+
+// I will replace from `// --- Update Processes List ---` to the end of the function.
+
