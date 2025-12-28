@@ -185,7 +185,7 @@ export async function updateAlertsTab(forceReRender = false) {
 
 
       const tempDiv = document.createElement('div');
-      tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer`;
+      tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer priority-${priority}`;
       tempDiv.dataset.alertId = alertEvent.id;
 
       tempDiv.onclick = function (e) {
@@ -390,6 +390,13 @@ export async function checkBackgroundAlerts() {
         
         let unreadCount = 0;
         allAlerts.forEach(event => {
+             let evtData = event.event;
+             if (typeof evtData === 'string') {
+                 try { evtData = JSON.parse(evtData); } catch (e) { evtData = {}; }
+             }
+             const priority = (evtData.priority || 'low').toLowerCase();
+             if (priority === 'low') return;
+
              const readTS = localStorage.getItem(`alert_read_ts_${event.id}`);
              if (!readTS) unreadCount++;
         });
