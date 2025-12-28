@@ -222,7 +222,7 @@ export async function updateSystemMonitor() {
           const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
           return `
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                            <span style="font-size: 1.1em; color: #fff; font-weight: 600;">${gpu.LABEL}</span>
+                            <span style="font-size: 1.1em; color: #fff; font-weight: 400;">${gpu.LABEL}</span>
                             <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${vramGB} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
                         </div>`;
         }).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>');

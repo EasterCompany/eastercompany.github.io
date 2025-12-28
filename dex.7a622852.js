@@ -589,7 +589,7 @@
                     </div>
                 </div>`}s&&(c.GPU&&c.GPU.length>0?s.innerHTML=c.GPU.map(g=>{let w=(g.VRAM/1073741824).toFixed(1);return`
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                            <span style="font-size: 1.1em; color: #fff; font-weight: 600;">${g.LABEL}</span>
+                            <span style="font-size: 1.1em; color: #fff; font-weight: 400;">${g.LABEL}</span>
                             <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${w} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
                         </div>`}).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>'):s.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>'),o&&c.STORAGE&&c.STORAGE.length>0?o.innerHTML=c.STORAGE.map(g=>{let w=(g.USED/1073741824).toFixed(1),n=(g.SIZE/(1024*1024*1024)).toFixed(1),m=g.SIZE>0?(g.USED/g.SIZE*100).toFixed(0):0,y=g.MOUNT_POINT||"Unmounted";return`
                     <div style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
