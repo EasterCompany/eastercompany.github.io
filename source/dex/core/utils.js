@@ -116,7 +116,7 @@ export function updateUnreadAlertCount() {
     const alertsList = document.getElementById('alerts-list');
     if (!alertsList) return;
     
-    const unreadCount = alertsList.querySelectorAll('.alert-unread').length;
+    const unreadCount = alertsList.querySelectorAll('.alert-unread:not(.priority-low)').length;
     updateGlobalBadgeCount(unreadCount);
 }
 
