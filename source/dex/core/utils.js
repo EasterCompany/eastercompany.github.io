@@ -116,6 +116,36 @@ export function ansiToHtml(text) {
     return escaped;
 }
 
+export function renderMarkdown(text) {
+    if (!text) return '';
+    let html = escapeHtml(text);
+
+    // Multiline Code
+    html = html.replace(/```([\s\S]*?)```/g, '<pre class="md-code-block">$1</pre>');
+
+    // Inline Code
+    html = html.replace(/`([^`]+)`/g, '<code class="md-inline-code">$1</code>');
+
+    // Bold
+    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+    // Italic
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+    // Headers
+    html = html.replace(/^# (.*$)/gm, '<h3 class="md-header">$1</h3>');
+    html = html.replace(/^## (.*$)/gm, '<h4 class="md-header">$1</h4>');
+    html = html.replace(/^### (.*$)/gm, '<h5 class="md-header">$1</h5>');
+
+    // Bullet Points
+    html = html.replace(/^- (.*$)/gm, '<div class="md-list-item"><span class="md-bullet">•</span> $1</div>');
+
+    // Numbered Lists
+    html = html.replace(/^(\d+)\. (.*$)/gm, '<div class="md-list-item"><span class="md-number">$1.</span> $2</div>');
+
+    return html;
+}
+
 let resolvedBaseUrl = null;
 let resolvedDiscordBaseUrl = null;
 let isFallingBack = false;
