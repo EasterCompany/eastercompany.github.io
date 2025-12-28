@@ -36,6 +36,7 @@ export const EVENT_TEMPLATES = {
     "system.cli.command": "CLI Command: {command} {args} ({status})",
     "system.cli.status": "CLI Status: {message}",
     "system.notification.generated": "Notification ({priority}): {title}",
+    "system.attention.expired": "Attention Expired: {tier}",
     "system.roadmap.created": "Roadmap item created: {content}",
     "system.roadmap.updated": "Roadmap item {id} changed to {state}",
     "system.process.registered": "Process {id} started: {state}",
@@ -56,6 +57,11 @@ export function formatEventSummary(type, data) {
     if (type === 'system.analysis.audit') {
         const tier = data.tier ? data.tier.toUpperCase() : 'UNKNOWN';
         template = `Analysis Audit: ${tier}`;
+    }
+    // Specific formatting for system.attention.expired
+    if (type === 'system.attention.expired') {
+        const tier = data.tier ? data.tier.charAt(0).toUpperCase() + data.tier.slice(1) : 'Unknown';
+        return `System Attention Expired: ${tier}`;
     }
     // Specific formatting for system.test.completed
     if (type === 'system.test.completed') {
