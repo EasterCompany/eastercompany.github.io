@@ -434,9 +434,6 @@ export async function updateEventsTimeline(forceReRender = false) {
 
                 detailsHtml = `
                     <div class="event-details" style="${detailsStyle}">
-                        <div class="event-details-header">
-                            <h4>Event Details</h4>
-                        </div>
                         ${detailsContent}
                     </div>
                 `;
