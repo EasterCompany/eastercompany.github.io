@@ -265,10 +265,8 @@ export async function updateSystemMonitor() {
             hardwareRefreshBtn.dataset.listenerAttached = "true";
         }
 
-        // Initial Load (only if showing "Loading..." text)
-        // Check if it has the initial loading paragraph
-        const loadingP = hardwareContainer.querySelector('p');
-        if (loadingP && loadingP.textContent === "Loading hardware info...") {
+        // Initial Load (only if empty)
+        if (hardwareContainer.children.length === 0) {
             const hwData = await fetchHardwareData();
             renderHardwareWidgets(hwData);
         }
@@ -286,7 +284,7 @@ export async function updateSystemMonitor() {
     }
 
     lastServicesUpdate = Date.now();
-    updateTabTimestamp(3, lastServicesUpdate);
+    updateTabTimestamp(0, lastServicesUpdate);
     const services = data.services || [];
 
     Array.from(widgetsContainer.children).forEach(child => {
@@ -377,7 +375,7 @@ export async function updateModelsTab() {
     }
 
     lastModelsUpdate = Date.now();
-    updateTabTimestamp(3, lastModelsUpdate);
+    updateTabTimestamp(2, lastModelsUpdate);
 
     const models = data.models || [];
     const whisperStatus = data.whisper;
@@ -541,7 +539,7 @@ export async function updateProcessesTab() {
     }
 
     lastProcessesUpdate = Date.now();
-    updateTabTimestamp(3, lastProcessesUpdate);
+    updateTabTimestamp(1, lastProcessesUpdate);
 
     if (processes.length === 0) {
         // Only clear if we actually have the widgets container and no processes, 
@@ -565,7 +563,7 @@ export async function updateProcessesTab() {
         // This is fine, it only clears the process list, not the analyst status!
         
         widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
-        updateTabBadgeCount(3, 0);
+        updateTabBadgeCount(1, 0);
         return;
     }
 
@@ -634,5 +632,5 @@ export async function updateProcessesTab() {
         }
     });
 
-    updateTabBadgeCount(3, processes.length);
+    updateTabBadgeCount(1, processes.length);
 }
