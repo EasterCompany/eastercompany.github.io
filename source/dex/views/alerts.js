@@ -384,13 +384,24 @@ function attachActionListeners() {
   }
 
   if (clearBtn && !clearBtn.dataset.listenerAttached) {
-    clearBtn.onclick = () => {
-      const longAgo = Date.now() - (48 * 60 * 60 * 1000); // 48 hours ago
-      currentFilteredAlerts.forEach(notif => {
-        localStorage.setItem(`alert_read_ts_${notif.id}`, longAgo.toString());
-      });
-      activeExpandedIds.clear();
-      updateAlertsTab(true);
+    clearBtn.onclick = async () => {
+      if (!confirm("Are you sure you want to delete all alerts from the backend?")) return;
+      
+      clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
+      try {
+          await smartFetch('/events?type=system.notification.generated', { method: 'DELETE' });
+          
+          const longAgo = Date.now() - (48 * 60 * 60 * 1000);
+          currentFilteredAlerts.forEach(notif => {
+            localStorage.setItem(`alert_read_ts_${notif.id}`, longAgo.toString());
+          });
+          activeExpandedIds.clear();
+          updateAlertsTab(true);
+      } catch (e) {
+          console.error("Failed to clear alerts:", e);
+      } finally {
+          clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
+      }
     };
     clearBtn.dataset.listenerAttached = "true";
   }

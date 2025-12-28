@@ -16,6 +16,7 @@ export const getEventsContent = () => `
         <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
             <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
             <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+            <button id="events-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
         </div>
     </div>
     
@@ -576,5 +577,32 @@ function attachEventActionListeners() {
             };
         });
         filterContainer.dataset.listenerAttached = "true";
+    }
+
+    const clearBtn = document.getElementById('events-clear');
+    if (clearBtn && !clearBtn.dataset.listenerAttached) {
+        clearBtn.onclick = async () => {
+            const filterName = currentFilter === 'all' ? 'ALL' : currentFilter.toUpperCase();
+            if (!confirm(`Are you sure you want to delete ${filterName} events from the backend? This cannot be undone.`)) return;
+
+            clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
+            try {
+                let url = '/events';
+                if (currentFilter !== 'all') {
+                    url += `?category=${currentFilter}`;
+                }
+                const response = await smartFetch(url, { method: 'DELETE' });
+                if (!response.ok) throw new Error("Failed to delete events");
+                
+                activeExpandedIds.clear();
+                updateEventsTimeline(true);
+            } catch (e) {
+                console.error("Failed to clear events:", e);
+                alert("Failed to clear events. Check console.");
+            } finally {
+                clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
+            }
+        };
+        clearBtn.dataset.listenerAttached = "true";
     }
 }
