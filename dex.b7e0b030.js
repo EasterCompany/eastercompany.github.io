@@ -30,7 +30,7 @@
             </div>
         `}
     `,c=document.createElement("nav");c.innerHTML=r,document.body.prepend(c)}function Re(t){let e=window.location.pathname,i=e==="/"||e==="/index.html",l=document.getElementById("nav-chevron"),s=document.querySelector(".nav-left");!l||!s||(t||!i?(l.style.display="block",s.style.cursor="pointer",s.classList.add("recording"),s.onmouseenter=()=>{l.style.transform="translateX(-3px)"},s.onmouseleave=()=>{l.style.transform="translateX(0)"}):(l.style.display="none",s.style.cursor="default",s.classList.remove("recording"),s.onmouseenter=null,s.onmouseleave=null))}function Pe(){if(document.querySelector("footer"))return;let t=`
-        <a href="/dexter" class="footer-brand-left">DEXTER</a>
+        <a href="/dexter" class="footer-brand-left">DEXTER M.XIV</a>
         <div class="socials-section">
             <a href="https://facebook.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-facebook'></i></a>
             <a href="https://linkedin.com/company/72223947" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
