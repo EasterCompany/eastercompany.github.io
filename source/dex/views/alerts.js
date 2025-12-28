@@ -179,8 +179,7 @@ export async function updateAlertsTab(forceReRender = false) {
                 </div>
                 ${relatedEventsHtml}
                 <div class="event-detail-block" style="text-align: left;">
-                    <span class="detail-label">Insight:</span>
-                    <div class="detail-pre">${renderMarkdown(body)}</div>
+                    <div class="detail-pre">${renderMarkdown('### Insight\n\n' + body)}</div>
                 </div>
             `;
 

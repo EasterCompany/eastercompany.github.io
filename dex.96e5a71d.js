@@ -80,8 +80,9 @@
                 </div>
                 ${ke}
                 <div class="event-detail-block" style="text-align: left;">
-                    <span class="detail-label">Insight:</span>
-                    <div class="detail-pre">${ze(C)}</div>
+                    <div class="detail-pre">${ze(`### Insight
+
+`+C)}</div>
                 </div>
             `;let U=document.createElement("div");U.className=`event-item notification-item ${E} ${_} ${N} cursor-pointer`,U.dataset.alertId=d.id,U.onclick=function(j){if(this.classList.contains("expanded")){this.classList.remove("expanded"),G.delete(d.id);let te=this.querySelector(".event-details");te&&(te.style.display="none")}else{this.classList.add("expanded"),G.add(d.id);let te=this.querySelector(".event-details");if(te&&(te.style.display="block"),!localStorage.getItem(`alert_read_ts_${d.id}`)){localStorage.setItem(`alert_read_ts_${d.id}`,Date.now().toString()),this.classList.add("alert-read"),this.classList.remove("alert-unread"),this.classList.remove("event-border-blue","event-border-red","event-border-purple");let we="event-border-grey";S==="high"||S==="critical"?we="event-border-red":S==="medium"&&(we="event-border-orange"),this.classList.add(we),ce()}}};let Gt=h,wt={system:"bx-cog",messaging:"bx-message-detail",cognitive:"bx-brain",moderation:"bx-shield-x",lifecycle:"bx-git-branch"}[I]||"bx-bell";U.innerHTML=`
                 <div class="event-time">
