@@ -161,6 +161,32 @@ h5.md-header { font-size: 0.9em; color: #bbb; text-transform: uppercase; letter-
     line-height: 1.5;
 }
 
+/* Markdown Tables */
+.md-table-row {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 6px 0;
+}
+
+.md-table-row:first-child {
+    border-bottom: 2px solid rgba(187, 134, 252, 0.3);
+    font-weight: 600;
+    color: #fff;
+    background: rgba(187, 134, 252, 0.05);
+}
+
+.md-table-cell {
+    flex: 1;
+    padding: 0 10px;
+    font-size: 0.85em;
+    font-family: 'JetBrains Mono', monospace;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.md-table-cell:last-child {
+    border-right: none;
+}
+
 .md-bullet, .md-number {
     color: #bb86fc;
     font-weight: bold;
