@@ -4,7 +4,7 @@
 <!-- HEAD_START -->
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Fileview - Easter Company</title>
+  <title>Dexter - Easter Company</title>
 
   <!-- SEO Meta Tags -->
   <meta name="description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
@@ -16,7 +16,7 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Easter Company">
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta property="og:url" content="https://easter.company/html/fileview">
+  <meta property="og:url" content="https://easter.company/dexter">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_updated=2025-12-26">
   <meta property="fb:app_id" content="1541540286236316">
@@ -37,38 +37,50 @@
   <link rel="manifest" href="/static/meta/site.webmanifest?last_updated=2025-12-26">
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://easter.company/html/fileview">
+  <link rel="canonical" href="https://easter.company/dexter">
 <!-- HEAD_END -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="/static/css/fileview.css?last_updated=2025-03-16"
-    />
-    <title>Dexter File View</title>
+    <title>Dexter - Easter Company</title>
+    <!-- We'll inject the hash-versioned CSS during build -->
   <link rel="stylesheet" href="/dex.6fa7bb71.css"></head>
-  <body>
-    <div id="tool-bar">
-      <label class="file-upload">
-        <input
-          type="file"
-          id="file-input"
-          accept=".txt,.csv,.md,.js,.ts,.go,.css,.html,.py,.java,.c,.cpp,.json,.xml"
-        />
-        Upload File
-      </label>
-    </div>
-    <div id="file-grid"></div>
-    <div id="file-view-container">
-      <div id="file-content">
-        <pre id="file-text"></pre>
-        <button id="back-button">Close</button>
-      </div>
-    </div>
-    <script src="/static/js/fileview.js?last_updated=2025-03-16"></script>
+  <body class="dex-page">
+    <!-- Navbar injected by JS -->
+    <main id="main" style="padding-top: 80px;">
+        
+        <!-- Hero Section -->
+        <section class="hero" style="min-height: 60vh; padding: 40px 20px;">
+            <h1>Dexter</h1>
+            <h2 class="radialGlow">The Recursive Engineering Ecosystem</h2>
+            <p style="max-width: 600px; margin: 20px auto; color: #ccc;">
+                A distributed system that uses LLMs as a Strategic Layer to manage its own nervous system and visual cortex.
+            </p>
+        </section>
+
+        <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); max-width: 1200px; margin: 0 auto;"></div>
+
+        <!-- Services Section -->
+        <section class="services-grid" style="padding: 60px 20px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            
+            <!-- Dex CLI Card -->
+            <a href="/dexter/cli" class="service-card" style="text-decoration: none;">
+                <div class="project" style="width: 100%; margin: 0; padding: 30px; height: 100%; align-items: flex-start; transition: transform 0.3s ease, border-color 0.3s ease;">
+                    <div class="header">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                            <h2>Dex CLI</h2>
+                            <p>Command Line Interface</p>
+                        </div>
+                    </div>
+                    <p style="text-align: left; margin-bottom: 0;">
+                        The primary interface for interacting with the Dexter ecosystem. Manage services, view logs, and execute commands.
+                    </p>
+                    <div style="margin-top: 20px; color: #bb86fc; font-weight: 500; font-size: 0.9em; display: flex; align-items: center; gap: 5px;">
+                        Launch CLI <i class='bx bx-right-arrow-alt'></i>
+                    </div>
+                </div>
+            </a>
+
+        </section>
+
+    </main>
+    <!-- Script injected during build -->
   <script src="/dex.6fa7bb71.js" defer></script></body>
 </html>
