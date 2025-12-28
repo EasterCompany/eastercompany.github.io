@@ -81,7 +81,7 @@
                 ${ke}
                 <div class="event-detail-block" style="text-align: left;">
                     <span class="detail-label">Insight:</span>
-                    <div class="detail-pre" style="white-space: pre-wrap; margin-top: 5px; text-align: left;">${Ue(L)}</div>
+                    <div class="detail-pre">${Ue(L)}</div>
                 </div>
             `;let z=document.createElement("div");z.className=`event-item notification-item ${T} ${R} ${be} cursor-pointer`,z.dataset.alertId=d.id,z.onclick=function(Z){if(this.classList.contains("expanded")){this.classList.remove("expanded"),q.delete(d.id);let ee=this.querySelector(".event-details");ee&&(ee.style.display="none")}else{this.classList.add("expanded"),q.add(d.id);let ee=this.querySelector(".event-details");if(ee&&(ee.style.display="block"),!localStorage.getItem(`alert_read_ts_${d.id}`)){localStorage.setItem(`alert_read_ts_${d.id}`,Date.now().toString()),this.classList.add("alert-read"),this.classList.remove("alert-unread"),this.classList.remove("event-border-blue","event-border-red","event-border-purple");let xe="event-border-grey";E==="high"||E==="critical"?xe="event-border-red":E==="medium"&&(xe="event-border-orange"),this.classList.add(xe),le()}}};let jt=y,xt={system:"bx-cog",messaging:"bx-message-detail",cognitive:"bx-brain",moderation:"bx-shield-x",lifecycle:"bx-git-branch"}[A]||"bx-bell";z.innerHTML=`
                 <div class="event-time">
@@ -170,8 +170,8 @@
                             ${_(i)}
                         </div>
                         ${M}
-                        <div class="event-detail-block" style="text-align: left; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; margin: 10px 0;">
-                            <p class="detail-pre" style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; text-align: left; color: #ccc;">${_(l)}</p>
+                        <div class="event-detail-block" style="text-align: left;">
+                            <div class="detail-pre">${_(l)}</div>
                         </div>
                         ${D}
                     </div>

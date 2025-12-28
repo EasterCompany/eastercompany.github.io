@@ -132,8 +132,8 @@ export async function updateBlueprintsTab(forceReRender = false) {
                             ${escapeHtml(summary)}
                         </div>
                         ${affectedHtml}
-                        <div class="event-detail-block" style="text-align: left; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; margin: 10px 0;">
-                            <p class="detail-pre" style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; text-align: left; color: #ccc;">${escapeHtml(content)}</p>
+                        <div class="event-detail-block" style="text-align: left;">
+                            <div class="detail-pre">${escapeHtml(content)}</div>
                         </div>
                         ${pathHtml}
                     </div>
