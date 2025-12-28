@@ -696,7 +696,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                     <code>curl -sSL https://easter.company/scripts/install_dex-cli.sh | bash</code>
                     <i class='bx bx-copy'></i>
                 </div>
-                <p class="cli-install-note">Installs the latest pre-built binary for Linux/macOS and configures your environment.</p>
+                <p class="cli-install-note">Installs the latest pre-built binary for Arch/Debian Linux.</p>
             </div>
 
             <div class="cli-divider">
