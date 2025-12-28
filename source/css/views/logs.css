@@ -79,7 +79,7 @@
     font-size: 0.85em;
     color: #ccc;
     background-color: rgba(0, 0, 0, 0.2);
-    padding: 15px;
+    padding: 5px 15px;
     flex-grow: 1;
     overflow-y: hidden;
     scrollbar-width: thin;
