@@ -240,7 +240,6 @@ export async function updateAlertsTab(forceReRender = false) {
                     <div class="event-details" style="${detailsStyle}">
                         <div class="event-details-header">
                             <h4>${isAlert ? 'Alert' : 'Notification'} Details</h4>
-                            <i class="bx bx-x close-details-btn"></i>
                         </div>
                         ${detailsContent}
                     </div>

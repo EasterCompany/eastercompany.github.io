@@ -100,7 +100,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
             };
 
             let affectedHtml = affectedServices.length > 0
-                ? `<div class="blueprint-meta-row"><strong>Affected:</strong> ${affectedServices.join(', ')}</div>`
+                ? `<div class="event-detail-row"><span class="detail-label">Related Services:</span> <span class="detail-value">${affectedServices.join(', ')}</span></div>`
                 : '';
 
             let pathHtml = '';
@@ -127,9 +127,8 @@ export async function updateBlueprintsTab(forceReRender = false) {
                     <div class="event-details" style="${detailsStyle}">
                         <div class="event-details-header">
                             <h4>Blueprint Design</h4>
-                            <i class="bx bx-x close-details-btn"></i>
                         </div>
-                        <div class="blueprint-summary" style="margin-bottom: 10px; font-weight: 500; color: #fff;">
+                        <div class="blueprint-summary" style="margin-bottom: 10px; color: #fff;">
                             ${escapeHtml(summary)}
                         </div>
                         ${affectedHtml}
