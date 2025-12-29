@@ -977,6 +977,12 @@
       "commit": "9b186bb",
       "binaries": {}
     },
+    "2.11.312": {
+      "type": "patch",
+      "date": "2025-12-29T03:48:03Z",
+      "commit": "0703ba4",
+      "binaries": {}
+    },
     "2.11.54": {
       "type": "patch",
       "date": "2025-12-24T11:40:04Z",
