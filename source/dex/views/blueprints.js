@@ -124,14 +124,17 @@ export async function updateBlueprintsTab(forceReRender = false) {
                     ${relatedServicesHtml}
                     <div style="display: flex; gap: 10px;">
                         <button class="blueprint-approve-btn" style="background: rgba(3, 218, 198, 0.1); color: #03dac6; border: 1px solid rgba(3, 218, 198, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-check'></i> Approve</button>
-                        <button class="blueprint-deny-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Decline</button>
+                        <button class="blueprint-delete-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Decline</button>
                     </div>
                 </div>
             ` : `
                 <div class="blueprint-status-badge" style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px;">
                     ${relatedServicesHtml}
-                    <div style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase;">
-                        <i class='bx bxs-check-shield'></i> Approved Blueprint
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase;">
+                            <i class='bx bxs-check-shield'></i> Approved Blueprint
+                        </div>
+                        <button class="blueprint-delete-btn" onmouseover="this.style.background='rgba(207, 102, 121, 0.1)'; this.style.color='#cf6679'; this.style.borderColor='rgba(207, 102, 121, 0.2)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.03)'; this.style.color='#666'; this.style.borderColor='rgba(255, 255, 255, 0.05)';" style="background: rgba(255, 255, 255, 0.03); color: #666; border: 1px solid rgba(255, 255, 255, 0.05); padding: 4px 10px; border-radius: 4px; font-size: 0.75em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-trash'></i> Delete</button>
                     </div>
                 </div>
             `;
@@ -180,11 +183,12 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 };
             }
 
-            const denyBtn = tempDiv.querySelector('.blueprint-deny-btn');
-            if (denyBtn) {
-                denyBtn.onclick = async (e) => {
+            const deleteBtn = tempDiv.querySelector('.blueprint-delete-btn');
+            if (deleteBtn) {
+                deleteBtn.onclick = async (e) => {
                     e.stopPropagation();
-                    denyBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Declining...";
+                    const isActuallyDecline = !isApproved;
+                    deleteBtn.innerHTML = isActuallyDecline ? "<i class='bx bx-loader-alt spin'></i> Declining..." : "<i class='bx bx-loader-alt spin'></i> Deleting...";
                     try {
                         const res = await smartFetch(`/events/${event.id}`, {
                             method: 'DELETE'
