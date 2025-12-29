@@ -622,6 +622,7 @@ export async function updateProcessesTab() {
   // --- Update Processes List ---
   const processesData = await fetchProcessData();
   let processes = [];
+  let queue = [];
   let history = [];
 
   if (processesData) {
@@ -629,33 +630,14 @@ export async function updateProcessesTab() {
       processes = processesData;
     } else {
       processes = processesData.active || [];
+      queue = processesData.queue || [];
       history = processesData.history || [];
       // Ensure newest is first
       history.sort((a, b) => (b.end_time || 0) - (a.end_time || 0));
     }
   }
 
-  const vitalsProcVal = document.getElementById('vitals-processes-val');
-  if (vitalsProcVal) {
-    if (processesData) {
-      const count = processes.length;
-      vitalsProcVal.textContent = count > 0 ? `${count} Active` : "Idle";
-      vitalsProcVal.style.color = count > 0 ? "#bb86fc" : "#fff";
-    } else {
-      vitalsProcVal.textContent = "-";
-      vitalsProcVal.style.color = "#888";
-    }
-  }
-
-  if (processesData === null) {
-    if (widgetsContainer.children.length === 0) {
-      widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load process status.', 'The event service may be offline.');
-    }
-    return;
-  }
-
-  lastProcessesUpdate = Date.now();
-  updateTabTimestamp(1, lastProcessesUpdate);
+// ... (omitting middle parts)
 
   // Active Processes Rendering
   if (processes.length === 0) {
@@ -667,6 +649,19 @@ export async function updateProcessesTab() {
       widgetsContainer.innerHTML = '';
     }
     renderProcessList(widgetsContainer, processes, false);
+  }
+
+  // Queue Processes Rendering
+  const queueContainer = document.getElementById('processes-queue-widgets');
+  if (queueContainer) {
+    if (queue.length === 0) {
+      if (!queueContainer.querySelector('.tab-placeholder') && !queueContainer.querySelector('div[style*="font-style: italic"]')) {
+        queueContainer.innerHTML = `<div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">Queue is empty</div>`;
+      }
+    } else {
+      queueContainer.innerHTML = '';
+      renderProcessList(queueContainer, queue, false);
+    }
   }
 
   // History Processes Rendering
