@@ -558,7 +558,7 @@
         </div>
         <div id="processes-queue-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;">
             <div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">
-                Queue is empty (Feature coming soon)
+                No processes in queue
             </div>
         </div>
         
