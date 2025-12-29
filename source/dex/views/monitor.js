@@ -638,7 +638,6 @@ function renderProcessList(container, list, isHistory) {
     // Pretty-print common system IDs
     let displayName = proc.channel_id;
     const idMap = {
-      'system-discord': 'Discord Engine',
       'system-guardian': 'Guardian Worker',
       'system-cli-op': 'CLI Operation'
     };
