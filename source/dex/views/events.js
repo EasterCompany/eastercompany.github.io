@@ -7,11 +7,11 @@ export const getEventsContent = () => `
         <i class='bx bx-calendar-event' style="color: #03dac6;"></i>
         <h2>Events</h2>
         <div id="event-filters" class="event-filters" style="margin-left: 20px; margin-bottom: 0;">
-            <button class="notif-action-btn filter-btn active" data-filter="all">All</button>
-            <button class="notif-action-btn filter-btn" data-filter="messaging">Messaging</button>
-            <button class="notif-action-btn filter-btn" data-filter="system">System</button>
-            <button class="notif-action-btn filter-btn" data-filter="cognitive">Cognitive</button>
-            <button class="notif-action-btn filter-btn" data-filter="moderation">Moderation</button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">All</button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'messaging' ? 'active' : ''}" data-filter="messaging">Messaging</button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'system' ? 'active' : ''}" data-filter="system">System</button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'cognitive' ? 'active' : ''}" data-filter="cognitive">Cognitive</button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'moderation' ? 'active' : ''}" data-filter="moderation">Moderation</button>
         </div>
         <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
             <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
