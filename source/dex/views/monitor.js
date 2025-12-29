@@ -630,6 +630,8 @@ export async function updateProcessesTab() {
     } else {
       processes = processesData.active || [];
       history = processesData.history || [];
+      // Ensure newest is first
+      history.sort((a, b) => (b.end_time || 0) - (a.end_time || 0));
     }
   }
 
@@ -769,19 +771,14 @@ function renderProcessList(container, list, isHistory) {
     if (existingWidget) {
       if (existingWidget.outerHTML !== newHtml) {
         existingWidget.outerHTML = newHtml;
-        // Update the map reference to the new element
-        const newElement = container.querySelector(`[data-channel-id="${uniqueId}"]`);
-        if (newElement) {
-          existingWidgetsMap.set(uniqueId, newElement);
-        }
+      }
+      // Move to the end of the container to maintain order matching the list array
+      const currentWidget = container.querySelector(`[data-channel-id="${uniqueId}"]`);
+      if (currentWidget) {
+        container.appendChild(currentWidget);
       }
     } else {
       container.insertAdjacentHTML('beforeend', newHtml);
-      // Add the new element to the map to prevent duplicates in the same pass
-      const newElement = container.querySelector(`[data-channel-id="${uniqueId}"]`);
-      if (newElement) {
-          existingWidgetsMap.set(uniqueId, newElement);
-      }
     }
   });
 }
