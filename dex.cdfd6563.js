@@ -154,7 +154,7 @@
     </div>
 `,tt=null,se=new Set,it=[];async function ne(t=!1){let e=document.getElementById("blueprints-list");if(!e)return;Rt();let o="/events?ml=1000&format=json&event.type=system.blueprint.generated";try{let a=await k(o);if(!a.ok)throw new Error("Service is offline or unreachable.");let i=(await a.json()).events||[];if(it=i,tt=Date.now(),O(2,tt),i.length===0){e.innerHTML=A("empty","No architectural blueprints generated yet.","The Guardian will generate these when idle."),oe(2,0);return}t&&(e.innerHTML="");let u=b=>{let h=b.event;if(typeof h=="string")try{h=JSON.parse(h)}catch{return null}let v=(h.title||"Untitled Blueprint").trim(),l=(h.summary||h.body||"No summary provided.").trim(),f=(h.content||"").trim(),E=(h.category||"architecture").trim(),r=(h.affected_services||[]).map(T=>T.trim()),x=(h.implementation_path||[]).map(T=>T.trim()),n=h.approved===!0,c=new Date(b.timestamp*1e3),g=c.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),C=c.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),w=se.has(b.id),$=w?"display: block;":"display: none;",S=document.createElement("div");S.className=`event-item notification-item event-border-purple cursor-pointer ${w?"expanded":""} ${n?"blueprint-approved":""}`,S.dataset.blueprintId=b.id,n&&(S.style.boxShadow="0 0 20px rgba(3, 218, 198, 0.15)",S.style.background="linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)");let _=n?"bx-check-shield":{architecture:"bx-vector",optimization:"bx-trending-up",feature:"bx-extension",security:"bx-shield-lock"}[E]||"bx-paint";S.onclick=function(T){if(this.classList.contains("expanded")){this.classList.remove("expanded"),se.delete(b.id);let z=this.querySelector(".event-details");z&&(z.style.display="none")}else{this.classList.add("expanded"),se.add(b.id);let z=this.querySelector(".event-details");z&&(z.style.display="block")}};let R="";x.length>0&&(R=`
                     <div class="blueprint-path" style="margin-top: 15px;">
-                        <h5 style="margin-bottom: 8px;">Proposed Steps</h5>
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Proposed Steps</h5>
                         <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${x.map(T=>`<li style="margin-bottom: 5px;">${B(T)}</li>`).join("")}</ul></div>
                     </div>
                 `);let N=r.length>0?`<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${r.join(", ")}</span></div>`:"<div></div>",H=n?`
@@ -183,10 +183,10 @@
                     <div class="event-service">${E.toUpperCase()}</div>
                     <div class="event-message">${v}</div>
                     <div class="event-details" style="${$}">
-                        <h5 style="margin-bottom: 8px;">Summary</h5>
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Summary</h5>
                         <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">${B(l)}</div>
 
-                        <h5 style="margin-bottom: 8px;">Technical Details</h5>
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
                         <div class="event-detail-block" style="text-align: left;">
                             <div class="detail-pre">${B(f)}</div>
                         </div>
