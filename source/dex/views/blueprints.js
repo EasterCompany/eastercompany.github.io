@@ -57,12 +57,12 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 } catch (e) { return null; }
             }
 
-            const title = blueprintData.title || 'Untitled Blueprint';
-            const summary = blueprintData.summary || blueprintData.body || 'No summary provided.';
-            const content = blueprintData.content || '';
-            const category = blueprintData.category || 'architecture';
-            const affectedServices = blueprintData.affected_services || [];
-            const implementationPath = blueprintData.implementation_path || [];
+            const title = (blueprintData.title || 'Untitled Blueprint').trim();
+            const summary = (blueprintData.summary || blueprintData.body || 'No summary provided.').trim();
+            const content = (blueprintData.content || '').trim();
+            const category = (blueprintData.category || 'architecture').trim();
+            const affectedServices = (blueprintData.affected_services || []).map(s => s.trim());
+            const implementationPath = (blueprintData.implementation_path || []).map(s => s.trim());
             const isApproved = blueprintData.approved === true;
 
             const utcDate = new Date(event.timestamp * 1000);
@@ -110,11 +110,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 pathHtml = `
                     <div class="blueprint-path" style="margin-top: 15px;">
                         <h5 style="margin-bottom: 8px;">Proposed Steps</h5>
-                        <div class="detail-pre">
-                            <ul style="margin: 0; padding-left: 20px;">
-                                ${implementationPath.map(step => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}
-                            </ul>
-                        </div>
+                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${implementationPath.map(step => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}</ul></div>
                     </div>
                 `;
             }
@@ -156,9 +152,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                         </div>
                         
                         <h5 style="margin-bottom: 8px;">Summary</h5>
-                        <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">
-                            ${escapeHtml(summary)}
-                        </div>
+                        <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">${escapeHtml(summary)}</div>
 
                         <h5 style="margin-bottom: 8px;">Technical Details</h5>
                         <div class="event-detail-block" style="text-align: left;">
