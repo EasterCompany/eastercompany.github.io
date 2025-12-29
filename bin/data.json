@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.16.13.main.bf3d9d3.2025-12-29.linux-amd64.bf3d9d3",
-    "dev": "2.16.13.main.bf3d9d3.2025-12-29.linux-amd64.bf3d9d3"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -166,17 +166,9 @@
     },
     "2.16.11": {
       "type": "patch",
-      "date": "2025-12-29T10:58:44Z",
-      "commit": "ff10bb3",
-      "binaries": {
-        "cli": {
-          "linux-amd64": {
-            "path": "/bin/2.16.11/dex",
-            "size": 16610295,
-            "checksum": "d54c2c19f5c22b2ba2c183ce618f26717d942cf962b7fca99c78c3b153bd5139"
-          }
-        }
-      }
+      "date": "2025-12-29T11:44:41Z",
+      "commit": "5cc9c9b",
+      "binaries": {}
     },
     "2.16.12": {
       "type": "patch",
