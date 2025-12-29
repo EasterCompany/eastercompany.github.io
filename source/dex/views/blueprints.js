@@ -63,6 +63,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
             const category = blueprintData.category || 'architecture';
             const affectedServices = blueprintData.affected_services || [];
             const implementationPath = blueprintData.implementation_path || [];
+            const isApproved = blueprintData.approved === true;
 
             const utcDate = new Date(event.timestamp * 1000);
             const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -72,9 +73,14 @@ export async function updateBlueprintsTab(forceReRender = false) {
             const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
             const tempDiv = document.createElement('div');
-            // Blueprints always use Purple border
-            tempDiv.className = `event-item notification-item event-border-purple cursor-pointer ${isExpanded ? 'expanded' : ''}`;
+            // Blueprints always use Purple border, but Approved get a special class
+            tempDiv.className = `event-item notification-item event-border-purple cursor-pointer ${isExpanded ? 'expanded' : ''} ${isApproved ? 'blueprint-approved' : ''}`;
             tempDiv.dataset.blueprintId = event.id;
+
+            if (isApproved) {
+                tempDiv.style.boxShadow = '0 0 20px rgba(3, 218, 198, 0.15)';
+                tempDiv.style.background = 'linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)';
+            }
 
             const iconMap = {
                 'architecture': 'bx-vector',
@@ -82,7 +88,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 'feature': 'bx-extension',
                 'security': 'bx-shield-lock'
             };
-            const icon = iconMap[category] || 'bx-paint';
+            const icon = isApproved ? 'bx-check-shield' : (iconMap[category] || 'bx-paint');
 
             tempDiv.onclick = function(e) {
                 const isCurrentlyExpanded = this.classList.contains('expanded');
@@ -115,12 +121,24 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 `;
             }
 
+            let actionButtonsHtml = !isApproved ? `
+                <div class="blueprint-actions" style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                    <button class="blueprint-deny-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Deny</button>
+                    <button class="blueprint-approve-btn" style="background: rgba(3, 218, 198, 0.1); color: #03dac6; border: 1px solid rgba(3, 218, 198, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-check'></i> Approve</button>
+                </div>
+            ` : `
+                <div class="blueprint-status-badge" style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase; margin-top: 15px; justify-content: flex-end;">
+                    <i class='bx bxs-check-shield'></i> Approved Blueprint
+                </div>
+            `;
+
             tempDiv.innerHTML = `
+                ${isApproved ? '<div class="blueprint-sparkle"></div>' : ''}
                 <div class="event-time">
                     <span class="event-time-main">${timeStr}</span>
                     <span class="event-date">${dateStr}</span>
                 </div>
-                <div class="event-icon"><i class='bx ${icon}'></i></div>
+                <div class="event-icon" style="${isApproved ? 'color: #03dac6;' : ''}"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
                     <div class="event-service">${category.toUpperCase()}</div>
                     <div class="event-message">${title}</div>
@@ -136,9 +154,48 @@ export async function updateBlueprintsTab(forceReRender = false) {
                             <div class="detail-pre">${escapeHtml(content)}</div>
                         </div>
                         ${pathHtml}
+                        ${actionButtonsHtml}
                     </div>
                 </div>
             `;
+
+            // Add button listeners
+            const approveBtn = tempDiv.querySelector('.blueprint-approve-btn');
+            if (approveBtn) {
+                approveBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    approveBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Approving...";
+                    try {
+                        const res = await smartFetch(`/events/${event.id}`, {
+                            method: 'PATCH',
+                            body: JSON.stringify({ approved: true })
+                        });
+                        if (res.ok) {
+                            updateBlueprintsTab(true);
+                        }
+                    } catch (err) {
+                        console.error('Failed to approve blueprint:', err);
+                    }
+                };
+            }
+
+            const denyBtn = tempDiv.querySelector('.blueprint-deny-btn');
+            if (denyBtn) {
+                denyBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    denyBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Deleting...";
+                    try {
+                        const res = await smartFetch(`/events/${event.id}`, {
+                            method: 'DELETE'
+                        });
+                        if (res.ok) {
+                            updateBlueprintsTab(true);
+                        }
+                    } catch (err) {
+                        console.error('Failed to delete blueprint:', err);
+                    }
+                };
+            }
 
             // Prevent close on detail interaction
             const detailsContentEl = tempDiv.querySelector('.event-details');
