@@ -301,6 +301,12 @@
       "commit": "b2412ad",
       "binaries": {}
     },
+    "2.16.25": {
+      "type": "patch",
+      "date": "2025-12-29T22:24:29Z",
+      "commit": "ee63754",
+      "binaries": {}
+    },
     "2.16.3": {
       "type": "patch",
       "date": "2025-12-29T09:16:40Z",
