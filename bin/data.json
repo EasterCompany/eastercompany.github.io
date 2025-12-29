@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.16.11.main.d1ed45c.2025-12-29.linux-amd64.d1ed45c",
+    "dev": "2.16.11.main.d1ed45c.2025-12-29.linux-amd64.d1ed45c"
   },
   "releases": {
     "0.0.0": {
@@ -172,6 +172,20 @@
         }
       }
     },
+    "2.16.11": {
+      "type": "patch",
+      "date": "2025-12-29T10:58:44Z",
+      "commit": "ff10bb3",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.16.11/dex",
+            "size": 16610295,
+            "checksum": "d54c2c19f5c22b2ba2c183ce618f26717d942cf962b7fca99c78c3b153bd5139"
+          }
+        }
+      }
+    },
     "2.16.2": {
       "type": "patch",
       "date": "2025-12-29T08:39:13Z",
@@ -272,8 +286,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.16.10.main.e3597a5.2025-12-29.linux-amd64.e3597a5",
-      "user": "2.16.10.main.e3597a5.2025-12-29.linux-amd64.e3597a5",
+      "current": "2.16.11.main.d1ed45c.2025-12-29.linux-amd64.d1ed45c",
+      "user": "2.16.11.main.d1ed45c.2025-12-29.linux-amd64.d1ed45c",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
