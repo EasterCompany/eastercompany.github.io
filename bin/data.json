@@ -357,6 +357,12 @@
       "commit": "cc703d2",
       "binaries": {}
     },
+    "2.16.29": {
+      "type": "patch",
+      "date": "2025-12-29T23:31:51Z",
+      "commit": "cc0b5fa",
+      "binaries": {}
+    },
     "2.16.3": {
       "type": "patch",
       "date": "2025-12-29T09:16:40Z",
