@@ -52,10 +52,11 @@ const CATEGORIES = {
         'messaging.bot.status_update', 'messaging.user.joined_server',
         'system.test.completed', 'system.build.completed',
         'system.roadmap.created', 'system.roadmap.updated',
-        'system.process.registered', 'system.process.unregistered'
+        'system.process.registered', 'system.process.unregistered',
+        'system.notification.logged'
     ],
     cognitive: [
-        'engagement.decision', 'system.analysis.audit', 'system.blueprint.generated',
+        'engagement.decision', 'system.analysis.audit', 'system.blueprint.logged',
         'analysis.link.completed', 'analysis.visual.completed'
     ],
     moderation: [
@@ -84,6 +85,8 @@ const EVENT_ICONS = {
     'engagement.decision': 'bx-brain',
     'system.analysis.audit': 'bx-search-alt',
     'system.blueprint.generated': 'bx-paint',
+    'system.blueprint.logged': 'bx-paint',
+    'system.notification.logged': 'bx-bell',
     'analysis.link.completed': 'bx-link',
     'analysis.visual.completed': 'bx-image',
     'moderation.explicit_content.deleted': 'bx-shield-x',
