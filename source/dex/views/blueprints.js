@@ -39,11 +39,11 @@ export async function updateBlueprintsTab(forceReRender = false) {
         lastBlueprintsUpdate = Date.now();
         updateTabTimestamp(2, lastBlueprintsUpdate); // Index 2 (Ideas) in mainWindow
 
-        if (allBlueprints.length === 0) {
-            blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Analyst Worker will generate these when idle.');
-            updateTabBadgeCount(1, 0);
-            return;
-        }
+    if (blueprints.length === 0) {
+      blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Guardian will generate these when idle.');
+      updateTabBadgeCount(1, 0);
+      return;
+    }
 
         if (forceReRender) {
             blueprintsContainer.innerHTML = '';

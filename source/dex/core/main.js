@@ -12,7 +12,7 @@ import {
   updateSystemMonitor,
   updateModelsTab,
   updateProcessesTab,
-  getAnalystContent,
+  getGuardianContent,
   getProcessesContent,
   getServicesContent,
   getModelsContent,
@@ -82,7 +82,7 @@ function onReady() {
   const container = document.getElementById('windows-container');
   if (container) container.setAttribute('data-count', '0');
 
-  // Helper to save state - Moved to top level of onReady for visibility
+  // Helper to save state
   const saveWindowState = (winId) => {
     localStorage.setItem('dex_last_window', winId);
   };
@@ -108,9 +108,6 @@ function onReady() {
       container.setAttribute('data-count', activeWindows.length);
     }
 
-    // Always snap/stretch if a window is open
-    const isStretched = activeWindows.length > 0;
-
     // Manage per-window header close button visibility
     activeWindows.forEach(win => {
       const winEl = document.getElementById(win.id);
@@ -133,7 +130,7 @@ function onReady() {
 
       navbar?.classList.add('window-open');
 
-      if (container) container.style.paddingTop = '60px'; // Always SNAP when open
+      if (container) container.style.paddingTop = '60px'; 
 
       // Navbar Transformation
       if (navMenuContainer) navMenuContainer.style.display = 'none';
@@ -262,7 +259,7 @@ function onReady() {
       { icon: 'bxs-brain', title: 'Models', content: getModelsContent() },
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
-      { icon: 'bxs-zap', title: 'Agents', content: getAnalystContent() }
+      { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() }
     ],
     onOpen: () => {
       updateSystemMonitor();
@@ -359,7 +356,6 @@ function onReady() {
     const menuBtn = document.getElementById('dexter-menu-btn');
 
     if (menuContainer && dropdown && menuBtn) {
-      // Hover to show
       menuContainer.addEventListener('mouseenter', () => {
         dropdown.classList.add('active');
         menuBtn.classList.add('active');
@@ -370,12 +366,10 @@ function onReady() {
         menuBtn.classList.remove('active');
       });
 
-      // Click to toggle last active window
       menuBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const lastWindowId = localStorage.getItem('dex_last_window') || 'alerts-window';
 
-        // Find the window object by ID
         let targetWindow = null;
         if (lastWindowId === 'alerts-window') targetWindow = alertsWindow;
         else if (lastWindowId === 'events-window') targetWindow = eventsWindow;
@@ -389,20 +383,15 @@ function onReady() {
       });
     }
 
-    // Dropdown Item Listeners - Update to save state
     document.getElementById('alerts-menu-item')?.addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
     document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
     document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
     document.getElementById('contacts-menu-item')?.addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
     document.getElementById('workspace-menu-item')?.addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
 
-    // Switcher Listeners - Update to save state (handled in recalculateLayout where these are created)
-    // We need to update the creation logic below to attach the saveWindowState call.
-
     document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
     document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
 
-    // Refresh loop (only if relevant window is open)
     setInterval(() => {
       if (alertsWindow.isOpen()) {
         updateAlertsTab();
@@ -411,13 +400,12 @@ function onReady() {
       }
       if (eventsWindow.isOpen()) updateEventsTimeline();
       if (monitorWindow.isOpen()) {
-        updateSystemTab(); // This triggers the component updates internally
+        updateSystemTab();
       }
       if (workspaceWindow.isOpen()) updateIdeasTab();
     }, 5000);
 
   } else {
-    // ... Login logic remains ...
     document.getElementById('login-btn')?.addEventListener('click', () => {
       loginWindow.open();
       setTimeout(() => {
