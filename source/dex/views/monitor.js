@@ -36,15 +36,18 @@ export const getAnalystContent = () => {
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                 <div class="analyst-indicator" style="text-align: center;">
                     <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Guardian</span>
-                    <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                    <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="analyst-t1-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
                 <div class="analyst-indicator" style="text-align: center;">
                     <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect</span>
-                    <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                    <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="analyst-t2-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
                 <div class="analyst-indicator" style="text-align: center;">
                     <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Strategist</span>
-                    <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em;">-</span>
+                    <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="analyst-t3-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
         </div>`;
@@ -502,28 +505,38 @@ export async function updateProcessesTab() {
       return `${s}s`;
     };
 
-    const updateTimer = (el, nextRun, tierName) => {
+    const updateTimer = (el, statsEl, tierData, tierName) => {
       if (activeTier === tierName || (tierName === 'guardian' && activeTier === 'tests')) {
         el.textContent = "Working";
         el.style.color = "#bb86fc"; // Purple for Analyst activity
-        return;
+      } else {
+        const nextRun = tierData.next_run;
+        const diff = nextRun - now;
+        if (diff <= 0) {
+          el.textContent = "Ready";
+          el.style.color = "#5eff5e";
+        } else {
+          const mins = Math.floor(diff / 60);
+          const secs = diff % 60;
+          el.textContent = `${mins}m ${secs}s`;
+          el.style.color = "#fff";
+        }
       }
 
-      const diff = nextRun - now;
-      if (diff <= 0) {
-        el.textContent = "Ready";
-        el.style.color = "#5eff5e";
-      } else {
-        const mins = Math.floor(diff / 60);
-        const secs = diff % 60;
-        el.textContent = `${mins}m ${secs}s`;
-        el.style.color = "#fff";
+      if (statsEl && tierData) {
+        statsEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span>Runs: ${tierData.attempts || 0}</span>
+            <span style="color: ${tierData.failures > 0 ? '#ffa500' : '#666'}">Fails: ${tierData.failures || 0}</span>
+            <span style="color: ${tierData.absolute_failures > 0 ? '#ff4d4d' : '#666'}">Aborted: ${tierData.absolute_failures || 0}</span>
+          </div>
+        `;
       }
     };
 
-    if (t1Val && analystStatus.guardian) updateTimer(t1Val, analystStatus.guardian.next_run, 'guardian');
-    if (t2Val && analystStatus.architect) updateTimer(t2Val, analystStatus.architect.next_run, 'architect');
-    if (t3Val && analystStatus.strategist) updateTimer(t3Val, analystStatus.strategist.next_run, 'strategist');
+    if (t1Val) updateTimer(t1Val, document.getElementById('analyst-t1-stats'), analystStatus.guardian, 'guardian');
+    if (t2Val) updateTimer(t2Val, document.getElementById('analyst-t2-stats'), analystStatus.architect, 'architect');
+    if (t3Val) updateTimer(t3Val, document.getElementById('analyst-t3-stats'), analystStatus.strategist, 'strategist');
 
     if (idleVal && analystStatus.system_idle_time !== undefined) {
       const idle = analystStatus.system_idle_time;
