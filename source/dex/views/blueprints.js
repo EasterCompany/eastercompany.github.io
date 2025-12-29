@@ -105,30 +105,38 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 }
             };
 
-            let affectedHtml = affectedServices.length > 0
-                ? `<div class="event-detail-row"><span class="detail-label">Related Services:</span> <span class="detail-value">${affectedServices.join(', ')}</span></div>`
-                : '';
-
             let pathHtml = '';
             if (implementationPath.length > 0) {
                 pathHtml = `
-                    <div class="blueprint-path">
-                        <h5>Implementation Path</h5>
-                        <ul>
-                            ${implementationPath.map(step => `<li>${escapeHtml(step)}</li>`).join('')}
-                        </ul>
+                    <div class="blueprint-path" style="margin-top: 15px;">
+                        <h5 style="margin-bottom: 8px;">Proposed Steps</h5>
+                        <div class="detail-pre">
+                            <ul style="margin: 0; padding-left: 20px;">
+                                ${implementationPath.map(step => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}
+                            </ul>
+                        </div>
                     </div>
                 `;
             }
 
+            let relatedServicesHtml = affectedServices.length > 0
+                ? `<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${affectedServices.join(', ')}</span></div>`
+                : '<div></div>';
+
             let actionButtonsHtml = !isApproved ? `
-                <div class="blueprint-actions" style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
-                    <button class="blueprint-approve-btn" style="background: rgba(3, 218, 198, 0.1); color: #03dac6; border: 1px solid rgba(3, 218, 198, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-check'></i> Approve</button>
-                    <button class="blueprint-deny-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Decline</button>
+                <div class="blueprint-actions" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 20px;">
+                    ${relatedServicesHtml}
+                    <div style="display: flex; gap: 10px;">
+                        <button class="blueprint-approve-btn" style="background: rgba(3, 218, 198, 0.1); color: #03dac6; border: 1px solid rgba(3, 218, 198, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-check'></i> Approve</button>
+                        <button class="blueprint-deny-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Decline</button>
+                    </div>
                 </div>
             ` : `
-                <div class="blueprint-status-badge" style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase; margin-top: 15px; justify-content: flex-end;">
-                    <i class='bx bxs-check-shield'></i> Approved Blueprint
+                <div class="blueprint-status-badge" style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px;">
+                    ${relatedServicesHtml}
+                    <div style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase;">
+                        <i class='bx bxs-check-shield'></i> Approved Blueprint
+                    </div>
                 </div>
             `;
 
@@ -146,10 +154,13 @@ export async function updateBlueprintsTab(forceReRender = false) {
                         <div class="event-details-header">
                             <h4>Blueprint Design</h4>
                         </div>
-                        <div class="blueprint-summary" style="margin-bottom: 10px; color: #fff;">
+                        
+                        <h5 style="margin-bottom: 8px;">Summary</h5>
+                        <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">
                             ${escapeHtml(summary)}
                         </div>
-                        ${affectedHtml}
+
+                        <h5 style="margin-bottom: 8px;">Technical Details</h5>
                         <div class="event-detail-block" style="text-align: left;">
                             <div class="detail-pre">${escapeHtml(content)}</div>
                         </div>
