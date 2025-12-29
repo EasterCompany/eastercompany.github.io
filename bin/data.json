@@ -209,17 +209,9 @@
     },
     "2.16.13": {
       "type": "patch",
-      "date": "2025-12-29T11:36:04Z",
-      "commit": "ff0f34e",
-      "binaries": {
-        "cli": {
-          "linux-amd64": {
-            "path": "/bin/2.16.13/dex",
-            "size": 16619539,
-            "checksum": "b1b0cc4a20204ce7e1bc4ccd916ea2290e8b9050587a5a35c695589249ba4429"
-          }
-        }
-      }
+      "date": "2025-12-29T12:12:25Z",
+      "commit": "2e596b1",
+      "binaries": {}
     },
     "2.16.2": {
       "type": "patch",
