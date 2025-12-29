@@ -51,16 +51,26 @@ export const getGuardianContent = () => {
 export const getProcessesContent = () => {
   return `
         <div class="system-section-header">
-            <i class='bx bxs-component' style="color: #03dac6;"></i>
-            <h2>Live Processes</h2>
+            <i class='bx bxs-zap' style="color: #03dac6;"></i>
+            <h2>Active Processes</h2>
         </div>
         <div id="processes-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>
+
+        <div class="system-section-header">
+            <i class='bx bx-list-ul' style="color: #ff9800;"></i>
+            <h2>Process Queue</h2>
+        </div>
+        <div id="processes-queue-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;">
+            <div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">
+                Queue is empty (Feature coming soon)
+            </div>
+        </div>
         
         <div class="system-section-header">
             <i class='bx bx-history' style="color: #888;"></i>
             <h2>Process History</h2>
         </div>
-        <div id="processes-history-widgets" class="system-monitor-widgets" style="margin-bottom: 30px; opacity: 0.7; flex-direction: row-reverse;"></div>`;
+        <div id="processes-history-widgets" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; opacity: 0.8;"></div>`;
 };
 
 export const getServicesContent = () => {
@@ -700,8 +710,23 @@ function renderProcessList(container, list, isHistory) {
       displayName = `Channel ${displayName}`;
     }
 
-    const stateColor = isHistory ? '#888' : '#fff';
-    const borderColor = isHistory ? 'border-left: 3px solid #666;' : ''; 
+    if (isHistory) {
+      return `
+        <div class="process-history-item" data-channel-id="${proc.channel_id}-${proc.start_time}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
+            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                <i class='bx bx-check-circle' style="color: #03dac6; font-size: 1.1em;"></i>
+                <span style="color: #fff; font-weight: 600;">${displayName}</span>
+                <span style="color: #666; font-size: 0.9em; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;">${proc.state}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px; color: #888;">
+                <span>PID: ${proc.pid}</span>
+                <span style="color: #03dac6; min-width: 40px; text-align: right;">${durationStr}</span>
+            </div>
+        </div>`;
+    }
+
+    const stateColor = '#fff';
+    const borderColor = ''; 
 
     return `
                 <div class="service-widget process-widget" data-channel-id="${proc.channel_id}-${proc.start_time}" style="${borderColor}">
@@ -727,7 +752,8 @@ function renderProcessList(container, list, isHistory) {
                 </div>`;
   }
 
-  const existingWidgetsMap = new Map(Array.from(container.querySelectorAll('.process-widget')).map(widget => [widget.dataset.channelId, widget]));
+  const selector = isHistory ? '.process-history-item' : '.process-widget';
+  const existingWidgetsMap = new Map(Array.from(container.querySelectorAll(selector)).map(widget => [widget.dataset.channelId, widget]));
   const incomingIds = new Set(list.map(p => `${p.channel_id}-${p.start_time}`));
 
   for (const [id, widget] of existingWidgetsMap) {
