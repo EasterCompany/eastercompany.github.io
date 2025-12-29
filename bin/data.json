@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.8.149.main.03b4ac7.2025-12-29.linux-amd64.03b4ac7",
-    "dev": "2.8.149.main.03b4ac7.2025-12-29.linux-amd64.03b4ac7"
+    "user": "2.8.150.main.a80c64c.2025-12-29.linux-amd64.a80c64c",
+    "dev": "2.8.150.main.a80c64c.2025-12-29.linux-amd64.a80c64c"
   },
   "releases": {
     "0.0.0": {
@@ -2173,14 +2173,28 @@
     },
     "2.8.150": {
       "type": "patch",
-      "date": "2025-12-24T18:34:52Z",
-      "commit": "1cf3e40",
+      "date": "2025-12-29T04:22:39Z",
+      "commit": "ed8cd0b",
       "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.150/dex",
+            "size": 16614818,
+            "checksum": "ba651fde96000c3d2b6f4099e928e25237b787e017771bca15bc5e6a2370ef29"
+          }
+        },
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/2.8.150/dex-discord-service",
+            "size": 13503184,
+            "checksum": "b46bcd44a7cfa92bcf38e24c0dba7fe332879a6c024b1b27edf17ade41645526"
+          }
+        },
         "event": {
           "linux-amd64": {
             "path": "/bin/2.8.150/dex-event-service",
-            "size": 12635475,
-            "checksum": "3955ea7fe6b7016fbfb66d3427d7327347241a179f533175487313d026501320"
+            "size": 12807881,
+            "checksum": "7af55229d87f4caf5b2627e4783896423601c69d01c5e07c85f0c01dc18d08de"
           }
         }
       }
@@ -3385,8 +3399,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.8.149.main.03b4ac7.2025-12-29.linux-amd64.03b4ac7",
-      "user": "2.8.149.main.03b4ac7.2025-12-29.linux-amd64.03b4ac7",
+      "current": "2.8.150.main.a80c64c.2025-12-29.linux-amd64.a80c64c",
+      "user": "2.8.150.main.a80c64c.2025-12-29.linux-amd64.a80c64c",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -3395,8 +3409,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.8.218",
-      "user": "2.8.218",
+      "current": "2.8.219",
+      "user": "2.8.219",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
