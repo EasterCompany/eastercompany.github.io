@@ -109,7 +109,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
             if (implementationPath.length > 0) {
                 pathHtml = `
                     <div class="blueprint-path" style="margin-top: 15px;">
-                        <h5 style="margin-bottom: 8px;">Proposed Steps</h5>
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Proposed Steps</h5>
                         <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${implementationPath.map(step => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}</ul></div>
                     </div>
                 `;
@@ -147,10 +147,10 @@ export async function updateBlueprintsTab(forceReRender = false) {
                     <div class="event-service">${category.toUpperCase()}</div>
                     <div class="event-message">${title}</div>
                     <div class="event-details" style="${detailsStyle}">
-                        <h5 style="margin-bottom: 8px;">Summary</h5>
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Summary</h5>
                         <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">${escapeHtml(summary)}</div>
 
-                        <h5 style="margin-bottom: 8px;">Technical Details</h5>
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
                         <div class="event-detail-block" style="text-align: left;">
                             <div class="detail-pre">${escapeHtml(content)}</div>
                         </div>
