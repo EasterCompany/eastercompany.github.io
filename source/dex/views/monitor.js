@@ -424,6 +424,32 @@ export async function updateModelsTab() {
                 </div>`;
   }
 
+  function generateXTTSWidgetHtml(xtts) {
+    const isReady = xtts.status === 'Ready';
+    const statusClass = isReady ? 'service-widget-online' : 'service-widget-offline';
+    const statusText = isReady ? 'READY' : 'NOT FOUND';
+    const icon = 'bx-volume-full';
+
+    return `
+                <div class="service-widget ${statusClass}" data-xtts-widget>
+                    <div class="service-widget-header">
+                        <i class="bx ${icon}"></i>
+                        <h3>XTTS-v2</h3>
+                        <span class="service-widget-status">${statusText}</span>
+                    </div>
+                    <div class="service-widget-body">
+                        <div class="service-widget-info">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value">${xtts.status}</span>
+                        </div>
+                        <div class="service-widget-info">
+                            <span class="info-label">Model:</span>
+                            <span class="info-value">XTTS-v2 (Voice)</span>
+                        </div>
+                    </div>
+                </div>`;
+  }
+
   function generateModelWidgetHtml(model) {
     const isDownloaded = model.status === 'Downloaded';
     const statusClass = isDownloaded ? 'service-widget-online' : 'service-widget-offline';
@@ -441,6 +467,9 @@ export async function updateModelsTab() {
   let finalHtml = '';
   if (whisperStatus) {
     finalHtml += generateWhisperWidgetHtml(whisperStatus);
+  }
+  if (data.xtts) {
+    finalHtml += generateXTTSWidgetHtml(data.xtts);
   }
   finalHtml += models.map(generateModelWidgetHtml).join('');
 
