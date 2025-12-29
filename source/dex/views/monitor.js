@@ -2,52 +2,47 @@
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 
-export const getAnalystContent = () => {
+export const getGuardianContent = () => {
   return `
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
             <h2>Summary</h2>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
-             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+             <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
                 <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Current Idle</span>
-                <span id="analyst-idle-val" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+                <span id="guardian-idle-val" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
             </div>
-             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+             <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
                 <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Idle</span>
-                <span id="analyst-total-idle" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+                <span id="guardian-total-idle" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
             </div>
-             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+             <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
                 <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Active</span>
-                <span id="analyst-total-active" style="color: #03dac6; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+                <span id="guardian-total-active" style="color: #03dac6; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
             </div>
-             <div class="analyst-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+             <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
                 <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Waste</span>
-                <span id="analyst-total-waste" style="color: #cf6679; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+                <span id="guardian-total-waste" style="color: #cf6679; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
             </div>
         </div>
 
         <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #bb86fc;"></i>
-            <h2>Analyst</h2>
-            <button id="analyst-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+            <h2>Guardian</h2>
+            <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
         </div>
-        <div class="analyst-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                <div class="analyst-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Guardian</span>
-                    <span id="analyst-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="analyst-t1-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Tier 1 (Sentry)</span>
+                    <span id="guardian-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="guardian-t1-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
-                <div class="analyst-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect</span>
-                    <span id="analyst-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="analyst-t2-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-                </div>
-                <div class="analyst-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Strategist</span>
-                    <span id="analyst-t3-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="analyst-t3-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Tier 2 (Architect)</span>
+                    <span id="guardian-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="guardian-t2-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
         </div>`;
@@ -172,9 +167,9 @@ async function fetchProcessData() {
   }
 }
 
-async function fetchAnalystStatus() {
+async function fetchGuardianStatus() {
   try {
-    const response = await smartFetch('/analyst/status');
+    const response = await smartFetch('/guardian/status');
     return await response.json();
   } catch (error) {
     return null;
@@ -463,21 +458,20 @@ export async function updateProcessesTab() {
   const widgetsContainer = document.getElementById('processes-widgets');
   if (!widgetsContainer) return;
 
-  // --- Update Analyst Status ---
-  const t1Val = document.getElementById('analyst-t1-val');
-  const t2Val = document.getElementById('analyst-t2-val');
-  const t3Val = document.getElementById('analyst-t3-val');
-  const idleVal = document.getElementById('analyst-idle-val');
-  const totalIdleVal = document.getElementById('analyst-total-idle');
-  const totalActiveVal = document.getElementById('analyst-total-active');
-  const totalWasteVal = document.getElementById('analyst-total-waste');
-  const resetBtn = document.getElementById('analyst-reset-btn');
+  // --- Update Guardian Status ---
+  const t1Val = document.getElementById('guardian-t1-val');
+  const t2Val = document.getElementById('guardian-t2-val');
+  const idleVal = document.getElementById('guardian-idle-val');
+  const totalIdleVal = document.getElementById('guardian-total-idle');
+  const totalActiveVal = document.getElementById('guardian-total-active');
+  const totalWasteVal = document.getElementById('guardian-total-waste');
+  const resetBtn = document.getElementById('guardian-reset-btn');
 
   if (resetBtn && !resetBtn.dataset.listenerAttached) {
     resetBtn.onclick = async () => {
       resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Resetting...";
       try {
-        await smartFetch('/analyst/reset?tier=all', { method: 'POST' });
+        await smartFetch('/guardian/reset?tier=all', { method: 'POST' });
         setTimeout(() => {
           resetBtn.innerHTML = "<i class='bx bx-check'></i> Done";
           setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset"; }, 2000);
@@ -490,10 +484,10 @@ export async function updateProcessesTab() {
     resetBtn.dataset.listenerAttached = "true";
   }
 
-  const analystStatus = await fetchAnalystStatus();
-  if (analystStatus) {
+  const guardianStatus = await fetchGuardianStatus();
+  if (guardianStatus) {
     const now = Math.floor(Date.now() / 1000);
-    const activeTier = analystStatus.active_tier;
+    const activeTier = guardianStatus.active_tier;
 
     const formatDuration = (seconds) => {
       if (seconds < 0) seconds = 0;
@@ -506,10 +500,10 @@ export async function updateProcessesTab() {
     };
 
     const updateTimer = (el, statsEl, tierData, tierName) => {
-      if (activeTier === tierName || (tierName === 'guardian' && activeTier === 'tests')) {
+      if (activeTier === tierName || (tierName === 't1' && activeTier === 'tests')) {
         el.textContent = "Working";
-        el.style.color = "#bb86fc"; // Purple for Analyst activity
-      } else {
+        el.style.color = "#bb86fc"; 
+      } else if (tierData) {
         const nextRun = tierData.next_run;
         const diff = nextRun - now;
         if (diff <= 0) {
@@ -534,24 +528,23 @@ export async function updateProcessesTab() {
       }
     };
 
-    if (t1Val) updateTimer(t1Val, document.getElementById('analyst-t1-stats'), analystStatus.guardian, 'guardian');
-    if (t2Val) updateTimer(t2Val, document.getElementById('analyst-t2-stats'), analystStatus.architect, 'architect');
-    if (t3Val) updateTimer(t3Val, document.getElementById('analyst-t3-stats'), analystStatus.strategist, 'strategist');
+    if (t1Val) updateTimer(t1Val, document.getElementById('guardian-t1-stats'), guardianStatus.t1, 't1');
+    if (t2Val) updateTimer(t2Val, document.getElementById('guardian-t2-stats'), guardianStatus.t2, 't2');
 
-    if (idleVal && analystStatus.system_idle_time !== undefined) {
-      const idle = analystStatus.system_idle_time;
+    if (idleVal && guardianStatus.system_idle_time !== undefined) {
+      const idle = guardianStatus.system_idle_time;
       idleVal.textContent = formatDuration(idle);
       if (idle > 300) idleVal.style.color = "#5eff5e";
       else if (idle > 60) idleVal.style.color = "#ffa500";
       else idleVal.style.color = "#fff";
     }
 
-    if (totalIdleVal) totalIdleVal.textContent = formatDuration(analystStatus.total_idle_time || 0);
-    if (totalActiveVal) totalActiveVal.textContent = formatDuration(analystStatus.total_active_time || 0);
-    if (totalWasteVal) totalWasteVal.textContent = formatDuration(analystStatus.total_waste_time || 0);
+    if (totalIdleVal) totalIdleVal.textContent = formatDuration(guardianStatus.total_idle_time || 0);
+    if (totalActiveVal) totalActiveVal.textContent = formatDuration(guardianStatus.total_active_time || 0);
+    if (totalWasteVal) totalWasteVal.textContent = formatDuration(guardianStatus.total_waste_time || 0);
 
   } else {
-    const indicators = [t1Val, t2Val, t3Val, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
+    const indicators = [t1Val, t2Val, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
     indicators.forEach(el => {
       if (el) {
         el.textContent = "-";
@@ -643,7 +636,7 @@ function renderProcessList(container, list, isHistory) {
     let displayName = proc.channel_id;
     const idMap = {
       'system-discord': 'Discord Engine',
-      'system-analyst': 'Analyst Worker',
+      'system-guardian': 'Guardian Worker',
       'system-cli-op': 'CLI Operation'
     };
     if (idMap[displayName]) {
@@ -653,7 +646,7 @@ function renderProcessList(container, list, isHistory) {
     }
 
     const stateColor = isHistory ? '#888' : '#fff';
-    const borderColor = isHistory ? 'border-left: 3px solid #666;' : ''; // Default uses class style, override if history
+    const borderColor = isHistory ? 'border-left: 3px solid #666;' : ''; 
 
     return `
                 <div class="service-widget process-widget" data-channel-id="${proc.channel_id}-${proc.start_time}" style="${borderColor}">
@@ -680,8 +673,6 @@ function renderProcessList(container, list, isHistory) {
   }
 
   const existingWidgetsMap = new Map(Array.from(container.querySelectorAll('.process-widget')).map(widget => [widget.dataset.channelId, widget]));
-
-  // Map list to unique IDs (channel_id + start_time to distinguish history items)
   const incomingIds = new Set(list.map(p => `${p.channel_id}-${p.start_time}`));
 
   for (const [id, widget] of existingWidgetsMap) {
