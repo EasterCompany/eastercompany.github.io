@@ -52,11 +52,10 @@ const CATEGORIES = {
         'messaging.bot.status_update', 'messaging.user.joined_server',
         'system.test.completed', 'system.build.completed',
         'system.roadmap.created', 'system.roadmap.updated',
-        'system.process.registered', 'system.process.unregistered',
-        'system.notification.logged'
+        'system.process.registered', 'system.process.unregistered'
     ],
     cognitive: [
-        'engagement.decision', 'system.analysis.audit', 'system.blueprint.logged',
+        'engagement.decision', 'system.analysis.audit', 'system.blueprint.generated',
         'analysis.link.completed', 'analysis.visual.completed'
     ],
     moderation: [
@@ -85,8 +84,6 @@ const EVENT_ICONS = {
     'engagement.decision': 'bx-brain',
     'system.analysis.audit': 'bx-search-alt',
     'system.blueprint.generated': 'bx-paint',
-    'system.blueprint.logged': 'bx-paint',
-    'system.notification.logged': 'bx-bell',
     'analysis.link.completed': 'bx-link',
     'analysis.visual.completed': 'bx-image',
     'moderation.explicit_content.deleted': 'bx-shield-x',
@@ -114,7 +111,10 @@ export async function updateEventsTimeline(forceReRender = false) {
 
     // Fetch MORE events if we are filtering, to ensure we have enough data
     const fetchCount = currentFilter === 'all' ? 100 : 250;
-    const url = `/events?ml=${fetchCount}&format=json&exclude_types=system.notification.generated`;
+    let url = `/events?ml=${fetchCount}&format=json`;
+    if (currentFilter !== 'all') {
+        url += `&category=${currentFilter}`;
+    }
 
     try {
         const response = await smartFetch(url);
@@ -123,12 +123,11 @@ export async function updateEventsTimeline(forceReRender = false) {
         const data = await response.json();
         const allEvents = data.events || [];
 
-        // Filter out primary structural events that belong in other windows
+        // UI ONLY: Filter out primary structural events that belong in dedicated windows
         currentFilteredEvents = allEvents.filter(e => {
             let ed = e.event;
             if (typeof ed === 'string') { try { ed = JSON.parse(ed); } catch { return true; } }
             const type = ed.type;
-            // Hide actual blueprints and alerts from this list
             if (type === 'system.blueprint.generated' || type === 'system.notification.generated') return false;
             return true;
         });
@@ -629,6 +628,9 @@ function attachEventActionListeners() {
                 let url = '/events';
                 if (currentFilter !== 'all') {
                     url += `?category=${currentFilter}`;
+                } else {
+                    // Protect structural events from 'Clear All' in general timeline
+                    url += `?exclude_types=system.blueprint.generated,system.notification.generated`;
                 }
                 const response = await smartFetch(url, { method: 'DELETE' });
                 if (!response.ok) throw new Error("Failed to delete events");
