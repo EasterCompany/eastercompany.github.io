@@ -147,10 +147,6 @@ export async function updateBlueprintsTab(forceReRender = false) {
                     <div class="event-service">${category.toUpperCase()}</div>
                     <div class="event-message">${title}</div>
                     <div class="event-details" style="${detailsStyle}">
-                        <div class="event-details-header">
-                            <h4>Blueprint Design</h4>
-                        </div>
-                        
                         <h5 style="margin-bottom: 8px;">Summary</h5>
                         <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">${escapeHtml(summary)}</div>
 

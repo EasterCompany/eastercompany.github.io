@@ -183,10 +183,6 @@
                     <div class="event-service">${E.toUpperCase()}</div>
                     <div class="event-message">${v}</div>
                     <div class="event-details" style="${$}">
-                        <div class="event-details-header">
-                            <h4>Blueprint Design</h4>
-                        </div>
-                        
                         <h5 style="margin-bottom: 8px;">Summary</h5>
                         <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">${B(l)}</div>
 
