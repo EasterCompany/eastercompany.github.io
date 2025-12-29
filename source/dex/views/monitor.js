@@ -169,7 +169,7 @@ async function fetchProcessData() {
 
 async function fetchGuardianStatus() {
   try {
-    const response = await smartFetch('/guardian/status');
+    const response = await smartFetch('/agent/status');
     return await response.json();
   } catch (error) {
     return null;
