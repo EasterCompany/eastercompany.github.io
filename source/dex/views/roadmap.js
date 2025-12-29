@@ -38,16 +38,8 @@ export async function updateRoadmapTab(forceReRender = false) {
     const items = await response.json();
     currentItems = items;
 
-    if (items.length === 0) {
-      roadmapContainer.innerHTML = createPlaceholderMessage('empty', 'Your roadmap is empty.', 'Click "New Idea" to start planning Dexter\'s future.');
-      return;
-    }
-
-    if (forceReRender) roadmapContainer.innerHTML = '';
-
     const createItemElement = (item) => {
       const isExpanded = activeExpandedIds.has(item.id);
-      const isDraft = item.state === 'draft';
       const isPublished = item.state === 'published';
       const isConsumed = item.state === 'consumed';
 
@@ -136,6 +128,13 @@ export async function updateRoadmapTab(forceReRender = false) {
         child.remove();
       }
     });
+
+    if (items.length === 0) {
+      roadmapContainer.innerHTML = createPlaceholderMessage('empty', 'Your roadmap is empty.', 'Click "New Idea" to start planning Dexter\'s future.');
+      return;
+    }
+
+    if (forceReRender) roadmapContainer.innerHTML = '';
 
     let previousElement = null;
     items.forEach((item, index) => {
