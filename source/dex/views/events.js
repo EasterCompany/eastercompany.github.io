@@ -330,22 +330,52 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
                 } else if (type === 'system.analysis.audit') {
-                     detailsContent = `
+                    const statusColor = eventData.success ? '#03dac6' : '#ff4d4d';
+                    const statusText = eventData.success ? 'SUCCESS' : 'FAILED';
+                    
+                    let errorHtml = '';
+                    if (eventData.error) {
+                        errorHtml = `
+                            <div class="event-detail-block">
+                                <span class="detail-label" style="color: #ff4d4d;">Error:</span>
+                                <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${escapeHtml(eventData.error)}</pre>
+                            </div>
+                        `;
+                    }
+
+                    detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Agent:</span>
+                            <span class="detail-value">${eventData.agent_name || 'Guardian'}</span>
+                        </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Tier:</span>
-                            <span class="detail-value">${eventData.tier}</span>
+                            <span class="detail-value" style="color: #bb86fc;">${eventData.tier}</span>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value" style="color: ${statusColor}; font-weight: bold;">${statusText} (${eventData.attempts} attempts)</span>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Duration:</span>
+                            <span class="detail-value">${eventData.duration}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Model:</span>
                             <span class="detail-value">${eventData.model}</span>
                         </div>
+                        ${errorHtml}
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Output:</span>
-                            <pre class="detail-pre">${escapeHtml(eventData.raw_output)}</pre>
+                            <span class="detail-label">System Prompt:</span>
+                            <pre class="detail-pre" style="max-height: 150px; overflow-y: auto;">${escapeHtml(eventData.system_prompt)}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Input (Prompt):</span>
-                            <pre class="detail-pre">${escapeHtml(eventData.raw_input)}</pre>
+                            <span class="detail-label">Input Context:</span>
+                            <pre class="detail-pre" style="max-height: 200px; overflow-y: auto;">${escapeHtml(eventData.input_context)}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            <span class="detail-label">Raw Output:</span>
+                            <pre class="detail-pre">${escapeHtml(eventData.raw_output || '(empty)')}</pre>
                         </div>
                     `;
                 } else if (type === 'system.test.completed') {
