@@ -39,9 +39,9 @@ export async function updateBlueprintsTab(forceReRender = false) {
         lastBlueprintsUpdate = Date.now();
         updateTabTimestamp(2, lastBlueprintsUpdate); // Index 2 (Ideas) in mainWindow
 
-    if (blueprints.length === 0) {
+    if (allBlueprints.length === 0) {
       blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Guardian will generate these when idle.');
-      updateTabBadgeCount(1, 0);
+      updateTabBadgeCount(2, 0);
       return;
     }
 

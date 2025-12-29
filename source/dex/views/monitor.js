@@ -688,9 +688,21 @@ function renderProcessList(container, list, isHistory) {
     const newHtml = generateProcessWidgetHtml(proc);
     const existingWidget = existingWidgetsMap.get(uniqueId);
     if (existingWidget) {
-      if (existingWidget.outerHTML !== newHtml) existingWidget.outerHTML = newHtml;
+      if (existingWidget.outerHTML !== newHtml) {
+        existingWidget.outerHTML = newHtml;
+        // Update the map reference to the new element
+        const newElement = container.querySelector(`[data-channel-id="${uniqueId}"]`);
+        if (newElement) {
+          existingWidgetsMap.set(uniqueId, newElement);
+        }
+      }
     } else {
       container.insertAdjacentHTML('beforeend', newHtml);
+      // Add the new element to the map to prevent duplicates in the same pass
+      const newElement = container.querySelector(`[data-channel-id="${uniqueId}"]`);
+      if (newElement) {
+          existingWidgetsMap.set(uniqueId, newElement);
+      }
     }
   });
 }
