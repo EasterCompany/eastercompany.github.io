@@ -240,6 +240,12 @@
       "commit": "2f844c6",
       "binaries": {}
     },
+    "2.16.19": {
+      "type": "patch",
+      "date": "2025-12-29T20:47:26Z",
+      "commit": "cdbed49",
+      "binaries": {}
+    },
     "2.16.2": {
       "type": "patch",
       "date": "2025-12-29T08:39:13Z",
