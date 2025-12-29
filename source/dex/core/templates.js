@@ -31,7 +31,7 @@ export const EVENT_TEMPLATES = {
     "system.status.change": "{entity} changed status to {new_status}",
     "system.test.completed": "Tests completed for {service_name} ({duration})",
     "system.build.completed": "Build completed for {service_name}: {status}",
-    "system.analysis.audit": "Analysis Audit: {tier}",
+    "system.analysis.audit": "Guardian Audit: {tier}",
     "system.blueprint.generated": "Blueprint Generated: {title}",
     "system.cli.command": "CLI Command: {command} {args} ({status})",
     "system.cli.status": "CLI Status: {message}",
@@ -56,7 +56,7 @@ export function formatEventSummary(type, data) {
     // Specific formatting for system.analysis.audit
     if (type === 'system.analysis.audit') {
         const tier = data.tier ? data.tier.toUpperCase() : 'UNKNOWN';
-        template = `Analysis Audit: ${tier}`;
+        template = `Guardian Audit: ${tier}`;
     }
     // Specific formatting for system.attention.expired
     if (type === 'system.attention.expired') {
