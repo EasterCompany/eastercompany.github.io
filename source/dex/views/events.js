@@ -118,25 +118,20 @@ export async function updateEventsTimeline(forceReRender = false) {
 
     try {
         const response = await smartFetch(url);
-        if (!response.ok) throw new Error('Service is offline or unreachable.');
+        if (!response.ok) throw new Error('Service unreachable');
 
         const data = await response.json();
         const allEvents = data.events || [];
-        
-        // Filter events client-side based on category
-        let filteredEvents = allEvents;
-        if (currentFilter !== 'all') {
-            filteredEvents = allEvents.filter(e => {
-                let eventData = e.event;
-                if (typeof eventData === 'string') {
-                    try { eventData = JSON.parse(eventData); } catch (err) { return false; }
-                }
-                return getEventCategory(eventData.type) === currentFilter;
-            });
-        }
-        
-        // Limit to 50 for display
-        currentFilteredEvents = filteredEvents.slice(0, 50);
+
+        // Filter out primary structural events that belong in other windows
+        currentFilteredEvents = allEvents.filter(e => {
+            let ed = e.event;
+            if (typeof ed === 'string') { try { ed = JSON.parse(ed); } catch { return true; } }
+            const type = ed.type;
+            // Hide actual blueprints and alerts from this list
+            if (type === 'system.blueprint.generated' || type === 'system.notification.generated') return false;
+            return true;
+        });
 
         lastEventsUpdate = Date.now();
         updateTabTimestamp(1, lastEventsUpdate); // Index 1 in mainWindow
