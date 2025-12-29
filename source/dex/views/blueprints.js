@@ -123,8 +123,8 @@ export async function updateBlueprintsTab(forceReRender = false) {
 
             let actionButtonsHtml = !isApproved ? `
                 <div class="blueprint-actions" style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
-                    <button class="blueprint-deny-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Deny</button>
                     <button class="blueprint-approve-btn" style="background: rgba(3, 218, 198, 0.1); color: #03dac6; border: 1px solid rgba(3, 218, 198, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-check'></i> Approve</button>
+                    <button class="blueprint-deny-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Deny</button>
                 </div>
             ` : `
                 <div class="blueprint-status-badge" style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase; margin-top: 15px; justify-content: flex-end;">
