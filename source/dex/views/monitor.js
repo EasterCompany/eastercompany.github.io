@@ -89,6 +89,10 @@ export const getHardwareContent = () => {
             <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
         </div>
         <div id="hardware-metrics" class="hardware-grid" style="display: flex; flex-direction: column; gap: 25px; margin-bottom: 30px;">
+            <div class="hardware-section" id="hw-os">
+                <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; text-align: left;"><i class='bx bx-laptop'></i> Operating System</h3>
+                <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);"></div>
+            </div>
             <div class="hardware-section" id="hw-cpu">
                 <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; text-align: left;"><i class='bx bx-chip'></i> CPU</h3>
                 <div class="hw-content" style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);"></div>
@@ -181,6 +185,7 @@ export async function updateSystemMonitor() {
   const hardwareRefreshBtn = document.getElementById('hardware-refresh-btn');
 
   // Hardware Containers
+  const osContainer = document.querySelector('#hw-os .hw-content');
   const cpuContainer = document.querySelector('#hw-cpu .hw-content');
   const ramContainer = document.querySelector('#hw-ram .hw-content');
   const gpuContainer = document.querySelector('#hw-gpu .hw-content');
@@ -189,6 +194,17 @@ export async function updateSystemMonitor() {
   // Helper to render hardware widgets
   const renderHardwareWidgets = (data) => {
     if (!data) return;
+
+    // OS & Architecture
+    if (osContainer) {
+      osContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${data.OS || 'Unknown'}</span>
+                    <div style="display: flex; gap: 30px;">
+                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${data.ARCHITECTURE || 'unknown'}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Architecture</span></div>
+                    </div>
+                </div>`;
+    }
 
     // RAM
     if (ramContainer) {
