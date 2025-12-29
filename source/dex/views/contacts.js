@@ -20,7 +20,12 @@ export async function updateContactsTab() {
     // Attach refresh listener
     const refreshBtn = document.getElementById('contacts-refresh');
     if (refreshBtn && !refreshBtn.dataset.listenerAttached) {
-        refreshBtn.onclick = () => updateContactsTab();
+        refreshBtn.onclick = async () => {
+            refreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Refreshing...";
+            await updateContactsTab();
+            refreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
+            setTimeout(() => { refreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
+        };
         refreshBtn.dataset.listenerAttached = "true";
     }
 
