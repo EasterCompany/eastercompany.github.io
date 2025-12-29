@@ -10,8 +10,8 @@ export const getGuardianContent = () => {
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
              <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
-                <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Current Idle</span>
-                <span id="guardian-idle-val" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
+                <span id="system-state-label" style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">System State</span>
+                <span id="system-state-val" style="color: #fff; font-family: monospace; font-size: 1.2em; font-weight: bold;">-</span>
             </div>
              <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
                 <span style="color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Total Idle</span>
@@ -534,12 +534,20 @@ export async function updateProcessesTab() {
     if (t1Val) updateTimer(t1Val, document.getElementById('guardian-t1-stats'), guardianStatus.t1, 't1');
     if (t2Val) updateTimer(t2Val, document.getElementById('guardian-t2-stats'), guardianStatus.t2, 't2');
 
-    if (idleVal && guardianStatus.system_idle_time !== undefined) {
-      const idle = guardianStatus.system_idle_time;
-      idleVal.textContent = formatDuration(idle);
-      if (idle > 300) idleVal.style.color = "#5eff5e";
-      else if (idle > 60) idleVal.style.color = "#ffa500";
-      else idleVal.style.color = "#fff";
+    const stateLabel = document.getElementById('system-state-label');
+    const stateVal = document.getElementById('system-state-val');
+    if (stateVal && guardianStatus.system_state) {
+      const state = guardianStatus.system_state;
+      const duration = formatDuration(guardianStatus.system_state_time || 0);
+      
+      if (stateLabel) stateLabel.textContent = `State: ${state.toUpperCase()}`;
+      stateVal.textContent = duration;
+      
+      if (state === 'idle') {
+        stateVal.style.color = guardianStatus.system_state_time > 300 ? "#5eff5e" : "#fff";
+      } else {
+        stateVal.style.color = "#bb86fc"; // Purple for working/busy
+      }
     }
 
     if (totalIdleVal) totalIdleVal.textContent = formatDuration(guardianStatus.total_idle_time || 0);
