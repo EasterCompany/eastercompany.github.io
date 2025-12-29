@@ -136,11 +136,11 @@ export async function updateAlertsTab(forceReRender = false) {
         } catch (e) { return null; }
       }
 
-      const title = alertData.title || 'Untitled Alert';
-      const body = alertData.body || 'No description provided.';
-      const priority = alertData.priority || 'low';
+      const title = (alertData.title || 'Untitled Alert').trim();
+      const body = (alertData.body || 'No description provided.').trim();
+      const priority = (alertData.priority || 'low').toLowerCase();
       const isAlert = !!alertData.alert;
-      const category = alertData.category || 'system';
+      const category = (alertData.category || 'system').trim();
       const relatedEventIDs = alertData.related_event_ids || [];
       const auditEventID = alertData.audit_event_id;
 
@@ -195,7 +195,7 @@ export async function updateAlertsTab(forceReRender = false) {
                 ${generatedByHtml}
                 ${relatedEventsHtml}
                 <div class="event-detail-block" style="text-align: left;">
-                    <div class="detail-pre">${renderMarkdown('### Insight\n\n' + body)}</div>
+                    <div class="detail-pre" style="color: #fff;">${renderMarkdown(body)}</div>
                 </div>
             `;
 
