@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.12.0.main.68802d6.2025-12-29.linux-amd64.68802d6",
-    "dev": "2.12.0.main.68802d6.2025-12-29.linux-amd64.68802d6"
+    "user": "2.8.155.main.68802d6.2025-12-29.linux-amd64.68802d6",
+    "dev": "2.8.155.main.68802d6.2025-12-29.linux-amd64.68802d6"
   },
   "releases": {
     "0.0.0": {
@@ -143,12 +143,40 @@
           }
         }
       }
+    },
+    "2.8.155": {
+      "type": "patch",
+      "date": "2025-12-29T07:21:15Z",
+      "commit": "0c1d39e",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.8.155/dex",
+            "size": 16614159,
+            "checksum": "8dd1a5e7423d08ec4ffa4c842412383036550aff27aeb527ac71177d25914ee9"
+          }
+        },
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.8.155/dex-event-service",
+            "size": 12791488,
+            "checksum": "8f9ef9504a083ced962c8e7b895a22327997eca78a094c80091d2a999bca9a58"
+          }
+        },
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/2.8.155/dex-tts-service",
+            "size": 2852654,
+            "checksum": "0578bd0200f70cad69c54a8db44aa73305edc5ab05d9eedde43d2e85553eecb1"
+          }
+        }
+      }
     }
   },
   "services": {
     "cli": {
-      "current": "2.12.0.main.68802d6.2025-12-29.linux-amd64.68802d6",
-      "user": "2.12.0.main.68802d6.2025-12-29.linux-amd64.68802d6",
+      "current": "2.8.155.main.68802d6.2025-12-29.linux-amd64.68802d6",
+      "user": "2.8.155.main.68802d6.2025-12-29.linux-amd64.68802d6",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -157,13 +185,13 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.12.0",
-      "user": "2.12.0",
+      "current": "2.8.226",
+      "user": "2.8.226",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
-      "current": "2.12.0",
-      "user": "2.12.0",
+      "current": "0.0.0",
+      "user": "0.0.0",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
