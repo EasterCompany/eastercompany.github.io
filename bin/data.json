@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.16.0.main.48b9869.2025-12-29.linux-amd64.48b9869",
-    "dev": "2.16.0.main.48b9869.2025-12-29.linux-amd64.48b9869"
+    "user": "2.16.3.main.48b9869.2025-12-29.linux-amd64.48b9869",
+    "dev": "2.16.3.main.48b9869.2025-12-29.linux-amd64.48b9869"
   },
   "releases": {
     "0.0.0": {
@@ -143,12 +143,33 @@
           }
         }
       }
+    },
+    "2.16.3": {
+      "type": "patch",
+      "date": "2025-12-29T07:36:40Z",
+      "commit": "e1813c0",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.16.3/dex",
+            "size": 16613527,
+            "checksum": "ee72dec72c53d063cd7a08e36ab3507933b00159e041d2210a0918079681c58d"
+          }
+        },
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/2.16.3/dex-tts-service",
+            "size": 2859152,
+            "checksum": "de48b038d9c830515690f9e935b0f8ad54b47460753f3951667e60bafc8595d7"
+          }
+        }
+      }
     }
   },
   "services": {
     "cli": {
-      "current": "2.16.0.main.48b9869.2025-12-29.linux-amd64.48b9869",
-      "user": "2.16.0.main.48b9869.2025-12-29.linux-amd64.48b9869",
+      "current": "2.16.3.main.48b9869.2025-12-29.linux-amd64.48b9869",
+      "user": "2.16.3.main.48b9869.2025-12-29.linux-amd64.48b9869",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -162,8 +183,8 @@
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
-      "current": "2.16.0",
-      "user": "2.16.0",
+      "current": "2.16.1",
+      "user": "2.16.1",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
