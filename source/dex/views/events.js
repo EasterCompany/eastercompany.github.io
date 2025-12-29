@@ -620,6 +620,9 @@ function attachEventActionListeners() {
                 let url = '/events';
                 if (currentFilter !== 'all') {
                     url += `?category=${currentFilter}`;
+                } else {
+                    // When clearing "ALL" in the events window, exclude types shown in other windows
+                    url += `?exclude_types=system.notification.generated,system.blueprint.generated`;
                 }
                 const response = await smartFetch(url, { method: 'DELETE' });
                 if (!response.ok) throw new Error("Failed to delete events");
