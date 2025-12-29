@@ -160,17 +160,9 @@
     },
     "2.16.2": {
       "type": "patch",
-      "date": "2025-12-29T07:39:34Z",
-      "commit": "7aaf4fc",
-      "binaries": {
-        "tts": {
-          "linux-amd64": {
-            "path": "/bin/2.16.2/dex-tts-service",
-            "size": 2859152,
-            "checksum": "9bbd96fdbc093ce9172911b277bfbc298583db8fb952816912d9729457719dc0"
-          }
-        }
-      }
+      "date": "2025-12-29T08:39:13Z",
+      "commit": "d8be741",
+      "binaries": {}
     },
     "2.16.3": {
       "type": "patch",
