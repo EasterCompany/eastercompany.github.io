@@ -229,7 +229,10 @@ function onReady() {
     title: 'Events',
     icon: 'bx-calendar-event',
     content: getEventsContent(),
-    onOpen: () => updateEventsTimeline(),
+    onOpen: () => {
+      eventsWindow.setContent(getEventsContent());
+      updateEventsTimeline();
+    },
     onClose: () => {
       const idx = activeWindows.indexOf(eventsWindow);
       if (idx > -1) activeWindows.splice(idx, 1);

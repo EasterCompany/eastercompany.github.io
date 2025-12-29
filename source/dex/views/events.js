@@ -612,6 +612,17 @@ function attachEventActionListeners() {
         filterContainer.dataset.listenerAttached = "true";
     }
 
+    // Force active state to match currentFilter (in case window was re-opened with cached HTML)
+    if (filterContainer) {
+        filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.dataset.filter === currentFilter) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
     const clearBtn = document.getElementById('events-clear');
     if (clearBtn && !clearBtn.dataset.listenerAttached) {
         clearBtn.onclick = async () => {
