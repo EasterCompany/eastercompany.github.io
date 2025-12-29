@@ -500,9 +500,12 @@ export async function updateProcessesTab() {
     };
 
     const updateTimer = (el, statsEl, tierData, tierName) => {
-      if (activeTier === tierName || (tierName === 't1' && activeTier === 'tests')) {
+      if (activeTier === tierName) {
         el.textContent = "Working";
         el.style.color = "#bb86fc"; 
+      } else if (tierName === 't1' && activeTier === 'tests') {
+        el.textContent = "Testing";
+        el.style.color = "#03dac6";
       } else if (tierData) {
         const nextRun = tierData.next_run;
         const diff = nextRun - now;
