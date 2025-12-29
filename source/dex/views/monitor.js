@@ -460,7 +460,7 @@ export async function updateModelsTab() {
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Model:</span>
-                            <span class="info-value">XTTS-v2 (Voice)</span>
+                            <span class="info-value">xtts</span>
                         </div>
                     </div>
                 </div>`;
