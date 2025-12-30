@@ -219,7 +219,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                     
                     detailsContent = `
                         <div class="event-detail-row">
-                            <span class="detail-label">Tier:</span>
+                            <span class="detail-label">Protocol:</span>
                             <span class="detail-value" style="color: #bb86fc;">${eventData.tier}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
@@ -359,7 +359,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.agent_name || 'Guardian'}</div>
                             </div>
                             <div style="flex: 1; min-width: 80px;">
-                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tier</div>
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
                                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier}</div>
                             </div>
                             <div style="flex: 1; min-width: 150px;">

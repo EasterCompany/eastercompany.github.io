@@ -35,12 +35,12 @@ export const getGuardianContent = () => {
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Tier 1 (Sentry)</span>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Sentry Protocol (T1)</span>
                     <span id="guardian-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="guardian-t1-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Tier 2 (Architect)</span>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Protocol (T2)</span>
                     <span id="guardian-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="guardian-t2-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
@@ -526,7 +526,7 @@ export async function updateProcessesTab() {
     resetBtn.onclick = async () => {
       resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Resetting...";
       try {
-        await smartFetch('/guardian/reset?tier=all', { method: 'POST' });
+        await smartFetch('/guardian/reset?protocol=all', { method: 'POST' });
         setTimeout(() => {
           resetBtn.innerHTML = "<i class='bx bx-check'></i> Done";
           setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset"; }, 2000);
@@ -554,15 +554,15 @@ export async function updateProcessesTab() {
       return `${s}s`;
     };
 
-    const updateTimer = (el, statsEl, tierData, tierName) => {
-      if (activeTier === tierName) {
+    const updateTimer = (el, statsEl, protocolData, protocolName) => {
+      if (activeTier === protocolName) {
         el.textContent = "Working";
         el.style.color = "#bb86fc"; 
-      } else if (tierName === 't1' && activeTier === 'tests') {
+      } else if (protocolName === 't1' && activeTier === 'tests') {
         el.textContent = "Testing";
         el.style.color = "#03dac6";
-      } else if (tierData) {
-        const nextRun = tierData.next_run;
+      } else if (protocolData) {
+        const nextRun = protocolData.next_run;
         const diff = nextRun - now;
         if (diff <= 0) {
           el.textContent = "Ready";
@@ -575,12 +575,12 @@ export async function updateProcessesTab() {
         }
       }
 
-      if (statsEl && tierData) {
+      if (statsEl && protocolData) {
         statsEl.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
-            <span>Runs: ${tierData.attempts || 0}</span>
-            <span style="color: ${tierData.failures > 0 ? '#ffa500' : '#666'}">Fails: ${tierData.failures || 0}</span>
-            <span style="color: ${tierData.absolute_failures > 0 ? '#ff4d4d' : '#666'}">Aborted: ${tierData.absolute_failures || 0}</span>
+            <span>Runs: ${protocolData.attempts || 0}</span>
+            <span style="color: ${protocolData.failures > 0 ? '#ffa500' : '#666'}">Fails: ${protocolData.failures || 0}</span>
+            <span style="color: ${protocolData.absolute_failures > 0 ? '#ff4d4d' : '#666'}">Aborted: ${protocolData.absolute_failures || 0}</span>
           </div>
         `;
       }
