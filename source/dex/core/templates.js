@@ -28,6 +28,7 @@ export const EVENT_TEMPLATES = {
     "moderation.explicit_content.deleted": "Explicit content deleted in {channel_name} from {user_name}: {reason}",
     "analysis.link.completed": "Analyzed link: {url}",
     "analysis.visual.completed": "Analyzed image: {filename}",
+    "analysis.router.decision": "Router Decision: {decision} for {url}",
     "system.status.change": "{entity} changed status to {new_status}",
     "system.test.completed": "Tests completed for {service_name} ({duration})",
     "system.build.completed": "Build completed for {service_name}: {status}",
