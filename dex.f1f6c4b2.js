@@ -202,7 +202,7 @@
                     <div class="event-message">${n}</div>
                     <div class="event-details" style="${S}">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Summary</h5>
-                        <div class="detail-pre" style="margin-bottom: 15px; color: #fff;">${N(g)}</div>
+                        <div class="detail-pre" style="margin-bottom: 15px;">${N(g)}</div>
 
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
                         <div class="event-detail-block" style="text-align: left;">
