@@ -193,21 +193,27 @@ export async function updateEventsTimeline(forceReRender = false) {
             if (isExpandable) {
                 let detailsContent = '';
                 if (type === 'engagement.decision') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Engagement Model:</span>
                             <span class="detail-value">${eventData.engagement_model || 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Context History:</span>
+                            ${stylisedHeader('Input Decision')}
+                            <pre class="detail-pre">${eventData.input_decision || 'None'}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            ${stylisedHeader('Context History')}
                             <pre class="detail-pre">${eventData.context_history || 'None'}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Engagement Output:</span>
+                            ${stylisedHeader('Raw Engagement Output')}
                             <pre class="detail-pre">${eventData.engagement_raw || 'None'}</pre>
                         </div>
                     `;
                 } else if (type === 'system.attention.expired') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     const idleTime = eventData.timestamp - eventData.last_active;
                     const idleMinutes = Math.floor(idleTime / 60);
                     
@@ -216,69 +222,73 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <span class="detail-label">Tier:</span>
                             <span class="detail-value" style="color: #bb86fc;">${eventData.tier}</span>
                         </div>
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Idle Time:</span>
                             <span class="detail-value">${idleMinutes} minutes</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Context (Last Input):</span>
+                            ${stylisedHeader('Context (Last Input)')}
                             <div class="detail-pre">${renderMarkdown(eventData.last_input || 'None')}</div>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Thought Process (Last Output):</span>
+                            ${stylisedHeader('Thought Process (Last Output)')}
                             <div class="detail-pre">${renderMarkdown(eventData.last_output || 'None')}</div>
                         </div>
                     `;
                 } else if (type === 'messaging.bot.sent_message') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
                             <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Input (Prompt):</span>
+                            ${stylisedHeader('Raw Input (Prompt)')}
                             <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Response Output:</span>
+                            ${stylisedHeader('Raw Response Output')}
                             <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
                         </div>
                     `;
                 } else if (type === 'moderation.explicit_content.deleted') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Message ID:</span>
                             <span class="detail-value">${eventData.message_id || 'N/A'}</span>
                         </div>
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Reason:</span>
                             <span class="detail-value">${eventData.reason || 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Model Output:</span>
+                            ${stylisedHeader('Raw Model Output')}
                             <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
                         </div>
                     `;
                 } else if (type === 'analysis.link.completed') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">URL:</span>
                             <span class="detail-value"><a href="${eventData.url}" target="_blank" class="attachment-link">${eventData.url}</a></span>
                         </div>
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Title:</span>
                             <span class="detail-value">${escapeHtml(eventData.title) || 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Description:</span>
+                            ${stylisedHeader('Description')}
                             <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Content Summary:</span>
+                            ${stylisedHeader('Content Summary')}
                             <pre class="detail-pre">${escapeHtml(eventData.summary) || 'None'}</pre>
                         </div>
                     `;
                 } else if (type === 'analysis.visual.completed') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     let imageHtml = '';
                     if (eventData.base64_preview) {
                         imageHtml = 
@@ -289,17 +299,18 @@ export async function updateEventsTimeline(forceReRender = false) {
                     }
 
                     detailsContent = `
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Filename:</span>
                             <span class="detail-value">${eventData.filename}</span>
                         </div>
                         ${imageHtml}
                         <div class="event-detail-block">
-                            <span class="detail-label">Visual Description:</span>
+                            ${stylisedHeader('Visual Description')}
                             <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
                         </div>
                     `;
                 } else if (type === 'system.cli.command') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Command:</span>
@@ -317,106 +328,112 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <span class="detail-label">Duration:</span>
                             <span class="detail-value">${eventData.duration || 'N/A'}</span>
                         </div>
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Exit Code:</span>
                             <span class="detail-value">${eventData.exit_code !== undefined ? eventData.exit_code : 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Output:</span>
+                            ${stylisedHeader('Output')}
                             <pre class="detail-pre">${escapeHtml(eventData.output) || 'No output recorded.'}</pre>
                         </div>
                     `;
                 } else if (type === 'system.analysis.audit') {
                     const statusColor = eventData.success ? '#03dac6' : '#ff4d4d';
                     const statusText = eventData.success ? 'SUCCESS' : 'FAILED';
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     
                     let errorHtml = '';
                     if (eventData.error) {
                         errorHtml = `
                             <div class="event-detail-block">
-                                <span class="detail-label" style="color: #ff4d4d;">Error:</span>
+                                ${stylisedHeader('Error')}
                                 <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${escapeHtml(eventData.error)}</pre>
                             </div>
                         `;
                     }
 
                     detailsContent = `
-                        <div class="event-detail-row">
-                            <span class="detail-label">Agent:</span>
-                            <span class="detail-value">${eventData.agent_name || 'Guardian'}</span>
-                        </div>
-                        <div class="event-detail-row">
-                            <span class="detail-label">Tier:</span>
-                            <span class="detail-value" style="color: #bb86fc;">${eventData.tier}</span>
-                        </div>
-                        <div class="event-detail-row">
-                            <span class="detail-label">Status:</span>
-                            <span class="detail-value" style="color: ${statusColor}; font-weight: bold;">${statusText} (${eventData.attempts} attempts)</span>
-                        </div>
-                        <div class="event-detail-row">
-                            <span class="detail-label">Duration:</span>
-                            <span class="detail-value">${eventData.duration}</span>
-                        </div>
-                        <div class="event-detail-row">
-                            <span class="detail-label">Model:</span>
-                            <span class="detail-value">${eventData.model}</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
+                            <div style="flex: 1; min-width: 120px;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.agent_name || 'Guardian'}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 80px;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tier</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Status</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${statusColor}; font-weight: bold;">${statusText} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${eventData.attempts} att)</span></div>
+                            </div>
+                            <div style="flex: 1; min-width: 100px;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.duration}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Model</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.model}</div>
+                            </div>
                         </div>
                         ${errorHtml}
                         <div class="event-detail-block">
-                            <span class="detail-label">Input Context:</span>
-                            <pre class="detail-pre" style="max-height: 200px; overflow-y: auto;">${escapeHtml(eventData.input_context)}</pre>
+                            ${stylisedHeader('Input Context')}
+                            <pre class="detail-pre" style="max-height: 200px; overflow-y: auto; color: #fff;">${escapeHtml(eventData.input_context)}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Output:</span>
-                            <pre class="detail-pre">${escapeHtml(eventData.raw_output || '(empty)')}</pre>
+                            ${stylisedHeader('Raw Output')}
+                            <pre class="detail-pre" style="max-height: 300px; overflow-y: auto; color: #fff;">${escapeHtml(eventData.raw_output || '(empty)')}</pre>
                         </div>
                     `;
                 } else if (type === 'system.test.completed') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Service:</span>
                             <span class="detail-value">${eventData.service_name}</span>
                         </div>
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Duration:</span>
                             <span class="detail-value">${eventData.duration}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Format:</span>
+                            ${stylisedHeader('Format')}
                             <pre class="detail-pre">${eventData.format?.status || 'N/A'}: ${eventData.format?.message || 'OK'}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Lint:</span>
+                            ${stylisedHeader('Lint')}
                             <pre class="detail-pre">${eventData.lint?.status || 'N/A'}: ${eventData.lint?.message || 'OK'}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Tests:</span>
+                            ${stylisedHeader('Tests')}
                             <pre class="detail-pre">${eventData.test?.status || 'N/A'}: ${eventData.test?.details || eventData.test?.message || 'OK'}</pre>
                         </div>
                     `;
                 } else if (type === 'error_occurred') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Severity:</span>
                             <span class="detail-value" style="color: #ff4d4d;">${eventData.severity || 'high'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Error Message:</span>
-                            <pre class="detail-pre">${escapeHtml(eventData.error)}</pre>
+                            ${stylisedHeader('Error Message')}
+                            <pre class="detail-pre" style="color: #ff4d4d;">${escapeHtml(eventData.error)}</pre>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Context:</span>
+                            ${stylisedHeader('Context')}
                             <pre class="detail-pre">${JSON.stringify(eventData.context || {}, null, 2)}</pre>
                         </div>
                     `;
                 } else if (type === 'system.cli.status') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     detailsContent = `
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Status:</span>
                             <span class="detail-value">${eventData.status}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Message:</span>
+                            ${stylisedHeader('Message')}
                             <pre class="detail-pre">${escapeHtml(eventData.message)}</pre>
                         </div>
                     `;
@@ -438,19 +455,19 @@ export async function updateEventsTimeline(forceReRender = false) {
 
                         attachmentsHtml = `
                             <div class="event-detail-block">
-                                <span class="detail-label">Attachments:</span>
+                                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Attachments</h5>
                                 <div class="attachments-grid">${attachmentsList}</div>
                             </div>`;
                     }
 
                     detailsContent = `
-                        <div class="event-detail-row">
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Message ID:</span>
                             <span class="detail-value">${eventData.message_id || 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            <span class="detail-label">Raw Content:</span>
-                            <pre class="detail-pre">${eventData.content || '(empty)'}</pre>
+                            <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Raw Content</h5>
+                            <pre class="detail-pre" style="color: #fff;">${eventData.content || '(empty)'}</pre>
                         </div>
                         ${attachmentsHtml}
                     `;

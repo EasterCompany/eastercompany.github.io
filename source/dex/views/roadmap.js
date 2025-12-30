@@ -79,8 +79,8 @@ export async function updateRoadmapTab(forceReRender = false) {
           <div class="event-service">ROADMAP ${statusBadge}</div>
           <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
           <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-            <div class="event-details-header">
-              <h4>Item Controls</h4>
+            <div class="event-details-header" style="margin-bottom: 15px;">
+              <h5 style="margin: 0; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Item Controls</h5>
               <i class="bx bx-x close-details-btn"></i>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
