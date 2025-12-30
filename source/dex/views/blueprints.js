@@ -1,5 +1,8 @@
 // Blueprints Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, escapeHtml, smartFetch } from '../core/utils.js';
+import {
+  createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch,
+  LOCAL_EVENT_SERVICE, escapeHtml, updatePendingBlueprintCount
+} from '../core/utils.js';
 
 export const getBlueprintActions = () => `
     <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
@@ -270,6 +273,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
     });
 
     updateTabBadgeCount(2, allBlueprints.length);
+    updatePendingBlueprintCount();
 
   } catch (error) {
     console.error('Error fetching blueprints:', error);
