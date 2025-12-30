@@ -377,6 +377,40 @@ export async function updateEventsTimeline(forceReRender = false) {
                         `;
                     }
 
+                    let correctionsHtml = '';
+                    if (eventData.corrections && eventData.corrections.length > 0) {
+                        const correctionItems = eventData.corrections.map((c, i) => `
+                            <div style="margin-bottom: 8px; padding: 8px; background: rgba(255, 77, 77, 0.1); border-left: 2px solid #ff4d4d; font-size: 0.85em;">
+                                <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${c.type}] ${c.guidance}</div>
+                                ${c.snippet ? `<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${escapeHtml(c.snippet)}</div>` : ''}
+                            </div>
+                        `).join('');
+                        
+                        correctionsHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader(`Corrections (${eventData.corrections.length})`)}
+                                ${correctionItems}
+                            </div>
+                        `;
+                    }
+
+                    let resultsHtml = '';
+                    if (eventData.parsed_results && eventData.parsed_results.length > 0) {
+                        const resultItems = eventData.parsed_results.map(r => `
+                            <div style="margin-bottom: 8px; padding: 8px; background: rgba(3, 218, 198, 0.1); border-left: 2px solid #03dac6; font-size: 0.85em;">
+                                <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${escapeHtml(r.title)}</div>
+                                <div style="color: #ddd;">${escapeHtml(r.summary)}</div>
+                            </div>
+                        `).join('');
+
+                        resultsHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Parsed Results')}
+                                ${resultItems}
+                            </div>
+                        `;
+                    }
+
                     detailsContent = `
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
                             <div style="flex: 1; min-width: 120px;">
@@ -401,6 +435,8 @@ export async function updateEventsTimeline(forceReRender = false) {
                             </div>
                         </div>
                         ${errorHtml}
+                        ${resultsHtml}
+                        ${correctionsHtml}
                         <div class="event-detail-block">
                             ${stylisedHeader('Input Context')}
                             <pre class="detail-pre" style="max-height: 200px; overflow-y: auto; color: #fff;">${escapeHtml(eventData.input_context)}</pre>
