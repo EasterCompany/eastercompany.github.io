@@ -1,7 +1,7 @@
 // Blueprints Tab Logic
 import {
   createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch,
-  LOCAL_EVENT_SERVICE, escapeHtml, updatePendingBlueprintCount
+  LOCAL_EVENT_SERVICE, escapeHtml, updatePendingBlueprintCount, setPendingBlueprints
 } from '../core/utils.js';
 
 export const getBlueprintActions = () => `
@@ -280,6 +280,31 @@ export async function updateBlueprintsTab(forceReRender = false) {
     if (blueprintsContainer.children.length === 0) {
       blueprintsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load blueprints.', 'The event service may be offline.');
     }
+  }
+}
+
+export async function checkBackgroundBlueprints() {
+  const url = `/events?ml=1000&format=json&event.type=system.blueprint.generated`;
+  try {
+    const response = await smartFetch(url);
+    if (!response.ok) return;
+    const data = await response.json();
+    const allBlueprints = data.events || [];
+
+    let pendingCount = 0;
+    allBlueprints.forEach(event => {
+      let evtData = event.event;
+      if (typeof evtData === 'string') {
+        try { evtData = JSON.parse(evtData); } catch (e) { evtData = {}; }
+      }
+      if (evtData.approved !== true) {
+        pendingCount++;
+      }
+    });
+
+    setPendingBlueprints(pendingCount);
+  } catch (e) {
+    // Silent fail in background
   }
 }
 

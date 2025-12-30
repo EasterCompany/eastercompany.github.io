@@ -1,5 +1,5 @@
 // Alerts Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown, updateGlobalBadgeCount } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown, setUnreadAlerts } from '../core/utils.js';
 
 export const getAlertsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">
@@ -446,7 +446,7 @@ export async function checkBackgroundAlerts() {
       if (!readTS) unreadCount++;
     });
 
-    updateGlobalBadgeCount(unreadCount);
+    setUnreadAlerts(unreadCount);
   } catch (e) {
     // Silent fail in background
   }

@@ -63,6 +63,16 @@ export function updateTabBadgeCount(tabIndex, count) {
 let lastUnreadAlerts = 0;
 let lastPendingBlueprints = 0;
 
+export function setUnreadAlerts(count) {
+    lastUnreadAlerts = count;
+    updateGlobalBadgeCount();
+}
+
+export function setPendingBlueprints(count) {
+    lastPendingBlueprints = count;
+    updateGlobalBadgeCount();
+}
+
 export function updateGlobalBadgeCount() {
     const count = lastUnreadAlerts + lastPendingBlueprints;
     lastGlobalBadgeCount = count;
@@ -70,11 +80,61 @@ export function updateGlobalBadgeCount() {
     // 1. Robot Icon Badge
     const navBadge = document.getElementById('dexter-nav-badge');
     if (navBadge) {
-        if (count > 0) {
-            navBadge.style.display = 'flex';
-        } else {
-            navBadge.style.display = 'none';
+        navBadge.style.display = count > 0 ? 'flex' : 'none';
+    }
+
+    // 2. Dropdown Menu Badges
+    const alertsDropdown = document.getElementById('alerts-menu-item');
+    if (alertsDropdown) {
+        let badge = alertsDropdown.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = 'auto';
+            alertsDropdown.appendChild(badge);
         }
+        badge.textContent = lastUnreadAlerts > 9 ? '9+' : lastUnreadAlerts;
+        badge.style.display = lastUnreadAlerts > 0 ? 'flex' : 'none';
+    }
+
+    const workspaceDropdown = document.getElementById('workspace-menu-item');
+    if (workspaceDropdown) {
+        let badge = workspaceDropdown.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = 'auto';
+            workspaceDropdown.appendChild(badge);
+        }
+        badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints;
+        badge.style.display = lastPendingBlueprints > 0 ? 'flex' : 'none';
+    }
+
+    // 3. Window Switcher Badges
+    const alertsSwitcher = document.getElementById('switch-alerts');
+    if (alertsSwitcher) {
+        let badge = alertsSwitcher.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = '8px';
+            alertsSwitcher.appendChild(badge);
+        }
+        badge.textContent = lastUnreadAlerts > 9 ? '9+' : lastUnreadAlerts;
+        badge.style.display = lastUnreadAlerts > 0 ? 'flex' : 'none';
+    }
+
+    const workspaceSwitcher = document.getElementById('switch-workspace');
+    if (workspaceSwitcher) {
+        let badge = workspaceSwitcher.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = '8px';
+            workspaceSwitcher.appendChild(badge);
+        }
+        badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints;
+        badge.style.display = lastPendingBlueprints > 0 ? 'flex' : 'none';
     }
 }
 
@@ -84,45 +144,6 @@ export function updateUnreadAlertCount() {
     
     const unreadCount = alertsList.querySelectorAll('.alert-unread:not(.priority-low)').length;
     lastUnreadAlerts = unreadCount;
-
-    // Update Dropdown Menu Badge
-    const dropdownItem = document.getElementById('alerts-menu-item');
-    if (dropdownItem) {
-        let badge = dropdownItem.querySelector('.notification-badge');
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'notification-badge';
-            badge.style.marginLeft = 'auto'; // Push to right
-            dropdownItem.appendChild(badge);
-        }
-        
-        if (unreadCount > 0) {
-            badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-
-    // Update Window Switcher Badge
-    const switcherBtn = document.getElementById('switch-alerts');
-    if (switcherBtn) {
-        let badge = switcherBtn.querySelector('.notification-badge');
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'notification-badge';
-            badge.style.marginLeft = '8px';
-            switcherBtn.appendChild(badge);
-        }
-
-        if (unreadCount > 0) {
-            badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-
     updateGlobalBadgeCount();
 }
 
@@ -130,48 +151,8 @@ export function updatePendingBlueprintCount() {
     const blueprintsList = document.getElementById('blueprints-list');
     if (!blueprintsList) return;
 
-    // Count blueprints that are NOT approved (and by extension not deleted since they wouldn't be in the DOM)
     const pendingCount = blueprintsList.querySelectorAll('.event-item:not(.blueprint-approved)').length;
     lastPendingBlueprints = pendingCount;
-
-    // Update Dropdown Menu Badge (Workspace)
-    const dropdownItem = document.getElementById('workspace-menu-item');
-    if (dropdownItem) {
-        let badge = dropdownItem.querySelector('.notification-badge');
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'notification-badge';
-            badge.style.marginLeft = 'auto';
-            dropdownItem.appendChild(badge);
-        }
-        
-        if (pendingCount > 0) {
-            badge.textContent = pendingCount > 9 ? '9+' : pendingCount;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-
-    // Update Window Switcher Badge (Workspace)
-    const switcherBtn = document.getElementById('switch-workspace');
-    if (switcherBtn) {
-        let badge = switcherBtn.querySelector('.notification-badge');
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'notification-badge';
-            badge.style.marginLeft = '8px';
-            switcherBtn.appendChild(badge);
-        }
-
-        if (pendingCount > 0) {
-            badge.textContent = pendingCount > 9 ? '9+' : pendingCount;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-
     updateGlobalBadgeCount();
 }
 
