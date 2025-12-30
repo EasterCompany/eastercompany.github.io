@@ -60,7 +60,11 @@ export function updateTabBadgeCount(tabIndex, count) {
     }
 }
 
-export function updateGlobalBadgeCount(count) {
+let lastUnreadAlerts = 0;
+let lastPendingBlueprints = 0;
+
+export function updateGlobalBadgeCount() {
+    const count = lastUnreadAlerts + lastPendingBlueprints;
     lastGlobalBadgeCount = count;
 
     // 1. Robot Icon Badge
@@ -72,8 +76,16 @@ export function updateGlobalBadgeCount(count) {
             navBadge.style.display = 'none';
         }
     }
+}
 
-    // 2. Dropdown Menu Badge
+export function updateUnreadAlertCount() {
+    const alertsList = document.getElementById('alerts-list');
+    if (!alertsList) return;
+    
+    const unreadCount = alertsList.querySelectorAll('.alert-unread:not(.priority-low)').length;
+    lastUnreadAlerts = unreadCount;
+
+    // Update Dropdown Menu Badge
     const dropdownItem = document.getElementById('alerts-menu-item');
     if (dropdownItem) {
         let badge = dropdownItem.querySelector('.notification-badge');
@@ -84,15 +96,15 @@ export function updateGlobalBadgeCount(count) {
             dropdownItem.appendChild(badge);
         }
         
-        if (count > 0) {
-            badge.textContent = count > 9 ? '9+' : count;
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
             badge.style.display = 'flex';
         } else {
             badge.style.display = 'none';
         }
     }
 
-    // 3. Window Switcher Badge
+    // Update Window Switcher Badge
     const switcherBtn = document.getElementById('switch-alerts');
     if (switcherBtn) {
         let badge = switcherBtn.querySelector('.notification-badge');
@@ -103,21 +115,64 @@ export function updateGlobalBadgeCount(count) {
             switcherBtn.appendChild(badge);
         }
 
-        if (count > 0) {
-            badge.textContent = count > 9 ? '9+' : count;
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
             badge.style.display = 'flex';
         } else {
             badge.style.display = 'none';
         }
     }
+
+    updateGlobalBadgeCount();
 }
 
-export function updateUnreadAlertCount() {
-    const alertsList = document.getElementById('alerts-list');
-    if (!alertsList) return;
-    
-    const unreadCount = alertsList.querySelectorAll('.alert-unread:not(.priority-low)').length;
-    updateGlobalBadgeCount(unreadCount);
+export function updatePendingBlueprintCount() {
+    const blueprintsList = document.getElementById('blueprints-list');
+    if (!blueprintsList) return;
+
+    // Count blueprints that are NOT approved (and by extension not deleted since they wouldn't be in the DOM)
+    const pendingCount = blueprintsList.querySelectorAll('.event-item:not(.blueprint-approved)').length;
+    lastPendingBlueprints = pendingCount;
+
+    // Update Dropdown Menu Badge (Workspace)
+    const dropdownItem = document.getElementById('workspace-menu-item');
+    if (dropdownItem) {
+        let badge = dropdownItem.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = 'auto';
+            dropdownItem.appendChild(badge);
+        }
+        
+        if (pendingCount > 0) {
+            badge.textContent = pendingCount > 9 ? '9+' : pendingCount;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    // Update Window Switcher Badge (Workspace)
+    const switcherBtn = document.getElementById('switch-workspace');
+    if (switcherBtn) {
+        let badge = switcherBtn.querySelector('.notification-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            badge.style.marginLeft = '8px';
+            switcherBtn.appendChild(badge);
+        }
+
+        if (pendingCount > 0) {
+            badge.textContent = pendingCount > 9 ? '9+' : pendingCount;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    updateGlobalBadgeCount();
 }
 
 /**
