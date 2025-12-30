@@ -321,14 +321,14 @@
     },
     "2.16.2": {
       "type": "patch",
-      "date": "2025-12-30T08:49:45Z",
-      "commit": "1f0713b",
+      "date": "2025-12-30T09:37:25Z",
+      "commit": "37fdcfd",
       "binaries": {
-        "discord": {
+        "web": {
           "linux-amd64": {
-            "path": "/bin/2.16.2/dex-discord-service",
-            "size": 13503536,
-            "checksum": "ee9bfc3bb3e246fb06e11712ec7643924bdc0fce2a7c57a435eb406153d9af96"
+            "path": "/bin/2.16.2/dex-web-service",
+            "size": 12654106,
+            "checksum": "ff26b73513287e9385b33026c198e6b1625300e953553a3c9baebf1835e83f20"
           }
         }
       }
@@ -679,8 +679,8 @@
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
-      "current": "2.16.0.main.2328da1.2025-12-29..2328da1",
-      "user": "2.16.0.main.2328da1.2025-12-29..2328da1",
+      "current": "2.16.2.main.2328da1.2025-12-30..2328da1",
+      "user": "2.16.2.main.2328da1.2025-12-30..2328da1",
       "repository": "github.com/EasterCompany/dex-web-service"
     }
   }
