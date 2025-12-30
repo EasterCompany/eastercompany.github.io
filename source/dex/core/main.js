@@ -5,6 +5,7 @@ import { isLoggedIn, login } from './auth.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
 import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.js';
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
+import { checkBackgroundBlueprints } from '../views/blueprints.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
 import { getEventsContent, updateEventsTimeline } from '../views/events.js';
 import {
@@ -181,7 +182,7 @@ function onReady() {
     }
 
     // Restore global badges after layout change
-    updateGlobalBadgeCount(getLastBadgeCount());
+    updateGlobalBadgeCount();
   }
 
   function toggleWindow(win) {
@@ -401,11 +402,17 @@ function onReady() {
       } else {
         checkBackgroundAlerts();
       }
+      
+      if (workspaceWindow.isOpen()) {
+        updateIdeasTab();
+      } else {
+        checkBackgroundBlueprints();
+      }
+
       if (eventsWindow.isOpen()) updateEventsTimeline();
       if (monitorWindow.isOpen()) {
         updateSystemTab();
       }
-      if (workspaceWindow.isOpen()) updateIdeasTab();
     }, 5000);
 
   } else {
