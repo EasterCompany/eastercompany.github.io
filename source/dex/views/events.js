@@ -363,10 +363,6 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                         ${errorHtml}
                         <div class="event-detail-block">
-                            <span class="detail-label">System Prompt:</span>
-                            <pre class="detail-pre" style="max-height: 150px; overflow-y: auto;">${escapeHtml(eventData.system_prompt)}</pre>
-                        </div>
-                        <div class="event-detail-block">
                             <span class="detail-label">Input Context:</span>
                             <pre class="detail-pre" style="max-height: 200px; overflow-y: auto;">${escapeHtml(eventData.input_context)}</pre>
                         </div>
