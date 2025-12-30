@@ -188,13 +188,14 @@ export async function updateAlertsTab(forceReRender = false) {
       }
 
       detailsContent = `
-                <div class="event-detail-row">
+                <div class="event-detail-row" style="margin-bottom: 15px;">
                     <span class="detail-label">Priority:</span>
                     <span class="detail-value" style="color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">${priority.toUpperCase()}</span>
                 </div>
                 ${generatedByHtml}
                 ${relatedEventsHtml}
                 <div class="event-detail-block" style="text-align: left;">
+                    <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
                     <div class="detail-pre" style="color: #fff;">${renderMarkdown(body)}</div>
                 </div>
             `;
