@@ -379,12 +379,17 @@ export async function updateEventsTimeline(forceReRender = false) {
 
                     let historyHtml = '';
                     if (eventData.chat_history && eventData.chat_history.length > 0) {
-                        const historyItems = eventData.chat_history.map(m => {
+                        const totalTurns = eventData.chat_history.length;
+                        const slides = eventData.chat_history.map((m, index) => {
                             const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
+                            const displayStyle = index === 0 ? 'block' : 'none';
                             return `
-                                <div style="margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 4px;">
-                                    <div style="font-size: 0.65em; text-transform: uppercase; color: ${roleColor}; letter-spacing: 1px; margin-bottom: 4px; font-weight: bold;">${m.role}</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto;">${escapeHtml(m.content)}</div>
+                                <div class="history-slide" data-index="${index}" style="display: ${displayStyle};">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="font-size: 0.7em; text-transform: uppercase; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${m.role}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${index + 1} of ${totalTurns}</span>
+                                    </div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${escapeHtml(m.content)}</div>
                                 </div>
                             `;
                         }).join('');
@@ -392,8 +397,12 @@ export async function updateEventsTimeline(forceReRender = false) {
                         historyHtml = `
                             <div class="event-detail-block">
                                 ${stylisedHeader('Turn-by-Turn History')}
-                                <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
-                                    ${historyItems}
+                                <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
+                                    ${slides}
+                                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                                        <button class="carousel-btn prev-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" disabled><i class='bx bx-chevron-left'></i> Prev</button>
+                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" ${totalTurns <= 1 ? 'disabled' : ''}>Next <i class='bx bx-chevron-right'></i></button>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -460,14 +469,6 @@ export async function updateEventsTimeline(forceReRender = false) {
                         ${resultsHtml}
                         ${correctionsHtml}
                         ${historyHtml}
-                        <div class="event-detail-block">
-                            ${stylisedHeader('Input Context')}
-                            <pre class="detail-pre" style="max-height: 200px; overflow-y: auto; color: #fff;">${escapeHtml(eventData.input_context)}</pre>
-                        </div>
-                        <div class="event-detail-block">
-                            ${stylisedHeader('Raw Output')}
-                            <pre class="detail-pre" style="max-height: 300px; overflow-y: auto; color: #fff;">${escapeHtml(eventData.raw_output || '(empty)')}</pre>
-                        </div>
                     `;
                 } else if (type === 'system.test.completed') {
                     const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
@@ -621,6 +622,46 @@ export async function updateEventsTimeline(forceReRender = false) {
                         }
                     });
                 }
+            }
+
+            // Carousel Logic
+            const prevBtn = tempDiv.querySelector('.prev-btn');
+            const nextBtn = tempDiv.querySelector('.next-btn');
+            if (prevBtn && nextBtn) {
+                let currentSlide = 0;
+                const slides = tempDiv.querySelectorAll('.history-slide');
+                const total = slides.length;
+
+                const updateCarousel = () => {
+                    slides.forEach((slide, index) => {
+                        slide.style.display = index === currentSlide ? 'block' : 'none';
+                    });
+                    prevBtn.disabled = currentSlide === 0;
+                    nextBtn.disabled = currentSlide === total - 1;
+                    
+                    // Update opacity/style for disabled state
+                    prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
+                    nextBtn.style.opacity = currentSlide === total - 1 ? '0.5' : '1';
+                };
+
+                prevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent toggling the event expansion
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        updateCarousel();
+                    }
+                });
+
+                nextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (currentSlide < total - 1) {
+                        currentSlide++;
+                        updateCarousel();
+                    }
+                });
+                
+                // Initial state check
+                updateCarousel();
             }
 
             return tempDiv;
