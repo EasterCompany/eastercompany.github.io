@@ -542,20 +542,17 @@ export async function updateProcessesTab() {
   const guardianStatus = await fetchGuardianStatus();
   if (guardianStatus) {
     const now = Math.floor(Date.now() / 1000);
-    const activeTier = guardianStatus.active_tier;
+  const activeTier = guardianStatus.active_tier;
+  const aliases = guardianStatus.protocol_aliases || { "t1": "Sentry", "t2": "Architect" };
 
-    const formatDuration = (seconds) => {
-      if (seconds < 0) seconds = 0;
-      const h = Math.floor(seconds / 3600);
-      const m = Math.floor((seconds % 3600) / 60);
-      const s = seconds % 60;
-      if (h > 0) return `${h}h ${m}m`;
-      if (m > 0) return `${m}m ${s}s`;
-      return `${s}s`;
-    };
+  const updateTimer = (el, statsEl, protocolData, protocolName) => {
+    const alias = aliases[protocolName] || protocolName.toUpperCase();
+    const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
+    if (labelEl) {
+        labelEl.textContent = `${alias} Protocol (${protocolName.toUpperCase()})`;
+    }
 
-    const updateTimer = (el, statsEl, protocolData, protocolName) => {
-      if (activeTier === protocolName) {
+    if (activeTier === protocolName) {
         el.textContent = "Working";
         el.style.color = "#bb86fc"; 
       } else if (protocolName === 't1' && activeTier === 'tests') {
