@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.16.20.main.c0cf39c.2025-12-30.linux-amd64.c0cf39c",
+    "dev": "2.16.20.main.c0cf39c.2025-12-30.linux-amd64.c0cf39c"
   },
   "releases": {
     "0.0.0": {
@@ -327,14 +327,21 @@
     },
     "2.16.20": {
       "type": "patch",
-      "date": "2025-12-29T22:51:59Z",
-      "commit": "db72af6",
+      "date": "2025-12-30T07:34:37Z",
+      "commit": "3eff7e4",
       "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.16.20/dex",
+            "size": 16619787,
+            "checksum": "8f13e1eadb84800b3bf7126b764b43d850f4d429c022007732ad655990ffc764"
+          }
+        },
         "event": {
           "linux-amd64": {
             "path": "/bin/2.16.20/dex-event-service",
-            "size": 12818944,
-            "checksum": "ecc1c53c2d72742650f07d528b0923533348e96074edb813073da62155fa54f2"
+            "size": 12844807,
+            "checksum": "c6bfa8beb7fc093ccef729da71fe6d9e6f250abed02f483ac9f459b510c91830"
           }
         }
       }
@@ -623,8 +630,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.16.19.main.00224c3.2025-12-30.linux-amd64.00224c3",
-      "user": "2.16.19.main.00224c3.2025-12-30.linux-amd64.00224c3",
+      "current": "2.16.20.main.c0cf39c.2025-12-30.linux-amd64.c0cf39c",
+      "user": "2.16.20.main.c0cf39c.2025-12-30.linux-amd64.c0cf39c",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -633,8 +640,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.16.35",
-      "user": "2.16.35",
+      "current": "2.16.36",
+      "user": "2.16.36",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
