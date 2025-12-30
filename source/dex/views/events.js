@@ -377,6 +377,28 @@ export async function updateEventsTimeline(forceReRender = false) {
                         `;
                     }
 
+                    let historyHtml = '';
+                    if (eventData.chat_history && eventData.chat_history.length > 0) {
+                        const historyItems = eventData.chat_history.map(m => {
+                            const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
+                            return `
+                                <div style="margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 4px;">
+                                    <div style="font-size: 0.65em; text-transform: uppercase; color: ${roleColor}; letter-spacing: 1px; margin-bottom: 4px; font-weight: bold;">${m.role}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto;">${escapeHtml(m.content)}</div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        historyHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Turn-by-Turn History')}
+                                <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                                    ${historyItems}
+                                </div>
+                            </div>
+                        `;
+                    }
+
                     let correctionsHtml = '';
                     if (eventData.corrections && eventData.corrections.length > 0) {
                         const correctionItems = eventData.corrections.map((c, i) => `
@@ -437,6 +459,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         ${errorHtml}
                         ${resultsHtml}
                         ${correctionsHtml}
+                        ${historyHtml}
                         <div class="event-detail-block">
                             ${stylisedHeader('Input Context')}
                             <pre class="detail-pre" style="max-height: 200px; overflow-y: auto; color: #fff;">${escapeHtml(eventData.input_context)}</pre>
