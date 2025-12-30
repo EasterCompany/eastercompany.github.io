@@ -56,7 +56,7 @@ const CATEGORIES = {
     ],
     cognitive: [
         'engagement.decision', 'system.analysis.audit', 'system.blueprint.generated',
-        'analysis.link.completed', 'analysis.visual.completed'
+        'analysis.link.completed', 'analysis.visual.completed', 'analysis.router.decision'
     ],
     moderation: [
         'moderation.explicit_content.deleted'
@@ -86,6 +86,7 @@ const EVENT_ICONS = {
     'system.blueprint.generated': 'bx-paint',
     'analysis.link.completed': 'bx-link',
     'analysis.visual.completed': 'bx-image',
+    'analysis.router.decision': 'bx-git-branch',
     'moderation.explicit_content.deleted': 'bx-shield-x',
     'system.status.change': 'bx-refresh',
     'metric_recorded': 'bx-line-chart'
@@ -158,12 +159,12 @@ export async function updateEventsTimeline(forceReRender = false) {
             const category = getEventCategory(type);
             const icon = getEventIcon(type);
 
-            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type === 'system.attention.expired' || type.startsWith('system.roadmap') || type.startsWith('system.process');
+            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type === 'system.attention.expired' || type.startsWith('system.roadmap') || type.startsWith('system.process');
             let borderClass = 'event-border-grey';
             if (isExpandable) {
                 if (type === 'moderation.explicit_content.deleted' || type === 'error_occurred') {
                     borderClass = 'event-border-red';
-                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'system.analysis.audit') {
+                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'system.analysis.audit') {
                     borderClass = 'event-border-purple';
                 } else if (type === 'system.attention.expired') {
                     borderClass = 'event-border-orange';
@@ -307,6 +308,30 @@ export async function updateEventsTimeline(forceReRender = false) {
                         <div class="event-detail-block">
                             ${stylisedHeader('Visual Description')}
                             <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
+                        </div>
+                    `;
+                } else if (type === 'analysis.router.decision') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+                    detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Decision:</span>
+                            <span class="detail-value" style="color: #bb86fc; font-weight: bold;">${eventData.decision}</span>
+                        </div>
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
+                            <span class="detail-label">Model:</span>
+                            <span class="detail-value">${eventData.model}</span>
+                        </div>
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
+                            <span class="detail-label">URL:</span>
+                            <span class="detail-value"><a href="${eventData.url}" target="_blank" class="attachment-link">${eventData.url}</a></span>
+                        </div>
+                        <div class="event-detail-block">
+                            ${stylisedHeader('Raw Model Output')}
+                            <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            ${stylisedHeader('Input Context')}
+                            <pre class="detail-pre">${escapeHtml(eventData.raw_input) || 'None'}</pre>
                         </div>
                     `;
                 } else if (type === 'system.cli.command') {
