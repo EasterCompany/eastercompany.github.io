@@ -63,6 +63,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
       const category = (blueprintData.category || 'architecture').trim();
       const affectedServices = (blueprintData.affected_services || []).map(s => s.trim());
       const implementationPath = (blueprintData.implementation_path || []).map(s => s.trim());
+      const sourceEventIDs = blueprintData.source_event_ids || [];
       const isApproved = blueprintData.approved === true;
 
       const utcDate = new Date(event.timestamp * 1000);
@@ -115,6 +116,22 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 `;
       }
 
+      let sourceHtml = '';
+      if (sourceEventIDs.length > 0) {
+        sourceHtml = `
+                    <div class="blueprint-source" style="margin-top: 15px;">
+                        <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Source Alerts</h5>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            ${sourceEventIDs.map(id => `
+                                <a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
+                                    <i class='bx bx-link-external'></i> ${id.substring(0, 8)}...
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+      }
+
       let relatedServicesHtml = affectedServices.length > 0
         ? `<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${affectedServices.join(', ')}</span></div>`
         : '<div></div>';
@@ -158,6 +175,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                             <div class="detail-pre">${escapeHtml(content)}</div>
                         </div>
                         ${pathHtml}
+                        ${sourceHtml}
                         ${actionButtonsHtml}
                     </div>
                 </div>
