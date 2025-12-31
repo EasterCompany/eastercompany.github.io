@@ -163,12 +163,8 @@
 }
 
 .md-inline-code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 5px;
-    border-radius: 4px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9em;
-    color: #bb86fc;
+    font-size: 0.95em;
 }
 
 .md-header {
