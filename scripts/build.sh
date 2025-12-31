@@ -35,7 +35,7 @@ echo "Bundling JavaScript..."
 
 # 4. Bundle and minify the CSS
 echo "Bundling CSS..."
-"$ESBUILD_BIN" "$CSS_ENTRY_POINT" --bundle --minify --outfile="$CSS_OUTPUT_FILE"
+"$ESBUILD_BIN" "$CSS_ENTRY_POINT" --bundle --minify --outfile="$CSS_OUTPUT_FILE" --loader:.woff=file --loader:.woff2=file --loader:.eot=file --loader:.ttf=file --loader:.svg=file
 
 # 5. Inject head content, script tag, and link tag into HTML files
 echo "Injecting head content and build tags into HTML files..."
