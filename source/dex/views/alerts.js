@@ -294,7 +294,7 @@ export async function updateAlertsTab(forceReRender = false) {
                     <div class="event-service">
                         DEXTER <span class="alert-badge" style="color: ${priorityColor}; font-size: 0.8em; margin-left: 5px;">[${priority.toUpperCase()}]</span>
                     </div>
-                    <div class="event-message">${summary}</div>
+                    <div class="event-message">${renderMarkdown(summary)}</div>
                     <div class="event-details" style="${detailsStyle}">
                         ${detailsContent}
                     </div>
