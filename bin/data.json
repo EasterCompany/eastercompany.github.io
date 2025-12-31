@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.16.25.main.cded16e.2025-12-31.linux-amd64.cded16e",
+    "dev": "2.16.25.main.cded16e.2025-12-31.linux-amd64.cded16e"
   },
   "releases": {
     "0.0.0": {
@@ -433,14 +433,14 @@
     },
     "2.16.25": {
       "type": "patch",
-      "date": "2025-12-30T01:42:53Z",
-      "commit": "665f060",
+      "date": "2025-12-31T08:54:40Z",
+      "commit": "9e04587",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.16.25/dex-event-service",
-            "size": 12824488,
-            "checksum": "19f87c230c7f5d31743e320e7d69f2a7770a352e14e4a2d245b65b41e4bc8402"
+            "path": "/bin/2.16.25/dex",
+            "size": 16619603,
+            "checksum": "f94011ee13994cd69c7478a8bf768824069006fc2692a34d92c0bd1b8481a722"
           }
         }
       }
@@ -887,8 +887,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.16.24.main.c229966.2025-12-31.linux-amd64.c229966",
-      "user": "2.16.24.main.c229966.2025-12-31.linux-amd64.c229966",
+      "current": "2.16.25.main.cded16e.2025-12-31.linux-amd64.cded16e",
+      "user": "2.16.25.main.cded16e.2025-12-31.linux-amd64.cded16e",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
