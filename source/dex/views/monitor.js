@@ -1,4 +1,5 @@
 // System Monitor Logic (Services, Models, Processes)
+import imaginatorSVG from '../components/imaginatorSVG.js';
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 
