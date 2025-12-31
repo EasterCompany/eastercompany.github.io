@@ -28,7 +28,7 @@ export const getGuardianContent = () => {
         </div>
 
         <div class="system-section-header">
-            <i class='bx bxs-zap' style="color: #bb86fc;"></i>
+            <i class='bx bx-shield' style="color: #bb86fc;"></i>
             <h2>Guardian</h2>
             <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
         </div>
@@ -44,6 +44,16 @@ export const getGuardianContent = () => {
                     <span id="guardian-architect-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="guardian-architect-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
+            </div>
+        </div>
+
+        <div class="system-section-header">
+            <i class='bx bx-hammer' style="color: #03dac6;"></i>
+            <h2>Fabricator</h2>
+        </div>
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.5;">
+            <div style="text-align: center; color: #666; font-style: italic; font-size: 0.85em;">
+                Fabricator Agent coming soon...
             </div>
         </div>`;
 };
