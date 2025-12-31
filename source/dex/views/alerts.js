@@ -277,7 +277,7 @@ export async function updateAlertsTab(forceReRender = false) {
         }
       };
 
-      const summary = title;
+      const summary = `${protocol ? protocol.charAt(0).toUpperCase() + protocol.slice(1) : 'Guardian'} Alert: ${summaryContent || title}`;
       const iconMap = {
         'system': 'bx-cog',
         'messaging': 'bx-message-detail',
@@ -295,10 +295,9 @@ export async function updateAlertsTab(forceReRender = false) {
                 <div class="event-icon"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
                     <div class="event-service">
-                        <span class="event-category-tag cat-${category}" style="font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); color: #888; text-transform: uppercase; margin-right: 8px;">${category}</span>
                         DEXTER ${isAlert ? '<span class="alert-badge" style="color: #ff4d4d; font-size: 0.8em; margin-left: 5px;">[ALERT]</span>' : ''}
                     </div>
-                    <div class="event-message">${title}</div>
+                    <div class="event-message">${summary}</div>
                     <div class="event-details" style="${detailsStyle}">
                         ${detailsContent}
                     </div>
