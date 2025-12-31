@@ -207,15 +207,15 @@ export async function updateAlertsTab(forceReRender = false) {
       if (technicalContent) {
         reportBodyHtml = `
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
-                <div class="detail-pre" style="color: #ddd; font-size: 0.85em;">${renderMarkdown(technicalContent)}</div>
+                <h5 style="margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
+                <div style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6;">${renderMarkdown(technicalContent)}</div>
             </div>
         `;
       } else {
         reportBodyHtml = `
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
-                <div class="detail-pre" style="color: #fff;">${renderMarkdown(body)}</div>
+                <h5 style="margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
+                <div style="color: #fff; white-space: pre-wrap; line-height: 1.6;">${renderMarkdown(body)}</div>
             </div>
         `;
       }
@@ -290,7 +290,7 @@ export async function updateAlertsTab(forceReRender = false) {
                     <span class="event-date">${dateStr}</span>
                 </div>
                 <div class="event-icon"><i class='bx ${icon}'></i></div>
-                <div class="event-content">
+                <div class="event-content" style="text-align: left;">
                     <div class="event-service">
                         DEXTER <span class="alert-badge" style="color: ${priorityColor}; font-size: 0.8em; margin-left: 5px;">[${priority.toUpperCase()}]</span>
                     </div>

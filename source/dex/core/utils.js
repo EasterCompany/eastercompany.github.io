@@ -248,13 +248,6 @@ export function renderMarkdown(text) {
   // Numbered Lists
   html = html.replace(/^(\d+)\. (.*$)/gm, '<div class="md-list-item"><span class="md-number">$1.</span> $2</div>');
 
-  // Paragraphs (Double newlines)
-  html = html.split(/\n\n+/).map(p => {
-    // If it's already a complex block (header, list, code), don't wrap in <p>
-    if (p.trim().startsWith('<')) return p;
-    return `<p class="md-para">${p.trim()}</p>`;
-  }).join('\n');
-
   return html;
 }
 
