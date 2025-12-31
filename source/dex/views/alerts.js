@@ -204,14 +204,11 @@ export async function updateAlertsTab(forceReRender = false) {
       }
 
       let reportBodyHtml = '';
-      if (summaryContent || technicalContent) {
+      if (technicalContent) {
         reportBodyHtml = `
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Report Content</h5>
-                <div style="padding: 10px; background: rgba(3, 218, 198, 0.05); border-left: 3px solid #03dac6; margin-bottom: 15px; font-size: 0.9em; color: #fff;">
-                    ${renderMarkdown(summaryContent)}
-                </div>
-                ${technicalContent ? `<div class="detail-pre" style="color: #ddd; font-size: 0.85em;">${renderMarkdown(technicalContent)}</div>` : ''}
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
+                <div class="detail-pre" style="color: #ddd; font-size: 0.85em;">${renderMarkdown(technicalContent)}</div>
             </div>
         `;
       } else {
