@@ -450,11 +450,11 @@ export async function updateEventsTimeline(forceReRender = false) {
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
                             <div style="flex: 1; min-width: 120px;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.agent_name || 'Guardian'}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.agent_name || 'Guardian'}</div>
                             </div>
                             <div style="flex: 1; min-width: 80px;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier}</div>
                             </div>
                             <div style="flex: 1; min-width: 150px;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Status</div>

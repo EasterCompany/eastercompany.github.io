@@ -199,7 +199,7 @@ export async function updateAlertsTab(forceReRender = false) {
         protocolHtml = `
             <div style="flex: 1; min-width: 100px;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${protocol.toUpperCase()}</div>
+                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${protocol}</div>
             </div>`;
       }
 
@@ -227,13 +227,13 @@ export async function updateAlertsTab(forceReRender = false) {
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
                     <div style="flex: 1; min-width: 100px;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Priority</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; font-weight: bold; color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">
-                            ${priority.toUpperCase()}
+                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; font-weight: bold; color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">
+                            ${priority}
                         </div>
                     </div>
                     <div style="flex: 1; min-width: 100px;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; text-transform: capitalize;">${category}</div>
+                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${category}</div>
                     </div>
                     ${protocolHtml}
                     ${generatedByHtml}
