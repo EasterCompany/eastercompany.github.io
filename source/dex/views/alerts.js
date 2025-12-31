@@ -223,10 +223,8 @@ export async function updateAlertsTab(forceReRender = false) {
       detailsContent = `
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
                     <div style="flex: 1; min-width: 100px;">
-                        <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Priority</div>
-                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; font-weight: bold; color: ${priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888'}">
-                            ${priority}
-                        </div>
+                        <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related</div>
+                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.related_services ? eventData.related_services.join(', ') : (eventData.related || 'SYSTEM')}</div>
                     </div>
                     <div style="flex: 1; min-width: 100px;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
@@ -274,7 +272,7 @@ export async function updateAlertsTab(forceReRender = false) {
         }
       };
 
-      const summary = `${protocol ? protocol.charAt(0).toUpperCase() + protocol.slice(1) : 'Guardian'} Alert: ${summaryContent || title}`;
+      const summary = `${protocol ? protocol.toUpperCase() : 'GUARDIAN'} ALERT: ${summaryContent || title}`;
       const iconMap = {
         'system': 'bx-cog',
         'messaging': 'bx-message-detail',
@@ -284,6 +282,8 @@ export async function updateAlertsTab(forceReRender = false) {
       };
       const icon = iconMap[category] || 'bx-bell';
 
+      const priorityColor = priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888';
+
       tempDiv.innerHTML = `
                 <div class="event-time">
                     <span class="event-time-main">${timeStr}</span>
@@ -292,7 +292,7 @@ export async function updateAlertsTab(forceReRender = false) {
                 <div class="event-icon"><i class='bx ${icon}'></i></div>
                 <div class="event-content">
                     <div class="event-service">
-                        DEXTER ${isAlert ? '<span class="alert-badge" style="color: #ff4d4d; font-size: 0.8em; margin-left: 5px;">[ALERT]</span>' : ''}
+                        DEXTER <span class="alert-badge" style="color: ${priorityColor}; font-size: 0.8em; margin-left: 5px;">[${priority.toUpperCase()}]</span>
                     </div>
                     <div class="event-message">${summary}</div>
                     <div class="event-details" style="${detailsStyle}">
