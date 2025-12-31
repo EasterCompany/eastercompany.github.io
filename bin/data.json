@@ -911,6 +911,12 @@
       "commit": "97a1d92",
       "binaries": {}
     },
+    "2.16.80": {
+      "type": "patch",
+      "date": "2025-12-31T18:34:47Z",
+      "commit": "b35f4b4",
+      "binaries": {}
+    },
     "2.16.9": {
       "type": "patch",
       "date": "2025-12-29T10:33:42Z",
