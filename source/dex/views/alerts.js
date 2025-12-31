@@ -175,9 +175,9 @@ export async function updateAlertsTab(forceReRender = false) {
       let relatedEventsHtml = '';
       if (relatedEventIDs.length > 0) {
         relatedEventsHtml = `
-            <div style="flex: 1; min-width: 150px;">
+            <div style="flex: 1; min-width: 150px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related Events</div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
                     ${relatedEventIDs.map(id => `<a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${id.substring(0, 8)}...</a>`).join(', ')}
                 </div>
             </div>`;
@@ -186,7 +186,7 @@ export async function updateAlertsTab(forceReRender = false) {
       let generatedByHtml = '';
       if (auditEventID) {
         generatedByHtml = `
-            <div style="flex: 1; min-width: 120px;">
+            <div style="flex: 1; min-width: 120px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Audit</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
                     <a href="#" onclick="window.dexter.viewEvent('${auditEventID}'); return false;" style="color: #bb86fc; text-decoration: none; border-bottom: 1px dashed rgba(187, 134, 252, 0.3); white-space: nowrap;">${auditEventID.substring(0, 8)}...</a>
@@ -197,7 +197,7 @@ export async function updateAlertsTab(forceReRender = false) {
       let protocolHtml = '';
       if (protocol) {
         protocolHtml = `
-            <div style="flex: 1; min-width: 100px;">
+            <div style="flex: 1; min-width: 100px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${protocol}</div>
             </div>`;
@@ -221,12 +221,12 @@ export async function updateAlertsTab(forceReRender = false) {
       }
 
       detailsContent = `
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="flex: 1; min-width: 100px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
+                    <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related</div>
                         <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${(alertData.related_services && alertData.related_services.length > 0) ? alertData.related_services.join(', ') : (alertData.related || 'SYSTEM')}</div>
                     </div>
-                    <div style="flex: 1; min-width: 100px;">
+                    <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
                         <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${category}</div>
                     </div>
