@@ -162,7 +162,7 @@ nav.window-open + .windows-container {
 .window-content {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 25px;
+    padding: 25px 25px 48px 25px;
     scrollbar-width: none;
     display: flex;
     flex-direction: column;
