@@ -923,6 +923,12 @@
       "commit": "bef107a",
       "binaries": {}
     },
+    "2.16.82": {
+      "type": "patch",
+      "date": "2025-12-31T18:36:13Z",
+      "commit": "0440ac5",
+      "binaries": {}
+    },
     "2.16.9": {
       "type": "patch",
       "date": "2025-12-29T10:33:42Z",
