@@ -186,3 +186,7 @@ body.theme-legacy {
   .theme-info { padding: 15px; flex: 0; }
   .theme-info h3, .theme-info p { text-align: center; }
 }
+
+.metadata-value {
+    text-transform: uppercase;
+}
