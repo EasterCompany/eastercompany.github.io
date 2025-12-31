@@ -381,12 +381,16 @@ export async function updateEventsTimeline(forceReRender = false) {
                     if (eventData.chat_history && eventData.chat_history.length > 0) {
                         const totalTurns = eventData.chat_history.length;
                         const slides = eventData.chat_history.map((m, index) => {
+                            let roleName = m.role.toUpperCase();
+                            if (roleName === 'USER') roleName = 'SYSTEM';
+                            if (roleName === 'ASSISTANT') roleName = 'AGENT';
+                            
                             const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
                             const displayStyle = index === 0 ? 'block' : 'none';
                             return `
                                 <div class="history-slide" data-index="${index}" style="display: ${displayStyle};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="font-size: 0.7em; text-transform: uppercase; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${m.role}</span>
+                                        <span style="font-size: 0.7em; text-transform: uppercase; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${roleName}</span>
                                         <span style="font-size: 0.7em; color: #666;">Turn ${index + 1} of ${totalTurns}</span>
                                     </div>
                                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${escapeHtml(m.content)}</div>
