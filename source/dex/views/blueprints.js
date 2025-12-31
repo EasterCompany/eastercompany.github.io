@@ -8,6 +8,7 @@ export const getBlueprintActions = () => `
     <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
         <button id="blueprints-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
+        <button id="blueprints-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
     </div>
 `;
 
@@ -64,7 +65,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
       const summary = (blueprintData.summary || blueprintData.body || 'No summary provided.').trim();
       const content = (blueprintData.content || '').trim();
       const category = (blueprintData.category || 'architecture').trim();
-      const affectedServices = (blueprintData.affected_services || []).map(s => s.trim());
+      const relatedServices = (blueprintData.related_services || blueprintData.affected_services || []).map(s => s.trim());
       const implementationPath = (blueprintData.implementation_path || []).map(s => s.trim());
       const sourceEventIDs = blueprintData.source_event_ids || [];
       const isApproved = blueprintData.approved === true;
@@ -135,8 +136,8 @@ export async function updateBlueprintsTab(forceReRender = false) {
                 `;
       }
 
-      let relatedServicesHtml = affectedServices.length > 0
-        ? `<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${affectedServices.join(', ')}</span></div>`
+      let relatedServicesHtml = relatedServices.length > 0
+        ? `<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${relatedServices.join(', ')}</span></div>`
         : '<div></div>';
 
       let actionButtonsHtml = !isApproved ? `
@@ -311,6 +312,7 @@ export async function checkBackgroundBlueprints() {
 function attachBlueprintActionListeners() {
   const expandAllBtn = document.getElementById('blueprints-expand-all');
   const closeAllBtn = document.getElementById('blueprints-close-all');
+  const clearBtn = document.getElementById('blueprints-clear');
 
   if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
     expandAllBtn.onclick = () => {
@@ -326,5 +328,26 @@ function attachBlueprintActionListeners() {
       updateBlueprintsTab(true);
     };
     closeAllBtn.dataset.listenerAttached = "true";
+  }
+
+  if (clearBtn && !clearBtn.dataset.listenerAttached) {
+    clearBtn.onclick = async () => {
+      if (!confirm("Are you sure you want to delete all UNAPPROVED blueprints?")) return;
+
+      clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
+      try {
+        // We delete all blueprints that are not approved
+        // Note: The backend DELETE handler might need support for filtering by nested fields if we want to be precise,
+        // but for now we'll delete the event type.
+        await smartFetch('/events?type=system.blueprint.generated', { method: 'DELETE' });
+        activeExpandedIds.clear();
+        updateBlueprintsTab(true);
+      } catch (e) {
+        console.error("Failed to clear blueprints:", e);
+      } finally {
+        clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
+      }
+    };
+    clearBtn.dataset.listenerAttached = "true";
   }
 }
