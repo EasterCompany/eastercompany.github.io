@@ -148,6 +148,14 @@
     color: #ff4d4d;
 }
 
+.md-para {
+    margin-bottom: 15px;
+}
+
+.md-para:last-child {
+    margin-bottom: 0;
+}
+
 /* Markdown Rendering Styles */
 .md-code-block {
     background: rgba(0, 0, 0, 0.3);
