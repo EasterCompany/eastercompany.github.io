@@ -73,19 +73,19 @@
         </div>
     </div>
 `,ke=null,te=new Set,Te=[];async function se(t=!1){let e=document.getElementById("alerts-list");if(!e)return;jt(),t&&(e.innerHTML="<p>Updating...</p>");let o="/events?ml=1000&format=json&event.type=system.notification.generated";try{let a=await M(o);if(!a.ok)throw new Error("Service is offline or unreachable.");let i=(await a.json()).events||[];ke=Date.now(),W(0,ke);let l=Date.now(),m=24*60*60*1e3,p=i.filter(r=>{let d=localStorage.getItem(`alert_read_ts_${r.id}`);if(!d)return!0;let y=parseInt(d);return l-y<m});p.sort((r,d)=>{let y=_=>{let E=_.event;if(typeof E=="string")try{E=JSON.parse(E)}catch{return"low"}return(E.priority||"low").toLowerCase()},C=_=>_==="critical"?4:_==="high"?3:_==="medium"?2:1,T=C(y(r)),S=C(y(d));return T!==S?S-T:d.timestamp-r.timestamp}),Te=p;let g=r=>{let d=r.event;if(typeof d=="string")try{d=JSON.parse(d)}catch{return"low"}return(d.priority||"low").toLowerCase()},x=[],b=new Set(p.map(r=>g(r))).size>1;if(p.length>0){let r=null;p.forEach(d=>{let y=g(d);b&&y!==r&&(x.push({id:`divider-${y}`,type:"divider",label:y.toUpperCase()}),r=y),x.push(d)})}if(t&&(e.innerHTML=""),p.length===0){e.innerHTML=B("empty","No alerts yet."),Se();return}let s=r=>{let d=r.event;if(typeof d=="string")try{d=JSON.parse(d)}catch{return null}let y=(d.title||"Untitled Alert").trim(),C=(d.body||"No description provided.").trim(),T=d.summary||"",S=d.content||"",_=d.protocol||"",E=(d.priority||"low").toLowerCase(),N=!!d.alert,P=(d.category||"system").trim(),H=d.related_event_ids||[],R=d.audit_event_id,q=!!localStorage.getItem(`alert_read_ts_${r.id}`),k=new Date(r.timestamp*1e3),w=k.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),$=k.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),A=q?"event-border-grey":"event-border-blue";!q&&N&&(A="event-border-red"),q&&(E==="high"||E==="critical")?A="event-border-red":q&&E==="medium"&&(A="event-border-orange");let L=q?"alert-read":"alert-unread",z=te.has(r.id),U=z?"expanded":"",he=z?"display: block;":"display: none;",F="",j="";H.length>0&&(j=`
-            <div style="flex: 1; min-width: 150px;">
+            <div style="flex: 1; min-width: 150px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related Events</div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
                     ${H.map(Z=>`<a href="#" onclick="window.dexter.viewEvent('${Z}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${Z.substring(0,8)}...</a>`).join(", ")}
                 </div>
             </div>`);let Q="";R&&(Q=`
-            <div style="flex: 1; min-width: 120px;">
+            <div style="flex: 1; min-width: 120px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Audit</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
                     <a href="#" onclick="window.dexter.viewEvent('${R}'); return false;" style="color: #bb86fc; text-decoration: none; border-bottom: 1px dashed rgba(187, 134, 252, 0.3); white-space: nowrap;">${R.substring(0,8)}...</a>
                 </div>
             </div>`);let ce="";_&&(ce=`
-            <div style="flex: 1; min-width: 100px;">
+            <div style="flex: 1; min-width: 100px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${_}</div>
             </div>`);let V="";S?V=`
@@ -99,12 +99,12 @@
                 <div class="detail-pre" style="color: #fff;">${ue(C)}</div>
             </div>
         `,F=`
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="flex: 1; min-width: 100px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
+                    <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related</div>
                         <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${d.related_services&&d.related_services.length>0?d.related_services.join(", "):d.related||"SYSTEM"}</div>
                     </div>
-                    <div style="flex: 1; min-width: 100px;">
+                    <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
                         <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${P}</div>
                     </div>
@@ -485,24 +485,24 @@
                                 ${F}
                             </div>
                         `}k=`
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
-                            <div style="flex: 1; min-width: 120px;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
+                            <div style="flex: 1; min-width: 120px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
                                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${s.agent_name||"Guardian"}</div>
                             </div>
-                            <div style="flex: 1; min-width: 80px;">
+                            <div style="flex: 1; min-width: 80px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
                                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${s.tier}</div>
                             </div>
-                            <div style="flex: 1; min-width: 150px;">
+                            <div style="flex: 1; min-width: 150px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Status</div>
                                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${w}; font-weight: bold;">${$} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${s.attempts} att)</span></div>
                             </div>
-                            <div style="flex: 1; min-width: 100px;">
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
                                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${s.duration}</div>
                             </div>
-                            <div style="flex: 1; min-width: 150px;">
+                            <div style="flex: 1; min-width: 150px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Model</div>
                                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${s.model}</div>
                             </div>
