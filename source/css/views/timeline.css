@@ -167,7 +167,7 @@
     color: #ccc;
     overflow-x: auto;
     white-space: pre-wrap;
-    margin: 10px 0;
+    margin: 10px 0 0 0;
 }
 
 .md-inline-code {
