@@ -35,14 +35,14 @@ export const getGuardianContent = () => {
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Sentry Protocol (T1)</span>
-                    <span id="guardian-t1-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="guardian-t1-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Sentry Protocol</span>
+                    <span id="guardian-sentry-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="guardian-sentry-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Protocol (T2)</span>
-                    <span id="guardian-t2-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="guardian-t2-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Protocol</span>
+                    <span id="guardian-architect-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="guardian-architect-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
         </div>`;
@@ -514,8 +514,8 @@ export async function updateProcessesTab() {
   if (!widgetsContainer) return;
 
   // --- Update Guardian Status ---
-  const t1Val = document.getElementById('guardian-t1-val');
-  const t2Val = document.getElementById('guardian-t2-val');
+  const sentryVal = document.getElementById('guardian-sentry-val');
+  const architectVal = document.getElementById('guardian-architect-val');
   const idleVal = document.getElementById('guardian-idle-val');
   const totalIdleVal = document.getElementById('guardian-total-idle');
   const totalActiveVal = document.getElementById('guardian-total-active');
@@ -543,7 +543,7 @@ export async function updateProcessesTab() {
   if (guardianStatus) {
     const now = Math.floor(Date.now() / 1000);
     const activeTier = guardianStatus.active_tier;
-    const aliases = guardianStatus.protocol_aliases || { "t1": "Sentry", "t2": "Architect" };
+    const aliases = guardianStatus.protocol_aliases || { "sentry": "Sentry", "architect": "Architect" };
 
     const formatDuration = (seconds) => {
       if (seconds < 0) seconds = 0;
@@ -556,18 +556,16 @@ export async function updateProcessesTab() {
     };
 
     const updateTimer = (el, statsEl, protocolData, protocolName) => {
+      if (!el) return;
       const alias = aliases[protocolName] || protocolName.toUpperCase();
       const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
       if (labelEl) {
           labelEl.textContent = alias;
       }
 
-      if (activeTier === protocolName) {
+      if (activeTier && activeTier.includes(alias)) {
         el.textContent = "Working";
         el.style.color = "#bb86fc"; 
-      } else if (protocolName === 't1' && activeTier === 'tests') {
-        el.textContent = "Testing";
-        el.style.color = "#03dac6";
       } else if (protocolData) {
         const nextRun = protocolData.next_run;
         const diff = nextRun - now;
@@ -593,8 +591,8 @@ export async function updateProcessesTab() {
       }
     };
 
-    if (t1Val) updateTimer(t1Val, document.getElementById('guardian-t1-stats'), guardianStatus.t1, 't1');
-    if (t2Val) updateTimer(t2Val, document.getElementById('guardian-t2-stats'), guardianStatus.t2, 't2');
+    if (sentryVal) updateTimer(sentryVal, document.getElementById('guardian-sentry-stats'), guardianStatus.sentry, 'sentry');
+    if (architectVal) updateTimer(architectVal, document.getElementById('guardian-architect-stats'), guardianStatus.architect, 'architect');
 
     const stateLabel = document.getElementById('system-state-label');
     const stateVal = document.getElementById('system-state-val');
@@ -617,7 +615,7 @@ export async function updateProcessesTab() {
     if (totalWasteVal) totalWasteVal.textContent = formatDuration(guardianStatus.total_waste_time || 0);
 
   } else {
-    const indicators = [t1Val, t2Val, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
+    const indicators = [sentryVal, architectVal, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
     indicators.forEach(el => {
       if (el) {
         el.textContent = "-";
