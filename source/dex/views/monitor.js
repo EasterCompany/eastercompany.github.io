@@ -703,7 +703,7 @@ function renderProcessList(container, list, isHistory) {
     // Pretty-print common system IDs
     let displayName = proc.channel_id;
     const idMap = {
-      'system-guardian': 'Guardian Worker',
+      'system-guardian': 'Guardian Agent',
       'system-cli-op': 'CLI Operation'
     };
     if (idMap[displayName]) {
