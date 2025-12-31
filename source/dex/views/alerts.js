@@ -207,15 +207,15 @@ export async function updateAlertsTab(forceReRender = false) {
       if (technicalContent) {
         reportBodyHtml = `
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
-                <div style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6;">${renderMarkdown(technicalContent)}</div>
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
+                <div class="md-para" style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6; text-align: left;">${renderMarkdown(technicalContent)}</div>
             </div>
         `;
       } else {
         reportBodyHtml = `
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
-                <div style="color: #fff; white-space: pre-wrap; line-height: 1.6;">${renderMarkdown(body)}</div>
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
+                <div class="md-para" style="color: #fff; white-space: pre-wrap; line-height: 1.6; text-align: left;">${renderMarkdown(body)}</div>
             </div>
         `;
       }

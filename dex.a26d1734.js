@@ -90,13 +90,13 @@
                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${_}</div>
             </div>`);let V="";S?V=`
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
-                <div style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6;">${te(S)}</div>
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
+                <div class="md-para" style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6; text-align: left;">${te(S)}</div>
             </div>
         `:V=`
             <div class="event-detail-block" style="text-align: left;">
-                <h5 style="margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
-                <div style="color: #fff; white-space: pre-wrap; line-height: 1.6;">${te(C)}</div>
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
+                <div class="md-para" style="color: #fff; white-space: pre-wrap; line-height: 1.6; text-align: left;">${te(C)}</div>
             </div>
         `,F=`
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
