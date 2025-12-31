@@ -138,6 +138,9 @@ export async function updateAlertsTab(forceReRender = false) {
 
       const title = (alertData.title || 'Untitled Alert').trim();
       const body = (alertData.body || 'No description provided.').trim();
+      const summaryContent = alertData.summary || '';
+      const technicalContent = alertData.content || '';
+      const protocol = alertData.protocol || '';
       const priority = (alertData.priority || 'low').toLowerCase();
       const isAlert = !!alertData.alert;
       const category = (alertData.category || 'system').trim();
@@ -191,6 +194,35 @@ export async function updateAlertsTab(forceReRender = false) {
             </div>`;
       }
 
+      let protocolHtml = '';
+      if (protocol) {
+        protocolHtml = `
+            <div style="flex: 1; min-width: 100px;">
+                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${protocol.toUpperCase()}</div>
+            </div>`;
+      }
+
+      let reportBodyHtml = '';
+      if (summaryContent || technicalContent) {
+        reportBodyHtml = `
+            <div class="event-detail-block" style="text-align: left;">
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Report Content</h5>
+                <div style="padding: 10px; background: rgba(3, 218, 198, 0.05); border-left: 3px solid #03dac6; margin-bottom: 15px; font-size: 0.9em; color: #fff;">
+                    ${renderMarkdown(summaryContent)}
+                </div>
+                ${technicalContent ? `<div class="detail-pre" style="color: #ddd; font-size: 0.85em;">${renderMarkdown(technicalContent)}</div>` : ''}
+            </div>
+        `;
+      } else {
+        reportBodyHtml = `
+            <div class="event-detail-block" style="text-align: left;">
+                <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
+                <div class="detail-pre" style="color: #fff;">${renderMarkdown(body)}</div>
+            </div>
+        `;
+      }
+
       detailsContent = `
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
                     <div style="flex: 1; min-width: 100px;">
@@ -203,14 +235,12 @@ export async function updateAlertsTab(forceReRender = false) {
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
                         <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; text-transform: capitalize;">${category}</div>
                     </div>
+                    ${protocolHtml}
                     ${generatedByHtml}
                     ${relatedEventsHtml}
                 </div>
 
-                <div class="event-detail-block" style="text-align: left;">
-                    <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
-                    <div class="detail-pre" style="color: #fff;">${renderMarkdown(body)}</div>
-                </div>
+                ${reportBodyHtml}
             `;
 
 
