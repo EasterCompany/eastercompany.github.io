@@ -751,17 +751,9 @@
     },
     "2.16.50": {
       "type": "patch",
-      "date": "2025-12-31T06:45:24Z",
-      "commit": "48b3149",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.16.50/dex-event-service",
-            "size": 12858777,
-            "checksum": "7dedf1fda91849a4259e990c207c63608c7e758ee7d11e389741cd6ea9d60644"
-          }
-        }
-      }
+      "date": "2025-12-31T08:47:32Z",
+      "commit": "fdcfce9",
+      "binaries": {}
     },
     "2.16.51": {
       "type": "patch",
