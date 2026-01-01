@@ -238,19 +238,56 @@ export async function updateEventsTimeline(forceReRender = false) {
                     `;
                 } else if (type === 'messaging.bot.sent_message') {
                     const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+                    
+                    let historyHtml = '';
+                    if (eventData.chat_history && eventData.chat_history.length > 0) {
+                        const totalTurns = eventData.chat_history.length;
+                        const slides = eventData.chat_history.map((m, index) => {
+                            let roleName = m.role.toUpperCase();
+                            if (roleName === 'ASSISTANT') roleName = 'DEXTER';
+                            
+                            const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
+                            const displayStyle = index === totalTurns - 1 ? 'block' : 'none'; // Default to showing Dexter's response
+                            return `
+                                <div class="history-slide" data-index="${index}" style="display: ${displayStyle};">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="font-size: 0.7em; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${roleName}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${index + 1} of ${totalTurns}</span>
+                                    </div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${escapeHtml(m.content)}</div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        historyHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Turn-by-Turn History')}
+                                <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
+                                    ${slides}
+                                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                                        <button class="carousel-btn prev-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;"><i class='bx bx-chevron-left'></i> Prev</button>
+                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;">Next <i class='bx bx-chevron-right'></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
                     detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
                             <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                         </div>
-                        <div class="event-detail-block">
-                            ${stylisedHeader('Raw Input (Prompt)')}
-                            <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
-                        </div>
-                        <div class="event-detail-block">
-                            ${stylisedHeader('Raw Response Output')}
-                            <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
-                        </div>
+                        ${historyHtml || `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Raw Input (Prompt)')}
+                                <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
+                            </div>
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Raw Response Output')}
+                                <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
+                            </div>
+                        `}
                     `;
                 } else if (type === 'moderation.explicit_content.deleted') {
                     const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
