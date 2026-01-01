@@ -49,6 +49,22 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
+        <div class="system-section-header">
+            <i class='bx bx-search-alt' style="color: #03dac6;"></i>
+            <h2>Analyzer</h2>
+            <button id="analyzer-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+        </div>
+
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Synthesis Protocol</span>
+                    <span id="analyzer-synthesis-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="analyzer-synthesis-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="system-section-header" style="display: flex; align-items: center;">
             <svg width="24" height="24" viewBox="0 0 276 268" style="color: #03dac6; fill: currentColor; min-width: 24px; margin: 0; max-width: 25px;">
                 <path d="M0 0 C0.83273438 -0.02191406 1.66546875 -0.04382813 2.5234375 -0.06640625 C12.42281602 1.94089846 19.08310224 8.30026822 25.96826172 15.2746582 C26.95727226 16.25851896 27.94735021 17.2413077 28.93840027 18.22311401 C31.60457896 20.87090912 34.25495042 23.53400437 36.90205145 26.20085549 C39.68567156 29.00096491 42.48198637 31.78835012 45.27639771 34.5776825 C49.96361651 39.26039291 54.64058983 43.95314835 59.31152344 48.65209961 C64.70016956 54.07281989 70.10469891 59.47729615 75.51801288 64.87337428 C80.74280158 70.08226408 85.95618152 75.30243123 91.16449356 80.52779198 C93.37364835 82.74379185 95.58666299 84.95582576 97.80294418 87.16469765 C100.41418514 89.7682407 103.01523577 92.38156651 105.60895729 95.00255966 C107.00896503 96.4126634 108.41872373 97.81306531 109.82881165 99.21308899 C115.21512659 104.68091165 119.71720271 109.65638967 121.15625 117.43359375 C121.1459375 118.28050781 121.135625 119.12742187 121.125 120 C121.14046875 121.26650391 121.14046875 121.26650391 121.15625 122.55859375 C119.29273788 133.0956586 112.41291897 139.49918055 105.10546875 146.7109375 C103.96129859 147.8559378 102.81794583 149.00175542 101.67536926 150.14834595 C99.28844755 152.53811319 96.89305386 154.91893632 94.4909668 157.29345703 C91.42251357 160.32777217 88.37460205 163.38178886 85.33254528 166.44254112 C82.97814152 168.80754245 80.61404093 171.16265346 78.24685097 173.51485062 C77.11941282 174.63713069 75.99475802 175.76221449 74.87303734 176.8902092 C73.30147909 178.4672553 71.71750525 180.03070557 70.12963867 181.59130859 C69.23347336 182.48127533 68.33730804 183.37124207 67.41398621 184.28817749 C62.66560568 188.16031881 57.88332197 189.99168346 51.6875 190 C50.72972656 190.01933594 49.77195312 190.03867188 48.78515625 190.05859375 C39.43875364 188.59135873 33.68473352 182.19800083 27.30932617 175.7644043 C26.29907148 174.75957818 25.28796968 173.75560315 24.27609253 172.75241089 C21.5460013 170.040466 18.82860783 167.31612861 16.11394668 164.58874869 C13.26396116 161.72859314 10.40417989 158.87825841 7.54597473 156.02632141 C2.7500778 151.23768806 -2.03735442 146.44071357 -6.82006836 141.63891602 C-12.34193771 136.09526806 -17.87808586 130.56619364 -23.42184621 125.04444379 C-28.19119159 120.29327429 -32.95266783 115.53432414 -37.70770282 110.7688325 C-40.54340877 107.92690528 -43.38171285 105.08771456 -46.22715187 102.2555294 C-48.90145417 99.59281726 -51.5657144 96.92044172 -54.22267532 94.24042892 C-55.19676448 93.26107013 -56.17423765 92.28506324 -57.15538216 91.31277275 C-67.60330716 80.95044548 -67.60330716 80.95044548 -68.80859375 72.53515625 C-68.80988281 71.57480469 -68.81117187 70.61445312 -68.8125 69.625 C-68.83183594 68.66722656 -68.85117188 67.70945312 -68.87109375 66.72265625 C-67.30574621 56.75126914 -59.94014197 50.53844575 -53.109375 43.765625 C-51.99024053 42.64379096 -50.87169999 41.52136415 -49.75372314 40.39837646 C-47.41663676 38.05541695 -45.072532 35.7197827 -42.72314453 33.38916016 C-39.72603827 30.41484171 -36.747253 27.42292163 -33.77352524 24.42525101 C-31.46951551 22.10672421 -29.15598517 19.79788601 -26.8395462 17.49178314 C-25.737909 16.3927969 -24.63918713 15.29087962 -23.54357147 14.1858902 C-9.43730391 -0.01451893 -9.43730391 -0.01451893 0 0 Z " transform="translate(144.375,4.4375)"/>
@@ -551,6 +567,7 @@ export async function updateProcessesTab() {
   const totalActiveVal = document.getElementById('guardian-total-active');
   const totalWasteVal = document.getElementById('guardian-total-waste');
   const resetBtn = document.getElementById('guardian-reset-btn');
+  const analyzerResetBtn = document.getElementById('analyzer-reset-btn');
 
   if (resetBtn && !resetBtn.dataset.listenerAttached) {
     resetBtn.onclick = async () => {
@@ -569,11 +586,29 @@ export async function updateProcessesTab() {
     resetBtn.dataset.listenerAttached = "true";
   }
 
+  if (analyzerResetBtn && !analyzerResetBtn.dataset.listenerAttached) {
+    analyzerResetBtn.onclick = async () => {
+      analyzerResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Resetting...";
+      try {
+        await smartFetch('/analyzer/reset?protocol=synthesis', { method: 'POST' });
+        setTimeout(() => {
+          analyzerResetBtn.innerHTML = "<i class='bx bx-check'></i> Done";
+          setTimeout(() => { analyzerResetBtn.innerHTML = "<i class='bx bx-refresh'></i> Reset"; }, 2000);
+        }, 500);
+        updateProcessesTab(); // refresh immediately
+      } catch (e) {
+        analyzerResetBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
+      }
+    };
+    analyzerResetBtn.dataset.listenerAttached = "true";
+  }
+
   const guardianStatus = await fetchGuardianStatus();
   if (guardianStatus) {
     const now = Math.floor(Date.now() / 1000);
     const activeTier = guardianStatus.active_tier;
-    const aliases = guardianStatus.protocol_aliases || { "sentry": "Sentry", "architect": "Architect" };
+    const activeSynthesis = guardianStatus.active_synthesis;
+    const aliases = guardianStatus.protocol_aliases || { "sentry": "Sentry", "architect": "Architect", "synthesis": "Synthesis" };
 
     const formatDuration = (seconds) => {
       if (seconds < 0) seconds = 0;
@@ -585,7 +620,7 @@ export async function updateProcessesTab() {
       return `${s}s`;
     };
 
-    const updateTimer = (el, statsEl, protocolData, protocolName) => {
+    const updateTimer = (el, statsEl, protocolData, protocolName, currentActive) => {
       if (!el) return;
       const alias = aliases[protocolName] || protocolName.toUpperCase();
       const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
@@ -593,7 +628,7 @@ export async function updateProcessesTab() {
         labelEl.textContent = alias;
       }
 
-      if (activeTier && activeTier.includes(alias)) {
+      if (currentActive && currentActive.includes(protocolName)) {
         el.textContent = "Working";
         el.style.color = "#bb86fc";
       } else if (protocolData) {
@@ -621,8 +656,12 @@ export async function updateProcessesTab() {
       }
     };
 
-    if (sentryVal) updateTimer(sentryVal, document.getElementById('guardian-sentry-stats'), guardianStatus.sentry, 'sentry');
-    if (architectVal) updateTimer(architectVal, document.getElementById('guardian-architect-stats'), guardianStatus.architect, 'architect');
+    if (sentryVal) updateTimer(sentryVal, document.getElementById('guardian-sentry-stats'), guardianStatus.sentry, 'sentry', activeTier);
+    if (architectVal) updateTimer(architectVal, document.getElementById('guardian-architect-stats'), guardianStatus.architect, 'architect', activeTier);
+    
+    const synthesisVal = document.getElementById('analyzer-synthesis-val');
+    const synthesisStats = document.getElementById('analyzer-synthesis-stats');
+    if (synthesisVal) updateTimer(synthesisVal, synthesisStats, guardianStatus.synthesis, 'synthesis', activeSynthesis);
 
     const stateLabel = document.getElementById('system-state-label');
     const stateVal = document.getElementById('system-state-val');
@@ -734,7 +773,8 @@ function renderProcessList(container, list, isHistory) {
     let displayName = proc.channel_id;
     const idMap = {
       'system-guardian': 'Guardian Agent',
-      'system-cli-op': 'CLI Operation'
+      'system-cli-op': 'CLI Operation',
+      'system-analyzer': 'Analyzer Agent'
     };
     if (idMap[displayName]) {
       displayName = idMap[displayName];
