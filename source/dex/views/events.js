@@ -56,7 +56,8 @@ const CATEGORIES = {
     ],
     cognitive: [
         'engagement.decision', 'system.analysis.audit', 'system.blueprint.generated',
-        'analysis.link.completed', 'analysis.visual.completed', 'analysis.router.decision'
+        'analysis.link.completed', 'analysis.visual.completed', 'analysis.router.decision',
+        'analysis.user.message_signals'
     ],
     moderation: [
         'moderation.explicit_content.deleted'
@@ -87,6 +88,7 @@ const EVENT_ICONS = {
     'analysis.link.completed': 'bx-link',
     'analysis.visual.completed': 'bx-image',
     'analysis.router.decision': 'bx-git-branch',
+    'analysis.user.message_signals': 'bx-pulse',
     'moderation.explicit_content.deleted': 'bx-shield-x',
     'system.status.change': 'bx-refresh',
     'metric_recorded': 'bx-line-chart'
@@ -159,12 +161,12 @@ export async function updateEventsTimeline(forceReRender = false) {
             const category = getEventCategory(type);
             const icon = getEventIcon(type);
 
-            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type === 'system.attention.expired' || type.startsWith('system.roadmap') || type.startsWith('system.process');
+            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'analysis.user.message_signals' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type === 'system.attention.expired' || type.startsWith('system.roadmap') || type.startsWith('system.process');
             let borderClass = 'event-border-grey';
             if (isExpandable) {
                 if (type === 'moderation.explicit_content.deleted' || type === 'error_occurred') {
                     borderClass = 'event-border-red';
-                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'system.analysis.audit') {
+                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'system.analysis.audit' || type === 'analysis.user.message_signals') {
                     borderClass = 'event-border-purple';
                 } else if (type === 'system.attention.expired') {
                     borderClass = 'event-border-orange';
@@ -239,6 +241,30 @@ export async function updateEventsTimeline(forceReRender = false) {
                 } else if (type === 'messaging.bot.sent_message') {
                     const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
                     
+                    let metricsHtml = '';
+                    if (eventData.eval_count) {
+                        metricsHtml = `
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
+                                <div style="flex: 1; min-width: 100px; text-align: center;">
+                                    <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tokens (In/Out)</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.prompt_count} / ${eventData.eval_count}</div>
+                                </div>
+                                <div style="flex: 1; min-width: 100px; text-align: center;">
+                                    <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Total Time</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${eventData.duration_ms}ms</div>
+                                </div>
+                                <div style="flex: 1; min-width: 100px; text-align: center;">
+                                    <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Load Time</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.load_duration_ms}ms</div>
+                                </div>
+                                <div style="flex: 1; min-width: 100px; text-align: center;">
+                                    <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Processing</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.prompt_duration_ms}ms / ${eventData.eval_duration_ms}ms</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
                     let historyHtml = '';
                     if (eventData.chat_history && eventData.chat_history.length > 0) {
                         const totalTurns = eventData.chat_history.length;
@@ -274,6 +300,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                     }
 
                     detailsContent = `
+                        ${metricsHtml}
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
                             <span class="detail-value">${eventData.response_model || 'N/A'}</span>
@@ -288,6 +315,41 @@ export async function updateEventsTimeline(forceReRender = false) {
                                 <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
                             </div>
                         `}
+                    `;
+                } else if (type === 'analysis.user.message_signals') {
+                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+                    const s = eventData.signals || {};
+                    const sentimentColor = s.sentiment > 0.3 ? '#03dac6' : (s.sentiment < -0.3 ? '#cf6679' : '#aaa');
+                    
+                    detailsContent = `
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Sentiment</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${sentimentColor}; font-weight: bold;">${s.sentiment?.toFixed(2) || 0}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Intent</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; text-transform: uppercase;">${s.intent || 'N/A'}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tech Depth</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${s.technical_depth || 0}/10</div>
+                            </div>
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Mood</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${s.mood || 'N/A'}</div>
+                            </div>
+                        </div>
+                        <div class="event-detail-block">
+                            ${stylisedHeader('Extracted Topics')}
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                ${(s.topics || []).map(t => `<span class="profile-badge">${t}</span>`).join('') || '<span style="color: #666;">No topics mapped.</span>'}
+                            </div>
+                        </div>
+                        <div class="event-detail-block" style="margin-top: 15px;">
+                            ${stylisedHeader('Raw Model Output')}
+                            <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
+                        </div>
                     `;
                 } else if (type === 'moderation.explicit_content.deleted') {
                     const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
