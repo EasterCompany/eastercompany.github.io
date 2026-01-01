@@ -1,4 +1,4 @@
-import { escapeHtml } from '../core/utils.js';
+import { escapeHtml, smartDiscordFetch } from '../core/utils.js';
 
 // --- CSS Styles for the Profile Modal ---
 const PROFILE_STYLES = `
@@ -434,7 +434,7 @@ const PROFILE_STYLES = `
     }
 `;
 
-// --- Mock Data Generator ---
+// --- Mock Data Generator (Fallback) ---
 function getMockData(userId, username) {
     const isMaster = userId === '313071000877137920';
     
@@ -547,20 +547,74 @@ export function showUserProfile(user) {
         document.head.appendChild(styleEl);
     }
 
-    // 2. Get Data
-    const data = getMockData(user.id, user.username);
+    // 2. Render Skeleton Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'profile-overlay';
+    // Skeleton content
+    overlay.innerHTML = `
+        <div class="profile-card" style="height: 400px; justify-content: center; align-items: center;">
+            <div style="text-align: center;">
+                <div style="font-size: 3em; color: #bb86fc;"><i class='bx bx-loader-alt spin'></i></div>
+                <div style="margin-top: 20px; font-family: 'JetBrains Mono'; color: #666;">ACCESSING SECURE ARCHIVE...</div>
+            </div>
+        </div>
+    `;
+    
+    // Close logic
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.remove(), 300);
+        }
+    });
+
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('active'));
+
+    // 3. Fetch Data
+    smartDiscordFetch(`/profile/${user.id}`)
+        .then(async (res) => {
+            if (res.ok) {
+                const data = await res.json();
+                renderProfileContent(overlay, user, data);
+            } else {
+                // Fallback to mock if not found (404)
+                console.log("Profile not found or error, using mock data.");
+                const mock = getMockData(user.id, user.username);
+                renderProfileContent(overlay, user, mock);
+            }
+        })
+        .catch(err => {
+            console.error("Profile fetch error:", err);
+            const mock = getMockData(user.id, user.username);
+            renderProfileContent(overlay, user, mock);
+        });
+}
+
+function renderProfileContent(overlay, user, data) {
     const statusColor = user.status === 'online' ? '#03dac6' : (user.status === 'idle' ? '#ffb74d' : '#cf6679');
 
     // 3. Render Helpers
     const renderOverview = () => {
-        const badgesHtml = data.badges.map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('');
-        const factsHtml = data.facts.map(f => `
+        const badgesHtml = (data.badges || []).map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('');
+        const factsHtml = (data.attributes || data.facts || []).map(f => {
+            // Handle both backend 'attributes' and mock 'facts' structures
+            const key = f.key || f.k;
+            const val = f.value || f.v;
+            return `
             <div class="fact-chip">
-                <span class="fact-key">${f.k}:</span>
-                <span class="fact-val">${f.v}</span>
+                <span class="fact-key">${key}:</span>
+                <span class="fact-val">${val}</span>
             </div>
-        `).join('');
+        `}).join('');
         
+        // Handle nested or flat cognitive model
+        const cm = data.cognitive_model || data;
+        const techLevel = cm.technical_level || cm.techLevel || 0;
+        const commStyle = cm.communication_style || cm.commStyle || 'Unknown';
+        const patience = cm.patience_level || cm.patience || 'Unknown';
+        const vibe = cm.vibe || 'Unknown';
+
         return `
             <div class="overview-grid">
                 <div class="profile-section">
@@ -569,31 +623,31 @@ export function showUserProfile(user) {
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Technical Level</span>
-                            <span>${data.techLevel}/10</span>
+                            <span>${techLevel}/10</span>
                         </div>
                         <div class="cog-bar-bg">
-                            <div class="cog-bar-fill" style="width: ${Math.min(data.techLevel * 10, 100)}%;"></div>
+                            <div class="cog-bar-fill" style="width: ${Math.min(techLevel * 10, 100)}%;"></div>
                         </div>
                     </div>
 
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Communication Style</span>
-                            <span style="color: #03dac6;">${data.commStyle}</span>
+                            <span style="color: #03dac6;">${commStyle}</span>
                         </div>
                     </div>
 
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Predicted Patience</span>
-                            <span>${data.patience}</span>
+                            <span>${patience}</span>
                         </div>
                     </div>
 
                      <div class="cog-metric">
                         <div class="cog-label">
                             <span>Vibe Check</span>
-                            <span style="font-family: 'JetBrains Mono'; color: #bb86fc;">${data.vibe}</span>
+                            <span style="font-family: 'JetBrains Mono'; color: #bb86fc;">${vibe}</span>
                         </div>
                     </div>
                 </div>
@@ -613,7 +667,12 @@ export function showUserProfile(user) {
     };
 
     const renderDossier = () => {
-        const d = data.dossier;
+        const d = data.dossier || {};
+        const identity = d.identity || {};
+        const career = d.career || {};
+        const personal = d.personal || {};
+        const social = d.social || [];
+
         return `
             <div class="dossier-grid">
                 <!-- Identity Column -->
@@ -621,34 +680,34 @@ export function showUserProfile(user) {
                     <div class="profile-section-title"><i class='bx bx-id-card'></i> Identity</div>
                     <div class="dossier-item">
                         <div class="dossier-label">Full Name</div>
-                        <div class="dossier-value">${d.identity.fullName}</div>
+                        <div class="dossier-value">${identity.fullName || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
                         
                         <div class="dossier-label">Age Range</div>
-                        <div class="dossier-value">${d.identity.ageRange}</div>
+                        <div class="dossier-value">${identity.ageRange || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
                         
                         <div class="dossier-label">Location</div>
-                        <div class="dossier-value">${d.identity.location}</div>
+                        <div class="dossier-value">${identity.location || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
 
                         <div class="dossier-label">Sexuality</div>
-                        <div class="dossier-value" style="color: #ffb74d;">${d.identity.sexuality}</div>
+                        <div class="dossier-value" style="color: #ffb74d;">${identity.sexuality || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
 
                         <div class="dossier-label">Relationship Status</div>
-                        <div class="dossier-value">${d.identity.relationship}</div>
+                        <div class="dossier-value">${identity.relationship || 'Unknown'}</div>
                     </div>
                     
                     <div class="profile-section-title" style="margin-top: 30px;"><i class='bx bx-briefcase'></i> Career</div>
                     <div class="dossier-item">
                         <div class="dossier-label">Current Role</div>
-                        <div class="dossier-value">${d.career.jobTitle}</div>
-                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${d.career.company}</div>
+                        <div class="dossier-value">${career.jobTitle || 'Unknown'}</div>
+                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${career.company || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
                          <div class="dossier-label">Key Skills</div>
                          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
-                            ${d.career.skills.map(s => `<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${s}</span>`).join('')}
+                            ${(career.skills || []).map(s => `<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${s}</span>`).join('')}
                          </div>
                     </div>
                 </div>
@@ -660,21 +719,21 @@ export function showUserProfile(user) {
                     <div class="dossier-item">
                         <div class="dossier-label"><i class='bx bx-joystick'></i> Hobbies</div>
                         <div style="margin-top: 10px;">
-                            ${d.personal.hobbies.map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
+                            ${(personal.hobbies || []).map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
                         </div>
                     </div>
 
                     <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-sync'></i> Habits</div>
                         <div style="margin-top: 10px;">
-                            ${d.personal.habits.map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
+                            ${(personal.habits || []).map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
                         </div>
                     </div>
 
                      <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-error-circle'></i> Known Vices</div>
                         <div style="margin-top: 10px;">
-                            ${d.personal.vices.map(h => `<div class="dossier-list-item" style="color: #cf6679;">${h}</div>`).join('')}
+                            ${(personal.vices || []).map(h => `<div class="dossier-list-item" style="color: #cf6679;">${h}</div>`).join('')}
                         </div>
                     </div>
                 </div>
@@ -683,7 +742,7 @@ export function showUserProfile(user) {
                 <div class="dossier-column">
                     <div class="profile-section-title"><i class='bx bx-network-chart'></i> Known Associates</div>
                     <div class="dossier-item" style="background: none; border: none; padding: 0;">
-                        ${d.social.length > 0 ? d.social.map(s => `
+                        ${social.length > 0 ? social.map(s => `
                             <div class="friend-chip">
                                 <div style="width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">${s.name.substring(0,1)}</div>
                                 <div style="flex: 1;">
@@ -699,10 +758,12 @@ export function showUserProfile(user) {
         `;
     };
 
-    const renderPsychometrics = () => `
+    const renderPsychometrics = () => {
+        const traits = data.traits || {};
+        return `
         <div class="profile-section-title"><i class='bx bx-radar'></i> Personality Matrix (OCEAN)</div>
         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
-            ${Object.entries(data.traits).map(([trait, val]) => `
+            ${Object.entries(traits).map(([trait, val]) => `
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                     <div style="width: 10px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 5px; position: relative; overflow: hidden;">
                         <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${val}%; background: ${val > 50 ? '#03dac6' : '#cf6679'}; transition: height 1s;"></div>
@@ -726,12 +787,12 @@ export function showUserProfile(user) {
                 <span>Today</span>
             </div>
         </div>
-    `;
+    `};
 
     const renderTopicMap = () => `
         <div class="profile-section-title"><i class='bx bx-map-alt'></i> Conversation Topics</div>
         <div style="margin-top: 20px;">
-            ${data.topics.map(t => `
+            ${(data.topics || []).map(t => `
                 <div class="topic-bar">
                     <div class="topic-header">
                         <span style="color: #eee;">${t.name}</span>
@@ -761,7 +822,7 @@ export function showUserProfile(user) {
                 </div>
                 <div class="profile-identity">
                     <h2>${escapeHtml(user.username)}</h2>
-                    <div class="profile-badges">${data.badges.map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('')}</div>
+                    <div class="profile-badges">${(data.badges || []).map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('')}</div>
                 </div>
             </div>
             
@@ -784,36 +845,28 @@ export function showUserProfile(user) {
             <div class="profile-footer">
                 <div style="display: flex; gap: 20px;">
                     <span>ID: ${user.id}</span>
-                    <span>LIFETIME TOKENS: ${data.stats.tokens}</span>
-                    <span>MSGS: ${data.stats.msgs}</span>
+                    <span>LIFETIME TOKENS: ${data.stats?.tokens_consumed || data.stats?.tokens || '0'}</span>
+                    <span>MSGS: ${data.stats?.total_messages || data.stats?.msgs || '0'}</span>
                 </div>
                 <button id="profile-expand-toggle" class="expand-btn"><i class='bx bx-expand-alt'></i> Detailed Analysis</button>
             </div>
         </div>
     `;
 
-    // 4. Create Overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'profile-overlay';
     overlay.innerHTML = html;
-
-    // 5. Interaction Logic
-    
-    // Close on background click
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            overlay.classList.remove('active');
-            setTimeout(() => overlay.remove(), 300);
-        }
-    });
-
-    document.body.appendChild(overlay);
 
     // Elements
     const card = overlay.querySelector('.profile-card');
     const expandBtn = overlay.querySelector('#profile-expand-toggle');
     const tabs = overlay.querySelectorAll('.profile-tab-btn');
     const contents = overlay.querySelectorAll('.tab-content');
+    const closeBtn = overlay.querySelector('.close-profile-btn');
+
+    // Close Button
+    closeBtn.addEventListener('click', () => {
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 300);
+    });
 
     // Tab Switching
     tabs.forEach(btn => {
@@ -833,10 +886,5 @@ export function showUserProfile(user) {
         expandBtn.innerHTML = isExpanded 
             ? `<i class='bx bx-collapse-alt'></i> Collapse View` 
             : `<i class='bx bx-expand-alt'></i> Detailed Analysis`;
-    });
-
-    // Trigger animation
-    requestAnimationFrame(() => {
-        overlay.classList.add('active');
     });
 }
