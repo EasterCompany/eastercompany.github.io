@@ -1,5 +1,6 @@
 // Contacts Tab Logic (Synced with Discord)
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartDiscordFetch } from '../core/utils.js';
+import { showUserProfile } from '../components/userProfile.js';
 
 export const getContactsContent = () => `
     <div class="system-section-header">
@@ -27,6 +28,22 @@ export async function updateContactsTab() {
             setTimeout(() => { refreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
         };
         refreshBtn.dataset.listenerAttached = "true";
+    }
+    
+    // Attach click listener for profiles (Delegation)
+    if (!container.dataset.listenerAttached) {
+        container.onclick = (e) => {
+            const card = e.target.closest('.user-profile-card');
+            if (card) {
+                try {
+                    const userData = JSON.parse(card.dataset.user);
+                    showUserProfile(userData);
+                } catch (err) {
+                    console.error("Failed to parse user data", err);
+                }
+            }
+        };
+        container.dataset.listenerAttached = "true";
     }
 
     try {
@@ -76,9 +93,15 @@ export async function updateContactsTab() {
             const isMe = m.level === 'Me';
             const cardBg = isMe ? 'rgba(187, 134, 252, 0.08)' : 'rgba(255,255,255,0.03)';
             const borderStyle = isMe ? `2px solid #bb86fc` : `1px solid ${hexColor}33`;
+            const cursorStyle = "cursor: pointer; transition: transform 0.2s, background 0.2s;";
+            
+            // Safe JSON serialization for data attribute
+            const jsonStr = JSON.stringify(m).replace(/"/g, "&quot;");
 
             return `
-                <div class="user-profile-section" style="background: ${cardBg}; padding: 15px; border-radius: 8px; border: ${borderStyle}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden;">
+                <div class="user-profile-card" 
+                     data-user="${jsonStr}"
+                     style="background: ${cardBg}; padding: 15px; border-radius: 8px; border: ${borderStyle}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; ${cursorStyle}">
                     <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${isMe ? '#bb86fc' : hexColor}22, transparent 70%); pointer-events: none;"></div>
                     <div style="position: relative;">
                         <img src="${m.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${isMe ? '2px solid #bb86fc' : 'none'};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
@@ -94,6 +117,11 @@ export async function updateContactsTab() {
                 </div>
             `;
         }).join('');
+
+        // Add hover effect via JS since inline styles are tricky for pseudo-classes
+        // We could add a <style> block but this is fine for now, or assume global CSS handles .user-profile-card:hover
+        // Actually, let's inject a small style tag just for this if needed, but for now relies on base CSS or just simple inline transform.
+        // I'll stick to the base implementation.
 
     } catch (e) {
         if (container.children.length === 0) {
