@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.16.28.main.7d79bff.2026-01-01.linux-amd64.7d79bff",
-    "dev": "2.16.28.main.7d79bff.2026-01-01.linux-amd64.7d79bff"
+    "user": "2.16.29.main.6e774fc.2026-01-01.linux-amd64.6e774fc",
+    "dev": "2.16.29.main.6e774fc.2026-01-01.linux-amd64.6e774fc"
   },
   "releases": {
     "0.0.0": {
@@ -489,14 +489,14 @@
     },
     "2.16.29": {
       "type": "patch",
-      "date": "2025-12-30T05:12:23Z",
-      "commit": "538c487",
+      "date": "2026-01-01T19:22:15Z",
+      "commit": "ff1c8dc",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.16.29/dex-event-service",
-            "size": 12826372,
-            "checksum": "4959238931e5aa8eac9ad0f900640c34d381be6dc7e206fbada0f6019fab82fe"
+            "path": "/bin/2.16.29/dex",
+            "size": 16622403,
+            "checksum": "7caa8e9688bbd2f493ae8e3feb40185393abe485f33744c5345463adc993296c"
           }
         }
       }
@@ -1165,8 +1165,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.16.28.main.7d79bff.2026-01-01.linux-amd64.7d79bff",
-      "user": "2.16.28.main.7d79bff.2026-01-01.linux-amd64.7d79bff",
+      "current": "2.16.29.main.6e774fc.2026-01-01.linux-amd64.6e774fc",
+      "user": "2.16.29.main.6e774fc.2026-01-01.linux-amd64.6e774fc",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
