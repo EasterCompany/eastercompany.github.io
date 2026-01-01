@@ -34,8 +34,14 @@ const PROFILE_STYLES = `
         flex-direction: column;
         overflow: hidden;
         transform: scale(0.95);
-        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
+    }
+    
+    .profile-card.expanded {
+        width: 1200px;
+        height: 85vh;
+        max-height: 95vh;
     }
 
     .profile-overlay.active .profile-card {
@@ -53,6 +59,7 @@ const PROFILE_STYLES = `
         background: linear-gradient(90deg, #bb86fc, #03dac6, #bb86fc);
         background-size: 200% 100%;
         animation: gradientMove 3s linear infinite;
+        z-index: 10;
     }
 
     @keyframes gradientMove {
@@ -61,18 +68,19 @@ const PROFILE_STYLES = `
     }
 
     .profile-header {
-        padding: 40px;
+        padding: 40px 40px 20px 40px;
         background: linear-gradient(180deg, rgba(187, 134, 252, 0.05) 0%, rgba(30, 30, 30, 0) 100%);
         display: flex;
         align-items: center;
         gap: 30px;
         position: relative;
+        flex-shrink: 0;
     }
 
     .profile-avatar-container {
         position: relative;
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
     }
 
     .profile-avatar {
@@ -87,8 +95,8 @@ const PROFILE_STYLES = `
         position: absolute;
         bottom: 5px;
         right: 5px;
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
         border: 3px solid #1e1e1e;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -96,7 +104,7 @@ const PROFILE_STYLES = `
 
     .profile-identity h2 {
         margin: 0;
-        font-size: 2.5em;
+        font-size: 2.2em;
         color: #fff;
         font-weight: 700;
         letter-spacing: -0.5px;
@@ -125,13 +133,64 @@ const PROFILE_STYLES = `
         color: #bb86fc;
         border-color: #bb86fc;
     }
+    
+    /* Navigation Tabs (Hidden unless expanded) */
+    .profile-nav {
+        display: none; /* Flex when expanded */
+        padding: 0 40px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin-top: 10px;
+        gap: 25px;
+    }
+    
+    .profile-card.expanded .profile-nav {
+        display: flex;
+    }
+    
+    .profile-tab-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        padding: 15px 0;
+        cursor: pointer;
+        position: relative;
+        font-size: 0.9em;
+        transition: color 0.2s;
+    }
+    
+    .profile-tab-btn:hover {
+        color: #fff;
+    }
+    
+    .profile-tab-btn.active {
+        color: #03dac6;
+    }
+    
+    .profile-tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #03dac6;
+        box-shadow: 0 -2px 10px rgba(3, 218, 198, 0.5);
+    }
 
     .profile-body {
         padding: 40px;
+        overflow-y: auto;
+        flex: 1;
+        position: relative;
+    }
+    
+    /* Grid layout for Overview */
+    .overview-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 40px;
-        overflow-y: auto;
     }
 
     .profile-section-title {
@@ -224,6 +283,8 @@ const PROFILE_STYLES = `
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.8em;
         color: #666;
+        flex-shrink: 0;
+        align-items: center;
     }
 
     .close-profile-btn {
@@ -236,10 +297,88 @@ const PROFILE_STYLES = `
         font-size: 1.5em;
         cursor: pointer;
         transition: color 0.2s;
+        z-index: 20;
     }
 
     .close-profile-btn:hover {
         color: #fff;
+    }
+    
+    .expand-btn {
+        background: rgba(187, 134, 252, 0.1);
+        border: 1px solid rgba(187, 134, 252, 0.3);
+        color: #bb86fc;
+        padding: 6px 16px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85em;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .expand-btn:hover {
+        background: rgba(187, 134, 252, 0.2);
+        box-shadow: 0 0 15px rgba(187, 134, 252, 0.2);
+    }
+    
+    /* Tab Content Logic */
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Deep Dive Styles */
+    .topic-bar {
+        margin-bottom: 20px;
+    }
+    .topic-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9em;
+    }
+    .topic-track {
+        height: 25px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+    }
+    .topic-fill {
+        height: 100%;
+        background: rgba(187, 134, 252, 0.4);
+        border-right: 2px solid #bb86fc;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+        font-size: 0.75em;
+        color: #fff;
+        white-space: nowrap;
+    }
+    
+    .raw-json {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85em;
+        color: #03dac6;
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        max-height: 600px;
+        overflow-y: auto;
     }
 `;
 
@@ -247,39 +386,34 @@ const PROFILE_STYLES = `
 function getMockData(userId, username) {
     const isMaster = userId === '313071000877137920';
     
-    if (isMaster) {
-        return {
-            techLevel: 11, // As requested :)
-            commStyle: 'Direct / Efficient',
-            patience: 'Infinite',
-            vibe: 'Architect',
-            facts: [
-                { k: 'Role', v: 'Creator' },
-                { k: 'Lang', v: 'Go' },
-                { k: 'OS', v: 'Linux' },
-                { k: 'Editor', v: 'VS Code' },
-                { k: 'Music', v: 'Synthwave' },
-                { k: 'Status', v: 'God Mode' }
-            ],
-            badges: ['Creator', 'Admin', 'Architect'],
-            stats: {
-                msgs: 14052,
-                tokens: '45.2M',
-                lastSeen: 'Now'
-            }
-        };
-    }
-
-    // Random generation for others
-    const techLevels = [2, 4, 6, 8, 3, 5];
-    const styles = ['Verbose', 'Casual', 'Formal', 'Chaotic', 'Inquisitive'];
-    const vibes = ['NPC', 'Guest', 'Lurker', 'Regular', 'Fan'];
-    
-    return {
-        techLevel: techLevels[Math.floor(Math.random() * techLevels.length)],
-        commStyle: styles[Math.floor(Math.random() * styles.length)],
+    const base = isMaster ? {
+        techLevel: 11, 
+        commStyle: 'Direct / Efficient',
+        patience: 'Infinite',
+        vibe: 'Architect',
+        facts: [
+            { k: 'Role', v: 'Creator' },
+            { k: 'Lang', v: 'Go' },
+            { k: 'OS', v: 'Linux' },
+            { k: 'Editor', v: 'VS Code' },
+            { k: 'Music', v: 'Synthwave' },
+            { k: 'Status', v: 'God Mode' }
+        ],
+        badges: ['Creator', 'Admin', 'Architect'],
+        stats: { msgs: 14052, tokens: '45.2M', lastSeen: 'Now' },
+        topics: [
+            { name: "System Architecture", val: 85 },
+            { name: "Code Review", val: 60 },
+            { name: "Music / Vibes", val: 30 },
+            { name: "Debugging", val: 45 }
+        ],
+        traits: { openness: 95, conscientiousness: 90, extraversion: 40, agreeableness: 60, neuroticism: 15 }
+    } : {
+        // Random generation for others
+        techLevel: [2, 4, 6, 8, 3, 5][Math.floor(Math.random() * 6)],
+        commStyle: ['Verbose', 'Casual', 'Formal', 'Chaotic', 'Inquisitive'][Math.floor(Math.random() * 5)],
         patience: Math.random() > 0.5 ? 'High' : 'Medium',
-        vibe: vibes[Math.floor(Math.random() * vibes.length)],
+        vibe: ['NPC', 'Guest', 'Lurker', 'Regular', 'Fan'][Math.floor(Math.random() * 5)],
         facts: [
             { k: 'Role', v: 'User' },
             { k: 'Interest', v: Math.random() > 0.5 ? 'Coding' : 'Gaming' }
@@ -289,8 +423,22 @@ function getMockData(userId, username) {
             msgs: Math.floor(Math.random() * 500),
             tokens: Math.floor(Math.random() * 100) + 'K',
             lastSeen: Math.floor(Math.random() * 24) + 'h ago'
+        },
+        topics: [
+            { name: "General Chat", val: 80 },
+            { name: "Troubleshooting", val: 40 },
+            { name: "Off-Topic", val: 20 }
+        ],
+        traits: { 
+            openness: Math.floor(Math.random() * 100), 
+            conscientiousness: Math.floor(Math.random() * 100), 
+            extraversion: Math.floor(Math.random() * 100), 
+            agreeableness: Math.floor(Math.random() * 100), 
+            neuroticism: Math.floor(Math.random() * 100) 
         }
     };
+    
+    return { ...base, id: userId, username };
 }
 
 // --- Main Function ---
@@ -307,32 +455,18 @@ export function showUserProfile(user) {
     const data = getMockData(user.id, user.username);
     const statusColor = user.status === 'online' ? '#03dac6' : (user.status === 'idle' ? '#ffb74d' : '#cf6679');
 
-    // 3. Build HTML
-    const badgesHtml = data.badges.map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('');
-    
-    const factsHtml = data.facts.map(f => `
-        <div class="fact-chip">
-            <span class="fact-key">${f.k}:</span>
-            <span class="fact-val">${f.v}</span>
-        </div>
-    `).join('');
-
-    const html = `
-        <div class="profile-card">
-            <button class="close-profile-btn" onclick="document.querySelector('.profile-overlay').click()"><i class='bx bx-x'></i></button>
-            
-            <div class="profile-header">
-                <div class="profile-avatar-container">
-                    <img src="${user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="profile-avatar">
-                    <div class="profile-status-dot" style="background: ${statusColor}"></div>
-                </div>
-                <div class="profile-identity">
-                    <h2>${escapeHtml(user.username)}</h2>
-                    <div class="profile-badges">${badgesHtml}</div>
-                </div>
+    // 3. Render Helpers
+    const renderOverview = () => {
+        const badgesHtml = data.badges.map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('');
+        const factsHtml = data.facts.map(f => `
+            <div class="fact-chip">
+                <span class="fact-key">${f.k}:</span>
+                <span class="fact-val">${f.v}</span>
             </div>
-
-            <div class="profile-body">
+        `).join('');
+        
+        return `
+            <div class="overview-grid">
                 <div class="profile-section">
                     <div class="profile-section-title"><i class='bx bx-brain'></i> Cognitive Model</div>
                     
@@ -379,11 +513,103 @@ export function showUserProfile(user) {
                     </div>
                 </div>
             </div>
+        `;
+    };
+
+    const renderPsychometrics = () => `
+        <div class="profile-section-title"><i class='bx bx-radar'></i> Personality Matrix (OCEAN)</div>
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
+            ${Object.entries(data.traits).map(([trait, val]) => `
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <div style="width: 10px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 5px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${val}%; background: ${val > 50 ? '#03dac6' : '#cf6679'}; transition: height 1s;"></div>
+                    </div>
+                    <div style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #aaa;">${trait.substring(0,4)}</div>
+                    <div style="font-family: monospace;">${val}%</div>
+                </div>
+            `).join('')}
+        </div>
+        <div style="margin-top: 40px;">
+            <div class="profile-section-title"><i class='bx bx-message-square-detail'></i> Sentiment History</div>
+            <div style="height: 100px; border-bottom: 1px solid #333; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 5px;">
+                ${Array.from({length: 40}).map(() => {
+                    const h = Math.floor(Math.random() * 80) + 10;
+                    const c = Math.random() > 0.7 ? '#cf6679' : (Math.random() > 0.5 ? '#03dac6' : '#444');
+                    return `<div style="flex: 1; background: ${c}; height: ${h}%; border-radius: 2px;"></div>`
+                }).join('')}
+            </div>
+            <div style="font-family: monospace; color: #666; font-size: 0.7em; margin-top: 5px; display: flex; justify-content: space-between;">
+                <span>30 Days Ago</span>
+                <span>Today</span>
+            </div>
+        </div>
+    `;
+
+    const renderTopicMap = () => `
+        <div class="profile-section-title"><i class='bx bx-map-alt'></i> Conversation Topics</div>
+        <div style="margin-top: 20px;">
+            ${data.topics.map(t => `
+                <div class="topic-bar">
+                    <div class="topic-header">
+                        <span style="color: #eee;">${t.name}</span>
+                        <span style="color: #bb86fc;">${t.val}%</span>
+                    </div>
+                    <div class="topic-track">
+                        <div class="topic-fill" style="width: ${t.val}%"></div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+        
+        <div class="profile-section-title" style="margin-top: 40px;"><i class='bx bx-network-chart'></i> Associations</div>
+        <div class="fact-grid">
+            <div class="fact-chip" style="border-color: #bb86fc; color: #bb86fc;"><span class="fact-key">Closest Peer:</span> Dexter</div>
+            <div class="fact-chip" style="border-color: #bb86fc; color: #bb86fc;"><span class="fact-key">Influence:</span> High</div>
+            <div class="fact-chip" style="border-color: #bb86fc; color: #bb86fc;"><span class="fact-key">Trust Score:</span> 99/100</div>
+        </div>
+    `;
+
+    const renderRawData = () => `
+        <div class="profile-section-title"><i class='bx bx-code-alt'></i> Raw Profile JSON</div>
+        <div class="raw-json">${JSON.stringify(data, null, 2)}</div>
+    `;
+
+    const html = `
+        <div class="profile-card">
+            <button class="close-profile-btn" onclick="document.querySelector('.profile-overlay').click()"><i class='bx bx-x'></i></button>
+            
+            <div class="profile-header">
+                <div class="profile-avatar-container">
+                    <img src="${user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" class="profile-avatar">
+                    <div class="profile-status-dot" style="background: ${statusColor}"></div>
+                </div>
+                <div class="profile-identity">
+                    <h2>${escapeHtml(user.username)}</h2>
+                    <div class="profile-badges">${data.badges.map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('')}</div>
+                </div>
+            </div>
+            
+            <div class="profile-nav">
+                <button class="profile-tab-btn active" data-tab="overview">Overview</button>
+                <button class="profile-tab-btn" data-tab="psychometrics">Psychometrics</button>
+                <button class="profile-tab-btn" data-tab="topics">Topic Matrix</button>
+                <button class="profile-tab-btn" data-tab="raw">Raw Data</button>
+            </div>
+
+            <div class="profile-body">
+                <div id="tab-overview" class="tab-content active">${renderOverview()}</div>
+                <div id="tab-psychometrics" class="tab-content">${renderPsychometrics()}</div>
+                <div id="tab-topics" class="tab-content">${renderTopicMap()}</div>
+                <div id="tab-raw" class="tab-content">${renderRawData()}</div>
+            </div>
 
             <div class="profile-footer">
-                <div>ID: ${user.id}</div>
-                <div>LIFETIME TOKENS: ${data.stats.tokens}</div>
-                <div>MSGS: ${data.stats.msgs}</div>
+                <div style="display: flex; gap: 20px;">
+                    <span>ID: ${user.id}</span>
+                    <span>LIFETIME TOKENS: ${data.stats.tokens}</span>
+                    <span>MSGS: ${data.stats.msgs}</span>
+                </div>
+                <button id="profile-expand-toggle" class="expand-btn"><i class='bx bx-expand-alt'></i> Detailed Analysis</button>
             </div>
         </div>
     `;
@@ -394,6 +620,8 @@ export function showUserProfile(user) {
     overlay.innerHTML = html;
 
     // 5. Interaction Logic
+    
+    // Close on background click
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) {
             overlay.classList.remove('active');
@@ -402,6 +630,32 @@ export function showUserProfile(user) {
     });
 
     document.body.appendChild(overlay);
+
+    // Elements
+    const card = overlay.querySelector('.profile-card');
+    const expandBtn = overlay.querySelector('#profile-expand-toggle');
+    const tabs = overlay.querySelectorAll('.profile-tab-btn');
+    const contents = overlay.querySelectorAll('.tab-content');
+
+    // Tab Switching
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            overlay.querySelector(`#tab-${btn.dataset.tab}`).classList.add('active');
+        });
+    });
+
+    // Expand / Collapse
+    expandBtn.addEventListener('click', () => {
+        card.classList.toggle('expanded');
+        const isExpanded = card.classList.contains('expanded');
+        expandBtn.innerHTML = isExpanded 
+            ? `<i class='bx bx-collapse-alt'></i> Collapse View` 
+            : `<i class='bx bx-expand-alt'></i> Detailed Analysis`;
+    });
 
     // Trigger animation
     requestAnimationFrame(() => {
