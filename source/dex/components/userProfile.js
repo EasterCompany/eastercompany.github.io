@@ -39,7 +39,7 @@ const PROFILE_STYLES = `
     }
     
     .profile-card.expanded {
-        width: 1200px;
+        width: 1300px;
         height: 85vh;
         max-height: 95vh;
     }
@@ -380,6 +380,58 @@ const PROFILE_STYLES = `
         max-height: 600px;
         overflow-y: auto;
     }
+
+    /* Dossier Styles */
+    .dossier-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .dossier-item {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .dossier-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7em;
+        text-transform: uppercase;
+        color: #666;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+    }
+    
+    .dossier-value {
+        font-size: 1.1em;
+        color: #fff;
+        font-weight: 500;
+    }
+    
+    .dossier-list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        font-size: 0.9em;
+    }
+    
+    .dossier-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .friend-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0,0,0,0.2);
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
 `;
 
 // --- Mock Data Generator ---
@@ -395,9 +447,7 @@ function getMockData(userId, username) {
             { k: 'Role', v: 'Creator' },
             { k: 'Lang', v: 'Go' },
             { k: 'OS', v: 'Linux' },
-            { k: 'Editor', v: 'VS Code' },
-            { k: 'Music', v: 'Synthwave' },
-            { k: 'Status', v: 'God Mode' }
+            { k: 'Editor', v: 'VS Code' }
         ],
         badges: ['Creator', 'Admin', 'Architect'],
         stats: { msgs: 14052, tokens: '45.2M', lastSeen: 'Now' },
@@ -407,7 +457,32 @@ function getMockData(userId, username) {
             { name: "Music / Vibes", val: 30 },
             { name: "Debugging", val: 45 }
         ],
-        traits: { openness: 95, conscientiousness: 90, extraversion: 40, agreeableness: 60, neuroticism: 15 }
+        traits: { openness: 95, conscientiousness: 90, extraversion: 40, agreeableness: 60, neuroticism: 15 },
+        dossier: {
+            identity: {
+                fullName: "Owen Easter",
+                ageRange: "25-30",
+                location: "United Kingdom",
+                sexuality: "Heterosexual",
+                relationship: "Single"
+            },
+            career: {
+                jobTitle: "Founder / Systems Architect",
+                company: "Easter Company",
+                skills: ["Go", "Distributed Systems", "AI Integration"]
+            },
+            personal: {
+                hobbies: ["Synthwave Production", "Coding", "Gaming"],
+                habits: ["Late Night Coding", "Coffee Consumption", "System Optimization"],
+                vices: ["Perfectionism"],
+                virtues: ["Efficiency", "Vision"]
+            },
+            social: [
+                { name: "Dexter", relation: "Creation / AI", trust: "100%" },
+                { name: "Sarah", relation: "Close Friend", trust: "95%" },
+                { name: "Mike", relation: "Developer Peer", trust: "88%" }
+            ]
+        }
     } : {
         // Random generation for others
         techLevel: [2, 4, 6, 8, 3, 5][Math.floor(Math.random() * 6)],
@@ -435,6 +510,27 @@ function getMockData(userId, username) {
             extraversion: Math.floor(Math.random() * 100), 
             agreeableness: Math.floor(Math.random() * 100), 
             neuroticism: Math.floor(Math.random() * 100) 
+        },
+        dossier: {
+            identity: {
+                fullName: "Unknown Subject",
+                ageRange: "Unknown",
+                location: "Global",
+                sexuality: "Unknown",
+                relationship: "Unknown"
+            },
+            career: {
+                jobTitle: "Unknown",
+                company: "Unknown",
+                skills: ["General User"]
+            },
+            personal: {
+                hobbies: ["Lurking", "Chatting"],
+                habits: ["Unknown"],
+                vices: ["None Observed"],
+                virtues: ["None Observed"]
+            },
+            social: []
         }
     };
     
@@ -516,6 +612,93 @@ export function showUserProfile(user) {
         `;
     };
 
+    const renderDossier = () => {
+        const d = data.dossier;
+        return `
+            <div class="dossier-grid">
+                <!-- Identity Column -->
+                <div class="dossier-column">
+                    <div class="profile-section-title"><i class='bx bx-id-card'></i> Identity</div>
+                    <div class="dossier-item">
+                        <div class="dossier-label">Full Name</div>
+                        <div class="dossier-value">${d.identity.fullName}</div>
+                        <div style="height: 15px;"></div>
+                        
+                        <div class="dossier-label">Age Range</div>
+                        <div class="dossier-value">${d.identity.ageRange}</div>
+                        <div style="height: 15px;"></div>
+                        
+                        <div class="dossier-label">Location</div>
+                        <div class="dossier-value">${d.identity.location}</div>
+                        <div style="height: 15px;"></div>
+
+                        <div class="dossier-label">Sexuality</div>
+                        <div class="dossier-value" style="color: #ffb74d;">${d.identity.sexuality}</div>
+                        <div style="height: 15px;"></div>
+
+                        <div class="dossier-label">Relationship Status</div>
+                        <div class="dossier-value">${d.identity.relationship}</div>
+                    </div>
+                    
+                    <div class="profile-section-title" style="margin-top: 30px;"><i class='bx bx-briefcase'></i> Career</div>
+                    <div class="dossier-item">
+                        <div class="dossier-label">Current Role</div>
+                        <div class="dossier-value">${d.career.jobTitle}</div>
+                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${d.career.company}</div>
+                        <div style="height: 15px;"></div>
+                         <div class="dossier-label">Key Skills</div>
+                         <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
+                            ${d.career.skills.map(s => `<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${s}</span>`).join('')}
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Personal Column -->
+                <div class="dossier-column">
+                    <div class="profile-section-title"><i class='bx bx-home-heart'></i> Personal Life</div>
+                    
+                    <div class="dossier-item">
+                        <div class="dossier-label"><i class='bx bx-joystick'></i> Hobbies</div>
+                        <div style="margin-top: 10px;">
+                            ${d.personal.hobbies.map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
+                        </div>
+                    </div>
+
+                    <div class="dossier-item" style="margin-top: 20px;">
+                        <div class="dossier-label"><i class='bx bx-sync'></i> Habits</div>
+                        <div style="margin-top: 10px;">
+                            ${d.personal.habits.map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
+                        </div>
+                    </div>
+
+                     <div class="dossier-item" style="margin-top: 20px;">
+                        <div class="dossier-label"><i class='bx bx-error-circle'></i> Known Vices</div>
+                        <div style="margin-top: 10px;">
+                            ${d.personal.vices.map(h => `<div class="dossier-list-item" style="color: #cf6679;">${h}</div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Column -->
+                <div class="dossier-column">
+                    <div class="profile-section-title"><i class='bx bx-network-chart'></i> Known Associates</div>
+                    <div class="dossier-item" style="background: none; border: none; padding: 0;">
+                        ${d.social.length > 0 ? d.social.map(s => `
+                            <div class="friend-chip">
+                                <div style="width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">${s.name.substring(0,1)}</div>
+                                <div style="flex: 1;">
+                                    <div style="color: #fff; font-weight: 500;">${s.name}</div>
+                                    <div style="font-size: 0.75em; color: #888;">${s.relation}</div>
+                                </div>
+                                <div style="font-size: 0.8em; color: #03dac6;">${s.trust}</div>
+                            </div>
+                        `).join('') : '<div style="color: #666; font-style: italic;">No associates mapped.</div>'}
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
     const renderPsychometrics = () => `
         <div class="profile-section-title"><i class='bx bx-radar'></i> Personality Matrix (OCEAN)</div>
         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
@@ -560,13 +743,6 @@ export function showUserProfile(user) {
                 </div>
             `).join('')}
         </div>
-        
-        <div class="profile-section-title" style="margin-top: 40px;"><i class='bx bx-network-chart'></i> Associations</div>
-        <div class="fact-grid">
-            <div class="fact-chip" style="border-color: #bb86fc; color: #bb86fc;"><span class="fact-key">Closest Peer:</span> Dexter</div>
-            <div class="fact-chip" style="border-color: #bb86fc; color: #bb86fc;"><span class="fact-key">Influence:</span> High</div>
-            <div class="fact-chip" style="border-color: #bb86fc; color: #bb86fc;"><span class="fact-key">Trust Score:</span> 99/100</div>
-        </div>
     `;
 
     const renderRawData = () => `
@@ -591,6 +767,7 @@ export function showUserProfile(user) {
             
             <div class="profile-nav">
                 <button class="profile-tab-btn active" data-tab="overview">Overview</button>
+                <button class="profile-tab-btn" data-tab="dossier">Dossier</button>
                 <button class="profile-tab-btn" data-tab="psychometrics">Psychometrics</button>
                 <button class="profile-tab-btn" data-tab="topics">Topic Matrix</button>
                 <button class="profile-tab-btn" data-tab="raw">Raw Data</button>
@@ -598,6 +775,7 @@ export function showUserProfile(user) {
 
             <div class="profile-body">
                 <div id="tab-overview" class="tab-content active">${renderOverview()}</div>
+                <div id="tab-dossier" class="tab-content">${renderDossier()}</div>
                 <div id="tab-psychometrics" class="tab-content">${renderPsychometrics()}</div>
                 <div id="tab-topics" class="tab-content">${renderTopicMap()}</div>
                 <div id="tab-raw" class="tab-content">${renderRawData()}</div>
