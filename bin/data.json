@@ -372,6 +372,12 @@
       "commit": "16652d6",
       "binaries": {}
     },
+    "2.17.41": {
+      "type": "patch",
+      "date": "2026-01-02T20:31:32Z",
+      "commit": "ba09099",
+      "binaries": {}
+    },
     "2.17.5": {
       "type": "patch",
       "date": "2026-01-02T18:04:41Z",
