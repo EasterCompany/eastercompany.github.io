@@ -23,7 +23,7 @@ import {
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
 import { getLogsContent, updateLogs } from '../views/logs.js';
 import { initCliDashboard } from '../views/cli.js';
-import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount, smartFetch } from './utils.js';
+import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount, smartFetch, isPublicMode } from './utils.js';
 
 async function checkServiceHealth() {
   // Use smartFetch which handles the fallback logic and public mode
@@ -394,6 +394,14 @@ function onReady() {
     document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
     document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
 
+    // 1. High-frequency updates (Local Mode only)
+    if (!isPublicMode()) {
+      setInterval(() => {
+        if (eventsWindow.isOpen()) updateEventsTimeline();
+      }, 1000);
+    }
+
+    // 2. Standard background updates
     setInterval(() => {
       if (alertsWindow.isOpen()) {
         updateAlertsTab();
@@ -407,7 +415,11 @@ function onReady() {
         checkBackgroundBlueprints();
       }
 
-      if (eventsWindow.isOpen()) updateEventsTimeline();
+      // In public mode, we still update the UI from the 1-minute cache
+      if (isPublicMode() && eventsWindow.isOpen()) {
+        updateEventsTimeline();
+      }
+
       if (monitorWindow.isOpen()) {
         updateSystemTab();
       }
