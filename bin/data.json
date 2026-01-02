@@ -1365,6 +1365,12 @@
       "commit": "59ef3ab",
       "binaries": {}
     },
+    "2.16.95": {
+      "type": "patch",
+      "date": "2026-01-02T14:52:59Z",
+      "commit": "a530bae",
+      "binaries": {}
+    },
     "2.16.96": {
       "type": "patch",
       "date": "2026-01-02T13:39:42Z",
