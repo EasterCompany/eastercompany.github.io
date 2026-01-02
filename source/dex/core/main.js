@@ -94,12 +94,37 @@ function onReady() {
     }
 
     if (settingsIcon) {
-      settingsIcon.onclick = () => toggleWindow(settingsWindow);
+      settingsIcon.onclick = (e) => {
+        e.stopPropagation();
+        toggleWindow(settingsWindow);
+      };
     }
 
     if (closeAllBtn) {
-      closeAllBtn.onclick = () => closeAll();
+      closeAllBtn.onclick = (e) => {
+        e.stopPropagation();
+        closeAll();
+      };
     }
+
+    // Dropdown Item Listeners
+    const attachItem = (id, win, storageId) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.onclick = (e) => {
+          e.stopPropagation();
+          closeDropdown();
+          if (storageId) saveWindowState(storageId);
+          toggleWindow(win);
+        };
+      }
+    };
+
+    attachItem('alerts-menu-item', alertsWindow, 'alerts-window');
+    attachItem('events-menu-item', eventsWindow, 'events-window');
+    attachItem('monitor-menu-item', monitorWindow, 'monitor-window');
+    attachItem('contacts-menu-item', contactsWindow, 'contacts-window');
+    attachItem('workspace-menu-item', workspaceWindow, 'workspace-window');
 
     if (navLeftBtn) {
       navLeftBtn.onclick = () => {
@@ -447,18 +472,6 @@ function onReady() {
           }, 500);
       }
   };
-
-  // Populate Dropdown
-  const dropdown = document.getElementById('dexter-dropdown');
-  if (dropdown) {
-    dropdown.innerHTML = `
-          <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
-          <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
-          <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
-          <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
-          <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
-      `;
-  }
 
     const closeDropdown = () => {
       const dropdown = document.getElementById('dexter-dropdown');
