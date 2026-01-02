@@ -348,38 +348,32 @@ function onReady() {
       `;
   }
 
-  // Dropdown Logic
-  const menuContainer = document.getElementById('dexter-menu-container');
-  const menuBtn = document.getElementById('dexter-menu-btn');
-
-  if (menuContainer && dropdown && menuBtn) {
-    menuContainer.addEventListener('mouseenter', () => {
-      dropdown.classList.add('active');
-      menuBtn.classList.add('active');
-    });
-
-    menuContainer.addEventListener('mouseleave', () => {
-      dropdown.classList.remove('active');
-      menuBtn.classList.remove('active');
-    });
-
-    menuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const lastWindowId = localStorage.getItem('dex_last_window') || 'alerts-window';
-
-      let targetWindow = null;
-      if (lastWindowId === 'alerts-window') targetWindow = alertsWindow;
-      else if (lastWindowId === 'events-window') targetWindow = eventsWindow;
-      else if (lastWindowId === 'monitor-window') targetWindow = monitorWindow;
-      else if (lastWindowId === 'contacts-window') targetWindow = contactsWindow;
-      else if (lastWindowId === 'workspace-window') targetWindow = workspaceWindow;
-
-      if (targetWindow) {
-        toggleWindow(targetWindow);
+      // Dropdown Logic
+      const menuContainer = document.getElementById('dexter-menu-container');
+      const menuBtn = document.getElementById('dexter-menu-btn');
+  
+      if (menuContainer && dropdown && menuBtn) {
+        // Toggle on click
+        menuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isActive = dropdown.classList.contains('active');
+          
+          // Close other potential dropdowns if any, then toggle
+          dropdown.classList.toggle('active');
+          menuBtn.classList.toggle('active');
+        });
+  
+        // Close when clicking outside
+        document.addEventListener('click', () => {
+          dropdown.classList.remove('active');
+          menuBtn.classList.remove('active');
+        });
+  
+        // Prevent closing when clicking inside the dropdown
+        dropdown.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
       }
-    });
-  }
-
   document.getElementById('alerts-menu-item')?.addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
   document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
   document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });

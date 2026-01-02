@@ -217,6 +217,25 @@ nav.window-open {
     .nav-right {
         gap: 12px;
     }
+
+    .dexter-dropdown {
+        position: fixed;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        width: calc(100% - 20px);
+        max-width: 350px;
+        right: auto;
+    }
+
+    .dexter-dropdown.active {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .dropdown-item {
+        padding: 16px 20px;
+        font-size: 1em;
+    }
 }
 
 @media (min-width: 768px) {
