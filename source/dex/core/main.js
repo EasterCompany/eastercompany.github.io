@@ -117,12 +117,16 @@ function onReady() {
     const navMenuContainer = document.getElementById('dexter-menu-container');
     const navWindowSwitcher = document.getElementById('nav-window-switcher');
     const settingsIcon = document.getElementById('settings-icon');
+    const closeAllWindowsIcon = document.getElementById('close-all-windows');
+    const isMobile = window.innerWidth < 768;
 
     updateNavbarState(activeWindows.length > 0);
 
     if (activeWindows.length > 0) {
       footer?.classList.add('hide');
-      document.getElementById('close-all-windows')?.style.setProperty('display', 'block');
+      if (closeAllWindowsIcon) {
+        closeAllWindowsIcon.style.display = isMobile ? 'none' : 'block';
+      }
       document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
 
       navbar?.classList.add('window-open');
@@ -130,9 +134,11 @@ function onReady() {
       if (container) container.style.paddingTop = '60px'; 
 
       // Navbar Transformation
-      if (navMenuContainer) navMenuContainer.style.display = 'none';
-      if (settingsIcon) settingsIcon.style.display = 'none';
-      if (navWindowSwitcher) {
+      if (navMenuContainer) navMenuContainer.style.display = 'flex'; // Always show on mobile
+      if (settingsIcon) settingsIcon.style.display = 'block'; // Always show on mobile
+      
+      // Desktop-only Switcher logic
+      if (!isMobile && navWindowSwitcher) {
         const currentWinId = activeWindows[0].id;
 
         // Only show switcher if the active window is one of the main dropdown windows
@@ -157,11 +163,13 @@ function onReady() {
         } else {
           navWindowSwitcher.innerHTML = '';
         }
+      } else if (navWindowSwitcher) {
+        navWindowSwitcher.innerHTML = ''; // Hide on mobile
       }
 
     } else {
       navbar?.classList.remove('window-open');
-      document.getElementById('close-all-windows')?.style.setProperty('display', 'none');
+      if (closeAllWindowsIcon) closeAllWindowsIcon.style.display = 'none';
       if (container) container.style.paddingTop = '100px';
       document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
 
