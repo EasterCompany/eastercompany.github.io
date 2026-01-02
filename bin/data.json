@@ -304,6 +304,12 @@
       "commit": "4fc14ff",
       "binaries": {}
     },
+    "2.17.32": {
+      "type": "patch",
+      "date": "2026-01-02T19:32:56Z",
+      "commit": "c5bbe0f",
+      "binaries": {}
+    },
     "2.17.4": {
       "type": "patch",
       "date": "2026-01-02T17:48:31Z",
