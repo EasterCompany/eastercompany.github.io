@@ -443,7 +443,7 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center; /* Center horizontally */
     gap: 20px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -454,18 +454,14 @@
 }
 
 .cli-install-command code {
+    flex: 1;
+    text-align: center;
     overflow: hidden;
     text-overflow: clip;
 }
 
-.cli-install-command:hover {
-    background: rgba(0, 0, 0, 0.6);
-    border-color: rgba(187, 134, 252, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
 .cli-install-command i {
+    flex-shrink: 0;
     font-size: 1.3em;
     color: #bb86fc;
 }
