@@ -13,7 +13,7 @@
         
         <div class="nav-right">
             <div id="dexter-menu-container" style="position: relative;">
-                <i class='bx bx-bot' id="dexter-menu-btn" title="Dexter Menu"></i>
+                <button id="dexter-menu-btn" class="nav-btn" title="Dexter Menu"><i class='bx bx-bot'></i></button>
                 <div id="dexter-nav-badge" class="notification-badge" style="position: absolute; top: 0; right: -2px; width: 8px; height: 8px; padding: 0; min-width: 0; display: none; box-shadow: 0 0 5px #ff4444;"></div>
                 <div id="dexter-dropdown" class="dexter-dropdown">
                     <div class="dropdown-item" id="feed-menu-item"><i class='bx bx-news'></i> Feed</div>
@@ -21,8 +21,8 @@
                     <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
                 </div>
             </div>
-            <i class='bx bx-cog' id="settings-icon" title="Settings"></i>
-            <i class='bx bx-x-circle' id="close-all-windows" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"></i>
+            <button id="settings-icon" class="nav-btn" title="Settings"><i class='bx bx-cog'></i></button>
+            <button id="close-all-windows" class="nav-btn" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"><i class='bx bx-x-circle'></i></button>
         </div>
     
     `,l=document.createElement("nav");l.innerHTML=s,document.body.prepend(l)}function fe(t){let e=window.location.pathname,i=e==="/"||e==="/index.html",a=document.getElementById("nav-chevron"),s=document.querySelector(".nav-left");!a||!s||(t||!i?(a.style.display="block",s.style.cursor="pointer",s.classList.add("recording"),s.onmouseenter=()=>{a.style.transform="translateX(-3px)"},s.onmouseleave=()=>{a.style.transform="translateX(0)"}):(a.style.display="none",s.style.cursor="default",s.classList.remove("recording"),s.onmouseenter=null,s.onmouseleave=null))}function Qe(){if(document.querySelector("footer"))return;let t=`

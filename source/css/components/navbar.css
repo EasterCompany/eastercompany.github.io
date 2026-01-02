@@ -62,19 +62,33 @@ nav.window-open {
     gap: 20px;
 }
 
+.nav-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    pointer-events: auto;
+}
+
 .nav-right i {
     font-size: 1.4em;
     color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
     transition: all 0.3s ease;
+    pointer-events: none; /* Let the button handle clicks */
 }
 
-.nav-right i:hover { color: #fff; transform: scale(1.1); }
-.nav-right i.active {
+.nav-btn:hover i { color: #fff; transform: scale(1.1); }
+.nav-btn.active i {
     color: #bb86fc;
     transform: scale(1.25);
     filter: drop-shadow(0 0 15px rgba(187, 134, 252, 0.8));
-    opacity: 1;
 }
 
 /* Nav Center (Window Switcher) */
@@ -218,7 +232,7 @@ nav.window-open .dexter-dropdown {
         gap: 25px;
     }
 
-    .nav-right i {
+    .nav-btn i {
         font-size: 1.6em;
     }
 
