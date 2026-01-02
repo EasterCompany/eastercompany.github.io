@@ -150,7 +150,7 @@ function onReady() {
       if (closeAllWindowsIcon) {
         closeAllWindowsIcon.style.display = isMobile ? 'none' : 'block';
       }
-      document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
+      document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
 
       navbar?.classList.add('window-open');
 
@@ -403,7 +403,7 @@ function onReady() {
           const winContainer = document.getElementById('windows-container');
           if (nowActive) {
             document.querySelector('footer')?.classList.add('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
+            document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
             navEl?.classList.add('window-open');
             winContainer?.classList.add('menu-open'); // Hide windows
             updateNavbarState(true);
