@@ -382,12 +382,18 @@ function onReady() {
           e.stopPropagation();
         });
       }
-  document.getElementById('alerts-menu-item')?.addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
-  document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
-  document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
-  document.getElementById('contacts-menu-item')?.addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
-  document.getElementById('workspace-menu-item')?.addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
-
+      const closeDropdown = () => {
+        if (dropdown && menuBtn) {
+          dropdown.classList.remove('active');
+          menuBtn.classList.remove('active');
+        }
+      };
+  
+      document.getElementById('alerts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
+      document.getElementById('events-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('events-window'); toggleWindow(eventsWindow); });
+      document.getElementById('monitor-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
+      document.getElementById('contacts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
+      document.getElementById('workspace-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
   document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
   document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
 
