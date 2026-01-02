@@ -53,8 +53,10 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         if [ "$filename" = "404" ]; then
             page_title="404 - Page Not Found"
         elif [ "$filename" = "index" ]; then
-            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ]; then
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ] || [ "$parent_dir" = "EasterCompany" ]; then
                 page_title="Home"
+            elif [ "$parent_dir" = "dex" ]; then
+                page_title="Dexter"
             else
                 page_title=$(echo "$parent_dir" | sed 's/[-_]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
             fi
