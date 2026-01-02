@@ -1,6 +1,6 @@
 // System Monitor Logic (Services, Models, Processes)
 import imaginatorSVG from '../components/imaginatorSVG.js';
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 
 export const getGuardianContent = () => {
@@ -424,7 +424,10 @@ export async function updateSystemMonitor() {
     } else {
       detailsHtml = `<div class="service-widget-footer offline"><span>OFFLINE</span></div>`;
     }
-    return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '')}</span></div>${detailsHtml}</div></div>`;
+
+    const displayAddress = isPublicMode() ? "easter.company" : truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '');
+
+    return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${displayAddress}</span></div>${detailsHtml}</div></div>`;
   }
 
   const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.service-widget')).map(widget => [widget.dataset.serviceId, widget]));
