@@ -691,6 +691,10 @@ function renderProfileContent(overlay, user, data) {
                         <div class="dossier-value">${identity.location || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
 
+                        <div class="dossier-label">Gender</div>
+                        <div class="dossier-value">${identity.gender || 'Unknown'}</div>
+                        <div style="height: 15px;"></div>
+
                         <div class="dossier-label">Sexuality</div>
                         <div class="dossier-value" style="color: #ffb74d;">${identity.sexuality || 'Unknown'}</div>
                         <div style="height: 15px;"></div>
