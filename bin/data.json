@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463",
-    "dev": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -436,6 +436,12 @@
       "type": "patch",
       "date": "2026-01-02T20:40:19Z",
       "commit": "3646f9d",
+      "binaries": {}
+    },
+    "2.17.48": {
+      "type": "patch",
+      "date": "2026-01-02T20:45:01Z",
+      "commit": "f25a96d",
       "binaries": {}
     },
     "2.17.5": {
