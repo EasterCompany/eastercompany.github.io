@@ -1058,7 +1058,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                     <h2>One-Step Installation</h2>
                 </div>
                 <div class="cli-install-command" id="install-command-copy">
-                    <code>curl -sSL https://easter.company/scripts/install_dex-cli.sh | bash</code>
+                    <code>curl -sSL https://easter.company/scripts/dex.sh | bash</code>
                     <i class='bx bx-copy'></i>
                 </div>
                 <p class="cli-install-note">Installs the latest pre-built binary for Arch/Debian Linux.</p>
