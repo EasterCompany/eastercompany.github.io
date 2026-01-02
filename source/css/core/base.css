@@ -5,7 +5,13 @@
     box-sizing: border-box;
 }
 
-/* Custom Scrollbar */
+:root {
+  --neon-blue: #00f3ff;
+  --neon-purple: #bd00ff;
+  --glass-bg: rgba(10, 10, 10, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
+}
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
