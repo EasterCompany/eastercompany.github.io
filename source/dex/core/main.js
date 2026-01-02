@@ -150,8 +150,10 @@ function onReady() {
       if (container) container.style.paddingTop = '60px'; 
 
       // Navbar Transformation
-      if (navMenuContainer) navMenuContainer.style.display = 'flex'; // Always show on mobile
-      if (settingsIcon) settingsIcon.style.display = 'block'; // Always show on mobile
+      // On Desktop: Hide menu/settings when a window is open (replaced by close icon)
+      // On Mobile: Always show menu/settings as they are the primary nav
+      if (navMenuContainer) navMenuContainer.style.display = isMobile ? 'flex' : 'none';
+      if (settingsIcon) settingsIcon.style.display = isMobile ? 'block' : 'none';
       
       // Desktop-only Switcher logic
       if (!isMobile && navWindowSwitcher) {
