@@ -53,7 +53,7 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         if [ "$filename" = "404" ]; then
             page_title="404 - Page Not Found"
         elif [ "$filename" = "index" ]; then
-            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ] || [ "$parent_dir" = "EasterCompany" ]; then
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ] || [ "$parent_dir" = "EasterCompany" ] || [ "$parent_dir" = ".." ]; then
                 page_title="Home"
             elif [ "$parent_dir" = "dex" ]; then
                 page_title="Dexter"
@@ -70,13 +70,13 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
 
         # Generate canonical URL
         if [ "$filename" = "index" ]; then
-            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ]; then
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ] || [ "$parent_dir" = "EasterCompany" ] || [ "$parent_dir" = ".." ]; then
                 canonical_url="https://easter.company"
             else
                 canonical_url="https://easter.company/$parent_dir"
             fi
         else
-            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ]; then
+            if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ] || [ "$parent_dir" = "EasterCompany" ] || [ "$parent_dir" = ".." ]; then
                 canonical_url="https://easter.company/$filename"
             else
                 canonical_url="https://easter.company/$parent_dir/$filename"
