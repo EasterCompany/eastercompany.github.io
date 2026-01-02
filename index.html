@@ -128,24 +128,35 @@
       <h1 class="dexter-hero-logo">DEXTER</h1>
       <p class="dexter-subtitle">MARK 14: GUARDIAN PROTOCOL</p>
       <div class="action-row">
-        <div class="action-btn primary" id="open-cli-btn">
-          <i class='bx bx-pulse'></i> DOWNLOAD
+        <!--
+        <div class="action-btn primary" id="download-btn">
+          <i class='bx bx-download'></i> DOWNLOAD
+        </div>
+        -->
+        <div class="action-btn primary" id="open-events-btn">
+          <i class='bx bx-calendar-event'></i> EVENTS
         </div>
         <div class="action-btn primary" id="open-monitor-btn">
-          <i class='bx bx-pulse'></i> STATUS
+          <i class='bx bx-pulse'></i> MONITOR
         </div>
-        <div class="action-btn" id="open-events-btn">
-          <i class='bx bx-calendar-event'></i> TIMELINE
+        <div class="action-btn primary" id="open-settings-btn">
+          <i class='bx bx-cog'></i> SETTINGS
         </div>
       </div>
     </main>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        const downloadBtn = document.getElementById('download-btn');
         const monitorBtn = document.getElementById('open-monitor-btn');
         const eventsBtn = document.getElementById('open-events-btn');
+        const settingsBtn = document.getElementById('open-settings-btn');
+        if(downloadBtn) {
+          downloadBtn.addEventListener('click', () => {
+            window.location.href = '/dexter/cli';
+          });
+        }
         if(monitorBtn) {
           monitorBtn.addEventListener('click', () => {
-            // Simulate menu click
             const item = document.getElementById('monitor-menu-item');
             if(item) item.click();
           });
@@ -153,6 +164,12 @@
         if(eventsBtn) {
           eventsBtn.addEventListener('click', () => {
             const item = document.getElementById('events-menu-item');
+            if(item) item.click();
+          });
+        }
+        if(settingsBtn) {
+          settingsBtn.addEventListener('click', () => {
+            const item = document.getElementById('settings-icon');
             if(item) item.click();
           });
         }
