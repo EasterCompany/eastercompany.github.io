@@ -248,6 +248,12 @@
       "commit": "dfe7b8b",
       "binaries": {}
     },
+    "2.17.25": {
+      "type": "patch",
+      "date": "2026-01-02T19:16:16Z",
+      "commit": "62befd9",
+      "binaries": {}
+    },
     "2.17.3": {
       "type": "patch",
       "date": "2026-01-02T17:34:49Z",
