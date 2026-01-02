@@ -481,13 +481,9 @@
     text-transform: uppercase;
     letter-spacing: 4px;
     font-weight: 600;
-    color: #444;
-    transition: all 0.3s ease;
-}
-
-body.is-animated .cli-divider span {
     color: #fff;
     text-shadow: 0 0 15px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 1);
+    transition: all 0.3s ease;
 }
 
 .cli-divider i {
