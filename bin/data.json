@@ -298,6 +298,12 @@
       "commit": "2dc24a0",
       "binaries": {}
     },
+    "2.17.31": {
+      "type": "patch",
+      "date": "2026-01-02T19:29:27Z",
+      "commit": "4fc14ff",
+      "binaries": {}
+    },
     "2.17.4": {
       "type": "patch",
       "date": "2026-01-02T17:48:31Z",
