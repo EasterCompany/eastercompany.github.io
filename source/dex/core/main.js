@@ -51,6 +51,21 @@ function onReady() {
   const navLeftBtn = document.getElementById('nav-left-container');
   if (navLeftBtn) {
       navLeftBtn.addEventListener('click', () => {
+          const dropdown = document.getElementById('dexter-dropdown');
+          const menuBtn = document.getElementById('dexter-menu-btn');
+          
+          if (dropdown && dropdown.classList.contains('active')) {
+              dropdown.classList.remove('active');
+              menuBtn.classList.remove('active');
+              if (activeWindows.length === 0) {
+                  document.querySelector('footer')?.classList.remove('hide');
+                  document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+                  document.querySelector('nav')?.classList.remove('window-open');
+                  updateNavbarState(false);
+              }
+              return;
+          }
+
           if (activeWindows.length > 0) {
               closeAll();
           } else {
@@ -356,33 +371,61 @@ function onReady() {
       `;
   }
 
-      // Dropdown Logic
-      const menuContainer = document.getElementById('dexter-menu-container');
-      const menuBtn = document.getElementById('dexter-menu-btn');
-  
-      if (menuContainer && dropdown && menuBtn) {
-        // Toggle on click
-        menuBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const isActive = dropdown.classList.contains('active');
-          
-          // Close other potential dropdowns if any, then toggle
-          dropdown.classList.toggle('active');
-          menuBtn.classList.toggle('active');
-        });
-  
-        // Close when clicking outside
-        document.addEventListener('click', () => {
-          dropdown.classList.remove('active');
-          menuBtn.classList.remove('active');
-        });
-  
-        // Prevent closing when clicking inside the dropdown
-        dropdown.addEventListener('click', (e) => {
-          e.stopPropagation();
-        });
-      }
-      const closeDropdown = () => {
+          // Dropdown Logic
+          const menuContainer = document.getElementById('dexter-menu-container');
+          const menuBtn = document.getElementById('dexter-menu-btn');
+      
+          if (menuContainer && dropdown && menuBtn) {
+            // Toggle on click
+            menuBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const isMobile = window.innerWidth < 880;
+              const isActive = dropdown.classList.contains('active');
+              
+              // Toggle active state
+              dropdown.classList.toggle('active');
+              menuBtn.classList.toggle('active');
+      
+              const nowActive = dropdown.classList.contains('active');
+      
+              // Treat like a window on mobile
+              if (isMobile) {
+                if (nowActive) {
+                  document.querySelector('footer')?.classList.add('hide');
+                  document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
+                  navbar?.classList.add('window-open');
+                  updateNavbarState(true);
+                } else if (activeWindows.length === 0) {
+                  // Only restore if no other windows are open
+                  document.querySelector('footer')?.classList.remove('hide');
+                  document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+                  navbar?.classList.remove('window-open');
+                  updateNavbarState(false);
+                }
+              }
+            });
+      
+            // Close when clicking outside
+            document.addEventListener('click', () => {
+              const isMobile = window.innerWidth < 880;
+              const wasActive = dropdown.classList.contains('active');
+              
+              dropdown.classList.remove('active');
+              menuBtn.classList.remove('active');
+      
+              if (isMobile && wasActive && activeWindows.length === 0) {
+                document.querySelector('footer')?.classList.remove('hide');
+                document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+                navbar?.classList.remove('window-open');
+                updateNavbarState(false);
+              }
+            });
+      
+            // Prevent closing when clicking inside the dropdown
+            dropdown.addEventListener('click', (e) => {
+              e.stopPropagation();
+            });
+          }      const closeDropdown = () => {
         if (dropdown && menuBtn) {
           dropdown.classList.remove('active');
           menuBtn.classList.remove('active');
