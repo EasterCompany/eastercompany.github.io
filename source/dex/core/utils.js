@@ -260,6 +260,7 @@ export function isPublicMode() {
 
 // --- CENTRALIZED DASHBOARD CACHE ---
 let DASHBOARD_CACHE = null;
+let isRefreshing = false;
 const CACHE_KEY = 'dex_dashboard_snapshot';
 
 /**
@@ -277,18 +278,23 @@ function loadDashboardFromStorage() {
 }
 
 async function refreshDashboardCache() {
-  if (!isPublicMode()) return;
+  if (!isPublicMode() || isRefreshing) return;
+  isRefreshing = true;
   
-  const snapshot = await upstashCommand('GET', 'state:dashboard:full');
-  if (snapshot) {
-    try {
-      const data = JSON.parse(snapshot);
-      DASHBOARD_CACHE = data;
-      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-      // console.log('✨ Dashboard snapshot synchronized at :59');
-    } catch (e) {
-      console.error("Failed to parse dashboard snapshot:", e);
+  try {
+    const snapshot = await upstashCommand('GET', 'state:dashboard:full');
+    if (snapshot) {
+      try {
+        const data = JSON.parse(snapshot);
+        DASHBOARD_CACHE = data;
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        // console.log('✨ Dashboard snapshot synchronized');
+      } catch (e) {
+        console.error("Failed to parse dashboard snapshot:", e);
+      }
     }
+  } finally {
+    isRefreshing = false;
   }
 }
 
@@ -323,14 +329,17 @@ async function initDashboardSync() {
 
   // PROACTIVE FETCH: If no cache or cache is over 2 mins old, fetch immediately
   if (!DASHBOARD_CACHE || cacheAge > 120) {
-    // console.log(`🔄 Proactively refreshing public dashboard cache (Age: ${cacheAge}s)`);
     await refreshDashboardCache();
   }
 
   // Set interval to check clock every second
   setInterval(() => {
     const clock = new Date();
-    if (clock.getSeconds() === 59) {
+    const currentNow = Math.floor(Date.now() / 1000);
+    const currentAge = DASHBOARD_CACHE ? (currentNow - DASHBOARD_CACHE.timestamp) : Infinity;
+
+    // Refresh logic: Every minute at :59 OR if data is > 5 mins old
+    if (clock.getSeconds() === 59 || currentAge > 300) {
       refreshDashboardCache();
     }
 
