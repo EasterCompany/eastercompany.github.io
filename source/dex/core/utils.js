@@ -406,7 +406,12 @@ export async function smartFetch(endpoint, options = {}) {
       return new Response(JSON.stringify([]), { status: 200 });
     }
 
-    // 5. Agent Status
+    // 5. Hardware (Not public, return empty)
+    if (endpoint.startsWith('/system/hardware')) {
+      return new Response(JSON.stringify({}), { status: 200 });
+    }
+
+    // 6. Agent Status
     if (endpoint.startsWith('/agent/status') || endpoint.startsWith('/guardian/status')) {
       // We don't have this explicitly in the snapshot but we can mock enough for the UI if needed
       // or just return empty {}
