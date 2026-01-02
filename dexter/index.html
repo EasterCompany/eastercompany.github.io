@@ -38,14 +38,20 @@
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/dexter">
+
+  <script>
+    if (window.location.protocol === 'http:' && window.location.hostname === 'easter.company') {
+      window.location.replace('https://' + window.location.hostname + window.location.pathname + window.location.search);
+    }
+  </script>
 <!-- HEAD_END -->
     <title>Dex CLI - Easter Company</title>
-  <link rel="stylesheet" href="/dex.1a3e9377.css"></head>
+  <link rel="stylesheet" href="/dex.e8f4e80a.css"></head>
   <body class="dex-page">
     <!-- Navbar and other elements injected by dex.js -->
     <main id="main">
       <!-- CLI Interface will be injected here -->
       <div id="cli-interface-container" class="cli-interface-container"></div>
     </main>
-  <script src="/dex.1a3e9377.js" defer></script></body>
+  <script src="/dex.e8f4e80a.js" defer></script></body>
 </html>
