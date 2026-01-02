@@ -514,9 +514,9 @@ export const getCliInterfaceContent = () => {
         <div class="cli-contribute-section">
             <div class="cli-contribute-card">
                 <i class='bx bxl-github'></i>
-                <h3>For Developers</h3>
-                <p>Dexter is open-source and built for the community. Help us refine the neural architecture or add new command modules.</p>
-                <a href="/dexter/contribute" target="_blank" class="notif-action-btn active">Contribute on GitHub</a>
+                <h3>Open Source</h3>
+                <p>Dexter is built with the help of creators around the world. Every contribution counts.</p>
+                <a href="/contribute" target="_blank" class="notif-action-btn active">Contribute on GitHub</a>
             </div>
             <div class="cli-contribute-card">
                 <i class='bx bxl-discord-alt'></i>

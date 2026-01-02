@@ -40,7 +40,7 @@ function onReady() {
   applyBaseStyles();
 
   const path = window.location.pathname;
-  if (path.includes('/dexter/cli') || path === '/cli' || path === '/cli/') {
+  if (path === '/dex' || path === '/dex/') {
     initCliDashboard();
   }
 
