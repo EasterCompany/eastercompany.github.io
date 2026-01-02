@@ -447,7 +447,7 @@ function getMockData(userId, username) {
             { k: 'Role', v: 'Creator' },
             { k: 'Lang', v: 'Go' },
             { k: 'OS', v: 'Linux' },
-            { k: 'Editor', v: 'VS Code' }
+            { k: 'Editor', v: 'neovim' }
         ],
         badges: ['Creator', 'Admin', 'Architect'],
         stats: { msgs: 14052, tokens: '45.2M', lastSeen: 'Now' },
