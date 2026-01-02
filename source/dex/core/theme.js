@@ -43,21 +43,19 @@ export function applyTheme(theme) {
     // Add current theme class
     body.classList.add(`theme-${theme}`);
 
-    // Manage background element
-    const needsBackground = [THEMES.LIGHT, THEMES.LEGACY].includes(theme);
+    // Ensure background element exists (All themes now use it)
+    if (!document.querySelector('.background')) {
+        const bg = document.createElement('div');
+        bg.className = 'background';
+        document.body.prepend(bg);
+    }
 
-    if (needsBackground) {
+    // Manage animation state
+    const needsAnimation = [THEMES.LIGHT, THEMES.LEGACY].includes(theme);
+    if (needsAnimation) {
         body.classList.add('is-animated');
-        // Create background element if it doesn't exist
-        if (!document.querySelector('.background')) {
-            const bg = document.createElement('div');
-            bg.className = 'background';
-            document.body.prepend(bg);
-        }
     } else {
         body.classList.remove('is-animated');
-        // Remove background element immediately
-        document.querySelector('.background')?.remove();
     }
 }
 
