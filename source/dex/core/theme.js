@@ -33,24 +33,45 @@ export function setTheme(theme) {
  * @param {string} theme - The theme preference
  */
 export function applyTheme(theme) {
+    const html = document.documentElement;
     const body = document.body;
 
-    // Remove all theme classes
+    // 1. Manage Body Classes
     Object.values(THEMES).forEach(t => {
         body.classList.remove(`theme-${t}`);
     });
-
-    // Add current theme class
     body.classList.add(`theme-${theme}`);
 
-    // Ensure background element exists (All themes now use it)
+    // 2. Manage Theme Color Meta (For Safari/Chrome Mobile)
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta');
+        metaThemeColor.name = 'theme-color';
+        document.getElementsByTagName('head')[0].appendChild(metaThemeColor);
+    }
+
+    // 3. Define Theme Constants
+    const themeColors = {
+        [THEMES.DARK]: '#050507',
+        [THEMES.LIGHT]: '#FFFFFF',
+        [THEMES.LEGACY]: '#000000'
+    };
+
+    const targetColor = themeColors[theme] || themeColors[THEMES.DARK];
+    metaThemeColor.setAttribute('content', targetColor);
+
+    // 4. Force HTML/Body background to match (Fixes Safari white overscroll)
+    html.style.backgroundColor = targetColor;
+    body.style.backgroundColor = targetColor;
+
+    // 5. Ensure background element exists
     if (!document.querySelector('.background')) {
         const bg = document.createElement('div');
         bg.className = 'background';
         document.body.prepend(bg);
     }
 
-    // Manage animation state (Always on now)
+    // 6. Manage animation state
     body.classList.add('is-animated');
 }
 
