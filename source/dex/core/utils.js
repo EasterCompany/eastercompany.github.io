@@ -256,7 +256,7 @@ import { isLoggedIn } from './auth.js';
 const UPSTASH_URL = "https://sterling-javelin-12539.upstash.io";
 const UPSTASH_TOKEN = "AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw"; // Read Only
 
-function isPublicMode() {
+export function isPublicMode() {
   return window.location.hostname === 'easter.company';
 }
 
