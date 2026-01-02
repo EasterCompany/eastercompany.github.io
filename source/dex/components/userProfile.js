@@ -462,6 +462,7 @@ function getMockData(userId, username) {
             identity: {
                 fullName: "Owen Easter",
                 ageRange: "25-30",
+                gender: "Male",
                 location: "United Kingdom",
                 sexuality: "Heterosexual",
                 relationship: "Single"
@@ -515,6 +516,7 @@ function getMockData(userId, username) {
             identity: {
                 fullName: "Unknown Subject",
                 ageRange: "Unknown",
+                gender: "Unknown",
                 location: "Global",
                 sexuality: "Unknown",
                 relationship: "Unknown"
