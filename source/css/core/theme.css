@@ -20,8 +20,9 @@
 }
 
 @keyframes smoothBg {
-  from { background-position: 50% 50%, 50% 50%; }
-  to { background-position: 350% 50%, 350% 50%; }
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-5%, -5%) rotate(2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 @keyframes fadeInBackground { from { opacity: 0; } to { opacity: var(--bg-opacity, 0.5); } }
@@ -29,7 +30,7 @@
 
 /* Light Theme (Heavenly) */
 body.theme-light {
-    --bg-blur: 80px;
+    --bg-blur: 60px;
     --bg-opacity: 0.5;
     --bg-blend: screen;
     --bg-filter: none;
@@ -48,8 +49,8 @@ body.theme-legacy .dropdown-item i {
 
 /* Legacy Theme (Original Animated) */
 body.theme-legacy {
-    --bg-blur: 25px;
-    --bg-opacity: 0.45;
+    --bg-blur: 20px;
+    --bg-opacity: 0.4;
     --bg-blend: difference;
     --bg-filter: invert(100%);
     --gradient-1: #32FFaa;
@@ -63,15 +64,16 @@ body.theme-legacy {
   z-index: -1;
   display: flex;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
   opacity: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
   place-content: center;
   place-items: center;
   animation: fadeInBackground 0.6s ease forwards;
+  overflow: hidden;
+  pointer-events: none;
   
   --stripes: repeating-linear-gradient(
     100deg,
@@ -93,10 +95,12 @@ body.theme-legacy {
   
   background-image: var(--stripes), var(--rainbow);
   background-size: 300%, 200%;
-  background-position: 50% 50%, 50% 50%;
+  background-position: center;
   filter: blur(var(--bg-blur)) var(--bg-filter);
   -webkit-mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
+  will-change: transform;
+  animation: smoothBg 20s ease-in-out infinite, fadeInBackground 0.6s ease forwards;
 }
 
 .background::after {
@@ -105,7 +109,6 @@ body.theme-legacy {
   inset: 0;
   background-image: var(--stripes), var(--rainbow);
   background-size: 200%, 100%;
-  animation: smoothBg 60s linear infinite;
   mix-blend-mode: var(--bg-blend);
 }
 
