@@ -181,6 +181,12 @@
       "date": "2026-01-02T21:51:04Z",
       "commit": "d7bae1e",
       "binaries": {}
+    },
+    "2.18.6": {
+      "type": "patch",
+      "date": "2026-01-02T21:53:51Z",
+      "commit": "d2e9c97",
+      "binaries": {}
     }
   },
   "services": {
