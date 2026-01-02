@@ -1,16 +1,16 @@
 /* --- Theme Engine & Background --- */
 :root {
-  /* Default/Dark Theme (No background variables needed as element is removed) */
-  --bg-blur: 0px;
-  --bg-opacity: 0;
+  /* Default/Dark Theme - Subtle Deep Gradient */
+  --bg-blur: 100px;
+  --bg-opacity: 1;
   --bg-blend: normal;
   --bg-filter: none;
-  --gradient-1: #000;
-  --gradient-2: #000;
-  --gradient-3: #000;
-  --gradient-4: #000;
-  --gradient-5: #000;
-  --stripe-color: #FFF;
+  --gradient-1: #0f0f12;
+  --gradient-2: #0a0a0e;
+  --gradient-3: #08080a;
+  --gradient-4: #050507;
+  --gradient-5: #000000;
+  --stripe-color: rgba(255, 255, 255, 0.02);
 }
 
 @property --blink-opacity {
