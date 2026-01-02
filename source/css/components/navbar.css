@@ -205,6 +205,20 @@ nav.window-open {
     color: #bb86fc;
 }
 
+@media (max-width: 767px) {
+    nav {
+        padding: 10px 14px;
+    }
+    
+    .nav-center {
+        display: none; /* Hide switcher on small mobile to prevent overlap */
+    }
+    
+    .nav-right {
+        gap: 12px;
+    }
+}
+
 @media (min-width: 768px) {
     nav {
         width: min(1200px, 90vw);

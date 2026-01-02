@@ -96,6 +96,21 @@ footer.hide {
     transform: scale(1.1);
 }
 
+@media (max-width: 767px) {
+    footer {
+        padding: 10px 14px;
+    }
+    
+    .footer-brand-left,
+    .footer-brand-right {
+        display: none; /* Hide brand text on mobile to prevent overlap */
+    }
+    
+    .socials-section {
+        gap: 20px;
+    }
+}
+
 @media (min-width: 768px) {
     footer {
         width: min(1200px, 90vw);

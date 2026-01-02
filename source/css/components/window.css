@@ -242,6 +242,26 @@ nav.window-open + .windows-container {
     justify-content: center;
 }
 
+/* Mobile Adaptations */
+@media (max-width: 767px) {
+    .window-content {
+        padding: 15px;
+    }
+
+    .tab {
+        padding: 0 12px;
+        font-size: 1.2em; /* Emphasize icons */
+    }
+
+    .tab span:not(.notification-badge) {
+        display: none; /* Icon-only tabs on small mobile */
+    }
+
+    .tab-bar {
+        margin: 0 5px;
+    }
+}
+
 /* Small View Adaptations (Below 1900px) */
 @media (max-width: 1899px) {
     /* Hide header if no tabs */
