@@ -55,41 +55,115 @@ function onReady() {
   injectNavbar();
   injectFooter();
 
-  // Handle Back Button / Logo Logic
-  const navLeftBtn = document.getElementById('nav-left-container');
-  if (navLeftBtn) {
-      navLeftBtn.addEventListener('click', () => {
-          const dropdown = document.getElementById('dexter-dropdown');
-          const menuBtn = document.getElementById('dexter-menu-btn');
-          
-          if (dropdown && dropdown.classList.contains('active')) {
-              dropdown.classList.remove('active');
-              menuBtn.classList.remove('active');
-              container?.classList.remove('menu-open'); // Restore windows
-              if (activeWindows.length === 0) {
-                  document.querySelector('footer')?.classList.remove('hide');
-                  document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-                  document.querySelector('nav')?.classList.remove('window-open');
-                  updateNavbarState(false);
-              }
-              return;
-          }
+  // Attach Navbar Listeners (Resilient to dynamic injection)
+  const setupNavbarListeners = () => {
+    const menuBtn = document.getElementById('dexter-menu-btn');
+    const settingsIcon = document.getElementById('settings-icon');
+    const closeAllBtn = document.getElementById('close-all-windows');
+    const navLeftBtn = document.getElementById('nav-left-container');
+    const dropdown = document.getElementById('dexter-dropdown');
+    const container = document.getElementById('windows-container');
 
-          if (activeWindows.length > 0) {
-              closeAll();
+    if (menuBtn && dropdown) {
+      menuBtn.onclick = (e) => {
+        e.stopPropagation();
+        const isMobile = window.innerWidth < 880;
+        dropdown.classList.toggle('active');
+        menuBtn.classList.toggle('active');
+        const nowActive = dropdown.classList.contains('active');
+
+        if (isMobile) {
+          const navEl = document.querySelector('nav');
+          if (nowActive) {
+            document.querySelector('footer')?.classList.add('hide');
+            document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
+            navEl?.classList.add('window-open');
+            container?.classList.add('menu-open');
+            updateNavbarState(true);
           } else {
-              const path = window.location.pathname;
-              const isRoot = path === '/' || path === '/index.html';
-              if (!isRoot) {
-                  const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
-                  const parts = cleanPath.split('/');
-                  parts.pop();
-                  const parentPath = parts.join('/') || '/';
-                  window.location.href = parentPath;
-              }
+            container?.classList.remove('menu-open');
+            if (activeWindows.length === 0) {
+              document.querySelector('footer')?.classList.remove('hide');
+              document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+              navEl?.classList.remove('window-open');
+              updateNavbarState(false);
+            }
           }
-      });
-  }
+        }
+      };
+    }
+
+    if (settingsIcon) {
+      settingsIcon.onclick = () => toggleWindow(settingsWindow);
+    }
+
+    if (closeAllBtn) {
+      closeAllBtn.onclick = () => closeAll();
+    }
+
+    if (navLeftBtn) {
+      navLeftBtn.onclick = () => {
+        if (dropdown && dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
+          menuBtn?.classList.remove('active');
+          container?.classList.remove('menu-open');
+          if (activeWindows.length === 0) {
+            document.querySelector('footer')?.classList.remove('hide');
+            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+            document.querySelector('nav')?.classList.remove('window-open');
+            updateNavbarState(false);
+          }
+          return;
+        }
+
+        if (activeWindows.length > 0) {
+          closeAll();
+        } else {
+          const path = window.location.pathname;
+          const isRoot = path === '/' || path === '/index.html';
+          if (!isRoot) {
+            const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+            const parts = cleanPath.split('/');
+            parts.pop();
+            const parentPath = parts.join('/') || '/';
+            window.location.href = parentPath;
+          }
+        }
+      };
+    }
+
+    // Global click listener for dropdown closing
+    document.addEventListener('click', () => {
+      const isMobile = window.innerWidth < 880;
+      if (dropdown && dropdown.classList.contains('active')) {
+        const wasActive = true;
+        dropdown.classList.remove('active');
+        menuBtn?.classList.remove('active');
+
+        if (isMobile && wasActive) {
+          container?.classList.remove('menu-open');
+          if (activeWindows.length === 0) {
+            document.querySelector('footer')?.classList.remove('hide');
+            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+            document.querySelector('nav')?.classList.remove('window-open');
+            updateNavbarState(false);
+          }
+        }
+      }
+    });
+
+    if (dropdown) {
+      dropdown.onclick = (e) => e.stopPropagation();
+    }
+  };
+
+  setupNavbarListeners();
+
+  // Handle Back Button / Logo Logic (Legacy, now handled by navLeftBtn above)
+  /*
+  const navLeftBtn = document.getElementById('nav-left-container');
+  ...
+  */
 
   // Initialize visibility
   const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
@@ -386,72 +460,9 @@ function onReady() {
       `;
   }
 
-    // Dropdown Logic
-    const menuContainer = document.getElementById('dexter-menu-container');
-    const menuBtn = document.getElementById('dexter-menu-btn');
-
-    if (menuContainer && dropdown && menuBtn) {
-      // Toggle on click
-      menuBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isMobile = window.innerWidth < 880;
-        
-        // Toggle active state
-        dropdown.classList.toggle('active');
-        menuBtn.classList.toggle('active');
-
-        const nowActive = dropdown.classList.contains('active');
-
-        // Treat like a window on mobile
-        if (isMobile) {
-          const navEl = document.querySelector('nav');
-          const winContainer = document.getElementById('windows-container');
-          if (nowActive) {
-            document.querySelector('footer')?.classList.add('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
-            navEl?.classList.add('window-open');
-            winContainer?.classList.add('menu-open'); // Hide windows
-            updateNavbarState(true);
-          } else {
-            winContainer?.classList.remove('menu-open'); // Restore windows
-            if (activeWindows.length === 0) {
-              document.querySelector('footer')?.classList.remove('hide');
-              document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-              navEl?.classList.remove('window-open');
-              updateNavbarState(false);
-            }
-          }
-        }
-      });
-
-      // Close when clicking outside
-      document.addEventListener('click', () => {
-        const isMobile = window.innerWidth < 880;
-        const wasActive = dropdown.classList.contains('active');
-        
-        dropdown.classList.remove('active');
-        menuBtn.classList.remove('active');
-
-        if (isMobile && wasActive) {
-          const winContainer = document.getElementById('windows-container');
-          winContainer?.classList.remove('menu-open'); // Restore windows
-          const navEl = document.querySelector('nav');
-          if (activeWindows.length === 0) {
-            document.querySelector('footer')?.classList.remove('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-            navEl?.classList.remove('window-open');
-            updateNavbarState(false);
-          }
-        }
-      });
-
-      // Prevent closing when clicking inside the dropdown
-      dropdown.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-    }
-
     const closeDropdown = () => {
+      const dropdown = document.getElementById('dexter-dropdown');
+      const menuBtn = document.getElementById('dexter-menu-btn');
       if (dropdown && menuBtn) {
         dropdown.classList.remove('active');
         menuBtn.classList.remove('active');
@@ -463,13 +474,11 @@ function onReady() {
       }
     };
   
-      document.getElementById('alerts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
-      document.getElementById('events-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('events-window'); toggleWindow(eventsWindow); });
-      document.getElementById('monitor-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
-      document.getElementById('contacts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
-      document.getElementById('workspace-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
-  document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
-  document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
+    document.getElementById('alerts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
+    document.getElementById('events-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('events-window'); toggleWindow(eventsWindow); });
+    document.getElementById('monitor-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
+    document.getElementById('contacts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
+    document.getElementById('workspace-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
 
   // 1. High-frequency updates (Local Mode only)
   if (!isPublicMode()) {
