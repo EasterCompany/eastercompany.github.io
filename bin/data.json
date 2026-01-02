@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.16.37.main.3f39cbe.2026-01-02.linux-amd64.3f39cbe",
-    "dev": "2.16.37.main.3f39cbe.2026-01-02.linux-amd64.3f39cbe"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -1360,6 +1360,20 @@
           }
         }
       }
+    },
+    "2.16.96": {
+      "type": "patch",
+      "date": "2026-01-02T13:39:42Z",
+      "commit": "8d601b4",
+      "binaries": {
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.16.96/dex-event-service",
+            "size": 13027645,
+            "checksum": "9f369c49fbde4274ce108e94613443f2fe1247539408d105da4a6fc7b0c4ac62"
+          }
+        }
+      }
     }
   },
   "services": {
@@ -1374,8 +1388,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.16.95",
-      "user": "2.16.95",
+      "current": "2.16.96",
+      "user": "2.16.96",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
