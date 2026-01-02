@@ -410,6 +410,8 @@ export async function smartFetch(endpoint, options = {}) {
       // Route to correct pool in cache
       if (type === 'system.notification.generated') {
         events = [...(DASHBOARD_CACHE.alerts || [])];
+      } else if (type === 'system.blueprint.generated' || endpoint.includes('event.type=system.blueprint.generated')) {
+        events = [...(DASHBOARD_CACHE.blueprints || [])];
       } else if (category === 'messaging') {
         events = [...(DASHBOARD_CACHE.messaging_events || [])];
       } else if (category === 'system') {
