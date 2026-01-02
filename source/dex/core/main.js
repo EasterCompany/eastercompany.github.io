@@ -393,14 +393,15 @@ function onReady() {
         // Treat like a window on mobile
         if (isMobile) {
           const navEl = document.querySelector('nav');
+          const winContainer = document.getElementById('windows-container');
           if (nowActive) {
             document.querySelector('footer')?.classList.add('hide');
             document.querySelector('main')?.style.setProperty('opacity', '0.3', 'important');
             navEl?.classList.add('window-open');
-            container?.classList.add('menu-open'); // Hide windows
+            winContainer?.classList.add('menu-open'); // Hide windows
             updateNavbarState(true);
           } else {
-            container?.classList.remove('menu-open'); // Restore windows
+            winContainer?.classList.remove('menu-open'); // Restore windows
             if (activeWindows.length === 0) {
               document.querySelector('footer')?.classList.remove('hide');
               document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
@@ -420,7 +421,8 @@ function onReady() {
         menuBtn.classList.remove('active');
 
         if (isMobile && wasActive) {
-          container?.classList.remove('menu-open'); // Restore windows
+          const winContainer = document.getElementById('windows-container');
+          winContainer?.classList.remove('menu-open'); // Restore windows
           const navEl = document.querySelector('nav');
           if (activeWindows.length === 0) {
             document.querySelector('footer')?.classList.remove('hide');
@@ -443,7 +445,8 @@ function onReady() {
         menuBtn.classList.remove('active');
         const isMobile = window.innerWidth < 880;
         if (isMobile) {
-          container?.classList.remove('menu-open');
+          const winContainer = document.getElementById('windows-container');
+          winContainer?.classList.remove('menu-open');
         }
       }
     };
