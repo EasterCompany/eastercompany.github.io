@@ -1388,6 +1388,20 @@
       "date": "2026-01-02T15:38:13Z",
       "commit": "704de6d",
       "binaries": {}
+    },
+    "2.16.99": {
+      "type": "patch",
+      "date": "2026-01-02T16:14:42Z",
+      "commit": "2b0aae9",
+      "binaries": {
+        "event": {
+          "linux-amd64": {
+            "path": "/bin/2.16.99/dex-event-service",
+            "size": 13034947,
+            "checksum": "7f6b549eda0fb8355c2023f442004eca1925d6ba8a699ffa4837198798067e8b"
+          }
+        }
+      }
     }
   },
   "services": {
@@ -1402,8 +1416,8 @@
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.16.98",
-      "user": "2.16.98",
+      "current": "2.16.99",
+      "user": "2.16.99",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
