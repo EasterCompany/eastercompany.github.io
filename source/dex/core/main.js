@@ -127,9 +127,6 @@ function onReady() {
       if (winEl) winEl.classList.remove('hide-close');
     });
 
-    // Synchronize theme background
-    applyTheme(getCurrentTheme());
-
     const navMenuContainer = document.getElementById('dexter-menu-container');
     const navWindowSwitcher = document.getElementById('nav-window-switcher');
     const settingsIcon = document.getElementById('settings-icon');
