@@ -96,7 +96,7 @@ footer.hide {
     transform: scale(1.1);
 }
 
-@media (max-width: 863px) {
+@media (max-width: 879px) {
     footer {
         padding: 10px 14px;
     }
@@ -111,7 +111,7 @@ footer.hide {
     }
 }
 
-@media (min-width: 864px) {
+@media (min-width: 880px) {
     footer {
         width: min(1200px, 90vw);
         left: 50%;
