@@ -1,5 +1,5 @@
 // Alerts Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown, setUnreadAlerts } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown, setUnreadAlerts, isPublicMode } from '../core/utils.js';
 
 export const getAlertsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">
@@ -9,7 +9,7 @@ export const getAlertsContent = () => `
             <button id="alerts-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
             <button id="alerts-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
             <button id="alerts-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-            <button id="alerts-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
+            <button id="alerts-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
         </div>
     </div>
     <div id="alerts-list" class="alerts-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">

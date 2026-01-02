@@ -1,5 +1,5 @@
 // Easter Company - Logs
-import { smartFetch, ansiToHtml, createPlaceholderMessage } from '../core/utils.js';
+import { smartFetch, ansiToHtml, createPlaceholderMessage, isPublicMode } from '../core/utils.js';
 
 export function getLogsContent() {
     return `
@@ -64,7 +64,7 @@ export async function updateLogs() {
                             <button class="log-action-btn copy-logs-btn" data-logs="${escape(rawLogs)}" title="Copy Logs">
                                 <i class="bx bx-copy"></i>
                             </button>
-                            <button class="log-action-btn delete clear-logs-btn" data-service-id="${logReport.id}" title="Clear Logs">
+                            <button class="log-action-btn delete clear-logs-btn" data-service-id="${logReport.id}" title="Clear Logs" style="${isPublicMode() ? 'display: none;' : ''}">
                                 <i class="bx bx-trash"></i>
                             </button>
                         </div>
