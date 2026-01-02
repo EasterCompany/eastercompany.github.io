@@ -516,13 +516,13 @@ export const getCliInterfaceContent = () => {
                 <i class='bx bxl-github'></i>
                 <h3>Open Source</h3>
                 <p>Dexter is built with the help of creators around the world. Every contribution counts.</p>
-                <a href="/contribute" target="_blank" class="notif-action-btn active">Contribute on GitHub</a>
+                <a href="/contribute" target="_blank" class="action-btn">CONTRIBUTE</a>
             </div>
             <div class="cli-contribute-card">
                 <i class='bx bxl-discord-alt'></i>
-                <h3>For Users</h3>
+                <h3>Community</h3>
                 <p>Join our Discord to stay updated, suggest new features, and interact with the community using the Dexter engine.</p>
-                <a href="https://discord.gg/eastercompany" target="_blank" class="notif-action-btn active">Join Discord</a>
+                <a href="https://discord.gg/eastercompany" target="_blank" class="action-btn">JOIN DISCORD</a>
             </div>
         </div>
     </div>`;
