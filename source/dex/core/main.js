@@ -398,15 +398,23 @@ function onReady() {
     if (!isPublicMode()) {
       setInterval(() => {
         if (eventsWindow.isOpen()) updateEventsTimeline();
+        
+        if (alertsWindow.isOpen()) {
+          updateAlertsTab();
+        } else {
+          checkBackgroundAlerts();
+        }
       }, 1000);
     }
 
     // 2. Standard background updates
     setInterval(() => {
-      if (alertsWindow.isOpen()) {
-        updateAlertsTab();
-      } else {
-        checkBackgroundAlerts();
+      if (isPublicMode()) {
+        if (alertsWindow.isOpen()) {
+          updateAlertsTab();
+        } else {
+          checkBackgroundAlerts();
+        }
       }
       
       if (workspaceWindow.isOpen()) {
