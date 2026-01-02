@@ -136,6 +136,13 @@ function onReady() {
     const closeAllWindowsIcon = document.getElementById('close-all-windows');
     const isMobile = window.innerWidth < 880;
 
+    // Reset mobile-only states when resizing back to desktop
+    if (!isMobile) {
+      if (dropdown) dropdown.classList.remove('active');
+      if (menuBtn) menuBtn.classList.remove('active');
+      if (container) container.classList.remove('menu-open');
+    }
+
     updateNavbarState(activeWindows.length > 0);
 
     if (activeWindows.length > 0) {
