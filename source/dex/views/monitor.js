@@ -4,6 +4,7 @@ import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smar
 import { getLogsContent, updateLogs } from './logs.js';
 
 export const getGuardianContent = () => {
+  const resetBtnStyle = isPublicMode() ? 'display: none;' : '';
   return `
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
@@ -31,7 +32,7 @@ export const getGuardianContent = () => {
         <div class="system-section-header">
             <i class='bx bx-shield' style="color: #bb86fc;"></i>
             <h2>Guardian</h2>
-            <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+            <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}"><i class='bx bx-refresh'></i> Reset</button>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
@@ -52,7 +53,7 @@ export const getGuardianContent = () => {
         <div class="system-section-header">
             <i class='bx bx-search-alt' style="color: #03dac6;"></i>
             <h2>Analyzer</h2>
-            <button id="analyzer-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+            <button id="analyzer-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}"><i class='bx bx-refresh'></i> Reset</button>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
@@ -72,7 +73,7 @@ export const getGuardianContent = () => {
                 <path d="M0 0 C5.38774836 3.27445051 9.48629464 7.72940902 11.375 13.796875 C12.57556759 20.12129356 13.08379186 26.61224973 9.8125 32.3515625 C9.1525 33.2590625 8.4925 34.1665625 7.8125 35.1015625 C3.14375463 31.20179529 -1.27877809 27.14941606 -5.55859375 22.828125 C-6.12578629 22.25951752 -6.69297882 21.69091003 -7.27735901 21.10507202 C-9.06229913 19.31460014 -10.84370256 17.52065766 -12.625 15.7265625 C-13.84546939 14.50106927 -15.06617053 13.27580678 -16.28710938 12.05078125 C-19.25658756 9.07036476 -22.22290257 6.08683356 -25.1875 3.1015625 C-18.60177483 -3.68024927 -8.47804034 -3.77979299 0 0 Z " transform="translate(229.1875,30.8984375)"/>
             </svg>
             <h2>Fabricator</h2>
-            <button id="fabricator-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+            <button id="fabricator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}"><i class='bx bx-refresh'></i> Reset</button>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.5;">
@@ -84,7 +85,7 @@ export const getGuardianContent = () => {
         <div class="system-section-header" style="display: flex; align-items: center;">
             ${imaginatorSVG}
             <h2>Imaginator</h2>
-            <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Reset</button>
+            <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}"><i class='bx bx-refresh'></i> Reset</button>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.5;">

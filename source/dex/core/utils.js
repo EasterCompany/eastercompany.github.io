@@ -413,9 +413,7 @@ export async function smartFetch(endpoint, options = {}) {
 
     // 6. Agent Status
     if (endpoint.startsWith('/agent/status') || endpoint.startsWith('/guardian/status')) {
-      // We don't have this explicitly in the snapshot but we can mock enough for the UI if needed
-      // or just return empty {}
-      return new Response(JSON.stringify({}), { status: 200 });
+      return new Response(JSON.stringify(DASHBOARD_CACHE.agent_status || {}), { status: 200 });
     }
 
     // 7. User Profiles
