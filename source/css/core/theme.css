@@ -178,7 +178,7 @@ body.theme-legacy {
 .theme-info h3 { font-size: 1em; margin-bottom: 6px; color: #eee; text-align: left; }
 .theme-info p { font-size: 0.8em; color: #999; line-height: 1.3; text-align: left; margin-bottom: 8px; }
 
-@media (min-width: 768px) {
+@media (min-width: 864px) {
   .theme-selector { flex-direction: row; gap: 20px; padding: 20px; align-items: stretch; }
   .theme-card { flex-direction: column; flex: 1; min-height: 0; height: 100%; }
   .theme-card:hover { transform: translateY(-4px); }

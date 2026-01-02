@@ -118,7 +118,7 @@ function onReady() {
     const navWindowSwitcher = document.getElementById('nav-window-switcher');
     const settingsIcon = document.getElementById('settings-icon');
     const closeAllWindowsIcon = document.getElementById('close-all-windows');
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 864;
 
     updateNavbarState(activeWindows.length > 0);
 
