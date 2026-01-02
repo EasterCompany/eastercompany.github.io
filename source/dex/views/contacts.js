@@ -1,5 +1,6 @@
 // Contacts Tab Logic (Synced with Discord)
 import { createPlaceholderMessage, updateTabTimestamp, smartDiscordFetch, isPublicMode } from '../core/utils.js';
+import { showUserProfile } from '../components/userProfile.js';
 
 export const getContactsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">
