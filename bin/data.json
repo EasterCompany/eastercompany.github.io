@@ -175,6 +175,12 @@
       "date": "2026-01-02T21:49:18Z",
       "commit": "356d21f",
       "binaries": {}
+    },
+    "2.18.5": {
+      "type": "patch",
+      "date": "2026-01-02T21:51:04Z",
+      "commit": "d7bae1e",
+      "binaries": {}
     }
   },
   "services": {
