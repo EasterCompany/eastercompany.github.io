@@ -43,6 +43,10 @@ function onReady() {
     return;
   }
 
+  // --- 0. Core UI Injection (Highest Priority) ---
+  injectNavbar();
+  injectFooter();
+
   checkServiceHealth();
   initTheme();
   applyBaseStyles();
@@ -319,10 +323,6 @@ function onReady() {
           }, 500);
       }
   };
-
-  // --- 3. UI Injection & Listener Setup ---
-  injectNavbar();
-  injectFooter();
 
   const closeDropdown = () => {
     const dropdown = document.getElementById('dexter-dropdown');
