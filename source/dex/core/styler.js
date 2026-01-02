@@ -174,7 +174,7 @@ export function injectFooter() {
     if (document.querySelector('footer')) return;
 
     const footerHTML = `
-        <a href="/dex" class="footer-brand-left">DEXTER M.XIV</a>
+        <a href="/dexter" class="footer-brand-left">DEXTER M.XIV</a>
         <div class="socials-section">
             <a href="https://facebook.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-facebook'></i></a>
             <a href="https://linkedin.com/company/72223947" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
