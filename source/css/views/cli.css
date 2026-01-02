@@ -535,7 +535,7 @@ body.is-animated .cli-divider span {
 
 .cli-contribute-card p {
     font-size: 0.95em;
-    color: #888;
+    color: #ccc;
     line-height: 1.6;
     max-width: 300px;
 }
@@ -543,8 +543,8 @@ body.is-animated .cli-divider span {
 .cli-contribute-card .action-btn {
     margin-top: 10px;
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     color: #fff;
     padding: 12px 24px;
     border-radius: 8px;
@@ -559,7 +559,7 @@ body.is-animated .cli-divider span {
 }
 
 .cli-contribute-card .action-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.6);
     border-color: #bb86fc;
     box-shadow: 0 0 20px rgba(187, 134, 252, 0.2);
     transform: translateY(-2px);
