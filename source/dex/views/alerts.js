@@ -6,12 +6,12 @@ export const getAlertsContent = () => `
         <i class='bx bx-bell' style="color: #bb86fc;"></i>
         <h2>Alerts</h2>
         <div id="alerts-filters" class="event-filters" style="margin-left: 20px; margin-bottom: 0;">
-            <button id="alerts-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
+            <button id="alerts-read-all" class="notif-action-btn" title="Read All"><i class='bx bx-check-double'></i></button>
         </div>
         <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
-            <button id="alerts-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
-            <button id="alerts-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-            <button id="alerts-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
+            <button id="alerts-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
+            <button id="alerts-close-all" class="notif-action-btn" title="Close All"><i class='bx bx-collapse'></i></button>
+            <button id="alerts-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}" title="Clear"><i class='bx bx-trash'></i></button>
         </div>
     </div>
     <div id="alerts-list" class="alerts-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">

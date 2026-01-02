@@ -7,16 +7,16 @@ export const getEventsContent = () => `
         <i class='bx bx-calendar-event' style="color: #03dac6;"></i>
         <h2>Events</h2>
         <div id="event-filters" class="event-filters" style="margin-left: 20px; margin-bottom: 0;">
-            <button class="notif-action-btn filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">All</button>
-            <button class="notif-action-btn filter-btn ${currentFilter === 'messaging' ? 'active' : ''}" data-filter="messaging">Messaging</button>
-            <button class="notif-action-btn filter-btn ${currentFilter === 'system' ? 'active' : ''}" data-filter="system">System</button>
-            <button class="notif-action-btn filter-btn ${currentFilter === 'cognitive' ? 'active' : ''}" data-filter="cognitive">Cognitive</button>
-            <button class="notif-action-btn filter-btn ${currentFilter === 'moderation' ? 'active' : ''}" data-filter="moderation">Moderation</button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-filter="all" title="All Events"><i class='bx bx-list-ul'></i></button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'messaging' ? 'active' : ''}" data-filter="messaging" title="Messaging"><i class='bx bx-message-square-detail'></i></button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'system' ? 'active' : ''}" data-filter="system" title="System"><i class='bx bx-cog'></i></button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'cognitive' ? 'active' : ''}" data-filter="cognitive" title="Cognitive"><i class='bx bx-brain'></i></button>
+            <button class="notif-action-btn filter-btn ${currentFilter === 'moderation' ? 'active' : ''}" data-filter="moderation" title="Moderation"><i class='bx bx-shield-quarter'></i></button>
         </div>
         <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
-            <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
-            <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-            <button id="events-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
+            <button id="events-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
+            <button id="events-close-all" class="notif-action-btn" title="Close All"><i class='bx bx-collapse'></i></button>
+            <button id="events-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}" title="Clear"><i class='bx bx-trash'></i></button>
         </div>
     </div>
     
