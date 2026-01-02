@@ -122,7 +122,6 @@ export function injectNavbar() {
         <div id="nav-left-container" style="display: flex; align-items: center; transition: transform 0.2s ease; gap: 5px; cursor: ${isRoot ? 'default' : 'pointer'};">
             <i class='bx bx-chevron-left' id="nav-chevron" style="font-size: 28px; color: #fff; display: ${isRoot ? 'none' : 'block'};"></i>
             <div class="navbar-favicon"></div>
-            <i class='bx bx-microphone' id="navbar-microphone"></i>
         </div>
     `;
 
