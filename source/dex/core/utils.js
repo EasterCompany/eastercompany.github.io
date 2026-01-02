@@ -371,6 +371,7 @@ export async function smartFetch(endpoint, options = {}) {
     if (endpoint.startsWith('/events')) {
       const urlParams = new URLSearchParams(endpoint.split('?')[1] || '');
       const type = urlParams.get('type') || urlParams.get('event.type');
+      const category = urlParams.get('category');
       const order = urlParams.get('order') || 'desc';
 
       let events = [];
@@ -378,6 +379,14 @@ export async function smartFetch(endpoint, options = {}) {
       // Route to correct pool in cache
       if (type === 'system.notification.generated') {
         events = [...(DASHBOARD_CACHE.alerts || [])];
+      } else if (category === 'messaging') {
+        events = [...(DASHBOARD_CACHE.messaging_events || [])];
+      } else if (category === 'system') {
+        events = [...(DASHBOARD_CACHE.system_events || [])];
+      } else if (category === 'cognitive') {
+        events = [...(DASHBOARD_CACHE.cognitive_events || [])];
+      } else if (category === 'moderation') {
+        events = [...(DASHBOARD_CACHE.moderation_events || [])];
       } else {
         events = [...(DASHBOARD_CACHE.events || [])];
       }
