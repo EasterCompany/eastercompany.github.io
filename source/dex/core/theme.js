@@ -60,18 +60,14 @@ export function applyTheme(theme) {
     const targetColor = themeColors[theme] || themeColors[THEMES.DARK];
     metaThemeColor.setAttribute('content', targetColor);
 
-    // 4. Fix Safari white overscroll by coloring the root HTML element
-    // We leave the body background to the CSS theme engine to preserve gradients
-    html.style.backgroundColor = targetColor;
-
-    // 5. Ensure background element exists
+    // 4. Ensure background element exists
     if (!document.querySelector('.background')) {
         const bg = document.createElement('div');
         bg.className = 'background';
         document.body.prepend(bg);
     }
 
-    // 6. Manage animation state
+    // 5. Manage animation state
     body.classList.add('is-animated');
 }
 
