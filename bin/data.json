@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "3.0.0.main.83a2506.2026-01-02.linux-amd64.83a2506",
-    "dev": "3.0.0.main.83a2506.2026-01-02.linux-amd64.83a2506"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -313,6 +313,12 @@
           }
         }
       }
+    },
+    "3.0.1": {
+      "type": "patch",
+      "date": "2026-01-02T22:41:25Z",
+      "commit": "b50fea6",
+      "binaries": {}
     }
   },
   "services": {
