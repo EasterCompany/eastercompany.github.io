@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463",
+    "dev": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463"
   },
   "releases": {
     "0.0.0": {
@@ -316,14 +316,14 @@
     },
     "2.17.3": {
       "type": "patch",
-      "date": "2026-01-02T17:34:49Z",
-      "commit": "13f8e71",
+      "date": "2026-01-02T20:43:00Z",
+      "commit": "bf1a6da",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.17.3/dex-event-service",
-            "size": 13034317,
-            "checksum": "62af4b542ac8ec87a187ac10392755f73f5bac8c150c5521e8143bd1b2e53434"
+            "path": "/bin/2.17.3/dex",
+            "size": 16627055,
+            "checksum": "6f66411d3459c6bc6aa88eba09ad497fb96de0747365d507c993d9f4b7ac2d90"
           }
         }
       }
@@ -489,8 +489,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.17.2.main.bea2463.2026-01-02.linux-amd64.bea2463",
-      "user": "2.17.2.main.bea2463.2026-01-02.linux-amd64.bea2463",
+      "current": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463",
+      "user": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
