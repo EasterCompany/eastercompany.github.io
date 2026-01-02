@@ -262,7 +262,12 @@ function onReady() {
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
       { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() }
-    ],
+    ].filter(tab => {
+      if (isPublicMode()) {
+        return tab.title !== 'Hardware' && tab.title !== 'Logs';
+      }
+      return true;
+    }),
     onOpen: () => {
       updateSystemMonitor();
       updateProcessesTab();
