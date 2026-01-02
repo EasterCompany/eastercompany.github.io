@@ -540,9 +540,29 @@ body.is-animated .cli-divider span {
     max-width: 300px;
 }
 
-.cli-contribute-card .notif-action-btn {
+.cli-contribute-card .action-btn {
     margin-top: 10px;
     text-decoration: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 1px;
+}
+
+.cli-contribute-card .action-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #bb86fc;
+    box-shadow: 0 0 20px rgba(187, 134, 252, 0.2);
+    transform: translateY(-2px);
 }
 
 .cli-install-note {
