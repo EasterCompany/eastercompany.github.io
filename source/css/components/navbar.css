@@ -223,7 +223,11 @@ nav.window-open .dexter-dropdown {
     }
     
     .nav-right {
-        gap: 12px;
+        gap: 25px;
+    }
+
+    .nav-right i {
+        font-size: 1.6em;
     }
 
     .dexter-dropdown {
