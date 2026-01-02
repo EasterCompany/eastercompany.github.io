@@ -1,4 +1,4 @@
-(()=>{function Ze(){console.log("Applying base styles dynamically (e.g., for background animation or theme toggles).")}function Ke(){let t=window.location.pathname,e=t==="/"||t==="/index.html",s=`
+(()=>{function Ze(){if(!document.querySelector(".grid-overlay")){let t=document.createElement("div");t.className="grid-overlay",document.body.appendChild(t)}console.log("Applying base styles dynamically (e.g., for background animation or theme toggles).")}function Ke(){let t=window.location.pathname,e=t==="/"||t==="/index.html",s=`
         <div class="nav-left" id="nav-left-wrapper" style="gap: 0;">
             ${`
         <div id="nav-left-container" style="display: flex; align-items: center; transition: transform 0.2s ease; gap: 5px; cursor: ${e?"default":"pointer"};">

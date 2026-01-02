@@ -1,6 +1,12 @@
 // styler.js - Placeholder for dynamic styles and elements.
 
 export function applyBaseStyles() {
+    // Inject Grid Overlay if missing
+    if (!document.querySelector('.grid-overlay')) {
+        const grid = document.createElement('div');
+        grid.className = 'grid-overlay';
+        document.body.appendChild(grid);
+    }
     console.log("Applying base styles dynamically (e.g., for background animation or theme toggles).");
 }
 
