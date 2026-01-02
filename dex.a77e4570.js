@@ -3,7 +3,8 @@
             ${`
         <div id="nav-left-container" style="display: flex; align-items: center; transition: transform 0.2s ease; gap: 5px; cursor: ${e?"default":"pointer"};">
             <i class='bx bx-chevron-left' id="nav-chevron" style="font-size: 28px; color: #fff; display: ${e?"none":"block"};"></i>
-            <img src="/static/meta/favicon.svg" alt="Easter Company Favicon" class="navbar-favicon" style="opacity: 1 !important; height: 24px; width: 24px;">
+            <div class="navbar-favicon"></div>
+            <i class='bx bx-microphone' id="navbar-microphone"></i>
         </div>
     `}
         </div>
