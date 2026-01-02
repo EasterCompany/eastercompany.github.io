@@ -37,6 +37,12 @@ async function checkServiceHealth() {
 }
 
 function onReady() {
+  // Enforce HTTPS on production domain
+  if (window.location.protocol === 'http:' && window.location.hostname === 'easter.company') {
+    window.location.replace('https://' + window.location.hostname + window.location.pathname + window.location.search);
+    return;
+  }
+
   checkServiceHealth();
   initTheme();
   applyBaseStyles();
