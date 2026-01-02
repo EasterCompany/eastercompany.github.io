@@ -306,8 +306,15 @@ export async function smartFetch(endpoint, options = {}) {
 
     // 3. Events Timeline
     if (endpoint.startsWith('/events')) {
+      const urlParams = new URLSearchParams(endpoint.split('?')[1] || '');
+      const order = urlParams.get('order') || 'desc';
+      const isRev = order === 'desc';
+
       // Fetch latest 50 events
-      const ids = await upstashCommand('ZRANGE', 'events:timeline', '0', '49', 'REV');
+      const args = ['ZRANGE', 'events:timeline', '0', '49'];
+      if (isRev) args.push('REV');
+
+      const ids = await upstashCommand(...args);
       if (!ids || ids.length === 0) {
         return new Response(JSON.stringify({ events: [], count: 0 }), { status: 200 });
       }
