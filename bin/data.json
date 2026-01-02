@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.17.1.main.3d79b15.2026-01-02.linux-amd64.3d79b15",
+    "dev": "2.17.1.main.3d79b15.2026-01-02.linux-amd64.3d79b15"
   },
   "releases": {
     "0.0.0": {
@@ -146,14 +146,14 @@
     },
     "2.17.1": {
       "type": "patch",
-      "date": "2026-01-02T17:22:26Z",
-      "commit": "5887ba7",
+      "date": "2026-01-02T18:15:25Z",
+      "commit": "57af39f",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.17.1/dex-event-service",
-            "size": 13030185,
-            "checksum": "a035df77ffa767c3005bcee51d417516f2ecd8d331d1dc060fd255f74f994f1a"
+            "path": "/bin/2.17.1/dex",
+            "size": 16627055,
+            "checksum": "ece82134b890a46c4fb6671b30e8d477ad50c5bed07000d3e7f50dc53a148417"
           }
         }
       }
@@ -229,8 +229,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.17.0.main.3d79b15.2026-01-02.linux-amd64.3d79b15",
-      "user": "2.17.0.main.3d79b15.2026-01-02.linux-amd64.3d79b15",
+      "current": "2.17.1.main.3d79b15.2026-01-02.linux-amd64.3d79b15",
+      "user": "2.17.1.main.3d79b15.2026-01-02.linux-amd64.3d79b15",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
