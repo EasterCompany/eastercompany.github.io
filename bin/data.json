@@ -1237,6 +1237,12 @@
           }
         }
       }
+    },
+    "2.16.91": {
+      "type": "patch",
+      "date": "2026-01-02T09:02:06Z",
+      "commit": "1fb0ce8",
+      "binaries": {}
     }
   },
   "services": {
