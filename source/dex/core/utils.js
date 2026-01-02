@@ -418,6 +418,16 @@ export async function smartFetch(endpoint, options = {}) {
       return new Response(JSON.stringify({}), { status: 200 });
     }
 
+    // 7. User Profiles
+    if (endpoint.startsWith('/profile/')) {
+      const userID = endpoint.split('/')[2];
+      const profile = DASHBOARD_CACHE.profiles ? DASHBOARD_CACHE.profiles[userID] : null;
+      if (profile) {
+        return new Response(JSON.stringify(profile), { status: 200 });
+      }
+      return new Response(JSON.stringify({ error: "Profile not found" }), { status: 404 });
+    }
+
     // Default: Return 404 for unsupported public endpoints
     return new Response(JSON.stringify({ error: "Not available in public demo" }), { status: 404 });
   }
@@ -471,6 +481,31 @@ export async function smartFetch(endpoint, options = {}) {
  * Executes a fetch against the primary Discord domain, falling back to local on failure.
  */
 export async function smartDiscordFetch(endpoint, options = {}) {
+  // --- PUBLIC MODE ADAPTER ---
+  if (isPublicMode()) {
+    if (!DASHBOARD_CACHE) {
+      return new Response(JSON.stringify({ error: "Initializing dashboard cache..." }), { status: 503 });
+    }
+
+    // 1. Contacts List
+    if (endpoint === '/contacts') {
+      return new Response(JSON.stringify(DASHBOARD_CACHE.contacts || { members: [] }), { status: 200 });
+    }
+
+    // 2. Individual Member Context
+    if (endpoint.startsWith('/member/')) {
+      const userID = endpoint.split('/')[2];
+      const member = (DASHBOARD_CACHE.contacts?.members || []).find(m => m.id === userID);
+      if (member) {
+        return new Response(JSON.stringify(member), { status: 200 });
+      }
+      return new Response(JSON.stringify({ error: "Member not found" }), { status: 404 });
+    }
+
+    return new Response(JSON.stringify({ error: "Discord API not public" }), { status: 404 });
+  }
+
+  // --- STANDARD MODE ---
   if (resolvedDiscordBaseUrl) {
     try {
       const response = await fetch(resolvedDiscordBaseUrl + endpoint, options);
