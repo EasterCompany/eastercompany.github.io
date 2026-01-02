@@ -2,6 +2,7 @@ User-agent: Googlebot
 Disallow: /static/
 Disallow: /downloads/
 Disallow: /README.md
+Disallow: /version.txt
 Disallow: CNAME
 
 User-agent: *
