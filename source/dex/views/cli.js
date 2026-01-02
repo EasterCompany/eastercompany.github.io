@@ -470,7 +470,7 @@ export const getCliInterfaceContent = () => {
 
             <div class="cli-divider">
                 <i class='bx bx-chevron-down'></i>
-                <span>Interactive Demos (v${CLI_VERSION})</span>
+                <span>Interactive Demos</span>
                 <i class='bx bx-chevron-down'></i>
             </div>
     `;
