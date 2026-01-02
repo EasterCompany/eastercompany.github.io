@@ -79,6 +79,7 @@ export async function updateRoadmapTab(forceReRender = false) {
           <div class="event-service">ROADMAP ${statusBadge}</div>
           <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
           <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
+            ${isPublicMode() ? '' : `
             <div class="event-details-header" style="margin-bottom: 15px;">
               <h5 style="margin: 0; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Item Controls</h5>
               <i class="bx bx-x close-details-btn"></i>
@@ -90,6 +91,7 @@ export async function updateRoadmapTab(forceReRender = false) {
               </button>
               <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
             </div>
+            `}
             ${isConsumed ? `<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(item.consumed_at * 1000).toLocaleString()}</div>` : ''}
           </div>
         </div>
@@ -129,8 +131,8 @@ export async function updateRoadmapTab(forceReRender = false) {
       }
     });
 
-    if (items.length === 0) {
-      roadmapContainer.innerHTML = createPlaceholderMessage('empty', 'Your roadmap is empty.', 'Click "New Idea" to start planning Dexter\'s future.');
+    if (!currentItems || currentItems.length === 0) {
+      roadmapContainer.innerHTML = createPlaceholderMessage('empty', 'Your roadmap is empty.', isPublicMode() ? 'Dexter is currently idle.' : 'Click "New Idea" to start planning Dexter\'s future.');
       return;
     }
 
