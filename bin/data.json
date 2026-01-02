@@ -340,6 +340,12 @@
       "commit": "45e10dc",
       "binaries": {}
     },
+    "2.17.38": {
+      "type": "patch",
+      "date": "2026-01-02T19:59:45Z",
+      "commit": "836038c",
+      "binaries": {}
+    },
     "2.17.4": {
       "type": "patch",
       "date": "2026-01-02T17:48:31Z",
