@@ -106,7 +106,6 @@ body.theme-legacy {
   background-image: var(--stripes), var(--rainbow);
   background-size: 200%, 100%;
   animation: smoothBg 60s linear infinite;
-  background-attachment: fixed;
   mix-blend-mode: var(--bg-blend);
 }
 
