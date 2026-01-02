@@ -452,7 +452,7 @@ export const getCliInterfaceContent = () => {
   let html = `
         <div class="cli-dashboard">
             <div class="cli-hero" style="text-align: center; padding: 40px 20px; margin-bottom: 20px;">
-                <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #fff;">DEX CLI</h1>
+                <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #fff;">DEXTER</h1>
                 <p style="color: #888; max-width: 600px; margin: 0 auto;">The unified command-line interface for the Dexter ecosystem. Manage, monitor, and evolve your AI infrastructure.</p>
             </div>
 

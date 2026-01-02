@@ -55,7 +55,7 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         elif [ "$filename" = "index" ]; then
             if [ "$parent_dir" = "easter.company" ] || [ "$parent_dir" = "." ] || [ "$parent_dir" = "EasterCompany" ] || [ "$parent_dir" = ".." ]; then
                 page_title="Home"
-            elif [ "$parent_dir" = "dex" ]; then
+            elif [ "$parent_dir" = "dexter" ]; then
                 page_title="Dexter"
             else
                 page_title=$(echo "$parent_dir" | sed 's/[-_]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
