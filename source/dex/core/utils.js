@@ -295,6 +295,29 @@ async function refreshDashboardCache() {
 }
 
 /**
+ * Emulates/predicts timers locally in public mode to keep the UI feel live.
+ */
+function predictDashboardTimers() {
+  if (!DASHBOARD_CACHE || !DASHBOARD_CACHE.agent_status) return;
+
+  const status = DASHBOARD_CACHE.agent_status;
+
+  // 1. System State Time (Increments)
+  if (typeof status.system_state_time === 'number') {
+    status.system_state_time += 1;
+  }
+
+  // 2. Protocol Cooldowns (Deduct from next_run vs current timestamp logic)
+  // Actually the UI usually displays 'last_run' or relative time based on next_run.
+  // We don't need to change last_run, but we can increment total times if active.
+  if (status.system_state === 'active') {
+    if (typeof status.total_active_time === 'number') status.total_active_time += 1;
+  } else {
+    if (typeof status.total_idle_time === 'number') status.total_idle_time += 1;
+  }
+}
+
+/**
  * Start the synchronized poller at :59 of every minute.
  */
 function initDashboardSync() {
@@ -314,6 +337,9 @@ function initDashboardSync() {
     if (clock.getSeconds() === 59) {
       refreshDashboardCache();
     }
+
+    // Predict timers every second
+    predictDashboardTimers();
   }, 1000);
 }
 
