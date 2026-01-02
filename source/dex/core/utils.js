@@ -330,6 +330,16 @@ export async function smartFetch(endpoint, options = {}) {
       return new Response(JSON.stringify({ events: events, count: events.length }), { status: 200 });
     }
 
+    // 4. Logs (Not available in public mode yet, but return empty to avoid errors)
+    if (endpoint.startsWith('/logs')) {
+      return new Response(JSON.stringify([]), { status: 200 });
+    }
+
+    // 5. Agent Status (Not available in public mode yet)
+    if (endpoint.startsWith('/agent/status') || endpoint.startsWith('/guardian/status')) {
+      return new Response(JSON.stringify({}), { status: 200 });
+    }
+
     // Default: Return 404 for unsupported public endpoints
     return new Response(JSON.stringify({ error: "Not available in public demo" }), { status: 404 });
   }
