@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.16.38.main.a5afea2.2026-01-02.linux-amd64.a5afea2",
+    "dev": "2.16.38.main.a5afea2.2026-01-02.linux-amd64.a5afea2"
   },
   "releases": {
     "0.0.0": {
@@ -636,14 +636,14 @@
     },
     "2.16.38": {
       "type": "patch",
-      "date": "2025-12-30T08:40:18Z",
-      "commit": "f278afe",
+      "date": "2026-01-02T14:05:32Z",
+      "commit": "fd58ac9",
       "binaries": {
-        "event": {
+        "cli": {
           "linux-amd64": {
-            "path": "/bin/2.16.38/dex-event-service",
-            "size": 12847711,
-            "checksum": "5faf2d5f68dbdb6b3d271bde118c5bd16725f3bb96359a1d5b960f27c3e1c36e"
+            "path": "/bin/2.16.38/dex",
+            "size": 16627409,
+            "checksum": "83109b3f8608ce4423f690570a07d41b0e1bf68f4f8ea0dd5e7e5350a4ee7079"
           }
         }
       }
@@ -1392,8 +1392,8 @@
   },
   "services": {
     "cli": {
-      "current": "2.16.37.main.3f39cbe.2026-01-02.linux-amd64.3f39cbe",
-      "user": "2.16.37.main.3f39cbe.2026-01-02.linux-amd64.3f39cbe",
+      "current": "2.16.38.main.a5afea2.2026-01-02.linux-amd64.a5afea2",
+      "user": "2.16.38.main.a5afea2.2026-01-02.linux-amd64.a5afea2",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
