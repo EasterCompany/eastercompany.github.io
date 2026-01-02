@@ -25,6 +25,8 @@ import { initCliDashboard } from '../views/cli.js';
 import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount, smartFetch, isPublicMode } from './utils.js';
 
 async function checkServiceHealth() {
+  if (isPublicMode()) return; // Snapshots handle health in public mode
+  
   // Use smartFetch which handles the fallback logic and public mode
   try {
     const response = await smartFetch('/system/status', { method: 'GET' }); // Changed to GET as smartFetch wrapper mocks Response
