@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.16.35.main.8018eff.2026-01-02.linux-amd64.8018eff",
+    "dev": "2.16.35.main.8018eff.2026-01-02.linux-amd64.8018eff"
   },
   "releases": {
     "0.0.0": {
@@ -573,14 +573,28 @@
     },
     "2.16.35": {
       "type": "patch",
-      "date": "2025-12-30T07:14:32Z",
-      "commit": "af118a1",
+      "date": "2026-01-02T12:07:30Z",
+      "commit": "1a3c25b",
       "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/2.16.35/dex",
+            "size": 16626301,
+            "checksum": "dca07c19488cc0ae82fc831c5913bc4ff5775b875cad43b12e0ec94df1eed0d8"
+          }
+        },
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/2.16.35/dex-discord-service",
+            "size": 13549464,
+            "checksum": "b1d079fc0f042cb2cec296f463a751b798b7c1515e7932542c94927afd63c21e"
+          }
+        },
         "event": {
           "linux-amd64": {
             "path": "/bin/2.16.35/dex-event-service",
-            "size": 12847463,
-            "checksum": "d3ad30109127741a55ecd165f547c7911c05edff5b92ac3d4a0219b520625e0c"
+            "size": 12991516,
+            "checksum": "846e4e21da2af5a066cc36264555588bad152c8790544897355c73dedb84207e"
           }
         }
       }
@@ -1307,18 +1321,18 @@
   },
   "services": {
     "cli": {
-      "current": "2.16.31.main.1c2c156.2026-01-02.linux-amd64.1c2c156",
-      "user": "2.16.31.main.1c2c156.2026-01-02.linux-amd64.1c2c156",
+      "current": "2.16.35.main.8018eff.2026-01-02.linux-amd64.8018eff",
+      "user": "2.16.35.main.8018eff.2026-01-02.linux-amd64.8018eff",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "2.16.8.main.895eae5.2026-01-02..895eae5",
-      "user": "2.16.8.main.895eae5.2026-01-02..895eae5",
+      "current": "2.16.9.main.88931ee.2026-01-02..88931ee",
+      "user": "2.16.9.main.88931ee.2026-01-02..88931ee",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.16.91",
-      "user": "2.16.91",
+      "current": "2.16.93",
+      "user": "2.16.93",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
