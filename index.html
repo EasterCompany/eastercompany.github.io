@@ -137,49 +137,26 @@
       <h1 class="dexter-hero-logo">DEXTER</h1>
       <p class="dexter-subtitle">MARK 14: GUARDIAN PROTOCOL</p>
       <div class="action-row">
-        <!--
-        <div class="action-btn primary" id="download-btn">
+        <div class="action-btn primary" id="open-dex-btn">
           <i class='bx bx-download'></i> DOWNLOAD
         </div>
-        -->
-        <div class="action-btn primary" id="open-events-btn">
-          <i class='bx bx-calendar-event'></i> EVENTS
-        </div>
-        <div class="action-btn primary" id="open-monitor-btn">
-          <i class='bx bx-pulse'></i> MONITOR
-        </div>
-        <div class="action-btn primary" id="open-settings-btn">
-          <i class='bx bx-cog'></i> SETTINGS
+        <div class="action-btn primary" id="open-contribute-btn">
+          <i class='bx bxl-github'></i> CONTRIBUTE
         </div>
       </div>
     </main>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const downloadBtn = document.getElementById('download-btn');
-        const monitorBtn = document.getElementById('open-monitor-btn');
-        const eventsBtn = document.getElementById('open-events-btn');
-        const settingsBtn = document.getElementById('open-settings-btn');
-        if(downloadBtn) {
-          downloadBtn.addEventListener('click', () => {
+        const dexBtn = document.getElementById('open-dex-btn');
+        const contributeBtn = document.getElementById('open-contribute-btn');
+        if(dexBtn) {
+          dexBtn.addEventListener('click', () => {
             window.location.href = '/dex';
           });
         }
-        if(monitorBtn) {
-          monitorBtn.addEventListener('click', () => {
-            const item = document.getElementById('monitor-menu-item');
-            if(item) item.click();
-          });
-        }
-        if(eventsBtn) {
-          eventsBtn.addEventListener('click', () => {
-            const item = document.getElementById('events-menu-item');
-            if(item) item.click();
-          });
-        }
-        if(settingsBtn) {
-          settingsBtn.addEventListener('click', () => {
-            const item = document.getElementById('settings-icon');
-            if(item) item.click();
+        if(contributeBtn) {
+          contributeBtn.addEventListener('click', () => {
+            window.location.href = '/contribute';
           });
         }
       });
