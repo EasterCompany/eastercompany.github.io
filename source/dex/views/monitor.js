@@ -5,10 +5,11 @@ import { getLogsContent, updateLogs } from './logs.js';
 
 export const getGuardianContent = () => {
   const resetBtnStyle = isPublicMode() ? 'display: none;' : '';
+  const approximationText = isPublicMode() ? '<span style="color: #666; font-size: 0.6em; margin-left: 10px; font-weight: normal; font-style: italic;">* Public data is approximated</span>' : '';
   return `
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
-            <h2>Summary</h2>
+            <h2>Summary ${approximationText}</h2>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
              <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
