@@ -141,15 +141,12 @@ nav.window-open {
     padding-top: 0;
 }
 
-/* Dexter Dropdown */
 .dexter-dropdown {
     position: absolute;
     top: 50px;
     right: -20px; /* Adjusted to account for wider padding/hit area */
     width: 220px; /* Increased width */
     background-color: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 12px; /* Increased padding */
@@ -248,8 +245,6 @@ nav.window-open .dexter-dropdown {
         display: flex;
         flex-direction: column;
         gap: 15px;
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
         transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease;
     }
 
