@@ -767,6 +767,10 @@
                         <div class="dossier-value">${y.location||"Unknown"}</div>
                         <div style="height: 15px;"></div>
 
+                        <div class="dossier-label">Gender</div>
+                        <div class="dossier-value">${y.gender||"Unknown"}</div>
+                        <div style="height: 15px;"></div>
+
                         <div class="dossier-label">Sexuality</div>
                         <div class="dossier-value" style="color: #ffb74d;">${y.sexuality||"Unknown"}</div>
                         <div style="height: 15px;"></div>
