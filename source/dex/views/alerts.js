@@ -5,8 +5,10 @@ export const getAlertsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-bell' style="color: #bb86fc;"></i>
         <h2>Alerts</h2>
-        <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
+        <div id="alerts-filters" class="event-filters" style="margin-left: 20px; margin-bottom: 0;">
             <button id="alerts-read-all" class="notif-action-btn"><i class='bx bx-check-double'></i> Read All</button>
+        </div>
+        <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
             <button id="alerts-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
             <button id="alerts-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
             <button id="alerts-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
