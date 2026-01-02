@@ -33,21 +33,35 @@ nav.window-open {
     position: relative;
 }
 
-.nav-left .navbar-favicon,
-.nav-left #navbar-microphone {
-    height: 30px;
-    width: 30px;
+.nav-left .navbar-favicon {
+    height: 24px;
+    width: 24px;
     transition: opacity 0.3s ease-in-out;
     cursor: pointer;
-    filter: invert(1) brightness(2); /* Force white icon */
+    background-color: #fff; /* The color we want the icon to be */
+    -webkit-mask-image: url('../../../static/meta/favicon.svg');
+    mask-image: url('../../../static/meta/favicon.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
 }
 
 .nav-left #navbar-microphone {
+    height: 24px;
+    width: 24px;
+    transition: opacity 0.3s ease-in-out;
+    cursor: pointer;
     position: absolute;
     opacity: 0;
-    font-size: 24px;
+    font-size: 22px;
     color: #fff;
-    line-height: 30px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-left:not(.recording):hover .navbar-favicon { opacity: 0; }
