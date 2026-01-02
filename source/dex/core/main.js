@@ -441,7 +441,10 @@ function onReady() {
       if (dropdown && menuBtn) {
         dropdown.classList.remove('active');
         menuBtn.classList.remove('active');
-        container?.classList.remove('menu-open'); // Restore windows on selection
+        const isMobile = window.innerWidth < 880;
+        if (isMobile) {
+          container?.classList.remove('menu-open');
+        }
       }
     };
   

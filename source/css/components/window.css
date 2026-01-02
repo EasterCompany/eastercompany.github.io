@@ -26,8 +26,7 @@
 
 /* Hide windows when menu is open (Mobile) */
 .windows-container.menu-open {
-    opacity: 0 !important;
-    pointer-events: none !important;
+    display: none !important;
 }
 
 /* Snapped State: Eliminate the gap when navbar darkens and stretches */
