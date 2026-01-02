@@ -50,13 +50,8 @@ export function applyTheme(theme) {
         document.body.prepend(bg);
     }
 
-    // Manage animation state
-    const needsAnimation = [THEMES.LIGHT, THEMES.LEGACY].includes(theme);
-    if (needsAnimation) {
-        body.classList.add('is-animated');
-    } else {
-        body.classList.remove('is-animated');
-    }
+    // Manage animation state (Always on now)
+    body.classList.add('is-animated');
 }
 
 /**
