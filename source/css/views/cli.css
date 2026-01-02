@@ -435,10 +435,10 @@
 
 .cli-install-command {
     background: rgba(0, 0, 0, 0.4);
-    padding: 18px 25px;
+    padding: 22px 30px;
     border-radius: 12px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1em;
+    font-size: clamp(0.7em, 2vw, 1.1em);
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
@@ -447,8 +447,15 @@
     gap: 20px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    max-width: 650px;
+    max-width: 800px;
     margin: 0 auto;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cli-install-command code {
+    overflow: hidden;
+    text-overflow: clip;
 }
 
 .cli-install-command:hover {
