@@ -23,17 +23,15 @@ import {
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
 import { getLogsContent, updateLogs } from '../views/logs.js';
 import { initCliDashboard } from '../views/cli.js';
-import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount } from './utils.js';
+import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount, smartFetch } from './utils.js';
 
 async function checkServiceHealth() {
-  const isProduction = window.location.hostname === 'easter.company';
-  if (!isProduction) return;
-
+  // Use smartFetch which handles the fallback logic and public mode
   try {
-    const response = await fetch(`${getEventServiceUrl()}/system/status`, { method: 'HEAD' });
+    const response = await smartFetch('/system/status', { method: 'GET' }); // Changed to GET as smartFetch wrapper mocks Response
     if (!response.ok) throw new Error('Service unhealthy');
   } catch (e) {
-    console.error('Production event service unreachable.');
+    console.error('Service health check failed:', e);
   }
 }
 

@@ -276,6 +276,11 @@ async function upstashCommand(command, ...args) {
   }
 }
 
+let resolvedBaseUrl = null;
+let resolvedDiscordBaseUrl = null;
+let isFallingBack = false;
+let isDiscordFallingBack = false;
+
 /**
  * Executes a fetch against the primary domain, falling back to local on failure.
  * Remembers the working endpoint to prevent console spam.
