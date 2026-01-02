@@ -155,6 +155,12 @@
       "date": "2026-01-02T21:31:27Z",
       "commit": "f9f7b42",
       "binaries": {}
+    },
+    "2.18.3": {
+      "type": "patch",
+      "date": "2026-01-02T21:38:37Z",
+      "commit": "184a5a2",
+      "binaries": {}
     }
   },
   "services": {
