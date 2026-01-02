@@ -1,9 +1,9 @@
 // Roadmap Tab Logic
-import { createPlaceholderMessage, escapeHtml, smartFetch } from '../core/utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch, isPublicMode } from '../core/utils.js';
 
 export const getRoadmapActions = () => `
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
-    <button id="roadmap-new" class="notif-action-btn"><i class='bx bx-plus'></i> New Idea</button>
+    <button id="roadmap-new" class="notif-action-btn" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-plus'></i> New Idea</button>
     <button id="roadmap-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
     <button id="roadmap-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
   </div>
