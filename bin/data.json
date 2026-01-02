@@ -325,6 +325,12 @@
       "date": "2026-01-02T22:45:57Z",
       "commit": "4ce439d",
       "binaries": {}
+    },
+    "3.0.3": {
+      "type": "patch",
+      "date": "2026-01-02T22:49:53Z",
+      "commit": "1351746",
+      "binaries": {}
     }
   },
   "services": {
