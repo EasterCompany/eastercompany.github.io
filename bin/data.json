@@ -328,6 +328,12 @@
       "commit": "e7029a7",
       "binaries": {}
     },
+    "2.17.36": {
+      "type": "patch",
+      "date": "2026-01-02T19:45:15Z",
+      "commit": "9b19922",
+      "binaries": {}
+    },
     "2.17.4": {
       "type": "patch",
       "date": "2026-01-02T17:48:31Z",
