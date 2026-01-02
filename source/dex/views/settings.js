@@ -1,10 +1,8 @@
 // Settings Window Logic
 import { getCurrentTheme, setTheme, THEMES } from '../core/theme.js';
-import { getUserEmail } from '../core/auth.js';
 
 export function getSettingsContent() {
     const currentTheme = getCurrentTheme();
-    const userEmail = getUserEmail() || 'master@easter.company';
     const notificationState = { enabled: Notification.permission === 'granted', supported: 'Notification' in window };
 
     return `

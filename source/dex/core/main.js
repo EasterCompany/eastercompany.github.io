@@ -1,7 +1,6 @@
 // Easter Company - Universal JS Entrypoint
 import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from './styler.js';
 import { createWindow } from './Window.js';
-import { isLoggedIn, login } from './auth.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
 import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.js';
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
@@ -45,8 +44,7 @@ function onReady() {
     initCliDashboard();
   }
 
-  const loggedIn = isLoggedIn();
-  injectNavbar(loggedIn);
+  injectNavbar();
   injectFooter();
 
   // Handle Back Button / Logo Logic
@@ -310,13 +308,6 @@ function onReady() {
     }
   });
 
-  const loginWindow = createWindow({
-    id: 'login-window',
-    title: 'Welcome',
-    content: `<div class="login-split-container"><div class="login-top-section"><div class="login-form"><p>Enter your email to continue</p><form id="login-form"><input type="email" id="email-input" placeholder="you@easter.company" required autocomplete="email" /><button type="submit">Continue</button><div id="login-error" class="error" style="display: none;"></div></form></div></div><div class="login-bottom-section"><div class="login-disclaimer"><h2>Early Access</h2><p>Contribute on <a href="/dexter/contribute" target="_blank" rel="noopener noreferrer">GitHub</a> to unlock early access.</p></div></div></div>`,
-    icon: 'bx-log-in'
-  });
-
   // Global API for cross-linking
   window.dexter = {
       viewEvent: (id) => {
@@ -345,119 +336,97 @@ function onReady() {
       }
   };
 
-  if (loggedIn) {
-    // Populate Dropdown
-    const dropdown = document.getElementById('dexter-dropdown');
-    if (dropdown) {
-      dropdown.innerHTML = `
-            <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
-            <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
-            <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
-            <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
-            <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
-        `;
-    }
+  // Populate Dropdown
+  const dropdown = document.getElementById('dexter-dropdown');
+  if (dropdown) {
+    dropdown.innerHTML = `
+          <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
+          <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
+          <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
+          <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
+          <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
+      `;
+  }
 
-    // Dropdown Logic
-    const menuContainer = document.getElementById('dexter-menu-container');
-    const menuBtn = document.getElementById('dexter-menu-btn');
+  // Dropdown Logic
+  const menuContainer = document.getElementById('dexter-menu-container');
+  const menuBtn = document.getElementById('dexter-menu-btn');
 
-    if (menuContainer && dropdown && menuBtn) {
-      menuContainer.addEventListener('mouseenter', () => {
-        dropdown.classList.add('active');
-        menuBtn.classList.add('active');
-      });
+  if (menuContainer && dropdown && menuBtn) {
+    menuContainer.addEventListener('mouseenter', () => {
+      dropdown.classList.add('active');
+      menuBtn.classList.add('active');
+    });
 
-      menuContainer.addEventListener('mouseleave', () => {
-        dropdown.classList.remove('active');
-        menuBtn.classList.remove('active');
-      });
+    menuContainer.addEventListener('mouseleave', () => {
+      dropdown.classList.remove('active');
+      menuBtn.classList.remove('active');
+    });
 
-      menuBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const lastWindowId = localStorage.getItem('dex_last_window') || 'alerts-window';
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lastWindowId = localStorage.getItem('dex_last_window') || 'alerts-window';
 
-        let targetWindow = null;
-        if (lastWindowId === 'alerts-window') targetWindow = alertsWindow;
-        else if (lastWindowId === 'events-window') targetWindow = eventsWindow;
-        else if (lastWindowId === 'monitor-window') targetWindow = monitorWindow;
-        else if (lastWindowId === 'contacts-window') targetWindow = contactsWindow;
-        else if (lastWindowId === 'workspace-window') targetWindow = workspaceWindow;
+      let targetWindow = null;
+      if (lastWindowId === 'alerts-window') targetWindow = alertsWindow;
+      else if (lastWindowId === 'events-window') targetWindow = eventsWindow;
+      else if (lastWindowId === 'monitor-window') targetWindow = monitorWindow;
+      else if (lastWindowId === 'contacts-window') targetWindow = contactsWindow;
+      else if (lastWindowId === 'workspace-window') targetWindow = workspaceWindow;
 
-        if (targetWindow) {
-          toggleWindow(targetWindow);
-        }
-      });
-    }
-
-    document.getElementById('alerts-menu-item')?.addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
-    document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
-    document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
-    document.getElementById('contacts-menu-item')?.addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
-    document.getElementById('workspace-menu-item')?.addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
-
-    document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
-    document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
-
-    // 1. High-frequency updates (Local Mode only)
-    if (!isPublicMode()) {
-      setInterval(() => {
-        if (eventsWindow.isOpen()) updateEventsTimeline();
-        
-        if (alertsWindow.isOpen()) {
-          updateAlertsTab();
-        } else {
-          checkBackgroundAlerts();
-        }
-      }, 1000);
-    }
-
-    // 2. Standard background updates
-    setInterval(() => {
-      if (isPublicMode()) {
-        if (alertsWindow.isOpen()) {
-          updateAlertsTab();
-        } else {
-          checkBackgroundAlerts();
-        }
+      if (targetWindow) {
+        toggleWindow(targetWindow);
       }
-      
-      if (workspaceWindow.isOpen()) {
-        updateIdeasTab();
-      } else {
-        checkBackgroundBlueprints();
-      }
-
-      // In public mode, we still update the UI from the 1-minute cache
-      if (isPublicMode() && eventsWindow.isOpen()) {
-        updateEventsTimeline();
-      }
-
-      if (monitorWindow.isOpen()) {
-        updateSystemTab();
-      }
-    }, 5000);
-
-  } else {
-    document.getElementById('login-btn')?.addEventListener('click', () => {
-      loginWindow.open();
-      setTimeout(() => {
-        document.getElementById('login-form')?.addEventListener('submit', e => {
-          e.preventDefault();
-          try {
-            login(document.getElementById('email-input').value);
-            window.location.reload();
-          } catch (error) {
-            const errorDiv = document.getElementById('login-error');
-            if (errorDiv) {
-              errorDiv.textContent = error.message;
-              errorDiv.style.display = 'block';
-            }
-          }
-        });
-      }, 100);
     });
   }
+
+  document.getElementById('alerts-menu-item')?.addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
+  document.getElementById('events-menu-item')?.addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
+  document.getElementById('monitor-menu-item')?.addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
+  document.getElementById('contacts-menu-item')?.addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
+  document.getElementById('workspace-menu-item')?.addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
+
+  document.getElementById('settings-icon')?.addEventListener('click', () => toggleWindow(settingsWindow));
+  document.getElementById('close-all-windows')?.addEventListener('click', () => closeAll());
+
+  // 1. High-frequency updates (Local Mode only)
+  if (!isPublicMode()) {
+    setInterval(() => {
+      if (eventsWindow.isOpen()) updateEventsTimeline();
+      
+      if (alertsWindow.isOpen()) {
+        updateAlertsTab();
+      } else {
+        checkBackgroundAlerts();
+      }
+    }, 1000);
+  }
+
+  // 2. Standard background updates
+  setInterval(() => {
+    if (isPublicMode()) {
+      if (alertsWindow.isOpen()) {
+        updateAlertsTab();
+      } else {
+        checkBackgroundAlerts();
+      }
+    }
+    
+    if (workspaceWindow.isOpen()) {
+      updateIdeasTab();
+    } else {
+      checkBackgroundBlueprints();
+    }
+
+    // In public mode, we still update the UI from the 1-minute cache
+    if (isPublicMode() && eventsWindow.isOpen()) {
+      updateEventsTimeline();
+    }
+
+    if (monitorWindow.isOpen()) {
+      updateSystemTab();
+    }
+  }, 5000);
 }
 
 if (document.readyState === "loading") {

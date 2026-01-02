@@ -89,16 +89,14 @@ function getCleanHostname() {
 
 
 /**
- * Injects the navbar with conditional content based on login state
- * @param {boolean} isLoggedIn - Whether the user is logged in
+ * Injects the navbar into the page.
  */
-export function injectNavbar(isLoggedIn = false) {
+export function injectNavbar() {
     const currentPath = window.location.pathname;
     // Check if we are effectively on the root page
     const isRoot = currentPath === '/' || currentPath === '/index.html';
 
-    const navRightContent = isLoggedIn
-        ? `
+    const navRightContent = `
         <div class="nav-right">
             <div id="dexter-menu-container" style="position: relative;">
                 <i class='bx bx-bot' id="dexter-menu-btn" title="Dexter Menu"></i>
@@ -112,12 +110,7 @@ export function injectNavbar(isLoggedIn = false) {
             <i class='bx bx-cog' id="settings-icon" title="Settings"></i>
             <i class='bx bx-x-circle' id="close-all-windows" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"></i>
         </div>
-        `
-        : `
-            <div class="nav-right">
-                <button id="login-btn" class="login-btn">LOGIN</button>
-            </div>
-        `;
+    `;
 
     const navLeftContent = `
         <div id="nav-left-container" style="display: flex; align-items: center; transition: transform 0.2s ease; gap: 5px; cursor: ${isRoot ? 'default' : 'pointer'};">
