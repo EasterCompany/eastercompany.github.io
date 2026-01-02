@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "",
-    "dev": ""
+    "user": "2.18.0.main.83a2506.2026-01-02.linux-amd64.83a2506",
+    "dev": "2.18.0.main.83a2506.2026-01-02.linux-amd64.83a2506"
   },
   "releases": {
     "0.0.0": {
@@ -102,490 +102,44 @@
         }
       }
     },
-    "2.17.0": {
+    "2.18.0": {
       "type": "minor",
-      "date": "2026-01-02T17:00:00Z",
-      "commit": "d44f1df",
+      "date": "2026-01-02T21:21:18Z",
+      "commit": "3847126",
       "binaries": {
         "cli": {
           "linux-amd64": {
-            "path": "/bin/2.17.0/dex",
-            "size": 16627409,
-            "checksum": "99d1d1ea5ecd2496c3b84d0b930c17bd83b1bece807c91575794e43d4bbaa4e8"
+            "path": "/bin/2.18.0/dex",
+            "size": 16627055,
+            "checksum": "e327cddb5e8ee7e9276ae4abbbdf775acd9333fb731ddc5839893875d8a2e4e7"
           }
         },
         "discord": {
           "linux-amd64": {
-            "path": "/bin/2.17.0/dex-discord-service",
+            "path": "/bin/2.18.0/dex-discord-service",
             "size": 13549464,
-            "checksum": "5f9bfc7b3690c41bfba958bee111e71ea32ca19f93fd4ac849bab390dc5011be"
+            "checksum": "f95caf441a01d14fc405994911ca46e7181708d646cee0834c32b313c8194f86"
           }
         },
         "event": {
           "linux-amd64": {
-            "path": "/bin/2.17.0/dex-event-service",
-            "size": 13030193,
-            "checksum": "bb6ed01319ba20cdfa0eff7762a1393b3b3248330358d1185b5a024ab5b77ed6"
-          }
-        },
-        "tts": {
-          "linux-amd64": {
-            "path": "/bin/2.17.0/dex-tts-service",
-            "size": 2859152,
-            "checksum": "3f2b3a2a8ed5a1a754479a7403954adbeaef23fe42044b347b8b7472fa64614e"
-          }
-        },
-        "web": {
-          "linux-amd64": {
-            "path": "/bin/2.17.0/dex-web-service",
-            "size": 12654106,
-            "checksum": "72ef696eca25d3d1dc3e4812e9943251834ed373e7b6e035f5e2ce0d356f1575"
-          }
-        }
-      }
-    },
-    "2.17.1": {
-      "type": "patch",
-      "date": "2026-01-02T18:15:25Z",
-      "commit": "57af39f",
-      "binaries": {
-        "cli": {
-          "linux-amd64": {
-            "path": "/bin/2.17.1/dex",
-            "size": 16627055,
-            "checksum": "ece82134b890a46c4fb6671b30e8d477ad50c5bed07000d3e7f50dc53a148417"
-          }
-        }
-      }
-    },
-    "2.17.11": {
-      "type": "patch",
-      "date": "2026-01-02T18:30:23Z",
-      "commit": "f41a583",
-      "binaries": {}
-    },
-    "2.17.12": {
-      "type": "patch",
-      "date": "2026-01-02T18:35:04Z",
-      "commit": "ec930b4",
-      "binaries": {}
-    },
-    "2.17.13": {
-      "type": "patch",
-      "date": "2026-01-02T18:38:28Z",
-      "commit": "3ca8700",
-      "binaries": {}
-    },
-    "2.17.14": {
-      "type": "patch",
-      "date": "2026-01-02T18:41:32Z",
-      "commit": "417c8ec",
-      "binaries": {}
-    },
-    "2.17.15": {
-      "type": "patch",
-      "date": "2026-01-02T18:47:45Z",
-      "commit": "6c45558",
-      "binaries": {}
-    },
-    "2.17.16": {
-      "type": "patch",
-      "date": "2026-01-02T18:48:37Z",
-      "commit": "9953f8e",
-      "binaries": {}
-    },
-    "2.17.17": {
-      "type": "patch",
-      "date": "2026-01-02T18:50:49Z",
-      "commit": "1c326f9",
-      "binaries": {}
-    },
-    "2.17.18": {
-      "type": "patch",
-      "date": "2026-01-02T18:55:08Z",
-      "commit": "9cecdf6",
-      "binaries": {}
-    },
-    "2.17.19": {
-      "type": "patch",
-      "date": "2026-01-02T18:59:45Z",
-      "commit": "e6535a5",
-      "binaries": {}
-    },
-    "2.17.2": {
-      "type": "patch",
-      "date": "2026-01-02T20:37:17Z",
-      "commit": "92a28c2",
-      "binaries": {
-        "cli": {
-          "linux-amd64": {
-            "path": "/bin/2.17.2/dex",
-            "size": 16627055,
-            "checksum": "6781db44cfac426e459282cc9636e7c6194094b1885cc295d5045a28bd692b07"
-          }
-        },
-        "discord": {
-          "linux-amd64": {
-            "path": "/bin/2.17.2/dex-discord-service",
-            "size": 13549464,
-            "checksum": "cf75774adbd80bac16c6330bf7826b848bdf98bcc0f913bf8a4b1c5febda959a"
-          }
-        },
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.17.2/dex-event-service",
-            "size": 13050209,
-            "checksum": "93e5f118d5b756a4d1e2c4b1fea14e8bf512528b785439b288f4fe03fbaf68be"
-          }
-        },
-        "tts": {
-          "linux-amd64": {
-            "path": "/bin/2.17.2/dex-tts-service",
-            "size": 2859152,
-            "checksum": "c613b40324554d875ee3afa0932802bce0b5deaaccb615ddd8c493991990b1e2"
-          }
-        },
-        "web": {
-          "linux-amd64": {
-            "path": "/bin/2.17.2/dex-web-service",
-            "size": 12654106,
-            "checksum": "14273f3c6364fd4d21456f3f50741fd3fb336e4c5e5bebc6d66b2947ce57e646"
-          }
-        }
-      }
-    },
-    "2.17.20": {
-      "type": "patch",
-      "date": "2026-01-02T19:02:28Z",
-      "commit": "e344250",
-      "binaries": {}
-    },
-    "2.17.21": {
-      "type": "patch",
-      "date": "2026-01-02T19:05:17Z",
-      "commit": "ba871f3",
-      "binaries": {}
-    },
-    "2.17.22": {
-      "type": "patch",
-      "date": "2026-01-02T19:07:03Z",
-      "commit": "1c18bf9",
-      "binaries": {}
-    },
-    "2.17.23": {
-      "type": "patch",
-      "date": "2026-01-02T19:10:16Z",
-      "commit": "f5ab7df",
-      "binaries": {}
-    },
-    "2.17.24": {
-      "type": "patch",
-      "date": "2026-01-02T19:12:20Z",
-      "commit": "dfe7b8b",
-      "binaries": {}
-    },
-    "2.17.25": {
-      "type": "patch",
-      "date": "2026-01-02T19:16:16Z",
-      "commit": "62befd9",
-      "binaries": {}
-    },
-    "2.17.26": {
-      "type": "patch",
-      "date": "2026-01-02T19:18:57Z",
-      "commit": "5108e31",
-      "binaries": {}
-    },
-    "2.17.27": {
-      "type": "patch",
-      "date": "2026-01-02T19:20:26Z",
-      "commit": "919e5c4",
-      "binaries": {}
-    },
-    "2.17.28": {
-      "type": "patch",
-      "date": "2026-01-02T19:22:58Z",
-      "commit": "7ebd9a0",
-      "binaries": {}
-    },
-    "2.17.29": {
-      "type": "patch",
-      "date": "2026-01-02T19:25:36Z",
-      "commit": "c2598d9",
-      "binaries": {}
-    },
-    "2.17.3": {
-      "type": "patch",
-      "date": "2026-01-02T20:43:00Z",
-      "commit": "bf1a6da",
-      "binaries": {
-        "cli": {
-          "linux-amd64": {
-            "path": "/bin/2.17.3/dex",
-            "size": 16627055,
-            "checksum": "6f66411d3459c6bc6aa88eba09ad497fb96de0747365d507c993d9f4b7ac2d90"
-          }
-        }
-      }
-    },
-    "2.17.30": {
-      "type": "patch",
-      "date": "2026-01-02T19:27:55Z",
-      "commit": "2dc24a0",
-      "binaries": {}
-    },
-    "2.17.31": {
-      "type": "patch",
-      "date": "2026-01-02T19:29:27Z",
-      "commit": "4fc14ff",
-      "binaries": {}
-    },
-    "2.17.32": {
-      "type": "patch",
-      "date": "2026-01-02T19:32:56Z",
-      "commit": "c5bbe0f",
-      "binaries": {}
-    },
-    "2.17.33": {
-      "type": "patch",
-      "date": "2026-01-02T19:34:55Z",
-      "commit": "be3ea4d",
-      "binaries": {}
-    },
-    "2.17.34": {
-      "type": "patch",
-      "date": "2026-01-02T19:38:40Z",
-      "commit": "5bcb60a",
-      "binaries": {}
-    },
-    "2.17.35": {
-      "type": "patch",
-      "date": "2026-01-02T19:40:13Z",
-      "commit": "e7029a7",
-      "binaries": {}
-    },
-    "2.17.36": {
-      "type": "patch",
-      "date": "2026-01-02T19:45:15Z",
-      "commit": "9b19922",
-      "binaries": {}
-    },
-    "2.17.37": {
-      "type": "patch",
-      "date": "2026-01-02T19:55:53Z",
-      "commit": "45e10dc",
-      "binaries": {}
-    },
-    "2.17.38": {
-      "type": "patch",
-      "date": "2026-01-02T19:59:45Z",
-      "commit": "836038c",
-      "binaries": {}
-    },
-    "2.17.39": {
-      "type": "patch",
-      "date": "2026-01-02T20:02:08Z",
-      "commit": "49c4fc6",
-      "binaries": {}
-    },
-    "2.17.4": {
-      "type": "patch",
-      "date": "2026-01-02T17:48:31Z",
-      "commit": "2f647bb",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.17.4/dex-event-service",
-            "size": 13037589,
-            "checksum": "ddb0553e180a0879917f8ad011f33f47bc22d981eab7696b7335889fc61fd67b"
-          }
-        }
-      }
-    },
-    "2.17.40": {
-      "type": "patch",
-      "date": "2026-01-02T20:04:05Z",
-      "commit": "16652d6",
-      "binaries": {}
-    },
-    "2.17.41": {
-      "type": "patch",
-      "date": "2026-01-02T20:31:32Z",
-      "commit": "ba09099",
-      "binaries": {}
-    },
-    "2.17.42": {
-      "type": "patch",
-      "date": "2026-01-02T20:32:13Z",
-      "commit": "7bc1acc",
-      "binaries": {}
-    },
-    "2.17.43": {
-      "type": "patch",
-      "date": "2026-01-02T20:36:45Z",
-      "commit": "79bb7f4",
-      "binaries": {}
-    },
-    "2.17.45": {
-      "type": "patch",
-      "date": "2026-01-02T20:38:22Z",
-      "commit": "3ac0968",
-      "binaries": {}
-    },
-    "2.17.46": {
-      "type": "patch",
-      "date": "2026-01-02T20:40:19Z",
-      "commit": "3646f9d",
-      "binaries": {}
-    },
-    "2.17.48": {
-      "type": "patch",
-      "date": "2026-01-02T20:45:01Z",
-      "commit": "f25a96d",
-      "binaries": {}
-    },
-    "2.17.49": {
-      "type": "patch",
-      "date": "2026-01-02T20:46:37Z",
-      "commit": "a4a4f8a",
-      "binaries": {}
-    },
-    "2.17.5": {
-      "type": "patch",
-      "date": "2026-01-02T18:04:41Z",
-      "commit": "dea1210",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.17.5/dex-event-service",
-            "size": 13039053,
-            "checksum": "67a66cacd96c56d5f6de65c818ceb6174b90497012d6f63760b6ccf4c5efabad"
-          }
-        }
-      }
-    },
-    "2.17.50": {
-      "type": "patch",
-      "date": "2026-01-02T20:54:05Z",
-      "commit": "311580e",
-      "binaries": {}
-    },
-    "2.17.51": {
-      "type": "patch",
-      "date": "2026-01-02T20:54:52Z",
-      "commit": "2ad529a",
-      "binaries": {}
-    },
-    "2.17.52": {
-      "type": "patch",
-      "date": "2026-01-02T20:56:03Z",
-      "commit": "67daf61",
-      "binaries": {}
-    },
-    "2.17.53": {
-      "type": "patch",
-      "date": "2026-01-02T20:56:58Z",
-      "commit": "b8168b4",
-      "binaries": {}
-    },
-    "2.17.54": {
-      "type": "patch",
-      "date": "2026-01-02T21:00:58Z",
-      "commit": "030addd",
-      "binaries": {}
-    },
-    "2.17.55": {
-      "type": "patch",
-      "date": "2026-01-02T21:02:12Z",
-      "commit": "02235ad",
-      "binaries": {}
-    },
-    "2.17.56": {
-      "type": "patch",
-      "date": "2026-01-02T21:04:33Z",
-      "commit": "94d2c9d",
-      "binaries": {}
-    },
-    "2.17.57": {
-      "type": "patch",
-      "date": "2026-01-02T21:05:11Z",
-      "commit": "44347b3",
-      "binaries": {}
-    },
-    "2.17.59": {
-      "type": "patch",
-      "date": "2026-01-02T21:07:18Z",
-      "commit": "badf288",
-      "binaries": {}
-    },
-    "2.17.6": {
-      "type": "patch",
-      "date": "2026-01-02T18:11:32Z",
-      "commit": "82e26ed",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.17.6/dex-event-service",
-            "size": 13039813,
-            "checksum": "50e8335ed1465f56148ea52091e57e3b90b1ebbbba4782c9b6c715647f0976f6"
-          }
-        }
-      }
-    },
-    "2.17.60": {
-      "type": "patch",
-      "date": "2026-01-02T21:08:28Z",
-      "commit": "239ba24",
-      "binaries": {}
-    },
-    "2.17.61": {
-      "type": "patch",
-      "date": "2026-01-02T21:14:12Z",
-      "commit": "c60e68c",
-      "binaries": {}
-    },
-    "2.17.63": {
-      "type": "patch",
-      "date": "2026-01-02T21:18:27Z",
-      "commit": "43f49b1",
-      "binaries": {}
-    },
-    "2.17.64": {
-      "type": "patch",
-      "date": "2026-01-02T21:18:52Z",
-      "commit": "158a520",
-      "binaries": {}
-    },
-    "2.17.7": {
-      "type": "patch",
-      "date": "2026-01-02T18:26:47Z",
-      "commit": "7960db1",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.17.7/dex-event-service",
-            "size": 13050209,
-            "checksum": "ce4c974cf66895daddd7f9caa82479f1547fb63382ca25024d71028a13b2dcbd"
-          }
-        }
-      }
-    },
-    "2.17.8": {
-      "type": "patch",
-      "date": "2026-01-02T17:41:32Z",
-      "commit": "1f67929",
-      "binaries": {}
-    },
-    "2.17.9": {
-      "type": "patch",
-      "date": "2026-01-02T21:16:48Z",
-      "commit": "865f443",
-      "binaries": {
-        "event": {
-          "linux-amd64": {
-            "path": "/bin/2.17.9/dex-event-service",
+            "path": "/bin/2.18.0/dex-event-service",
             "size": 13050193,
-            "checksum": "e81ee0effca029216e78635f8b55c6126e9508abb793e613a013e183b2eb284e"
+            "checksum": "c2cae916b916e645213495b564dc48af5f8c9084b964d0d02ce8ff5a3e232847"
+          }
+        },
+        "tts": {
+          "linux-amd64": {
+            "path": "/bin/2.18.0/dex-tts-service",
+            "size": 2859152,
+            "checksum": "4c69db046002b4a7a66112642ec5a31b689744ccc34c65c1b2e8076992fc1193"
+          }
+        },
+        "web": {
+          "linux-amd64": {
+            "path": "/bin/2.18.0/dex-web-service",
+            "size": 12654106,
+            "checksum": "d58bfa37095d12e039b19269f668b24176e3de3853736f96dfd01a550edf656d"
           }
         }
       }
@@ -593,28 +147,28 @@
   },
   "services": {
     "cli": {
-      "current": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463",
-      "user": "2.17.3.main.bea2463.2026-01-02.linux-amd64.bea2463",
+      "current": "2.18.0.main.83a2506.2026-01-02.linux-amd64.83a2506",
+      "user": "2.18.0.main.83a2506.2026-01-02.linux-amd64.83a2506",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "2.17.1.main.9bad0a2.2026-01-02..9bad0a2",
-      "user": "2.17.1.main.9bad0a2.2026-01-02..9bad0a2",
+      "current": "2.18.0.main.9bad0a2.2026-01-02..9bad0a2",
+      "user": "2.18.0.main.9bad0a2.2026-01-02..9bad0a2",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "2.17.9",
-      "user": "2.17.9",
+      "current": "2.18.0",
+      "user": "2.18.0",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "tts": {
-      "current": "2.17.1",
-      "user": "2.17.1",
+      "current": "2.18.0",
+      "user": "2.18.0",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
-      "current": "2.17.1.main.a7adeaa.2026-01-02..a7adeaa",
-      "user": "2.17.1.main.a7adeaa.2026-01-02..a7adeaa",
+      "current": "2.18.0.main.a7adeaa.2026-01-02..a7adeaa",
+      "user": "2.18.0.main.a7adeaa.2026-01-02..a7adeaa",
       "repository": "github.com/EasterCompany/dex-web-service"
     }
   }
