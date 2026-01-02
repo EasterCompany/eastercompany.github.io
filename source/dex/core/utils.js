@@ -260,6 +260,68 @@ function isPublicMode() {
   return window.location.hostname === 'easter.company';
 }
 
+// --- CENTRALIZED DASHBOARD CACHE ---
+let DASHBOARD_CACHE = null;
+const CACHE_KEY = 'dex_dashboard_snapshot';
+
+/**
+ * Loads the dashboard cache from localStorage on script boot.
+ */
+function loadDashboardFromStorage() {
+  const stored = localStorage.getItem(CACHE_KEY);
+  if (stored) {
+    try {
+      DASHBOARD_CACHE = JSON.parse(stored);
+    } catch (e) {
+      DASHBOARD_CACHE = null;
+    }
+  }
+}
+
+async function refreshDashboardCache() {
+  if (!isPublicMode()) return;
+  
+  const snapshot = await upstashCommand('GET', 'state:dashboard:full');
+  if (snapshot) {
+    try {
+      const data = JSON.parse(snapshot);
+      DASHBOARD_CACHE = data;
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      // console.log('✨ Dashboard snapshot synchronized at :59');
+    } catch (e) {
+      console.error("Failed to parse dashboard snapshot:", e);
+    }
+  }
+}
+
+/**
+ * Start the synchronized poller at :59 of every minute.
+ */
+function initDashboardSync() {
+  if (!isPublicMode()) return;
+
+  loadDashboardFromStorage();
+
+  // If no cache or cache is old (over 2 mins), do an immediate fetch to bootstrap
+  const now = Date.now();
+  if (!DASHBOARD_CACHE || (now / 1000 - DASHBOARD_CACHE.timestamp) > 120) {
+    refreshDashboardCache();
+  }
+
+  // Set interval to check clock every second
+  setInterval(() => {
+    const clock = new Date();
+    if (clock.getSeconds() === 59) {
+      refreshDashboardCache();
+    }
+  }, 1000);
+}
+
+// Self-initialize sync
+if (isPublicMode()) {
+  initDashboardSync();
+}
+
 async function upstashCommand(command, ...args) {
   try {
     const response = await fetch(UPSTASH_URL, {
@@ -286,64 +348,59 @@ let isDiscordFallingBack = false;
  * Remembers the working endpoint to prevent console spam.
  */
 export async function smartFetch(endpoint, options = {}) {
-  // --- PUBLIC MODE ADAPTER ---
+  // --- PUBLIC MODE ADAPTER (Served from Local Dashboard Cache) ---
   if (isPublicMode()) {
-    // 1. System Monitor
+    // Ensure we have a cache to serve from
+    if (!DASHBOARD_CACHE) {
+      // If still no cache, wait a tiny bit or try one more upstash call if it's critical
+      // For now, we return error to avoid infinite loops, refreshDashboardCache handles the background fetch
+      return new Response(JSON.stringify({ error: "Initializing dashboard cache..." }), { status: 503 });
+    }
+
+    // 1. System Monitor & Status
     if (endpoint.startsWith('/system_monitor') || endpoint.startsWith('/system/status')) {
-      const stateJSON = await upstashCommand('GET', 'state:system:monitor');
-      if (!stateJSON) throw new Error("No public data available");
-      
-      // Mock the Response object for the caller
-      return new Response(stateJSON, { status: 200, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify(DASHBOARD_CACHE.monitor), { status: 200 });
     }
 
     // 2. Processes
     if (endpoint.startsWith('/processes')) {
-      const stateJSON = await upstashCommand('GET', 'state:system:processes');
-      if (!stateJSON) throw new Error("No public data available");
-      return new Response(stateJSON, { status: 200 });
+      return new Response(JSON.stringify(DASHBOARD_CACHE.processes), { status: 200 });
     }
 
     // 3. Events Timeline
     if (endpoint.startsWith('/events')) {
       const urlParams = new URLSearchParams(endpoint.split('?')[1] || '');
+      const type = urlParams.get('type') || urlParams.get('event.type');
       const order = urlParams.get('order') || 'desc';
-      const isRev = order === 'desc';
 
-      // Fetch latest 50 events
-      const args = ['ZRANGE', 'events:timeline', '0', '49'];
-      if (isRev) args.push('REV');
-
-      const ids = await upstashCommand(...args);
-      if (!ids || ids.length === 0) {
-        return new Response(JSON.stringify({ events: [], count: 0 }), { status: 200 });
+      let events = [];
+      
+      // Route to correct pool in cache
+      if (type === 'system.notification.generated') {
+        events = [...(DASHBOARD_CACHE.alerts || [])];
+      } else {
+        events = [...(DASHBOARD_CACHE.events || [])];
       }
 
-      // Fetch event bodies
-      // Prefix IDs with "event:"
-      const keys = ids.map(id => `event:${id}`);
-      const eventsJSON = await upstashCommand('MGET', ...keys);
-
-      // Parse and construct
-      const events = [];
-      eventsJSON.forEach(jsonStr => {
-        if (jsonStr) {
-          try {
-            events.push(JSON.parse(jsonStr));
-          } catch (e) {}
-        }
-      });
+      // Handle Sorting
+      if (order === 'asc') {
+        events.sort((a, b) => a.timestamp - b.timestamp);
+      } else {
+        events.sort((a, b) => b.timestamp - a.timestamp);
+      }
 
       return new Response(JSON.stringify({ events: events, count: events.length }), { status: 200 });
     }
 
-    // 4. Logs (Not available in public mode yet, but return empty to avoid errors)
+    // 4. Logs (Not public, return empty)
     if (endpoint.startsWith('/logs')) {
       return new Response(JSON.stringify([]), { status: 200 });
     }
 
-    // 5. Agent Status (Not available in public mode yet)
+    // 5. Agent Status
     if (endpoint.startsWith('/agent/status') || endpoint.startsWith('/guardian/status')) {
+      // We don't have this explicitly in the snapshot but we can mock enough for the UI if needed
+      // or just return empty {}
       return new Response(JSON.stringify({}), { status: 200 });
     }
 
