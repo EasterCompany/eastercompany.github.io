@@ -1,5 +1,5 @@
 // Events Timeline Logic
-import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch, renderMarkdown } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch, renderMarkdown, isPublicMode } from '../core/utils.js';
 import { formatEventSummary } from '../core/templates.js';
 
 export const getEventsContent = () => `
@@ -16,7 +16,7 @@ export const getEventsContent = () => `
         <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
             <button id="events-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
             <button id="events-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-            <button id="events-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
+            <button id="events-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
         </div>
     </div>
     

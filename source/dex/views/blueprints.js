@@ -1,14 +1,14 @@
 // Blueprints Tab Logic
 import {
   createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch,
-  LOCAL_EVENT_SERVICE, escapeHtml, updatePendingBlueprintCount, setPendingBlueprints
+  LOCAL_EVENT_SERVICE, escapeHtml, updatePendingBlueprintCount, setPendingBlueprints, isPublicMode
 } from '../core/utils.js';
 
 export const getBlueprintActions = () => `
     <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
         <button id="blueprints-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
         <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-        <button id="blueprints-clear" class="notif-action-btn danger"><i class='bx bx-trash'></i> Clear</button>
+        <button id="blueprints-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
     </div>
 `;
 
