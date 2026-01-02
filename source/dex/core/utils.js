@@ -313,15 +313,18 @@ function predictDashboardTimers() {
 /**
  * Start the synchronized poller at :59 of every minute.
  */
-function initDashboardSync() {
+async function initDashboardSync() {
   if (!isPublicMode()) return;
 
   loadDashboardFromStorage();
 
-  // If no cache or cache is old (over 2 mins), do an immediate fetch to bootstrap
-  const now = Date.now();
-  if (!DASHBOARD_CACHE || (now / 1000 - DASHBOARD_CACHE.timestamp) > 120) {
-    refreshDashboardCache();
+  const now = Math.floor(Date.now() / 1000);
+  const cacheAge = DASHBOARD_CACHE ? (now - DASHBOARD_CACHE.timestamp) : Infinity;
+
+  // PROACTIVE FETCH: If no cache or cache is over 2 mins old, fetch immediately
+  if (!DASHBOARD_CACHE || cacheAge > 120) {
+    // console.log(`🔄 Proactively refreshing public dashboard cache (Age: ${cacheAge}s)`);
+    await refreshDashboardCache();
   }
 
   // Set interval to check clock every second
