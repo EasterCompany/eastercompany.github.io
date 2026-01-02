@@ -303,18 +303,13 @@ function predictDashboardTimers() {
   const status = DASHBOARD_CACHE.agent_status;
 
   // 1. System State Time (Increments)
+  // This represents the duration of the CURRENT state.
   if (typeof status.system_state_time === 'number') {
     status.system_state_time += 1;
   }
 
-  // 2. Protocol Cooldowns (Deduct from next_run vs current timestamp logic)
-  // Actually the UI usually displays 'last_run' or relative time based on next_run.
-  // We don't need to change last_run, but we can increment total times if active.
-  if (status.system_state === 'active') {
-    if (typeof status.total_active_time === 'number') status.total_active_time += 1;
-  } else {
-    if (typeof status.total_idle_time === 'number') status.total_idle_time += 1;
-  }
+  // Note: Total aggregate metrics (total_active_time, total_idle_time) are NOT predicted
+  // here as they are officially committed by the backend upon state transitions.
 }
 
 /**
