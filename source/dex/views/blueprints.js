@@ -6,9 +6,9 @@ import {
 
 export const getBlueprintActions = () => `
     <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
-        <button id="blueprints-expand-all" class="notif-action-btn"><i class='bx bx-expand'></i> Expand All</button>
-        <button id="blueprints-close-all" class="notif-action-btn"><i class='bx bx-collapse'></i> Close All</button>
-        <button id="blueprints-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-trash'></i> Clear</button>
+        <button id="blueprints-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
+        <button id="blueprints-close-all" class="notif-action-btn" title="Close All"><i class='bx bx-collapse'></i></button>
+        <button id="blueprints-clear" class="notif-action-btn danger" style="${isPublicMode() ? 'display: none;' : ''}" title="Clear"><i class='bx bx-trash'></i></button>
     </div>
 `;
 
