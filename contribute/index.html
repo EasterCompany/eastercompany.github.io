@@ -64,9 +64,13 @@
       }
       .project-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          grid-template-columns: repeat(2, 1fr);
           gap: 20px;
           margin-top: 40px;
+      }
+      /* If odd number of items, last one spans full width */
+      .project-card:last-child:nth-child(odd) {
+          grid-column: span 2;
       }
       .project-card {
           background: rgba(255, 255, 255, 0.02);
@@ -78,6 +82,15 @@
           flex-direction: column;
           align-items: center; /* Center content in card */
           text-align: center;
+      }
+      
+      @media (max-width: 880px) {
+          .project-grid {
+              grid-template-columns: 1fr;
+          }
+          .project-card:last-child:nth-child(odd) {
+              grid-column: auto;
+          }
       }
       .project-card:hover {
           background: rgba(255, 255, 255, 0.04);
