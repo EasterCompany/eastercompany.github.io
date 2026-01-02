@@ -39,161 +39,124 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/..">
 <!-- HEAD_END -->
-    <style>
-        /* Hero Redesign */
-        #main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dexter-hero-logo {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 8vw;
-            letter-spacing: -0.05em;
-            background: linear-gradient(180deg, #fff 0%, #666 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-            padding: 0;
-            line-height: 1;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
-            z-index: 2;
-        }
-
-        .dexter-subtitle {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            color: var(--neon-blue);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-top: 1rem;
-            margin-bottom: 3rem;
-            opacity: 0.8;
-            z-index: 2;
-        }
-
-        .pulse-orb {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30vw;
-            height: 30vw;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-            filter: blur(40px);
-            z-index: 0;
-            animation: breathe 4s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        .grid-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-        }
-
-        .action-row {
-            display: flex;
-            gap: 20px;
-            z-index: 2;
-        }
-
-        .action-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .action-btn.primary {
-            border-color: rgba(0, 243, 255, 0.3);
-        }
-    </style>
+  <style>
+    #main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 0;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .dexter-hero-logo {
+      user-select: none;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 8vw;
+      letter-spacing: -0.05em;
+      background: linear-gradient(180deg, #fff 0%, #666 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+      z-index: 2;
+    }
+    .dexter-subtitle {
+      user-select: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--neon-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-top: 1rem;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+      z-index: 2;
+    }
+    .grid-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    }
+    .action-row {
+      display: flex;
+      gap: 20px;
+      z-index: 2;
+    }
+    .action-btn {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .action-btn.primary {
+      border-color: rgba(0, 243, 255, 0.3);
+    }
+  </style>
   <link rel="stylesheet" href="/dex.cb865d62.css"></head>
   <body>
     <div class="background"></div>
     <div class="grid-overlay"></div>
-    <div class="pulse-orb"></div>
     <main id="main">
-        <h1 class="dexter-hero-logo">DEXTER</h1>
-        <p class="dexter-subtitle">THE NERVE CENTER</p>
-
-        <div class="action-row">
-            <div class="action-btn primary" id="open-monitor-btn">
-                <i class='bx bx-pulse'></i> SYSTEM STATUS
-            </div>
-            <div class="action-btn" id="open-events-btn">
-                <i class='bx bx-calendar-event'></i> TIMELINE
-            </div>
+      <h1 class="dexter-hero-logo">DEXTER</h1>
+      <p class="dexter-subtitle">MARK 14: GUARDIAN PROTOCOL</p>
+      <div class="action-row">
+        <div class="action-btn primary" id="open-cli-btn">
+          <i class='bx bx-pulse'></i> DOWNLOAD
         </div>
+        <div class="action-btn primary" id="open-monitor-btn">
+          <i class='bx bx-pulse'></i> STATUS
+        </div>
+        <div class="action-btn" id="open-events-btn">
+          <i class='bx bx-calendar-event'></i> TIMELINE
+        </div>
+      </div>
     </main>
-    <!-- Init Script for new buttons -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Map new buttons to window toggles via the global Dexter API or manual trigger
-            // Note: main.js handles the window logic. We just need to trigger the right events.
-
-            const monitorBtn = document.getElementById('open-monitor-btn');
-            const eventsBtn = document.getElementById('open-events-btn');
-            const loginBtn = document.getElementById('login-btn');
-
-            if(monitorBtn) {
-                monitorBtn.addEventListener('click', () => {
-                    // Simulate menu click
-                    const item = document.getElementById('monitor-menu-item');
-                    if(item) item.click();
-                });
-            }
-
-            if(eventsBtn) {
-                eventsBtn.addEventListener('click', () => {
-                    const item = document.getElementById('events-menu-item');
-                    if(item) item.click();
-                });
-            }
-
-            // Check auth for login button
-            const isLoggedIn = !!localStorage.getItem('easter_user_email');
-            if(!isLoggedIn && loginBtn) {
-                loginBtn.style.display = 'flex';
-            }
-        });
+      document.addEventListener('DOMContentLoaded', () => {
+        const monitorBtn = document.getElementById('open-monitor-btn');
+        const eventsBtn = document.getElementById('open-events-btn');
+        if(monitorBtn) {
+          monitorBtn.addEventListener('click', () => {
+            // Simulate menu click
+            const item = document.getElementById('monitor-menu-item');
+            if(item) item.click();
+          });
+        }
+        if(eventsBtn) {
+          eventsBtn.addEventListener('click', () => {
+            const item = document.getElementById('events-menu-item');
+            if(item) item.click();
+          });
+        }
+      });
     </script>
   <script src="/dex.cb865d62.js" defer></script></body>
 </html>
