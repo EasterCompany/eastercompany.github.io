@@ -322,6 +322,12 @@
       "commit": "5bcb60a",
       "binaries": {}
     },
+    "2.17.35": {
+      "type": "patch",
+      "date": "2026-01-02T19:40:13Z",
+      "commit": "e7029a7",
+      "binaries": {}
+    },
     "2.17.4": {
       "type": "patch",
       "date": "2026-01-02T17:48:31Z",
