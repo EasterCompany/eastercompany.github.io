@@ -144,7 +144,7 @@ export const getHardwareContent = () => {
         <div class="system-section-header">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
             <h2>Hardware</h2>
-            <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;"><i class='bx bx-refresh'></i> Refresh</button>
+            <button id="hardware-refresh-btn" class="notif-action-btn" style="margin-left: auto;" title="Refresh Data"><i class='bx bx-refresh'></i></button>
         </div>
         <div id="hardware-metrics" class="hardware-grid" style="display: flex; flex-direction: column; gap: 25px; margin-bottom: 30px;">
             <div class="hardware-section" id="hw-os">
@@ -339,15 +339,15 @@ export async function updateSystemMonitor() {
     // Setup Refresh Button
     if (!hardwareRefreshBtn.dataset.listenerAttached) {
       hardwareRefreshBtn.onclick = async () => {
-        hardwareRefreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Refreshing...";
+        hardwareRefreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
         const hwData = await fetchHardwareData();
         if (hwData) {
           renderHardwareWidgets(hwData);
-          hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
-          setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
+          hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
         } else {
-          hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i> Failed";
-          setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
+          hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i>";
+          setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
         }
       };
       hardwareRefreshBtn.dataset.listenerAttached = "true";

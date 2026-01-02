@@ -5,7 +5,7 @@ export const getContactsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-book-content' style="color: #03dac6;"></i>
         <h2>Contacts</h2>
-        <button id="contacts-refresh" class="notif-action-btn" style="margin-left: auto; ${isPublicMode() ? 'display: none;' : ''}"><i class='bx bx-refresh'></i> Refresh</button>
+        <button id="contacts-refresh" class="notif-action-btn" style="margin-left: auto; ${isPublicMode() ? 'display: none;' : ''}" title="Refresh Contacts"><i class='bx bx-refresh'></i></button>
     </div>
     <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
     </div>
@@ -21,10 +21,10 @@ export async function updateContactsTab() {
     const refreshBtn = document.getElementById('contacts-refresh');
     if (refreshBtn && !refreshBtn.dataset.listenerAttached) {
         refreshBtn.onclick = async () => {
-            refreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Refreshing...";
+            refreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
             await updateContactsTab();
-            refreshBtn.innerHTML = "<i class='bx bx-check'></i> Done";
-            setTimeout(() => { refreshBtn.innerHTML = "<i class='bx bx-refresh'></i> Refresh"; }, 2000);
+            refreshBtn.innerHTML = "<i class='bx bx-check'></i>";
+            setTimeout(() => { refreshBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
         };
         refreshBtn.dataset.listenerAttached = "true";
     }
