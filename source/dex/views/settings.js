@@ -6,7 +6,6 @@ export function getSettingsContent() {
     const currentTheme = getCurrentTheme();
     const userEmail = getUserEmail() || 'master@easter.company';
     const notificationState = { enabled: Notification.permission === 'granted', supported: 'Notification' in window };
-    const analyticsEnabled = localStorage.getItem('easter_analytics_enabled') !== 'false';
 
     return `
             <div class="theme-selector">
@@ -47,16 +46,6 @@ export function getSettingsContent() {
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
-                    <div class="settings-item">
-                        <div class="settings-item-info">
-                            <span class="settings-item-label">Analytics</span>
-                            <span class="settings-item-description">Help improve the platform (enables debug mode)</span>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="analytics-toggle" ${analyticsEnabled ? 'checked' : ''}>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
                 </div>
             </div>`;
 }
@@ -84,17 +73,6 @@ export function attachSettingsListeners(settingsWindowInstance) {
                 alert('To disable notifications, please use your browser settings.');
                 e.target.checked = true;
             }
-        };
-    }
-
-    const analyticsToggle = document.getElementById('analytics-toggle');
-    if (analyticsToggle) {
-        analyticsToggle.checked = localStorage.getItem('easter_analytics_enabled') !== 'false';
-        analyticsToggle.onclick = (e) => {
-            const enabled = e.target.checked;
-            localStorage.setItem('easter_analytics_enabled', enabled);
-            window.EASTER_ANALYTICS_ENABLED = enabled;
-            window.EASTER_DEBUG_MODE = enabled;
         };
     }
 }
