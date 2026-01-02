@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "2.17.0.main.3d79b15.2026-01-02.linux-amd64.3d79b15",
-    "dev": "2.17.0.main.3d79b15.2026-01-02.linux-amd64.3d79b15"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -143,6 +143,12 @@
           }
         }
       }
+    },
+    "2.17.2": {
+      "type": "patch",
+      "date": "2026-01-02T17:04:57Z",
+      "commit": "ab763b2",
+      "binaries": {}
     }
   },
   "services": {
