@@ -52,152 +52,7 @@ function onReady() {
     initCliDashboard();
   }
 
-  injectNavbar();
-  injectFooter();
-
-  // Attach Navbar Listeners (Resilient to dynamic injection)
-  const setupNavbarListeners = () => {
-    const menuBtn = document.getElementById('dexter-menu-btn');
-    const settingsIcon = document.getElementById('settings-icon');
-    const closeAllBtn = document.getElementById('close-all-windows');
-    const navLeftBtn = document.getElementById('nav-left-container');
-    const dropdown = document.getElementById('dexter-dropdown');
-    const container = document.getElementById('windows-container');
-
-    if (menuBtn && dropdown) {
-      menuBtn.onclick = (e) => {
-        e.stopPropagation();
-        const isMobile = window.innerWidth < 880;
-        dropdown.classList.toggle('active');
-        menuBtn.classList.toggle('active');
-        const nowActive = dropdown.classList.contains('active');
-
-        if (isMobile) {
-          const navEl = document.querySelector('nav');
-          if (nowActive) {
-            document.querySelector('footer')?.classList.add('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
-            navEl?.classList.add('window-open');
-            container?.classList.add('menu-open');
-            updateNavbarState(true);
-          } else {
-            container?.classList.remove('menu-open');
-            if (activeWindows.length === 0) {
-              document.querySelector('footer')?.classList.remove('hide');
-              document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-              navEl?.classList.remove('window-open');
-              updateNavbarState(false);
-            }
-          }
-        }
-      };
-    }
-
-    if (settingsIcon) {
-      settingsIcon.onclick = (e) => {
-        e.stopPropagation();
-        toggleWindow(settingsWindow);
-      };
-    }
-
-    if (closeAllBtn) {
-      closeAllBtn.onclick = (e) => {
-        e.stopPropagation();
-        closeAll();
-      };
-    }
-
-    // Dropdown Item Listeners
-    const attachItem = (id, win, storageId) => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.onclick = (e) => {
-          e.stopPropagation();
-          closeDropdown();
-          if (storageId) saveWindowState(storageId);
-          toggleWindow(win);
-        };
-      }
-    };
-
-    attachItem('alerts-menu-item', alertsWindow, 'alerts-window');
-    attachItem('events-menu-item', eventsWindow, 'events-window');
-    attachItem('monitor-menu-item', monitorWindow, 'monitor-window');
-    attachItem('contacts-menu-item', contactsWindow, 'contacts-window');
-    attachItem('workspace-menu-item', workspaceWindow, 'workspace-window');
-
-    if (navLeftBtn) {
-      navLeftBtn.onclick = () => {
-        if (dropdown && dropdown.classList.contains('active')) {
-          dropdown.classList.remove('active');
-          menuBtn?.classList.remove('active');
-          container?.classList.remove('menu-open');
-          if (activeWindows.length === 0) {
-            document.querySelector('footer')?.classList.remove('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-            document.querySelector('nav')?.classList.remove('window-open');
-            updateNavbarState(false);
-          }
-          return;
-        }
-
-        if (activeWindows.length > 0) {
-          closeAll();
-        } else {
-          const path = window.location.pathname;
-          const isRoot = path === '/' || path === '/index.html';
-          if (!isRoot) {
-            const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
-            const parts = cleanPath.split('/');
-            parts.pop();
-            const parentPath = parts.join('/') || '/';
-            window.location.href = parentPath;
-          }
-        }
-      };
-    }
-
-    // Global click listener for dropdown closing
-    document.addEventListener('click', () => {
-      const isMobile = window.innerWidth < 880;
-      if (dropdown && dropdown.classList.contains('active')) {
-        const wasActive = true;
-        dropdown.classList.remove('active');
-        menuBtn?.classList.remove('active');
-
-        if (isMobile && wasActive) {
-          container?.classList.remove('menu-open');
-          if (activeWindows.length === 0) {
-            document.querySelector('footer')?.classList.remove('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
-            document.querySelector('nav')?.classList.remove('window-open');
-            updateNavbarState(false);
-          }
-        }
-      }
-    });
-
-    if (dropdown) {
-      dropdown.onclick = (e) => e.stopPropagation();
-    }
-  };
-
-  setupNavbarListeners();
-
-  // Handle Back Button / Logo Logic (Legacy, now handled by navLeftBtn above)
-  /*
-  const navLeftBtn = document.getElementById('nav-left-container');
-  ...
-  */
-
-  // Initialize visibility
-  const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
-  const isErrorPage = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
-  if (!isRoot && !isErrorPage) {
-    document.querySelector('footer')?.classList.add('hide');
-  }
-
-  // --- Single Window Manager Logic ---
+  // --- 1. Single Window Manager Logic & Definitions ---
   let activeWindows = [];
   const container = document.getElementById('windows-container');
   if (container) container.setAttribute('data-count', '0');
@@ -206,10 +61,6 @@ function onReady() {
   const saveWindowState = (winId) => {
     localStorage.setItem('dex_last_window', winId);
   };
-
-  function getWindowLimit() {
-    return 1; // Strict limit of 1 window always
-  }
 
   function recalculateLayout() {
     // Ensure only 1 window is active
@@ -242,6 +93,8 @@ function onReady() {
 
     // Reset mobile-only states when resizing back to desktop
     if (!isMobile) {
+      const dropdown = document.getElementById('dexter-dropdown');
+      const menuBtn = document.getElementById('dexter-menu-btn');
       if (dropdown) dropdown.classList.remove('active');
       if (menuBtn) menuBtn.classList.remove('active');
       if (container) container.classList.remove('menu-open');
@@ -261,16 +114,12 @@ function onReady() {
       if (container) container.style.paddingTop = '60px'; 
 
       // Navbar Transformation
-      // On Desktop: Hide menu/settings when a window is open (replaced by close icon)
-      // On Mobile: Always show menu/settings as they are the primary nav
       if (navMenuContainer) navMenuContainer.style.display = isMobile ? 'flex' : 'none';
       if (settingsIcon) settingsIcon.style.display = isMobile ? 'block' : 'none';
       
       // Desktop-only Switcher logic
       if (!isMobile && navWindowSwitcher) {
         const currentWinId = activeWindows[0].id;
-
-        // Only show switcher if the active window is one of the main dropdown windows
         const dropdownWindows = ['alerts-window', 'events-window', 'monitor-window', 'contacts-window', 'workspace-window'];
         const isMainWindow = dropdownWindows.includes(currentWinId);
 
@@ -293,7 +142,7 @@ function onReady() {
           navWindowSwitcher.innerHTML = '';
         }
       } else if (navWindowSwitcher) {
-        navWindowSwitcher.innerHTML = ''; // Hide on mobile
+        navWindowSwitcher.innerHTML = ''; 
       }
 
     } else {
@@ -314,7 +163,6 @@ function onReady() {
       if (navWindowSwitcher) navWindowSwitcher.innerHTML = '';
     }
 
-    // Restore global badges after layout change
     updateGlobalBadgeCount();
   }
 
@@ -324,7 +172,6 @@ function onReady() {
       return;
     }
 
-    // Close any existing window before opening new one
     while (activeWindows.length > 0) {
       const existing = activeWindows.pop();
       existing.close(true);
@@ -343,7 +190,7 @@ function onReady() {
 
   window.addEventListener('resize', recalculateLayout);
 
-  // --- Window Definitions ---
+  // --- 2. Window Definitions ---
 
   const alertsWindow = createWindow({
     id: 'alerts-window',
@@ -473,31 +320,159 @@ function onReady() {
       }
   };
 
-    const closeDropdown = () => {
-      const dropdown = document.getElementById('dexter-dropdown');
-      const menuBtn = document.getElementById('dexter-menu-btn');
-      if (dropdown && menuBtn) {
-        dropdown.classList.remove('active');
-        menuBtn.classList.remove('active');
+  // --- 3. UI Injection & Listener Setup ---
+  injectNavbar();
+  injectFooter();
+
+  const closeDropdown = () => {
+    const dropdown = document.getElementById('dexter-dropdown');
+    const menuBtn = document.getElementById('dexter-menu-btn');
+    if (dropdown && menuBtn) {
+      dropdown.classList.remove('active');
+      menuBtn.classList.remove('active');
+      const isMobile = window.innerWidth < 880;
+      if (isMobile) {
+        const winContainer = document.getElementById('windows-container');
+        winContainer?.classList.remove('menu-open');
+      }
+    }
+  };
+
+  // Resilient listener attachment for Safari
+  const setupNavbarListeners = () => {
+    const menuBtn = document.getElementById('dexter-menu-btn');
+    const settingsIcon = document.getElementById('settings-icon');
+    const closeAllBtn = document.getElementById('close-all-windows');
+    const navLeftBtn = document.getElementById('nav-left-container');
+    const dropdown = document.getElementById('dexter-dropdown');
+    const container = document.getElementById('windows-container');
+
+    if (menuBtn && dropdown) {
+      menuBtn.onclick = (e) => {
+        e.stopPropagation();
         const isMobile = window.innerWidth < 880;
+        dropdown.classList.toggle('active');
+        menuBtn.classList.toggle('active');
+        const nowActive = dropdown.classList.contains('active');
+
         if (isMobile) {
-          const winContainer = document.getElementById('windows-container');
-          winContainer?.classList.remove('menu-open');
+          const navEl = document.querySelector('nav');
+          if (nowActive) {
+            document.querySelector('footer')?.classList.add('hide');
+            document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
+            navEl?.classList.add('window-open');
+            container?.classList.add('menu-open');
+            updateNavbarState(true);
+          } else {
+            container?.classList.remove('menu-open');
+            if (activeWindows.length === 0) {
+              document.querySelector('footer')?.classList.remove('hide');
+              document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+              navEl?.classList.remove('window-open');
+              updateNavbarState(false);
+            }
+          }
         }
+      };
+    }
+
+    if (settingsIcon) {
+      settingsIcon.onclick = (e) => {
+        e.stopPropagation();
+        toggleWindow(settingsWindow);
+      };
+    }
+
+    if (closeAllBtn) {
+      closeAllBtn.onclick = (e) => {
+        e.stopPropagation();
+        closeAll();
+      };
+    }
+
+    // Dropdown Item Listeners
+    const attachItem = (id, win, storageId) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.onclick = (e) => {
+          e.stopPropagation();
+          closeDropdown();
+          if (storageId) saveWindowState(storageId);
+          toggleWindow(win);
+        };
       }
     };
-  
-    document.getElementById('alerts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
-    document.getElementById('events-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('events-window'); toggleWindow(eventsWindow); });
-    document.getElementById('monitor-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
-    document.getElementById('contacts-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
-    document.getElementById('workspace-menu-item')?.addEventListener('click', () => { closeDropdown(); saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
 
-  // 1. High-frequency updates (Local Mode only)
+    attachItem('alerts-menu-item', alertsWindow, 'alerts-window');
+    attachItem('events-menu-item', eventsWindow, 'events-window');
+    attachItem('monitor-menu-item', monitorWindow, 'monitor-window');
+    attachItem('contacts-menu-item', contactsWindow, 'contacts-window');
+    attachItem('workspace-menu-item', workspaceWindow, 'workspace-window');
+
+    if (navLeftBtn) {
+      navLeftBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (dropdown && dropdown.classList.contains('active')) {
+          closeDropdown();
+          const isMobile = window.innerWidth < 880;
+          if (isMobile && activeWindows.length === 0) {
+            document.querySelector('footer')?.classList.remove('hide');
+            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+            document.querySelector('nav')?.classList.remove('window-open');
+            updateNavbarState(false);
+          }
+          return;
+        }
+
+        if (activeWindows.length > 0) {
+          closeAll();
+        } else {
+          const path = window.location.pathname;
+          const isRoot = path === '/' || path === '/index.html';
+          if (!isRoot) {
+            const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+            const parts = cleanPath.split('/');
+            parts.pop();
+            const parentPath = parts.join('/') || '/';
+            window.location.href = parentPath;
+          }
+        }
+      };
+    }
+
+    document.addEventListener('click', () => {
+      const isMobile = window.innerWidth < 880;
+      if (dropdown && dropdown.classList.contains('active')) {
+        closeDropdown();
+        if (isMobile) {
+          if (activeWindows.length === 0) {
+            document.querySelector('footer')?.classList.remove('hide');
+            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+            document.querySelector('nav')?.classList.remove('window-open');
+            updateNavbarState(false);
+          }
+        }
+      }
+    });
+
+    if (dropdown) {
+      dropdown.onclick = (e) => e.stopPropagation();
+    }
+  };
+
+  setupNavbarListeners();
+
+  // Initialize visibility after setup
+  const isRootPath = window.location.pathname === '/' || window.location.pathname === '/index.html';
+  const isError = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
+  if (!isRootPath && !isError) {
+    document.querySelector('footer')?.classList.add('hide');
+  }
+
+  // --- 4. Background Updates ---
   if (!isPublicMode()) {
     setInterval(() => {
       if (eventsWindow.isOpen()) updateEventsTimeline();
-      
       if (alertsWindow.isOpen()) {
         updateAlertsTab();
       } else {
@@ -506,7 +481,6 @@ function onReady() {
     }, 1000);
   }
 
-  // 2. Standard background updates
   setInterval(() => {
     if (isPublicMode()) {
       if (alertsWindow.isOpen()) {
@@ -522,7 +496,6 @@ function onReady() {
       checkBackgroundBlueprints();
     }
 
-    // In public mode, we still update the UI from the 1-minute cache
     if (isPublicMode() && eventsWindow.isOpen()) {
       updateEventsTimeline();
     }
