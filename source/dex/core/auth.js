@@ -5,7 +5,7 @@
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    return true; // Always available
+    return !!localStorage.getItem('easter_user_email');
 }
 
 /**

@@ -251,16 +251,85 @@ export function renderMarkdown(text) {
   return html;
 }
 
-let resolvedBaseUrl = null;
-let resolvedDiscordBaseUrl = null;
-let isFallingBack = false;
-let isDiscordFallingBack = false;
+import { isLoggedIn } from './auth.js';
+
+const UPSTASH_URL = "https://sterling-javelin-12539.upstash.io";
+const UPSTASH_TOKEN = "AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw"; // Read Only
+
+function isPublicMode() {
+  return window.location.hostname === 'easter.company' && !isLoggedIn();
+}
+
+async function upstashCommand(command, ...args) {
+  try {
+    const response = await fetch(UPSTASH_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` },
+      body: JSON.stringify([command, ...args])
+    });
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+    return data.result;
+  } catch (e) {
+    console.error("Upstash Error:", e);
+    return null;
+  }
+}
 
 /**
  * Executes a fetch against the primary domain, falling back to local on failure.
  * Remembers the working endpoint to prevent console spam.
  */
 export async function smartFetch(endpoint, options = {}) {
+  // --- PUBLIC MODE ADAPTER ---
+  if (isPublicMode()) {
+    // 1. System Monitor
+    if (endpoint.startsWith('/system_monitor') || endpoint.startsWith('/system/status')) {
+      const stateJSON = await upstashCommand('GET', 'state:system:monitor');
+      if (!stateJSON) throw new Error("No public data available");
+      
+      // Mock the Response object for the caller
+      return new Response(stateJSON, { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    // 2. Processes
+    if (endpoint.startsWith('/processes')) {
+      const stateJSON = await upstashCommand('GET', 'state:system:processes');
+      if (!stateJSON) throw new Error("No public data available");
+      return new Response(stateJSON, { status: 200 });
+    }
+
+    // 3. Events Timeline
+    if (endpoint.startsWith('/events')) {
+      // Fetch latest 50 events
+      const ids = await upstashCommand('ZRANGE', 'events:timeline', '0', '49', 'REV');
+      if (!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ events: [], count: 0 }), { status: 200 });
+      }
+
+      // Fetch event bodies
+      // Prefix IDs with "event:"
+      const keys = ids.map(id => `event:${id}`);
+      const eventsJSON = await upstashCommand('MGET', ...keys);
+
+      // Parse and construct
+      const events = [];
+      eventsJSON.forEach(jsonStr => {
+        if (jsonStr) {
+          try {
+            events.push(JSON.parse(jsonStr));
+          } catch (e) {}
+        }
+      });
+
+      return new Response(JSON.stringify({ events: events, count: events.length }), { status: 200 });
+    }
+
+    // Default: Return 404 for unsupported public endpoints
+    return new Response(JSON.stringify({ error: "Not available in public demo" }), { status: 404 });
+  }
+
+  // --- STANDARD MODE ---
   if (resolvedBaseUrl) {
     try {
       const response = await fetch(resolvedBaseUrl + endpoint, options);
