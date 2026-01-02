@@ -3,7 +3,11 @@ import { getCurrentTheme, setTheme, THEMES } from '../core/theme.js';
 
 export function getSettingsContent() {
     const currentTheme = getCurrentTheme();
-    const notificationState = { enabled: Notification.permission === 'granted', supported: 'Notification' in window };
+    const supported = 'Notification' in window;
+    const notificationState = { 
+        enabled: supported && Notification.permission === 'granted', 
+        supported: supported 
+    };
 
     return `
             <div class="theme-selector">
@@ -62,7 +66,7 @@ export function attachSettingsListeners(settingsWindowInstance) {
     });
 
     const notificationToggle = document.getElementById('notifications-toggle');
-    if (notificationToggle) {
+    if (notificationToggle && 'Notification' in window) {
         notificationToggle.onclick = async (e) => {
             if (e.target.checked) {
                 try { const permission = await Notification.requestPermission(); if (permission !== 'granted') e.target.checked = false; }
@@ -72,5 +76,7 @@ export function attachSettingsListeners(settingsWindowInstance) {
                 e.target.checked = true;
             }
         };
+    } else if (notificationToggle) {
+        notificationToggle.disabled = true;
     }
 }
