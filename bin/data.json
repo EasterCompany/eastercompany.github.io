@@ -355,6 +355,12 @@
       "date": "2026-01-02T23:13:54Z",
       "commit": "29e288c",
       "binaries": {}
+    },
+    "3.0.8": {
+      "type": "patch",
+      "date": "2026-01-02T23:17:48Z",
+      "commit": "7771ab4",
+      "binaries": {}
     }
   },
   "services": {
