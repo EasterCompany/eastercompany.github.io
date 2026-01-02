@@ -538,6 +538,12 @@
       "commit": "239ba24",
       "binaries": {}
     },
+    "2.17.61": {
+      "type": "patch",
+      "date": "2026-01-02T21:14:12Z",
+      "commit": "c60e68c",
+      "binaries": {}
+    },
     "2.17.7": {
       "type": "patch",
       "date": "2026-01-02T18:26:47Z",
