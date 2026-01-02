@@ -39,275 +39,254 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/..">
 <!-- HEAD_END -->
-    <title>Dexter - The Nerve Center</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="theme-color" content="#000000" />
-    
-    <!-- Boxicons -->
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" />
-    
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" />
+    <head>
+<!-- HEAD_START -->
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>.. - Easter Company</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/background.css" />
-    <link rel="stylesheet" href="/static/css/main.css" />
-    <link rel="stylesheet" href="/static/css/project.css" />
-    <link rel="stylesheet" href="/static/css/footer.css" />
-    <link rel="stylesheet" href="/static/css/particle_loader.css" />
-    <link rel="stylesheet" href="/static/css/hatch_loader.css" />
-    <link rel="stylesheet" href="/static/css/windows.css" />
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
+  <meta name="revised" content="2025-12-26">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Easter">
 
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Easter Company">
+  <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
+  <meta property="og:url" content="https://easter.company/..">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_updated=2025-12-26">
+  <meta property="fb:app_id" content="1541540286236316">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Easter Company">
+  <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_updated=2025-12-26">
+  <meta name="twitter:site" content="@eastercompany">
+  <meta name="twitter:creator" content="@eastercompany">
+
+  <!-- Favicons and Icons -->
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_updated=2025-12-26" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_updated=2025-12-26">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_updated=2025-12-26">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_updated=2025-12-26">
+  <link rel="manifest" href="/static/meta/site.webmanifest?last_updated=2025-12-26">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://easter.company/..">
+<!-- HEAD_END -->
     <style>
-        /* EXTRA Styles for the New Look */
+        /* EXTRA Styles for the New Dexter-Centric Look */
         :root {
             --neon-blue: #00f3ff;
             --neon-purple: #bd00ff;
-            --glass-bg: rgba(10, 10, 10, 0.6);
+            --glass-bg: rgba(10, 10, 10, 0.4);
             --glass-border: rgba(255, 255, 255, 0.05);
         }
 
         body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #fff;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* App-like feel */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
-        /* Hero Redesign */
         #main {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            padding: 0;
-            margin: 0;
             position: relative;
             z-index: 1;
         }
 
         .dexter-hero-logo {
-            font-family: 'Poppins', sans-serif;
             font-weight: 800;
-            font-size: 8vw;
+            font-size: clamp(4rem, 10vw, 8rem);
             letter-spacing: -0.05em;
-            background: linear-gradient(180deg, #fff 0%, #666 100%);
+            background: linear-gradient(180deg, #fff 0%, #444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
-            padding: 0;
-            line-height: 1;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+            line-height: 0.9;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.05));
             z-index: 2;
+            animation: fadeIn 1.5s ease-out;
         }
 
         .dexter-subtitle {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
+            font-size: clamp(0.8rem, 2vw, 1.1rem);
             color: var(--neon-blue);
             text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-top: 1rem;
-            margin-bottom: 3rem;
-            opacity: 0.8;
+            letter-spacing: 0.4em;
+            margin-top: 1.5rem;
+            margin-bottom: 4rem;
+            opacity: 0.6;
             z-index: 2;
+            animation: fadeIn 2s ease-out;
         }
 
-        /* Abstract Visualization */
+        /* Abstract Visualizations */
         .pulse-orb {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 30vw;
-            height: 30vw;
+            width: 40vw;
+            height: 40vw;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-            filter: blur(40px);
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(60px);
             z-index: 0;
-            animation: breathe 4s ease-in-out infinite;
+            animation: breathe 6s ease-in-out infinite;
         }
 
         @keyframes breathe {
-            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .grid-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
             pointer-events: none;
             z-index: 0;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+            mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
         }
 
         /* Action Buttons */
         .action-row {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             z-index: 2;
+            animation: fadeIn 2.5s ease-out;
         }
 
         .action-btn {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             color: #fff;
-            padding: 15px 30px;
-            border-radius: 8px;
+            padding: 18px 35px;
+            border-radius: 4px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
+            letter-spacing: 0.1em;
         }
 
         .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+            transform: translateY(-3px);
+            color: var(--neon-blue);
         }
 
-        .action-btn.primary {
-            border-color: rgba(0, 243, 255, 0.3);
+        .action-btn i {
+            font-size: 1.2rem;
         }
 
-        /* Footer override */
         footer {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
+            padding: 30px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.8rem;
-            pointer-events: none;
+            color: rgba(255, 255, 255, 0.15);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            z-index: 2;
+        }
+
+        /* SPA Shell Hidden on Landing */
+        #nav-container, #windows-container {
+            display: none !important;
         }
         
-        /* Hide navbar initially or style it to float */
-        #nav-container {
-            background: transparent !important;
-            box-shadow: none !important;
-            border-bottom: none !important;
+        /* Show UI when windows are open */
+        body.ui-mode #nav-container, body.ui-mode #windows-container {
+            display: block !important;
         }
-        #nav-title { display: none; } /* Hide title as we have the big logo */
+        body.ui-mode #main {
+            display: none !important;
+        }
     </style>
   <link rel="stylesheet" href="/dex.578e3102.css"></head>
   <body>
-    <div class="background"></div>
+    <!-- Abstract Background -->
     <div class="grid-overlay"></div>
     <div class="pulse-orb"></div>
 
-    <div id="alert-banner" class="alert-banner hide">
-      <i id="alert-banner-icon" class="bx bxs-error-alt"></i>
-      <b id="alert-banner-title" class="alert-banner-title"></b>&nbsp;&nbsp;
-      <i id="alert-banner-text" class="alert-banner-text"></i>
-    </div>
+    <div id="alert-banner" class="alert-banner hide"></div>
 
-    <!-- Minimal Nav -->
-    <nav id="nav-container" class="glass">
-      <canvas id="dexter-waveform"></canvas>
-      <div id="nav-left-section">
-        <div id="dexter-icon" class="dexter-icon">
-          <!-- Loaders -->
-          <div id="dexter-loader" class="dexter-loader">
-             <div id="dexter-stt-loader" class="loader-container hide"></div>
-             <div id="dexter-llm-loader" class="loader-container hide"></div>
-             <div id="dexter-tts-loader" class="loader-container hide"></div>
-             <i id="dexter-icon-D" class="bx bxs-diamond dexter-icon-D"></i>
-             <div id="dexter-icon-spinner" class="dexter-icon-spinner">
-               <i id="dexter-icon-O" class="bx bxs-certification dexter-icon-O"></i>
-             </div>
-          </div>
-        </div>
-      </div>
-      <div id="nav-right-section">
-        <div id="dexter-nav-badge" class="nav-badge" style="display: none;">0</div>
-        <div id="dexter-menu-container">
-            <i id="dexter-menu-btn" class="bx bx-grid-alt"></i>
-            <div id="dexter-dropdown" class="dexter-dropdown glass">
-                <!-- Populated by JS -->
-            </div>
-        </div>
-        <div id="nav-window-switcher" class="nav-window-switcher"></div>
-        <i id="settings-icon" class="bx bx-cog"></i>
-        <i id="close-all-windows" class="bx bx-x-circle" style="display:none; color: #ff5555;"></i>
-        
-        <!-- Public Mode Login Button (Hidden if logged in) -->
-        <button id="login-btn" class="action-btn small" style="padding: 5px 15px; margin-left: 10px; display: none;">
-            <i class='bx bx-log-in'></i> Login
-        </button>
-      </div>
-    </nav>
+    <!-- The SPA Shell (Hidden by default via CSS above) -->
+    <nav id="nav-container" class="glass"></nav>
+    <div id="windows-container" class="windows-container hide"></div>
 
-    <div id="windows-container" class="windows-container hide">
-      <!-- Windows injected by JS -->
-    </div>
-
+    <!-- The Stunning Landing Content -->
     <main id="main">
         <h1 class="dexter-hero-logo">DEXTER</h1>
         <p class="dexter-subtitle">THE NERVE CENTER</p>
         
         <div class="action-row">
-            <div class="action-btn primary" id="open-monitor-btn">
-                <i class='bx bx-pulse'></i> SYSTEM STATUS
+            <div class="action-btn" id="open-monitor-btn">
+                <i class='bx bx-pulse'></i> INITIALIZE STATUS
             </div>
             <div class="action-btn" id="open-events-btn">
-                <i class='bx bx-calendar-event'></i> TIMELINE
+                <i class='bx bx-calendar-event'></i> ACCESS TIMELINE
             </div>
         </div>
 
         <footer>
-            &copy; 2026 Easter Company. All Systems Nominal.
+            &copy; 2026 EASTER COMPANY. SYSTEMS NOMINAL.
         </footer>
     </main>
 
-    <!-- Dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="/static/js/main.js"></script>
-    <script src="/static/js/git_projects.js"></script>
-    <script src="/static/js/windows.js"></script>
-    <script src="/static/js/dexter.js"></script>
-    
-    <!-- Init Script for new buttons -->
     <script>
+        // Inline bridge to main SPA logic
         document.addEventListener('DOMContentLoaded', () => {
-            // Map new buttons to window toggles via the global Dexter API or manual trigger
-            // Note: main.js handles the window logic. We just need to trigger the right events.
-            
             const monitorBtn = document.getElementById('open-monitor-btn');
             const eventsBtn = document.getElementById('open-events-btn');
-            const loginBtn = document.getElementById('login-btn');
 
-            if(monitorBtn) {
-                monitorBtn.addEventListener('click', () => {
-                    // Simulate menu click
-                    const item = document.getElementById('monitor-menu-item');
+            const enterUI = (targetId) => {
+                document.body.classList.add('ui-mode');
+                // Small delay to let JS initialize the menu items if not ready
+                setTimeout(() => {
+                    const item = document.getElementById(targetId);
                     if(item) item.click();
-                });
-            }
+                }, 50);
+            };
 
-            if(eventsBtn) {
-                eventsBtn.addEventListener('click', () => {
-                    const item = document.getElementById('events-menu-item');
-                    if(item) item.click();
-                });
-            }
+            if(monitorBtn) monitorBtn.addEventListener('click', () => enterUI('monitor-menu-item'));
+            if(eventsBtn) eventsBtn.addEventListener('click', () => enterUI('events-menu-item'));
             
-            // Check auth for login button
-            const isLoggedIn = !!localStorage.getItem('easter_user_email');
-            if(!isLoggedIn && loginBtn) {
-                loginBtn.style.display = 'flex';
+            // If URL has a hash or path that implies a window, auto-enter
+            if(window.location.hash || window.location.pathname.length > 5) {
+                document.body.classList.add('ui-mode');
             }
         });
     </script>
