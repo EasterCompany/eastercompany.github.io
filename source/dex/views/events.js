@@ -269,8 +269,8 @@ export async function updateEventsTimeline(forceReRender = false) {
                     if (eventData.chat_history && eventData.chat_history.length > 0) {
                         const totalTurns = eventData.chat_history.length;
                         const slides = eventData.chat_history.map((m, index) => {
-                            let roleName = m.role.toUpperCase();
-                            if (roleName === 'ASSISTANT') roleName = 'DEXTER';
+                            let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
+                            if (!m.name && roleName === 'ASSISTANT') roleName = 'DEXTER';
                             
                             const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
                             const displayStyle = index === totalTurns - 1 ? 'block' : 'none'; // Default to showing Dexter's response
@@ -480,9 +480,9 @@ export async function updateEventsTimeline(forceReRender = false) {
                     if (eventData.chat_history && eventData.chat_history.length > 0) {
                         const totalTurns = eventData.chat_history.length;
                         const slides = eventData.chat_history.map((m, index) => {
-                            let roleName = m.role.toUpperCase();
-                            if (roleName === 'USER') roleName = 'SYSTEM';
-                            if (roleName === 'ASSISTANT') roleName = 'AGENT';
+                            let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
+                            if (!m.name && roleName === 'USER') roleName = 'SYSTEM';
+                            if (!m.name && roleName === 'ASSISTANT') roleName = 'AGENT';
                             
                             const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
                             const displayStyle = index === 0 ? 'block' : 'none';
