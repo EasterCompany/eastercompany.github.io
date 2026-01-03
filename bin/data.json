@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "3.0.6.main.173c18a.2026-01-03.linux-amd64.173c18a",
-    "dev": "3.0.6.main.173c18a.2026-01-03.linux-amd64.173c18a"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -316,14 +316,14 @@
     },
     "3.0.1": {
       "type": "patch",
-      "date": "2026-01-03T08:25:32Z",
-      "commit": "3e7fb93",
+      "date": "2026-01-03T09:59:43Z",
+      "commit": "3d29477",
       "binaries": {
-        "discord": {
+        "web": {
           "linux-amd64": {
-            "path": "/bin/3.0.1/dex-discord-service",
-            "size": 13549464,
-            "checksum": "6df0fdbcb8f8170c0cc70f3cbcbc6787c0206ff14c5ab4614fcfe28c7180a612"
+            "path": "/bin/3.0.1/dex-web-service",
+            "size": 12669444,
+            "checksum": "1c0ef3af3e659332fa8b6ad0b65f733fa7ae8fd6b1c437ace85a4aabd9e05993"
           }
         }
       }
@@ -464,8 +464,8 @@
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
-      "current": "3.0.0.main.a7adeaa.2026-01-02..a7adeaa",
-      "user": "3.0.0.main.a7adeaa.2026-01-02..a7adeaa",
+      "current": "3.0.1.main.a7adeaa.2026-01-03..a7adeaa",
+      "user": "3.0.1.main.a7adeaa.2026-01-03..a7adeaa",
       "repository": "github.com/EasterCompany/dex-web-service"
     }
   }
