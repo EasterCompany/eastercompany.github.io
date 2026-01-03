@@ -2,6 +2,7 @@
 import imaginatorSVG from '../components/imaginatorSVG.js';
 import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
+import { updateChoresTab } from './chores.js';
 
 export const getGuardianContent = () => {
   const resetBtnStyle = isPublicMode() ? 'display: none;' : '';
@@ -191,7 +192,8 @@ export async function updateSystemTab() {
   await Promise.all([
     updateProcessesTab(),
     updateSystemMonitor(),
-    updateModelsTab()
+    updateModelsTab(),
+    updateChoresTab()
   ]);
 
   // Update logs separately
