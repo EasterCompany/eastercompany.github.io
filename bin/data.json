@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "3.0.7.main.312a65c.2026-01-03.linux-amd64.312a65c",
-    "dev": "3.0.7.main.312a65c.2026-01-03.linux-amd64.312a65c"
+    "user": "3.0.8.main.061f2f1.2026-01-03.linux-amd64.061f2f1",
+    "dev": "3.0.8.main.061f2f1.2026-01-03.linux-amd64.061f2f1"
   },
   "releases": {
     "0.0.0": {
@@ -439,9 +439,24 @@
     },
     "3.0.8": {
       "type": "patch",
-      "date": "2026-01-02T23:17:48Z",
-      "commit": "7771ab4",
-      "binaries": {}
+      "date": "2026-01-03T10:07:38Z",
+      "commit": "21494ab",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/3.0.8/dex",
+            "size": 16652754,
+            "checksum": "a58dcc9e6b5a2bc04ae7c4edde32b6ea7d61bcf7a603bdfa021c652185bced4c"
+          }
+        },
+        "web": {
+          "linux-amd64": {
+            "path": "/bin/3.0.8/dex-web-service",
+            "size": 12660190,
+            "checksum": "d57ad36e85b9c167b4656a9db1309d62c87dfa61f7c7b1324aea85e5f9105650"
+          }
+        }
+      }
     },
     "3.0.9": {
       "type": "patch",
@@ -452,8 +467,8 @@
   },
   "services": {
     "cli": {
-      "current": "3.0.7.main.312a65c.2026-01-03.linux-amd64.312a65c",
-      "user": "3.0.7.main.312a65c.2026-01-03.linux-amd64.312a65c",
+      "current": "3.0.8.main.061f2f1.2026-01-03.linux-amd64.061f2f1",
+      "user": "3.0.8.main.061f2f1.2026-01-03.linux-amd64.061f2f1",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
@@ -472,8 +487,8 @@
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
-      "current": "3.0.1.main.a7adeaa.2026-01-03..a7adeaa",
-      "user": "3.0.1.main.a7adeaa.2026-01-03..a7adeaa",
+      "current": "3.0.2.main.997c590.2026-01-03..997c590",
+      "user": "3.0.2.main.997c590.2026-01-03..997c590",
       "repository": "github.com/EasterCompany/dex-web-service"
     }
   }
