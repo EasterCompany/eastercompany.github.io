@@ -320,6 +320,12 @@
       "commit": "b50fea6",
       "binaries": {}
     },
+    "3.0.10": {
+      "type": "patch",
+      "date": "2026-01-03T00:55:25Z",
+      "commit": "dae419a",
+      "binaries": {}
+    },
     "3.0.2": {
       "type": "patch",
       "date": "2026-01-02T22:45:57Z",
