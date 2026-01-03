@@ -316,9 +316,17 @@
     },
     "3.0.1": {
       "type": "patch",
-      "date": "2026-01-02T22:41:25Z",
-      "commit": "b50fea6",
-      "binaries": {}
+      "date": "2026-01-03T08:25:32Z",
+      "commit": "3e7fb93",
+      "binaries": {
+        "discord": {
+          "linux-amd64": {
+            "path": "/bin/3.0.1/dex-discord-service",
+            "size": 13549464,
+            "checksum": "6df0fdbcb8f8170c0cc70f3cbcbc6787c0206ff14c5ab4614fcfe28c7180a612"
+          }
+        }
+      }
     },
     "3.0.10": {
       "type": "patch",
@@ -382,8 +390,8 @@
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "3.0.0.main.9bad0a2.2026-01-02..9bad0a2",
-      "user": "3.0.0.main.9bad0a2.2026-01-02..9bad0a2",
+      "current": "3.0.1.main.9bad0a2.2026-01-03..9bad0a2",
+      "user": "3.0.1.main.9bad0a2.2026-01-03..9bad0a2",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
