@@ -14,6 +14,7 @@ export const getChoresContent = () => {
             <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                 <input type="text" id="new-chore-instruction" placeholder="E.g., 'Find Fiat Punto in Belgrade'" style="flex: 2; min-width: 200px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
                 <input type="text" id="new-chore-url" placeholder="Entry URL (Optional)" style="flex: 1; min-width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
+                <input type="text" id="new-chore-owner" placeholder="Discord User ID" value="313071000877137920" style="flex: 1; min-width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button id="cancel-chore-btn" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Cancel</button>
@@ -49,6 +50,7 @@ export async function updateChoresTab() {
         saveBtn.onclick = async () => {
             const instruction = document.getElementById('new-chore-instruction').value;
             const url = document.getElementById('new-chore-url').value;
+            const ownerId = document.getElementById('new-chore-owner').value || "313071000877137920";
             
             if (!instruction) return;
 
@@ -58,7 +60,7 @@ export async function updateChoresTab() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        owner_id: "313071000877137920",
+                        owner_id: ownerId,
                         natural_instruction: instruction,
                         entry_url: url,
                         schedule: "every_6h"
