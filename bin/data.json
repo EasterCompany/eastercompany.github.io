@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "3.0.5.main.5e05971.2026-01-03.linux-amd64.5e05971",
-    "dev": "3.0.5.main.5e05971.2026-01-03.linux-amd64.5e05971"
+    "user": "3.0.6.main.173c18a.2026-01-03.linux-amd64.173c18a",
+    "dev": "3.0.6.main.173c18a.2026-01-03.linux-amd64.173c18a"
   },
   "releases": {
     "0.0.0": {
@@ -411,9 +411,17 @@
     },
     "3.0.6": {
       "type": "patch",
-      "date": "2026-01-02T23:11:37Z",
-      "commit": "40de1d3",
-      "binaries": {}
+      "date": "2026-01-03T09:53:19Z",
+      "commit": "acacddd",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/3.0.6/dex",
+            "size": 16652746,
+            "checksum": "271d606f5f0e46d5bd0514308bf792725366b1a1840df3d412bcb7848c35db4f"
+          }
+        }
+      }
     },
     "3.0.7": {
       "type": "patch",
@@ -436,8 +444,8 @@
   },
   "services": {
     "cli": {
-      "current": "3.0.5.main.5e05971.2026-01-03.linux-amd64.5e05971",
-      "user": "3.0.5.main.5e05971.2026-01-03.linux-amd64.5e05971",
+      "current": "3.0.6.main.173c18a.2026-01-03.linux-amd64.173c18a",
+      "user": "3.0.6.main.173c18a.2026-01-03.linux-amd64.173c18a",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
