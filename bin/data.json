@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "3.0.10.main.8979bb5.2026-01-03.linux-amd64.8979bb5",
-    "dev": "3.0.10.main.8979bb5.2026-01-03.linux-amd64.8979bb5"
+    "user": "3.0.11.main.29c2e9f.2026-01-03.linux-amd64.29c2e9f",
+    "dev": "3.0.11.main.29c2e9f.2026-01-03.linux-amd64.29c2e9f"
   },
   "releases": {
     "0.0.0": {
@@ -344,9 +344,17 @@
     },
     "3.0.11": {
       "type": "patch",
-      "date": "2026-01-03T08:54:25Z",
-      "commit": "e30c403",
-      "binaries": {}
+      "date": "2026-01-03T10:24:05Z",
+      "commit": "297a40c",
+      "binaries": {
+        "cli": {
+          "linux-amd64": {
+            "path": "/bin/3.0.11/dex",
+            "size": 16652754,
+            "checksum": "0a28c2eafd332606ab1345e9a39823139e89fc171feb870296bf3cd17e8b6b12"
+          }
+        }
+      }
     },
     "3.0.12": {
       "type": "patch",
@@ -490,8 +498,8 @@
   },
   "services": {
     "cli": {
-      "current": "3.0.10.main.8979bb5.2026-01-03.linux-amd64.8979bb5",
-      "user": "3.0.10.main.8979bb5.2026-01-03.linux-amd64.8979bb5",
+      "current": "3.0.11.main.29c2e9f.2026-01-03.linux-amd64.29c2e9f",
+      "user": "3.0.11.main.29c2e9f.2026-01-03.linux-amd64.29c2e9f",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
