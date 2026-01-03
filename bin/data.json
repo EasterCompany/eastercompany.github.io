@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "3.0.4.main.78d3e93.2026-01-03.linux-amd64.78d3e93",
-    "dev": "3.0.4.main.78d3e93.2026-01-03.linux-amd64.78d3e93"
+    "user": "",
+    "dev": ""
   },
   "releases": {
     "0.0.0": {
@@ -338,6 +338,12 @@
       "type": "patch",
       "date": "2026-01-03T08:54:25Z",
       "commit": "e30c403",
+      "binaries": {}
+    },
+    "3.0.12": {
+      "type": "patch",
+      "date": "2026-01-03T09:04:34Z",
+      "commit": "4035c46",
       "binaries": {}
     },
     "3.0.2": {
