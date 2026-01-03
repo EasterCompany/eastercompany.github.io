@@ -4,6 +4,7 @@ import { createWindow } from './Window.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
 import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.js';
 import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
+import { getChoresContent, updateChoresTab } from '../views/chores.js';
 import { checkBackgroundBlueprints } from '../views/blueprints.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
 import { getEventsContent, updateEventsTimeline } from '../views/events.js';
@@ -247,7 +248,8 @@ function onReady() {
       { icon: 'bxs-brain', title: 'Models', content: getModelsContent() },
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
-      { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() }
+      { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() },
+      { icon: 'bx-task', title: 'Chores', content: getChoresContent() }
     ].filter(tab => {
       if (isPublicMode()) {
         return tab.title !== 'Hardware' && tab.title !== 'Logs';
@@ -259,6 +261,7 @@ function onReady() {
       updateProcessesTab();
       updateModelsTab();
       updateLogs();
+      updateChoresTab();
     },
     onClose: () => {
       const idx = activeWindows.indexOf(monitorWindow);
