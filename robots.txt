@@ -1,11 +1,9 @@
-User-agent: Googlebot
-Disallow: /static/
-Disallow: /downloads/
-Disallow: /README.md
-Disallow: /version.txt
-Disallow: CNAME
-
 User-agent: *
+Disallow: /
+Allow: /static/
+Allow: /dex.*
+Allow: /contribute/
+Allow: /dexter/
 Allow: /
 
 Sitemap: https://easter.company/sitemap.xml

@@ -21,9 +21,10 @@ fi
 
 # 2. Generate a hash from the source file contents
 echo "Generating content hash..."
-# Find all source files and hash their combined content
-HASH=$(find "$SRC_DIR" -type f -print0 | sort -z | xargs -0 cat | sha1sum | head -c 8)
+# Find all source files and hash their combined content (including static assets)
+HASH=$(find "$SRC_DIR" "$ROOT_DIR/static" -type f -print0 | sort -z | xargs -0 cat | sha1sum | head -c 8)
 echo "Build hash: $HASH"
+CURRENT_DATE=$(date +%Y-%m-%d)
 
 # Define hashed output filenames
 JS_OUTPUT_FILE="$ROOT_DIR/dex.$HASH.js"
@@ -94,17 +95,24 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         if [ -f "$TEMPLATES_DIR/head.html" ]; then
             # Create a temporary file with the injection, replacing title and canonical
             # Using index() for literal matches instead of ~ for regex to avoid escape issues
-            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" -v canonical="$canonical_url" '
+            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" -v canonical="$canonical_url" -v build_hash="$HASH" -v current_date="$CURRENT_DATE" '
                 /<head>/ {
                     print
                     print "<!-- HEAD_START -->"
                     while ((getline line < head_file) > 0) {
+                        # Replace last_updated or last_build param with current build hash
+                        gsub(/(last_updated|last_build)=[^"]*/, "last_build=" build_hash, line)
+                        
                         if (index(line, "<title>") > 0) {
                             print "  <title>" title "</title>"
                         } else if (index(line, "og:url") > 0) {
                             print "  <meta property=\"og:url\" content=\"" canonical "\">"
                         } else if (index(line, "rel=\"canonical\"") > 0) {
                             print "  <link rel=\"canonical\" href=\"" canonical "\">"
+                        } else if (index(line, "name=\"revised\"") > 0) {
+                            # Update revised date
+                            gsub(/content="[^"]*"/, "content=\"" current_date "\"", line)
+                            print line
                         } else {
                             print line
                         }
@@ -116,6 +124,9 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
                 { print }
             ' "$html_file" > "$html_file.tmp" && mv "$html_file.tmp" "$html_file"
         fi
+        
+        # Global replace for any other params in the body (scripts/links)
+        sed -i -E "s/(last_updated|last_build)=[a-zA-Z0-9\-]*/last_build=$HASH/g" "$html_file"
 
         # Inject CSS and JS tags
         sed -i "s|</head>|$LINK_TAG</head>|" "$html_file"
@@ -123,5 +134,22 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         echo "  - Injected tags into $html_file (title: $full_title)"
     fi
 done
+
+# 6. Generate Sitemap
+echo "Generating Sitemap..."
+"$ROOT_DIR/scripts/generate_sitemap.sh"
+
+# 7. Generate Robots.txt
+echo "Generating robots.txt..."
+"$ROOT_DIR/scripts/generate_robots.sh"
+
+# 8. Touch Web Manifest (Optional: update timestamp if we want to force refresh, 
+# but simply ensuring it exists or checking validity is good practice here)
+echo "Verifying Web Manifest..."
+if [ -f "$ROOT_DIR/static/meta/site.webmanifest" ]; then
+    echo "  - site.webmanifest found."
+else
+    echo "  - WARNING: site.webmanifest not found!"
+fi
 
 echo "Build complete!"
