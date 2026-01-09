@@ -22,6 +22,7 @@ import {
 } from '../views/monitor.js';
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
 import { getLogsContent, updateLogs } from '../views/logs.js';
+import { getWebContent, updateWebTab } from '../views/web.js';
 import { initCliDashboard } from '../views/cli.js';
 import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount, smartFetch, isPublicMode } from './utils.js';
 
@@ -246,6 +247,7 @@ function onReady() {
       { icon: 'bxs-server', title: 'Services', content: getServicesContent() },
       { icon: 'bxs-component', title: 'Processes', content: getProcessesContent() },
       { icon: 'bxs-brain', title: 'Models', content: getModelsContent() },
+      { icon: 'bx-globe', title: 'Web', content: getWebContent() },
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
       { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() },
@@ -260,6 +262,7 @@ function onReady() {
       updateSystemMonitor();
       updateProcessesTab();
       updateModelsTab();
+      updateWebTab();
       updateLogs();
       updateChoresTab();
     },
