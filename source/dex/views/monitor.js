@@ -669,6 +669,10 @@ export async function updateProcessesTab() {
     const synthesisStats = document.getElementById('analyzer-synthesis-stats');
     if (synthesisVal) updateTimer(synthesisVal, synthesisStats, guardianStatus.synthesis, 'synthesis', activeSynthesis);
 
+    const imaginatorVal = document.getElementById('imaginator-alert_review-val');
+    const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
+    if (imaginatorVal) updateTimer(imaginatorVal, imaginatorStats, guardianStatus.alert_review, 'alert_review', activeTier);
+
     const stateLabel = document.getElementById('system-state-label');
     const stateVal = document.getElementById('system-state-val');
     if (stateVal && guardianStatus.system_state) {
