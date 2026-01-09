@@ -75,13 +75,30 @@ async function renderWebHistory(container) {
 
         html += `
                 </div>
-                <div style="text-align: center; color: #555; font-size: 0.75em; padding: 10px 0 0; flex-shrink: 0; text-transform: uppercase; letter-spacing: 1px;">
-                    <i class='bx bx-left-arrow-alt'></i> Swipe to navigate history <i class='bx bx-right-arrow-alt'></i>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0 0; flex-shrink: 0;">
+                    <button id="web-prev-btn" class="notif-action-btn" style="margin-right: auto;"><i class='bx bx-left-arrow-alt'></i> Prev</button>
+                    <span style="color: #555; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;">Swipe to navigate</span>
+                    <button id="web-next-btn" class="notif-action-btn" style="margin-left: auto;">Next <i class='bx bx-right-arrow-alt'></i></button>
                 </div>
             </div>
         `;
 
         container.innerHTML = html;
+
+        const carousel = container.querySelector('.web-carousel');
+        const prevBtn = container.querySelector('#web-prev-btn');
+        const nextBtn = container.querySelector('#web-next-btn');
+
+        if (prevBtn) {
+            prevBtn.onclick = () => {
+                carousel.scrollBy({ left: -carousel.offsetWidth, behavior: 'smooth' });
+            };
+        }
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                carousel.scrollBy({ left: carousel.offsetWidth, behavior: 'smooth' });
+            };
+        }
 
     } catch (e) {
         container.innerHTML = createPlaceholderMessage('error', 'Failed to load web history.', e.message);
