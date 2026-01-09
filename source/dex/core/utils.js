@@ -459,6 +459,11 @@ export async function smartFetch(endpoint, options = {}) {
       return new Response(JSON.stringify({ error: "Profile not found" }), { status: 404 });
     }
 
+    // 8. Web History
+    if (endpoint.startsWith('/web/history')) {
+      return new Response(JSON.stringify(DASHBOARD_CACHE.web_history || []), { status: 200 });
+    }
+
     // Default: Return 404 for unsupported public endpoints
     return new Response(JSON.stringify({ error: "Not available in public demo" }), { status: 404 });
   }
