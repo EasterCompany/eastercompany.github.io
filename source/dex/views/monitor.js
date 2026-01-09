@@ -438,10 +438,14 @@ export async function updateSystemMonitor() {
     }
   }
 
+  const processedServiceIds = new Set();
   services.forEach(service => {
+    if (processedServiceIds.has(service.id)) return;
+    processedServiceIds.add(service.id);
+
     const newHtml = generateWidgetHtml(service);
     const existingWidget = existingWidgetsMap.get(service.id);
-    if (existingWidget) {
+    if (existingWidget && existingWidget.parentNode) {
       if (existingWidget.outerHTML !== newHtml) existingWidget.outerHTML = newHtml;
     } else {
       widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
@@ -836,11 +840,15 @@ function renderProcessList(container, list, isHistory) {
     }
   }
 
+  const processedIds = new Set();
   list.forEach(proc => {
     const uniqueId = `${proc.channel_id}-${proc.start_time}`;
+    if (processedIds.has(uniqueId)) return;
+    processedIds.add(uniqueId);
+
     const newHtml = generateProcessWidgetHtml(proc);
     const existingWidget = existingWidgetsMap.get(uniqueId);
-    if (existingWidget) {
+    if (existingWidget && existingWidget.parentNode) {
       if (existingWidget.outerHTML !== newHtml) {
         existingWidget.outerHTML = newHtml;
       }

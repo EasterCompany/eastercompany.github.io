@@ -27,7 +27,7 @@
             <button id="close-all-windows" class="nav-btn" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"><i class='bx bx-x-circle'></i></button>
         </div>
     
-    `,l=document.createElement("nav");l.innerHTML=n,document.body.prepend(l)}function fe(t){let e=window.location.pathname,i=e==="/"||e==="/index.html",s=document.getElementById("nav-chevron"),n=document.querySelector(".nav-left");!s||!n||(t||!i?(s.style.display="block",n.style.cursor="pointer",n.classList.add("recording"),n.onmouseenter=()=>{s.style.transform="translateX(-3px)"},n.onmouseleave=()=>{s.style.transform="translateX(0)"}):(s.style.display="none",n.style.cursor="default",n.classList.remove("recording"),n.onmouseenter=null,n.onmouseleave=null))}function et(){if(document.querySelector("footer"))return;let t=`
+    `,c=document.createElement("nav");c.innerHTML=n,document.body.prepend(c)}function fe(t){let e=window.location.pathname,i=e==="/"||e==="/index.html",s=document.getElementById("nav-chevron"),n=document.querySelector(".nav-left");!s||!n||(t||!i?(s.style.display="block",n.style.cursor="pointer",n.classList.add("recording"),n.onmouseenter=()=>{s.style.transform="translateX(-3px)"},n.onmouseleave=()=>{s.style.transform="translateX(0)"}):(s.style.display="none",n.style.cursor="default",n.classList.remove("recording"),n.onmouseenter=null,n.onmouseleave=null))}function et(){if(document.querySelector("footer"))return;let t=`
         <a href="/dexter" class="footer-brand-left">DEXTER M.XIV</a>
         <div class="socials-section">
             <a href="https://facebook.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-facebook'></i></a>
@@ -38,22 +38,22 @@
             <a href="https://youtube.com/@eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-youtube'></i></a>
         </div>
         <a href="/contribute" class="footer-brand-right">CONTRIBUTE</a>
-    `,e=document.createElement("footer");e.innerHTML=t,document.body.appendChild(e)}var tt=1e3;function ae(t){let e=null,i=t.onClose||null,s=t.onOpen||null;function n(){e&&(e.style.zIndex=++tt)}function l(){if(e){e.classList.add("open"),n(),window.addEventListener("resize",r),s&&setTimeout(s,10);return}let u=document.getElementById("windows-container");u||(u=document.createElement("div"),u.id="windows-container",u.className="windows-container",document.body.appendChild(u)),e=document.createElement("div"),e.id=t.id,e.className="window",t.tabs&&t.tabs.length>0&&e.classList.add("has-tabs"),e.style.zIndex=++tt,e.addEventListener("mousedown",n);let v=t.icon||"bx-window",o="",b="",E;t.tabs&&t.tabs.length>0?(o=`<div class="tab-bar">${t.tabs.map((d,f)=>{let g=d.icon?`<i class="bx ${d.icon}"></i>`:`<span class="tab-glyph">${d.title?.charAt(0).toUpperCase()||"?"}</span>`;return`
-                    <div class="tab ${f===0?"active":""}" data-tab-index="${f}">
-                        ${g}
-                        <span class="tab-title">${d.title}</span>
-                        <span class="tab-subtitle" data-tab-subtitle="${f}">Last updated: never</span>
+    `,e=document.createElement("footer");e.innerHTML=t,document.body.appendChild(e)}var tt=1e3;function ae(t){let e=null,i=t.onClose||null,s=t.onOpen||null;function n(){e&&(e.style.zIndex=++tt)}function c(){if(e){e.classList.add("open"),n(),window.addEventListener("resize",r),s&&setTimeout(s,10);return}let m=document.getElementById("windows-container");m||(m=document.createElement("div"),m.id="windows-container",m.className="windows-container",document.body.appendChild(m)),e=document.createElement("div"),e.id=t.id,e.className="window",t.tabs&&t.tabs.length>0&&e.classList.add("has-tabs"),e.style.zIndex=++tt,e.addEventListener("mousedown",n);let b=t.icon||"bx-window",a="",g="",E;t.tabs&&t.tabs.length>0?(a=`<div class="tab-bar">${t.tabs.map((o,d)=>{let u=o.icon?`<i class="bx ${o.icon}"></i>`:`<span class="tab-glyph">${o.title?.charAt(0).toUpperCase()||"?"}</span>`;return`
+                    <div class="tab ${d===0?"active":""}" data-tab-index="${d}">
+                        ${u}
+                        <span class="tab-title">${o.title}</span>
+                        <span class="tab-subtitle" data-tab-subtitle="${d}">Last updated: never</span>
                         <span class="notification-badge" style="display: none;">0</span>
                     </div>
-                `}).join("")}</div>`,E=`<div class="window-content">${t.tabs.map((d,f)=>`<div class="tab-content ${f===0?"active":""}" data-tab-content="${f}">${d.content}</div>`).join("")}</div>`):(t.title&&(b=`<div class="window-title">${t.title}</div>`),E=`<div class="window-content">${t.content||""}</div>`),e.innerHTML=`
+                `}).join("")}</div>`,E=`<div class="window-content">${t.tabs.map((o,d)=>`<div class="tab-content ${d===0?"active":""}" data-tab-content="${d}">${o.content}</div>`).join("")}</div>`):(t.title&&(g=`<div class="window-title">${t.title}</div>`),E=`<div class="window-content">${t.content||""}</div>`),e.innerHTML=`
             <div class="window-header">
-                <i class="bx ${v}"></i>
-                ${o}
-                ${b}
+                <i class="bx ${b}"></i>
+                ${a}
+                ${g}
                 <i class="bx bx-x window-close"></i>
             </div>
             ${E}
-        `,u.appendChild(e),e.querySelector(".window-close")?.addEventListener("click",h=>{h.stopPropagation(),c()}),window.addEventListener("resize",r),t.tabs&&e.querySelectorAll(".tab").forEach(h=>{h.addEventListener("click",()=>{let a=h.getAttribute("data-tab-index");e.querySelectorAll(".tab").forEach(d=>d.classList.remove("active")),h.classList.add("active"),e.querySelectorAll(".tab-content").forEach(d=>d.classList.remove("active")),e.querySelector(`.tab-content[data-tab-content="${a}"]`).classList.add("active"),m(h,e)})}),setTimeout(()=>{e.classList.add("open"),s&&s()},10)}function r(){if(!e||!e.classList.contains("open"))return;let u=e.querySelector(".tab.active");u&&m(u,e)}function m(u,v){setTimeout(()=>{let o=v.querySelector(".tab-bar");if(!o)return;let b=Array.from(o.querySelectorAll(".tab")),E=b.indexOf(u),h=o.clientWidth,a=b[Math.max(0,E-2)],d=b[Math.min(b.length-1,E+2)],f=a.offsetLeft-o.offsetLeft-25,w=d.offsetLeft+d.offsetWidth-o.offsetLeft+25-f,I=w<=h?f-(h-w)/2:u.offsetLeft-o.offsetLeft-h/2+u.offsetWidth/2;o.scrollTo({left:I,behavior:"smooth"})},350)}function c(u=!1){e&&(window.removeEventListener("resize",r),u?(e.remove(),e=null):(e.classList.remove("open"),i&&i(),setTimeout(()=>{e?.remove(),e=null},400)))}function p(u){let v=e?.querySelector(".window-content");v&&(v.innerHTML=u)}function x(){return e&&e.classList.contains("open")}return{open:l,close:c,setContent:p,isOpen:x,focus:n,id:t.id}}var st="easter_theme",Y={DARK:"dark",LIGHT:"light",LEGACY:"legacy"};function He(){return localStorage.getItem(st)||Y.DARK}function it(t){if(!Object.values(Y).includes(t))throw new Error("Invalid theme");localStorage.setItem(st,t),nt(t)}function nt(t){let e=document.documentElement,i=document.body;Object.values(Y).forEach(r=>{i.classList.remove(`theme-${r}`)}),i.classList.add(`theme-${t}`);let s=document.querySelector('meta[name="theme-color"]');s||(s=document.createElement("meta"),s.name="theme-color",document.getElementsByTagName("head")[0].appendChild(s));let n={[Y.DARK]:"#050507",[Y.LIGHT]:"#FFFFFF",[Y.LEGACY]:"#000000"},l=n[t]||n[Y.DARK];if(s.setAttribute("content",l),!document.querySelector(".background")){let r=document.createElement("div");r.className="background",document.body.prepend(r)}i.classList.add("is-animated")}function at(){let t=He();nt(t)}function N(t,e,i=null){let n={config:"bx-cog",error:"bx-error-circle",empty:"bx-info-circle",offline:"bx-wifi-off"}[t]||"bx-info-circle",l=i?`<p class="placeholder-action">${i}</p>`:"";return`<div class="tab-placeholder"><i class='bx ${n} placeholder-icon'></i><p class="placeholder-message">${e}</p>${l}</div>`}function P(t){return t&&t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function X(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"] .tab-subtitle`);if(!i)return;if(!e){i.textContent="Last updated: never";return}let s=Date.now(),n=Math.floor((s-e)/1e3),l;n<60?l=`${n}s ago`:n<3600?l=`${Math.floor(n/60)}m ago`:l=`${Math.floor(n/3600)}h ago`,i.textContent=`Last updated: ${l}`}var Vt=0;function we(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"]`);if(!i)return;let s=i.querySelector(".notification-badge");s&&(e>0?(s.textContent=e>9?"9+":e,s.style.display="flex"):s.style.display="none")}var ee=0,te=0;function rt(t){ee=t,ve()}function lt(t){te=t,ve()}function ve(){let t=ee+te;Vt=t;let e=document.getElementById("dexter-nav-badge");e&&(e.style.display=t>0?"flex":"none");let i=document.getElementById("alerts-menu-item");if(i){let r=i.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="auto",i.appendChild(r)),r.textContent=ee>9?"9+":ee,r.style.display=ee>0?"flex":"none"}let s=document.getElementById("workspace-menu-item");if(s){let r=s.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="auto",s.appendChild(r)),r.textContent=te>9?"9+":te,r.style.display=te>0?"flex":"none"}let n=document.getElementById("switch-alerts");if(n){let r=n.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="8px",n.appendChild(r)),r.textContent=ee>9?"9+":ee,r.style.display=ee>0?"flex":"none"}let l=document.getElementById("switch-workspace");if(l){let r=l.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="8px",l.appendChild(r)),r.textContent=te>9?"9+":te,r.style.display=te>0?"flex":"none"}}function Te(){let t=document.getElementById("alerts-list");if(!t)return;ee=t.querySelectorAll(".alert-unread:not(.priority-low)").length,ve()}function ct(){let t=document.getElementById("blueprints-list");if(!t)return;te=t.querySelectorAll(".event-item:not(.blueprint-approved)").length,ve()}function Kt(){return"https://event.easter.company"}function Zt(){return"https://discord.easter.company"}var Yt="http://127.0.0.1:8100",Xt="http://127.0.0.1:8300",Qt={31:"ansi-red",91:"ansi-bright-red",32:"ansi-green",33:"ansi-yellow",34:"ansi-blue",35:"ansi-purple",36:"ansi-cyan",37:"ansi-white",90:"ansi-dark-gray"};function Le(t){let e=P(t);e=e.replace(/\x1b\[0m/g,"</span>"),e=e.replace(/\x1b\[(\d+)m/g,(n,l)=>{let r=Qt[l];return r?`<span class="${r}">`:""});let i=(e.match(/<span/g)||[]).length,s=(e.match(/<\/span/g)||[]).length;return i>s&&(e+="</span>".repeat(i-s)),e}function oe(t){if(!t)return"";let e=P(t);return e=e.replace(/```([\s\S]*?)```/g,'<pre class="md-code-block">$1</pre>'),e=e.replace(/`([^`]+)`/g,'<code class="md-inline-code">$1</code>'),e=e.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),e=e.replace(/\*([^*]+)\*/g,"<em>$1</em>"),e=e.replace(/^# (.*$)/gm,'<h3 class="md-header">$1</h3>'),e=e.replace(/^## (.*$)/gm,'<h4 class="md-header">$1</h4>'),e=e.replace(/^### (.*$)/gm,'<h5 class="md-header">$1</h5>'),e=e.replace(/^\|(.+)\|$/gm,(i,s)=>{let n=s.split("|").map(l=>l.trim());return n.every(l=>l.match(/^:?-+:?$/))?"":`<div class="md-table-row">${n.map(l=>`<span class="md-table-cell">${l}</span>`).join("")}</div>`}),e=e.replace(/^- (.*$)/gm,'<div class="md-list-item"><span class="md-bullet">\u2022</span> $1</div>'),e=e.replace(/^(\d+)\. (.*$)/gm,'<div class="md-list-item"><span class="md-number">$1.</span> $2</div>'),e}var es="https://sterling-javelin-12539.upstash.io",ts="AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw";function z(){return window.location.hostname==="easter.company"}var R=null,Pe=!1,dt="dex_dashboard_snapshot";function ss(){let t=localStorage.getItem(dt);if(t)try{R=JSON.parse(t)}catch{R=null}}async function ot(){if(!(!z()||Pe)){Pe=!0;try{let t=await as("GET","state:dashboard:full");if(t)try{let e=JSON.parse(t);R=e,localStorage.setItem(dt,JSON.stringify(e))}catch(e){console.error("Failed to parse dashboard snapshot:",e)}}finally{Pe=!1}}}function is(){if(!R||!R.agent_status)return;let t=R.agent_status;typeof t.system_state_time=="number"&&(t.system_state_time+=1)}async function ns(){if(!z())return;ss();let t=Math.floor(Date.now()/1e3),e=R?t-R.timestamp:1/0;(!R||e>120)&&await ot(),setInterval(()=>{let i=new Date,s=Math.floor(Date.now()/1e3),n=R?s-R.timestamp:1/0;(i.getSeconds()===59||n>300)&&ot(),is()},1e3)}z()&&ns();async function as(t,...e){try{let s=await(await fetch(es,{method:"POST",headers:{Authorization:`Bearer ${ts}`},body:JSON.stringify([t,...e])})).json();if(s.error)throw new Error(s.error);return s.result}catch(i){return console.error("Upstash Error:",i),null}}var ge=null,be=null,ke=!1,Se=!1;async function A(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t.startsWith("/system_monitor")||t.startsWith("/system/status"))return new Response(JSON.stringify(R.monitor),{status:200});if(t.startsWith("/processes"))return new Response(JSON.stringify(R.processes),{status:200});if(t.startsWith("/events")){let n=new URLSearchParams(t.split("?")[1]||""),l=n.get("type")||n.get("event.type"),r=n.get("category"),m=n.get("order")||"desc",c=[];return l==="system.notification.generated"?c=[...R.alerts||[]]:l==="system.blueprint.generated"||t.includes("event.type=system.blueprint.generated")?c=[...R.blueprints||[]]:r==="messaging"?c=[...R.messaging_events||[]]:r==="system"?c=[...R.system_events||[]]:r==="cognitive"?c=[...R.cognitive_events||[]]:r==="moderation"?c=[...R.moderation_events||[]]:c=[...R.events||[]],m==="asc"?c.sort((p,x)=>p.timestamp-x.timestamp):c.sort((p,x)=>x.timestamp-p.timestamp),new Response(JSON.stringify({events:c,count:c.length}),{status:200})}if(t.startsWith("/logs"))return new Response(JSON.stringify([]),{status:200});if(t.startsWith("/system/hardware"))return new Response(JSON.stringify({}),{status:200});if(t.startsWith("/agent/status")||t.startsWith("/guardian/status"))return new Response(JSON.stringify(R.agent_status||{}),{status:200});if(t.startsWith("/profile/")){let n=t.split("/")[2],l=R.profiles?R.profiles[n]:null;return l?new Response(JSON.stringify(l),{status:200}):new Response(JSON.stringify({error:"Profile not found"}),{status:404})}return new Response(JSON.stringify({error:"Not available in public demo"}),{status:404})}if(ge)try{let n=await fetch(ge+t,e);if(n.ok)return n;ge=null}catch{ge=null}let i=Kt(),s=Yt;try{let n=await fetch(i+t,e);if(n.ok)return ge=i,ke&&(console.log("\u2728 Production event service restored."),ke=!1),n;throw new Error("Primary failed")}catch{ke||(console.warn(`\u{1F310} Production service unreachable. Falling back to local: ${s}`),ke=!0);try{let l=await fetch(s+t,e);if(l.ok)return ge=s,l;throw new Error("Fallback failed")}catch(l){throw l}}}async function Me(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t==="/contacts")return new Response(JSON.stringify(R.contacts||{members:[]}),{status:200});if(t.startsWith("/member/")){let n=t.split("/")[2],l=(R.contacts?.members||[]).find(r=>r.id===n);return l?new Response(JSON.stringify(l),{status:200}):new Response(JSON.stringify({error:"Member not found"}),{status:404})}return new Response(JSON.stringify({error:"Discord API not public"}),{status:404})}if(be)try{let n=await fetch(be+t,e);if(n.ok)return n;be=null}catch{be=null}let i=Zt(),s=Xt;try{let n=await fetch(i+t,e);if(n.ok)return be=i,Se&&(console.log("\u2728 Production discord service restored."),Se=!1),n;throw new Error("Primary failed")}catch{Se||(console.warn(`\u{1F310} Production discord service unreachable. Falling back to local: ${s}`),Se=!0);try{let l=await fetch(s+t,e);if(l.ok)return be=s,l;throw new Error("Fallback failed")}catch(l){throw l}}}var pt=()=>`
+        `,m.appendChild(e),e.querySelector(".window-close")?.addEventListener("click",y=>{y.stopPropagation(),l()}),window.addEventListener("resize",r),t.tabs&&e.querySelectorAll(".tab").forEach(y=>{y.addEventListener("click",()=>{let f=y.getAttribute("data-tab-index");e.querySelectorAll(".tab").forEach(o=>o.classList.remove("active")),y.classList.add("active"),e.querySelectorAll(".tab-content").forEach(o=>o.classList.remove("active")),e.querySelector(`.tab-content[data-tab-content="${f}"]`).classList.add("active"),v(y,e)})}),setTimeout(()=>{e.classList.add("open"),s&&s()},10)}function r(){if(!e||!e.classList.contains("open"))return;let m=e.querySelector(".tab.active");m&&v(m,e)}function v(m,b){setTimeout(()=>{let a=b.querySelector(".tab-bar");if(!a)return;let g=Array.from(a.querySelectorAll(".tab")),E=g.indexOf(m),y=a.clientWidth,f=g[Math.max(0,E-2)],o=g[Math.min(g.length-1,E+2)],d=f.offsetLeft-a.offsetLeft-25,w=o.offsetLeft+o.offsetWidth-a.offsetLeft+25-d,A=w<=y?d-(y-w)/2:m.offsetLeft-a.offsetLeft-y/2+m.offsetWidth/2;a.scrollTo({left:A,behavior:"smooth"})},350)}function l(m=!1){e&&(window.removeEventListener("resize",r),m?(e.remove(),e=null):(e.classList.remove("open"),i&&i(),setTimeout(()=>{e?.remove(),e=null},400)))}function p(m){let b=e?.querySelector(".window-content");b&&(b.innerHTML=m)}function h(){return e&&e.classList.contains("open")}return{open:c,close:l,setContent:p,isOpen:h,focus:n,id:t.id}}var st="easter_theme",Y={DARK:"dark",LIGHT:"light",LEGACY:"legacy"};function He(){return localStorage.getItem(st)||Y.DARK}function it(t){if(!Object.values(Y).includes(t))throw new Error("Invalid theme");localStorage.setItem(st,t),nt(t)}function nt(t){let e=document.documentElement,i=document.body;Object.values(Y).forEach(r=>{i.classList.remove(`theme-${r}`)}),i.classList.add(`theme-${t}`);let s=document.querySelector('meta[name="theme-color"]');s||(s=document.createElement("meta"),s.name="theme-color",document.getElementsByTagName("head")[0].appendChild(s));let n={[Y.DARK]:"#050507",[Y.LIGHT]:"#FFFFFF",[Y.LEGACY]:"#000000"},c=n[t]||n[Y.DARK];if(s.setAttribute("content",c),!document.querySelector(".background")){let r=document.createElement("div");r.className="background",document.body.prepend(r)}i.classList.add("is-animated")}function at(){let t=He();nt(t)}function N(t,e,i=null){let n={config:"bx-cog",error:"bx-error-circle",empty:"bx-info-circle",offline:"bx-wifi-off"}[t]||"bx-info-circle",c=i?`<p class="placeholder-action">${i}</p>`:"";return`<div class="tab-placeholder"><i class='bx ${n} placeholder-icon'></i><p class="placeholder-message">${e}</p>${c}</div>`}function P(t){return t&&t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function X(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"] .tab-subtitle`);if(!i)return;if(!e){i.textContent="Last updated: never";return}let s=Date.now(),n=Math.floor((s-e)/1e3),c;n<60?c=`${n}s ago`:n<3600?c=`${Math.floor(n/60)}m ago`:c=`${Math.floor(n/3600)}h ago`,i.textContent=`Last updated: ${c}`}var Vt=0;function we(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"]`);if(!i)return;let s=i.querySelector(".notification-badge");s&&(e>0?(s.textContent=e>9?"9+":e,s.style.display="flex"):s.style.display="none")}var ee=0,te=0;function rt(t){ee=t,ve()}function lt(t){te=t,ve()}function ve(){let t=ee+te;Vt=t;let e=document.getElementById("dexter-nav-badge");e&&(e.style.display=t>0?"flex":"none");let i=document.getElementById("alerts-menu-item");if(i){let r=i.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="auto",i.appendChild(r)),r.textContent=ee>9?"9+":ee,r.style.display=ee>0?"flex":"none"}let s=document.getElementById("workspace-menu-item");if(s){let r=s.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="auto",s.appendChild(r)),r.textContent=te>9?"9+":te,r.style.display=te>0?"flex":"none"}let n=document.getElementById("switch-alerts");if(n){let r=n.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="8px",n.appendChild(r)),r.textContent=ee>9?"9+":ee,r.style.display=ee>0?"flex":"none"}let c=document.getElementById("switch-workspace");if(c){let r=c.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="8px",c.appendChild(r)),r.textContent=te>9?"9+":te,r.style.display=te>0?"flex":"none"}}function Te(){let t=document.getElementById("alerts-list");if(!t)return;ee=t.querySelectorAll(".alert-unread:not(.priority-low)").length,ve()}function ct(){let t=document.getElementById("blueprints-list");if(!t)return;te=t.querySelectorAll(".event-item:not(.blueprint-approved)").length,ve()}function Kt(){return"https://event.easter.company"}function Zt(){return"https://discord.easter.company"}var Yt="http://127.0.0.1:8100",Xt="http://127.0.0.1:8300",Qt={31:"ansi-red",91:"ansi-bright-red",32:"ansi-green",33:"ansi-yellow",34:"ansi-blue",35:"ansi-purple",36:"ansi-cyan",37:"ansi-white",90:"ansi-dark-gray"};function Le(t){let e=P(t);e=e.replace(/\x1b\[0m/g,"</span>"),e=e.replace(/\x1b\[(\d+)m/g,(n,c)=>{let r=Qt[c];return r?`<span class="${r}">`:""});let i=(e.match(/<span/g)||[]).length,s=(e.match(/<\/span/g)||[]).length;return i>s&&(e+="</span>".repeat(i-s)),e}function oe(t){if(!t)return"";let e=P(t);return e=e.replace(/```([\s\S]*?)```/g,'<pre class="md-code-block">$1</pre>'),e=e.replace(/`([^`]+)`/g,'<code class="md-inline-code">$1</code>'),e=e.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),e=e.replace(/\*([^*]+)\*/g,"<em>$1</em>"),e=e.replace(/^# (.*$)/gm,'<h3 class="md-header">$1</h3>'),e=e.replace(/^## (.*$)/gm,'<h4 class="md-header">$1</h4>'),e=e.replace(/^### (.*$)/gm,'<h5 class="md-header">$1</h5>'),e=e.replace(/^\|(.+)\|$/gm,(i,s)=>{let n=s.split("|").map(c=>c.trim());return n.every(c=>c.match(/^:?-+:?$/))?"":`<div class="md-table-row">${n.map(c=>`<span class="md-table-cell">${c}</span>`).join("")}</div>`}),e=e.replace(/^- (.*$)/gm,'<div class="md-list-item"><span class="md-bullet">\u2022</span> $1</div>'),e=e.replace(/^(\d+)\. (.*$)/gm,'<div class="md-list-item"><span class="md-number">$1.</span> $2</div>'),e}var es="https://sterling-javelin-12539.upstash.io",ts="AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw";function z(){return window.location.hostname==="easter.company"}var R=null,Pe=!1,dt="dex_dashboard_snapshot";function ss(){let t=localStorage.getItem(dt);if(t)try{R=JSON.parse(t)}catch{R=null}}async function ot(){if(!(!z()||Pe)){Pe=!0;try{let t=await as("GET","state:dashboard:full");if(t)try{let e=JSON.parse(t);R=e,localStorage.setItem(dt,JSON.stringify(e))}catch(e){console.error("Failed to parse dashboard snapshot:",e)}}finally{Pe=!1}}}function is(){if(!R||!R.agent_status)return;let t=R.agent_status;typeof t.system_state_time=="number"&&(t.system_state_time+=1)}async function ns(){if(!z())return;ss();let t=Math.floor(Date.now()/1e3),e=R?t-R.timestamp:1/0;(!R||e>120)&&await ot(),setInterval(()=>{let i=new Date,s=Math.floor(Date.now()/1e3),n=R?s-R.timestamp:1/0;(i.getSeconds()===59||n>300)&&ot(),is()},1e3)}z()&&ns();async function as(t,...e){try{let s=await(await fetch(es,{method:"POST",headers:{Authorization:`Bearer ${ts}`},body:JSON.stringify([t,...e])})).json();if(s.error)throw new Error(s.error);return s.result}catch(i){return console.error("Upstash Error:",i),null}}var ge=null,be=null,Se=!1,ke=!1;async function I(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t.startsWith("/system_monitor")||t.startsWith("/system/status"))return new Response(JSON.stringify(R.monitor),{status:200});if(t.startsWith("/processes"))return new Response(JSON.stringify(R.processes),{status:200});if(t.startsWith("/events")){let n=new URLSearchParams(t.split("?")[1]||""),c=n.get("type")||n.get("event.type"),r=n.get("category"),v=n.get("order")||"desc",l=[];return c==="system.notification.generated"?l=[...R.alerts||[]]:c==="system.blueprint.generated"||t.includes("event.type=system.blueprint.generated")?l=[...R.blueprints||[]]:r==="messaging"?l=[...R.messaging_events||[]]:r==="system"?l=[...R.system_events||[]]:r==="cognitive"?l=[...R.cognitive_events||[]]:r==="moderation"?l=[...R.moderation_events||[]]:l=[...R.events||[]],v==="asc"?l.sort((p,h)=>p.timestamp-h.timestamp):l.sort((p,h)=>h.timestamp-p.timestamp),new Response(JSON.stringify({events:l,count:l.length}),{status:200})}if(t.startsWith("/logs"))return new Response(JSON.stringify([]),{status:200});if(t.startsWith("/system/hardware"))return new Response(JSON.stringify({}),{status:200});if(t.startsWith("/agent/status")||t.startsWith("/guardian/status"))return new Response(JSON.stringify(R.agent_status||{}),{status:200});if(t.startsWith("/profile/")){let n=t.split("/")[2],c=R.profiles?R.profiles[n]:null;return c?new Response(JSON.stringify(c),{status:200}):new Response(JSON.stringify({error:"Profile not found"}),{status:404})}return new Response(JSON.stringify({error:"Not available in public demo"}),{status:404})}if(ge)try{let n=await fetch(ge+t,e);if(n.ok)return n;ge=null}catch{ge=null}let i=Kt(),s=Yt;try{let n=await fetch(i+t,e);if(n.ok)return ge=i,Se&&(console.log("\u2728 Production event service restored."),Se=!1),n;throw new Error("Primary failed")}catch{Se||(console.warn(`\u{1F310} Production service unreachable. Falling back to local: ${s}`),Se=!0);try{let c=await fetch(s+t,e);if(c.ok)return ge=s,c;throw new Error("Fallback failed")}catch(c){throw c}}}async function Me(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t==="/contacts")return new Response(JSON.stringify(R.contacts||{members:[]}),{status:200});if(t.startsWith("/member/")){let n=t.split("/")[2],c=(R.contacts?.members||[]).find(r=>r.id===n);return c?new Response(JSON.stringify(c),{status:200}):new Response(JSON.stringify({error:"Member not found"}),{status:404})}return new Response(JSON.stringify({error:"Discord API not public"}),{status:404})}if(be)try{let n=await fetch(be+t,e);if(n.ok)return n;be=null}catch{be=null}let i=Zt(),s=Xt;try{let n=await fetch(i+t,e);if(n.ok)return be=i,ke&&(console.log("\u2728 Production discord service restored."),ke=!1),n;throw new Error("Primary failed")}catch{ke||(console.warn(`\u{1F310} Production discord service unreachable. Falling back to local: ${s}`),ke=!0);try{let c=await fetch(s+t,e);if(c.ok)return be=s,c;throw new Error("Fallback failed")}catch(c){throw c}}}var pt=()=>`
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-bell' style="color: #bb86fc;"></i>
         <h2>Alerts</h2>
@@ -72,49 +72,49 @@
             <p class="placeholder-message">Loading alerts...</p>
         </div>
     </div>
-`,Ae=null,re=new Set,Ie=[];async function ie(t=!1){let e=document.getElementById("alerts-list");if(!e)return;os(),t&&(e.innerHTML="<p>Updating...</p>");let i="/events?ml=1000&format=json&event.type=system.notification.generated";try{let s=await A(i);if(!s.ok)throw new Error("Service is offline or unreachable.");let l=(await s.json()).events||[];Ae=Date.now(),X(0,Ae);let r=Date.now(),m=24*60*60*1e3,c=l.filter(f=>{let g=localStorage.getItem(`alert_read_ts_${f.id}`);if(!g)return!0;let w=parseInt(g);return r-w<m});c.sort((f,g)=>{let w=S=>{let y=S.event;if(typeof y=="string")try{y=JSON.parse(y)}catch{return"low"}return(y.priority||"low").toLowerCase()},I=S=>S==="critical"?4:S==="high"?3:S==="medium"?2:1,M=I(w(f)),k=I(w(g));return M!==k?k-M:g.timestamp-f.timestamp}),Ie=c;let p=f=>{let g=f.event;if(typeof g=="string")try{g=JSON.parse(g)}catch{return"low"}return(g.priority||"low").toLowerCase()},x=[],v=new Set(c.map(f=>p(f))).size>1;if(c.length>0){let f=null;c.forEach(g=>{let w=p(g);v&&w!==f&&(x.push({id:`divider-${w}`,type:"divider",label:w.toUpperCase()}),f=w),x.push(g)})}if(t&&(e.innerHTML=""),c.length===0){e.innerHTML=N("empty","No alerts yet."),Te();return}let o=f=>{let g=f.event;if(typeof g=="string")try{g=JSON.parse(g)}catch{return null}let w=(g.title||"Untitled Alert").trim(),I=(g.body||"No description provided.").trim(),M=g.summary||"",k=g.content||"",S=g.protocol||"",y=(g.priority||"low").toLowerCase(),B=!!g.alert,_=(g.category||"system").trim(),H=g.related_event_ids||[],q=g.audit_event_id,F=!!localStorage.getItem(`alert_read_ts_${f.id}`),T=new Date(f.timestamp*1e3),$=T.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),C=T.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),L=F?"event-border-grey":"event-border-blue";!F&&B&&(L="event-border-red"),F&&(y==="high"||y==="critical")?L="event-border-red":F&&y==="medium"&&(L="event-border-orange");let O=F?"alert-read":"alert-unread",D=re.has(f.id),U=D?"expanded":"",j=D?"display: block;":"display: none;",J="",G="";H.length>0&&(G=`
+`,Ae=null,re=new Set,Ie=[];async function ie(t=!1){let e=document.getElementById("alerts-list");if(!e)return;os(),t&&(e.innerHTML="<p>Updating...</p>");let i="/events?ml=1000&format=json&event.type=system.notification.generated";try{let s=await I(i);if(!s.ok)throw new Error("Service is offline or unreachable.");let c=(await s.json()).events||[];Ae=Date.now(),X(0,Ae);let r=Date.now(),v=24*60*60*1e3,l=c.filter(d=>{let u=localStorage.getItem(`alert_read_ts_${d.id}`);if(!u)return!0;let w=parseInt(u);return r-w<v});l.sort((d,u)=>{let w=k=>{let x=k.event;if(typeof x=="string")try{x=JSON.parse(x)}catch{return"low"}return(x.priority||"low").toLowerCase()},A=k=>k==="critical"?4:k==="high"?3:k==="medium"?2:1,_=A(w(d)),S=A(w(u));return _!==S?S-_:u.timestamp-d.timestamp}),Ie=l;let p=d=>{let u=d.event;if(typeof u=="string")try{u=JSON.parse(u)}catch{return"low"}return(u.priority||"low").toLowerCase()},h=[],b=new Set(l.map(d=>p(d))).size>1;if(l.length>0){let d=null;l.forEach(u=>{let w=p(u);b&&w!==d&&(h.push({id:`divider-${w}`,type:"divider",label:w.toUpperCase()}),d=w),h.push(u)})}if(t&&(e.innerHTML=""),l.length===0){e.innerHTML=N("empty","No alerts yet."),Te();return}let a=d=>{let u=d.event;if(typeof u=="string")try{u=JSON.parse(u)}catch{return null}let w=(u.title||"Untitled Alert").trim(),A=(u.body||"No description provided.").trim(),_=u.summary||"",S=u.content||"",k=u.protocol||"",x=(u.priority||"low").toLowerCase(),L=!!u.alert,B=(u.category||"system").trim(),H=u.related_event_ids||[],J=u.audit_event_id,j=!!localStorage.getItem(`alert_read_ts_${d.id}`),T=new Date(d.timestamp*1e3),$=T.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),C=T.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),M=j?"event-border-grey":"event-border-blue";!j&&L&&(M="event-border-red"),j&&(x==="high"||x==="critical")?M="event-border-red":j&&x==="medium"&&(M="event-border-orange");let O=j?"alert-read":"alert-unread",D=re.has(d.id),U=D?"expanded":"",q=D?"display: block;":"display: none;",F="",W="";H.length>0&&(W=`
             <div style="flex: 1; min-width: 150px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related Events</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
                     ${H.map(se=>`<a href="#" onclick="window.dexter.viewEvent('${se}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${se.substring(0,8)}...</a>`).join(", ")}
                 </div>
-            </div>`);let W="";q&&(W=`
+            </div>`);let V="";J&&(V=`
             <div style="flex: 1; min-width: 120px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Audit</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
-                    <a href="#" onclick="window.dexter.viewEvent('${q}'); return false;" style="color: #bb86fc; text-decoration: none; border-bottom: 1px dashed rgba(187, 134, 252, 0.3); white-space: nowrap;">${q.substring(0,8)}...</a>
+                    <a href="#" onclick="window.dexter.viewEvent('${J}'); return false;" style="color: #bb86fc; text-decoration: none; border-bottom: 1px dashed rgba(187, 134, 252, 0.3); white-space: nowrap;">${J.substring(0,8)}...</a>
                 </div>
-            </div>`);let ue="";S&&(ue=`
+            </div>`);let ue="";k&&(ue=`
             <div style="flex: 1; min-width: 100px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
-                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${S}</div>
-            </div>`);let Q="";k?Q=`
+                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${k}</div>
+            </div>`);let Q="";S?Q=`
             <div class="event-detail-block" style="text-align: left;">
                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
-                <div class="md-para" style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6; text-align: left;">${oe(k)}</div>
+                <div class="md-para" style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6; text-align: left;">${oe(S)}</div>
             </div>
         `:Q=`
             <div class="event-detail-block" style="text-align: left;">
                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
-                <div class="md-para" style="color: #fff; white-space: pre-wrap; line-height: 1.6; text-align: left;">${oe(I)}</div>
+                <div class="md-para" style="color: #fff; white-space: pre-wrap; line-height: 1.6; text-align: left;">${oe(A)}</div>
             </div>
-        `,J=`
+        `,F=`
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                     <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related</div>
-                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${g.related_services&&g.related_services.length>0?g.related_services.join(", "):g.related||"SYSTEM"}</div>
+                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${u.related_services&&u.related_services.length>0?u.related_services.join(", "):u.related||"SYSTEM"}</div>
                     </div>
                     <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
-                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${_}</div>
+                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${B}</div>
                     </div>
                     ${ue}
+                    ${V}
                     ${W}
-                    ${G}
                 </div>
 
                 ${Q}
-            `;let Z=document.createElement("div");Z.className=`event-item notification-item ${L} ${O} ${U} cursor-pointer priority-${y}`,Z.dataset.alertId=f.id,Z.onclick=function(se){if(this.classList.contains("expanded")){this.classList.remove("expanded"),re.delete(f.id);let he=this.querySelector(".event-details");he&&(he.style.display="none")}else{this.classList.add("expanded"),re.add(f.id);let he=this.querySelector(".event-details");if(he&&(he.style.display="block"),!localStorage.getItem(`alert_read_ts_${f.id}`)){localStorage.setItem(`alert_read_ts_${f.id}`,Date.now().toString()),this.classList.add("alert-read"),this.classList.remove("alert-unread"),this.classList.remove("event-border-blue","event-border-red","event-border-purple");let Ne="event-border-grey";y==="high"||y==="critical"?Ne="event-border-red":y==="medium"&&(Ne="event-border-orange"),this.classList.add(Ne),Te()}}};let Ke=`${S?S.toUpperCase():"GUARDIAN"} ALERT: ${M||w}`,Gt={system:"bx-cog",messaging:"bx-message-detail",cognitive:"bx-brain",moderation:"bx-shield-x",lifecycle:"bx-git-branch"}[_]||"bx-bell",Wt=y==="high"||y==="critical"?"#ff4d4d":y==="medium"?"#ffa500":"#888";Z.innerHTML=`
+            `;let Z=document.createElement("div");Z.className=`event-item notification-item ${M} ${O} ${U} cursor-pointer priority-${x}`,Z.dataset.alertId=d.id,Z.onclick=function(se){if(this.classList.contains("expanded")){this.classList.remove("expanded"),re.delete(d.id);let he=this.querySelector(".event-details");he&&(he.style.display="none")}else{this.classList.add("expanded"),re.add(d.id);let he=this.querySelector(".event-details");if(he&&(he.style.display="block"),!localStorage.getItem(`alert_read_ts_${d.id}`)){localStorage.setItem(`alert_read_ts_${d.id}`,Date.now().toString()),this.classList.add("alert-read"),this.classList.remove("alert-unread"),this.classList.remove("event-border-blue","event-border-red","event-border-purple");let Ne="event-border-grey";x==="high"||x==="critical"?Ne="event-border-red":x==="medium"&&(Ne="event-border-orange"),this.classList.add(Ne),Te()}}};let Ke=`${k?k.toUpperCase():"GUARDIAN"} ALERT: ${_||w}`,Gt={system:"bx-cog",messaging:"bx-message-detail",cognitive:"bx-brain",moderation:"bx-shield-x",lifecycle:"bx-git-branch"}[B]||"bx-bell",Wt=x==="high"||x==="critical"?"#ff4d4d":x==="medium"?"#ffa500":"#888";Z.innerHTML=`
                 <div class="event-time">
                     <span class="event-time-main">${$}</span>
                     <span class="event-date">${C}</span>
@@ -122,14 +122,14 @@
                 <div class="event-icon"><i class='bx ${Gt}'></i></div>
                 <div class="event-content" style="text-align: left;">
                     <div class="event-service">
-                        DEXTER <span class="alert-badge" style="color: ${Wt}; font-size: 0.8em; margin-left: 5px;">[${y.toUpperCase()}]</span>
+                        DEXTER <span class="alert-badge" style="color: ${Wt}; font-size: 0.8em; margin-left: 5px;">[${x.toUpperCase()}]</span>
                     </div>
                     <div class="event-message">${oe(Ke)}</div>
-                    <div class="event-details" style="${j}">
-                        ${J}
+                    <div class="event-details" style="${q}">
+                        ${F}
                     </div>
                 </div>
-            `;let Ze=Z.querySelector(".event-details");Ze&&Ze.addEventListener("click",se=>{se.stopPropagation()});let Ye=Z.querySelector(".close-details-btn");return Ye&&Ye.addEventListener("click",se=>{se.stopPropagation(),Z.classList.remove("expanded");let ze=Z.querySelector(".event-details");ze&&(ze.style.display="none"),re.delete(f.id)}),Z},b=f=>{let g=document.createElement("div");g.className="notification-divider",g.dataset.alertId=f.id;let w="#888888";return f.label==="CRITICAL"?w="#ff4d4d":f.label==="HIGH"?w="#ff8888":f.label==="MEDIUM"&&(w="#ffa500"),g.style.cssText=`display: flex; align-items: center; gap: 15px; color: ${w}; font-size: 0.7em; font-weight: 700; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8;`,g.innerHTML=`<span style="white-space: nowrap;">${f.label} PRIORITY</span><div style="height: 1px; background: linear-gradient(to right, ${w}44, transparent); flex-grow: 1;"></div>`,g},E=Array.from(e.children),h=new Map(E.map(f=>[f.dataset.alertId,f])),a=new Set(x.map(f=>f.id));E.forEach(f=>{let g=f.dataset.alertId;(!g||!a.has(g))&&f.remove()});let d=null;x.forEach((f,g)=>{let w=h.get(f.id);(!w||t)&&(w&&w.remove(),f.type==="divider"?w=b(f):w=o(f),!w)||(g===0?e.firstElementChild!==w&&e.prepend(w):d&&d.nextElementSibling!==w&&d.after(w),d=w)}),Ae=Date.now(),X(0,Ae),Te()}catch(s){console.error("Error fetching alerts:",s),e.children.length===0&&(e.innerHTML=N("offline","Failed to load alerts.","The event service may be offline."))}}function os(){let t=document.getElementById("alerts-read-all"),e=document.getElementById("alerts-expand-all"),i=document.getElementById("alerts-close-all"),s=document.getElementById("alerts-clear");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{Ie.forEach(n=>{localStorage.getItem(`alert_read_ts_${n.id}`)||localStorage.setItem(`alert_read_ts_${n.id}`,Date.now().toString())}),ie(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{Ie.forEach(n=>{re.add(n.id),localStorage.getItem(`alert_read_ts_${n.id}`)||localStorage.setItem(`alert_read_ts_${n.id}`,Date.now().toString())}),ie(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{re.clear(),ie(!0)},i.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=async()=>{if(confirm("Are you sure you want to delete all alerts from the backend?")){s.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{await A("/events?type=system.notification.generated",{method:"DELETE"});let n=Date.now()-48*60*60*1e3;Ie.forEach(l=>{localStorage.setItem(`alert_read_ts_${l.id}`,n.toString())}),re.clear(),ie(!0)}catch(n){console.error("Failed to clear alerts:",n)}finally{s.innerHTML="<i class='bx bx-trash'></i> Clear"}}},s.dataset.listenerAttached="true")}async function Re(){let t="/events?ml=1000&format=json&event.type=system.notification.generated";try{let e=await A(t);if(!e.ok)return;let s=(await e.json()).events||[],n=0;s.forEach(l=>{let r=l.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{r={}}if((r.priority||"low").toLowerCase()==="low")return;localStorage.getItem(`alert_read_ts_${l.id}`)||n++}),rt(n)}catch{}}var mt=()=>`
+            `;let Ze=Z.querySelector(".event-details");Ze&&Ze.addEventListener("click",se=>{se.stopPropagation()});let Ye=Z.querySelector(".close-details-btn");return Ye&&Ye.addEventListener("click",se=>{se.stopPropagation(),Z.classList.remove("expanded");let ze=Z.querySelector(".event-details");ze&&(ze.style.display="none"),re.delete(d.id)}),Z},g=d=>{let u=document.createElement("div");u.className="notification-divider",u.dataset.alertId=d.id;let w="#888888";return d.label==="CRITICAL"?w="#ff4d4d":d.label==="HIGH"?w="#ff8888":d.label==="MEDIUM"&&(w="#ffa500"),u.style.cssText=`display: flex; align-items: center; gap: 15px; color: ${w}; font-size: 0.7em; font-weight: 700; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8;`,u.innerHTML=`<span style="white-space: nowrap;">${d.label} PRIORITY</span><div style="height: 1px; background: linear-gradient(to right, ${w}44, transparent); flex-grow: 1;"></div>`,u},E=Array.from(e.children),y=new Map(E.map(d=>[d.dataset.alertId,d])),f=new Set(h.map(d=>d.id));E.forEach(d=>{let u=d.dataset.alertId;(!u||!f.has(u))&&d.remove()});let o=null;h.forEach((d,u)=>{let w=y.get(d.id);(!w||t)&&(w&&w.remove(),d.type==="divider"?w=g(d):w=a(d),!w)||(u===0?e.firstElementChild!==w&&e.prepend(w):o&&o.nextElementSibling!==w&&o.after(w),o=w)}),Ae=Date.now(),X(0,Ae),Te()}catch(s){console.error("Error fetching alerts:",s),e.children.length===0&&(e.innerHTML=N("offline","Failed to load alerts.","The event service may be offline."))}}function os(){let t=document.getElementById("alerts-read-all"),e=document.getElementById("alerts-expand-all"),i=document.getElementById("alerts-close-all"),s=document.getElementById("alerts-clear");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{Ie.forEach(n=>{localStorage.getItem(`alert_read_ts_${n.id}`)||localStorage.setItem(`alert_read_ts_${n.id}`,Date.now().toString())}),ie(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{Ie.forEach(n=>{re.add(n.id),localStorage.getItem(`alert_read_ts_${n.id}`)||localStorage.setItem(`alert_read_ts_${n.id}`,Date.now().toString())}),ie(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{re.clear(),ie(!0)},i.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=async()=>{if(confirm("Are you sure you want to delete all alerts from the backend?")){s.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{await I("/events?type=system.notification.generated",{method:"DELETE"});let n=Date.now()-48*60*60*1e3;Ie.forEach(c=>{localStorage.setItem(`alert_read_ts_${c.id}`,n.toString())}),re.clear(),ie(!0)}catch(n){console.error("Failed to clear alerts:",n)}finally{s.innerHTML="<i class='bx bx-trash'></i> Clear"}}},s.dataset.listenerAttached="true")}async function Re(){let t="/events?ml=1000&format=json&event.type=system.notification.generated";try{let e=await I(t);if(!e.ok)return;let s=(await e.json()).events||[],n=0;s.forEach(c=>{let r=c.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{r={}}if((r.priority||"low").toLowerCase()==="low")return;localStorage.getItem(`alert_read_ts_${c.id}`)||n++}),rt(n)}catch{}}var mt=()=>`
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
     <button id="roadmap-new" class="notif-action-btn" style="${z()?"display: none;":""}" title="New Idea"><i class='bx bx-plus'></i></button>
     <button id="roadmap-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
@@ -145,32 +145,32 @@
   </div>
   <div id="roadmap-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
   </div>
-`,le=new Set,Be=[],xe=null;async function ce(t=!1){let e=document.getElementById("roadmap-list");if(e){rs();try{let i=await A("/roadmap");if(!i.ok)throw new Error("Offline");let s=await i.json();Be=s;let n=p=>{let x=le.has(p.id),u=p.state==="published",v=p.state==="consumed",o="event-border-grey";u&&(o="event-border-blue"),v&&(o="event-border-purple");let E=new Date(p.created_at*1e3).toLocaleDateString(navigator.language,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}),h=document.createElement("div");h.className=`event-item notification-item ${o} cursor-pointer ${x?"expanded":""}`,h.dataset.itemId=p.id,h.onclick=f=>{if(f.target.closest("button"))return;h.classList.contains("expanded")?(h.classList.remove("expanded"),h.querySelector(".event-details").style.display="none",le.delete(p.id)):(h.classList.add("expanded"),h.querySelector(".event-details").style.display="block",le.add(p.id))};let a=`<span style="font-size: 0.7em; opacity: 0.6; margin-left: 10px;">[${p.state.toUpperCase()}]</span>`;h.innerHTML=`
+`,le=new Set,Be=[],xe=null;async function ce(t=!1){let e=document.getElementById("roadmap-list");if(e){rs();try{let i=await I("/roadmap");if(!i.ok)throw new Error("Offline");let s=await i.json();Be=s;let n=p=>{let h=le.has(p.id),m=p.state==="published",b=p.state==="consumed",a="event-border-grey";m&&(a="event-border-blue"),b&&(a="event-border-purple");let E=new Date(p.created_at*1e3).toLocaleDateString(navigator.language,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}),y=document.createElement("div");y.className=`event-item notification-item ${a} cursor-pointer ${h?"expanded":""}`,y.dataset.itemId=p.id,y.onclick=d=>{if(d.target.closest("button"))return;y.classList.contains("expanded")?(y.classList.remove("expanded"),y.querySelector(".event-details").style.display="none",le.delete(p.id)):(y.classList.add("expanded"),y.querySelector(".event-details").style.display="block",le.add(p.id))};let f=`<span style="font-size: 0.7em; opacity: 0.6; margin-left: 10px;">[${p.state.toUpperCase()}]</span>`;y.innerHTML=`
         <div class="event-time">
           <span class="event-time-main">${E.split(",")[1]}</span>
           <span class="event-date">${E.split(",")[0]}</span>
         </div>
         <div class="event-content">
-          <div class="event-service">ROADMAP ${a}</div>
+          <div class="event-service">ROADMAP ${f}</div>
           <div class="event-message" style="white-space: pre-wrap;">${P(p.content)}</div>
-          <div class="event-details" style="${x?"display: block;":"display: none;"} ">
+          <div class="event-details" style="${h?"display: block;":"display: none;"} ">
             ${z()?"":`
             <div class="event-details-header" style="margin-bottom: 15px;">
               <h5 style="margin: 0; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Item Controls</h5>
               <i class="bx bx-x close-details-btn"></i>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              ${v?"":`<button class="notif-action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>`}
+              ${b?"":`<button class="notif-action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>`}
               <button class="notif-action-btn publish-toggle-btn">
-                <i class='bx ${u?"bx-pause":"bx-rocket"}'></i> ${u?"Un-publish":"Publish"}
+                <i class='bx ${m?"bx-pause":"bx-rocket"}'></i> ${m?"Un-publish":"Publish"}
               </button>
               <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
             </div>
             `}
-            ${v?`<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(p.consumed_at*1e3).toLocaleString()}</div>`:""}
+            ${b?`<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(p.consumed_at*1e3).toLocaleString()}</div>`:""}
           </div>
         </div>
-      `;let d=h.querySelector(".event-details");return d&&d.addEventListener("click",f=>{f.stopPropagation()}),h.querySelector(".edit-btn")?.addEventListener("click",()=>ls(p)),h.querySelector(".publish-toggle-btn")?.addEventListener("click",()=>cs(p)),h.querySelector(".delete-btn")?.addEventListener("click",()=>ds(p.id)),h.querySelector(".close-details-btn")?.addEventListener("click",f=>{f.stopPropagation(),h.classList.remove("expanded"),h.querySelector(".event-details").style.display="none",le.delete(p.id)}),h},l=Array.from(e.children),r=new Map(l.map(p=>[p.dataset.itemId,p])),m=new Set(s.map(p=>p.id));if(l.forEach(p=>{let x=p.dataset.itemId;(!x||!m.has(x))&&p.remove()}),!Be||Be.length===0){e.innerHTML=N("empty","Your roadmap is empty.",z()?"Dexter is currently idle.":`Click "New Idea" to start planning Dexter's future.`);return}t&&(e.innerHTML="");let c=null;s.forEach((p,x)=>{let u=r.get(p.id);(!u||t)&&(u&&u.remove(),u=n(p),!u)||(x===0?e.firstElementChild!==u&&e.prepend(u):c&&c.nextElementSibling!==u&&c.after(u),c=u)})}catch{e.children.length===0&&(e.innerHTML=N("offline","Failed to load roadmap.","The event service may be offline."))}}}function rs(){let t=document.getElementById("roadmap-new"),e=document.getElementById("roadmap-save"),i=document.getElementById("roadmap-cancel"),s=document.getElementById("roadmap-expand-all"),n=document.getElementById("roadmap-close-all");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{xe=null,document.getElementById("roadmap-editor-input").value="",document.getElementById("roadmap-editor-container").style.display="block"},t.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{document.getElementById("roadmap-editor-container").style.display="none",xe=null},i.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{let l=document.getElementById("roadmap-editor-input").value;if(!l.trim())return;let r=xe?`/roadmap/${xe}`:"/roadmap",m=xe?"PATCH":"POST";try{await A(r,{method:m,headers:{"Content-Type":"application/json"},body:JSON.stringify({content:l})}),document.getElementById("roadmap-editor-container").style.display="none",ce(!0)}catch(c){console.error(c)}},e.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{Be.forEach(l=>le.add(l.id)),ce(!0)},s.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=()=>{le.clear(),ce(!0)},n.dataset.listenerAttached="true")}function ls(t){xe=t.id,document.getElementById("roadmap-editor-input").value=t.content,document.getElementById("roadmap-editor-container").style.display="block",document.getElementById("roadmap-editor-container").scrollIntoView({behavior:"smooth"})}async function cs(t){let e=t.state==="published"?"draft":"published";try{await A(`/roadmap/${t.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({state:e})}),ce(!0)}catch(i){console.error(i)}}async function ds(t){if(confirm("Delete this roadmap item?"))try{await A(`/roadmap/${t}`,{method:"DELETE"}),le.delete(t),ce(!0)}catch(e){console.error(e)}}var gt=()=>`
+      `;let o=y.querySelector(".event-details");return o&&o.addEventListener("click",d=>{d.stopPropagation()}),y.querySelector(".edit-btn")?.addEventListener("click",()=>ls(p)),y.querySelector(".publish-toggle-btn")?.addEventListener("click",()=>cs(p)),y.querySelector(".delete-btn")?.addEventListener("click",()=>ds(p.id)),y.querySelector(".close-details-btn")?.addEventListener("click",d=>{d.stopPropagation(),y.classList.remove("expanded"),y.querySelector(".event-details").style.display="none",le.delete(p.id)}),y},c=Array.from(e.children),r=new Map(c.map(p=>[p.dataset.itemId,p])),v=new Set(s.map(p=>p.id));if(c.forEach(p=>{let h=p.dataset.itemId;(!h||!v.has(h))&&p.remove()}),!Be||Be.length===0){e.innerHTML=N("empty","Your roadmap is empty.",z()?"Dexter is currently idle.":`Click "New Idea" to start planning Dexter's future.`);return}t&&(e.innerHTML="");let l=null;s.forEach((p,h)=>{let m=r.get(p.id);(!m||t)&&(m&&m.remove(),m=n(p),!m)||(h===0?e.firstElementChild!==m&&e.prepend(m):l&&l.nextElementSibling!==m&&l.after(m),l=m)})}catch{e.children.length===0&&(e.innerHTML=N("offline","Failed to load roadmap.","The event service may be offline."))}}}function rs(){let t=document.getElementById("roadmap-new"),e=document.getElementById("roadmap-save"),i=document.getElementById("roadmap-cancel"),s=document.getElementById("roadmap-expand-all"),n=document.getElementById("roadmap-close-all");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{xe=null,document.getElementById("roadmap-editor-input").value="",document.getElementById("roadmap-editor-container").style.display="block"},t.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{document.getElementById("roadmap-editor-container").style.display="none",xe=null},i.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{let c=document.getElementById("roadmap-editor-input").value;if(!c.trim())return;let r=xe?`/roadmap/${xe}`:"/roadmap",v=xe?"PATCH":"POST";try{await I(r,{method:v,headers:{"Content-Type":"application/json"},body:JSON.stringify({content:c})}),document.getElementById("roadmap-editor-container").style.display="none",ce(!0)}catch(l){console.error(l)}},e.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{Be.forEach(c=>le.add(c.id)),ce(!0)},s.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=()=>{le.clear(),ce(!0)},n.dataset.listenerAttached="true")}function ls(t){xe=t.id,document.getElementById("roadmap-editor-input").value=t.content,document.getElementById("roadmap-editor-container").style.display="block",document.getElementById("roadmap-editor-container").scrollIntoView({behavior:"smooth"})}async function cs(t){let e=t.state==="published"?"draft":"published";try{await I(`/roadmap/${t.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({state:e})}),ce(!0)}catch(i){console.error(i)}}async function ds(t){if(confirm("Delete this roadmap item?"))try{await I(`/roadmap/${t}`,{method:"DELETE"}),le.delete(t),ce(!0)}catch(e){console.error(e)}}var gt=()=>`
     <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
         <button id="blueprints-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
         <button id="blueprints-close-all" class="notif-action-btn" title="Close All"><i class='bx bx-collapse'></i></button>
@@ -179,64 +179,64 @@
 `,bt=()=>`
     <div id="blueprints-list" class="blueprints-list blueprints-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
     </div>
-`,ft=null,de=new Set,vt=[];async function pe(t=!1){let e=document.getElementById("blueprints-list");if(!e)return;ps();let i="/events?ml=1000&format=json&event.type=system.blueprint.generated";try{let s=await A(i);if(!s.ok)throw new Error("Service is offline or unreachable.");let l=(await s.json()).events||[];if(vt=l,ft=Date.now(),X(2,ft),l.length===0){e.innerHTML=N("empty","No architectural blueprints generated yet.","The Guardian will generate these when idle."),we(2,0);return}t&&(e.innerHTML="");let r=u=>{let v=u.event;if(typeof v=="string")try{v=JSON.parse(v)}catch{return null}let o=(v.title||"Untitled Blueprint").trim(),b=(v.summary||v.body||"No summary provided.").trim(),E=(v.content||"").trim(),h=(v.category||"architecture").trim(),a=(v.related_services||v.affected_services||[]).map(D=>D.trim()),d=(v.implementation_path||[]).map(D=>D.trim()),f=v.source_event_ids||[],g=v.approved===!0,w=new Date(u.timestamp*1e3),I=w.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),M=w.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),k=de.has(u.id),S=k?"display: block;":"display: none;",y=document.createElement("div");y.className=`event-item notification-item event-border-purple cursor-pointer ${k?"expanded":""} ${g?"blueprint-approved":""}`,y.dataset.blueprintId=u.id,g&&(y.style.boxShadow="0 0 20px rgba(3, 218, 198, 0.15)",y.style.background="linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)");let _=g?"bx-check-shield":{architecture:"bx-vector",optimization:"bx-trending-up",feature:"bx-extension",security:"bx-shield-lock"}[h]||"bx-paint";y.onclick=function(D){if(this.classList.contains("expanded")){this.classList.remove("expanded"),de.delete(u.id);let j=this.querySelector(".event-details");j&&(j.style.display="none")}else{this.classList.add("expanded"),de.add(u.id);let j=this.querySelector(".event-details");j&&(j.style.display="block")}};let H="";d.length>0&&(H=`
+`,ft=null,de=new Set,vt=[];async function pe(t=!1){let e=document.getElementById("blueprints-list");if(!e)return;ps();let i="/events?ml=1000&format=json&event.type=system.blueprint.generated";try{let s=await I(i);if(!s.ok)throw new Error("Service is offline or unreachable.");let c=(await s.json()).events||[];if(vt=c,ft=Date.now(),X(2,ft),c.length===0){e.innerHTML=N("empty","No architectural blueprints generated yet.","The Guardian will generate these when idle."),we(2,0);return}t&&(e.innerHTML="");let r=m=>{let b=m.event;if(typeof b=="string")try{b=JSON.parse(b)}catch{return null}let a=(b.title||"Untitled Blueprint").trim(),g=(b.summary||b.body||"No summary provided.").trim(),E=(b.content||"").trim(),y=(b.category||"architecture").trim(),f=(b.related_services||b.affected_services||[]).map(D=>D.trim()),o=(b.implementation_path||[]).map(D=>D.trim()),d=b.source_event_ids||[],u=b.approved===!0,w=new Date(m.timestamp*1e3),A=w.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),_=w.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),S=de.has(m.id),k=S?"display: block;":"display: none;",x=document.createElement("div");x.className=`event-item notification-item event-border-purple cursor-pointer ${S?"expanded":""} ${u?"blueprint-approved":""}`,x.dataset.blueprintId=m.id,u&&(x.style.boxShadow="0 0 20px rgba(3, 218, 198, 0.15)",x.style.background="linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)");let B=u?"bx-check-shield":{architecture:"bx-vector",optimization:"bx-trending-up",feature:"bx-extension",security:"bx-shield-lock"}[y]||"bx-paint";x.onclick=function(D){if(this.classList.contains("expanded")){this.classList.remove("expanded"),de.delete(m.id);let q=this.querySelector(".event-details");q&&(q.style.display="none")}else{this.classList.add("expanded"),de.add(m.id);let q=this.querySelector(".event-details");q&&(q.style.display="block")}};let H="";o.length>0&&(H=`
                     <div class="blueprint-path" style="margin-top: 15px;">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Proposed Steps</h5>
-                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${d.map(D=>`<li style="margin-bottom: 5px;">${P(D)}</li>`).join("")}</ul></div>
+                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${o.map(D=>`<li style="margin-bottom: 5px;">${P(D)}</li>`).join("")}</ul></div>
                     </div>
-                `);let q="";f.length>0&&(q=`
+                `);let J="";d.length>0&&(J=`
                     <div class="blueprint-source" style="margin-top: 15px;">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Source Alerts</h5>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            ${f.map(D=>`
+                            ${d.map(D=>`
                                 <a href="#" onclick="window.dexter.viewEvent('${D}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
                                     <i class='bx bx-link-external'></i> ${D.substring(0,8)}...
                                 </a>
                             `).join("")}
                         </div>
                     </div>
-                `);let K=a.length>0?`<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${a.join(", ")}</span></div>`:"<div></div>",F=z(),T=g?`
+                `);let G=f.length>0?`<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${f.join(", ")}</span></div>`:"<div></div>",j=z(),T=u?`
                 <div class="blueprint-status-badge" style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px;">
-                    ${K}
+                    ${G}
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <div style="display: flex; align-items: center; gap: 5px; color: #03dac6; font-size: 0.75em; font-weight: 700; text-transform: uppercase;">
                             <i class='bx bxs-check-shield'></i> Approved Blueprint
                         </div>
-                        <button class="blueprint-delete-btn" onmouseover="this.style.background='rgba(207, 102, 121, 0.1)'; this.style.color='#cf6679'; this.style.borderColor='rgba(207, 102, 121, 0.2)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.03)'; this.style.color='#666'; this.style.borderColor='rgba(255, 255, 255, 0.05)';" style="background: rgba(255, 255, 255, 0.03); color: #666; border: 1px solid rgba(255, 255, 255, 0.05); padding: 4px 10px; border-radius: 4px; font-size: 0.75em; font-weight: 600; cursor: pointer; transition: all 0.2s; display: ${F?"none":"block"};"><i class='bx bx-trash'></i> Delete</button>
+                        <button class="blueprint-delete-btn" onmouseover="this.style.background='rgba(207, 102, 121, 0.1)'; this.style.color='#cf6679'; this.style.borderColor='rgba(207, 102, 121, 0.2)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.03)'; this.style.color='#666'; this.style.borderColor='rgba(255, 255, 255, 0.05)';" style="background: rgba(255, 255, 255, 0.03); color: #666; border: 1px solid rgba(255, 255, 255, 0.05); padding: 4px 10px; border-radius: 4px; font-size: 0.75em; font-weight: 600; cursor: pointer; transition: all 0.2s; display: ${j?"none":"block"};"><i class='bx bx-trash'></i> Delete</button>
                     </div>
                 </div>
             `:`
                 <div class="blueprint-actions" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 20px;">
-                    ${K}
-                    <div style="display: ${F?"none":"flex"}; gap: 10px;">
+                    ${G}
+                    <div style="display: ${j?"none":"flex"}; gap: 10px;">
                         <button class="blueprint-approve-btn" style="background: rgba(3, 218, 198, 0.1); color: #03dac6; border: 1px solid rgba(3, 218, 198, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-check'></i> Approve</button>
                         <button class="blueprint-delete-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Decline</button>
                     </div>
                 </div>
-            `;y.innerHTML=`
-                ${g?'<div class="blueprint-sparkle"></div>':""}
+            `;x.innerHTML=`
+                ${u?'<div class="blueprint-sparkle"></div>':""}
                 <div class="event-time">
-                    <span class="event-time-main">${I}</span>
-                    <span class="event-date">${M}</span>
+                    <span class="event-time-main">${A}</span>
+                    <span class="event-date">${_}</span>
                 </div>
-                <div class="event-icon" style="${g?"color: #03dac6;":""}"><i class='bx ${_}'></i></div>
+                <div class="event-icon" style="${u?"color: #03dac6;":""}"><i class='bx ${B}'></i></div>
                 <div class="event-content">
-                    <div class="event-service">${h.toUpperCase()}</div>
-                    <div class="event-message">${o}</div>
-                    <div class="event-details" style="${S}">
+                    <div class="event-service">${y.toUpperCase()}</div>
+                    <div class="event-message">${a}</div>
+                    <div class="event-details" style="${k}">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Summary</h5>
-                        <div class="detail-pre" style="margin-bottom: 15px;">${P(b)}</div>
+                        <div class="detail-pre" style="margin-bottom: 15px;">${P(g)}</div>
 
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
                         <div class="event-detail-block" style="text-align: left;">
                             <div class="detail-pre">${P(E)}</div>
                         </div>
                         ${H}
-                        ${q}
+                        ${J}
                         ${T}
                     </div>
                 </div>
-            `;let $=y.querySelector(".blueprint-approve-btn");$&&($.onclick=async D=>{D.stopPropagation(),$.innerHTML="<i class='bx bx-loader-alt spin'></i> Approving...";try{(await A(`/events/${u.id}`,{method:"PATCH",body:JSON.stringify({approved:!0})})).ok&&pe(!0)}catch(U){console.error("Failed to approve blueprint:",U)}});let C=y.querySelector(".blueprint-delete-btn");C&&(C.onclick=async D=>{D.stopPropagation();let U=!g;C.innerHTML=U?"<i class='bx bx-loader-alt spin'></i> Declining...":"<i class='bx bx-loader-alt spin'></i> Deleting...";try{(await A(`/events/${u.id}`,{method:"DELETE"})).ok&&pe(!0)}catch(j){console.error("Failed to delete blueprint:",j)}});let L=y.querySelector(".event-details");L&&L.addEventListener("click",D=>{D.stopPropagation()});let O=y.querySelector(".close-details-btn");return O&&O.addEventListener("click",D=>{D.stopPropagation(),y.classList.remove("expanded");let U=y.querySelector(".event-details");U&&(U.style.display="none"),de.delete(u.id)}),y},m=Array.from(e.children),c=new Map(m.map(u=>[u.dataset.blueprintId,u])),p=new Set(l.map(u=>u.id));m.forEach(u=>{let v=u.dataset.blueprintId;(!v||!p.has(v))&&u.remove()});let x=null;l.forEach((u,v)=>{let o=c.get(u.id);(!o||t)&&(o&&o.remove(),o=r(u),!o)||(v===0?e.firstElementChild!==o&&e.prepend(o):x&&x.nextElementSibling!==o&&x.after(o),x=o)}),we(2,l.length),ct()}catch(s){console.error("Error fetching blueprints:",s),e.children.length===0&&(e.innerHTML=N("offline","Failed to load blueprints.","The event service may be offline."))}}async function xt(){let t="/events?ml=1000&format=json&event.type=system.blueprint.generated";try{let e=await A(t);if(!e.ok)return;let s=(await e.json()).events||[],n=0;s.forEach(l=>{let r=l.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{r={}}r.approved!==!0&&n++}),lt(n)}catch{}}function ps(){let t=document.getElementById("blueprints-expand-all"),e=document.getElementById("blueprints-close-all"),i=document.getElementById("blueprints-clear");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{vt.forEach(s=>de.add(s.id)),pe(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{de.clear(),pe(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=async()=>{if(confirm("Are you sure you want to delete all UNAPPROVED blueprints?")){i.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{await A("/events?type=system.blueprint.generated",{method:"DELETE"}),de.clear(),pe(!0)}catch(s){console.error("Failed to clear blueprints:",s)}finally{i.innerHTML="<i class='bx bx-trash'></i> Clear"}}},i.dataset.listenerAttached="true")}var yt=()=>`
+            `;let $=x.querySelector(".blueprint-approve-btn");$&&($.onclick=async D=>{D.stopPropagation(),$.innerHTML="<i class='bx bx-loader-alt spin'></i> Approving...";try{(await I(`/events/${m.id}`,{method:"PATCH",body:JSON.stringify({approved:!0})})).ok&&pe(!0)}catch(U){console.error("Failed to approve blueprint:",U)}});let C=x.querySelector(".blueprint-delete-btn");C&&(C.onclick=async D=>{D.stopPropagation();let U=!u;C.innerHTML=U?"<i class='bx bx-loader-alt spin'></i> Declining...":"<i class='bx bx-loader-alt spin'></i> Deleting...";try{(await I(`/events/${m.id}`,{method:"DELETE"})).ok&&pe(!0)}catch(q){console.error("Failed to delete blueprint:",q)}});let M=x.querySelector(".event-details");M&&M.addEventListener("click",D=>{D.stopPropagation()});let O=x.querySelector(".close-details-btn");return O&&O.addEventListener("click",D=>{D.stopPropagation(),x.classList.remove("expanded");let U=x.querySelector(".event-details");U&&(U.style.display="none"),de.delete(m.id)}),x},v=Array.from(e.children),l=new Map(v.map(m=>[m.dataset.blueprintId,m])),p=new Set(c.map(m=>m.id));v.forEach(m=>{let b=m.dataset.blueprintId;(!b||!p.has(b))&&m.remove()});let h=null;c.forEach((m,b)=>{let a=l.get(m.id);(!a||t)&&(a&&a.remove(),a=r(m),!a)||(b===0?e.firstElementChild!==a&&e.prepend(a):h&&h.nextElementSibling!==a&&h.after(a),h=a)}),we(2,c.length),ct()}catch(s){console.error("Error fetching blueprints:",s),e.children.length===0&&(e.innerHTML=N("offline","Failed to load blueprints.","The event service may be offline."))}}async function xt(){let t="/events?ml=1000&format=json&event.type=system.blueprint.generated";try{let e=await I(t);if(!e.ok)return;let s=(await e.json()).events||[],n=0;s.forEach(c=>{let r=c.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{r={}}r.approved!==!0&&n++}),lt(n)}catch{}}function ps(){let t=document.getElementById("blueprints-expand-all"),e=document.getElementById("blueprints-close-all"),i=document.getElementById("blueprints-clear");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{vt.forEach(s=>de.add(s.id)),pe(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{de.clear(),pe(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=async()=>{if(confirm("Are you sure you want to delete all UNAPPROVED blueprints?")){i.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{await I("/events?type=system.blueprint.generated",{method:"DELETE"}),de.clear(),pe(!0)}catch(s){console.error("Failed to clear blueprints:",s)}finally{i.innerHTML="<i class='bx bx-trash'></i> Clear"}}},i.dataset.listenerAttached="true")}var yt=()=>`
     <div class="ideas-container">
         <div class="roadmap-section" style="margin-bottom: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
@@ -282,19 +282,19 @@
         </div>
 
         <div id="chores-list" class="system-monitor-widgets" style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;"></div>
-    `;async function ye(){let t=document.getElementById("chores-list"),e=document.getElementById("create-chore-btn"),i=document.getElementById("create-chore-form"),s=document.getElementById("save-chore-btn"),n=document.getElementById("cancel-chore-btn");if(e&&!e.dataset.listenerAttached&&(e.onclick=()=>{i.style.display=i.style.display==="none"?"block":"none"},e.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=()=>{i.style.display="none"},n.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=async()=>{let l=document.getElementById("new-chore-instruction").value,r=document.getElementById("new-chore-url").value,m=document.getElementById("new-chore-owner").value||"313071000877137920";if(l){s.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await A("/chores",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({owner_id:m,natural_instruction:l,entry_url:r,schedule:"every_6h"})}),i.style.display="none",document.getElementById("new-chore-instruction").value="",document.getElementById("new-chore-url").value="",ye()}catch(c){console.error(c),alert("Failed to create chore")}finally{s.innerHTML="Create Task"}}},s.dataset.listenerAttached="true"),!!t)try{let r=await(await A("/chores")).json();if(!r||r.length===0){t.innerHTML=N("empty","No active chores.","Create one to start monitoring.");return}let m=r.map(c=>{let p=c.last_run===0?"Never":new Date(c.last_run*1e3).toLocaleString(),x=c.memory?c.memory.length:0,u=c.status==="active"?"#03dac6":"#666";return`
-                <div class="service-widget" style="border-left: 3px solid ${u}; width: 100%;">
+    `;async function ye(){let t=document.getElementById("chores-list"),e=document.getElementById("create-chore-btn"),i=document.getElementById("create-chore-form"),s=document.getElementById("save-chore-btn"),n=document.getElementById("cancel-chore-btn");if(e&&!e.dataset.listenerAttached&&(e.onclick=()=>{i.style.display=i.style.display==="none"?"block":"none"},e.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=()=>{i.style.display="none"},n.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=async()=>{let c=document.getElementById("new-chore-instruction").value,r=document.getElementById("new-chore-url").value,v=document.getElementById("new-chore-owner").value||"313071000877137920";if(c){s.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await I("/chores",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({owner_id:v,natural_instruction:c,entry_url:r,schedule:"every_6h"})}),i.style.display="none",document.getElementById("new-chore-instruction").value="",document.getElementById("new-chore-url").value="",ye()}catch(l){console.error(l),alert("Failed to create chore")}finally{s.innerHTML="Create Task"}}},s.dataset.listenerAttached="true"),!!t)try{let r=await(await I("/chores")).json();if(!r||r.length===0){t.innerHTML=N("empty","No active chores.","Create one to start monitoring.");return}let v=r.map(l=>{let p=l.last_run===0?"Never":new Date(l.last_run*1e3).toLocaleString(),h=l.memory?l.memory.length:0,m=l.status==="active"?"#03dac6":"#666";return`
+                <div class="service-widget" style="border-left: 3px solid ${m}; width: 100%;">
                     <div class="service-widget-header">
-                        <i class='bx bx-search-alt' style="color: ${u}"></i>
-                        <h3 style="font-size: 0.95em; white-space: normal; line-height: 1.4;">${c.natural_instruction}</h3>
+                        <i class='bx bx-search-alt' style="color: ${m}"></i>
+                        <h3 style="font-size: 0.95em; white-space: normal; line-height: 1.4;">${l.natural_instruction}</h3>
                         <div style="margin-left: auto; display: flex; gap: 10px;">
-                            <button class="icon-btn delete-chore-btn" data-id="${c.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 5px;"><i class='bx bx-trash'></i></button>
+                            <button class="icon-btn delete-chore-btn" data-id="${l.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 5px;"><i class='bx bx-trash'></i></button>
                         </div>
                     </div>
                     <div class="service-widget-body">
                         <div class="service-widget-info">
                             <span class="info-label">Schedule:</span>
-                            <span class="info-value">${c.schedule}</span>
+                            <span class="info-value">${l.schedule}</span>
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Last Run:</span>
@@ -302,15 +302,15 @@
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Items Found:</span>
-                            <span class="info-value">${x}</span>
+                            <span class="info-value">${h}</span>
                         </div>
                         <div class="service-widget-info" style="grid-column: span 2; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px;">
                             <span class="info-label">Target:</span>
-                            <span class="info-value" style="font-size: 0.8em; opacity: 0.8; word-break: break-all;">${c.execution_plan.entry_url||"Auto-detected"}</span>
+                            <span class="info-value" style="font-size: 0.8em; opacity: 0.8; word-break: break-all;">${l.execution_plan.entry_url||"Auto-detected"}</span>
                         </div>
                     </div>
                 </div>
-            `}).join("");t.innerHTML=m,t.querySelectorAll(".delete-chore-btn").forEach(c=>{c.onclick=async p=>{p.stopPropagation(),confirm("Delete this chore?")&&(await A(`/chores/${c.dataset.id}`,{method:"DELETE"}),ye())}})}catch(l){console.error("Failed to fetch chores",l)}}var ms=`
+            `}).join("");t.innerHTML=v,t.querySelectorAll(".delete-chore-btn").forEach(l=>{l.onclick=async p=>{p.stopPropagation(),confirm("Delete this chore?")&&(await I(`/chores/${l.dataset.id}`,{method:"DELETE"}),ye())}})}catch(c){console.error("Failed to fetch chores",c)}}var ms=`
     .profile-overlay {
         position: fixed;
         top: 0;
@@ -748,12 +748,12 @@
                 <div style="margin-top: 20px; font-family: 'JetBrains Mono'; color: #666;">ACCESSING SECURE ARCHIVE...</div>
             </div>
         </div>
-    `,e.addEventListener("click",i=>{i.target===e&&(e.classList.remove("active"),setTimeout(()=>e.remove(),300))}),document.body.appendChild(e),requestAnimationFrame(()=>e.classList.add("active")),Me(`/profile/${t.id}`).then(async i=>{if(i.ok){let s=await i.json();Ue(e,t,s)}else{console.log("Profile not found or error, using mock data.");let s=wt(t.id,t.username);Ue(e,t,s)}}).catch(i=>{console.error("Profile fetch error:",i);let s=wt(t.id,t.username);Ue(e,t,s)})}function Ue(t,e,i){let s=e.status==="online"?"#03dac6":e.status==="idle"?"#ffb74d":"#cf6679",n=()=>{let E=(i.badges||[]).map(I=>`<span class="profile-badge ${I==="Creator"?"master":""}">${I}</span>`).join(""),h=(i.attributes||i.facts||[]).map(I=>{let M=I.key||I.k,k=I.value||I.v;return`
+    `,e.addEventListener("click",i=>{i.target===e&&(e.classList.remove("active"),setTimeout(()=>e.remove(),300))}),document.body.appendChild(e),requestAnimationFrame(()=>e.classList.add("active")),Me(`/profile/${t.id}`).then(async i=>{if(i.ok){let s=await i.json();Ue(e,t,s)}else{console.log("Profile not found or error, using mock data.");let s=wt(t.id,t.username);Ue(e,t,s)}}).catch(i=>{console.error("Profile fetch error:",i);let s=wt(t.id,t.username);Ue(e,t,s)})}function Ue(t,e,i){let s=e.status==="online"?"#03dac6":e.status==="idle"?"#ffb74d":"#cf6679",n=()=>{let E=(i.badges||[]).map(A=>`<span class="profile-badge ${A==="Creator"?"master":""}">${A}</span>`).join(""),y=(i.attributes||i.facts||[]).map(A=>{let _=A.key||A.k,S=A.value||A.v;return`
             <div class="fact-chip">
-                <span class="fact-key">${M}:</span>
-                <span class="fact-val">${k}</span>
+                <span class="fact-key">${_}:</span>
+                <span class="fact-val">${S}</span>
             </div>
-        `}).join(""),a=i.cognitive_model||i,d=a.technical_level||a.techLevel||0,f=a.communication_style||a.commStyle||"Unknown",g=a.patience_level||a.patience||"Unknown",w=a.vibe||"Unknown";return`
+        `}).join(""),f=i.cognitive_model||i,o=f.technical_level||f.techLevel||0,d=f.communication_style||f.commStyle||"Unknown",u=f.patience_level||f.patience||"Unknown",w=f.vibe||"Unknown";return`
             <div class="overview-grid">
                 <div class="profile-section">
                     <div class="profile-section-title"><i class='bx bx-brain'></i> Cognitive Model</div>
@@ -761,24 +761,24 @@
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Technical Level</span>
-                            <span>${d}/10</span>
+                            <span>${o}/10</span>
                         </div>
                         <div class="cog-bar-bg">
-                            <div class="cog-bar-fill" style="width: ${Math.min(d*10,100)}%;"></div>
+                            <div class="cog-bar-fill" style="width: ${Math.min(o*10,100)}%;"></div>
                         </div>
                     </div>
 
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Communication Style</span>
-                            <span style="color: #03dac6;">${f}</span>
+                            <span style="color: #03dac6;">${d}</span>
                         </div>
                     </div>
 
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Predicted Patience</span>
-                            <span>${g}</span>
+                            <span>${u}</span>
                         </div>
                     </div>
 
@@ -793,7 +793,7 @@
                 <div class="profile-section">
                     <div class="profile-section-title"><i class='bx bx-purchase-tag-alt'></i> Fact Bank</div>
                     <div class="fact-grid">
-                        ${h}
+                        ${y}
                     </div>
                     
                     <div style="margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 0.9em; color: #888; font-style: italic;">
@@ -801,45 +801,45 @@
                     </div>
                 </div>
             </div>
-        `},l=()=>{let E=i.dossier||{},h=E.identity||{},a=E.career||{},d=E.personal||{},f=E.social||[];return`
+        `},c=()=>{let E=i.dossier||{},y=E.identity||{},f=E.career||{},o=E.personal||{},d=E.social||[];return`
             <div class="dossier-grid">
                 <!-- Identity Column -->
                 <div class="dossier-column">
                     <div class="profile-section-title"><i class='bx bx-id-card'></i> Identity</div>
                     <div class="dossier-item">
                         <div class="dossier-label">Full Name</div>
-                        <div class="dossier-value">${h.fullName||"Unknown"}</div>
+                        <div class="dossier-value">${y.fullName||"Unknown"}</div>
                         <div style="height: 15px;"></div>
                         
                         <div class="dossier-label">Age Range</div>
-                        <div class="dossier-value">${h.ageRange||"Unknown"}</div>
+                        <div class="dossier-value">${y.ageRange||"Unknown"}</div>
                         <div style="height: 15px;"></div>
                         
                         <div class="dossier-label">Location</div>
-                        <div class="dossier-value">${h.location||"Unknown"}</div>
+                        <div class="dossier-value">${y.location||"Unknown"}</div>
                         <div style="height: 15px;"></div>
 
                         <div class="dossier-label">Gender</div>
-                        <div class="dossier-value">${h.gender||"Unknown"}</div>
+                        <div class="dossier-value">${y.gender||"Unknown"}</div>
                         <div style="height: 15px;"></div>
 
                         <div class="dossier-label">Sexuality</div>
-                        <div class="dossier-value" style="color: #ffb74d;">${h.sexuality||"Unknown"}</div>
+                        <div class="dossier-value" style="color: #ffb74d;">${y.sexuality||"Unknown"}</div>
                         <div style="height: 15px;"></div>
 
                         <div class="dossier-label">Relationship Status</div>
-                        <div class="dossier-value">${h.relationship||"Unknown"}</div>
+                        <div class="dossier-value">${y.relationship||"Unknown"}</div>
                     </div>
                     
                     <div class="profile-section-title" style="margin-top: 30px;"><i class='bx bx-briefcase'></i> Career</div>
                     <div class="dossier-item">
                         <div class="dossier-label">Current Role</div>
-                        <div class="dossier-value">${a.jobTitle||"Unknown"}</div>
-                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${a.company||"Unknown"}</div>
+                        <div class="dossier-value">${f.jobTitle||"Unknown"}</div>
+                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${f.company||"Unknown"}</div>
                         <div style="height: 15px;"></div>
                          <div class="dossier-label">Key Skills</div>
                          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
-                            ${(a.skills||[]).map(g=>`<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${g}</span>`).join("")}
+                            ${(f.skills||[]).map(u=>`<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${u}</span>`).join("")}
                          </div>
                     </div>
                 </div>
@@ -851,21 +851,21 @@
                     <div class="dossier-item">
                         <div class="dossier-label"><i class='bx bx-joystick'></i> Hobbies</div>
                         <div style="margin-top: 10px;">
-                            ${(d.hobbies||[]).map(g=>`<div class="dossier-list-item">${g}</div>`).join("")}
+                            ${(o.hobbies||[]).map(u=>`<div class="dossier-list-item">${u}</div>`).join("")}
                         </div>
                     </div>
 
                     <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-sync'></i> Habits</div>
                         <div style="margin-top: 10px;">
-                            ${(d.habits||[]).map(g=>`<div class="dossier-list-item">${g}</div>`).join("")}
+                            ${(o.habits||[]).map(u=>`<div class="dossier-list-item">${u}</div>`).join("")}
                         </div>
                     </div>
 
                      <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-error-circle'></i> Known Vices</div>
                         <div style="margin-top: 10px;">
-                            ${(d.vices||[]).map(g=>`<div class="dossier-list-item" style="color: #cf6679;">${g}</div>`).join("")}
+                            ${(o.vices||[]).map(u=>`<div class="dossier-list-item" style="color: #cf6679;">${u}</div>`).join("")}
                         </div>
                     </div>
                 </div>
@@ -874,14 +874,14 @@
                 <div class="dossier-column">
                     <div class="profile-section-title"><i class='bx bx-network-chart'></i> Known Associates</div>
                     <div class="dossier-item" style="background: none; border: none; padding: 0;">
-                        ${f.length>0?f.map(g=>`
+                        ${d.length>0?d.map(u=>`
                             <div class="friend-chip">
-                                <div style="width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">${g.name.substring(0,1)}</div>
+                                <div style="width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">${u.name.substring(0,1)}</div>
                                 <div style="flex: 1;">
-                                    <div style="color: #fff; font-weight: 500;">${g.name}</div>
-                                    <div style="font-size: 0.75em; color: #888;">${g.relation}</div>
+                                    <div style="color: #fff; font-weight: 500;">${u.name}</div>
+                                    <div style="font-size: 0.75em; color: #888;">${u.relation}</div>
                                 </div>
-                                <div style="font-size: 0.8em; color: #03dac6;">${g.trust}</div>
+                                <div style="font-size: 0.8em; color: #03dac6;">${u.trust}</div>
                             </div>
                         `).join(""):'<div style="color: #666; font-style: italic;">No associates mapped.</div>'}
                     </div>
@@ -890,27 +890,27 @@
         `},r=()=>{let E=i.traits||{};return`
         <div class="profile-section-title"><i class='bx bx-radar'></i> Personality Matrix (OCEAN)</div>
         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
-            ${Object.entries(E).map(([h,a])=>`
+            ${Object.entries(E).map(([y,f])=>`
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                     <div style="width: 10px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 5px; position: relative; overflow: hidden;">
-                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${a}%; background: ${a>50?"#03dac6":"#cf6679"}; transition: height 1s;"></div>
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${f}%; background: ${f>50?"#03dac6":"#cf6679"}; transition: height 1s;"></div>
                     </div>
-                    <div style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #aaa;">${h.substring(0,4)}</div>
-                    <div style="font-family: monospace;">${a}%</div>
+                    <div style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #aaa;">${y.substring(0,4)}</div>
+                    <div style="font-family: monospace;">${f}%</div>
                 </div>
             `).join("")}
         </div>
         <div style="margin-top: 40px;">
             <div class="profile-section-title"><i class='bx bx-message-square-detail'></i> Sentiment History</div>
             <div style="height: 100px; border-bottom: 1px solid #333; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 5px;">
-                ${Array.from({length:40}).map(()=>{let h=Math.floor(Math.random()*80)+10;return`<div style="flex: 1; background: ${Math.random()>.7?"#cf6679":Math.random()>.5?"#03dac6":"#444"}; height: ${h}%; border-radius: 2px;"></div>`}).join("")}
+                ${Array.from({length:40}).map(()=>{let y=Math.floor(Math.random()*80)+10;return`<div style="flex: 1; background: ${Math.random()>.7?"#cf6679":Math.random()>.5?"#03dac6":"#444"}; height: ${y}%; border-radius: 2px;"></div>`}).join("")}
             </div>
             <div style="font-family: monospace; color: #666; font-size: 0.7em; margin-top: 5px; display: flex; justify-content: space-between;">
                 <span>30 Days Ago</span>
                 <span>Today</span>
             </div>
         </div>
-    `},m=()=>`
+    `},v=()=>`
         <div class="profile-section-title"><i class='bx bx-map-alt'></i> Conversation Topics</div>
         <div style="margin-top: 20px;">
             ${(i.topics||[]).map(E=>`
@@ -925,7 +925,7 @@
                 </div>
             `).join("")}
         </div>
-    `,c=()=>`
+    `,l=()=>`
         <div class="profile-section-title"><i class='bx bx-code-alt'></i> Raw Profile JSON</div>
         <div class="raw-json">${JSON.stringify(i,null,2)}</div>
     `,p=`
@@ -953,10 +953,10 @@
 
             <div class="profile-body">
                 <div id="tab-overview" class="tab-content active">${n()}</div>
-                <div id="tab-dossier" class="tab-content">${l()}</div>
+                <div id="tab-dossier" class="tab-content">${c()}</div>
                 <div id="tab-psychometrics" class="tab-content">${r()}</div>
-                <div id="tab-topics" class="tab-content">${m()}</div>
-                <div id="tab-raw" class="tab-content">${c()}</div>
+                <div id="tab-topics" class="tab-content">${v()}</div>
+                <div id="tab-raw" class="tab-content">${l()}</div>
             </div>
 
             <div class="profile-footer">
@@ -968,7 +968,7 @@
                 <button id="profile-expand-toggle" class="expand-btn"><i class='bx bx-expand-alt'></i> Detailed Analysis</button>
             </div>
         </div>
-    `;t.innerHTML=p;let x=t.querySelector(".profile-card"),u=t.querySelector("#profile-expand-toggle"),v=t.querySelectorAll(".profile-tab-btn"),o=t.querySelectorAll(".tab-content");t.querySelector(".close-profile-btn").addEventListener("click",()=>{t.classList.remove("active"),setTimeout(()=>t.remove(),300)}),v.forEach(E=>{E.addEventListener("click",()=>{v.forEach(h=>h.classList.remove("active")),o.forEach(h=>h.classList.remove("active")),E.classList.add("active"),t.querySelector(`#tab-${E.dataset.tab}`).classList.add("active")})}),u.addEventListener("click",()=>{x.classList.toggle("expanded");let E=x.classList.contains("expanded");u.innerHTML=E?"<i class='bx bx-collapse-alt'></i> Collapse View":"<i class='bx bx-expand-alt'></i> Detailed Analysis"})}var $t=()=>`
+    `;t.innerHTML=p;let h=t.querySelector(".profile-card"),m=t.querySelector("#profile-expand-toggle"),b=t.querySelectorAll(".profile-tab-btn"),a=t.querySelectorAll(".tab-content");t.querySelector(".close-profile-btn").addEventListener("click",()=>{t.classList.remove("active"),setTimeout(()=>t.remove(),300)}),b.forEach(E=>{E.addEventListener("click",()=>{b.forEach(y=>y.classList.remove("active")),a.forEach(y=>y.classList.remove("active")),E.classList.add("active"),t.querySelector(`#tab-${E.dataset.tab}`).classList.add("active")})}),m.addEventListener("click",()=>{h.classList.toggle("expanded");let E=h.classList.contains("expanded");m.innerHTML=E?"<i class='bx bx-collapse-alt'></i> Collapse View":"<i class='bx bx-expand-alt'></i> Detailed Analysis"})}var $t=()=>`
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-book-content' style="color: #03dac6;"></i>
         <h2>Contacts</h2>
@@ -976,33 +976,33 @@
     </div>
     <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
     </div>
-`,us=null;async function je(){let t=document.getElementById("contacts-list");if(!t)return;let e=document.getElementById("contacts-refresh");e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>",await je(),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},e.dataset.listenerAttached="true"),t.dataset.listenerAttached||(t.onclick=i=>{let s=i.target.closest(".user-profile-card");if(s)try{let n=JSON.parse(s.dataset.user);Ct(n)}catch(n){console.error("Failed to parse user data",n)}},t.dataset.listenerAttached="true");try{let i=await Me("/contacts");if(!i.ok)throw new Error("Service unreachable");let n=(await i.json()).members||[];if(us=Date.now(),n.length===0){t.innerHTML=N("empty","No contacts found.","Check your Discord connection.");return}let l={Me:0,Master:1,Admin:2,Moderator:3,Contributor:4,User:5};n.sort((r,m)=>{let c=l[r.level]??10,p=l[m.level]??10;return c!==p?c-p:r.username.localeCompare(m.username)}),t.innerHTML=n.map(r=>{let m=r.color?"#"+r.color.toString(16).padStart(6,"0"):"rgba(255,255,255,0.1)",c=r.status==="online"?"#5eff5e":r.status==="idle"?"#ffa500":r.status==="dnd"?"#ff4d4d":"#666",p="#888";r.level==="Me"||r.level==="Master"?p="#bb86fc":r.level==="Admin"?p="#cf6679":r.level==="Moderator"?p="#03dac6":r.level==="Contributor"&&(p="#ffa500");let x=r.level==="Me",u=x?"rgba(187, 134, 252, 0.08)":"rgba(255,255,255,0.03)",v=x?"2px solid #bb86fc":`1px solid ${m}33`;return`
+`,us=null;async function je(){let t=document.getElementById("contacts-list");if(!t)return;let e=document.getElementById("contacts-refresh");e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>",await je(),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},e.dataset.listenerAttached="true"),t.dataset.listenerAttached||(t.onclick=i=>{let s=i.target.closest(".user-profile-card");if(s)try{let n=JSON.parse(s.dataset.user);Ct(n)}catch(n){console.error("Failed to parse user data",n)}},t.dataset.listenerAttached="true");try{let i=await Me("/contacts");if(!i.ok)throw new Error("Service unreachable");let n=(await i.json()).members||[];if(us=Date.now(),n.length===0){t.innerHTML=N("empty","No contacts found.","Check your Discord connection.");return}let c={Me:0,Master:1,Admin:2,Moderator:3,Contributor:4,User:5};n.sort((r,v)=>{let l=c[r.level]??10,p=c[v.level]??10;return l!==p?l-p:r.username.localeCompare(v.username)}),t.innerHTML=n.map(r=>{let v=r.color?"#"+r.color.toString(16).padStart(6,"0"):"rgba(255,255,255,0.1)",l=r.status==="online"?"#5eff5e":r.status==="idle"?"#ffa500":r.status==="dnd"?"#ff4d4d":"#666",p="#888";r.level==="Me"||r.level==="Master"?p="#bb86fc":r.level==="Admin"?p="#cf6679":r.level==="Moderator"?p="#03dac6":r.level==="Contributor"&&(p="#ffa500");let h=r.level==="Me",m=h?"rgba(187, 134, 252, 0.08)":"rgba(255,255,255,0.03)",b=h?"2px solid #bb86fc":`1px solid ${v}33`;return`
                 <div class="user-profile-card" 
                      data-user="${JSON.stringify(r).replace(/"/g,"&quot;")}"
-                     style="background: ${u}; padding: 15px; border-radius: 8px; border: ${v}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.2s, background 0.2s;">
-                    <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${x?"#bb86fc":m}22, transparent 70%); pointer-events: none;"></div>
+                     style="background: ${m}; padding: 15px; border-radius: 8px; border: ${b}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.2s, background 0.2s;">
+                    <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${h?"#bb86fc":v}22, transparent 70%); pointer-events: none;"></div>
                     <div style="position: relative;">
-                        <img src="${r.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${x?"2px solid #bb86fc":"none"};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                        <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${c}; border: 2px solid #1a1a1a; border-radius: 50%;"></div>
+                        <img src="${r.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${h?"2px solid #bb86fc":"none"};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                        <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${l}; border: 2px solid #1a1a1a; border-radius: 50%;"></div>
                     </div>
                     <div class="user-info" style="text-align: left; flex: 1; min-width: 0;">
                         <h3 style="margin: 0; font-size: 0.95em; color: #fff; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${r.username}</h3>
                         <div style="display: flex; align-items: center; gap: 5px; margin-top: 2px;">
-                            <span style="font-size: 0.75em; color: ${p}; font-weight: 600; text-transform: uppercase;">${x?"DEXTER (ME)":r.level}</span>
+                            <span style="font-size: 0.75em; color: ${p}; font-weight: 600; text-transform: uppercase;">${h?"DEXTER (ME)":r.level}</span>
                         </div>
                         <p style="margin: 4px 0 0 0; font-family: monospace; font-size: 0.65em; opacity: 0.4; text-align: left;">${r.id}</p>
                     </div>
                 </div>
-            `}).join("")}catch{t.children.length===0&&(t.innerHTML=N("offline","Failed to fetch contacts.","The Discord service may be offline."))}}var fs={message_received:"{user} posted in {channel}: {message}",action_performed:"{actor} {action} {target}",log_entry:"[{level}] {message}",error_occurred:"ERROR: {error}",status_change:"{entity} changed status to {new_status}",metric_recorded:"{metric_name}: {value}{unit}","messaging.user.joined_voice":"{user_name} joined voice channel {channel_name}","messaging.user.left_voice":"{user_name} left voice channel {channel_name}","messaging.user.sent_message":"{user_name} in {channel_name}: {content}","messaging.bot.sent_message":"Dexter sent in {channel_name}: {content}","messaging.bot.joined_voice":"Dexter joined voice channel {channel_name}","messaging.bot.voice_response":"Dexter said: {content}","messaging.bot.status_update":"Dexter status changed to {status}: {details}","messaging.user.speaking.started":"{user_name} started speaking","messaging.user.speaking.stopped":"{user_name} stopped speaking","messaging.user.transcribed":"{user_name} said: {transcription}","messaging.user.joined_server":"{user_name} joined {server_name}","messaging.webhook.message":"{user_name} (Webhook): {content}","webhook.processed":"Webhook processed: {status}",voice_speaking_started:"User {user_id} started speaking in voice channel {channel_id}",voice_speaking_stopped:"User {user_id} stopped speaking in voice channel {channel_id}",voice_transcribed:"{user_name} said: {transcription}","engagement.decision":"Engagement Decision: {decision} ({reason})",bot_response:"Bot Responded: {response}","moderation.explicit_content.deleted":"Explicit content deleted in {channel_name} from {user_name}: {reason}","analysis.link.completed":"Analyzed link: {url}","analysis.visual.completed":"Analyzed image: {filename}","analysis.router.decision":"Router Decision: {decision} for {url}","analysis.user.message_signals":"Analyzed Signals for User {user_id}","system.status.change":"{entity} changed status to {new_status}","system.test.completed":"Tests completed for {service_name} ({duration})","system.build.completed":"Build completed for {service_name}: {status}","system.analysis.audit":"Guardian Audit: {tier}","system.blueprint.generated":"Blueprint Generated: {title}","system.cli.command":"CLI Command: {command} {args} ({status})","system.cli.status":"CLI Status: {message}","system.notification.generated":"Notification ({priority}): {title}","system.attention.expired":"Attention Expired: {tier}","system.roadmap.created":"Roadmap item created: {content}","system.roadmap.updated":"Roadmap item {id} changed to {state}","system.process.registered":"Process {id} started: {state}","system.process.unregistered":"Process {id} completed"};function Et(t,e){let i=fs[t];if(t==="voice_transcribed"&&!e.user_name&&e.user_id&&(i="User {user_id} said in voice channel {channel_id}: {transcription}"),t==="system.notification.generated"&&(i=`Notification (${e.priority?e.priority.charAt(0).toUpperCase()+e.priority.slice(1):"Low"}): ${e.title}`),t==="system.analysis.audit"&&(i=`Guardian Audit: ${e.tier?e.tier.toUpperCase():"UNKNOWN"}`),t==="system.attention.expired")return`System Attention Expired: ${e.tier?e.tier.charAt(0).toUpperCase()+e.tier.slice(1):"Unknown"}`;if(t==="system.test.completed")return`Tests ${e.test?.status==="OK"&&e.lint?.status==="OK"&&e.format?.status==="OK"?"PASSED":"FAILED"} for ${e.service_name} (${e.duration})`;if(!i)return t;let s=i.replace(/\{(\w+)\}/g,(n,l)=>e[l]!==void 0&&e[l]!==null?e[l]:n);return(t==="messaging.user.transcribed"||t==="voice_transcribed")&&e.detected_language&&e.detected_language!=="en"&&e.english_translation&&(s+=` (Translation: ${e.english_translation})`),s}var qe=()=>`
+            `}).join("")}catch{t.children.length===0&&(t.innerHTML=N("offline","Failed to fetch contacts.","The Discord service may be offline."))}}var fs={message_received:"{user} posted in {channel}: {message}",action_performed:"{actor} {action} {target}",log_entry:"[{level}] {message}",error_occurred:"ERROR: {error}",status_change:"{entity} changed status to {new_status}",metric_recorded:"{metric_name}: {value}{unit}","messaging.user.joined_voice":"{user_name} joined voice channel {channel_name}","messaging.user.left_voice":"{user_name} left voice channel {channel_name}","messaging.user.sent_message":"{user_name} in {channel_name}: {content}","messaging.bot.sent_message":"Dexter sent in {channel_name}: {content}","messaging.bot.joined_voice":"Dexter joined voice channel {channel_name}","messaging.bot.voice_response":"Dexter said: {content}","messaging.bot.status_update":"Dexter status changed to {status}: {details}","messaging.user.speaking.started":"{user_name} started speaking","messaging.user.speaking.stopped":"{user_name} stopped speaking","messaging.user.transcribed":"{user_name} said: {transcription}","messaging.user.joined_server":"{user_name} joined {server_name}","messaging.webhook.message":"{user_name} (Webhook): {content}","webhook.processed":"Webhook processed: {status}",voice_speaking_started:"User {user_id} started speaking in voice channel {channel_id}",voice_speaking_stopped:"User {user_id} stopped speaking in voice channel {channel_id}",voice_transcribed:"{user_name} said: {transcription}","engagement.decision":"Engagement Decision: {decision} ({reason})",bot_response:"Bot Responded: {response}","moderation.explicit_content.deleted":"Explicit content deleted in {channel_name} from {user_name}: {reason}","analysis.link.completed":"Analyzed link: {url}","analysis.visual.completed":"Analyzed image: {filename}","analysis.router.decision":"Router Decision: {decision} for {url}","analysis.user.message_signals":"Analyzed Signals for User {user_id}","system.status.change":"{entity} changed status to {new_status}","system.test.completed":"Tests completed for {service_name} ({duration})","system.build.completed":"Build completed for {service_name}: {status}","system.analysis.audit":"Guardian Audit: {tier}","system.blueprint.generated":"Blueprint Generated: {title}","system.cli.command":"CLI Command: {command} {args} ({status})","system.cli.status":"CLI Status: {message}","system.notification.generated":"Notification ({priority}): {title}","system.attention.expired":"Attention Expired: {tier}","system.roadmap.created":"Roadmap item created: {content}","system.roadmap.updated":"Roadmap item {id} changed to {state}","system.process.registered":"Process {id} started: {state}","system.process.unregistered":"Process {id} completed"};function Et(t,e){let i=fs[t];if(t==="voice_transcribed"&&!e.user_name&&e.user_id&&(i="User {user_id} said in voice channel {channel_id}: {transcription}"),t==="system.notification.generated"&&(i=`Notification (${e.priority?e.priority.charAt(0).toUpperCase()+e.priority.slice(1):"Low"}): ${e.title}`),t==="system.analysis.audit"&&(i=`Guardian Audit: ${e.tier?e.tier.toUpperCase():"UNKNOWN"}`),t==="system.attention.expired")return`System Attention Expired: ${e.tier?e.tier.charAt(0).toUpperCase()+e.tier.slice(1):"Unknown"}`;if(t==="system.test.completed")return`Tests ${e.test?.status==="OK"&&e.lint?.status==="OK"&&e.format?.status==="OK"?"PASSED":"FAILED"} for ${e.service_name} (${e.duration})`;if(!i)return t;let s=i.replace(/\{(\w+)\}/g,(n,c)=>e[c]!==void 0&&e[c]!==null?e[c]:n);return(t==="messaging.user.transcribed"||t==="voice_transcribed")&&e.detected_language&&e.detected_language!=="en"&&e.english_translation&&(s+=` (Translation: ${e.english_translation})`),s}var qe=()=>`
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-calendar-event' style="color: #03dac6;"></i>
         <h2>Events</h2>
         <div id="event-filters" class="event-filters" style="margin-left: 20px; margin-bottom: 0;">
-            <button class="notif-action-btn filter-btn ${V==="all"?"active":""}" data-filter="all" title="All Events"><i class='bx bx-list-ul'></i></button>
-            <button class="notif-action-btn filter-btn ${V==="messaging"?"active":""}" data-filter="messaging" title="Messaging"><i class='bx bx-message-square-detail'></i></button>
-            <button class="notif-action-btn filter-btn ${V==="system"?"active":""}" data-filter="system" title="System"><i class='bx bx-cog'></i></button>
-            <button class="notif-action-btn filter-btn ${V==="cognitive"?"active":""}" data-filter="cognitive" title="Cognitive"><i class='bx bx-brain'></i></button>
-            <button class="notif-action-btn filter-btn ${V==="moderation"?"active":""}" data-filter="moderation" title="Moderation"><i class='bx bx-shield-quarter'></i></button>
+            <button class="notif-action-btn filter-btn ${K==="all"?"active":""}" data-filter="all" title="All Events"><i class='bx bx-list-ul'></i></button>
+            <button class="notif-action-btn filter-btn ${K==="messaging"?"active":""}" data-filter="messaging" title="Messaging"><i class='bx bx-message-square-detail'></i></button>
+            <button class="notif-action-btn filter-btn ${K==="system"?"active":""}" data-filter="system" title="System"><i class='bx bx-cog'></i></button>
+            <button class="notif-action-btn filter-btn ${K==="cognitive"?"active":""}" data-filter="cognitive" title="Cognitive"><i class='bx bx-brain'></i></button>
+            <button class="notif-action-btn filter-btn ${K==="moderation"?"active":""}" data-filter="moderation" title="Moderation"><i class='bx bx-shield-quarter'></i></button>
         </div>
         <div class="alerts-actions" style="margin-left: auto; display: flex; gap: 10px; padding: 0;">
             <button id="events-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
@@ -1019,68 +1019,68 @@
             </div>
         </div>
     </div>
-`,_e=null,me=new Set,Ce=[],V="all",gs={messaging:["message_received","messaging.user.sent_message","messaging.bot.sent_message","messaging.user.transcribed","voice_transcribed","bot_response","messaging.user.joined_voice","messaging.user.left_voice","messaging.bot.joined_voice","messaging.bot.voice_response","messaging.user.speaking.started","messaging.user.speaking.stopped","messaging.webhook.message"],system:["system.cli.command","system.cli.status","system.status.change","metric_recorded","log_entry","error_occurred","webhook.processed","messaging.bot.status_update","messaging.user.joined_server","system.test.completed","system.build.completed","system.roadmap.created","system.roadmap.updated","system.process.registered","system.process.unregistered"],cognitive:["engagement.decision","system.analysis.audit","system.blueprint.generated","analysis.link.completed","analysis.visual.completed","analysis.router.decision","analysis.user.message_signals"],moderation:["moderation.explicit_content.deleted"]},bs={message_received:"bx-message-detail","messaging.user.sent_message":"bx-message-rounded-dots","messaging.bot.sent_message":"bx-bot","messaging.user.transcribed":"bx-microphone",voice_transcribed:"bx-microphone","messaging.user.joined_voice":"bx-phone-incoming","messaging.user.left_voice":"bx-phone-outgoing","messaging.webhook.message":"bx-cloud-lightning","system.cli.command":"bx-terminal","system.cli.status":"bx-info-circle","system.test.completed":"bx-check-shield","system.build.completed":"bx-package","system.roadmap.created":"bx-map-pin","system.roadmap.updated":"bx-map-alt","system.process.registered":"bx-play-circle","system.process.unregistered":"bx-stop-circle",error_occurred:"bx-error-alt","engagement.decision":"bx-brain","system.analysis.audit":"bx-search-alt","system.blueprint.generated":"bx-paint","analysis.link.completed":"bx-link","analysis.visual.completed":"bx-image","analysis.router.decision":"bx-git-branch","analysis.user.message_signals":"bx-pulse","moderation.explicit_content.deleted":"bx-shield-x","system.status.change":"bx-refresh",metric_recorded:"bx-line-chart"};function vs(t){for(let[e,i]of Object.entries(gs))if(i.includes(t))return e;return"system"}function xs(t){return bs[t]||"bx-square-rounded"}async function ne(t=!1){let e=document.getElementById("events-timeline");if(!e)return;ys();let s=`/events?ml=${V==="all"?100:250}&format=json`;V!=="all"&&(s+=`&category=${V}`);try{let n=await A(s);if(!n.ok)throw new Error("Service unreachable");if(Ce=((await n.json()).events||[]).filter(v=>{let o=v.event;if(typeof o=="string")try{o=JSON.parse(o)}catch{return!0}let b=o.type;return!(b==="system.blueprint.generated"||b==="system.notification.generated")}),_e=Date.now(),X(1,_e),Ce.length===0){e.innerHTML=N("empty","No events found for this filter.");return}t&&(e.innerHTML="");let m=v=>{let o=v.event;if(typeof o=="string")try{o=JSON.parse(o)}catch{return null}let b=o.type,E=vs(b),h=xs(b),a=b==="engagement.decision"||b==="messaging.bot.sent_message"||b==="messaging.user.sent_message"||b==="moderation.explicit_content.deleted"||b==="analysis.link.completed"||b==="analysis.visual.completed"||b==="analysis.router.decision"||b==="analysis.user.message_signals"||b==="system.cli.command"||b==="system.analysis.audit"||b==="system.test.completed"||b==="error_occurred"||b==="system.cli.status"||b==="system.attention.expired"||b.startsWith("system.roadmap")||b.startsWith("system.process"),d="event-border-grey";a&&(b==="moderation.explicit_content.deleted"||b==="error_occurred"?d="event-border-red":b==="analysis.link.completed"||b==="analysis.visual.completed"||b==="analysis.router.decision"||b==="system.analysis.audit"||b==="analysis.user.message_signals"?d="event-border-purple":b==="system.attention.expired"||b==="system.cli.command"||b==="system.cli.status"?d="event-border-orange":b==="system.test.completed"?d=o.test?.status==="OK"&&o.lint?.status==="OK"&&o.format?.status==="OK"?"event-border-blue":"event-border-red":d="event-border-blue");let f=a?"cursor-pointer":"",g=me.has(v.id),w=g?"expanded":"",I=g?"display: block;":"display: none;",M=new Date(v.timestamp*1e3),k=M.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),S=M.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),y=Et(b,o),B=o.user_level?`<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${o.user_level})</span>`:"",_="";if(a){let T="";if(b==="engagement.decision"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+`,_e=null,me=new Set,Ce=[],K="all",gs={messaging:["message_received","messaging.user.sent_message","messaging.bot.sent_message","messaging.user.transcribed","voice_transcribed","bot_response","messaging.user.joined_voice","messaging.user.left_voice","messaging.bot.joined_voice","messaging.bot.voice_response","messaging.user.speaking.started","messaging.user.speaking.stopped","messaging.webhook.message"],system:["system.cli.command","system.cli.status","system.status.change","metric_recorded","log_entry","error_occurred","webhook.processed","messaging.bot.status_update","messaging.user.joined_server","system.test.completed","system.build.completed","system.roadmap.created","system.roadmap.updated","system.process.registered","system.process.unregistered"],cognitive:["engagement.decision","system.analysis.audit","system.blueprint.generated","analysis.link.completed","analysis.visual.completed","analysis.router.decision","analysis.user.message_signals"],moderation:["moderation.explicit_content.deleted"]},bs={message_received:"bx-message-detail","messaging.user.sent_message":"bx-message-rounded-dots","messaging.bot.sent_message":"bx-bot","messaging.user.transcribed":"bx-microphone",voice_transcribed:"bx-microphone","messaging.user.joined_voice":"bx-phone-incoming","messaging.user.left_voice":"bx-phone-outgoing","messaging.webhook.message":"bx-cloud-lightning","system.cli.command":"bx-terminal","system.cli.status":"bx-info-circle","system.test.completed":"bx-check-shield","system.build.completed":"bx-package","system.roadmap.created":"bx-map-pin","system.roadmap.updated":"bx-map-alt","system.process.registered":"bx-play-circle","system.process.unregistered":"bx-stop-circle",error_occurred:"bx-error-alt","engagement.decision":"bx-brain","system.analysis.audit":"bx-search-alt","system.blueprint.generated":"bx-paint","analysis.link.completed":"bx-link","analysis.visual.completed":"bx-image","analysis.router.decision":"bx-git-branch","analysis.user.message_signals":"bx-pulse","moderation.explicit_content.deleted":"bx-shield-x","system.status.change":"bx-refresh",metric_recorded:"bx-line-chart"};function vs(t){for(let[e,i]of Object.entries(gs))if(i.includes(t))return e;return"system"}function xs(t){return bs[t]||"bx-square-rounded"}async function ne(t=!1){let e=document.getElementById("events-timeline");if(!e)return;ys();let s=`/events?ml=${K==="all"?100:250}&format=json`;K!=="all"&&(s+=`&category=${K}`);try{let n=await I(s);if(!n.ok)throw new Error("Service unreachable");if(Ce=((await n.json()).events||[]).filter(b=>{let a=b.event;if(typeof a=="string")try{a=JSON.parse(a)}catch{return!0}let g=a.type;return!(g==="system.blueprint.generated"||g==="system.notification.generated")}),_e=Date.now(),X(1,_e),Ce.length===0){e.innerHTML=N("empty","No events found for this filter.");return}t&&(e.innerHTML="");let v=b=>{let a=b.event;if(typeof a=="string")try{a=JSON.parse(a)}catch{return null}let g=a.type,E=vs(g),y=xs(g),f=g==="engagement.decision"||g==="messaging.bot.sent_message"||g==="messaging.user.sent_message"||g==="moderation.explicit_content.deleted"||g==="analysis.link.completed"||g==="analysis.visual.completed"||g==="analysis.router.decision"||g==="analysis.user.message_signals"||g==="system.cli.command"||g==="system.analysis.audit"||g==="system.test.completed"||g==="error_occurred"||g==="system.cli.status"||g==="system.attention.expired"||g.startsWith("system.roadmap")||g.startsWith("system.process"),o="event-border-grey";f&&(g==="moderation.explicit_content.deleted"||g==="error_occurred"?o="event-border-red":g==="analysis.link.completed"||g==="analysis.visual.completed"||g==="analysis.router.decision"||g==="system.analysis.audit"||g==="analysis.user.message_signals"?o="event-border-purple":g==="system.attention.expired"||g==="system.cli.command"||g==="system.cli.status"?o="event-border-orange":g==="system.test.completed"?o=a.test?.status==="OK"&&a.lint?.status==="OK"&&a.format?.status==="OK"?"event-border-blue":"event-border-red":o="event-border-blue");let d=f?"cursor-pointer":"",u=me.has(b.id),w=u?"expanded":"",A=u?"display: block;":"display: none;",_=new Date(b.timestamp*1e3),S=_.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),k=_.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),x=Et(g,a),L=a.user_level?`<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${a.user_level})</span>`:"",B="";if(f){let T="";if(g==="engagement.decision"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Engagement Model:</span>
-                            <span class="detail-value">${o.engagement_model||"N/A"}</span>
+                            <span class="detail-value">${a.engagement_model||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Input Decision")}
-                            <pre class="detail-pre">${o.input_decision||"None"}</pre>
+                            <pre class="detail-pre">${a.input_decision||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Context History")}
-                            <pre class="detail-pre">${o.context_history||"None"}</pre>
+                            <pre class="detail-pre">${a.context_history||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Raw Engagement Output")}
-                            <pre class="detail-pre">${o.engagement_raw||"None"}</pre>
+                            <pre class="detail-pre">${a.engagement_raw||"None"}</pre>
                         </div>
-                    `}else if(b==="system.attention.expired"){let $=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,C=o.timestamp-o.last_active,L=Math.floor(C/60);T=`
+                    `}else if(g==="system.attention.expired"){let $=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,C=a.timestamp-a.last_active,M=Math.floor(C/60);T=`
                         <div class="event-detail-row">
                             <span class="detail-label">Protocol:</span>
-                            <span class="detail-value" style="color: #bb86fc;">${o.tier}</span>
+                            <span class="detail-value" style="color: #bb86fc;">${a.tier}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Idle Time:</span>
-                            <span class="detail-value">${L} minutes</span>
+                            <span class="detail-value">${M} minutes</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Context (Last Input)")}
-                            <div class="detail-pre">${oe(o.last_input||"None")}</div>
+                            <div class="detail-pre">${oe(a.last_input||"None")}</div>
                         </div>
                         <div class="event-detail-block">
                             ${$("Thought Process (Last Output)")}
-                            <div class="detail-pre">${oe(o.last_output||"None")}</div>
+                            <div class="detail-pre">${oe(a.last_output||"None")}</div>
                         </div>
-                    `}else if(b==="messaging.bot.sent_message"){let $=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,C="";o.eval_count&&(C=`
+                    `}else if(g==="messaging.bot.sent_message"){let $=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,C="";a.eval_count&&(C=`
                             <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tokens (In/Out)</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.prompt_count} / ${o.eval_count}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${a.prompt_count} / ${a.eval_count}</div>
                                 </div>
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Total Time</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${o.duration_ms}ms</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${a.duration_ms}ms</div>
                                 </div>
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Load Time</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.load_duration_ms}ms</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${a.load_duration_ms}ms</div>
                                 </div>
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Processing</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.prompt_duration_ms}ms / ${o.eval_duration_ms}ms</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${a.prompt_duration_ms}ms / ${a.eval_duration_ms}ms</div>
                                 </div>
                             </div>
-                        `);let L="";if(o.chat_history&&o.chat_history.length>0){let O=o.chat_history.length,D=o.chat_history.map((U,j)=>{let J=U.name?U.name.toUpperCase():U.role.toUpperCase();!U.name&&J==="ASSISTANT"&&(J="DEXTER");let G=U.role==="user"?"#03dac6":U.role==="system"?"#ffb74d":"#bb86fc",W=j===O-1?"block":"none";return`
-                                <div class="history-slide" data-index="${j}" style="display: ${W};">
+                        `);let M="";if(a.chat_history&&a.chat_history.length>0){let O=a.chat_history.length,D=a.chat_history.map((U,q)=>{let F=U.name?U.name.toUpperCase():U.role.toUpperCase();!U.name&&F==="ASSISTANT"&&(F="DEXTER");let W=U.role==="user"?"#03dac6":U.role==="system"?"#ffb74d":"#bb86fc",V=q===O-1?"block":"none";return`
+                                <div class="history-slide" data-index="${q}" style="display: ${V};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="font-size: 0.7em; color: ${G}; letter-spacing: 1px; font-weight: bold;">${J}</span>
-                                        <span style="font-size: 0.7em; color: #666;">Turn ${j+1} of ${O}</span>
+                                        <span style="font-size: 0.7em; color: ${W}; letter-spacing: 1px; font-weight: bold;">${F}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${q+1} of ${O}</span>
                                     </div>
                                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${P(U.content)}</div>
                                 </div>
-                            `}).join("");L=`
+                            `}).join("");M=`
                             <div class="event-detail-block">
                                 ${$("Turn-by-Turn History")}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
@@ -1095,19 +1095,19 @@
                         ${C}
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
-                            <span class="detail-value">${o.response_model||"N/A"}</span>
+                            <span class="detail-value">${a.response_model||"N/A"}</span>
                         </div>
-                        ${L||`
+                        ${M||`
                             <div class="event-detail-block">
                                 ${$("Raw Input (Prompt)")}
-                                <pre class="detail-pre">${o.raw_input||"None"}</pre>
+                                <pre class="detail-pre">${a.raw_input||"None"}</pre>
                             </div>
                             <div class="event-detail-block">
                                 ${$("Raw Response Output")}
-                                <pre class="detail-pre">${o.response_raw||"None"}</pre>
+                                <pre class="detail-pre">${a.response_raw||"None"}</pre>
                             </div>
                         `}
-                    `}else if(b==="analysis.user.message_signals"){let $=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,C=o.signals||{};T=`
+                    `}else if(g==="analysis.user.message_signals"){let $=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,C=a.signals||{};T=`
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Sentiment</div>
@@ -1134,248 +1134,248 @@
                         </div>
                         <div class="event-detail-block" style="margin-top: 15px;">
                             ${$("Raw Model Output")}
-                            <pre class="detail-pre">${P(o.raw_output)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.raw_output)||"None"}</pre>
                         </div>
-                    `}else if(b==="moderation.explicit_content.deleted"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="moderation.explicit_content.deleted"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row">
                             <span class="detail-label">Message ID:</span>
-                            <span class="detail-value">${o.message_id||"N/A"}</span>
+                            <span class="detail-value">${a.message_id||"N/A"}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Reason:</span>
-                            <span class="detail-value">${o.reason||"N/A"}</span>
+                            <span class="detail-value">${a.reason||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Raw Model Output")}
-                            <pre class="detail-pre">${P(o.raw_output)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.raw_output)||"None"}</pre>
                         </div>
-                    `}else if(b==="analysis.link.completed"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="analysis.link.completed"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row">
                             <span class="detail-label">URL:</span>
-                            <span class="detail-value"><a href="${o.url}" target="_blank" class="attachment-link">${o.url}</a></span>
+                            <span class="detail-value"><a href="${a.url}" target="_blank" class="attachment-link">${a.url}</a></span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Title:</span>
-                            <span class="detail-value">${P(o.title)||"N/A"}</span>
+                            <span class="detail-value">${P(a.title)||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Description")}
-                            <pre class="detail-pre">${P(o.description)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.description)||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Content Summary")}
-                            <pre class="detail-pre">${P(o.summary)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.summary)||"None"}</pre>
                         </div>
-                    `}else if(b==="analysis.visual.completed"){let $=L=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${L}</h5>`,C="";o.base64_preview?C=`<div class="event-detail-block"><img src="data:image/jpeg;base64,${o.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`:o.url&&(C=`<div class="event-detail-block"><img src="${o.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`),T=`
+                    `}else if(g==="analysis.visual.completed"){let $=M=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${M}</h5>`,C="";a.base64_preview?C=`<div class="event-detail-block"><img src="data:image/jpeg;base64,${a.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`:a.url&&(C=`<div class="event-detail-block"><img src="${a.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`),T=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Filename:</span>
-                            <span class="detail-value">${o.filename}</span>
+                            <span class="detail-value">${a.filename}</span>
                         </div>
                         ${C}
                         <div class="event-detail-block">
                             ${$("Visual Description")}
-                            <pre class="detail-pre">${P(o.description)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.description)||"None"}</pre>
                         </div>
-                    `}else if(b==="analysis.router.decision"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="analysis.router.decision"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row">
                             <span class="detail-label">Decision:</span>
-                            <span class="detail-value" style="color: #bb86fc; font-weight: bold;">${o.decision}</span>
+                            <span class="detail-value" style="color: #bb86fc; font-weight: bold;">${a.decision}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Model:</span>
-                            <span class="detail-value">${o.model}</span>
+                            <span class="detail-value">${a.model}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">URL:</span>
-                            <span class="detail-value"><a href="${o.url}" target="_blank" class="attachment-link">${o.url}</a></span>
+                            <span class="detail-value"><a href="${a.url}" target="_blank" class="attachment-link">${a.url}</a></span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Raw Model Output")}
-                            <pre class="detail-pre">${P(o.raw_output)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.raw_output)||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Input Context")}
-                            <pre class="detail-pre">${P(o.raw_input)||"None"}</pre>
+                            <pre class="detail-pre">${P(a.raw_input)||"None"}</pre>
                         </div>
-                    `}else if(b==="system.cli.command"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="system.cli.command"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row">
                             <span class="detail-label">Command:</span>
-                            <span class="detail-value">dex ${o.command||"unknown"}</span>
+                            <span class="detail-value">dex ${a.command||"unknown"}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Arguments:</span>
-                            <span class="detail-value">${o.args||"None"}</span>
+                            <span class="detail-value">${a.args||"None"}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Status:</span>
-                            <span class="detail-value">${o.status||"unknown"}</span>
+                            <span class="detail-value">${a.status||"unknown"}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Duration:</span>
-                            <span class="detail-value">${o.duration||"N/A"}</span>
+                            <span class="detail-value">${a.duration||"N/A"}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Exit Code:</span>
-                            <span class="detail-value">${o.exit_code!==void 0?o.exit_code:"N/A"}</span>
+                            <span class="detail-value">${a.exit_code!==void 0?a.exit_code:"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Output")}
-                            <pre class="detail-pre">${P(o.output)||"No output recorded."}</pre>
+                            <pre class="detail-pre">${P(a.output)||"No output recorded."}</pre>
                         </div>
-                    `}else if(b==="system.analysis.audit"){let $=o.success?"#03dac6":"#ff4d4d",C=o.success?"SUCCESS":"FAILED",L=J=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${J}</h5>`,O="";o.error&&(O=`
+                    `}else if(g==="system.analysis.audit"){let $=a.success?"#03dac6":"#ff4d4d",C=a.success?"SUCCESS":"FAILED",M=F=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${F}</h5>`,O="";a.error&&(O=`
                             <div class="event-detail-block">
-                                ${L("Error")}
-                                <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${P(o.error)}</pre>
+                                ${M("Error")}
+                                <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${P(a.error)}</pre>
                             </div>
-                        `);let D="";if(o.chat_history&&o.chat_history.length>0){let J=o.chat_history.length,G=o.chat_history.map((W,ue)=>{let Q=W.name?W.name.toUpperCase():W.role.toUpperCase();!W.name&&Q==="USER"&&(Q="SYSTEM"),!W.name&&Q==="ASSISTANT"&&(Q="AGENT");let Z=W.role==="user"?"#03dac6":W.role==="system"?"#ffb74d":"#bb86fc";return`
+                        `);let D="";if(a.chat_history&&a.chat_history.length>0){let F=a.chat_history.length,W=a.chat_history.map((V,ue)=>{let Q=V.name?V.name.toUpperCase():V.role.toUpperCase();!V.name&&Q==="USER"&&(Q="SYSTEM"),!V.name&&Q==="ASSISTANT"&&(Q="AGENT");let Z=V.role==="user"?"#03dac6":V.role==="system"?"#ffb74d":"#bb86fc";return`
                                 <div class="history-slide" data-index="${ue}" style="display: ${ue===0?"block":"none"};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                         <span style="font-size: 0.7em; text-transform: uppercase; color: ${Z}; letter-spacing: 1px; font-weight: bold;">${Q}</span>
-                                        <span style="font-size: 0.7em; color: #666;">Turn ${ue+1} of ${J}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${ue+1} of ${F}</span>
                                     </div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${P(W.content)}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${P(V.content)}</div>
                                 </div>
                             `}).join("");D=`
                             <div class="event-detail-block">
-                                ${L("Turn-by-Turn History")}
+                                ${M("Turn-by-Turn History")}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
-                                    ${G}
+                                    ${W}
                                     <div style="display: flex; justify-content: space-between; margin-top: 10px;">
                                         <button class="carousel-btn prev-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" disabled><i class='bx bx-chevron-left'></i> Prev</button>
-                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" ${J<=1?"disabled":""}>Next <i class='bx bx-chevron-right'></i></button>
+                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" ${F<=1?"disabled":""}>Next <i class='bx bx-chevron-right'></i></button>
                                     </div>
                                 </div>
                             </div>
-                        `}let U="";if(o.corrections&&o.corrections.length>0){let J=o.corrections.map((G,W)=>`
+                        `}let U="";if(a.corrections&&a.corrections.length>0){let F=a.corrections.map((W,V)=>`
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(255, 77, 77, 0.1); border-left: 2px solid #ff4d4d; font-size: 0.85em;">
-                                <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${G.type}] ${G.guidance}</div>
-                                ${G.snippet?`<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${P(G.snippet)}</div>`:""}
+                                <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${W.type}] ${W.guidance}</div>
+                                ${W.snippet?`<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${P(W.snippet)}</div>`:""}
                             </div>
                         `).join("");U=`
                             <div class="event-detail-block">
-                                ${L(`Corrections (${o.corrections.length})`)}
-                                ${J}
+                                ${M(`Corrections (${a.corrections.length})`)}
+                                ${F}
                             </div>
-                        `}let j="";if(o.parsed_results&&o.parsed_results.length>0){let J=o.parsed_results.map(G=>`
+                        `}let q="";if(a.parsed_results&&a.parsed_results.length>0){let F=a.parsed_results.map(W=>`
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(3, 218, 198, 0.1); border-left: 2px solid #03dac6; font-size: 0.85em;">
-                                <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${P(G.title)}</div>
-                                <div style="color: #ddd;">${P(G.summary)}</div>
+                                <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${P(W.title)}</div>
+                                <div style="color: #ddd;">${P(W.summary)}</div>
                             </div>
-                        `).join("");j=`
+                        `).join("");q=`
                             <div class="event-detail-block">
-                                ${L("Parsed Results")}
-                                ${J}
+                                ${M("Parsed Results")}
+                                ${F}
                             </div>
                         `}T=`
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 120px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
-                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.agent_name||"Guardian"}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${a.agent_name||"Guardian"}</div>
                             </div>
                             <div style="flex: 1; min-width: 80px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
-                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${o.tier}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${a.tier}</div>
                             </div>
                             <div style="flex: 1; min-width: 150px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Status</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${$}; font-weight: bold;">${C} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${o.attempts} att)</span></div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${$}; font-weight: bold;">${C} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${a.attempts} att)</span></div>
                             </div>
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.duration}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${a.duration}</div>
                             </div>
                             <div style="flex: 1; min-width: 150px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Model</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.model}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${a.model}</div>
                             </div>
                         </div>
                         ${O}
-                        ${j}
+                        ${q}
                         ${U}
                         ${D}
-                    `}else if(b==="system.test.completed"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="system.test.completed"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row">
                             <span class="detail-label">Service:</span>
-                            <span class="detail-value">${o.service_name}</span>
+                            <span class="detail-value">${a.service_name}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Duration:</span>
-                            <span class="detail-value">${o.duration}</span>
+                            <span class="detail-value">${a.duration}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Format")}
-                            <pre class="detail-pre">${o.format?.status||"N/A"}: ${o.format?.message||"OK"}</pre>
+                            <pre class="detail-pre">${a.format?.status||"N/A"}: ${a.format?.message||"OK"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Lint")}
-                            <pre class="detail-pre">${o.lint?.status||"N/A"}: ${o.lint?.message||"OK"}</pre>
+                            <pre class="detail-pre">${a.lint?.status||"N/A"}: ${a.lint?.message||"OK"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Tests")}
-                            <pre class="detail-pre">${o.test?.status||"N/A"}: ${o.test?.details||o.test?.message||"OK"}</pre>
+                            <pre class="detail-pre">${a.test?.status||"N/A"}: ${a.test?.details||a.test?.message||"OK"}</pre>
                         </div>
-                    `}else if(b==="error_occurred"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="error_occurred"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Severity:</span>
-                            <span class="detail-value" style="color: #ff4d4d;">${o.severity||"high"}</span>
+                            <span class="detail-value" style="color: #ff4d4d;">${a.severity||"high"}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Error Message")}
-                            <pre class="detail-pre" style="color: #ff4d4d;">${P(o.error)}</pre>
+                            <pre class="detail-pre" style="color: #ff4d4d;">${P(a.error)}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${$("Context")}
-                            <pre class="detail-pre">${JSON.stringify(o.context||{},null,2)}</pre>
+                            <pre class="detail-pre">${JSON.stringify(a.context||{},null,2)}</pre>
                         </div>
-                    `}else if(b==="system.cli.status"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
+                    `}else if(g==="system.cli.status"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`;T=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Status:</span>
-                            <span class="detail-value">${o.status}</span>
+                            <span class="detail-value">${a.status}</span>
                         </div>
                         <div class="event-detail-block">
                             ${$("Message")}
-                            <pre class="detail-pre">${P(o.message)}</pre>
+                            <pre class="detail-pre">${P(a.message)}</pre>
                         </div>
-                    `}else if(b==="messaging.user.sent_message"){let $="";o.attachments&&o.attachments.length>0&&($=`
+                    `}else if(g==="messaging.user.sent_message"){let $="";a.attachments&&a.attachments.length>0&&($=`
                             <div class="event-detail-block">
                                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Attachments</h5>
-                                <div class="attachments-grid">${o.attachments.map(L=>{let O=L.content_type&&L.content_type.startsWith("image/"),D=(L.size/1024).toFixed(1)+" KB";return`
+                                <div class="attachments-grid">${a.attachments.map(M=>{let O=M.content_type&&M.content_type.startsWith("image/"),D=(M.size/1024).toFixed(1)+" KB";return`
                                 <div class="attachment-item">
-                                    ${O?`<div class="attachment-thumb-container"><img src="${L.url}" alt="${L.filename}" class="attachment-thumb"></div>`:`<div class="attachment-icon-container"><i class='bx bx-file attachment-icon'></i></div>`}
+                                    ${O?`<div class="attachment-thumb-container"><img src="${M.url}" alt="${M.filename}" class="attachment-thumb"></div>`:`<div class="attachment-icon-container"><i class='bx bx-file attachment-icon'></i></div>`}
                                     <div class="attachment-info">
-                                        <a href="${L.url}" target="_blank" class="attachment-link">${L.filename}</a>
-                                        <span class="attachment-meta">${L.content_type} \u2022 ${D}</span>
+                                        <a href="${M.url}" target="_blank" class="attachment-link">${M.filename}</a>
+                                        <span class="attachment-meta">${M.content_type} \u2022 ${D}</span>
                                     </div>
                                 </div>`}).join("")}</div>
                             </div>`),T=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Message ID:</span>
-                            <span class="detail-value">${o.message_id||"N/A"}</span>
+                            <span class="detail-value">${a.message_id||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
                             <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Raw Content</h5>
-                            <pre class="detail-pre" style="color: #fff;">${o.content||"(empty)"}</pre>
+                            <pre class="detail-pre" style="color: #fff;">${a.content||"(empty)"}</pre>
                         </div>
                         ${$}
-                    `}_=`
-                    <div class="event-details" style="${I}">
+                    `}B=`
+                    <div class="event-details" style="${A}">
                         ${T}
                     </div>
-                `}let H=document.createElement("div");H.className=`event-item ${d} ${f} ${w}`,H.dataset.eventId=v.id,H.onclick=function(T){if(!a)return;if(this.classList.contains("expanded")){this.classList.remove("expanded"),me.delete(v.id);let C=this.querySelector(".event-details");C&&(C.style.display="none")}else{this.classList.add("expanded"),me.add(v.id);let C=this.querySelector(".event-details");C&&(C.style.display="block")}},H.innerHTML=`
+                `}let H=document.createElement("div");H.className=`event-item ${o} ${d} ${w}`,H.dataset.eventId=b.id,H.onclick=function(T){if(!f)return;if(this.classList.contains("expanded")){this.classList.remove("expanded"),me.delete(b.id);let C=this.querySelector(".event-details");C&&(C.style.display="none")}else{this.classList.add("expanded"),me.add(b.id);let C=this.querySelector(".event-details");C&&(C.style.display="block")}},H.innerHTML=`
                 <div class="event-time">
-                    <span class="event-time-main">${k}</span>
-                    <span class="event-date">${S}</span>
+                    <span class="event-time-main">${S}</span>
+                    <span class="event-date">${k}</span>
                 </div>
-                <div class="event-icon"><i class='bx ${h}'></i></div>
+                <div class="event-icon"><i class='bx ${y}'></i></div>
                 <div class="event-content">
                     <div class="event-service">
                         <span class="event-category-tag cat-${E}" style="font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); color: #888; text-transform: uppercase; margin-right: 8px;">${E}</span>
-                        ${v.service} ${B}
+                        ${b.service} ${L}
                     </div>
-                    <div class="event-message">${y}</div>
-                    ${_}
+                    <div class="event-message">${x}</div>
+                    ${B}
                 </div>
-            `;let q=H.querySelector(".event-details");if(q&&q.addEventListener("click",T=>{T.stopPropagation()}),a){let T=H.querySelector(".close-details-btn");T&&T.addEventListener("click",$=>{$.stopPropagation();let C=$.target.closest(".event-item");if(C){C.classList.remove("expanded"),me.delete(v.id);let L=C.querySelector(".event-details");L&&(L.style.display="none")}})}let K=H.querySelector(".prev-btn"),F=H.querySelector(".next-btn");if(K&&F){let T=0,$=H.querySelectorAll(".history-slide"),C=$.length,L=()=>{$.forEach((O,D)=>{O.style.display=D===T?"block":"none"}),K.disabled=T===0,F.disabled=T===C-1,K.style.opacity=T===0?"0.5":"1",F.style.opacity=T===C-1?"0.5":"1"};K.addEventListener("click",O=>{O.stopPropagation(),T>0&&(T--,L())}),F.addEventListener("click",O=>{O.stopPropagation(),T<C-1&&(T++,L())}),L()}return H},c=Array.from(e.children),p=new Map(c.map(v=>[v.dataset.eventId,v])),x=new Set(Ce.map(v=>v.id));c.forEach(v=>{let o=v.dataset.eventId;(!o||!x.has(o))&&v.remove()});let u=null;Ce.forEach((v,o)=>{let b=p.get(v.id);(!b||t)&&(b&&b.remove(),b=m(v),!b)||(o===0?e.firstElementChild!==b&&e.prepend(b):u&&u.nextElementSibling!==b&&u.after(b),u=b)}),_e=Date.now(),X(1,_e)}catch(n){console.error("Error fetching events:",n),e.children.length===0&&(e.innerHTML=N("offline","Failed to load events.","The event service may be offline."))}}function ys(){let t=document.getElementById("events-expand-all"),e=document.getElementById("events-close-all"),i=document.getElementById("event-filters");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{Ce.forEach(n=>me.add(n.id)),ne(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{me.clear(),ne(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.querySelectorAll(".filter-btn").forEach(n=>{n.onclick=()=>{i.querySelectorAll(".filter-btn").forEach(l=>l.classList.remove("active")),n.classList.add("active"),V=n.dataset.filter,ne(!0)}}),i.dataset.listenerAttached="true"),i&&i.querySelectorAll(".filter-btn").forEach(n=>{n.dataset.filter===V?n.classList.add("active"):n.classList.remove("active")});let s=document.getElementById("events-clear");s&&!s.dataset.listenerAttached&&(s.onclick=async()=>{let n=V==="all"?"ALL":V.toUpperCase();if(confirm(`Are you sure you want to delete ${n} events from the backend? This cannot be undone.`)){s.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{let l="/events";if(V!=="all"?l+=`?category=${V}`:l+="?exclude_types=system.blueprint.generated,system.notification.generated",!(await A(l,{method:"DELETE"})).ok)throw new Error("Failed to delete events");me.clear(),ne(!0)}catch(l){console.error("Failed to clear events:",l),alert("Failed to clear events. Check console.")}finally{s.innerHTML="<i class='bx bx-trash'></i> Clear"}}},s.dataset.listenerAttached="true")}var hs=`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 348 346" style="color: #bb86fc; fill: currentColor; margin-right: 10px; min-width: 24px; margin-left: 0; max-width: 25px;">
+            `;let J=H.querySelector(".event-details");if(J&&J.addEventListener("click",T=>{T.stopPropagation()}),f){let T=H.querySelector(".close-details-btn");T&&T.addEventListener("click",$=>{$.stopPropagation();let C=$.target.closest(".event-item");if(C){C.classList.remove("expanded"),me.delete(b.id);let M=C.querySelector(".event-details");M&&(M.style.display="none")}})}let G=H.querySelector(".prev-btn"),j=H.querySelector(".next-btn");if(G&&j){let T=0,$=H.querySelectorAll(".history-slide"),C=$.length,M=()=>{$.forEach((O,D)=>{O.style.display=D===T?"block":"none"}),G.disabled=T===0,j.disabled=T===C-1,G.style.opacity=T===0?"0.5":"1",j.style.opacity=T===C-1?"0.5":"1"};G.addEventListener("click",O=>{O.stopPropagation(),T>0&&(T--,M())}),j.addEventListener("click",O=>{O.stopPropagation(),T<C-1&&(T++,M())}),M()}return H},l=Array.from(e.children),p=new Map(l.map(b=>[b.dataset.eventId,b])),h=new Set(Ce.map(b=>b.id));l.forEach(b=>{let a=b.dataset.eventId;(!a||!h.has(a))&&b.remove()});let m=null;Ce.forEach((b,a)=>{let g=p.get(b.id);(!g||t)&&(g&&g.remove(),g=v(b),!g)||(a===0?e.firstElementChild!==g&&e.prepend(g):m&&m.nextElementSibling!==g&&m.after(g),m=g)}),_e=Date.now(),X(1,_e)}catch(n){console.error("Error fetching events:",n),e.children.length===0&&(e.innerHTML=N("offline","Failed to load events.","The event service may be offline."))}}function ys(){let t=document.getElementById("events-expand-all"),e=document.getElementById("events-close-all"),i=document.getElementById("event-filters");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{Ce.forEach(n=>me.add(n.id)),ne(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{me.clear(),ne(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.querySelectorAll(".filter-btn").forEach(n=>{n.onclick=()=>{i.querySelectorAll(".filter-btn").forEach(c=>c.classList.remove("active")),n.classList.add("active"),K=n.dataset.filter,ne(!0)}}),i.dataset.listenerAttached="true"),i&&i.querySelectorAll(".filter-btn").forEach(n=>{n.dataset.filter===K?n.classList.add("active"):n.classList.remove("active")});let s=document.getElementById("events-clear");s&&!s.dataset.listenerAttached&&(s.onclick=async()=>{let n=K==="all"?"ALL":K.toUpperCase();if(confirm(`Are you sure you want to delete ${n} events from the backend? This cannot be undone.`)){s.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{let c="/events";if(K!=="all"?c+=`?category=${K}`:c+="?exclude_types=system.blueprint.generated,system.notification.generated",!(await I(c,{method:"DELETE"})).ok)throw new Error("Failed to delete events");me.clear(),ne(!0)}catch(c){console.error("Failed to clear events:",c),alert("Failed to clear events. Check console.")}finally{s.innerHTML="<i class='bx bx-trash'></i> Clear"}}},s.dataset.listenerAttached="true")}var hs=`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 348 346" style="color: #bb86fc; fill: currentColor; margin-right: 10px; min-width: 24px; margin-left: 0; max-width: 25px;">
 <path d="M0 0 C6.68906895 0.30942998 13.34298509 1.14956038 19.984375 1.9765625 C21.04816879 2.1076088 21.04816879 2.1076088 22.13345337 2.24130249 C55.44930058 6.37374759 89.44852457 11.1701099 121.234375 22.3515625 C122.0190918 22.62500488 122.80380859 22.89844727 123.61230469 23.18017578 C126.17837625 24.07923377 128.73863524 24.9929688 131.296875 25.9140625 C132.08344482 26.19507813 132.87001465 26.47609375 133.68041992 26.765625 C137.31290641 28.10565219 140.66084169 29.52135743 143.98046875 31.5234375 C148.9255565 34.30171009 152.70673961 34.37236954 158.234375 33.3515625 C161.19075168 32.16972593 164.01848917 30.83745747 166.86157227 29.40722656 C189.09451792 18.33311522 214.1097852 13.06828487 238.484375 9.28125 C242.0480496 8.72309832 245.57972623 8.10268773 249.109375 7.359375 C260.87664682 4.88142336 272.66220914 3.38697773 284.609375 2.1015625 C285.4294101 2.01261719 286.24944519 1.92367187 287.09432983 1.83203125 C289.46077916 1.57775351 291.8278105 1.3302037 294.1953125 1.0859375 C294.90185471 1.01115173 295.60839691 0.93636597 296.33634949 0.85931396 C298.29983402 0.66293761 300.26718112 0.50642829 302.234375 0.3515625 C303.47268066 0.25391602 304.71098633 0.15626953 305.98681641 0.05566406 C309.234375 0.3515625 309.234375 0.3515625 311.40896606 2.03759766 C313.62046553 4.84098704 313.72210791 6.13960734 313.68847656 9.67089844 C313.68802338 11.26209503 313.68802338 11.26209503 313.68756104 12.88543701 C313.66691589 14.02410217 313.64627075 15.16276733 313.625 16.3359375 C313.61934021 17.50666809 313.61368042 18.67739868 313.60784912 19.88360596 C313.58545625 23.6233405 313.5352518 27.36211747 313.484375 31.1015625 C313.46431389 33.63670492 313.44606244 36.17186235 313.4296875 38.70703125 C313.38558178 44.92220179 313.31863954 51.13681374 313.234375 57.3515625 C315.1215625 57.25875 315.1215625 57.25875 317.046875 57.1640625 C320.94155078 57.18512993 320.94155078 57.18512993 323.20727539 58.47290039 C325.65285499 62.94609626 324.70011794 68.83114218 324.671875 73.7890625 C324.69185547 75.02978516 324.71183594 76.27050781 324.73242188 77.54882812 C324.73177734 78.74056641 324.73113281 79.93230469 324.73046875 81.16015625 C324.73232178 82.25126709 324.7341748 83.34237793 324.73608398 84.46655273 C324.10324457 88.10561034 323.11038098 89.08260175 320.234375 91.3515625 C317.45481014 91.85213375 317.45481014 91.85213375 314.19285583 91.85276794 C312.3357901 91.86751915 312.3357901 91.86751915 310.44120789 91.88256836 C309.07204925 91.8731967 307.70289335 91.8634174 306.33374023 91.85327148 C304.88975498 91.85705507 303.44577335 91.86255544 302.00180054 91.86964417 C298.08238523 91.8836099 294.16340834 91.87242202 290.24401736 91.85593295 C286.14412508 91.84208843 282.04425841 91.84854174 277.9443512 91.85206604 C271.06024097 91.85476834 264.17630508 91.84128991 257.29223633 91.81811523 C249.32937929 91.79149474 241.36681357 91.78976163 233.40392727 91.8015036 C225.74724942 91.81227574 218.09067711 91.80609946 210.43400764 91.79194832 C207.17368136 91.78618465 203.91343222 91.78627414 200.65310478 91.79101372 C196.81578854 91.79577963 192.9787921 91.78569821 189.14153671 91.76405907 C187.73181677 91.75848609 186.32206613 91.7580306 184.91234398 91.76301193 C182.99119233 91.76895004 181.07000959 91.75464687 179.14891052 91.73924255 C178.07284263 91.73681266 176.99677473 91.73438276 175.88809872 91.73187923 C173.234375 91.3515625 173.234375 91.3515625 171.3993845 89.9691782 C169.86921668 87.84454017 169.6851698 86.12555538 169.359375 83.5390625 C168.42408919 78.322753 167.16382417 75.9317273 163.234375 72.3515625 C158.44641172 69.6915829 154.68845721 68.75657171 149.234375 69.3515625 C144.38523011 71.09725466 140.70979663 73.7800942 138.234375 78.3515625 C137.60341831 80.93165292 137.18265404 83.44293705 136.88671875 86.08203125 C136.01470353 89.11580876 134.93221382 89.75561394 132.234375 91.3515625 C129.45481014 91.73187923 129.45481014 91.73187923 126.19285583 91.73924255 C124.95481201 91.74914719 123.71676819 91.75905182 122.44120789 91.76925659 C121.07205101 91.76501864 119.70289509 91.76046079 118.33374023 91.75561523 C116.88975496 91.76131831 115.44577419 91.76828233 114.00180054 91.77641296 C110.08247452 91.79436369 106.16337215 91.79317281 102.24401736 91.78747058 C98.973391 91.78438239 95.70280783 91.79046684 92.43218762 91.79650933 C84.71883403 91.81055836 77.00559121 91.8089893 69.29223633 91.79760742 C61.32933972 91.78611714 53.36677955 91.80021611 45.40392727 91.8270039 C38.56986186 91.84913522 31.73590226 91.85580436 24.90180355 91.84992748 C20.81882199 91.84655156 16.73605628 91.84901522 12.65310478 91.86617851 C8.815742 91.8816056 4.97887943 91.87773998 1.14153671 91.85887337 C-0.2681932 91.85517607 -1.67795984 91.85832911 -3.08765602 91.86875916 C-5.00876303 91.88189016 -6.92999848 91.86806256 -8.85108948 91.85276794 C-9.92715737 91.85255866 -11.00322527 91.85234938 -12.11190128 91.85213375 C-14.765625 91.3515625 -14.765625 91.3515625 -16.611022 89.50055027 C-18.16026852 86.61703808 -18.15393672 84.42523721 -18.1640625 81.16015625 C-18.16792969 79.96841797 -18.17179687 78.77667969 -18.17578125 77.54882812 C-18.16417969 76.30810547 -18.15257812 75.06738281 -18.140625 73.7890625 C-18.15802734 71.92217773 -18.15802734 71.92217773 -18.17578125 70.01757812 C-18.17191406 68.82712891 -18.16804688 67.63667969 -18.1640625 66.41015625 C-18.16067871 65.32017334 -18.15729492 64.23019043 -18.15380859 63.10717773 C-17.765625 60.3515625 -17.765625 60.3515625 -16.74072266 58.47290039 C-13.50845762 56.63782087 -10.43369607 57.17116556 -6.765625 57.3515625 C-6.77561775 56.36890411 -6.77561775 56.36890411 -6.78581238 55.36639404 C-6.85213825 48.55339461 -6.8974143 41.74048676 -6.93041992 34.92724609 C-6.94551436 32.38391393 -6.96599188 29.84060783 -6.99194336 27.29736328 C-7.02829677 23.6434893 -7.04534497 19.98995921 -7.05859375 16.3359375 C-7.07407761 15.19727234 -7.08956146 14.05860718 -7.10551453 12.88543701 C-7.10574112 11.82463928 -7.10596771 10.76384155 -7.10620117 9.67089844 C-7.11619392 8.27191315 -7.11619392 8.27191315 -7.12638855 6.84466553 C-6.42189256 1.97615514 -4.85517479 0.45328395 0 0 Z " fill="#060606" transform="translate(21.765625,251.6484375)"/>
 <path d="M0 0 C0.66 0 1.32 0 2 0 C2.14695312 1.28970703 2.14695312 1.28970703 2.296875 2.60546875 C5.08360945 24.63508504 14.41729795 41.81161864 28 59 C28.75925781 59.98355469 29.51851562 60.96710938 30.30078125 61.98046875 C36.7308671 69.94703993 43.96024328 77.13956811 51.1875 84.375 C51.70887543 84.89746307 52.23025085 85.41992615 52.76742554 85.95822144 C57.56330909 90.75297453 62.35486952 95.51788786 67.5078125 99.93359375 C75.90110735 107.13804583 82.11998331 117.66652759 83.4453125 128.7109375 C83.95888965 145.59050657 76.30622862 157.74088673 65.11328125 169.80859375 C64.41589844 170.53175781 63.71851563 171.25492188 63 172 C62.29230469 172.75410156 61.58460938 173.50820312 60.85546875 174.28515625 C59 176 59 176 57 176 C56.70867187 175.05640625 56.41734375 174.1128125 56.1171875 173.140625 C48.70619998 149.66788328 35.03316674 131.71527224 17.59306335 114.68505859 C15.36913305 112.51154379 13.15338738 110.32973714 10.93661499 108.14892578 C9.29609528 106.54506523 7.64072695 104.95780678 5.98364258 103.37109375 C-3.28333878 94.36929929 -10.58064719 84.29542711 -15 72 C-15.35449219 71.01515625 -15.70898438 70.0303125 -16.07421875 69.015625 C-22.4055257 46.11190862 -14.04830546 24.41218485 -3.06567383 4.81494141 C-2.10227483 3.17418352 -1.05542177 1.58313265 0 0 Z " fill="#BB86FC" transform="translate(119,29)"/>
 <path d="M0 0 C2.6875 1.0625 2.6875 1.0625 4.6875 3.0625 C4.69921875 5.12109375 4.69921875 5.12109375 4.375 7.5 C4.27574219 8.28246094 4.17648438 9.06492187 4.07421875 9.87109375 C3.6875 12.0625 3.6875 12.0625 2.6875 15.0625 C1.11751294 41.13458025 10.70017547 60.20871873 26.6875 80.0625 C27.32631104 80.87485107 27.32631104 80.87485107 27.97802734 81.70361328 C38.00384498 94.4313106 49.75405874 106.28039473 62.015625 116.84765625 C73.31308007 126.59059735 82.51511524 140.57567183 83.93359375 155.68359375 C84.80464021 175.55929027 75.13286292 190.4683239 62.37890625 204.625 C57.73963885 209.50042059 52.7715211 213.75009263 47.375 217.75 C46.49485229 218.42011108 46.49485229 218.42011108 45.59692383 219.10375977 C42.9036089 221.0257985 41.25267503 222.08384227 37.89453125 221.95703125 C35.6875 221.0625 35.6875 221.0625 33.6875 219.0625 C33.57834186 217.00738807 33.48167927 214.95049672 33.46240234 212.89257812 C33.19649736 186.01010601 14.86556478 165.96635035 -3.4140625 147.96875 C-3.94474335 147.44587906 -4.47542419 146.92300812 -5.02218628 146.3842926 C-7.209009 144.23393129 -9.39847831 142.08646079 -11.59765625 139.94873047 C-28.73945797 123.25776218 -39.9245404 104.51739082 -40.73217773 80.15063477 C-40.96750809 50.10249423 -25.32855137 22.56751306 -4.96069336 1.33837891 C-3.3125 0.0625 -3.3125 0.0625 0 0 Z M-11.3125 27.0625 C-18.47043958 39.22879094 -18.47043958 39.22879094 -24.3125 52.0625 C-24.70566406 53.01253906 -25.09882812 53.96257813 -25.50390625 54.94140625 C-30.62887368 69.4948852 -31.1271472 88.87170382 -24.85546875 103.1015625 C-24.34628906 104.07867187 -23.83710937 105.05578125 -23.3125 106.0625 C-22.79300781 107.10148437 -22.27351563 108.14046875 -21.73828125 109.2109375 C-14.67368766 122.28619929 -3.23503581 132.25756497 7.3190918 142.52270508 C18.97878583 153.88200462 28.53854239 165.91104681 36.6875 180.0625 C37.08582031 180.74441406 37.48414063 181.42632812 37.89453125 182.12890625 C41.44550337 188.67910582 43.44004283 195.98853646 45.6875 203.0625 C57.20837041 197.9881391 65.51761894 183.80608342 70.25 172.625 C73.4350825 162.59788842 72.8346148 152.32347304 68.26953125 142.87890625 C62.70662662 132.97556245 55.47793746 125.81779121 47.1875 118.22265625 C34.690972 106.74630941 22.51974202 94.94052607 12.6875 81.0625 C12.25646973 80.45986328 11.82543945 79.85722656 11.38134766 79.23632812 C0.01118248 63.19709329 -7.89296503 46.93598964 -9.3125 27.0625 C-9.9725 27.0625 -10.6325 27.0625 -11.3125 27.0625 Z " fill="#060606" transform="translate(130.3125,1.9375)"/>
@@ -1405,16 +1405,16 @@
 <path d="M0 0 C1.32 0.66 2.64 1.32 4 2 C4 2.66 4 3.32 4 4 C4.66 4 5.32 4 6 4 C4.79618552 6.49361571 3.54571278 8.68143083 2 11 C1.34 11 0.68 11 0 11 C-1.7143618 9.04072937 -3.38405168 7.04119788 -5 5 C-3.35 3.35 -1.7 1.7 0 0 Z " fill="#5AC55A" transform="translate(174,25)"/>
 <path d="M0 0 C2.62187494 1.04874998 3.79371361 1.64931313 5.25 4.125 C5.4975 4.74375 5.745 5.3625 6 6 C4.71937515 7.7074998 3.38232443 9.37373596 2 11 C1.34 11 0.68 11 0 11 C-1.38232443 9.37373596 -2.71937515 7.7074998 -4 6 C-2.84826645 3.53199953 -1.95216435 1.95216435 0 0 Z " fill="#DA5A5A" transform="translate(100,207)"/>
 </svg>
-`,kt=hs;function St(){return`
+`,St=hs;function kt(){return`
         <div id="logs-container" class="logs-container"></div>
-    `}var ws=null;async function $e(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await A("/logs");if(!e.ok)throw new Error("Logs offline");let i=await e.json();if(!i||i.length===0)return t.innerHTML=N("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let s=["local-ollama-0","local-cache-0","cloud-cache-0","cloud-cache-1"],n=i.filter(r=>!s.includes(r.id));n.forEach(r=>{r.logs&&Array.isArray(r.logs)?r.logs.reverse():r.logs=[]}),n.reverse();let l=n.map(r=>{let m=r.logs.join(`
-`),c=[...r.logs];if(c.length<25){let x=25-c.length;for(let u=0;u<x;u++)c.push("")}else c.length>25&&(c=c.slice(-25));let p=c.map(x=>Le(x)).join(`
+    `}var ws=null;async function $e(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await I("/logs");if(!e.ok)throw new Error("Logs offline");let i=await e.json();if(!i||i.length===0)return t.innerHTML=N("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let s=["local-ollama-0","local-cache-0","cloud-cache-0","cloud-cache-1"],n=i.filter(r=>!s.includes(r.id));n.forEach(r=>{r.logs&&Array.isArray(r.logs)?r.logs.reverse():r.logs=[]}),n.reverse();let c=n.map(r=>{let v=r.logs.join(`
+`),l=[...r.logs];if(l.length<25){let h=25-l.length;for(let m=0;m<h;m++)l.push("")}else l.length>25&&(l=l.slice(-25));let p=l.map(h=>Le(h)).join(`
 `);return`
                 <div class="log-report">
                     <div class="log-report-header">
                         <h3>${r.id}</h3>
                         <div style="display: flex; gap: 5px;">
-                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(m)}" title="Copy Logs">
+                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(v)}" title="Copy Logs">
                                 <i class="bx bx-copy"></i>
                             </button>
                             <button class="log-action-btn delete clear-logs-btn" data-service-id="${r.id}" title="Clear Logs" style="${z()?"display: none;":""}">
@@ -1424,7 +1424,7 @@
                     </div>
                     <pre class="log-content">${p}</pre>
                 </div>
-            `}).join("");return t.innerHTML=l,document.querySelectorAll(".copy-logs-btn").forEach(r=>{r.addEventListener("click",()=>{let m=unescape(r.dataset.logs);navigator.clipboard.writeText(m).then(()=>{let c=r.querySelector("i");c.classList.remove("bx-copy"),c.classList.add("bx-check"),setTimeout(()=>{c.classList.remove("bx-check"),c.classList.add("bx-copy")},2e3)})})}),document.querySelectorAll(".clear-logs-btn").forEach(r=>{r.addEventListener("click",async()=>{let m=r.dataset.serviceId;if(confirm(`Are you sure you want to clear logs for ${m}?`))try{(await A(`/logs?service_id=${m}`,{method:"DELETE"})).ok&&$e()}catch(c){console.error("Error clearing logs:",c)}})}),ws=Date.now(),!0}catch(e){return console.error("Error fetching logs:",e),t.children.length===0&&(t.innerHTML=N("offline","Failed to load logs.","The event service may be offline."),t.classList.add("placeholder-active")),!1}}var At=()=>{let t=z()?"display: none;":"";return`
+            `}).join("");return t.innerHTML=c,document.querySelectorAll(".copy-logs-btn").forEach(r=>{r.addEventListener("click",()=>{let v=unescape(r.dataset.logs);navigator.clipboard.writeText(v).then(()=>{let l=r.querySelector("i");l.classList.remove("bx-copy"),l.classList.add("bx-check"),setTimeout(()=>{l.classList.remove("bx-check"),l.classList.add("bx-copy")},2e3)})})}),document.querySelectorAll(".clear-logs-btn").forEach(r=>{r.addEventListener("click",async()=>{let v=r.dataset.serviceId;if(confirm(`Are you sure you want to clear logs for ${v}?`))try{(await I(`/logs?service_id=${v}`,{method:"DELETE"})).ok&&$e()}catch(l){console.error("Error clearing logs:",l)}})}),ws=Date.now(),!0}catch(e){return console.error("Error fetching logs:",e),t.children.length===0&&(t.innerHTML=N("offline","Failed to load logs.","The event service may be offline."),t.classList.add("placeholder-active")),!1}}var At=()=>{let t=z()?"display: none;":"";return`
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
             <h2>Summary ${z()?'<span style="color: #666; font-size: 0.6em; margin-left: 10px; font-weight: normal; font-style: italic;">* Public data is approximated</span>':""}</h2>
@@ -1493,7 +1493,7 @@
         </div>
 
         <div class="system-section-header" style="display: flex; align-items: center;">
-            ${kt}
+            ${St}
             <h2>Imaginator</h2>
             <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
@@ -1570,63 +1570,63 @@
             <h2>Service Logs</h2>
         </div>
         <div id="logs-container-wrapper" style="margin-bottom: 20px;">
-            ${St()}
-        </div>`;async function Nt(){await Promise.all([Ee(),Je(),Ge(),ye()]),await $e()}var Tt=null,Lt=null;async function Ht(){try{return await(await A("/system_monitor")).json()}catch{return null}}async function Mt(){try{return await(await A("/system/hardware")).json()}catch{return null}}async function Cs(){try{return await(await A("/processes")).json()}catch{return null}}async function $s(){try{return await(await A("/agent/status")).json()}catch{return null}}async function Je(){let t=document.getElementById("services-widgets"),e=document.getElementById("hardware-refresh-btn"),i=document.querySelector("#hw-os .hw-content"),s=document.querySelector("#hw-cpu .hw-content"),n=document.querySelector("#hw-ram .hw-content"),l=document.querySelector("#hw-gpu .hw-content"),r=document.querySelector("#hw-storage .hw-content"),m=a=>{if(a){if(i&&(i.innerHTML=`
+            ${kt()}
+        </div>`;async function Nt(){await Promise.all([Ee(),Je(),Ge(),ye()]),await $e()}var Tt=null,Lt=null;async function Ht(){try{return await(await I("/system_monitor")).json()}catch{return null}}async function Mt(){try{return await(await I("/system/hardware")).json()}catch{return null}}async function Cs(){try{return await(await I("/processes")).json()}catch{return null}}async function $s(){try{return await(await I("/agent/status")).json()}catch{return null}}async function Je(){let t=document.getElementById("services-widgets"),e=document.getElementById("hardware-refresh-btn"),i=document.querySelector("#hw-os .hw-content"),s=document.querySelector("#hw-cpu .hw-content"),n=document.querySelector("#hw-ram .hw-content"),c=document.querySelector("#hw-gpu .hw-content"),r=document.querySelector("#hw-storage .hw-content"),v=o=>{if(o){if(i&&(i.innerHTML=`
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-                    <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${a.OS||"Unknown"}</span>
+                    <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${o.OS||"Unknown"}</span>
                     <div style="display: flex; gap: 30px;">
-                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${a.ARCHITECTURE||"unknown"}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Architecture</span></div>
+                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${o.ARCHITECTURE||"unknown"}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Architecture</span></div>
                     </div>
-                </div>`),n){let d=(a.MEMORY_BYTES/1073741824).toFixed(1);n.innerHTML=`
+                </div>`),n){let d=(o.MEMORY_BYTES/1073741824).toFixed(1);n.innerHTML=`
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 0.9em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">Total System Memory</span>
                     <span style="font-size: 1.8em; font-weight: bold; color: #fff;">${d} <span style="font-size: 0.5em; color: #888; font-weight: normal; margin-left: 2px;">GB</span></span>
-                </div>`}if(s&&a.CPU&&a.CPU.length>0){let d=a.CPU[0];s.innerHTML=`
+                </div>`}if(s&&o.CPU&&o.CPU.length>0){let d=o.CPU[0];s.innerHTML=`
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
                     <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${d.LABEL}</span>
                     <div style="display: flex; gap: 30px;">
                         <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${d.COUNT}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Cores</span></div>
                         <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #bb86fc; line-height: 1;">${d.THREADS}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Threads</span></div>
                     </div>
-                </div>`}l&&(a.GPU&&a.GPU.length>0?l.innerHTML=a.GPU.map(d=>{let f=(d.VRAM/1073741824).toFixed(1);return`
+                </div>`}c&&(o.GPU&&o.GPU.length>0?c.innerHTML=o.GPU.map(d=>{let u=(d.VRAM/1073741824).toFixed(1);return`
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                             <span style="font-size: 1.1em; color: #fff; font-weight: 400;">${d.LABEL}</span>
-                            <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${f} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
-                        </div>`}).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>'):l.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>'),r&&a.STORAGE&&a.STORAGE.length>0?r.innerHTML=a.STORAGE.map(d=>{let f=(d.USED/1073741824).toFixed(1),g=(d.SIZE/(1024*1024*1024)).toFixed(1),w=d.SIZE>0?(d.USED/d.SIZE*100).toFixed(0):0,I=d.MOUNT_POINT||"Unmounted";return`
+                            <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${u} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
+                        </div>`}).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>'):c.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>'),r&&o.STORAGE&&o.STORAGE.length>0?r.innerHTML=o.STORAGE.map(d=>{let u=(d.USED/1073741824).toFixed(1),w=(d.SIZE/(1024*1024*1024)).toFixed(1),A=d.SIZE>0?(d.USED/d.SIZE*100).toFixed(0):0,_=d.MOUNT_POINT||"Unmounted";return`
                     <div style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <i class='bx bxs-hdd' style="color: #03dac6; font-size: 1.1em;"></i>
                                 <span style="font-weight: 600; color: #fff; font-size: 0.95em;">${d.DEVICE}</span>
                             </div>
-                            <span style="font-size: 0.75em; color: #666; font-family: monospace; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">${I}</span>
+                            <span style="font-size: 0.75em; color: #666; font-family: monospace; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">${_}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #888; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">
-                            <span>${f} GB Used</span>
-                            <span>${g} GB Total</span>
+                            <span>${u} GB Used</span>
+                            <span>${w} GB Total</span>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden;">
-                             <div style="background: ${w>90?"#cf6679":"#03dac6"}; width: ${w}%; height: 100%; box-shadow: 0 0 10px ${w>90?"#cf667944":"#03dac644"};"></div>
+                             <div style="background: ${A>90?"#cf6679":"#03dac6"}; width: ${A}%; height: 100%; box-shadow: 0 0 10px ${A>90?"#cf667944":"#03dac644"};"></div>
                         </div>
-                    </div>`}).join(""):r&&(r.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No storage devices found</p>')}};if(e&&(e.dataset.listenerAttached||(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>";let a=await Mt();a?(m(a),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)):(e.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3))},e.dataset.listenerAttached="true"),s&&!s.hasChildNodes())){let a=await Mt();m(a)}if(!t)return;let c=await Ht();if(!c||!c.services){t.children.length===0&&(t.innerHTML=N("offline","Failed to load system metrics.","The event service may be offline."));return}Tt=Date.now(),X(0,Tt);let p=c.services||[];Array.from(t.children).forEach(a=>{a.classList.contains("service-widget")||a.remove()});function x(a){return!a||a==="N/A"||a==="unknown"||a.trim()===""?"-":a}function u(a){if(!a||a==="N/A"||a==="unknown")return"-";let d=a.match(/^(\d+\.\d+\.\d+)/);return d?d[0]:a.split(".").slice(0,3).join(".")||"-"}function v(a){return!a||a.length<=28?a:a.substring(0,28)+"..."}function o(a){if(!a||a==="N/A"||a==="unknown")return"-";let d=a.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);if(!d)return"-";let f=parseInt(d[1])||0,g=parseInt(d[2])||0,w=parseInt(d[3])||0,I=parseFloat(d[4])||0,M=f*86400+g*3600+w*60+I,k=Math.floor(M/86400);if(k>0)return`${k}d`;let S=Math.floor(M/3600);if(S>0)return`${S}h`;let y=Math.floor(M/60);return y>0?`${y}m`:`${Math.floor(M)}s`}function b(a){let d=a.status==="online",f=d?"service-widget-online":"service-widget-offline",g=d?"bx-check-circle":"bx-x-circle",w=d?"OK":"BAD",I=a.version?u(a.version.str):"-",M=a.cpu&&a.cpu!=="N/A"?a.cpu:"-",k=a.memory&&a.memory!=="N/A"?a.memory:"-",S=M!=="-"?"#00ff00":"#666",y=M!=="-"?"#fff":"#666",B=k!=="-"?"#00ff00":"#666",_=k!=="-"?"#fff":"#666",H=o(a.uptime),q="";d?q=`
+                    </div>`}).join(""):r&&(r.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No storage devices found</p>')}};if(e&&(e.dataset.listenerAttached||(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>";let o=await Mt();o?(v(o),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)):(e.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3))},e.dataset.listenerAttached="true"),s&&!s.hasChildNodes())){let o=await Mt();v(o)}if(!t)return;let l=await Ht();if(!l||!l.services){t.children.length===0&&(t.innerHTML=N("offline","Failed to load system metrics.","The event service may be offline."));return}Tt=Date.now(),X(0,Tt);let p=l.services||[];Array.from(t.children).forEach(o=>{o.classList.contains("service-widget")||o.remove()});function h(o){return!o||o==="N/A"||o==="unknown"||o.trim()===""?"-":o}function m(o){if(!o||o==="N/A"||o==="unknown")return"-";let d=o.match(/^(\d+\.\d+\.\d+)/);return d?d[0]:o.split(".").slice(0,3).join(".")||"-"}function b(o){return!o||o.length<=28?o:o.substring(0,28)+"..."}function a(o){if(!o||o==="N/A"||o==="unknown")return"-";let d=o.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);if(!d)return"-";let u=parseInt(d[1])||0,w=parseInt(d[2])||0,A=parseInt(d[3])||0,_=parseFloat(d[4])||0,S=u*86400+w*3600+A*60+_,k=Math.floor(S/86400);if(k>0)return`${k}d`;let x=Math.floor(S/3600);if(x>0)return`${x}h`;let L=Math.floor(S/60);return L>0?`${L}m`:`${Math.floor(S)}s`}function g(o){let d=o.status==="online",u=d?"service-widget-online":"service-widget-offline",w=d?"bx-check-circle":"bx-x-circle",A=d?"OK":"BAD",_=o.version?m(o.version.str):"-",S=o.cpu&&o.cpu!=="N/A"?o.cpu:"-",k=o.memory&&o.memory!=="N/A"?o.memory:"-",x=S!=="-"?"#00ff00":"#666",L=S!=="-"?"#fff":"#666",B=k!=="-"?"#00ff00":"#666",H=k!=="-"?"#fff":"#666",J=a(o.uptime),G="";d?G=`
                 <div class="service-widget-info">
                     <span class="info-label">Version:</span>
-                    <span class="info-value metric-version-monospace">${I}</span>
+                    <span class="info-value metric-version-monospace">${_}</span>
                 </div>
                 <div class="service-widget-footer">
                     <div class="service-widget-item">
                         <i class="bx bx-time-five" style="color: #00ff00;"></i>
-                        <span style="color: #fff;">${H}</span>
+                        <span style="color: #fff;">${J}</span>
                     </div>
                     <div class="service-widget-item">
-                        <i class="bx bxs-microchip" style="color: ${S};"></i>
-                        <span style="color: ${y};">${M}</span>
+                        <i class="bx bxs-microchip" style="color: ${x};"></i>
+                        <span style="color: ${L};">${S}</span>
                     </div>
                     <div class="service-widget-item">
                         <i class="bx bxs-chip" style="color: ${B};"></i>
-                        <span style="color: ${_};">${k}</span>
+                        <span style="color: ${H};">${k}</span>
                     </div>
-                </div>`:q='<div class="service-widget-footer offline"><span>OFFLINE</span></div>';let K=z()?"easter.company":v(a.domain&&a.port?`${a.domain}:${a.port}`:"");return`<div class="service-widget ${f}" data-service-id="${a.id}"><div class="service-widget-header"><i class="bx ${g}"></i><h3>${a.short_name||a.id}</h3><span class="service-widget-status">${w}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${K}</span></div>${q}</div></div>`}let E=new Map(Array.from(t.querySelectorAll(".service-widget")).map(a=>[a.dataset.serviceId,a])),h=new Set(p.map(a=>a.id));for(let[a,d]of E)h.has(a)||d.remove();p.forEach(a=>{let d=b(a),f=E.get(a.id);f?f.outerHTML!==d&&(f.outerHTML=d):t.insertAdjacentHTML("beforeend",d)})}async function Ge(){let t=document.getElementById("models-widgets");if(!t)return;let e=await Ht();if(!e){t.children.length===0&&(t.innerHTML=N("offline","Failed to load model status.","The event service may be offline."));return}Lt=Date.now(),X(2,Lt);let i=e.models||[],s=e.whisper;Array.from(t.children).forEach(c=>{c.classList.contains("service-widget")||c.remove()});function n(c){let p=c.status==="Ready";return`
+                </div>`:G='<div class="service-widget-footer offline"><span>OFFLINE</span></div>';let j=z()?"easter.company":b(o.domain&&o.port?`${o.domain}:${o.port}`:"");return`<div class="service-widget ${u}" data-service-id="${o.id}"><div class="service-widget-header"><i class="bx ${w}"></i><h3>${o.short_name||o.id}</h3><span class="service-widget-status">${A}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${j}</span></div>${G}</div></div>`}let E=new Map(Array.from(t.querySelectorAll(".service-widget")).map(o=>[o.dataset.serviceId,o])),y=new Set(p.map(o=>o.id));for(let[o,d]of E)y.has(o)||d.remove();let f=new Set;p.forEach(o=>{if(f.has(o.id))return;f.add(o.id);let d=g(o),u=E.get(o.id);u&&u.parentNode?u.outerHTML!==d&&(u.outerHTML=d):t.insertAdjacentHTML("beforeend",d)})}async function Ge(){let t=document.getElementById("models-widgets");if(!t)return;let e=await Ht();if(!e){t.children.length===0&&(t.innerHTML=N("offline","Failed to load model status.","The event service may be offline."));return}Lt=Date.now(),X(2,Lt);let i=e.models||[],s=e.whisper;Array.from(t.children).forEach(l=>{l.classList.contains("service-widget")||l.remove()});function n(l){let p=l.status==="Ready";return`
                 <div class="service-widget ${p?"service-widget-online":"service-widget-offline"}" data-whisper-widget>
                     <div class="service-widget-header">
                         <i class="bx bxs-microphone-alt"></i>
@@ -1636,14 +1636,14 @@
                     <div class="service-widget-body">
                         <div class="service-widget-info">
                             <span class="info-label">Status:</span>
-                            <span class="info-value">${c.status}</span>
+                            <span class="info-value">${l.status}</span>
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Model:</span>
                             <span class="info-value">large-v3-turbo</span>
                         </div>
                     </div>
-                </div>`}function l(c){let p=c.status==="Ready";return`
+                </div>`}function c(l){let p=l.status==="Ready";return`
                 <div class="service-widget ${p?"service-widget-online":"service-widget-offline"}" data-xtts-widget>
                     <div class="service-widget-header">
                         <i class="bx bx-volume-full"></i>
@@ -1653,52 +1653,52 @@
                     <div class="service-widget-body">
                         <div class="service-widget-info">
                             <span class="info-label">Status:</span>
-                            <span class="info-value">${c.status}</span>
+                            <span class="info-value">${l.status}</span>
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Model:</span>
                             <span class="info-value">xtts</span>
                         </div>
                     </div>
-                </div>`}function r(c){let p=c.status==="Downloaded",x=p?"service-widget-online":"service-widget-offline",u=p?"OK":"MISSING",v=p&&c.size>0?`${(c.size/1e9).toFixed(2)} GB`:"-",o=c.name;return c.type==="custom"&&o.endsWith(":latest")&&(o=o.replace(":latest","")),`<div class="service-widget ${x}" data-model-name="${c.name}"><div class="service-widget-header"><i class="bx ${p?"bx-check-circle":"bx-x-circle"}"></i><h3>${o}</h3><span class="service-widget-status">${u}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Type:</span><span class="info-value">${c.type}</span></div><div class="service-widget-info"><span class="info-label">Size:</span><span class="info-value">${v}</span></div></div></div>`}let m="";if(s&&(m+=n(s)),e.xtts&&(m+=l(e.xtts)),m+=i.map(r).join(""),!m){t.innerHTML=N("empty","No models found.");return}t.innerHTML!==m&&(t.innerHTML=m)}async function Ee(){let t=document.getElementById("processes-widgets");if(!t)return;let e=document.getElementById("guardian-sentry-val"),i=document.getElementById("guardian-architect-val"),s=document.getElementById("guardian-idle-val"),n=document.getElementById("guardian-total-idle"),l=document.getElementById("guardian-total-active"),r=document.getElementById("guardian-total-waste"),m=document.getElementById("guardian-reset-btn"),c=document.getElementById("analyzer-reset-btn");m&&!m.dataset.listenerAttached&&(m.onclick=async()=>{m.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await A("/guardian/reset?protocol=all",{method:"POST"}),setTimeout(()=>{m.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{m.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),Ee()}catch{m.innerHTML="<i class='bx bx-error'></i>"}},m.dataset.listenerAttached="true"),c&&!c.dataset.listenerAttached&&(c.onclick=async()=>{c.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await A("/analyzer/reset?protocol=synthesis",{method:"POST"}),setTimeout(()=>{c.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{c.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),Ee()}catch{c.innerHTML="<i class='bx bx-error'></i>"}},c.dataset.listenerAttached="true");let p=await $s();if(p){let h=Math.floor(Date.now()/1e3),a=p.active_tier,d=p.active_synthesis,f=p.protocol_aliases||{sentry:"Sentry",architect:"Architect",synthesis:"Synthesis"},g=y=>{y<0&&(y=0);let B=Math.floor(y/3600),_=Math.floor(y%3600/60),H=y%60;return B>0?`${B}h ${_}m`:_>0?`${_}m ${H}s`:`${H}s`},w=(y,B,_,H,q)=>{if(!y)return;let K=f[H]||H.toUpperCase(),F=y.parentElement.querySelector('span[style*="text-transform: uppercase"]');if(F&&(F.textContent=K),q&&q.includes(H))y.textContent="Working",y.style.color="#bb86fc";else if(_){let $=_.next_run-h;if($<=0)y.textContent="Ready",y.style.color="#5eff5e";else{let C=Math.floor($/60),L=$%60;y.textContent=`${C}m ${L}s`,y.style.color="#fff"}}B&&_&&(B.innerHTML=`
+                </div>`}function r(l){let p=l.status==="Downloaded",h=p?"service-widget-online":"service-widget-offline",m=p?"OK":"MISSING",b=p&&l.size>0?`${(l.size/1e9).toFixed(2)} GB`:"-",a=l.name;return l.type==="custom"&&a.endsWith(":latest")&&(a=a.replace(":latest","")),`<div class="service-widget ${h}" data-model-name="${l.name}"><div class="service-widget-header"><i class="bx ${p?"bx-check-circle":"bx-x-circle"}"></i><h3>${a}</h3><span class="service-widget-status">${m}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Type:</span><span class="info-value">${l.type}</span></div><div class="service-widget-info"><span class="info-label">Size:</span><span class="info-value">${b}</span></div></div></div>`}let v="";if(s&&(v+=n(s)),e.xtts&&(v+=c(e.xtts)),v+=i.map(r).join(""),!v){t.innerHTML=N("empty","No models found.");return}t.innerHTML!==v&&(t.innerHTML=v)}async function Ee(){let t=document.getElementById("processes-widgets");if(!t)return;let e=document.getElementById("guardian-sentry-val"),i=document.getElementById("guardian-architect-val"),s=document.getElementById("guardian-idle-val"),n=document.getElementById("guardian-total-idle"),c=document.getElementById("guardian-total-active"),r=document.getElementById("guardian-total-waste"),v=document.getElementById("guardian-reset-btn"),l=document.getElementById("analyzer-reset-btn");v&&!v.dataset.listenerAttached&&(v.onclick=async()=>{v.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await I("/guardian/reset?protocol=all",{method:"POST"}),setTimeout(()=>{v.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{v.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),Ee()}catch{v.innerHTML="<i class='bx bx-error'></i>"}},v.dataset.listenerAttached="true"),l&&!l.dataset.listenerAttached&&(l.onclick=async()=>{l.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await I("/analyzer/reset?protocol=synthesis",{method:"POST"}),setTimeout(()=>{l.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{l.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),Ee()}catch{l.innerHTML="<i class='bx bx-error'></i>"}},l.dataset.listenerAttached="true");let p=await $s();if(p){let y=Math.floor(Date.now()/1e3),f=p.active_tier,o=p.active_synthesis,d=p.protocol_aliases||{sentry:"Sentry",architect:"Architect",synthesis:"Synthesis"},u=x=>{x<0&&(x=0);let L=Math.floor(x/3600),B=Math.floor(x%3600/60),H=x%60;return L>0?`${L}h ${B}m`:B>0?`${B}m ${H}s`:`${H}s`},w=(x,L,B,H,J)=>{if(!x)return;let G=d[H]||H.toUpperCase(),j=x.parentElement.querySelector('span[style*="text-transform: uppercase"]');if(j&&(j.textContent=G),J&&J.includes(H))x.textContent="Working",x.style.color="#bb86fc";else if(B){let $=B.next_run-y;if($<=0)x.textContent="Ready",x.style.color="#5eff5e";else{let C=Math.floor($/60),M=$%60;x.textContent=`${C}m ${M}s`,x.style.color="#fff"}}L&&B&&(L.innerHTML=`
           <div style="display: flex; flex-direction: column; gap: 2px;">
-            <span>Runs: ${_.attempts||0}</span>
-            <span style="color: ${_.failures>0?"#ffa500":"#666"}">Fails: ${_.failures||0}</span>
-            <span style="color: ${_.absolute_failures>0?"#ff4d4d":"#666"}">Aborted: ${_.absolute_failures||0}</span>
+            <span>Runs: ${B.attempts||0}</span>
+            <span style="color: ${B.failures>0?"#ffa500":"#666"}">Fails: ${B.failures||0}</span>
+            <span style="color: ${B.absolute_failures>0?"#ff4d4d":"#666"}">Aborted: ${B.absolute_failures||0}</span>
           </div>
-        `)};e&&w(e,document.getElementById("guardian-sentry-stats"),p.sentry,"sentry",a),i&&w(i,document.getElementById("guardian-architect-stats"),p.architect,"architect",a);let I=document.getElementById("analyzer-synthesis-val"),M=document.getElementById("analyzer-synthesis-stats");I&&w(I,M,p.synthesis,"synthesis",d);let k=document.getElementById("system-state-label"),S=document.getElementById("system-state-val");if(S&&p.system_state){let y=p.system_state,B=g(p.system_state_time||0);k&&(k.textContent=`State: ${y.toUpperCase()}`),S.textContent=B,y==="idle"?S.style.color=p.system_state_time>300?"#5eff5e":"#fff":S.style.color="#bb86fc"}n&&(n.textContent=g(p.total_idle_time||0)),l&&(l.textContent=g(p.total_active_time||0)),r&&(r.textContent=g(p.total_waste_time||0))}else[e,i,s,n,l,r].forEach(a=>{a&&(a.textContent="-",a.style.color="#666")});let x=await Cs(),u=[],v=[],o=[];x&&(Array.isArray(x)?u=x:(u=x.active||[],v=x.queue||[],o=x.history||[],o.sort((h,a)=>(a.end_time||0)-(h.end_time||0)))),u.length===0?t.querySelector(".tab-placeholder")||(t.innerHTML=N("empty","No active processes.")):((t.querySelector(".tab-placeholder")||t.querySelector("p"))&&(t.innerHTML=""),Fe(t,u,!1));let b=document.getElementById("processes-queue-widgets");b&&(v.length===0?!b.querySelector(".tab-placeholder")&&!b.querySelector('div[style*="font-style: italic"]')&&(b.innerHTML='<div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">Queue is empty</div>'):(b.innerHTML="",Fe(b,v,!1)));let E=document.getElementById("processes-history-widgets");E&&(o.length===0?E.querySelector(".tab-placeholder")||(E.innerHTML=N("empty","No recent history.")):(E.querySelector(".tab-placeholder")&&(E.innerHTML=""),Fe(E,o,!0))),we(1,u.length)}function Fe(t,e,i){function s(m){let c="";m.end_time?c=`${m.end_time-m.start_time}s`:c=`${Math.floor(Date.now()/1e3-m.start_time)}s`;let p=m.retries>0?`<span class="process-retry-badge">Retry ${m.retries}</span>`:"",x=m.channel_id,u={"system-guardian":"Guardian Agent","system-cli-op":"CLI Operation","system-analyzer":"Analyzer Agent"};if(u[x]?x=u[x]:/^\d+$/.test(x)&&(x=`Channel ${x}`),i)return`
-        <div class="process-history-item" data-channel-id="${m.channel_id}-${m.start_time}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
+        `)};e&&w(e,document.getElementById("guardian-sentry-stats"),p.sentry,"sentry",f),i&&w(i,document.getElementById("guardian-architect-stats"),p.architect,"architect",f);let A=document.getElementById("analyzer-synthesis-val"),_=document.getElementById("analyzer-synthesis-stats");A&&w(A,_,p.synthesis,"synthesis",o);let S=document.getElementById("system-state-label"),k=document.getElementById("system-state-val");if(k&&p.system_state){let x=p.system_state,L=u(p.system_state_time||0);S&&(S.textContent=`State: ${x.toUpperCase()}`),k.textContent=L,x==="idle"?k.style.color=p.system_state_time>300?"#5eff5e":"#fff":k.style.color="#bb86fc"}n&&(n.textContent=u(p.total_idle_time||0)),c&&(c.textContent=u(p.total_active_time||0)),r&&(r.textContent=u(p.total_waste_time||0))}else[e,i,s,n,c,r].forEach(f=>{f&&(f.textContent="-",f.style.color="#666")});let h=await Cs(),m=[],b=[],a=[];h&&(Array.isArray(h)?m=h:(m=h.active||[],b=h.queue||[],a=h.history||[],a.sort((y,f)=>(f.end_time||0)-(y.end_time||0)))),m.length===0?t.querySelector(".tab-placeholder")||(t.innerHTML=N("empty","No active processes.")):((t.querySelector(".tab-placeholder")||t.querySelector("p"))&&(t.innerHTML=""),Fe(t,m,!1));let g=document.getElementById("processes-queue-widgets");g&&(b.length===0?!g.querySelector(".tab-placeholder")&&!g.querySelector('div[style*="font-style: italic"]')&&(g.innerHTML='<div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">Queue is empty</div>'):(g.innerHTML="",Fe(g,b,!1)));let E=document.getElementById("processes-history-widgets");E&&(a.length===0?E.querySelector(".tab-placeholder")||(E.innerHTML=N("empty","No recent history.")):(E.querySelector(".tab-placeholder")&&(E.innerHTML=""),Fe(E,a,!0))),we(1,m.length)}function Fe(t,e,i){function s(l){let p="";l.end_time?p=`${l.end_time-l.start_time}s`:p=`${Math.floor(Date.now()/1e3-l.start_time)}s`;let h=l.retries>0?`<span class="process-retry-badge">Retry ${l.retries}</span>`:"",m=l.channel_id,b={"system-guardian":"Guardian Agent","system-cli-op":"CLI Operation","system-analyzer":"Analyzer Agent"};if(b[m]?m=b[m]:/^\d+$/.test(m)&&(m=`Channel ${m}`),i)return`
+        <div class="process-history-item" data-channel-id="${l.channel_id}-${l.start_time}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
             <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
                 <i class='bx bx-check-circle' style="color: #03dac6; font-size: 1.1em;"></i>
-                <span style="color: #fff; font-weight: 600;">${x}</span>
-                <span style="color: #666; font-size: 0.9em; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;">${m.state}</span>
+                <span style="color: #fff; font-weight: 600;">${m}</span>
+                <span style="color: #666; font-size: 0.9em; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;">${l.state}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 20px; color: #888;">
-                <span>PID: ${m.pid}</span>
-                <span style="color: #03dac6; min-width: 40px; text-align: right;">${c}</span>
+                <span>PID: ${l.pid}</span>
+                <span style="color: #03dac6; min-width: 40px; text-align: right;">${p}</span>
             </div>
-        </div>`;let v="#fff";return`
-                <div class="service-widget process-widget" data-channel-id="${m.channel_id}-${m.start_time}" style="">
+        </div>`;let a="#fff";return`
+                <div class="service-widget process-widget" data-channel-id="${l.channel_id}-${l.start_time}" style="">
                     <div class="service-widget-header">
-                        <i class="bx bx-cog" style="color: ${v}"></i>
-                        <h3 style="color: ${v}">${x}</h3>
-                        ${p}
+                        <i class="bx bx-cog" style="color: ${a}"></i>
+                        <h3 style="color: ${a}">${m}</h3>
+                        ${h}
                     </div>
                     <div class="service-widget-body">
                         <div class="service-widget-info">
                             <span class="info-label">State:</span>
-                            <span class="info-value" style="color: ${v}">${m.state}</span>
+                            <span class="info-value" style="color: ${a}">${l.state}</span>
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Duration:</span>
-                            <span class="info-value" style="color: ${v}">${c}</span>
+                            <span class="info-value" style="color: ${a}">${p}</span>
                         </div>
                          <div class="service-widget-info">
                             <span class="info-label">PID:</span>
-                            <span class="info-value" style="color: ${v}">${m.pid}</span>
+                            <span class="info-value" style="color: ${a}">${l.pid}</span>
                         </div>
                     </div>
-                </div>`}let n=i?".process-history-item":".process-widget",l=new Map(Array.from(t.querySelectorAll(n)).map(m=>[m.dataset.channelId,m])),r=new Set(e.map(m=>`${m.channel_id}-${m.start_time}`));for(let[m,c]of l)r.has(m)||c.remove();e.forEach(m=>{let c=`${m.channel_id}-${m.start_time}`,p=s(m),x=l.get(c);if(x){x.outerHTML!==p&&(x.outerHTML=p);let u=t.querySelector(`[data-channel-id="${c}"]`);u&&t.appendChild(u)}else t.insertAdjacentHTML("beforeend",p)})}function De(){let t=He(),e="Notification"in window,i={enabled:e&&Notification.permission==="granted",supported:e};return`
+                </div>`}let n=i?".process-history-item":".process-widget",c=new Map(Array.from(t.querySelectorAll(n)).map(l=>[l.dataset.channelId,l])),r=new Set(e.map(l=>`${l.channel_id}-${l.start_time}`));for(let[l,p]of c)r.has(l)||p.remove();let v=new Set;e.forEach(l=>{let p=`${l.channel_id}-${l.start_time}`;if(v.has(p))return;v.add(p);let h=s(l),m=c.get(p);if(m&&m.parentNode){m.outerHTML!==h&&(m.outerHTML=h);let b=t.querySelector(`[data-channel-id="${p}"]`);b&&t.appendChild(b)}else t.insertAdjacentHTML("beforeend",h)})}function De(){let t=He(),e="Notification"in window,i={enabled:e&&Notification.permission==="granted",supported:e};return`
             <div class="theme-selector">
                 ${Object.values(Y).map(s=>`
                     <div class="theme-card ${t===s?"active":""}" data-theme="${s}">
@@ -1749,19 +1749,19 @@
                 <div id="web-history-content" style="height: 100%;"></div>
             </div>
         </div>
-    `;async function Ot(){let t=document.getElementById("web-history-content");if(!t)return;let e=document.getElementById("web-refresh-btn");e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>",await Pt(t),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},e.dataset.listenerAttached="true"),await Pt(t)}async function Pt(t){try{let e=await A("/web/history");if(!e.ok)throw new Error("Failed to fetch history");let i=await e.json();if(!i||i.length===0){t.innerHTML=N("empty","No web history found.");return}let s=`
+    `;async function Ot(){let t=document.getElementById("web-history-content");if(!t)return;let e=document.getElementById("web-refresh-btn");e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>",await Pt(t),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},e.dataset.listenerAttached="true"),await Pt(t)}async function Pt(t){try{let e=await I("/web/history");if(!e.ok)throw new Error("Failed to fetch history");let i=await e.json();if(!i||i.length===0){t.innerHTML=N("empty","No web history found.");return}let s=`
             <div style="display: flex; flex-direction: column; height: 100%;">
                 <div class="web-carousel" style="flex: 1; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding-bottom: 5px; scroll-behavior: smooth; min-height: 0;">
-        `;i.forEach((n,l)=>{let r=new Date(n.timestamp*1e3).toLocaleString([],{dateStyle:"short",timeStyle:"short"}),m=n.screenshot?`<img src="data:image/png;base64,${n.screenshot}" style="width: 100%; max-height: 45%; object-fit: contain; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; flex-shrink: 0; background: #000;">`:'<div style="width: 100%; height: 80px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 15px; border-radius: 8px; flex-shrink: 0;">No Screenshot</div>';s+=`
+        `;i.forEach((n,c)=>{let r=new Date(n.timestamp*1e3).toLocaleString([],{dateStyle:"short",timeStyle:"short"}),v=n.screenshot?`<img src="data:image/png;base64,${n.screenshot}" style="width: 100%; max-height: 45%; object-fit: contain; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; flex-shrink: 0; background: #000;">`:'<div style="width: 100%; height: 80px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 15px; border-radius: 8px; flex-shrink: 0;">No Screenshot</div>';s+=`
                 <div class="web-card" style="flex: 0 0 100%; height: 100%; display: flex; flex-direction: column; scroll-snap-align: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; box-sizing: border-box; max-width: 100%; overflow: hidden;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px; flex-shrink: 0;">
-                        <span style="color: #03dac6; font-weight: bold; font-family: monospace;">#${l+1}</span>
+                        <span style="color: #03dac6; font-weight: bold; font-family: monospace;">#${c+1}</span>
                         <span style="color: #888; font-size: 0.8em; font-family: monospace;">${r}</span>
                     </div>
                     <h3 style="margin-bottom: 5px; color: #fff; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; font-size: 1.1em;">${n.title||"No Title"}</h3>
                     <a href="${n.url}" target="_blank" style="color: #bb86fc; font-size: 0.8em; margin-bottom: 15px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; text-decoration: none;">${n.url}</a>
                     
-                    ${m}
+                    ${v}
 
                     <div style="flex: 1; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; color: #aaa; white-space: pre-wrap; border: 1px solid rgba(255,255,255,0.03);">${n.content?n.content.replace(/</g,"&lt;").replace(/>/g,"&gt;"):"No content available"}</div>
                 </div>
@@ -1807,23 +1807,23 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                 <span>Interactive Demos</span>
                 <i class='bx bx-chevron-down'></i>
             </div>
-    `;for(let[i,s]of Object.entries(t)){let n=qt.filter(l=>l.category===i);n.length!==0&&(e+=`
+    `;for(let[i,s]of Object.entries(t)){let n=qt.filter(c=>c.category===i);n.length!==0&&(e+=`
             <div class="cli-category-section">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 20px;">
                     <i class='bx ${s.icon}' style="color: ${s.color}; font-size: 1.5em;"></i>
                     <h2 style="font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; color: #eee; margin: 0;">${s.title}</h2>
                 </div>
                 <div class="cli-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 20px;">
-                    ${n.map(l=>`
-                        <div class="cli-command-card ${l.dummy?"dummy":""}" data-cmd="${l.id}" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 25px; transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden;">
+                    ${n.map(c=>`
+                        <div class="cli-command-card ${c.dummy?"dummy":""}" data-cmd="${c.id}" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 25px; transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden;">
                             <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, ${s.color}11, transparent 70%); pointer-events: none;"></div>
                             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; position: relative; z-index: 1;">
-                                <i class='bx ${l.icon}' style="font-size: 2em; color: ${s.color};"></i>
-                                <h3 style="font-size: 1.3em; color: #fff; margin: 0;">${l.title}</h3>
+                                <i class='bx ${c.icon}' style="font-size: 2em; color: ${s.color};"></i>
+                                <h3 style="font-size: 1.3em; color: #fff; margin: 0;">${c.title}</h3>
                             </div>
-                            <p style="font-size: 0.9em; color: #aaa; margin-bottom: 20px; line-height: 1.5; text-align: left; position: relative; z-index: 1;">${l.description}</p>
+                            <p style="font-size: 0.9em; color: #aaa; margin-bottom: 20px; line-height: 1.5; text-align: left; position: relative; z-index: 1;">${c.description}</p>
                             <div class="usage-block" style="background: rgba(0,0,0,0.3); overflow: hidden; padding: 10px 15px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.8em; color: ${s.color}; position: relative; z-index: 1;">
-                                <span style="opacity: 0.5;">$</span> ${l.usage}
+                                <span style="opacity: 0.5;">$</span> ${c.usage}
                             </div>
                         </div>
                     `).join("")}
@@ -1850,7 +1850,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                 <a href="https://discord.gg/eastercompany" target="_blank" class="action-btn">JOIN DISCORD</a>
             </div>
         </div>
-    </div>`,e},Ve=!1;function ks(t){let e=document.getElementById("cli-terminal-overlay");e||(e=document.createElement("div"),e.id="cli-terminal-overlay",e.className="cli-execution-overlay",e.innerHTML=`
+    </div>`,e},Ve=!1;function Ss(t){let e=document.getElementById("cli-terminal-overlay");e||(e=document.createElement("div"),e.id="cli-terminal-overlay",e.className="cli-execution-overlay",e.innerHTML=`
             <div class="cli-terminal-window">
                 <div class="cli-terminal-header">
                     <div class="terminal-title">
@@ -1882,7 +1882,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
             <div class="cli-docs-section">
                 <h4>Core Features</h4>
                 <ul class="cli-docs-list">
-                    ${n.details.map(l=>`<li>${l}</li>`).join("")}
+                    ${n.details.map(c=>`<li>${c}</li>`).join("")}
                 </ul>
             </div>
         `:""}
@@ -1890,10 +1890,10 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
             <h4>Detailed Usage</h4>
             <pre class="cli-docs-usage">${n.extended_usage}</pre>
         </div>
-    `,document.getElementById("terminal-cmd-name").textContent=`dex ${t.id}`,document.getElementById("terminal-status-badge").className="terminal-status status-running",document.getElementById("terminal-status-badge").textContent="Running",document.getElementById("terminal-action-btn").style.display="none",e.classList.add("active"),Ve=!0,i}function Ut(){let t=document.getElementById("cli-terminal-overlay");t&&t.classList.remove("active"),Ve=!1}function jt(t,e,i="output"){if(!Ve)return;let s=document.createElement("div");s.className=`terminal-line terminal-${i}`,i==="prompt"?s.innerHTML=`<span class="terminal-prompt">$</span> ${e}`:s.innerHTML=Le(e),t.appendChild(s),t.scrollTop=t.scrollHeight}async function Ss(t){let e=qt.find(n=>n.id===t);if(!e)return;let i=ks(e);jt(i,`dex ${t}`,"prompt");let s=e.demo_output||["Executing command...","\u2713 Done."];for(let n of s){await new Promise(r=>setTimeout(r,400+Math.random()*600));let l="output";n.includes("[ERROR]")?l="error":n.includes("[SUCCESS]")||n.includes("\u2713")?l="success":n.includes("!")&&(l="warning"),jt(i,n,l)}document.getElementById("terminal-status-badge").className="terminal-status status-success",document.getElementById("terminal-status-badge").textContent="Completed (Demo)",document.getElementById("terminal-action-btn").style.display="block"}function Ft(){let t=document.getElementById("cli-interface-container");if(!t)return;t.innerHTML=Es();let e=document.getElementById("install-command-copy");e&&e.addEventListener("click",()=>{let i=e.querySelector("code").textContent;navigator.clipboard.writeText(i).then(()=>{let s=e.querySelector("i");s.className="bx bx-check",s.style.color="#5eff5e",setTimeout(()=>{s.className="bx bx-copy",s.style.color="#bb86fc"},2e3)})}),t.querySelectorAll(".cli-command-card").forEach(i=>{i.addEventListener("mouseenter",()=>{i.style.transform="translateY(-5px)",i.style.borderColor="rgba(255,255,255,0.15)",i.style.backgroundColor="rgba(255,255,255,0.05)"}),i.addEventListener("mouseleave",()=>{i.style.transform="translateY(0)",i.style.borderColor="rgba(255,255,255,0.05)",i.style.backgroundColor="rgba(255,255,255,0.03)"}),i.addEventListener("click",()=>{let s=i.dataset.cmd;Ss(s)})})}async function Ts(){if(!z())try{if(!(await A("/system/status",{method:"GET"})).ok)throw new Error("Service unhealthy")}catch(t){console.error("Service health check failed:",t)}}function Jt(){if(window.location.protocol==="http:"&&window.location.hostname==="easter.company"){window.location.replace("https://"+window.location.hostname+window.location.pathname+window.location.search);return}Qe(),et(),Ts(),at(),Xe();let t=window.location.pathname;(t==="/dexter"||t==="/dexter/")&&Ft();let e=[],i=document.getElementById("windows-container");i&&i.setAttribute("data-count","0");let s=a=>{localStorage.setItem("dex_last_window",a)};function n(){for(;e.length>1;)e.shift().close(!0);let a=document.getElementById("windows-container"),d=document.querySelector("nav"),f=document.querySelector("footer"),g=window.location.pathname==="/"||window.location.pathname==="/index.html",w=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");a&&a.setAttribute("data-count",e.length),e.forEach(B=>{let _=document.getElementById(B.id);_&&_.classList.remove("hide-close")});let I=document.getElementById("dexter-menu-container"),M=document.getElementById("nav-window-switcher"),k=document.getElementById("settings-icon"),S=document.getElementById("close-all-windows"),y=window.innerWidth<880;if(!y){let B=document.getElementById("dexter-dropdown"),_=document.getElementById("dexter-menu-btn");B&&B.classList.remove("active"),_&&_.classList.remove("active"),a&&a.classList.remove("menu-open")}if(fe(e.length>0),e.length>0)if(f?.classList.add("hide"),S&&(S.style.display=y?"none":"block"),document.querySelector("main")?.style.setProperty("opacity","0","important"),d?.classList.add("window-open"),a&&(a.style.paddingTop="60px"),I&&(I.style.display=y?"flex":"none"),k&&(k.style.display=y?"block":"none"),!y&&M){let B=e[0].id;["alerts-window","events-window","monitor-window","contacts-window","workspace-window"].includes(B)?(M.innerHTML=`
-                      <div class="nav-switch-btn ${B==="alerts-window"?"active":""}" id="switch-alerts"><i class='bx bx-bell'></i> Alerts</div>
-                      <div class="nav-switch-btn ${B==="events-window"?"active":""}" id="switch-events"><i class='bx bx-calendar-event'></i> Events</div>
-                      <div class="nav-switch-btn ${B==="monitor-window"?"active":""}" id="switch-monitor"><i class='bx bx-pulse'></i> Monitor</div>
-                      <div class="nav-switch-btn ${B==="contacts-window"?"active":""}" id="switch-contacts"><i class='bx bx-book-content'></i> Contacts</div>
-                      <div class="nav-switch-btn ${B==="workspace-window"?"active":""}" id="switch-workspace"><i class='bx bx-brain'></i> Workspace</div>
-                  `,document.getElementById("switch-alerts").addEventListener("click",()=>{s("alerts-window"),l(m)}),document.getElementById("switch-events").addEventListener("click",()=>{s("events-window"),l(c)}),document.getElementById("switch-monitor").addEventListener("click",()=>{s("monitor-window"),l(x)}),document.getElementById("switch-contacts").addEventListener("click",()=>{s("contacts-window"),l(p)}),document.getElementById("switch-workspace").addEventListener("click",()=>{s("workspace-window"),l(u)})):M.innerHTML=""}else M&&(M.innerHTML="");else d?.classList.remove("window-open"),S&&(S.style.display="none"),a&&(a.style.paddingTop="100px"),document.querySelector("main")?.style.setProperty("opacity","1","important"),g||w?f?.classList.remove("hide"):f?.classList.add("hide"),I&&(I.style.display="flex"),k&&(k.style.display="block"),M&&(M.innerHTML="");ve()}function l(a){if(a.isOpen()){a.close();return}for(;e.length>0;)e.pop().close(!0);e.push(a),a.open(),n()}function r(){[...e].forEach(d=>d.close()),e=[]}window.addEventListener("resize",n);let m=ae({id:"alerts-window",title:"Alerts",icon:"bx-bell",content:pt(),onOpen:()=>ie(),onClose:()=>{let a=e.indexOf(m);a>-1&&e.splice(a,1),n()}}),c=ae({id:"events-window",title:"Events",icon:"bx-calendar-event",content:qe(),onOpen:()=>{c.setContent(qe()),ne()},onClose:()=>{let a=e.indexOf(c);a>-1&&e.splice(a,1),n()}}),p=ae({id:"contacts-window",title:"Contacts",icon:"bx-book-content",content:$t(),onOpen:()=>je(),onClose:()=>{let a=e.indexOf(p);a>-1&&e.splice(a,1),n()}}),x=ae({id:"monitor-window",icon:"bx-pulse",tabs:[{icon:"bxs-server",title:"Services",content:Bt()},{icon:"bxs-component",title:"Processes",content:It()},{icon:"bxs-brain",title:"Models",content:_t()},{icon:"bx-globe",title:"Web",content:Rt()},{icon:"bxs-hdd",title:"Hardware",content:Dt()},{icon:"bxs-terminal",title:"Logs",content:zt()},{icon:"bxs-zap",title:"Agents",content:At()},{icon:"bx-task",title:"Chores",content:ht()}].filter(a=>z()?a.title!=="Hardware"&&a.title!=="Logs":!0),onOpen:()=>{Je(),Ee(),Ge(),Ot(),$e(),ye()},onClose:()=>{let a=e.indexOf(x);a>-1&&e.splice(a,1),n()}}),u=ae({id:"workspace-window",title:"Workspace",icon:"bx-brain",content:yt(),onOpen:()=>Oe(),onClose:()=>{let a=e.indexOf(u);a>-1&&e.splice(a,1),n()}}),v=ae({id:"settings-window",title:"Settings",icon:"bx-cog",content:De(),onOpen:()=>{v.setContent(De()),We(v)},onClose:()=>{let a=e.indexOf(v);a>-1&&e.splice(a,1),n()}});window.dexter={viewEvent:a=>{c.isOpen()||l(c),setTimeout(()=>{let d=document.querySelector(`.event-item[data-event-id="${a}"]`);d&&(d.scrollIntoView({behavior:"smooth",block:"center"}),d.classList.add("flash-highlight"),d.classList.contains("expanded")||d.click(),setTimeout(()=>d.classList.remove("flash-highlight"),2e3))},500)},viewAlert:a=>{m.isOpen()||l(m),setTimeout(()=>{let d=document.querySelector(`.event-item[data-alert-id="${a}"]`);d&&(d.scrollIntoView({behavior:"smooth",block:"center"}),d.classList.add("flash-highlight"),d.classList.contains("expanded")||d.click(),setTimeout(()=>d.classList.remove("flash-highlight"),2e3))},500)}};let o=()=>{let a=document.getElementById("dexter-dropdown"),d=document.getElementById("dexter-menu-btn");a&&d&&(a.classList.remove("active"),d.classList.remove("active"),window.innerWidth<880&&document.getElementById("windows-container")?.classList.remove("menu-open"))};(()=>{let a=document.getElementById("dexter-menu-btn"),d=document.getElementById("settings-icon"),f=document.getElementById("close-all-windows"),g=document.getElementById("nav-left-container"),w=document.getElementById("dexter-dropdown"),I=document.getElementById("windows-container");a&&w&&(a.onclick=k=>{k.stopPropagation();let S=window.innerWidth<880;w.classList.toggle("active"),a.classList.toggle("active");let y=w.classList.contains("active");if(S){let B=document.querySelector("nav");y?(document.querySelector("footer")?.classList.add("hide"),document.querySelector("main")?.style.setProperty("opacity","0","important"),B?.classList.add("window-open"),I?.classList.add("menu-open"),fe(!0)):(I?.classList.remove("menu-open"),e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),B?.classList.remove("window-open"),fe(!1)))}}),d&&(d.onclick=k=>{k.stopPropagation(),l(v)}),f&&(f.onclick=k=>{k.stopPropagation(),r()});let M=(k,S,y)=>{let B=document.getElementById(k);B&&(B.onclick=_=>{_.stopPropagation(),o(),y&&s(y),l(S)})};M("alerts-menu-item",m,"alerts-window"),M("events-menu-item",c,"events-window"),M("monitor-menu-item",x,"monitor-window"),M("contacts-menu-item",p,"contacts-window"),M("workspace-menu-item",u,"workspace-window"),g&&(g.onclick=k=>{if(k.stopPropagation(),w&&w.classList.contains("active")){o(),window.innerWidth<880&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),fe(!1));return}if(e.length>0)r();else{let S=window.location.pathname;if(!(S==="/"||S==="/index.html")){let _=(S.endsWith("/")&&S.length>1?S.slice(0,-1):S).split("/");_.pop();let H=_.join("/")||"/";window.location.href=H}}}),document.addEventListener("click",()=>{let k=window.innerWidth<880;w&&w.classList.contains("active")&&(o(),k&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),fe(!1)))}),w&&(w.onclick=k=>k.stopPropagation())})();let E=window.location.pathname==="/"||window.location.pathname==="/index.html",h=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");!E&&!h&&document.querySelector("footer")?.classList.add("hide"),z()||setInterval(()=>{c.isOpen()&&ne(),m.isOpen()?ie():Re()},1e3),setInterval(()=>{z()&&(m.isOpen()?ie():Re()),u.isOpen()?Oe():xt(),z()&&c.isOpen()&&ne(),x.isOpen()&&Nt()},5e3)}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",Jt):Jt();})();
+    `,document.getElementById("terminal-cmd-name").textContent=`dex ${t.id}`,document.getElementById("terminal-status-badge").className="terminal-status status-running",document.getElementById("terminal-status-badge").textContent="Running",document.getElementById("terminal-action-btn").style.display="none",e.classList.add("active"),Ve=!0,i}function Ut(){let t=document.getElementById("cli-terminal-overlay");t&&t.classList.remove("active"),Ve=!1}function jt(t,e,i="output"){if(!Ve)return;let s=document.createElement("div");s.className=`terminal-line terminal-${i}`,i==="prompt"?s.innerHTML=`<span class="terminal-prompt">$</span> ${e}`:s.innerHTML=Le(e),t.appendChild(s),t.scrollTop=t.scrollHeight}async function ks(t){let e=qt.find(n=>n.id===t);if(!e)return;let i=Ss(e);jt(i,`dex ${t}`,"prompt");let s=e.demo_output||["Executing command...","\u2713 Done."];for(let n of s){await new Promise(r=>setTimeout(r,400+Math.random()*600));let c="output";n.includes("[ERROR]")?c="error":n.includes("[SUCCESS]")||n.includes("\u2713")?c="success":n.includes("!")&&(c="warning"),jt(i,n,c)}document.getElementById("terminal-status-badge").className="terminal-status status-success",document.getElementById("terminal-status-badge").textContent="Completed (Demo)",document.getElementById("terminal-action-btn").style.display="block"}function Ft(){let t=document.getElementById("cli-interface-container");if(!t)return;t.innerHTML=Es();let e=document.getElementById("install-command-copy");e&&e.addEventListener("click",()=>{let i=e.querySelector("code").textContent;navigator.clipboard.writeText(i).then(()=>{let s=e.querySelector("i");s.className="bx bx-check",s.style.color="#5eff5e",setTimeout(()=>{s.className="bx bx-copy",s.style.color="#bb86fc"},2e3)})}),t.querySelectorAll(".cli-command-card").forEach(i=>{i.addEventListener("mouseenter",()=>{i.style.transform="translateY(-5px)",i.style.borderColor="rgba(255,255,255,0.15)",i.style.backgroundColor="rgba(255,255,255,0.05)"}),i.addEventListener("mouseleave",()=>{i.style.transform="translateY(0)",i.style.borderColor="rgba(255,255,255,0.05)",i.style.backgroundColor="rgba(255,255,255,0.03)"}),i.addEventListener("click",()=>{let s=i.dataset.cmd;ks(s)})})}async function Ts(){if(!z())try{if(!(await I("/system/status",{method:"GET"})).ok)throw new Error("Service unhealthy")}catch(t){console.error("Service health check failed:",t)}}function Jt(){if(window.location.protocol==="http:"&&window.location.hostname==="easter.company"){window.location.replace("https://"+window.location.hostname+window.location.pathname+window.location.search);return}Qe(),et(),Ts(),at(),Xe();let t=window.location.pathname;(t==="/dexter"||t==="/dexter/")&&Ft();let e=[],i=document.getElementById("windows-container");i&&i.setAttribute("data-count","0");let s=f=>{localStorage.setItem("dex_last_window",f)};function n(){for(;e.length>1;)e.shift().close(!0);let f=document.getElementById("windows-container"),o=document.querySelector("nav"),d=document.querySelector("footer"),u=window.location.pathname==="/"||window.location.pathname==="/index.html",w=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");f&&f.setAttribute("data-count",e.length),e.forEach(L=>{let B=document.getElementById(L.id);B&&B.classList.remove("hide-close")});let A=document.getElementById("dexter-menu-container"),_=document.getElementById("nav-window-switcher"),S=document.getElementById("settings-icon"),k=document.getElementById("close-all-windows"),x=window.innerWidth<880;if(!x){let L=document.getElementById("dexter-dropdown"),B=document.getElementById("dexter-menu-btn");L&&L.classList.remove("active"),B&&B.classList.remove("active"),f&&f.classList.remove("menu-open")}if(fe(e.length>0),e.length>0)if(d?.classList.add("hide"),k&&(k.style.display=x?"none":"block"),document.querySelector("main")?.style.setProperty("opacity","0","important"),o?.classList.add("window-open"),f&&(f.style.paddingTop="60px"),A&&(A.style.display=x?"flex":"none"),S&&(S.style.display=x?"block":"none"),!x&&_){let L=e[0].id;["alerts-window","events-window","monitor-window","contacts-window","workspace-window"].includes(L)?(_.innerHTML=`
+                      <div class="nav-switch-btn ${L==="alerts-window"?"active":""}" id="switch-alerts"><i class='bx bx-bell'></i> Alerts</div>
+                      <div class="nav-switch-btn ${L==="events-window"?"active":""}" id="switch-events"><i class='bx bx-calendar-event'></i> Events</div>
+                      <div class="nav-switch-btn ${L==="monitor-window"?"active":""}" id="switch-monitor"><i class='bx bx-pulse'></i> Monitor</div>
+                      <div class="nav-switch-btn ${L==="contacts-window"?"active":""}" id="switch-contacts"><i class='bx bx-book-content'></i> Contacts</div>
+                      <div class="nav-switch-btn ${L==="workspace-window"?"active":""}" id="switch-workspace"><i class='bx bx-brain'></i> Workspace</div>
+                  `,document.getElementById("switch-alerts").addEventListener("click",()=>{s("alerts-window"),c(v)}),document.getElementById("switch-events").addEventListener("click",()=>{s("events-window"),c(l)}),document.getElementById("switch-monitor").addEventListener("click",()=>{s("monitor-window"),c(h)}),document.getElementById("switch-contacts").addEventListener("click",()=>{s("contacts-window"),c(p)}),document.getElementById("switch-workspace").addEventListener("click",()=>{s("workspace-window"),c(m)})):_.innerHTML=""}else _&&(_.innerHTML="");else o?.classList.remove("window-open"),k&&(k.style.display="none"),f&&(f.style.paddingTop="100px"),document.querySelector("main")?.style.setProperty("opacity","1","important"),u||w?d?.classList.remove("hide"):d?.classList.add("hide"),A&&(A.style.display="flex"),S&&(S.style.display="block"),_&&(_.innerHTML="");ve()}function c(f){if(f.isOpen()){f.close();return}for(;e.length>0;)e.pop().close(!0);e.push(f),f.open(),n()}function r(){[...e].forEach(o=>o.close()),e=[]}window.addEventListener("resize",n);let v=ae({id:"alerts-window",title:"Alerts",icon:"bx-bell",content:pt(),onOpen:()=>ie(),onClose:()=>{let f=e.indexOf(v);f>-1&&e.splice(f,1),n()}}),l=ae({id:"events-window",title:"Events",icon:"bx-calendar-event",content:qe(),onOpen:()=>{l.setContent(qe()),ne()},onClose:()=>{let f=e.indexOf(l);f>-1&&e.splice(f,1),n()}}),p=ae({id:"contacts-window",title:"Contacts",icon:"bx-book-content",content:$t(),onOpen:()=>je(),onClose:()=>{let f=e.indexOf(p);f>-1&&e.splice(f,1),n()}}),h=ae({id:"monitor-window",icon:"bx-pulse",tabs:[{icon:"bxs-server",title:"Services",content:Bt()},{icon:"bxs-component",title:"Processes",content:It()},{icon:"bxs-brain",title:"Models",content:_t()},{icon:"bx-globe",title:"Web",content:Rt()},{icon:"bxs-hdd",title:"Hardware",content:Dt()},{icon:"bxs-terminal",title:"Logs",content:zt()},{icon:"bxs-zap",title:"Agents",content:At()},{icon:"bx-task",title:"Chores",content:ht()}].filter(f=>z()?f.title!=="Hardware"&&f.title!=="Logs":!0),onOpen:()=>{Je(),Ee(),Ge(),Ot(),$e(),ye()},onClose:()=>{let f=e.indexOf(h);f>-1&&e.splice(f,1),n()}}),m=ae({id:"workspace-window",title:"Workspace",icon:"bx-brain",content:yt(),onOpen:()=>Oe(),onClose:()=>{let f=e.indexOf(m);f>-1&&e.splice(f,1),n()}}),b=ae({id:"settings-window",title:"Settings",icon:"bx-cog",content:De(),onOpen:()=>{b.setContent(De()),We(b)},onClose:()=>{let f=e.indexOf(b);f>-1&&e.splice(f,1),n()}});window.dexter={viewEvent:f=>{l.isOpen()||c(l),setTimeout(()=>{let o=document.querySelector(`.event-item[data-event-id="${f}"]`);o&&(o.scrollIntoView({behavior:"smooth",block:"center"}),o.classList.add("flash-highlight"),o.classList.contains("expanded")||o.click(),setTimeout(()=>o.classList.remove("flash-highlight"),2e3))},500)},viewAlert:f=>{v.isOpen()||c(v),setTimeout(()=>{let o=document.querySelector(`.event-item[data-alert-id="${f}"]`);o&&(o.scrollIntoView({behavior:"smooth",block:"center"}),o.classList.add("flash-highlight"),o.classList.contains("expanded")||o.click(),setTimeout(()=>o.classList.remove("flash-highlight"),2e3))},500)}};let a=()=>{let f=document.getElementById("dexter-dropdown"),o=document.getElementById("dexter-menu-btn");f&&o&&(f.classList.remove("active"),o.classList.remove("active"),window.innerWidth<880&&document.getElementById("windows-container")?.classList.remove("menu-open"))};(()=>{let f=document.getElementById("dexter-menu-btn"),o=document.getElementById("settings-icon"),d=document.getElementById("close-all-windows"),u=document.getElementById("nav-left-container"),w=document.getElementById("dexter-dropdown"),A=document.getElementById("windows-container");f&&w&&(f.onclick=S=>{S.stopPropagation();let k=window.innerWidth<880;w.classList.toggle("active"),f.classList.toggle("active");let x=w.classList.contains("active");if(k){let L=document.querySelector("nav");x?(document.querySelector("footer")?.classList.add("hide"),document.querySelector("main")?.style.setProperty("opacity","0","important"),L?.classList.add("window-open"),A?.classList.add("menu-open"),fe(!0)):(A?.classList.remove("menu-open"),e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),L?.classList.remove("window-open"),fe(!1)))}}),o&&(o.onclick=S=>{S.stopPropagation(),c(b)}),d&&(d.onclick=S=>{S.stopPropagation(),r()});let _=(S,k,x)=>{let L=document.getElementById(S);L&&(L.onclick=B=>{B.stopPropagation(),a(),x&&s(x),c(k)})};_("alerts-menu-item",v,"alerts-window"),_("events-menu-item",l,"events-window"),_("monitor-menu-item",h,"monitor-window"),_("contacts-menu-item",p,"contacts-window"),_("workspace-menu-item",m,"workspace-window"),u&&(u.onclick=S=>{if(S.stopPropagation(),w&&w.classList.contains("active")){a(),window.innerWidth<880&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),fe(!1));return}if(e.length>0)r();else{let k=window.location.pathname;if(!(k==="/"||k==="/index.html")){let B=(k.endsWith("/")&&k.length>1?k.slice(0,-1):k).split("/");B.pop();let H=B.join("/")||"/";window.location.href=H}}}),document.addEventListener("click",()=>{let S=window.innerWidth<880;w&&w.classList.contains("active")&&(a(),S&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),fe(!1)))}),w&&(w.onclick=S=>S.stopPropagation())})();let E=window.location.pathname==="/"||window.location.pathname==="/index.html",y=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");!E&&!y&&document.querySelector("footer")?.classList.add("hide"),z()||setInterval(()=>{l.isOpen()&&ne(),v.isOpen()?ie():Re()},1e3),setInterval(()=>{z()&&(v.isOpen()?ie():Re()),m.isOpen()?Oe():xt(),z()&&l.isOpen()&&ne(),h.isOpen()&&Nt()},5e3)}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",Jt):Jt();})();
