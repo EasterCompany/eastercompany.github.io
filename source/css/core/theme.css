@@ -33,9 +33,12 @@ body.theme-dark {
 }
 
 @keyframes smoothBg {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(-5%, -5%) rotate(2deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
 }
 
 @keyframes fadeInBackground { from { opacity: 0; } to { opacity: var(--bg-opacity, 0.5); } }
@@ -62,8 +65,8 @@ body.theme-legacy .dropdown-item i {
 
 /* Legacy Theme (Original Animated) */
 body.theme-legacy {
-    --bg-blur: 20px;
-    --bg-opacity: 0.4;
+    --bg-blur: 25px;
+    --bg-opacity: 0.25;
     --bg-blend: difference;
     --bg-filter: invert(100%);
     --gradient-1: #32FFaa;
@@ -71,16 +74,17 @@ body.theme-legacy {
     --gradient-3: #4444FF;
     --gradient-4: #6666FF;
     --gradient-5: #ddddFF;
+    --stripe-color: #FFF;
 }
 
 .background {
   z-index: -1;
   display: flex;
   position: fixed;
-  top: -10%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   opacity: 0;
   place-content: center;
   place-items: center;
@@ -108,12 +112,11 @@ body.theme-legacy {
   
   background-image: var(--stripes), var(--rainbow);
   background-size: 300%, 200%;
-  background-position: center;
+  background-position: 50% 50%, 50% 50%;
   filter: blur(var(--bg-blur)) var(--bg-filter);
   -webkit-mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   will-change: transform;
-  animation: smoothBg 20s ease-in-out infinite, fadeInBackground 0.6s ease forwards;
 }
 
 .background::after {
@@ -123,6 +126,8 @@ body.theme-legacy {
   background-image: var(--stripes), var(--rainbow);
   background-size: 200%, 100%;
   mix-blend-mode: var(--bg-blend);
+  animation: smoothBg 60s linear infinite;
+  background-attachment: fixed;
 }
 
 /* Global Grid Overlay - Only for Dark Theme */
