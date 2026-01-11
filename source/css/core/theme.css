@@ -126,8 +126,12 @@ body.theme-legacy {
   background-image: var(--stripes), var(--rainbow);
   background-size: 200%, 100%;
   mix-blend-mode: var(--bg-blend);
-  animation: smoothBg 60s linear infinite;
   background-attachment: fixed;
+}
+
+/* Scoped animation for Legacy theme */
+body.theme-legacy .background::after {
+  animation: smoothBg 60s linear infinite;
 }
 
 /* Global Grid Overlay - Only for Dark Theme */
