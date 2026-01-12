@@ -19,23 +19,23 @@
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
   <meta property="og:url" content="https://easter.company">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=afbe4d5a">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=30a4859e">
   <meta property="fb:app_id" content="1541540286236316">
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Easter Company">
   <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=afbe4d5a">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=30a4859e">
   <meta name="twitter:site" content="@eastercompany">
   <meta name="twitter:creator" content="@eastercompany">
 
   <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=afbe4d5a" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=afbe4d5a">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=afbe4d5a">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=afbe4d5a">
-  <link rel="manifest" href="/static/meta/site.webmanifest?last_build=afbe4d5a">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=30a4859e" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=30a4859e">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=30a4859e">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=30a4859e">
+  <link rel="manifest" href="/static/meta/site.webmanifest?last_build=30a4859e">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
@@ -133,7 +133,7 @@
     }
 
     body {
-      padding-bottom: 300px;
+      padding-bottom: 25vh;
     }
 
     /* Scroll Indicator */
@@ -202,6 +202,12 @@
       font-size: 4rem;
       color: rgba(255, 255, 255, 0.05);
       border-bottom: 1px solid var(--glass-border);
+    }
+    .widget-image img {
+      max-width: 50%;
+      max-height: 40%;
+      opacity: 0.7;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
     }
     .widget-content {
       padding: 25px;
@@ -296,8 +302,154 @@
       filter: none;
       transform: scale(1.05);
     }
+
+    .section-header {
+      width: 100%;
+      max-width: 1200px;
+      margin: 120px auto 0 auto;
+      padding: 0 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--neon-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.4em;
+      opacity: 0.5;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 1;
+      position: relative;
+    }
+    .section-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
+    }
+
+    /* About Us Section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 30px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 50px auto 100px auto;
+      padding: 0 20px;
+    }
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .terminal-window {
+      background: #050507;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 25px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #a9a9b3;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 300px;
+    }
+    .terminal-header {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+    
+    .terminal-body p { margin: 5px 0; line-height: 1.5; }
+    .cmd { color: var(--neon-blue); }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; font-style: italic; }
+    .cursor { animation: blink 1s step-end infinite; color: var(--neon-blue); }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .stats-grid {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-rows: auto; grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .stat-card:hover {
+      transform: translateX(-5px);
+      border-color: var(--neon-blue);
+      box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
+    }
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .about-bio {
+      grid-column: 1 / -1;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    .about-bio:hover {
+      border-color: var(--neon-blue);
+    }
+    .about-bio h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    .about-bio p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #888;
+      line-height: 1.8;
+      margin: 0;
+    }
   </style>
-  <link rel="stylesheet" href="/dex.afbe4d5a.css"></head>
+  <link rel="stylesheet" href="/dex.30a4859e.css"></head>
   <body>
     <main id="main">
       <h1 class="dexter-hero-logo">DEXTER</h1>
@@ -316,6 +468,7 @@
       </div>
     </main>
 
+    <div class="section-header">Products</div>
     <section class="content-section">
       <div class="widget">
         <div class="widget-image">
@@ -374,6 +527,69 @@
         <div class="widget-content">
           <h3>Easter Cloud</h3>
           <p>Distributed high-performance compute nodes providing the decentralized backbone for heavy cognitive tasks and large-scale AI model execution.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-header">Clients</div>
+    <section class="content-section">
+      <div class="widget">
+        <div class="widget-image">
+          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+        </div>
+        <div class="widget-content">
+          <h3>Emperia</h3>
+          <p>Building the future of retail with immersive virtual stores and Unreal Engine 5 infrastructure for global luxury brands.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-image">
+          <img src="/static/assets/clients/dior.svg" alt="Dior" />
+        </div>
+        <div class="widget-content">
+          <h3>Dior</h3>
+          <p>Delivering high-fidelity digital couture experiences and interactive virtual environments for world-renowned fashion campaigns.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-image">
+          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+        </div>
+        <div class="widget-content">
+          <h3>Bloomingdales</h3>
+          <p>Developing the landmark 150th Anniversary virtual experience, bringing high-end retail directly to the browser with native performance.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-image">
+          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+        </div>
+        <div class="widget-content">
+          <h3>Lacoste</h3>
+          <p>Streamlining global deployments for immersive seasonal campaigns and automated interactive brand activations across Europe.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-image">
+          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+        </div>
+        <div class="widget-content">
+          <h3>Walmart</h3>
+          <p>Pioneering next-generation retail solutions through innovative AI system architecture and large-scale distributed infrastructure.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-image">
+          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+        </div>
+        <div class="widget-content">
+          <h3>European Union</h3>
+          <p>Contributing to the PHEMS initiative, utilizing federated learning for biomedical research and life-saving early warning diagnostics.</p>
         </div>
       </div>
     </section>
@@ -454,6 +670,60 @@
       </div>
     </div>
 
+    <div class="section-header">About Us</div>
+    <div class="about-grid">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+        </div>
+        <div class="terminal-body">
+          <p><span class="cmd">root@easter:~$</span> ./mission_statement.sh</p>
+          <p>> Initializing core philosophy...</p>
+          <p>> Loading "Recursive Engineering" modules...</p>
+          <p>> [SUCCESS] Vision loaded.</p>
+          <br>
+          <p class="comment"># We bridge the gap between abstract idea and</p>
+          <p class="comment"># concrete implementation. We build intelligence</p>
+          <p class="comment"># that builds itself.</p>
+          <br>
+          <p><span class="cmd">root@easter:~$</span> cat locations.txt</p>
+          <p>Highlands, Scotland, UK</p>
+          <p>New York, NY, United States</p>
+          <br>
+          <p><span class="cmd">root@easter:~$</span> <span class="cursor">_</span></p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">2016</div>
+          <div class="stat-label">Founded</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Years R&D</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Independent</div>
+        </div>
+      </div>
+
+      <div class="about-bio">
+        <h3>Our Story</h3>
+        <p>
+          Easter Company is a specialized engineering firm dedicated to the pursuit of recursive intelligence and high-fidelity digital implementation. 
+          Founded in 2016 as a research initiative, we have evolved into a strategic partner for global industry leaders across AI, Finance, and Luxury Retail sectors.
+          <br><br>
+          Our core mission is to eliminate the friction between abstract vision and concrete reality. We believe that modern software systems should be as 
+          dynamic as the people who use them—evolving, learning, and self-correcting. Operating from our bases in the Highlands of Scotland and New York, 
+          we act as a distributed nerve center for cutting-edge innovation, delivering products that define their respective niches.
+        </p>
+      </div>
+    </div>
+
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const dexBtn = document.getElementById('open-dex-btn');
@@ -484,5 +754,5 @@
       });
     </script>
 
-  <script src="/dex.afbe4d5a.js" defer></script></body>
+  <script src="/dex.30a4859e.js" defer></script></body>
 </html>
