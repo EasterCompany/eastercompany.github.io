@@ -261,6 +261,7 @@ export function isPublicMode() {
 // --- CENTRALIZED DASHBOARD CACHE ---
 let DASHBOARD_CACHE = null;
 let isRefreshing = false;
+let lastSyncAttempt = 0;
 const CACHE_KEY = 'dex_dashboard_snapshot';
 
 /**
@@ -280,6 +281,7 @@ function loadDashboardFromStorage() {
 async function refreshDashboardCache() {
   if (!isPublicMode() || isRefreshing) return;
   isRefreshing = true;
+  lastSyncAttempt = Math.floor(Date.now() / 1000);
   
   try {
     const snapshot = await upstashCommand('GET', 'state:dashboard:full');
@@ -337,9 +339,15 @@ async function initDashboardSync() {
     const clock = new Date();
     const currentNow = Math.floor(Date.now() / 1000);
     const currentAge = DASHBOARD_CACHE ? (currentNow - DASHBOARD_CACHE.timestamp) : Infinity;
+    const timeSinceLastAttempt = currentNow - lastSyncAttempt;
 
     // Refresh logic: Every minute at :59 OR if data is > 5 mins old
-    if (clock.getSeconds() === 59 || currentAge > 300) {
+    // Guarded by a 60s cooldown on attempts to prevent retry loops on failure
+    const isScheduled = clock.getSeconds() === 59;
+    const isStale = currentAge > 300;
+    const canRetry = timeSinceLastAttempt > 60;
+
+    if ((isScheduled && canRetry) || (isStale && canRetry)) {
       refreshDashboardCache();
     }
 
