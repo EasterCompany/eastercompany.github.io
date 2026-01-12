@@ -8,7 +8,7 @@
 
   <!-- SEO Meta Tags -->
   <meta name="description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="revised" content="2026-01-11">
+  <meta name="revised" content="2026-01-12">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Easter">
@@ -19,23 +19,23 @@
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
   <meta property="og:url" content="https://easter.company">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=ad21a4d7">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=afbe4d5a">
   <meta property="fb:app_id" content="1541540286236316">
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Easter Company">
   <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=ad21a4d7">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=afbe4d5a">
   <meta name="twitter:site" content="@eastercompany">
   <meta name="twitter:creator" content="@eastercompany">
 
   <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=ad21a4d7" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=ad21a4d7">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=ad21a4d7">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=ad21a4d7">
-  <link rel="manifest" href="/static/meta/site.webmanifest?last_build=ad21a4d7">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=afbe4d5a" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=afbe4d5a">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=afbe4d5a">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=afbe4d5a">
+  <link rel="manifest" href="/static/meta/site.webmanifest?last_build=afbe4d5a">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
@@ -223,47 +223,81 @@
       margin: 0;
     }
 
-    /* Clients Collage */
-    .clients-wrapper {
+    /* Clients Marquee */
+    .clients-marquee {
       width: 100%;
-      overflow: hidden;
-      margin-top: 100px;
-      padding-bottom: 100px;
+      max-width: 1200px;
+      margin: 50px auto 0 auto;
+      padding: 0 20px 100px 20px;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
+      gap: 40px;
       position: relative;
       z-index: 1;
+      overflow: hidden;
+      /* Mask for fade effect */
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     }
-    .clients-container {
-      width: 1200px; /* Fixed reference width */
-      flex-shrink: 0; /* Prevent flex shrinking */
+
+    .marquee-row {
       display: flex;
-      justify-content: space-evenly;
+      width: 100%;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .marquee-content {
+      display: flex;
+      flex-shrink: 0;
       align-items: center;
-      text-align: center;
-      flex-wrap: wrap;
-      flex-direction: row;
-      transform-origin: top center;
-      padding: 0;
+      gap: 60px;
+      padding: 0 30px;
+      min-width: 100%;
+      will-change: transform;
+      transform: translate3d(0, 0, 0); /* Force hardware acceleration */
     }
-    /* Specific overrides for raw SVGs to behave nicely */
-    .clients-container img {
-      margin: 30px;
+
+    .scroll-left .marquee-content {
+      animation: scrollLeft 75s linear infinite;
+    }
+
+    .scroll-right .marquee-content {
+      animation: scrollRight 75s linear infinite;
+    }
+
+    /* Pause on hover */
+    .marquee-row:hover .marquee-content {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollLeft {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    @keyframes scrollRight {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+
+    .clients-marquee img {
       display: block;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      opacity: 0.5;
-      cursor: pointer;
-      max-width: 200px;
-      height: auto;
+      height: 28px; /* Standardized height */
+      width: auto;
+      opacity: 0.4;
+      transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+      /* filter: grayscale(100%); - Removed to show colors but dim */
+      will-change: transform, opacity, filter;
     }
-    .clients-container img:hover {
+
+    .clients-marquee img:hover {
       opacity: 1;
+      filter: none;
       transform: scale(1.05);
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
     }
   </style>
-  <link rel="stylesheet" href="/dex.ad21a4d7.css"></head>
+  <link rel="stylesheet" href="/dex.afbe4d5a.css"></head>
   <body>
     <main id="main">
       <h1 class="dexter-hero-logo">DEXTER</h1>
@@ -344,17 +378,79 @@
       </div>
     </section>
 
-    <div class="clients-wrapper">
-      <div class="clients-container">
-        <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-        <img src="/static/assets/clients/dior.svg" alt="Dior" />
-        <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-        <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-        <img src="/static/assets/clients/armani.svg" alt="Armani" />
-        <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-        <img src="/static/assets/clients/dkny.svg" alt="DKNY" />
-        <img src="/static/assets/clients/sunglasshut.svg" alt="Sunglass Hut" />
-        <img src="/static/assets/clients/aridhia.svg" alt="Aridhia" />
+    <div class="clients-marquee">
+      <!-- Row 1: Left Scroll -->
+      <div class="marquee-row scroll-left">
+        <div class="marquee-content">
+          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+          <img src="/static/assets/clients/dior.svg" alt="Dior" />
+          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+          <img src="/static/assets/clients/boss.svg" alt="Boss" />
+          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+        </div>
+        <!-- Duplicate for loop -->
+        <div class="marquee-content">
+          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+          <img src="/static/assets/clients/dior.svg" alt="Dior" />
+          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+          <img src="/static/assets/clients/boss.svg" alt="Boss" />
+          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+        </div>
+      </div>
+
+      <!-- Row 2: Right Scroll (Reverse Order) -->
+      <div class="marquee-row scroll-right">
+        <div class="marquee-content">
+          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+          <img src="/static/assets/clients/boss.svg" alt="Boss" />
+          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+          <img src="/static/assets/clients/dior.svg" alt="Dior" />
+          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+        </div>
+        <!-- Duplicate for loop -->
+        <div class="marquee-content">
+          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+          <img src="/static/assets/clients/boss.svg" alt="Boss" />
+          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+          <img src="/static/assets/clients/dior.svg" alt="Dior" />
+          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+        </div>
       </div>
     </div>
 
@@ -385,30 +481,8 @@
             scrollIndicator.style.transform = 'translateX(-50%) translateY(0)';
           }
         });
-
-        // Clients Scaling Logic
-        function resizeClients() {
-          const wrapper = document.querySelector('.clients-wrapper');
-          const container = document.querySelector('.clients-container');
-          if (!wrapper || !container) return;
-
-          const refWidth = 1200; // The fixed width of the layout
-          const scale = Math.min(1, window.innerWidth / refWidth);
-          
-          container.style.transform = `scale(${scale})`;
-          
-          // Adjust wrapper height to match scaled content
-          // offsetHeight includes padding, which we want
-          wrapper.style.height = (container.offsetHeight * scale) + 'px';
-        }
-
-        window.addEventListener('resize', resizeClients);
-        // Initial call
-        resizeClients();
-        // Delayed call to handle asset loading
-        setTimeout(resizeClients, 100);
       });
     </script>
 
-  <script src="/dex.ad21a4d7.js" defer></script></body>
+  <script src="/dex.afbe4d5a.js" defer></script></body>
 </html>
