@@ -1,7 +1,5 @@
 import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from '../core/utils.js';
 
-const CLI_VERSION = '2.8.143';
-
 const CLI_COMMANDS = [
   {
     id: 'chat',
@@ -599,6 +597,7 @@ function openTerminal(cmdInfo) {
   document.getElementById('terminal-action-btn').style.display = 'none';
 
   overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
   terminalActive = true;
 
   return body;
@@ -607,6 +606,7 @@ function openTerminal(cmdInfo) {
 function closeTerminal() {
   const overlay = document.getElementById('cli-terminal-overlay');
   if (overlay) overlay.classList.remove('active');
+  document.body.style.overflow = '';
   terminalActive = false;
 }
 

@@ -114,6 +114,7 @@ function onReady() {
         closeAllWindowsIcon.style.display = isMobile ? 'none' : 'block';
       }
       document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
+      document.body.style.overflow = 'hidden';
 
       navbar?.classList.add('window-open');
 
@@ -156,6 +157,7 @@ function onReady() {
       if (closeAllWindowsIcon) closeAllWindowsIcon.style.display = 'none';
       if (container) container.style.paddingTop = '100px';
       document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+      document.body.style.overflow = '';
 
       if (isRoot || isErrorPage) {
         footer?.classList.remove('hide');

@@ -566,12 +566,14 @@ export function showUserProfile(user) {
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) {
             overlay.classList.remove('active');
+            document.body.style.overflow = '';
             setTimeout(() => overlay.remove(), 300);
         }
     });
 
     document.body.appendChild(overlay);
     requestAnimationFrame(() => overlay.classList.add('active'));
+    document.body.style.overflow = 'hidden';
 
     // 3. Fetch Data
     smartDiscordFetch(`/profile/${user.id}`)
@@ -871,6 +873,7 @@ function renderProfileContent(overlay, user, data) {
     // Close Button
     closeBtn.addEventListener('click', () => {
         overlay.classList.remove('active');
+        document.body.style.overflow = '';
         setTimeout(() => overlay.remove(), 300);
     });
 
