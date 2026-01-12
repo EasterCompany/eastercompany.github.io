@@ -155,7 +155,7 @@ nav.window-open {
     top: 50px;
     right: -20px; /* Adjusted to account for wider padding/hit area */
     width: 220px; /* Increased width */
-    background-color: #ffffff6d;
+    background-color: #ffffff0d;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
