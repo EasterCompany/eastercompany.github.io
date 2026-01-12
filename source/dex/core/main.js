@@ -363,19 +363,28 @@ function onReady() {
         if (!isMobile) {
             // Position dropdown relative to button for desktop
             const rect = menuBtn.getBoundingClientRect();
+            const navRect = document.querySelector('nav').getBoundingClientRect();
             
             // Width of dropdown is 220px (from CSS).
             const dropdownWidth = 220;
+            const gap = 15; // Vertical gap
             
-            // Right-align the dropdown with the right edge of the button
-            // rect.right is the right edge of the button.
-            // leftPos = rect.right - dropdownWidth
-            let leftPos = rect.right - dropdownWidth;
+            // Target: Center of button
+            const btnCenter = rect.left + rect.width / 2;
+            let leftPos = btnCenter - dropdownWidth / 2;
             
-            // Ensure it doesn't go off-screen to the left (unlikely given it's on the right)
+            // Constraint: Right edge of dropdown must not exceed right edge of navbar (minus padding)
+            // Navbar padding is usually ~20px
+            const maxRight = navRect.right - 10; 
+            
+            if (leftPos + dropdownWidth > maxRight) {
+                leftPos = maxRight - dropdownWidth;
+            }
+            
+            // Basic viewport boundary check (left side)
             if (leftPos < 10) leftPos = 10;
             
-            dropdown.style.top = (rect.bottom + 15) + 'px'; // 15px gap
+            dropdown.style.top = (rect.bottom + gap) + 'px';
             dropdown.style.left = leftPos + 'px';
             dropdown.style.right = 'auto';
             dropdown.style.transform = 'none'; // Reset any CSS transforms
