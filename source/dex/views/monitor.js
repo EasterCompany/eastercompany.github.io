@@ -609,91 +609,118 @@ export async function updateProcessesTab() {
     analyzerResetBtn.dataset.listenerAttached = "true";
   }
 
-  const guardianStatus = await fetchGuardianStatus();
-  if (guardianStatus) {
-    const now = Math.floor(Date.now() / 1000);
-    const activeTier = guardianStatus.active_tier;
-    const activeSynthesis = guardianStatus.active_synthesis;
-    const aliases = guardianStatus.protocol_aliases || { "sentry": "Sentry", "architect": "Architect", "synthesis": "Synthesis" };
+    const guardianStatus = await fetchGuardianStatus();
+    if (guardianStatus && guardianStatus.agents) {
+      const guardianData = guardianStatus.agents.guardian || { protocols: {} };
+      const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
+      const systemData = guardianStatus.system || {};
 
-    const formatDuration = (seconds) => {
-      if (seconds < 0) seconds = 0;
-      const h = Math.floor(seconds / 3600);
-      const m = Math.floor((seconds % 3600) / 60);
-      const s = seconds % 60;
-      if (h > 0) return `${h}h ${m}m`;
-      if (m > 0) return `${m}m ${s}s`;
-      return `${s}s`;
-    };
+      const now = Math.floor(Date.now() / 1000);
+      const aliases = { 
+        "sentry": "Sentry", 
+        "architect": "Architect", 
+        "synthesis": "Synthesis",
+        "alert_review": "Alert Review"
+      };
 
-    const updateTimer = (el, statsEl, protocolData, protocolName, currentActive) => {
-      if (!el) return;
-      const alias = aliases[protocolName] || protocolName.toUpperCase();
-      const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
-      if (labelEl) {
-        labelEl.textContent = alias;
-      }
+      const formatDuration = (seconds) => {
+        if (seconds < 0) seconds = 0;
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}h ${m}m`;
+        if (m > 0) return `${m}m ${s}s`;
+        return `${s}s`;
+      };
 
-      if (currentActive && currentActive.includes(protocolName)) {
-        el.textContent = "Working";
-        el.style.color = "#bb86fc";
-      } else if (protocolData) {
-        const nextRun = protocolData.next_run;
-        const diff = nextRun - now;
-        if (diff <= 0) {
-          el.textContent = "Ready";
-          el.style.color = "#5eff5e";
+      const updateProtocolWidget = (el, statsEl, protocolData, protocolName) => {
+        if (!el) return;
+        const alias = aliases[protocolName] || protocolName.toUpperCase();
+        
+        // Update label if exists
+        const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
+        if (labelEl) labelEl.textContent = alias;
+
+        if (!protocolData) {
+            el.textContent = "Inactive";
+            el.style.color = "#666";
+            return;
+        }
+
+        const status = protocolData.status; // "Ready", "Working", "Cooldown"
+        
+        if (status === "Working") {
+            el.textContent = "Working";
+            el.style.color = "#bb86fc";
+        } else if (status === "Ready") {
+            el.textContent = "Ready";
+            el.style.color = "#5eff5e";
         } else {
-          const mins = Math.floor(diff / 60);
-          const secs = diff % 60;
-          el.textContent = `${mins}m ${secs}s`;
-          el.style.color = "#fff";
+            // Cooldown
+            // Use backend provided cooldown or calculate locally if public mode drift
+            let remaining = protocolData.cooldown;
+            if (isPublicMode()) {
+                 remaining = protocolData.next_run - now;
+            }
+            if (remaining <= 0) {
+                 el.textContent = "Ready";
+                 el.style.color = "#5eff5e";
+            } else {
+                 const mins = Math.floor(remaining / 60);
+                 const secs = remaining % 60;
+                 el.textContent = `${mins}m ${secs}s`;
+                 el.style.color = "#fff";
+            }
+        }
+
+        if (statsEl && protocolData.stats) {
+          statsEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span>Runs: ${protocolData.stats.runs || 0}</span>
+              <span style="color: ${protocolData.stats.failures > 0 ? '#ffa500' : '#666'}">Fails: ${protocolData.stats.failures || 0}</span>
+              <span style="color: ${protocolData.stats.aborted > 0 ? '#ff4d4d' : '#666'}">Aborted: ${protocolData.stats.aborted || 0}</span>
+            </div>
+          `;
+        }
+      };
+
+      // Guardian Protocols
+      if (sentryVal) updateProtocolWidget(sentryVal, document.getElementById('guardian-sentry-stats'), guardianData.protocols.sentry, 'sentry');
+      if (architectVal) updateProtocolWidget(architectVal, document.getElementById('guardian-architect-stats'), guardianData.protocols.architect, 'architect');
+      
+      // Analyzer Protocols
+      const synthesisVal = document.getElementById('analyzer-synthesis-val');
+      const synthesisStats = document.getElementById('analyzer-synthesis-stats');
+      if (synthesisVal) updateProtocolWidget(synthesisVal, synthesisStats, analyzerData.protocols.synthesis, 'synthesis');
+
+      // Imaginator Protocols
+      const imaginatorVal = document.getElementById('imaginator-alert_review-val');
+      const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
+      if (imaginatorVal) updateProtocolWidget(imaginatorVal, imaginatorStats, guardianData.protocols.alert_review, 'alert_review');
+
+      // System State
+      const stateLabel = document.getElementById('system-state-label');
+      const stateVal = document.getElementById('system-state-val');
+      
+      if (stateVal && systemData.state) {
+        const state = systemData.state;
+        const duration = formatDuration(systemData.state_time || 0);
+
+        if (stateLabel) stateLabel.textContent = `State: ${state.toUpperCase()}`;
+        stateVal.textContent = duration;
+
+        if (state === 'idle') {
+          stateVal.style.color = systemData.state_time > 300 ? "#5eff5e" : "#fff";
+        } else {
+          stateVal.style.color = "#bb86fc"; 
         }
       }
 
-      if (statsEl && protocolData) {
-        statsEl.innerHTML = `
-          <div style="display: flex; flex-direction: column; gap: 2px;">
-            <span>Runs: ${protocolData.attempts || 0}</span>
-            <span style="color: ${protocolData.failures > 0 ? '#ffa500' : '#666'}">Fails: ${protocolData.failures || 0}</span>
-            <span style="color: ${protocolData.absolute_failures > 0 ? '#ff4d4d' : '#666'}">Aborted: ${protocolData.absolute_failures || 0}</span>
-          </div>
-        `;
-      }
-    };
+      if (totalIdleVal) totalIdleVal.textContent = formatDuration(systemData.metrics?.total_idle_time || 0);
+      if (totalActiveVal) totalActiveVal.textContent = formatDuration(systemData.metrics?.total_active_time || 0);
+      if (totalWasteVal) totalWasteVal.textContent = formatDuration(systemData.metrics?.total_waste_time || 0);
 
-    if (sentryVal) updateTimer(sentryVal, document.getElementById('guardian-sentry-stats'), guardianStatus.sentry, 'sentry', activeTier);
-    if (architectVal) updateTimer(architectVal, document.getElementById('guardian-architect-stats'), guardianStatus.architect, 'architect', activeTier);
-    
-    const synthesisVal = document.getElementById('analyzer-synthesis-val');
-    const synthesisStats = document.getElementById('analyzer-synthesis-stats');
-    if (synthesisVal) updateTimer(synthesisVal, synthesisStats, guardianStatus.synthesis, 'synthesis', activeSynthesis);
-
-    const imaginatorVal = document.getElementById('imaginator-alert_review-val');
-    const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
-    if (imaginatorVal) updateTimer(imaginatorVal, imaginatorStats, guardianStatus.alert_review, 'alert_review', activeTier);
-
-    const stateLabel = document.getElementById('system-state-label');
-    const stateVal = document.getElementById('system-state-val');
-    if (stateVal && guardianStatus.system_state) {
-      const state = guardianStatus.system_state;
-      const duration = formatDuration(guardianStatus.system_state_time || 0);
-
-      if (stateLabel) stateLabel.textContent = `State: ${state.toUpperCase()}`;
-      stateVal.textContent = duration;
-
-      if (state === 'idle') {
-        stateVal.style.color = guardianStatus.system_state_time > 300 ? "#5eff5e" : "#fff";
-      } else {
-        stateVal.style.color = "#bb86fc"; // Purple for working/busy
-      }
-    }
-
-    if (totalIdleVal) totalIdleVal.textContent = formatDuration(guardianStatus.total_idle_time || 0);
-    if (totalActiveVal) totalActiveVal.textContent = formatDuration(guardianStatus.total_active_time || 0);
-    if (totalWasteVal) totalWasteVal.textContent = formatDuration(guardianStatus.total_waste_time || 0);
-
-  } else {
+    } else {
     const indicators = [sentryVal, architectVal, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
     indicators.forEach(el => {
       if (el) {
