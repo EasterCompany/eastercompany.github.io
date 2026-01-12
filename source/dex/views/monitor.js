@@ -613,6 +613,7 @@ export async function updateProcessesTab() {
     if (guardianStatus && guardianStatus.agents) {
       const guardianData = guardianStatus.agents.guardian || { protocols: {} };
       const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
+      const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
       const systemData = guardianStatus.system || {};
 
       const now = Math.floor(Date.now() / 1000);
@@ -696,7 +697,7 @@ export async function updateProcessesTab() {
       // Imaginator Protocols
       const imaginatorVal = document.getElementById('imaginator-alert_review-val');
       const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
-      if (imaginatorVal) updateProtocolWidget(imaginatorVal, imaginatorStats, guardianData.protocols.alert_review, 'alert_review');
+      if (imaginatorVal) updateProtocolWidget(imaginatorVal, imaginatorStats, imaginatorData.protocols.alert_review, 'alert_review');
 
       // System State
       const stateLabel = document.getElementById('system-state-label');
