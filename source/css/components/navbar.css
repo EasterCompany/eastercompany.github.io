@@ -151,9 +151,8 @@ nav.window-open {
 }
 
 .dexter-dropdown {
-    position: absolute;
-    top: 50px;
-    right: -20px; /* Adjusted to account for wider padding/hit area */
+    position: fixed; /* Fixed relative to viewport (body) */
+    /* top/left set by JS on desktop */
     width: 220px; /* Increased width */
     background-color: #ffffff0d;
     backdrop-filter: blur(15px);
@@ -166,27 +165,16 @@ nav.window-open {
     gap: 8px; /* Increased gap */
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-10px);
-    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: opacity 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     z-index: 1002;
 }
 
-/* Invisible bridge to prevent hover loss (Top) */
-#dexter-menu-container::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 240px; /* Matches dropdown width + buffer */
-    height: 30px; /* Covers the gap to the dropdown */
-}
+/* Invisible bridge removed as it's no longer nested hover-based */
 
 .dexter-dropdown.active {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0);
 }
 
 /* Darker/Solid Dropdown when a window is open */
@@ -240,15 +228,16 @@ nav.window-open .dexter-dropdown {
     }
 
     .dexter-dropdown {
-        position: fixed;
-        top: 60px;
+        top: 60px; /* Below navbar */
         left: 0;
         transform: translateY(100%); /* Start off-screen bottom */
         width: 100%;
         height: calc(100vh - 60px);
         max-width: none;
         right: auto;
-        background-color: rgba(10, 10, 10, 0.98);
+        background-color: rgba(10, 10, 10, 0.98); /* Solid dark for mobile */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         border: none;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 0;
@@ -258,6 +247,7 @@ nav.window-open .dexter-dropdown {
         flex-direction: column;
         gap: 15px;
         transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease;
+        opacity: 0; /* Start invisible */
     }
 
     .dexter-dropdown.active {

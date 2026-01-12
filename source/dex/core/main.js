@@ -359,6 +359,37 @@ function onReady() {
       menuBtn.onclick = (e) => {
         e.stopPropagation();
         const isMobile = window.innerWidth < 880;
+        
+        if (!isMobile) {
+            // Position dropdown relative to button for desktop
+            const rect = menuBtn.getBoundingClientRect();
+            // Center horizontally relative to button, but constrained by width
+            // Or typically right-aligned to the button
+            // Standard Navbar Dropdown: Right aligned to the right edge of the button/container
+            
+            // Width of dropdown is 220px (from CSS).
+            // Let's align the center of the dropdown with the center of the button
+            const dropdownWidth = 220;
+            const btnCenter = rect.left + rect.width / 2;
+            let leftPos = btnCenter - dropdownWidth / 2;
+            
+            // Basic viewport boundary check
+            if (leftPos + dropdownWidth > window.innerWidth - 20) {
+                leftPos = window.innerWidth - 20 - dropdownWidth;
+            }
+            
+            dropdown.style.top = (rect.bottom + 15) + 'px'; // 15px gap
+            dropdown.style.left = leftPos + 'px';
+            dropdown.style.right = 'auto';
+            dropdown.style.transform = 'none'; // Reset any CSS transforms
+        } else {
+            // Mobile: Reset inline styles to let CSS handle fixed full screen
+            dropdown.style.top = '';
+            dropdown.style.left = '';
+            dropdown.style.right = '';
+            dropdown.style.transform = '';
+        }
+
         dropdown.classList.toggle('active');
         menuBtn.classList.toggle('active');
         const nowActive = dropdown.classList.contains('active');

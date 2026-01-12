@@ -107,13 +107,6 @@ export function injectNavbar() {
             <div id="dexter-menu-container" style="position: relative;">
                 <button id="dexter-menu-btn" class="nav-btn" title="Dexter Menu"><i class='bx bx-bot'></i></button>
                 <div id="dexter-nav-badge" class="notification-badge" style="position: absolute; top: 0; right: -2px; width: 8px; height: 8px; padding: 0; min-width: 0; display: none; box-shadow: 0 0 5px #ff4444;"></div>
-                <div id="dexter-dropdown" class="dexter-dropdown">
-                    <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
-                    <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
-                    <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
-                    <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
-                    <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
-                </div>
             </div>
             <button id="settings-icon" class="nav-btn" title="Settings"><i class='bx bx-cog'></i></button>
             <button id="close-all-windows" class="nav-btn" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"><i class='bx bx-x-circle'></i></button>
@@ -140,6 +133,19 @@ export function injectNavbar() {
     const navbar = document.createElement('nav');
     navbar.innerHTML = navbarHTML;
     document.body.prepend(navbar);
+
+    // Inject Dropdown separately to avoid stacking context issues with backdrop-filter
+    const dropdown = document.createElement('div');
+    dropdown.id = 'dexter-dropdown';
+    dropdown.className = 'dexter-dropdown';
+    dropdown.innerHTML = `
+        <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
+        <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
+        <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
+        <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
+        <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
+    `;
+    document.body.appendChild(dropdown);
 }
 
 export function updateNavbarState(isWindowOpen) {
