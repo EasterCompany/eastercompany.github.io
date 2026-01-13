@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: row;
   padding: 0; /* Remove default padding from widget */
-  position: relative; /* Context for absolute positioning on hover */
 }
 
 @media (max-width: 900px) {
@@ -19,7 +18,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother fade transition */
 }
 
 .widget-video-content {
@@ -28,7 +26,6 @@
   overflow: hidden;
   border-left: 1px solid var(--glass-border);
   min-height: 300px;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother expansion transition */
 }
 
 @media (max-width: 900px) {
@@ -46,27 +43,4 @@
   height: 100%;
   object-fit: cover;
   transform: translate(-50%, -50%);
-  transition: object-fit 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother object-fit transition */
-}
-
-/* --- Desktop Hover Effect --- */
-@media (min-width: 901px) {
-  .widget.vertical-split:hover .widget-text-content {
-    opacity: 0;
-    pointer-events: none; /* Prevent text from interfering with video */
-  }
-
-  .widget.vertical-split:hover .widget-video-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    border-left: none;
-  }
-
-  .widget.vertical-split:hover .widget-video-content video {
-    object-fit: contain; /* Best-fit with black bars if needed */
-  }
 }
