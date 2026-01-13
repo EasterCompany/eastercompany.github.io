@@ -19,23 +19,23 @@
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
   <meta property="og:url" content="https://easter.company">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=e0e233ba">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=dd4e87d5">
   <meta property="fb:app_id" content="1541540286236316">
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Easter Company">
   <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=e0e233ba">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=dd4e87d5">
   <meta name="twitter:site" content="@eastercompany">
   <meta name="twitter:creator" content="@eastercompany">
 
   <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=e0e233ba" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=e0e233ba">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=e0e233ba">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=e0e233ba">
-  <link rel="manifest" href="/site.webmanifest?last_build=e0e233ba">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=dd4e87d5" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=dd4e87d5">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=dd4e87d5">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=dd4e87d5">
+  <link rel="manifest" href="/site.webmanifest?last_build=dd4e87d5">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
@@ -99,6 +99,38 @@
       margin-top: 0.5rem;
       opacity: 0.8;
       text-align: center;
+    }
+
+    .est-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-top: -1.5rem;
+      margin-bottom: 3rem;
+      z-index: 2;
+    }
+
+    .hero-icons {
+      display: flex;
+      gap: 50px;
+      margin-bottom: 0;
+      z-index: 2;
+      align-items: center;
+    }
+
+    .hero-icon {
+      height: 32px;
+      width: auto;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+      filter: grayscale(100%);
+    }
+    .hero-icon:hover {
+      opacity: 1;
+      filter: grayscale(0%) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+      transform: translateY(-3px);
     }
 
     body {
@@ -458,7 +490,7 @@
       margin: 0;
     }
   </style>
-  <link rel="stylesheet" href="/dist/dex.e0e233ba.css"></head>
+  <link rel="stylesheet" href="/dist/dex.dd4e87d5.css"></head>
   <body>
     <main id="main">
     <section class="hero-section" style="min-height: 100vh; padding-top: 15vh;">
@@ -468,6 +500,21 @@
           EASTER COMPANY
         </text>
       </svg>
+      
+      <div class="est-text">EST. 2016</div>
+
+      <div class="hero-icons">
+        <a href="/dexter" title="Dexter AI">
+          <img src="/static/assets/logo/dexter_logo.svg" alt="Dexter" class="hero-icon" />
+        </a>
+        <a href="https://bashful-sh.github.io" target="_blank" title="Bashful CLI">
+          <img src="/static/assets/bashful-icon.svg" alt="Bashful" class="hero-icon" />
+        </a>
+        <a href="#" title="Overlord Framework">
+          <img src="/static/assets/logo/overlord_logo.svg" alt="Overlord" class="hero-icon" />
+        </a>
+      </div>
+
       <div class="scroll-indicator" id="scroll-indicator">
         <span>Scroll Down</span>
         <i class='bx bx-chevron-down'></i>
@@ -742,5 +789,5 @@
       });
     </script>
 
-  <script src="/dist/dex.e0e233ba.js" defer></script></body>
+  <script src="/dist/dex.dd4e87d5.js" defer></script></body>
 </html>
