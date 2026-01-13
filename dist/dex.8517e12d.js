@@ -1406,7 +1406,7 @@
 </svg>
 `,kt=ws;function Tt(){return`
         <div id="logs-container" class="logs-container"></div>
-    `}var Cs=null;async function $e(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await B("/logs");if(!e.ok)throw new Error("Logs offline");let i=await e.json();if(!i||i.length===0)return t.innerHTML=R("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let s=["local-ollama-0","local-cache-0","cloud-cache-0","cloud-cache-1"],n=i.filter(o=>!s.includes(o.id));n.forEach(o=>{o.logs&&Array.isArray(o.logs)?o.logs.reverse():o.logs=[]}),n.reverse();let c=n.map(o=>{let v=o.logs.join(`
+    `}var Cs=null;async function $e(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await B("/logs");if(!e.ok)throw new Error("Logs offline");let i=await e.json();if(!i||i.length===0)return t.innerHTML=R("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let s=["local-ollama-0","local-cache-0"],n=i.filter(o=>!s.includes(o.id));n.forEach(o=>{o.logs&&Array.isArray(o.logs)?o.logs.reverse():o.logs=[]}),n.reverse();let c=n.map(o=>{let v=o.logs.join(`
 `),r=[...o.logs];if(r.length<25){let y=25-r.length;for(let p=0;p<y;p++)r.push("")}else r.length>25&&(r=r.slice(-25));let m=r.map(y=>Le(y)).join(`
 `);return`
                 <div class="log-report">

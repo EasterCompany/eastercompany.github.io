@@ -27,7 +27,7 @@ export async function updateLogs() {
             return false;
         }
 
-        const hiddenServiceIDs = ["local-ollama-0", "local-cache-0", "cloud-cache-0", "cloud-cache-1"];
+        const hiddenServiceIDs = ["local-ollama-0", "local-cache-0"];
         const filteredLogsData = logsData.filter(logReport => !hiddenServiceIDs.includes(logReport.id));
 
         // Reverse the order of log reports so newest appear at the top
