@@ -41,7 +41,7 @@
 
 @media (min-width: 901px) {
   .widget-text-content {
-    max-width: 40%;
+    width: 45%;
   }
 }
 
