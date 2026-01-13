@@ -77,28 +77,40 @@ nav.window-open {
     pointer-events: auto;
 }
 
-.nav-right i,
-.nav-right .dexter-nav-icon {
+.nav-right i {
     font-size: 1.6em;
-    height: 1.2em;
-    width: auto;
     color: rgba(255, 255, 255, 0.6);
     transition: all 0.3s ease;
-    pointer-events: none; /* Let the button handle clicks */
-    filter: brightness(0) invert(1) opacity(0.6);
+    pointer-events: none;
 }
 
-.nav-btn:hover i,
-.nav-btn:hover .dexter-nav-icon { 
+.nav-right .dexter-nav-icon {
+    height: 1.1em;
+    width: auto;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    filter: grayscale(100%) opacity(0.6);
+}
+
+.nav-btn:hover i { 
     color: #fff; 
     transform: scale(1.1); 
-    filter: brightness(0) invert(1) opacity(1);
 }
-.nav-btn.active i,
-.nav-btn.active .dexter-nav-icon {
+
+.nav-btn:hover .dexter-nav-icon {
+    transform: scale(1.1);
+    filter: grayscale(0%) opacity(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.nav-btn.active i {
     color: #bb86fc;
     transform: scale(1.2);
-    filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(230deg) drop-shadow(0 0 15px rgba(187, 134, 252, 0.8));
+    filter: drop-shadow(0 0 15px rgba(187, 134, 252, 0.8));
+}
+
+.nav-btn.active .dexter-nav-icon {
+    transform: scale(1.2);
+    filter: grayscale(0%) drop-shadow(0 0 15px rgba(187, 134, 252, 0.8));
 }
 
 /* Nav Center (Window Switcher) */
