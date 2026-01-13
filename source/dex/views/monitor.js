@@ -365,12 +365,34 @@ export async function updateSystemMonitor() {
     if (widgetsContainer.children.length === 0) {
       widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline.');
     }
+    // If data fetch fails, specifically mark the upstash widget as offline
+    const upstashWidget = document.querySelector('[data-service-id="upstash-redis-ro"]');
+    if (upstashWidget) {
+        upstashWidget.className = 'service-widget service-widget-offline';
+        upstashWidget.querySelector('.service-widget-status').textContent = 'ERROR';
+        const body = upstashWidget.querySelector('.service-widget-body');
+        if (body) {
+            body.innerHTML = `<div class="service-widget-footer offline"><span>CONNECTION FAILED</span></div>`;
+        }
+    }
     return;
   }
 
   lastServicesUpdate = Date.now();
   updateTabTimestamp(0, lastServicesUpdate);
   const services = data.services || [];
+
+  // Start or update the countdown timer
+  if (!window.updateCountdownInterval) {
+    window.updateCountdownInterval = setInterval(() => {
+      const countdownEl = document.getElementById('upstash-countdown');
+      if (countdownEl) {
+        const now = new Date();
+        const secondsUntilNextMinute = 60 - now.getSeconds();
+        countdownEl.textContent = `${secondsUntilNextMinute}s`;
+      }
+    }, 1000);
+  }
 
   Array.from(widgetsContainer.children).forEach(child => {
     if (!child.classList.contains('service-widget')) child.remove();
@@ -383,6 +405,31 @@ export async function updateSystemMonitor() {
   function formatUptime(uptimeStr) { if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-'; const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/); if (!match) return '-'; const days = parseInt(match[1]) || 0; const hours = parseInt(match[2]) || 0; const minutes = parseInt(match[3]) || 0; const seconds = parseFloat(match[4]) || 0; const totalSeconds = (days * 86400) + (hours * 3600) + (minutes * 60) + seconds; const totalDays = Math.floor(totalSeconds / 86400); if (totalDays > 0) return `${totalDays}d`; const totalHours = Math.floor(totalSeconds / 3600); if (totalHours > 0) return `${totalHours}h`; const totalMinutes = Math.floor(totalSeconds / 60); if (totalMinutes > 0) return `${totalMinutes}m`; return `${Math.floor(totalSeconds)}s`; }
 
   function generateWidgetHtml(service) {
+    // Special case for Upstash Read-Only service
+    if (service.id === 'upstash-redis-ro') {
+        const lastUpdated = new Date(lastServicesUpdate).toLocaleTimeString();
+        return `
+            <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
+                <div class="service-widget-header">
+                    <i class="bx bx-check-circle"></i>
+                    <h3>public-cache</h3>
+                    <span class="service-widget-status">OK</span>
+                </div>
+                <div class="service-widget-body">
+                     <div class="service-widget-info">
+                        <span class="info-label">Last Update:</span>
+                        <span class="info-value">${lastUpdated}</span>
+                    </div>
+                    <div class="service-widget-footer">
+                        <div class="service-widget-item">
+                            <i class="bx bx-time-five" style="color: #00ff00;"></i>
+                            <span style="color: #fff;" id="upstash-countdown">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    }
+
     const isOnline = service.status === 'online';
     const statusClass = isOnline ? 'service-widget-online' : 'service-widget-offline';
     const statusIcon = isOnline ? 'bx-check-circle' : 'bx-x-circle';
