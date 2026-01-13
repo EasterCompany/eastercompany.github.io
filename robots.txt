@@ -2,6 +2,7 @@ User-agent: *
 Disallow: /
 Allow: /static/
 Allow: /dist/
+Allow: /site.webmanifest
 Allow: /contribute/
 Allow: /dexter/
 Allow: /

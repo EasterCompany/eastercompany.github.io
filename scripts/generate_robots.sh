@@ -16,6 +16,7 @@ EOF
 # Allow necessary assets for rendering (Googlebot needs these)
 echo "Allow: /static/" >> "$ROBOTS_FILE"
 echo "Allow: /dist/" >> "$ROBOTS_FILE"
+echo "Allow: /site.webmanifest" >> "$ROBOTS_FILE"
 
 # Find all HTML files, exclude templates, legacy, and 404
 # We use the same logic as the sitemap to determine valid pages

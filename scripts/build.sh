@@ -147,13 +147,8 @@ echo "Generating Sitemap..."
 echo "Generating robots.txt..."
 "$ROOT_DIR/scripts/generate_robots.sh"
 
-# 8. Touch Web Manifest (Optional: update timestamp if we want to force refresh, 
-# but simply ensuring it exists or checking validity is good practice here)
-echo "Verifying Web Manifest..."
-if [ -f "$ROOT_DIR/static/meta/site.webmanifest" ]; then
-    echo "  - site.webmanifest found."
-else
-    echo "  - WARNING: site.webmanifest not found!"
-fi
+# 8. Generate Web Manifest
+echo "Generating Web Manifest..."
+"$ROOT_DIR/scripts/generate_manifest.sh"
 
 echo "Build complete!"
