@@ -14,10 +14,16 @@
 
 .widget-text-content {
   flex: 1;
-  padding: 40px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+@media (min-width: 901px) {
+  .widget-text-content {
+    max-width: 40%;
+  }
 }
 
 .widget-video-content {
