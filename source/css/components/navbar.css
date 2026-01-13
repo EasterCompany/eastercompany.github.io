@@ -85,11 +85,12 @@ nav.window-open {
 }
 
 .nav-right .dexter-nav-icon {
-    height: 1.6em;
+    height: 1.8em;
     width: auto;
+    display: block;
     transition: all 0.3s ease;
     pointer-events: none;
-    filter: grayscale(100%) opacity(0.6);
+    filter: grayscale(100%) opacity(0.9);
 }
 
 .nav-btn:hover i { 
