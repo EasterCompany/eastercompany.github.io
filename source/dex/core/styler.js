@@ -105,7 +105,7 @@ export function injectNavbar() {
     const navRightContent = `
         <div class="nav-right">
             <div id="dexter-menu-container" style="position: relative;">
-                <button id="dexter-menu-btn" class="nav-btn" title="Dexter Menu"><i class='bx bx-bot'></i></button>
+                <button id="dexter-menu-btn" class="nav-btn" title="Dexter Menu"><img src="/static/assets/logo/dexter-icon.svg" class="dexter-nav-icon" alt="Dexter Icon" /></button>
                 <div id="dexter-nav-badge" class="notification-badge" style="position: absolute; top: 0; right: -2px; width: 8px; height: 8px; padding: 0; min-width: 0; display: none; box-shadow: 0 0 5px #ff4444;"></div>
             </div>
             <button id="settings-icon" class="nav-btn" title="Settings"><i class='bx bx-cog'></i></button>
