@@ -1,7 +1,7 @@
 User-agent: *
 Disallow: /
 Allow: /static/
-Allow: /dex.*
+Allow: /dist/
 Allow: /contribute/
 Allow: /dexter/
 Allow: /

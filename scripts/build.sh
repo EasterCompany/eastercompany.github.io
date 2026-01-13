@@ -11,7 +11,8 @@ ESBUILD_BIN="$HOME/go/bin/esbuild"
 
 # 1. Clean up old hashed files
 echo "Cleaning up old build files..."
-rm -f "$ROOT_DIR"/dex.*.js "$ROOT_DIR"/dex.*.js.map "$ROOT_DIR"/dex.*.css
+rm -rf "$ROOT_DIR/dist"
+mkdir -p "$ROOT_DIR/dist"
 
 # Write version if available
 if [ ! -z "$DEX_BUILD_VERSION" ]; then
@@ -27,8 +28,8 @@ echo "Build hash: $HASH"
 CURRENT_DATE=$(date +%Y-%m-%d)
 
 # Define hashed output filenames
-JS_OUTPUT_FILE="$ROOT_DIR/dex.$HASH.js"
-CSS_OUTPUT_FILE="$ROOT_DIR/dex.$HASH.css"
+JS_OUTPUT_FILE="$ROOT_DIR/dist/dex.$HASH.js"
+CSS_OUTPUT_FILE="$ROOT_DIR/dist/dex.$HASH.css"
 
 # 3. Bundle, minify, and obfuscate the JavaScript
 echo "Bundling JavaScript..."
@@ -40,8 +41,8 @@ echo "Bundling CSS..."
 
 # 5. Inject head content, script tag, and link tag into HTML files
 echo "Injecting head content and build tags into HTML files..."
-SCRIPT_TAG="<script src=\"/dex.$HASH.js\" defer></script>"
-LINK_TAG="<link rel=\"stylesheet\" href=\"/dex.$HASH.css\">"
+SCRIPT_TAG="<script src=\"/dist/dex.$HASH.js\" defer></script>"
+LINK_TAG="<link rel=\"stylesheet\" href=\"/dist/dex.$HASH.css\">"
 
 find "$ROOT_DIR" -name "*.html" | while read html_file; do
     if [ -f "$html_file" ]; then
@@ -85,6 +86,9 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         fi
 
         # Remove old tags
+        sed -i 's|<link rel="stylesheet" href="/dist/dex\..*\.css">||g' "$html_file"
+        sed -i 's|<script src="/dist/dex\..*\.js" defer></script>||g' "$html_file"
+        # Also cleanup legacy root paths just in case
         sed -i 's|<link rel="stylesheet" href="/dex\..*\.css">||g' "$html_file"
         sed -i 's|<script src="/dex\..*\.js" defer></script>||g' "$html_file"
 
