@@ -8,7 +8,7 @@
 
   <!-- SEO Meta Tags -->
   <meta name="description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="revised" content="2026-01-12">
+  <meta name="revised" content="2026-01-13">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Easter">
@@ -19,23 +19,23 @@
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
   <meta property="og:url" content="https://easter.company">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=ceee9fc8">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=f0ea7519">
   <meta property="fb:app_id" content="1541540286236316">
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Easter Company">
   <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=ceee9fc8">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=f0ea7519">
   <meta name="twitter:site" content="@eastercompany">
   <meta name="twitter:creator" content="@eastercompany">
 
   <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=ceee9fc8" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=ceee9fc8">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=ceee9fc8">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=ceee9fc8">
-  <link rel="manifest" href="/static/meta/site.webmanifest?last_build=ceee9fc8">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=f0ea7519" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=f0ea7519">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=f0ea7519">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=f0ea7519">
+  <link rel="manifest" href="/static/meta/site.webmanifest?last_build=f0ea7519">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
@@ -185,6 +185,14 @@
       position: relative;
       z-index: 1;
     }
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 768px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     .widget {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
@@ -194,6 +202,14 @@
       backdrop-filter: blur(10px);
       display: flex;
       flex-direction: column;
+    }
+    .widget.full-width {
+      grid-column: span 2;
+    }
+    @media (max-width: 768px) {
+      .widget.full-width {
+        grid-column: span 1;
+      }
     }
     .widget:hover {
       transform: translateY(-10px);
@@ -466,7 +482,7 @@
       margin: 0;
     }
   </style>
-  <link rel="stylesheet" href="/dex.ceee9fc8.css"></head>
+  <link rel="stylesheet" href="/dex.f0ea7519.css"></head>
   <body>
     <main id="main">
     <section class="hero-section">
@@ -487,7 +503,7 @@
     </section>
 
     <div class="section-header">Products</div>
-    <section class="content-section">
+    <section class="content-section products-grid">
       <div class="widget">
         <div class="widget-image">
           <i class='bx bx-bot'></i>
@@ -508,43 +524,13 @@
         </div>
       </div>
 
-      <div class="widget">
-        <div class="widget-image">
-          <i class='bx bx-broadcast'></i>
-        </div>
-        <div class="widget-content">
-          <h3>Event Horizon</h3>
-          <p>Our distributed event streaming architecture that powers the real-time communications between all Easter Company services and products globally.</p>
-        </div>
-      </div>
-
-      <div class="widget">
+      <div class="widget full-width">
         <div class="widget-image">
           <i class='bx bx-layer'></i>
         </div>
         <div class="widget-content">
           <h3>Overlord Framework</h3>
           <p>A true full-stack ecosystem designed to streamline the development of high-performance web and native applications with built-in AI integration.</p>
-        </div>
-      </div>
-
-      <div class="widget">
-        <div class="widget-image">
-          <i class='bx bx-shield-quarter'></i>
-        </div>
-        <div class="widget-content">
-          <h3>Sentinel Protocol</h3>
-          <p>The multi-tier agent monitoring system (T1-T4) that maintains the health, security, and strategic alignment of the entire Easter Company infrastructure.</p>
-        </div>
-      </div>
-
-      <div class="widget">
-        <div class="widget-image">
-          <i class='bx bx-cloud'></i>
-        </div>
-        <div class="widget-content">
-          <h3>Easter Cloud</h3>
-          <p>Distributed high-performance compute nodes providing the decentralized backbone for heavy cognitive tasks and large-scale AI model execution.</p>
         </div>
       </div>
     </section>
@@ -776,5 +762,5 @@
       });
     </script>
 
-  <script src="/dex.ceee9fc8.js" defer></script></body>
+  <script src="/dex.f0ea7519.js" defer></script></body>
 </html>
