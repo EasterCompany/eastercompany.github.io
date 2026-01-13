@@ -228,6 +228,30 @@ h5.md-header { font-size: 0.9em; color: #bbb; text-transform: uppercase; letter-
     animation: flashHighlight 1.5s ease-out;
 }
 
+.event-detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    align-items: baseline;
+}
+
+.detail-label {
+    color: #888;
+    margin-right: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    color: #eee;
+    font-family: 'JetBrains Mono', monospace;
+    text-align: right;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    flex: 1;
+}
+
 .detail-pre {
     background: rgba(0, 0, 0, 0.25);
     padding: 15px;
@@ -239,5 +263,6 @@ h5.md-header { font-size: 0.9em; color: #bbb; text-transform: uppercase; letter-
     color: #ccc;
     white-space: pre-wrap;
     word-break: break-word;
+    overflow-wrap: anywhere;
     line-height: 1.6;
 }
