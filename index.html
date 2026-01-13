@@ -19,23 +19,23 @@
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
   <meta property="og:url" content="https://easter.company">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=b47966c7">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=e0e233ba">
   <meta property="fb:app_id" content="1541540286236316">
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Easter Company">
   <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=b47966c7">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=e0e233ba">
   <meta name="twitter:site" content="@eastercompany">
   <meta name="twitter:creator" content="@eastercompany">
 
   <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=b47966c7" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=b47966c7">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=b47966c7">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=b47966c7">
-  <link rel="manifest" href="/site.webmanifest?last_build=b47966c7">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=e0e233ba" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=e0e233ba">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=e0e233ba">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=e0e233ba">
+  <link rel="manifest" href="/site.webmanifest?last_build=e0e233ba">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
@@ -51,7 +51,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       padding: 0;
       margin: 0;
       position: relative;
@@ -111,10 +111,8 @@
 
     /* Scroll Indicator */
     .scroll-indicator {
-      position: absolute;
-      bottom: 120px;
-      left: 50%;
-      transform: translateX(-50%);
+      margin-top: auto;
+      margin-bottom: 140px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -460,10 +458,10 @@
       margin: 0;
     }
   </style>
-  <link rel="stylesheet" href="/dist/dex.b47966c7.css"></head>
+  <link rel="stylesheet" href="/dist/dex.e0e233ba.css"></head>
   <body>
     <main id="main">
-    <section class="hero-section" style="height: 75vh;">
+    <section class="hero-section" style="min-height: 100vh; padding-top: 15vh;">
       <img src="/static/assets/logo/easter_logo.svg" alt="Easter Company Logo" class="easter-hero-logo" />
       <svg viewBox="0 0 1600 200" class="easter-hero-subtitle">
         <text x="50%" y="50%" dy=".35em" text-anchor="middle" style="font-family: 'Poppins', sans-serif; font-size: 140px; font-weight: 700; fill: transparent; stroke: rgba(255,255,255,0.7); stroke-width: 3px; letter-spacing: 10px;">
@@ -735,14 +733,14 @@
           const scrollY = window.scrollY;
           if (scrollY > 50) {
             scrollIndicator.style.opacity = '0';
-            scrollIndicator.style.transform = 'translateX(-50%) translateY(20px)';
+            scrollIndicator.style.transform = 'translateY(20px)';
           } else {
             scrollIndicator.style.opacity = '1';
-            scrollIndicator.style.transform = 'translateX(-50%) translateY(0)';
+            scrollIndicator.style.transform = 'translateY(0)';
           }
         });
       });
     </script>
 
-  <script src="/dist/dex.b47966c7.js" defer></script></body>
+  <script src="/dist/dex.e0e233ba.js" defer></script></body>
 </html>
