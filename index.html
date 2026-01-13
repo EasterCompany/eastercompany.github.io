@@ -19,23 +19,23 @@
   <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
   <meta property="og:url" content="https://easter.company">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=091f88aa">
+  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=546c18fc">
   <meta property="fb:app_id" content="1541540286236316">
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Easter Company">
   <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=091f88aa">
+  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=546c18fc">
   <meta name="twitter:site" content="@eastercompany">
   <meta name="twitter:creator" content="@eastercompany">
 
   <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=091f88aa" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=091f88aa">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=091f88aa">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=091f88aa">
-  <link rel="manifest" href="/site.webmanifest?last_build=091f88aa">
+  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=546c18fc" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=546c18fc">
+  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=546c18fc">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=546c18fc">
+  <link rel="manifest" href="/site.webmanifest?last_build=546c18fc">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
@@ -57,24 +57,15 @@
       position: relative;
       z-index: 1;
     }
-    .dexter-hero-logo {
-      user-select: none;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 800;
-      font-size: clamp(60px, 15vw, 180px);
-      letter-spacing: -0.05em;
-      background: linear-gradient(180deg, #fff 0%, #666 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin: 0;
-      padding: 0 20px;
-      line-height: 1;
-      text-align: center;
-      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+    .easter-hero-logo {
+      width: clamp(200px, 40vw, 500px); /* Big logo */
+      height: auto;
+      margin-bottom: 20px; /* Space between logo and subtitle */
       z-index: 2;
-      width: 100%;
+      filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.2));
+      transform: translateY(-5%); /* A little above center */
     }
-    .dexter-subtitle {
+    .easter-hero-subtitle {
       user-select: none;
       font-family: 'JetBrains Mono', monospace;
       font-size: clamp(0.8rem, 2vw, 1.2rem);
@@ -87,6 +78,7 @@
       z-index: 2;
       text-align: center;
       padding: 0 20px;
+      transform: translateY(-5%); /* A little below center to offset logo */
     }
     .action-row {
       display: flex;
@@ -495,12 +487,12 @@
       margin: 0;
     }
   </style>
-  <link rel="stylesheet" href="/dist/dex.091f88aa.css"></head>
+  <link rel="stylesheet" href="/dist/dex.546c18fc.css"></head>
   <body>
     <main id="main">
     <section class="hero-section">
-      <h1 class="dexter-hero-logo">DEXTER</h1>
-      <p class="dexter-subtitle">M.XIV: Self Evolving AI Project</p>
+      <img src="/static/assets/logo/easter_logo.svg" alt="Easter Company Logo" class="easter-hero-logo" />
+      <p class="easter-hero-subtitle">EASTER COMPANY</p>
       <div class="action-row">
         <div class="action-btn primary" id="open-dex-btn">
           <i class='bx bx-download'></i> DOWNLOAD
@@ -520,7 +512,7 @@
       <a href="/dexter" class="widget">
         <div class="widget-image" style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
           <h1 class="dexter-hero-logo" style="font-size: clamp(2rem, 5vw, 4rem); padding: 0; margin: 0; filter: none; opacity: 1;">DEXTER</h1>
-          <p class="dexter-subtitle" style="font-size: clamp(0.6rem, 1.5vw, 0.9rem); margin-top: 0.5rem; margin-bottom: 0; opacity: 1;">M.XIV: Self Evolving AI Project</p>
+          <p class="dexter-subtitle" style="font-size: clamp(0.6rem, 1.5vw, 0.9rem); margin-top: 0.5rem; margin-bottom: 0; opacity: 1;">M.XIV: Self Evolving AI</p>
         </div>
         <div class="widget-content">
           <h3>Dexter AI</h3>
@@ -783,5 +775,5 @@
       });
     </script>
 
-  <script src="/dist/dex.091f88aa.js" defer></script></body>
+  <script src="/dist/dex.546c18fc.js" defer></script></body>
 </html>
