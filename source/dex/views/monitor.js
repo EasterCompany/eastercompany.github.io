@@ -415,17 +415,10 @@ export async function updateSystemMonitor() {
                     <h3>public-cache</h3>
                     <span class="service-widget-status">OK</span>
                 </div>
-                <div class="service-widget-body">
-                     <div class="service-widget-info">
-                        <span class="info-label">Last Update:</span>
-                        <span class="info-value">${lastUpdated}</span>
-                    </div>
-                    <div class="service-widget-footer">
-                        <div class="service-widget-item">
-                            <i class="bx bx-time-five" style="color: #00ff00;"></i>
-                            <span style="color: #fff;" id="upstash-countdown">--</span>
-                        </div>
-                    </div>
+                <div class="service-widget-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0;">
+                    <div style="font-size: 0.7em; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Next Update In</div>
+                    <div id="upstash-countdown" style="font-size: 2em; font-weight: bold; color: #fff; font-family: monospace;">--</div>
+                    <div style="font-size: 0.6em; color: #444; margin-top: 10px;">Last synced: ${lastUpdated}</div>
                 </div>
             </div>`;
     }
@@ -468,7 +461,7 @@ export async function updateSystemMonitor() {
                     </div>
                 </div>`;
     } else {
-      detailsHtml = `<div class="service-widget-footer offline"><span>OFFLINE</span></div>`;
+      detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold;"><span>OFFLINE</span></div>`;
     }
 
     const displayAddress = isPublicMode() ? "easter.company" : truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '');
