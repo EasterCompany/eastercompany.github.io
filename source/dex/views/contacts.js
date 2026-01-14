@@ -79,7 +79,9 @@ export async function updateContactsTab() {
 
         container.innerHTML = members.map(m => {
             // Convert decimal color to hex
-            const hexColor = m.color ? '#' + m.color.toString(16).padStart(6, '0') : 'rgba(255,255,255,0.1)';
+            // Discord uses 0 for no color, we treat it as no color
+            const hasColor = m.color && m.color !== 0;
+            const hexColor = hasColor ? '#' + m.color.toString(16).padStart(6, '0') : 'rgba(255,255,255,0.1)';
             const statusColor = m.status === 'online' ? '#5eff5e' : m.status === 'idle' ? '#ffa500' : m.status === 'dnd' ? '#ff4d4d' : '#666';
             
             // Branding colors for specific levels
@@ -91,9 +93,9 @@ export async function updateContactsTab() {
             else if (m.level === 'Contributor') levelColor = '#ffa500';
 
             const isMe = m.level === 'Me';
-            const cardBg = isMe ? 'rgba(187, 134, 252, 0.08)' : 'rgba(255,255,255,0.03)';
-            const borderStyle = isMe ? `2px solid #bb86fc` : `1px solid ${hexColor}33`;
-            const cursorStyle = "cursor: pointer; transition: transform 0.2s, background 0.2s;";
+            const cardBg = isMe ? 'rgba(187, 134, 252, 0.08)' : (hasColor ? `${hexColor}11` : 'rgba(255,255,255,0.03)');
+            const borderStyle = isMe ? `2px solid #bb86fc` : (hasColor ? `1px solid ${hexColor}66` : `1px solid rgba(255,255,255,0.1)`);
+            const cursorStyle = "cursor: pointer; transition: transform 0.2s, background 0.2s, box-shadow 0.2s;";
             
             // Safe JSON serialization for data attribute
             const jsonStr = JSON.stringify(m).replace(/"/g, "&quot;");
@@ -102,13 +104,13 @@ export async function updateContactsTab() {
                 <div class="user-profile-card" 
                      data-user="${jsonStr}"
                      style="background: ${cardBg}; padding: 15px; border-radius: 8px; border: ${borderStyle}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; ${cursorStyle}">
-                    <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${isMe ? '#bb86fc' : hexColor}22, transparent 70%); pointer-events: none;"></div>
+                    <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${isMe ? '#bb86fc' : (hasColor ? hexColor : 'transparent')}33, transparent 70%); pointer-events: none;"></div>
                     <div style="position: relative;">
-                        <img src="${m.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${isMe ? '2px solid #bb86fc' : 'none'};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                        <img src="${m.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${isMe ? '2px solid #bb86fc' : (hasColor ? `2px solid ${hexColor}` : 'none')};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                         <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${statusColor}; border: 2px solid #1a1a1a; border-radius: 50%;"></div>
                     </div>
                     <div class="user-info" style="text-align: left; flex: 1; min-width: 0;">
-                        <h3 style="margin: 0; font-size: 0.95em; color: #fff; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${m.username}</h3>
+                        <h3 style="margin: 0; font-size: 0.95em; color: ${hasColor ? hexColor : '#fff'}; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${m.username}</h3>
                         <div style="display: flex; align-items: center; gap: 5px; margin-top: 2px;">
                             <span style="font-size: 0.75em; color: ${levelColor}; font-weight: 600; text-transform: uppercase;">${isMe ? 'DEXTER (ME)' : m.level}</span>
                         </div>
