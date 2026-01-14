@@ -1,6 +1,6 @@
 // System Monitor Logic (Services, Models, Processes)
 import imaginatorSVG from '../components/imaginatorSVG.js';
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode, lastDashboardSyncTs } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 import { updateChoresTab } from './chores.js';
 
@@ -378,7 +378,7 @@ export async function updateSystemMonitor() {
     return;
   }
 
-  lastServicesUpdate = Date.now();
+  lastServicesUpdate = isPublicMode() ? (lastDashboardSyncTs || Date.now()) : Date.now();
   updateTabTimestamp(0, lastServicesUpdate);
   const services = data.services || [];
 
@@ -388,8 +388,11 @@ export async function updateSystemMonitor() {
       const countdownEl = document.getElementById('upstash-countdown');
       if (countdownEl) {
         const now = new Date();
-        const secondsUntilNextMinute = 60 - now.getSeconds();
-        countdownEl.textContent = `${secondsUntilNextMinute}s`;
+        const seconds = now.getSeconds();
+        // Sync happens at :59
+        let secondsUntilUpdate = 59 - seconds;
+        if (secondsUntilUpdate <= 0) secondsUntilUpdate += 60;
+        countdownEl.textContent = `${secondsUntilUpdate}s`;
       }
     }, 1000);
   }
