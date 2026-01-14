@@ -260,8 +260,10 @@ export function isPublicMode() {
 
 // --- CENTRALIZED DASHBOARD CACHE ---
 let DASHBOARD_CACHE = null;
-export let lastDashboardSyncTs = 0;
-export let lastFrontendSyncTs = 0;
+export const syncState = {
+  lastDashboard: 0,
+  lastFrontend: 0
+};
 let isRefreshing = false;
 let lastSyncAttempt = 0;
 const CACHE_KEY = 'dex_dashboard_snapshot';
@@ -276,8 +278,8 @@ function loadDashboardFromStorage() {
       const data = JSON.parse(stored);
       DASHBOARD_CACHE = data;
       // Handle missing timestamp (migration)
-      lastDashboardSyncTs = (data.timestamp ? data.timestamp * 1000 : 0);
-      // Note: we don't set lastFrontendSyncTs here as we don't know when the local storage was written
+      syncState.lastDashboard = (data.timestamp ? data.timestamp * 1000 : 0);
+      // Note: we don't set lastFrontend here as we don't know when the local storage was written
     } catch (e) {
       DASHBOARD_CACHE = null;
     }
@@ -296,8 +298,8 @@ async function refreshDashboardCache() {
         const data = JSON.parse(snapshot);
         DASHBOARD_CACHE = data;
         // Handle missing timestamp (migration)
-        lastDashboardSyncTs = (data.timestamp ? data.timestamp * 1000 : Date.now());
-        lastFrontendSyncTs = Date.now();
+        syncState.lastDashboard = (data.timestamp ? data.timestamp * 1000 : Date.now());
+        syncState.lastFrontend = Date.now();
         localStorage.setItem(CACHE_KEY, JSON.stringify(data));
         // console.log('✨ Dashboard snapshot synchronized');
       } catch (e) {

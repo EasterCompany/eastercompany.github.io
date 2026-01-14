@@ -1,6 +1,6 @@
 // System Monitor Logic (Services, Models, Processes)
 import imaginatorSVG from '../components/imaginatorSVG.js';
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode, lastDashboardSyncTs, lastFrontendSyncTs } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode, syncState } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 import { updateChoresTab } from './chores.js';
 
@@ -400,7 +400,7 @@ export async function updateSystemMonitor() {
     return;
   }
 
-  lastServicesUpdate = isPublicMode() ? (lastDashboardSyncTs || Date.now()) : Date.now();
+  lastServicesUpdate = isPublicMode() ? (syncState.lastDashboard || Date.now()) : Date.now();
   updateTabTimestamp(0, lastServicesUpdate);
   const services = data.services || [];
 
@@ -432,7 +432,7 @@ export async function updateSystemMonitor() {
   function generateWidgetHtml(service) {
     // Special case for Upstash Read-Only service
     if (service.id === 'upstash-redis-ro') {
-        const syncTs = isPublicMode() ? (lastFrontendSyncTs || lastDashboardSyncTs || Date.now()) : Date.now();
+        const syncTs = isPublicMode() ? (syncState.lastFrontend || syncState.lastDashboard || Date.now()) : Date.now();
         const lastSynced = new Date(syncTs).toLocaleTimeString();
         return `
             <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
@@ -517,7 +517,7 @@ export async function updateSystemMonitor() {
         // Use lastFrontendSyncTs (time of last successful client fetch) if available
         // Fallback to lastDashboardSyncTs (time of data origin) if available
         // Finally fallback to Date.now() only if nothing else exists
-        const syncTs = isPublicMode() ? (lastFrontendSyncTs || lastDashboardSyncTs || Date.now()) : Date.now();
+        const syncTs = isPublicMode() ? (syncState.lastFrontend || syncState.lastDashboard || Date.now()) : Date.now();
         const lastSynced = new Date(syncTs).toLocaleTimeString();
         const syncLabel = existingWidget.querySelector('.sync-time-label');
         if (syncLabel) syncLabel.textContent = `Last synced: ${lastSynced}`;
