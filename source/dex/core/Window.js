@@ -148,6 +148,7 @@ export function createWindow(options) {
     }
 
     function setContent(content) {
+        options.content = content;
         const contentDiv = windowEl?.querySelector('.window-content');
         if (contentDiv) contentDiv.innerHTML = content;
     }
