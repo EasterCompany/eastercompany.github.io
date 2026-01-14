@@ -641,21 +641,168 @@ export async function updateProcessesTab(isSmoothMode = false) {
 
   // --- Update Guardian Status ---
   const sentryVal = document.getElementById('guardian-sentry-val');
-// ...
+  const architectVal = document.getElementById('guardian-architect-val');
+  const idleVal = document.getElementById('guardian-idle-val');
+  const totalIdleVal = document.getElementById('guardian-total-idle');
+  const totalActiveVal = document.getElementById('guardian-total-active');
+  const totalWasteVal = document.getElementById('guardian-total-waste');
+  const resetBtn = document.getElementById('guardian-reset-btn');
+  const analyzerResetBtn = document.getElementById('analyzer-reset-btn');
+
+  if (resetBtn && !resetBtn.dataset.listenerAttached) {
+    resetBtn.onclick = async () => {
+      resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch('/guardian/reset?protocol=all', { method: 'POST' });
+        setTimeout(() => {
+          resetBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+        }, 500);
+        updateProcessesTab(); // refresh immediately
+      } catch (e) {
+        resetBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
+    };
+    resetBtn.dataset.listenerAttached = "true";
+  }
+
   if (analyzerResetBtn && !analyzerResetBtn.dataset.listenerAttached) {
-// ...
+    analyzerResetBtn.onclick = async () => {
+      analyzerResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch('/analyzer/reset?protocol=synthesis', { method: 'POST' });
+        setTimeout(() => {
+          analyzerResetBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => { analyzerResetBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+        }, 500);
+        updateProcessesTab(); // refresh immediately
+      } catch (e) {
+        analyzerResetBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
+    };
     analyzerResetBtn.dataset.listenerAttached = "true";
   }
 
     const guardianStatus = await fetchGuardianStatus();
     if (guardianStatus && guardianStatus.agents) {
-// ...
+      const guardianData = guardianStatus.agents.guardian || { protocols: {} };
+      const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
+      const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
+      const systemData = guardianStatus.system || {};
+
+      const now = Math.floor(Date.now() / 1000);
+      const aliases = { 
+        "sentry": "Sentry", 
+        "architect": "Architect", 
+        "synthesis": "Synthesis",
+        "alert_review": "Alert Review"
+      };
+
+      const formatDuration = (seconds) => {
+        if (seconds < 0) seconds = 0;
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}h ${m}m`;
+        if (m > 0) return `${m}m ${s}s`;
+        return `${s}s`;
+      };
+
+      const updateProtocolWidget = (el, statsEl, protocolData, protocolName) => {
+        if (!el) return;
+        const alias = aliases[protocolName] || protocolName.toUpperCase();
+        
+        // Update label if exists
+        const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
+        if (labelEl) labelEl.textContent = alias;
+
+        if (!protocolData) {
+            el.textContent = "Inactive";
+            el.style.color = "#666";
+            return;
+        }
+
+        const status = protocolData.status; // "Ready", "Working", "Cooldown"
+        
+        if (status === "Working") {
+            el.textContent = "Working";
+            el.style.color = "#bb86fc";
+        } else if (status === "Ready") {
+            el.textContent = "Ready";
+            el.style.color = "#5eff5e";
+        } else {
+            // Cooldown
+            // Use backend provided cooldown or calculate locally if public mode drift
+            let remaining = protocolData.cooldown;
+            if (isPublicMode()) {
+                 remaining = protocolData.next_run - now;
+            }
+            if (remaining <= 0) {
+                 el.textContent = "Ready";
+                 el.style.color = "#5eff5e";
+            } else {
+                 const mins = Math.floor(remaining / 60);
+                 const secs = remaining % 60;
+                 el.textContent = `${mins}m ${secs}s`;
+                 el.style.color = "#fff";
+            }
+        }
+
+        if (statsEl && protocolData.stats) {
+          statsEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span>Runs: ${protocolData.stats.runs || 0}</span>
+              <span style="color: ${protocolData.stats.failures > 0 ? '#ffa500' : '#666'}">Fails: ${protocolData.stats.failures || 0}</span>
+              <span style="color: ${protocolData.stats.aborted > 0 ? '#ff4d4d' : '#666'}">Aborted: ${protocolData.stats.aborted || 0}</span>
+            </div>
+          `;
+        }
+      };
+
+      // Guardian Protocols
+      if (sentryVal) updateProtocolWidget(sentryVal, document.getElementById('guardian-sentry-stats'), guardianData.protocols.sentry, 'sentry');
+      if (architectVal) updateProtocolWidget(architectVal, document.getElementById('guardian-architect-stats'), guardianData.protocols.architect, 'architect');
+      
+      // Analyzer Protocols
+      const synthesisVal = document.getElementById('analyzer-synthesis-val');
+      const synthesisStats = document.getElementById('analyzer-synthesis-stats');
+      if (synthesisVal) updateProtocolWidget(synthesisVal, synthesisStats, analyzerData.protocols.synthesis, 'synthesis');
+
+      // Imaginator Protocols
+      const imaginatorVal = document.getElementById('imaginator-alert_review-val');
+      const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
+      if (imaginatorVal) updateProtocolWidget(imaginatorVal, imaginatorStats, imaginatorData.protocols.alert_review, 'alert_review');
+
+      // System State
+      const stateLabel = document.getElementById('system-state-label');
+      const stateVal = document.getElementById('system-state-val');
+      
+      if (stateVal && systemData.state) {
+        const state = systemData.state;
+        const duration = formatDuration(systemData.state_time || 0);
+
+        if (stateLabel) stateLabel.textContent = `State: ${state.toUpperCase()}`;
+        stateVal.textContent = duration;
+
+        if (state === 'idle') {
+          stateVal.style.color = systemData.state_time > 300 ? "#5eff5e" : "#fff";
+        } else {
+          stateVal.style.color = "#bb86fc"; 
+        }
+      }
+
       if (totalIdleVal) totalIdleVal.textContent = formatDuration(systemData.metrics?.total_idle_time || 0);
       if (totalActiveVal) totalActiveVal.textContent = formatDuration(systemData.metrics?.total_active_time || 0);
       if (totalWasteVal) totalWasteVal.textContent = formatDuration(systemData.metrics?.total_waste_time || 0);
 
     } else {
-// ...
+    const indicators = [sentryVal, architectVal, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
+    indicators.forEach(el => {
+      if (el) {
+        el.textContent = "-";
+        el.style.color = "#666";
+      }
+    });
   }
 
   // Skip process list updates in smooth mode to save CPU/flicker
@@ -678,8 +825,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
       history.sort((a, b) => (b.end_time || 0) - (a.end_time || 0));
     }
   }
-
-  // ... (omitting middle parts)
 
   // Active Processes Rendering
   if (processes.length === 0) {
