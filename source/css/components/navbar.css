@@ -36,7 +36,7 @@ nav.window-open {
 .nav-left .navbar-favicon {
     height: 24px;
     width: 24px;
-    transition: opacity 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     cursor: pointer;
     background-color: #fff; /* The color we want the icon to be */
     -webkit-mask-image: url('../../../static/assets/logo/easter_logo_sm.svg');
@@ -47,6 +47,13 @@ nav.window-open {
     mask-repeat: no-repeat;
     -webkit-mask-position: center;
     mask-position: center;
+    filter: opacity(0.6);
+}
+
+.nav-left.recording .navbar-favicon,
+.nav-left:hover .navbar-favicon {
+    filter: opacity(1);
+    transform: scale(1.05);
 }
 
 .nav-left h1 {
