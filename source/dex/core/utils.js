@@ -255,7 +255,7 @@ const UPSTASH_URL = "https://sterling-javelin-12539.upstash.io";
 const UPSTASH_TOKEN = "AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw"; // Read Only
 
 export function isPublicMode() {
-  return window.location.hostname === 'easter.company';
+  return window.location.hostname.includes('easter.company');
 }
 
 // --- CENTRALIZED DASHBOARD CACHE ---
@@ -275,7 +275,8 @@ function loadDashboardFromStorage() {
     try {
       const data = JSON.parse(stored);
       DASHBOARD_CACHE = data;
-      lastDashboardSyncTs = data.timestamp * 1000;
+      // Handle missing timestamp (migration)
+      lastDashboardSyncTs = (data.timestamp ? data.timestamp * 1000 : 0);
       // Note: we don't set lastFrontendSyncTs here as we don't know when the local storage was written
     } catch (e) {
       DASHBOARD_CACHE = null;
@@ -294,7 +295,8 @@ async function refreshDashboardCache() {
       try {
         const data = JSON.parse(snapshot);
         DASHBOARD_CACHE = data;
-        lastDashboardSyncTs = data.timestamp * 1000;
+        // Handle missing timestamp (migration)
+        lastDashboardSyncTs = (data.timestamp ? data.timestamp * 1000 : Date.now());
         lastFrontendSyncTs = Date.now();
         localStorage.setItem(CACHE_KEY, JSON.stringify(data));
         // console.log('✨ Dashboard snapshot synchronized');

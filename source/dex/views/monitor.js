@@ -432,7 +432,7 @@ export async function updateSystemMonitor() {
   function generateWidgetHtml(service) {
     // Special case for Upstash Read-Only service
     if (service.id === 'upstash-redis-ro') {
-        const syncTs = isPublicMode() ? (lastFrontendSyncTs || Date.now()) : Date.now();
+        const syncTs = isPublicMode() ? (lastFrontendSyncTs || lastDashboardSyncTs || Date.now()) : Date.now();
         const lastSynced = new Date(syncTs).toLocaleTimeString();
         return `
             <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
@@ -514,7 +514,10 @@ export async function updateSystemMonitor() {
     if (existingWidget && existingWidget.parentNode) {
       if (service.id === 'upstash-redis-ro') {
         // Only update the sync timestamp, leave the countdown element alone to avoid flickering
-        const syncTs = isPublicMode() ? (lastFrontendSyncTs || Date.now()) : Date.now();
+        // Use lastFrontendSyncTs (time of last successful client fetch) if available
+        // Fallback to lastDashboardSyncTs (time of data origin) if available
+        // Finally fallback to Date.now() only if nothing else exists
+        const syncTs = isPublicMode() ? (lastFrontendSyncTs || lastDashboardSyncTs || Date.now()) : Date.now();
         const lastSynced = new Date(syncTs).toLocaleTimeString();
         const syncLabel = existingWidget.querySelector('.sync-time-label');
         if (syncLabel) syncLabel.textContent = `Last synced: ${lastSynced}`;
