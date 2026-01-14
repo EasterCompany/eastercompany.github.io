@@ -84,9 +84,11 @@ export async function updateChoresTab() {
 
     try {
         const response = await smartFetch('/chores');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
         const chores = await response.json();
 
-        if (!chores || chores.length === 0) {
+        if (!Array.isArray(chores) || chores.length === 0) {
             container.innerHTML = createPlaceholderMessage('empty', 'No active chores.', 'Create one to start monitoring.');
             return;
         }
