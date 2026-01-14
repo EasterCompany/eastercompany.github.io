@@ -316,13 +316,18 @@ function predictDashboardTimers() {
   const status = DASHBOARD_CACHE.agent_status;
 
   // 1. System State Time (Increments)
-  // This represents the duration of the CURRENT state.
-  if (typeof status.system_state_time === 'number') {
-    status.system_state_time += 1;
-  }
+  if (status.system && typeof status.system.state_time === 'number') {
+    status.system.state_time += 1;
 
-  // Note: Total aggregate metrics (total_active_time, total_idle_time) are NOT predicted
-  // here as they are officially committed by the backend upon state transitions.
+    // 2. Increment Aggregate Metrics
+    if (status.system.metrics) {
+      if (status.system.state === 'idle') {
+        if (typeof status.system.metrics.total_idle_time === 'number') status.system.metrics.total_idle_time += 1;
+      } else {
+        if (typeof status.system.metrics.total_active_time === 'number') status.system.metrics.total_active_time += 1;
+      }
+    }
+  }
 }
 
 /**
