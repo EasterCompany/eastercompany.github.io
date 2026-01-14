@@ -318,15 +318,6 @@ function predictDashboardTimers() {
   // 1. System State Time (Increments)
   if (status.system && typeof status.system.state_time === 'number') {
     status.system.state_time += 1;
-
-    // 2. Increment Aggregate Metrics
-    if (status.system.metrics) {
-      if (status.system.state === 'idle') {
-        if (typeof status.system.metrics.total_idle_time === 'number') status.system.metrics.total_idle_time += 1;
-      } else {
-        if (typeof status.system.metrics.total_active_time === 'number') status.system.metrics.total_active_time += 1;
-      }
-    }
   }
 }
 
