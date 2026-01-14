@@ -1,6 +1,6 @@
 // System Monitor Logic (Services, Models, Processes)
 import imaginatorSVG from '../components/imaginatorSVG.js';
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode, lastDashboardSyncTs } from '../core/utils.js';
+import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode, lastDashboardSyncTs, lastFrontendSyncTs } from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 import { updateChoresTab } from './chores.js';
 
@@ -410,7 +410,8 @@ export async function updateSystemMonitor() {
   function generateWidgetHtml(service) {
     // Special case for Upstash Read-Only service
     if (service.id === 'upstash-redis-ro') {
-        const lastUpdated = new Date(lastServicesUpdate).toLocaleTimeString();
+        const syncTs = isPublicMode() ? (lastFrontendSyncTs || Date.now()) : Date.now();
+        const lastSynced = new Date(syncTs).toLocaleTimeString();
         return `
             <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
                 <div class="service-widget-header">
@@ -421,7 +422,7 @@ export async function updateSystemMonitor() {
                 <div class="service-widget-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0;">
                     <div style="font-size: 0.7em; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Next Update In</div>
                     <div id="upstash-countdown" style="font-size: 2em; font-weight: bold; color: #fff; font-family: monospace;">--</div>
-                    <div style="font-size: 0.6em; color: #444; margin-top: 10px;">Last synced: ${lastUpdated}</div>
+                    <div class="sync-time-label" style="font-size: 0.6em; color: #444; margin-top: 10px;">Last synced: ${lastSynced}</div>
                 </div>
             </div>`;
     }
@@ -489,7 +490,15 @@ export async function updateSystemMonitor() {
     const newHtml = generateWidgetHtml(service);
     const existingWidget = existingWidgetsMap.get(service.id);
     if (existingWidget && existingWidget.parentNode) {
-      if (existingWidget.outerHTML !== newHtml) existingWidget.outerHTML = newHtml;
+      if (service.id === 'upstash-redis-ro') {
+        // Only update the sync timestamp, leave the countdown element alone to avoid flickering
+        const syncTs = isPublicMode() ? (lastFrontendSyncTs || Date.now()) : Date.now();
+        const lastSynced = new Date(syncTs).toLocaleTimeString();
+        const syncLabel = existingWidget.querySelector('.sync-time-label');
+        if (syncLabel) syncLabel.textContent = `Last synced: ${lastSynced}`;
+      } else if (existingWidget.outerHTML !== newHtml) {
+        existingWidget.outerHTML = newHtml;
+      }
     } else {
       widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
     }
