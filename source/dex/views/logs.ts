@@ -1,5 +1,6 @@
+// @ts-nocheck
 // Easter Company - Logs
-import { smartFetch, ansiToHtml, createPlaceholderMessage, isPublicMode } from '../core/utils.js';
+import { smartFetch, ansiToHtml, createPlaceholderMessage, isPublicMode } from '../core/utils.ts';
 
 export function getLogsContent() {
   return `

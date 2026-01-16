@@ -1,3 +1,4 @@
+// @ts-nocheck
 // source/dex/Window.js
 
 let windowZIndex = 1000;

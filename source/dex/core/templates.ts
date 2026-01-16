@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Event Templates & Formatting
 
 export const EVENT_TEMPLATES = {

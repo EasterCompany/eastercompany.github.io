@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Shared Utility Functions
 
 export function createPlaceholderMessage(type, message, actionText = null) {

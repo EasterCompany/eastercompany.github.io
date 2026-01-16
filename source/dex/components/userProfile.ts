@@ -1,4 +1,5 @@
-import { escapeHtml, smartDiscordFetch } from '../core/utils.js';
+// @ts-nocheck
+import { escapeHtml, smartDiscordFetch } from '../core/utils.ts';
 
 // --- CSS Styles for the Profile Modal ---
 const PROFILE_STYLES = `

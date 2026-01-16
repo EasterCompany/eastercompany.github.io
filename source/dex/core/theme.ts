@@ -1,3 +1,4 @@
+// @ts-nocheck
 // theme.js - Theme management system
 
 const THEME_KEY = 'easter_theme';

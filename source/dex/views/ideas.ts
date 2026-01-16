@@ -1,6 +1,7 @@
+// @ts-nocheck
 // Ideas Tab Logic (Roadmap + Blueprints)
-import { getRoadmapContent, updateRoadmapTab, getRoadmapActions } from './roadmap.js';
-import { getBlueprintsContent, updateBlueprintsTab, getBlueprintActions } from './blueprints.js';
+import { getRoadmapContent, updateRoadmapTab, getRoadmapActions } from './roadmap.ts';
+import { getBlueprintsContent, updateBlueprintsTab, getBlueprintActions } from './blueprints.ts';
 
 export const getRoadmapTabContent = () => `
     <div class="ideas-container">

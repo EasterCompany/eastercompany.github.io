@@ -1,3 +1,4 @@
+// @ts-nocheck
 // styler.js - Placeholder for dynamic styles and elements.
 
 export function applyBaseStyles() {

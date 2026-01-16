@@ -1,13 +1,14 @@
+// @ts-nocheck
 // Easter Company - Universal JS Entrypoint
-import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from './styler.js';
-import { createWindow } from './Window.js';
-import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
-import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.js';
-import { updateIdeasTab, getRoadmapTabContent, getBlueprintsTabContent } from '../views/ideas.js';
-import { getChoresContent, updateChoresTab } from '../views/chores.js';
-import { checkBackgroundBlueprints } from '../views/blueprints.js';
-import { getContactsContent, updateContactsTab } from '../views/contacts.js';
-import { getEventsContent, updateEventsTimeline } from '../views/events.js';
+import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from './styler.ts';
+import { createWindow } from './Window.ts';
+import { initTheme, applyTheme, getCurrentTheme } from './theme.ts';
+import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.ts';
+import { updateIdeasTab, getRoadmapTabContent, getBlueprintsTabContent } from '../views/ideas.ts';
+import { getChoresContent, updateChoresTab } from '../views/chores.ts';
+import { checkBackgroundBlueprints } from '../views/blueprints.ts';
+import { getContactsContent, updateContactsTab } from '../views/contacts.ts';
+import { getEventsContent, updateEventsTimeline } from '../views/events.ts';
 import {
   updateSystemTab,
   updateSystemMonitor,
@@ -19,18 +20,18 @@ import {
   getModelsContent,
   getHardwareContent,
   getServiceLogsContent,
-} from '../views/monitor.js';
-import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
-import { getLogsContent, updateLogs } from '../views/logs.js';
-import { getWebContent, updateWebTab } from '../views/web.js';
-import { initCliDashboard } from '../views/cli.js';
+} from '../views/monitor.ts';
+import { getSettingsContent, attachSettingsListeners } from '../views/settings.ts';
+import { getLogsContent, updateLogs } from '../views/logs.ts';
+import { getWebContent, updateWebTab } from '../views/web.ts';
+import { initCliDashboard } from '../views/cli.ts';
 import {
   getEventServiceUrl,
   getLastBadgeCount,
   updateGlobalBadgeCount,
   smartFetch,
   isPublicMode,
-} from './utils.js';
+} from './utils.ts';
 
 async function checkServiceHealth() {
   if (isPublicMode()) return; // Snapshots handle health in public mode

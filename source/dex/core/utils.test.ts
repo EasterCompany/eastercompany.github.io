@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { describe, it, expect } from 'vitest';
-import { escapeHtml } from './utils.js';
+import { escapeHtml } from './utils.ts';
 
 describe('utils.js', () => {
   describe('escapeHtml', () => {

@@ -1,5 +1,6 @@
+// @ts-nocheck
 // Settings Window Logic
-import { getCurrentTheme, setTheme, THEMES } from '../core/theme.js';
+import { getCurrentTheme, setTheme, THEMES } from '../core/theme.ts';
 
 export function getSettingsContent() {
   const currentTheme = getCurrentTheme();

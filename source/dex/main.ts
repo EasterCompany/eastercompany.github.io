@@ -1,2 +1,3 @@
+// @ts-nocheck
 // Easter Company - Universal JS Entrypoint (Modular Redirect)
 import './core/main.js';

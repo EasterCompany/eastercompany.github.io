@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Alerts Tab Logic
 import {
   createPlaceholderMessage,
@@ -8,7 +9,7 @@ import {
   renderMarkdown,
   setUnreadAlerts,
   isPublicMode,
-} from '../core/utils.js';
+} from '../core/utils.ts';
 
 export const getAlertsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">

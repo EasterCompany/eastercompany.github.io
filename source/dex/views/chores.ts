@@ -1,4 +1,5 @@
-import { smartFetch, createPlaceholderMessage } from '../core/utils.js';
+// @ts-nocheck
+import { smartFetch, createPlaceholderMessage } from '../core/utils.ts';
 
 export const getChoresContent = () => {
   return `

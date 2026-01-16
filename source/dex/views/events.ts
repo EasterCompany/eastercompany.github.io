@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Events Timeline Logic
 import {
   createPlaceholderMessage,
@@ -6,8 +7,8 @@ import {
   smartFetch,
   renderMarkdown,
   isPublicMode,
-} from '../core/utils.js';
-import { formatEventSummary } from '../core/templates.js';
+} from '../core/utils.ts';
+import { formatEventSummary } from '../core/templates.ts';
 
 export const getEventsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">

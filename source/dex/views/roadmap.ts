@@ -1,5 +1,6 @@
+// @ts-nocheck
 // Roadmap Tab Logic
-import { createPlaceholderMessage, escapeHtml, smartFetch, isPublicMode } from '../core/utils.js';
+import { createPlaceholderMessage, escapeHtml, smartFetch, isPublicMode } from '../core/utils.ts';
 
 export const getRoadmapActions = () => `
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">

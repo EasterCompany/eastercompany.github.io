@@ -5,7 +5,7 @@ set -e
 ROOT_DIR=$(dirname "$0")/..
 SRC_DIR="$ROOT_DIR/source"
 TEMPLATES_DIR="$SRC_DIR/templates"
-JS_ENTRY_POINT="$SRC_DIR/dex/main.js"
+JS_ENTRY_POINT="$SRC_DIR/dex/main.ts"
 CSS_ENTRY_POINT="$SRC_DIR/css/main.css"
 ESBUILD_BIN="$HOME/go/bin/esbuild"
 

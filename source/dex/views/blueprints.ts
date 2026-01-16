@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Blueprints Tab Logic
 import {
   createPlaceholderMessage,
@@ -9,7 +10,7 @@ import {
   updatePendingBlueprintCount,
   setPendingBlueprints,
   isPublicMode,
-} from '../core/utils.js';
+} from '../core/utils.ts';
 
 export const getBlueprintActions = () => `
     <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">

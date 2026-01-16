@@ -1,5 +1,6 @@
+// @ts-nocheck
 // System Monitor Logic (Services, Models, Processes)
-import imaginatorSVG from '../components/imaginatorSVG.js';
+import imaginatorSVG from '../components/imaginatorSVG.ts';
 import {
   createPlaceholderMessage,
   updateTabTimestamp,
@@ -8,9 +9,9 @@ import {
   LOCAL_EVENT_SERVICE,
   isPublicMode,
   syncState,
-} from '../core/utils.js';
-import { getLogsContent, updateLogs } from './logs.js';
-import { updateChoresTab } from './chores.js';
+} from '../core/utils.ts';
+import { getLogsContent, updateLogs } from './logs.ts';
+import { updateChoresTab } from './chores.ts';
 
 export const getGuardianContent = () => {
   const resetBtnStyle = isPublicMode() ? 'display: none;' : '';

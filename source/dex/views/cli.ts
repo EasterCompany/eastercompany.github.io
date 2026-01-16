@@ -1,4 +1,5 @@
-import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from '../core/utils.js';
+// @ts-nocheck
+import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from '../core/utils.ts';
 
 const CLI_COMMANDS = [
   {
