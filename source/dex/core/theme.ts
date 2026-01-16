@@ -1,4 +1,3 @@
-// @ts-nocheck
 // theme.js - Theme management system
 
 const THEME_KEY = 'easter_theme';
@@ -21,7 +20,7 @@ export function getCurrentTheme() {
  * Set the theme
  * @param {string} theme
  */
-export function setTheme(theme) {
+export function setTheme(theme: string) {
   if (!Object.values(THEMES).includes(theme)) {
     throw new Error('Invalid theme');
   }
@@ -33,18 +32,17 @@ export function setTheme(theme) {
  * Apply the theme to the document
  * @param {string} theme - The theme preference
  */
-export function applyTheme(theme) {
-  const html = document.documentElement;
+export function applyTheme(theme: string) {
   const body = document.body;
 
   // 1. Manage Body Classes
-  Object.values(THEMES).forEach((t) => {
+  Object.values(THEMES).forEach((t: string) => {
     body.classList.remove(`theme-${t}`);
   });
   body.classList.add(`theme-${theme}`);
 
   // 2. Manage Theme Color Meta (For Safari/Chrome Mobile)
-  let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  let metaThemeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
   if (!metaThemeColor) {
     metaThemeColor = document.createElement('meta');
     metaThemeColor.name = 'theme-color';
@@ -52,7 +50,7 @@ export function applyTheme(theme) {
   }
 
   // 3. Define Theme Constants
-  const themeColors = {
+  const themeColors: Record<string, string> = {
     [THEMES.DARK]: '#050507',
     [THEMES.LIGHT]: '#FFFFFF',
     [THEMES.LEGACY]: '#000000',

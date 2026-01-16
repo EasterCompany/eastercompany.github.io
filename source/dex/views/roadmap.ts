@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Roadmap Tab Logic
 import { createPlaceholderMessage, escapeHtml, smartFetch, isPublicMode } from '../core/utils.ts';
 
@@ -23,8 +22,8 @@ export const getRoadmapContent = () => `
 `;
 
 let activeExpandedIds = new Set();
-let currentItems = [];
-let editingItemId = null;
+let currentItems: any[] = [];
+let editingItemId: string | null = null;
 
 export async function updateRoadmapTab(forceReRender = false) {
   const roadmapContainer = document.getElementById('roadmap-list');
@@ -39,7 +38,7 @@ export async function updateRoadmapTab(forceReRender = false) {
     const items = await response.json();
     currentItems = items;
 
-    const createItemElement = (item) => {
+    const createItemElement = (item: any) => {
       const isExpanded = activeExpandedIds.has(item.id);
       const isPublished = item.state === 'published';
       const isConsumed = item.state === 'consumed';
@@ -61,15 +60,17 @@ export async function updateRoadmapTab(forceReRender = false) {
       tempDiv.dataset.itemId = item.id;
 
       tempDiv.onclick = (e) => {
-        if (e.target.closest('button')) return;
+        if ((e.target as HTMLElement).closest('button')) return;
         const wasExpanded = tempDiv.classList.contains('expanded');
         if (wasExpanded) {
           tempDiv.classList.remove('expanded');
-          tempDiv.querySelector('.event-details').style.display = 'none';
+          const details = tempDiv.querySelector('.event-details') as HTMLElement;
+          if (details) details.style.display = 'none';
           activeExpandedIds.delete(item.id);
         } else {
           tempDiv.classList.add('expanded');
-          tempDiv.querySelector('.event-details').style.display = 'block';
+          const details = tempDiv.querySelector('.event-details') as HTMLElement;
+          if (details) details.style.display = 'block';
           activeExpandedIds.add(item.id);
         }
       };
@@ -124,16 +125,17 @@ export async function updateRoadmapTab(forceReRender = false) {
       tempDiv.querySelector('.close-details-btn')?.addEventListener('click', (e) => {
         e.stopPropagation();
         tempDiv.classList.remove('expanded');
-        tempDiv.querySelector('.event-details').style.display = 'none';
+        const details = tempDiv.querySelector('.event-details') as HTMLElement;
+        if (details) details.style.display = 'none';
         activeExpandedIds.delete(item.id);
       });
 
       return tempDiv;
     };
 
-    const currentChildren = Array.from(roadmapContainer.children);
+    const currentChildren = Array.from(roadmapContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.itemId, el]));
-    const newIds = new Set(items.map((e) => e.id));
+    const newIds = new Set(items.map((e: any) => e.id));
 
     // Remove old items OR placeholders
     currentChildren.forEach((child) => {
@@ -156,8 +158,8 @@ export async function updateRoadmapTab(forceReRender = false) {
 
     if (forceReRender) roadmapContainer.innerHTML = '';
 
-    let previousElement = null;
-    items.forEach((item, index) => {
+    let previousElement: HTMLElement | null = null;
+    items.forEach((item: any, index: number) => {
       let el = currentMap.get(item.id);
       if (!el || forceReRender) {
         if (el) el.remove();
@@ -169,7 +171,7 @@ export async function updateRoadmapTab(forceReRender = false) {
       } else {
         if (previousElement && previousElement.nextElementSibling !== el) previousElement.after(el);
       }
-      previousElement = el;
+      previousElement = el as HTMLElement;
     });
   } catch (e) {
     if (roadmapContainer.children.length === 0) {
@@ -192,15 +194,18 @@ function attachRoadmapListeners() {
   if (newBtn && !newBtn.dataset.listenerAttached) {
     newBtn.onclick = () => {
       editingItemId = null;
-      document.getElementById('roadmap-editor-input').value = '';
-      document.getElementById('roadmap-editor-container').style.display = 'block';
+      const input = document.getElementById('roadmap-editor-input') as HTMLTextAreaElement;
+      if (input) input.value = '';
+      const container = document.getElementById('roadmap-editor-container');
+      if (container) container.style.display = 'block';
     };
     newBtn.dataset.listenerAttached = 'true';
   }
 
   if (cancelBtn && !cancelBtn.dataset.listenerAttached) {
     cancelBtn.onclick = () => {
-      document.getElementById('roadmap-editor-container').style.display = 'none';
+      const container = document.getElementById('roadmap-editor-container');
+      if (container) container.style.display = 'none';
       editingItemId = null;
     };
     cancelBtn.dataset.listenerAttached = 'true';
@@ -208,7 +213,8 @@ function attachRoadmapListeners() {
 
   if (saveBtn && !saveBtn.dataset.listenerAttached) {
     saveBtn.onclick = async () => {
-      const content = document.getElementById('roadmap-editor-input').value;
+      const input = document.getElementById('roadmap-editor-input') as HTMLTextAreaElement;
+      const content = input ? input.value : '';
       if (!content.trim()) return;
 
       const url = editingItemId ? `/roadmap/${editingItemId}` : `/roadmap`;
@@ -221,7 +227,8 @@ function attachRoadmapListeners() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ content }),
         });
-        document.getElementById('roadmap-editor-container').style.display = 'none';
+        const container = document.getElementById('roadmap-editor-container');
+        if (container) container.style.display = 'none';
         updateRoadmapTab(true);
       } catch (e) {
         console.error(e);
@@ -247,14 +254,18 @@ function attachRoadmapListeners() {
   }
 }
 
-function startEditing(item) {
+function startEditing(item: any) {
   editingItemId = item.id;
-  document.getElementById('roadmap-editor-input').value = item.content;
-  document.getElementById('roadmap-editor-container').style.display = 'block';
-  document.getElementById('roadmap-editor-container').scrollIntoView({ behavior: 'smooth' });
+  const input = document.getElementById('roadmap-editor-input') as HTMLTextAreaElement;
+  if (input) input.value = item.content;
+  const container = document.getElementById('roadmap-editor-container');
+  if (container) {
+    container.style.display = 'block';
+    container.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
-async function togglePublish(item) {
+async function togglePublish(item: any) {
   const newState = item.state === 'published' ? 'draft' : 'published';
 
   try {
@@ -269,7 +280,7 @@ async function togglePublish(item) {
   }
 }
 
-async function deleteItem(id) {
+async function deleteItem(id: string) {
   if (!confirm('Delete this roadmap item?')) return;
 
   try {

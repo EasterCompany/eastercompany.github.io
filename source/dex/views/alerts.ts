@@ -1,10 +1,8 @@
-// @ts-nocheck
 // Alerts Tab Logic
 import {
   createPlaceholderMessage,
   updateTabTimestamp,
   updateUnreadAlertCount,
-  escapeHtml,
   smartFetch,
   renderMarkdown,
   setUnreadAlerts,
@@ -33,11 +31,11 @@ export const getAlertsContent = () => `
 `;
 
 // Export this to track updates in main.js if needed, or manage it internally
-export let lastAlertsUpdate = null;
+export let lastAlertsUpdate: number | null = null;
 
 // Track expanded state globally within the module
 let activeExpandedIds = new Set();
-let currentFilteredAlerts = [];
+let currentFilteredAlerts: any[] = [];
 
 export async function updateAlertsTab(forceReRender = false) {
   const alertsContainer = document.getElementById('alerts-list');
@@ -69,7 +67,7 @@ export async function updateAlertsTab(forceReRender = false) {
     const now = Date.now();
     const persistenceThreshold = 24 * 60 * 60 * 1000; // 24 hours
 
-    const filteredAlerts = allAlerts.filter((event) => {
+    const filteredAlerts = allAlerts.filter((event: any) => {
       const readTSStr = localStorage.getItem(`alert_read_ts_${event.id}`);
       if (!readTSStr) return true; // Keep unread
 
@@ -78,8 +76,8 @@ export async function updateAlertsTab(forceReRender = false) {
     });
 
     // Sort: Priority (Desc) -> Time (Desc)
-    filteredAlerts.sort((a, b) => {
-      const getPriority = (evt) => {
+    filteredAlerts.sort((a: any, b: any) => {
+      const getPriority = (evt: any) => {
         let data = evt.event;
         if (typeof data === 'string') {
           try {
@@ -91,7 +89,7 @@ export async function updateAlertsTab(forceReRender = false) {
         return (data.priority || 'low').toLowerCase();
       };
 
-      const score = (p) => {
+      const score = (p: string) => {
         if (p === 'critical') return 4;
         if (p === 'high') return 3;
         if (p === 'medium') return 2;
@@ -109,7 +107,7 @@ export async function updateAlertsTab(forceReRender = false) {
 
     currentFilteredAlerts = filteredAlerts;
 
-    const getPriority = (evt) => {
+    const getPriority = (evt: any) => {
       let data = evt.event;
       if (typeof data === 'string') {
         try {
@@ -122,13 +120,13 @@ export async function updateAlertsTab(forceReRender = false) {
     };
 
     // Build Display List with Dividers
-    const displayList = [];
-    const uniquePriorities = new Set(filteredAlerts.map((n) => getPriority(n)));
+    const displayList: any[] = [];
+    const uniquePriorities = new Set(filteredAlerts.map((n: any) => getPriority(n)));
     const showDividers = uniquePriorities.size > 1;
 
     if (filteredAlerts.length > 0) {
-      let lastPriority = null;
-      filteredAlerts.forEach((n) => {
+      let lastPriority: string | null = null;
+      filteredAlerts.forEach((n: any) => {
         const p = getPriority(n);
         if (showDividers && p !== lastPriority) {
           displayList.push({ id: `divider-${p}`, type: 'divider', label: p.toUpperCase() });
@@ -148,7 +146,7 @@ export async function updateAlertsTab(forceReRender = false) {
       return;
     }
 
-    const createAlertElement = (alertEvent) => {
+    const createAlertElement = (alertEvent: any) => {
       let alertData = alertEvent.event;
       if (typeof alertData === 'string') {
         try {
@@ -207,7 +205,7 @@ export async function updateAlertsTab(forceReRender = false) {
             <div style="flex: 1; min-width: 150px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related Events</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
-                    ${relatedEventIDs.map((id) => `<a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${id.substring(0, 8)}...</a>`).join(', ')}
+                    ${relatedEventIDs.map((id: string) => `<a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${id.substring(0, 8)}...</a>`).join(', ')}
                 </div>
             </div>`;
       }
@@ -271,29 +269,30 @@ export async function updateAlertsTab(forceReRender = false) {
       tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer priority-${priority}`;
       tempDiv.dataset.alertId = alertEvent.id;
 
-      tempDiv.onclick = function (e) {
-        const isCurrentlyExpanded = this.classList.contains('expanded');
+      tempDiv.onclick = function (this: GlobalEventHandlers, _e: MouseEvent) {
+        const el = this as HTMLElement;
+        const isCurrentlyExpanded = el.classList.contains('expanded');
         if (isCurrentlyExpanded) {
-          this.classList.remove('expanded');
+          el.classList.remove('expanded');
           activeExpandedIds.delete(alertEvent.id);
-          const details = this.querySelector('.event-details');
+          const details = el.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'none';
         } else {
-          this.classList.add('expanded');
+          el.classList.add('expanded');
           activeExpandedIds.add(alertEvent.id);
-          const details = this.querySelector('.event-details');
+          const details = el.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'block';
 
           if (!localStorage.getItem(`alert_read_ts_${alertEvent.id}`)) {
             localStorage.setItem(`alert_read_ts_${alertEvent.id}`, Date.now().toString());
-            this.classList.add('alert-read');
-            this.classList.remove('alert-unread');
+            el.classList.add('alert-read');
+            el.classList.remove('alert-unread');
 
-            this.classList.remove('event-border-blue', 'event-border-red', 'event-border-purple');
+            el.classList.remove('event-border-blue', 'event-border-red', 'event-border-purple');
             let newBorder = 'event-border-grey';
             if (priority === 'high' || priority === 'critical') newBorder = 'event-border-red';
             else if (priority === 'medium') newBorder = 'event-border-orange';
-            this.classList.add(newBorder);
+            el.classList.add(newBorder);
 
             updateUnreadAlertCount();
           }
@@ -301,7 +300,7 @@ export async function updateAlertsTab(forceReRender = false) {
       };
 
       const summary = `${protocol ? protocol.toUpperCase() : 'GUARDIAN'} ALERT: ${summaryContent || title}`;
-      const iconMap = {
+      const iconMap: Record<string, string> = {
         system: 'bx-cog',
         messaging: 'bx-message-detail',
         cognitive: 'bx-brain',
@@ -347,7 +346,7 @@ export async function updateAlertsTab(forceReRender = false) {
         closeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           tempDiv.classList.remove('expanded');
-          const details = tempDiv.querySelector('.event-details');
+          const details = tempDiv.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'none';
           activeExpandedIds.delete(alertEvent.id);
         });
@@ -356,7 +355,7 @@ export async function updateAlertsTab(forceReRender = false) {
       return tempDiv;
     };
 
-    const createDividerElement = (item) => {
+    const createDividerElement = (item: any) => {
       const div = document.createElement('div');
       div.className = 'notification-divider';
       div.dataset.alertId = item.id;
@@ -372,7 +371,7 @@ export async function updateAlertsTab(forceReRender = false) {
     };
 
     // Basic diffing and rendering logic for alerts
-    const currentChildren = Array.from(alertsContainer.children);
+    const currentChildren = Array.from(alertsContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.alertId, el]));
     const newIds = new Set(displayList.map((e) => e.id));
 
@@ -384,16 +383,18 @@ export async function updateAlertsTab(forceReRender = false) {
       }
     });
 
-    let previousElement = null;
+    let previousElement: HTMLElement | null = null;
 
     displayList.forEach((item, index) => {
-      let el = currentMap.get(item.id);
+      let el = currentMap.get(item.id) as HTMLElement;
       if (!el || forceReRender) {
         if (el) el.remove();
         if (item.type === 'divider') {
           el = createDividerElement(item);
         } else {
-          el = createAlertElement(item);
+          const created = createAlertElement(item);
+          if (!created) return;
+          el = created;
         }
         if (!el) return;
       }
@@ -496,7 +497,7 @@ export async function checkBackgroundAlerts() {
     const allAlerts = data.events || [];
 
     let unreadCount = 0;
-    allAlerts.forEach((event) => {
+    allAlerts.forEach((event: any) => {
       let evtData = event.event;
       if (typeof evtData === 'string') {
         try {

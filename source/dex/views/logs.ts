@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Easter Company - Logs
 import { smartFetch, ansiToHtml, createPlaceholderMessage, isPublicMode } from '../core/utils.ts';
 
@@ -8,7 +7,7 @@ export function getLogsContent() {
     `;
 }
 
-export let lastLogsUpdate = null;
+export let lastLogsUpdate: number | null = null;
 
 export async function updateLogs() {
   const logsContainer = document.getElementById('logs-container');
@@ -34,11 +33,11 @@ export async function updateLogs() {
 
     const hiddenServiceIDs = ['local-ollama-0', 'local-cache-0'];
     const filteredLogsData = logsData.filter(
-      (logReport) => !hiddenServiceIDs.includes(logReport.id)
+      (logReport: any) => !hiddenServiceIDs.includes(logReport.id)
     );
 
     // Reverse the order of log reports so newest appear at the top
-    filteredLogsData.forEach((logReport) => {
+    filteredLogsData.forEach((logReport: any) => {
       if (logReport.logs && Array.isArray(logReport.logs)) {
         logReport.logs.reverse();
       } else {
@@ -48,7 +47,7 @@ export async function updateLogs() {
     filteredLogsData.reverse();
 
     const logsHtml = filteredLogsData
-      .map((logReport) => {
+      .map((logReport: any) => {
         const rawLogs = logReport.logs.join('\n');
 
         // Ensure exactly 25 lines
@@ -62,7 +61,7 @@ export async function updateLogs() {
           lines = lines.slice(-25); // Take last 25 if somehow more
         }
 
-        const styledLogs = lines.map((line) => ansiToHtml(line)).join('\n');
+        const styledLogs = lines.map((line: string) => ansiToHtml(line)).join('\n');
 
         return `
                 <div class="log-report">
@@ -88,15 +87,18 @@ export async function updateLogs() {
     // Add event listeners for copy buttons
     document.querySelectorAll('.copy-logs-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const logs = unescape(btn.dataset.logs);
+        const htmlBtn = btn as HTMLElement;
+        const logs = unescape(htmlBtn.dataset.logs || '');
         navigator.clipboard.writeText(logs).then(() => {
-          const icon = btn.querySelector('i');
-          icon.classList.remove('bx-copy');
-          icon.classList.add('bx-check');
-          setTimeout(() => {
-            icon.classList.remove('bx-check');
-            icon.classList.add('bx-copy');
-          }, 2000);
+          const icon = htmlBtn.querySelector('i');
+          if (icon) {
+            icon.classList.remove('bx-copy');
+            icon.classList.add('bx-check');
+            setTimeout(() => {
+              icon.classList.remove('bx-check');
+              icon.classList.add('bx-copy');
+            }, 2000);
+          }
         });
       });
     });
@@ -104,7 +106,8 @@ export async function updateLogs() {
     // Add event listeners for clear buttons
     document.querySelectorAll('.clear-logs-btn').forEach((btn) => {
       btn.addEventListener('click', async () => {
-        const serviceId = btn.dataset.serviceId;
+        const htmlBtn = btn as HTMLElement;
+        const serviceId = htmlBtn.dataset.serviceId;
         if (!confirm(`Are you sure you want to clear logs for ${serviceId}?`)) return;
 
         try {

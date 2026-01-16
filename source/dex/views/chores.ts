@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { smartFetch, createPlaceholderMessage } from '../core/utils.ts';
 
 export const getChoresContent = () => {
@@ -37,23 +36,27 @@ export async function updateChoresTab() {
   // Attach Listeners
   if (createBtn && !createBtn.dataset.listenerAttached) {
     createBtn.onclick = () => {
-      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
     };
     createBtn.dataset.listenerAttached = 'true';
   }
 
   if (cancelBtn && !cancelBtn.dataset.listenerAttached) {
     cancelBtn.onclick = () => {
-      form.style.display = 'none';
+      if (form) form.style.display = 'none';
     };
     cancelBtn.dataset.listenerAttached = 'true';
   }
 
   if (saveBtn && !saveBtn.dataset.listenerAttached) {
     saveBtn.onclick = async () => {
-      const instruction = document.getElementById('new-chore-instruction').value;
-      const url = document.getElementById('new-chore-url').value;
-      const ownerId = document.getElementById('new-chore-owner').value || '313071000877137920';
+      const instructionInput = document.getElementById('new-chore-instruction') as HTMLInputElement;
+      const urlInput = document.getElementById('new-chore-url') as HTMLInputElement;
+      const ownerInput = document.getElementById('new-chore-owner') as HTMLInputElement;
+
+      const instruction = instructionInput?.value;
+      const url = urlInput?.value;
+      const ownerId = ownerInput?.value || '313071000877137920';
 
       if (!instruction) return;
 
@@ -69,9 +72,9 @@ export async function updateChoresTab() {
             schedule: 'every_6h',
           }),
         });
-        form.style.display = 'none';
-        document.getElementById('new-chore-instruction').value = '';
-        document.getElementById('new-chore-url').value = '';
+        if (form) form.style.display = 'none';
+        if (instructionInput) instructionInput.value = '';
+        if (urlInput) urlInput.value = '';
         updateChoresTab();
       } catch (e) {
         console.error(e);
@@ -101,7 +104,7 @@ export async function updateChoresTab() {
     }
 
     const html = chores
-      .map((chore) => {
+      .map((chore: any) => {
         const lastRun =
           chore.last_run === 0 ? 'Never' : new Date(chore.last_run * 1000).toLocaleString();
         const memoryCount = chore.memory ? chore.memory.length : 0;
@@ -143,10 +146,11 @@ export async function updateChoresTab() {
 
     // Attach delete listeners
     container.querySelectorAll('.delete-chore-btn').forEach((btn) => {
-      btn.onclick = async (e) => {
+      (btn as HTMLElement).onclick = async (e) => {
         e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id;
         if (confirm('Delete this chore?')) {
-          await smartFetch(`/chores/${btn.dataset.id}`, { method: 'DELETE' });
+          await smartFetch(`/chores/${id}`, { method: 'DELETE' });
           updateChoresTab();
         }
       };

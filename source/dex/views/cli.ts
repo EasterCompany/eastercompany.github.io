@@ -1,7 +1,22 @@
-// @ts-nocheck
-import { createPlaceholderMessage, escapeHtml, smartFetch, ansiToHtml } from '../core/utils.ts';
+import { ansiToHtml } from '../core/utils.ts';
 
-const CLI_COMMANDS = [
+interface CliCommand {
+  id: string;
+  title: string;
+  icon: string;
+  description: string;
+  usage: string;
+  category: string;
+  dummy?: boolean;
+  docs: {
+    overview: string;
+    details: string[];
+    extended_usage: string;
+  };
+  demo_output: string[];
+}
+
+const CLI_COMMANDS: CliCommand[] = [
   {
     id: 'chat',
     title: 'Chat',
@@ -441,7 +456,7 @@ const CLI_COMMANDS = [
 ];
 
 export const getCliInterfaceContent = () => {
-  const categories = {
+  const categories: Record<string, { title: string; icon: string; color: string }> = {
     cognitive: { title: 'Cognitive Core', icon: 'bx-brain', color: '#bb86fc' },
     lifecycle: { title: 'Development Lifecycle', icon: 'bx-git-branch', color: '#03dac6' },
     system: { title: 'System Management', icon: 'bx-cog', color: '#aaa' },
@@ -533,7 +548,7 @@ export const getCliInterfaceContent = () => {
 
 let terminalActive = false;
 
-function openTerminal(cmdInfo) {
+function openTerminal(cmdInfo: CliCommand) {
   let overlay = document.getElementById('cli-terminal-overlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -564,14 +579,17 @@ function openTerminal(cmdInfo) {
         `;
     document.body.appendChild(overlay);
 
-    document.getElementById('close-terminal-btn').onclick = () => closeTerminal();
-    document.getElementById('terminal-action-btn').onclick = () => closeTerminal();
+    const closeBtn = document.getElementById('close-terminal-btn');
+    if (closeBtn) closeBtn.onclick = () => closeTerminal();
+
+    const actionBtn = document.getElementById('terminal-action-btn');
+    if (actionBtn) actionBtn.onclick = () => closeTerminal();
   }
 
-  const body = document.getElementById('cli-terminal-body');
-  const docs = document.getElementById('cli-docs-pane');
+  const body = document.getElementById('cli-terminal-body') as HTMLElement;
+  const docs = document.getElementById('cli-docs-pane') as HTMLElement;
 
-  body.innerHTML = '';
+  if (body) body.innerHTML = '';
 
   // Render Documentation
   const docData = cmdInfo.docs || {
@@ -579,7 +597,9 @@ function openTerminal(cmdInfo) {
     details: [],
     extended_usage: cmdInfo.usage,
   };
-  docs.innerHTML = `
+
+  if (docs) {
+    docs.innerHTML = `
         <div class="cli-docs-section">
             <h4>Command Overview</h4>
             <h2>${cmdInfo.title}</h2>
@@ -602,11 +622,19 @@ function openTerminal(cmdInfo) {
             <pre class="cli-docs-usage">${docData.extended_usage}</pre>
         </div>
     `;
+  }
 
-  document.getElementById('terminal-cmd-name').textContent = `dex ${cmdInfo.id}`;
-  document.getElementById('terminal-status-badge').className = 'terminal-status status-running';
-  document.getElementById('terminal-status-badge').textContent = 'Running';
-  document.getElementById('terminal-action-btn').style.display = 'none';
+  const cmdName = document.getElementById('terminal-cmd-name');
+  if (cmdName) cmdName.textContent = `dex ${cmdInfo.id}`;
+
+  const statusBadge = document.getElementById('terminal-status-badge');
+  if (statusBadge) {
+    statusBadge.className = 'terminal-status status-running';
+    statusBadge.textContent = 'Running';
+  }
+
+  const actionBtn = document.getElementById('terminal-action-btn');
+  if (actionBtn) actionBtn.style.display = 'none';
 
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -622,27 +650,28 @@ function closeTerminal() {
   terminalActive = false;
 }
 
-function logToTerminal(body, text, type = 'output') {
-  if (!terminalActive) return;
+function logToTerminal(body: HTMLElement, text: string, type = 'output') {
+  if (!terminalActive || !body) return;
   const line = document.createElement('div');
   line.className = `terminal-line terminal-${type}`;
 
   if (type === 'prompt') {
     line.innerHTML = `<span class="terminal-prompt">$</span> ${text}`;
   } else {
-    line.innerHTML = ansiToHtml(text);
+    const html = ansiToHtml(text);
+    line.innerHTML = html || text;
   }
 
   body.appendChild(line);
   body.scrollTop = body.scrollHeight;
 }
 
-async function showDemoCommand(cmdId) {
+async function showDemoCommand(cmdId: string) {
   const cmdInfo = CLI_COMMANDS.find((c) => c.id === cmdId);
   if (!cmdInfo) return;
 
   const body = openTerminal(cmdInfo);
-  logToTerminal(body, `dex ${cmdId}`, 'prompt');
+  if (body) logToTerminal(body, `dex ${cmdId}`, 'prompt');
 
   const demoLines = cmdInfo.demo_output || ['Executing command...', '✓ Done.'];
 
@@ -656,12 +685,17 @@ async function showDemoCommand(cmdId) {
     else if (line.includes('✓')) type = 'success';
     else if (line.includes('!')) type = 'warning';
 
-    logToTerminal(body, line, type);
+    if (body) logToTerminal(body, line, type);
   }
 
-  document.getElementById('terminal-status-badge').className = 'terminal-status status-success';
-  document.getElementById('terminal-status-badge').textContent = 'Completed (Demo)';
-  document.getElementById('terminal-action-btn').style.display = 'block';
+  const statusBadge = document.getElementById('terminal-status-badge');
+  if (statusBadge) {
+    statusBadge.className = 'terminal-status status-success';
+    statusBadge.textContent = 'Completed (Demo)';
+  }
+
+  const actionBtn = document.getElementById('terminal-action-btn');
+  if (actionBtn) actionBtn.style.display = 'block';
 }
 
 export function initCliDashboard() {
@@ -674,34 +708,40 @@ export function initCliDashboard() {
   const copyBtn = document.getElementById('install-command-copy');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
-      const command = copyBtn.querySelector('code').textContent;
+      const codeEl = copyBtn.querySelector('code');
+      const command = codeEl ? codeEl.textContent : '';
+      if (!command) return;
+
       navigator.clipboard.writeText(command).then(() => {
         const icon = copyBtn.querySelector('i');
-        icon.className = 'bx bx-check';
-        icon.style.color = '#5eff5e';
-        setTimeout(() => {
-          icon.className = 'bx bx-copy';
-          icon.style.color = '#bb86fc';
-        }, 2000);
+        if (icon) {
+          icon.className = 'bx bx-check';
+          icon.style.color = '#5eff5e';
+          setTimeout(() => {
+            icon.className = 'bx bx-copy';
+            icon.style.color = '#bb86fc';
+          }, 2000);
+        }
       });
     });
   }
 
   // Add interactivity
   container.querySelectorAll('.cli-command-card').forEach((card) => {
+    const cardEl = card as HTMLElement;
     card.addEventListener('mouseenter', () => {
-      card.style.transform = 'translateY(-5px)';
-      card.style.borderColor = 'rgba(255,255,255,0.15)';
-      card.style.backgroundColor = 'rgba(255,255,255,0.05)';
+      cardEl.style.transform = 'translateY(-5px)';
+      cardEl.style.borderColor = 'rgba(255,255,255,0.15)';
+      cardEl.style.backgroundColor = 'rgba(255,255,255,0.05)';
     });
     card.addEventListener('mouseleave', () => {
-      card.style.transform = 'translateY(0)';
-      card.style.borderColor = 'rgba(255,255,255,0.05)';
-      card.style.backgroundColor = 'rgba(255,255,255,0.03)';
+      cardEl.style.transform = 'translateY(0)';
+      cardEl.style.borderColor = 'rgba(255,255,255,0.05)';
+      cardEl.style.backgroundColor = 'rgba(255,255,255,0.03)';
     });
     card.addEventListener('click', () => {
-      const cmd = card.dataset.cmd;
-      showDemoCommand(cmd);
+      const cmd = cardEl.dataset.cmd;
+      if (cmd) showDemoCommand(cmd);
     });
   });
 }

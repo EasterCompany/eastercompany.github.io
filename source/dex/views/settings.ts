@@ -1,6 +1,6 @@
-// @ts-nocheck
 // Settings Window Logic
 import { getCurrentTheme, setTheme, THEMES } from '../core/theme.ts';
+import { WindowInstance } from '../core/Window.ts';
 
 export function getSettingsContent() {
   const currentTheme = getCurrentTheme();
@@ -57,32 +57,35 @@ export function getSettingsContent() {
             </div>`;
 }
 
-export function attachSettingsListeners(settingsWindowInstance) {
+export function attachSettingsListeners(settingsWindowInstance: WindowInstance) {
   const settingsContent = document.querySelector('#settings-window .window-content');
   if (!settingsContent) return;
 
   settingsContent.querySelectorAll('.theme-card').forEach((card) => {
-    card.addEventListener('click', function () {
+    card.addEventListener('click', function (this: HTMLElement) {
       const newTheme = this.dataset.theme;
-      setTheme(newTheme);
-      settingsWindowInstance.setContent(getSettingsContent());
-      attachSettingsListeners(settingsWindowInstance);
+      if (newTheme) {
+        setTheme(newTheme);
+        settingsWindowInstance.setContent(getSettingsContent());
+        attachSettingsListeners(settingsWindowInstance);
+      }
     });
   });
 
-  const notificationToggle = document.getElementById('notifications-toggle');
+  const notificationToggle = document.getElementById('notifications-toggle') as HTMLInputElement;
   if (notificationToggle && 'Notification' in window) {
     notificationToggle.onclick = async (e) => {
-      if (e.target.checked) {
+      const target = e.target as HTMLInputElement;
+      if (target.checked) {
         try {
           const permission = await Notification.requestPermission();
-          if (permission !== 'granted') e.target.checked = false;
+          if (permission !== 'granted') target.checked = false;
         } catch (error) {
-          e.target.checked = false;
+          target.checked = false;
         }
       } else if (Notification.permission === 'granted') {
         alert('To disable notifications, please use your browser settings.');
-        e.target.checked = true;
+        target.checked = true;
       }
     };
   } else if (notificationToggle) {

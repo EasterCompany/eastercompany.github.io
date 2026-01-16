@@ -1,7 +1,6 @@
-// @ts-nocheck
 // Event Templates & Formatting
 
-export const EVENT_TEMPLATES = {
+export const EVENT_TEMPLATES: Record<string, string> = {
   message_received: '{user} posted in {channel}: {message}',
   action_performed: '{actor} {action} {target}',
   log_entry: '[{level}] {message}',
@@ -47,7 +46,7 @@ export const EVENT_TEMPLATES = {
   'system.process.unregistered': 'Process {id} completed',
 };
 
-export function formatEventSummary(type, data) {
+export function formatEventSummary(type: string, data: any): string {
   let template = EVENT_TEMPLATES[type];
   if (type === 'voice_transcribed' && !data.user_name && data.user_id) {
     template = 'User {user_id} said in voice channel {channel_id}: {transcription}';
@@ -79,7 +78,7 @@ export function formatEventSummary(type, data) {
     return `Tests ${status} for ${data.service_name} (${data.duration})`;
   }
   if (!template) return type;
-  let summary = template.replace(/\{(\w+)\}/g, (match, key) => {
+  let summary = template.replace(/\{(\w+)\}/g, (match: string, key: string) => {
     return data[key] !== undefined && data[key] !== null ? data[key] : match;
   });
   if (

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Events Timeline Logic
 import {
   createPlaceholderMessage,
@@ -38,14 +37,14 @@ export const getEventsContent = () => `
     </div>
 `;
 
-export let lastEventsUpdate = null;
+export let lastEventsUpdate: number | null = null;
 
 // Track expanded state globally within the module
-let activeExpandedIds = new Set();
-let currentFilteredEvents = [];
+let activeExpandedIds = new Set<string>();
+let currentFilteredEvents: any[] = [];
 let currentFilter = 'all';
 
-const CATEGORIES = {
+const CATEGORIES: Record<string, string[]> = {
   messaging: [
     'message_received',
     'messaging.user.sent_message',
@@ -90,7 +89,7 @@ const CATEGORIES = {
   moderation: ['moderation.explicit_content.deleted'],
 };
 
-const EVENT_ICONS = {
+const EVENT_ICONS: Record<string, string> = {
   message_received: 'bx-message-detail',
   'messaging.user.sent_message': 'bx-message-rounded-dots',
   'messaging.bot.sent_message': 'bx-bot',
@@ -120,14 +119,14 @@ const EVENT_ICONS = {
   metric_recorded: 'bx-line-chart',
 };
 
-function getEventCategory(type) {
+function getEventCategory(type: string) {
   for (const [cat, types] of Object.entries(CATEGORIES)) {
     if (types.includes(type)) return cat;
   }
   return 'system'; // Default
 }
 
-function getEventIcon(type) {
+function getEventIcon(type: string) {
   return EVENT_ICONS[type] || 'bx-square-rounded';
 }
 
@@ -153,7 +152,7 @@ export async function updateEventsTimeline(forceReRender = false) {
     const allEvents = data.events || [];
 
     // UI ONLY: Filter out primary structural events that belong in dedicated windows
-    currentFilteredEvents = allEvents.filter((e) => {
+    currentFilteredEvents = allEvents.filter((e: any) => {
       let ed = e.event;
       if (typeof ed === 'string') {
         try {
@@ -183,7 +182,7 @@ export async function updateEventsTimeline(forceReRender = false) {
       eventsContainer.innerHTML = '';
     }
 
-    const createEventElement = (event) => {
+    const createEventElement = (event: any) => {
       let eventData = event.event;
       if (typeof eventData === 'string') {
         try {
@@ -266,7 +265,7 @@ export async function updateEventsTimeline(forceReRender = false) {
       if (isExpandable) {
         let detailsContent = '';
         if (type === 'engagement.decision') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
@@ -287,7 +286,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'system.attention.expired') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           const idleTime = eventData.timestamp - eventData.last_active;
           const idleMinutes = Math.floor(idleTime / 60);
@@ -311,7 +310,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'messaging.bot.sent_message') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
 
           let metricsHtml = '';
@@ -342,7 +341,7 @@ export async function updateEventsTimeline(forceReRender = false) {
           if (eventData.chat_history && eventData.chat_history.length > 0) {
             const totalTurns = eventData.chat_history.length;
             const slides = eventData.chat_history
-              .map((m, index) => {
+              .map((m: any, index: number) => {
                 let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
                 if (!m.name && roleName === 'ASSISTANT') roleName = 'DEXTER';
 
@@ -396,7 +395,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         }
                     `;
         } else if (type === 'analysis.user.message_signals') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           const s = eventData.signals || {};
           const sentimentColor =
@@ -424,7 +423,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         <div class="event-detail-block">
                             ${stylisedHeader('Extracted Topics')}
                             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                ${(s.topics || []).map((t) => `<span class="profile-badge">${t}</span>`).join('') || '<span style="color: #666;">No topics mapped.</span>'}
+                                ${(s.topics || []).map((t: string) => `<span class="profile-badge">${t}</span>`).join('') || '<span style="color: #666;">No topics mapped.</span>'}
                             </div>
                         </div>
                         <div class="event-detail-block" style="margin-top: 15px;">
@@ -433,7 +432,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'moderation.explicit_content.deleted') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row">
@@ -450,7 +449,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'analysis.link.completed') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row">
@@ -471,7 +470,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'analysis.visual.completed') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           let imageHtml = '';
           if (eventData.base64_preview) {
@@ -492,7 +491,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'analysis.router.decision') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row">
@@ -517,7 +516,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'system.cli.command') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row">
@@ -548,7 +547,7 @@ export async function updateEventsTimeline(forceReRender = false) {
         } else if (type === 'system.analysis.audit') {
           const statusColor = eventData.success ? '#03dac6' : '#ff4d4d';
           const statusText = eventData.success ? 'SUCCESS' : 'FAILED';
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
 
           let errorHtml = '';
@@ -565,7 +564,7 @@ export async function updateEventsTimeline(forceReRender = false) {
           if (eventData.chat_history && eventData.chat_history.length > 0) {
             const totalTurns = eventData.chat_history.length;
             const slides = eventData.chat_history
-              .map((m, index) => {
+              .map((m: any, index: number) => {
                 let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
                 if (!m.name && roleName === 'USER') roleName = 'SYSTEM';
                 if (!m.name && roleName === 'ASSISTANT') roleName = 'AGENT';
@@ -603,7 +602,7 @@ export async function updateEventsTimeline(forceReRender = false) {
           if (eventData.corrections && eventData.corrections.length > 0) {
             const correctionItems = eventData.corrections
               .map(
-                (c, i) => `
+                (c: any, _i: number) => `
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(255, 77, 77, 0.1); border-left: 2px solid #ff4d4d; font-size: 0.85em;">
                                 <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${c.type}] ${c.guidance}</div>
                                 ${c.snippet ? `<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${escapeHtml(c.snippet)}</div>` : ''}
@@ -624,7 +623,7 @@ export async function updateEventsTimeline(forceReRender = false) {
           if (eventData.parsed_results && eventData.parsed_results.length > 0) {
             const resultItems = eventData.parsed_results
               .map(
-                (r) => `
+                (r: any) => `
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(3, 218, 198, 0.1); border-left: 2px solid #03dac6; font-size: 0.85em;">
                                 <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${escapeHtml(r.title)}</div>
                                 <div style="color: #ddd;">${escapeHtml(r.summary)}</div>
@@ -670,7 +669,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         ${historyHtml}
                     `;
         } else if (type === 'system.test.completed') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row">
@@ -695,7 +694,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'error_occurred') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
@@ -712,7 +711,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                     `;
         } else if (type === 'system.cli.status') {
-          const stylisedHeader = (text) =>
+          const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
@@ -728,7 +727,7 @@ export async function updateEventsTimeline(forceReRender = false) {
           let attachmentsHtml = '';
           if (eventData.attachments && eventData.attachments.length > 0) {
             const attachmentsList = eventData.attachments
-              .map((att) => {
+              .map((att: any) => {
                 const isImage = att.content_type && att.content_type.startsWith('image/');
                 const sizeStr = (att.size / 1024).toFixed(1) + ' KB';
                 return `
@@ -772,18 +771,19 @@ export async function updateEventsTimeline(forceReRender = false) {
       const tempDiv = document.createElement('div');
       tempDiv.className = `event-item ${borderClass} ${cursorClass} ${expandedClass}`;
       tempDiv.dataset.eventId = event.id;
-      tempDiv.onclick = function (e) {
+      tempDiv.onclick = function (this: GlobalEventHandlers, _e: MouseEvent) {
         if (!isExpandable) return;
-        const isCurrentlyExpanded = this.classList.contains('expanded');
+        const el = this as HTMLElement;
+        const isCurrentlyExpanded = el.classList.contains('expanded');
         if (isCurrentlyExpanded) {
-          this.classList.remove('expanded');
+          el.classList.remove('expanded');
           activeExpandedIds.delete(event.id);
-          const details = this.querySelector('.event-details');
+          const details = el.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'none';
         } else {
-          this.classList.add('expanded');
+          el.classList.add('expanded');
           activeExpandedIds.add(event.id);
-          const details = this.querySelector('.event-details');
+          const details = el.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'block';
         }
       };
@@ -817,11 +817,11 @@ export async function updateEventsTimeline(forceReRender = false) {
         if (closeBtn) {
           closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const item = e.target.closest('.event-item');
+            const item = (e.target as HTMLElement).closest('.event-item');
             if (item) {
               item.classList.remove('expanded');
               activeExpandedIds.delete(event.id);
-              const details = item.querySelector('.event-details');
+              const details = item.querySelector('.event-details') as HTMLElement;
               if (details) details.style.display = 'none';
             }
           });
@@ -829,11 +829,11 @@ export async function updateEventsTimeline(forceReRender = false) {
       }
 
       // Carousel Logic
-      const prevBtn = tempDiv.querySelector('.prev-btn');
-      const nextBtn = tempDiv.querySelector('.next-btn');
+      const prevBtn = tempDiv.querySelector('.prev-btn') as HTMLButtonElement;
+      const nextBtn = tempDiv.querySelector('.next-btn') as HTMLButtonElement;
       if (prevBtn && nextBtn) {
         let currentSlide = 0;
-        const slides = tempDiv.querySelectorAll('.history-slide');
+        const slides = Array.from(tempDiv.querySelectorAll('.history-slide')) as HTMLElement[];
         const total = slides.length;
 
         const updateCarousel = () => {
@@ -871,7 +871,7 @@ export async function updateEventsTimeline(forceReRender = false) {
       return tempDiv;
     };
 
-    const currentChildren = Array.from(eventsContainer.children);
+    const currentChildren = Array.from(eventsContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.eventId, el]));
     const newIds = new Set(currentFilteredEvents.map((e) => e.id));
 
@@ -883,13 +883,13 @@ export async function updateEventsTimeline(forceReRender = false) {
       }
     });
 
-    let previousElement = null;
+    let previousElement: HTMLElement | null = null;
 
     currentFilteredEvents.forEach((event, index) => {
-      let el = currentMap.get(event.id);
+      let el = currentMap.get(event.id) as HTMLElement;
       if (!el || forceReRender) {
         if (el) el.remove();
-        el = createEventElement(event);
+        el = createEventElement(event) as HTMLElement;
         if (!el) return;
       }
       if (index === 0) {
@@ -941,12 +941,12 @@ function attachEventActionListeners() {
 
   if (filterContainer && !filterContainer.dataset.listenerAttached) {
     filterContainer.querySelectorAll('.filter-btn').forEach((btn) => {
-      btn.onclick = () => {
+      (btn as HTMLElement).onclick = () => {
         filterContainer
           .querySelectorAll('.filter-btn')
           .forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
+        currentFilter = (btn as HTMLElement).dataset.filter || 'all';
         updateEventsTimeline(true);
       };
     });
@@ -956,7 +956,7 @@ function attachEventActionListeners() {
   // Force active state to match currentFilter (in case window was re-opened with cached HTML)
   if (filterContainer) {
     filterContainer.querySelectorAll('.filter-btn').forEach((btn) => {
-      if (btn.dataset.filter === currentFilter) {
+      if ((btn as HTMLElement).dataset.filter === currentFilter) {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');

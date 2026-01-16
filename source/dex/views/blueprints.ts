@@ -1,11 +1,9 @@
-// @ts-nocheck
 // Blueprints Tab Logic
 import {
   createPlaceholderMessage,
   updateTabTimestamp,
   updateTabBadgeCount,
   smartFetch,
-  LOCAL_EVENT_SERVICE,
   escapeHtml,
   updatePendingBlueprintCount,
   setPendingBlueprints,
@@ -25,11 +23,11 @@ export const getBlueprintsContent = () => `
     </div>
 `;
 
-export let lastBlueprintsUpdate = null;
+export let lastBlueprintsUpdate: number | null = null;
 
 // Track expanded state globally within the module
 let activeExpandedIds = new Set();
-let currentFilteredBlueprints = [];
+let currentFilteredBlueprints: any[] = [];
 
 export async function updateBlueprintsTab(forceReRender = false) {
   const blueprintsContainer = document.getElementById('blueprints-list');
@@ -65,7 +63,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
       blueprintsContainer.innerHTML = '';
     }
 
-    const createBlueprintElement = (event) => {
+    const createBlueprintElement = (event: any) => {
       let blueprintData = event.event;
       if (typeof blueprintData === 'string') {
         try {
@@ -87,8 +85,10 @@ export async function updateBlueprintsTab(forceReRender = false) {
         blueprintData.related_services ||
         blueprintData.affected_services ||
         []
-      ).map((s) => s.trim());
-      const implementationPath = (blueprintData.implementation_path || []).map((s) => s.trim());
+      ).map((s: string) => s.trim());
+      const implementationPath = (blueprintData.implementation_path || []).map((s: string) =>
+        s.trim()
+      );
       const sourceEventIDs = blueprintData.source_event_ids || [];
       const isApproved = blueprintData.approved === true;
 
@@ -117,7 +117,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
           'linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)';
       }
 
-      const iconMap = {
+      const iconMap: Record<string, string> = {
         architecture: 'bx-vector',
         optimization: 'bx-trending-up',
         feature: 'bx-extension',
@@ -125,17 +125,18 @@ export async function updateBlueprintsTab(forceReRender = false) {
       };
       const icon = isApproved ? 'bx-check-shield' : iconMap[category] || 'bx-paint';
 
-      tempDiv.onclick = function (e) {
-        const isCurrentlyExpanded = this.classList.contains('expanded');
+      tempDiv.onclick = function (this: GlobalEventHandlers, _e: MouseEvent) {
+        const el = this as HTMLElement;
+        const isCurrentlyExpanded = el.classList.contains('expanded');
         if (isCurrentlyExpanded) {
-          this.classList.remove('expanded');
+          el.classList.remove('expanded');
           activeExpandedIds.delete(event.id);
-          const details = this.querySelector('.event-details');
+          const details = el.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'none';
         } else {
-          this.classList.add('expanded');
+          el.classList.add('expanded');
           activeExpandedIds.add(event.id);
-          const details = this.querySelector('.event-details');
+          const details = el.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'block';
         }
       };
@@ -145,7 +146,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
         pathHtml = `
                     <div class="blueprint-path" style="margin-top: 15px;">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Proposed Steps</h5>
-                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${implementationPath.map((step) => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}</ul></div>
+                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${implementationPath.map((step: string) => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}</ul></div>
                     </div>
                 `;
       }
@@ -158,7 +159,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             ${sourceEventIDs
                               .map(
-                                (id) => `
+                                (id: string) => `
                                 <a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
                                     <i class='bx bx-link-external'></i> ${id.substring(0, 8)}...
                                 </a>
@@ -227,7 +228,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
       // Add button listeners
       const approveBtn = tempDiv.querySelector('.blueprint-approve-btn');
       if (approveBtn) {
-        approveBtn.onclick = async (e) => {
+        (approveBtn as HTMLElement).onclick = async (e) => {
           e.stopPropagation();
           approveBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Approving...";
           try {
@@ -246,7 +247,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
 
       const deleteBtn = tempDiv.querySelector('.blueprint-delete-btn');
       if (deleteBtn) {
-        deleteBtn.onclick = async (e) => {
+        (deleteBtn as HTMLElement).onclick = async (e) => {
           e.stopPropagation();
           const isActuallyDecline = !isApproved;
           deleteBtn.innerHTML = isActuallyDecline
@@ -278,7 +279,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
         closeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           tempDiv.classList.remove('expanded');
-          const details = tempDiv.querySelector('.event-details');
+          const details = tempDiv.querySelector('.event-details') as HTMLElement;
           if (details) details.style.display = 'none';
           activeExpandedIds.delete(event.id);
         });
@@ -287,9 +288,9 @@ export async function updateBlueprintsTab(forceReRender = false) {
       return tempDiv;
     };
 
-    const currentChildren = Array.from(blueprintsContainer.children);
+    const currentChildren = Array.from(blueprintsContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.blueprintId, el]));
-    const newIds = new Set(allBlueprints.map((e) => e.id));
+    const newIds = new Set(allBlueprints.map((e: any) => e.id));
 
     currentChildren.forEach((child) => {
       const id = child.dataset.blueprintId;
@@ -298,13 +299,14 @@ export async function updateBlueprintsTab(forceReRender = false) {
       }
     });
 
-    let previousElement = null;
-    allBlueprints.forEach((event, index) => {
+    let previousElement: HTMLElement | null = null;
+    allBlueprints.forEach((event: any, index: number) => {
       let el = currentMap.get(event.id);
       if (!el || forceReRender) {
         if (el) el.remove();
-        el = createBlueprintElement(event);
-        if (!el) return;
+        const created = createBlueprintElement(event);
+        if (!created) return;
+        el = created;
       }
       if (index === 0) {
         if (blueprintsContainer.firstElementChild !== el) blueprintsContainer.prepend(el);
@@ -337,7 +339,7 @@ export async function checkBackgroundBlueprints() {
     const allBlueprints = data.events || [];
 
     let pendingCount = 0;
-    allBlueprints.forEach((event) => {
+    allBlueprints.forEach((event: any) => {
       let evtData = event.event;
       if (typeof evtData === 'string') {
         try {

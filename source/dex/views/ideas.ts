@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Ideas Tab Logic (Roadmap + Blueprints)
 import { getRoadmapContent, updateRoadmapTab, getRoadmapActions } from './roadmap.ts';
 import { getBlueprintsContent, updateBlueprintsTab, getBlueprintActions } from './blueprints.ts';

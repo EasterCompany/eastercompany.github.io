@@ -1,8 +1,11 @@
-// @ts-nocheck
 // Shared Utility Functions
 
-export function createPlaceholderMessage(type, message, actionText = null) {
-  const iconMap = {
+export function createPlaceholderMessage(
+  type: string,
+  message: string,
+  actionText: string | null = null
+): string {
+  const iconMap: Record<string, string> = {
     config: 'bx-cog',
     error: 'bx-error-circle',
     empty: 'bx-info-circle',
@@ -13,7 +16,7 @@ export function createPlaceholderMessage(type, message, actionText = null) {
   return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
 }
 
-export function escapeHtml(text) {
+export function escapeHtml(text: string | null | undefined): string | null | undefined {
   if (!text) return text;
   return text
     .replace(/&/g, '&amp;')
@@ -23,7 +26,7 @@ export function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
-export function updateTabTimestamp(tabIndex, timestamp) {
+export function updateTabTimestamp(tabIndex: string | number, timestamp: number): void {
   const subtitleElement = document.querySelector(
     `.tab[data-tab-index="${tabIndex}"] .tab-subtitle`
   );
@@ -49,19 +52,19 @@ export function updateTabTimestamp(tabIndex, timestamp) {
 
 let lastGlobalBadgeCount = 0;
 
-export function getLastBadgeCount() {
+export function getLastBadgeCount(): number {
   return lastGlobalBadgeCount;
 }
 
-export function updateTabBadgeCount(tabIndex, count) {
+export function updateTabBadgeCount(tabIndex: string | number, count: number): void {
   const tabBtn = document.querySelector(`.tab[data-tab-index="${tabIndex}"]`);
   if (!tabBtn) return;
 
-  let badge = tabBtn.querySelector('.notification-badge');
+  let badge = tabBtn.querySelector('.notification-badge') as HTMLElement;
   if (!badge) return;
 
   if (count > 0) {
-    badge.textContent = count > 9 ? '9+' : count;
+    badge.textContent = count > 9 ? '9+' : count.toString();
     badge.style.display = 'flex';
   } else {
     badge.style.display = 'none';
@@ -71,17 +74,17 @@ export function updateTabBadgeCount(tabIndex, count) {
 let lastUnreadAlerts = 0;
 let lastPendingBlueprints = 0;
 
-export function setUnreadAlerts(count) {
+export function setUnreadAlerts(count: number): void {
   lastUnreadAlerts = count;
   updateGlobalBadgeCount();
 }
 
-export function setPendingBlueprints(count) {
+export function setPendingBlueprints(count: number): void {
   lastPendingBlueprints = count;
   updateGlobalBadgeCount();
 }
 
-export function updateGlobalBadgeCount() {
+export function updateGlobalBadgeCount(): void {
   const count = lastUnreadAlerts + lastPendingBlueprints;
   lastGlobalBadgeCount = count;
 
@@ -94,59 +97,59 @@ export function updateGlobalBadgeCount() {
   // 2. Dropdown Menu Badges
   const alertsDropdown = document.getElementById('alerts-menu-item');
   if (alertsDropdown) {
-    let badge = alertsDropdown.querySelector('.notification-badge');
+    let badge = alertsDropdown.querySelector('.notification-badge') as HTMLElement;
     if (!badge) {
       badge = document.createElement('span');
       badge.className = 'notification-badge';
       badge.style.marginLeft = 'auto';
       alertsDropdown.appendChild(badge);
     }
-    badge.textContent = lastUnreadAlerts > 9 ? '9+' : lastUnreadAlerts;
+    badge.textContent = lastUnreadAlerts > 9 ? '9+' : lastUnreadAlerts.toString();
     badge.style.display = lastUnreadAlerts > 0 ? 'flex' : 'none';
   }
 
   const workspaceDropdown = document.getElementById('workspace-menu-item');
   if (workspaceDropdown) {
-    let badge = workspaceDropdown.querySelector('.notification-badge');
+    let badge = workspaceDropdown.querySelector('.notification-badge') as HTMLElement;
     if (!badge) {
       badge = document.createElement('span');
       badge.className = 'notification-badge';
       badge.style.marginLeft = 'auto';
       workspaceDropdown.appendChild(badge);
     }
-    badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints;
+    badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints.toString();
     badge.style.display = lastPendingBlueprints > 0 ? 'flex' : 'none';
   }
 
   // 3. Window Switcher Badges
   const alertsSwitcher = document.getElementById('switch-alerts');
   if (alertsSwitcher) {
-    let badge = alertsSwitcher.querySelector('.notification-badge');
+    let badge = alertsSwitcher.querySelector('.notification-badge') as HTMLElement;
     if (!badge) {
       badge = document.createElement('span');
       badge.className = 'notification-badge';
       badge.style.marginLeft = '8px';
       alertsSwitcher.appendChild(badge);
     }
-    badge.textContent = lastUnreadAlerts > 9 ? '9+' : lastUnreadAlerts;
+    badge.textContent = lastUnreadAlerts > 9 ? '9+' : lastUnreadAlerts.toString();
     badge.style.display = lastUnreadAlerts > 0 ? 'flex' : 'none';
   }
 
   const workspaceSwitcher = document.getElementById('switch-workspace');
   if (workspaceSwitcher) {
-    let badge = workspaceSwitcher.querySelector('.notification-badge');
+    let badge = workspaceSwitcher.querySelector('.notification-badge') as HTMLElement;
     if (!badge) {
       badge = document.createElement('span');
       badge.className = 'notification-badge';
       badge.style.marginLeft = '8px';
       workspaceSwitcher.appendChild(badge);
     }
-    badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints;
+    badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints.toString();
     badge.style.display = lastPendingBlueprints > 0 ? 'flex' : 'none';
   }
 }
 
-export function updateUnreadAlertCount() {
+export function updateUnreadAlertCount(): void {
   const alertsList = document.getElementById('alerts-list');
   if (!alertsList) return;
 
@@ -155,7 +158,7 @@ export function updateUnreadAlertCount() {
   updateGlobalBadgeCount();
 }
 
-export function updatePendingBlueprintCount() {
+export function updatePendingBlueprintCount(): void {
   const blueprintsList = document.getElementById('blueprints-list');
   if (!blueprintsList) return;
 
@@ -169,21 +172,21 @@ export function updatePendingBlueprintCount() {
 /**
  * Resolves the primary production URL or the local fallback.
  */
-export function getEventServiceUrl() {
+export function getEventServiceUrl(): string {
   return 'https://event.easter.company';
 }
 
 /**
  * Resolves the primary production URL or the local fallback for Discord service.
  */
-export function getDiscordServiceUrl() {
+export function getDiscordServiceUrl(): string {
   return 'https://discord.easter.company';
 }
 
 export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
 export const LOCAL_DISCORD_SERVICE = 'http://127.0.0.1:8300';
 
-const ANSI_MAP = {
+const ANSI_MAP: Record<string, string> = {
   31: 'ansi-red',
   91: 'ansi-bright-red',
   32: 'ansi-green',
@@ -198,14 +201,15 @@ const ANSI_MAP = {
 /**
  * Converts ANSI escape sequences to HTML spans with color classes.
  */
-export function ansiToHtml(text) {
+export function ansiToHtml(text: string): string | null | undefined {
   let escaped = escapeHtml(text);
+  if (!escaped) return escaped;
 
   // Handle Reset
   escaped = escaped.replace(/\x1b\[0m/g, '</span>');
 
   // Handle Colors
-  escaped = escaped.replace(/\x1b\[(\d+)m/g, (match, code) => {
+  escaped = escaped.replace(/\x1b\[(\d+)m/g, (_match: string, code: string) => {
     const className = ANSI_MAP[code];
     return className ? `<span class="${className}">` : '';
   });
@@ -220,9 +224,10 @@ export function ansiToHtml(text) {
   return escaped;
 }
 
-export function renderMarkdown(text) {
+export function renderMarkdown(text: string): string | null | undefined {
   if (!text) return '';
   let html = escapeHtml(text);
+  if (!html) return html;
 
   // Multiline Code
   html = html.replace(/```([\s\S]*?)```/g, '<pre class="md-code-block">$1</pre>');
@@ -242,7 +247,7 @@ export function renderMarkdown(text) {
   html = html.replace(/^### (.*$)/gm, '<h5 class="md-header">$1</h5>');
 
   // Tables
-  html = html.replace(/^\|(.+)\|$/gm, (match, content) => {
+  html = html.replace(/^\|(.+)\|$/gm, (_match: string, content: string) => {
     const cells = content.split('|').map((c) => c.trim());
     if (cells.every((c) => c.match(/^:?-+:?$/))) {
       return ''; // Hide the separator row
@@ -270,12 +275,13 @@ export function renderMarkdown(text) {
 const UPSTASH_URL = 'https://sterling-javelin-12539.upstash.io';
 const UPSTASH_TOKEN = 'AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw'; // Read Only
 
-export function isPublicMode() {
+export function isPublicMode(): boolean {
   return window.location.hostname.includes('easter.company');
 }
 
 // --- CENTRALIZED DASHBOARD CACHE ---
-let DASHBOARD_CACHE = null;
+// TODO: Define strict Dashboard interface
+let DASHBOARD_CACHE: any = null;
 export const syncState = {
   lastDashboard: 0,
   lastFrontend: 0,
@@ -384,7 +390,7 @@ if (isPublicMode()) {
   initDashboardSync();
 }
 
-async function upstashCommand(command, ...args) {
+async function upstashCommand(command: string, ...args: any[]) {
   try {
     const response = await fetch(UPSTASH_URL, {
       method: 'POST',
@@ -400,8 +406,8 @@ async function upstashCommand(command, ...args) {
   }
 }
 
-let resolvedBaseUrl = null;
-let resolvedDiscordBaseUrl = null;
+let resolvedBaseUrl: string | null = null;
+let resolvedDiscordBaseUrl: string | null = null;
 let isFallingBack = false;
 let isDiscordFallingBack = false;
 
@@ -409,7 +415,7 @@ let isDiscordFallingBack = false;
  * Executes a fetch against the primary domain, falling back to local on failure.
  * Remembers the working endpoint to prevent console spam.
  */
-export async function smartFetch(endpoint, options = {}) {
+export async function smartFetch(endpoint: string, options: RequestInit = {}) {
   // --- PUBLIC MODE ADAPTER (Served from Local Dashboard Cache) ---
   if (isPublicMode()) {
     // Ensure we have a cache to serve from
@@ -438,7 +444,7 @@ export async function smartFetch(endpoint, options = {}) {
       const category = urlParams.get('category');
       const order = urlParams.get('order') || 'desc';
 
-      let events = [];
+      let events: any[] = [];
 
       // Route to correct pool in cache
       if (type === 'system.notification.generated') {
@@ -462,9 +468,9 @@ export async function smartFetch(endpoint, options = {}) {
 
       // Handle Sorting
       if (order === 'asc') {
-        events.sort((a, b) => a.timestamp - b.timestamp);
+        events.sort((a: any, b: any) => a.timestamp - b.timestamp);
       } else {
-        events.sort((a, b) => b.timestamp - a.timestamp);
+        events.sort((a: any, b: any) => b.timestamp - a.timestamp);
       }
 
       return new Response(JSON.stringify({ events: events, count: events.length }), {
@@ -559,7 +565,7 @@ export async function smartFetch(endpoint, options = {}) {
 /**
  * Executes a fetch against the primary Discord domain, falling back to local on failure.
  */
-export async function smartDiscordFetch(endpoint, options = {}) {
+export async function smartDiscordFetch(endpoint: string, options: RequestInit = {}) {
   // --- PUBLIC MODE ADAPTER ---
   if (isPublicMode()) {
     if (!DASHBOARD_CACHE) {
@@ -578,7 +584,7 @@ export async function smartDiscordFetch(endpoint, options = {}) {
     // 2. Individual Member Context
     if (endpoint.startsWith('/member/')) {
       const userID = endpoint.split('/')[2];
-      const member = (DASHBOARD_CACHE.contacts?.members || []).find((m) => m.id === userID);
+      const member = (DASHBOARD_CACHE.contacts?.members || []).find((m: any) => m.id === userID);
       if (member) {
         return new Response(JSON.stringify(member), { status: 200 });
       }

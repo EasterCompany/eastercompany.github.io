@@ -1,20 +1,44 @@
-// @ts-nocheck
-// source/dex/Window.js
+// source/dex/Window.ts
 
 let windowZIndex = 1000;
 
+export interface WindowTab {
+  title: string;
+  icon?: string;
+  content: string;
+}
+
+export interface WindowOptions {
+  id: string;
+  title?: string;
+  icon?: string;
+  content?: string;
+  tabs?: WindowTab[];
+  onOpen?: () => void;
+  onClose?: () => void;
+}
+
+export interface WindowInstance {
+  open: () => void;
+  close: (immediate?: boolean) => void;
+  setContent: (content: string) => void;
+  isOpen: () => boolean;
+  focus: () => void;
+  id: string;
+}
+
 /**
  * Creates and manages a single window instance.
- * @param {object} options - Configuration for the window.
+ * @param {WindowOptions} options - Configuration for the window.
  */
-export function createWindow(options) {
-  let windowEl = null;
+export function createWindow(options: WindowOptions): WindowInstance {
+  let windowEl: HTMLElement | null = null;
   let closeCallback = options.onClose || null;
   let openCallback = options.onOpen || null;
 
   function focus() {
     if (windowEl) {
-      windowEl.style.zIndex = ++windowZIndex;
+      windowEl.style.zIndex = (++windowZIndex).toString();
     }
   }
 
@@ -41,7 +65,7 @@ export function createWindow(options) {
     if (options.tabs && options.tabs.length > 0) {
       windowEl.classList.add('has-tabs');
     }
-    windowEl.style.zIndex = ++windowZIndex;
+    windowEl.style.zIndex = (++windowZIndex).toString();
 
     // Add focus listener
     windowEl.addEventListener('mousedown', focus);
@@ -102,18 +126,20 @@ export function createWindow(options) {
     if (options.tabs) {
       windowEl.querySelectorAll('.tab').forEach((tab) => {
         tab.addEventListener('click', () => {
+          if (!windowEl) return;
           const idx = tab.getAttribute('data-tab-index');
           windowEl.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
           tab.classList.add('active');
           windowEl.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('active'));
-          windowEl.querySelector(`.tab-content[data-tab-content="${idx}"]`).classList.add('active');
-          scrollToActiveTab(tab, windowEl);
+          const targetContent = windowEl.querySelector(`.tab-content[data-tab-content="${idx}"]`);
+          if (targetContent) targetContent.classList.add('active');
+          scrollToActiveTab(tab as HTMLElement, windowEl);
         });
       });
     }
 
     setTimeout(() => {
-      windowEl.classList.add('open');
+      if (windowEl) windowEl.classList.add('open');
       if (openCallback) openCallback();
     }, 10);
   }
@@ -121,26 +147,28 @@ export function createWindow(options) {
   function handleResize() {
     if (!windowEl || !windowEl.classList.contains('open')) return;
     const activeTab = windowEl.querySelector('.tab.active');
-    if (activeTab) scrollToActiveTab(activeTab, windowEl);
+    if (activeTab) scrollToActiveTab(activeTab as HTMLElement, windowEl);
   }
 
-  function scrollToActiveTab(tab, windowEl) {
+  function scrollToActiveTab(tab: HTMLElement, windowEl: HTMLElement) {
     setTimeout(() => {
       const tabBar = windowEl.querySelector('.tab-bar');
       if (!tabBar) return;
-      const tabs = Array.from(tabBar.querySelectorAll('.tab'));
+      const tabs = Array.from(tabBar.querySelectorAll('.tab')) as HTMLElement[];
       const currentIndex = tabs.indexOf(tab);
       const barWidth = tabBar.clientWidth;
       const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
       const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
-      const leftPos = leftNeighbor.offsetLeft - tabBar.offsetLeft - 25;
+
+      const tabBarEl = tabBar as HTMLElement;
+      const leftPos = leftNeighbor.offsetLeft - tabBarEl.offsetLeft - 25;
       const rightPos =
-        rightNeighbor.offsetLeft + rightNeighbor.offsetWidth - tabBar.offsetLeft + 25;
+        rightNeighbor.offsetLeft + rightNeighbor.offsetWidth - tabBarEl.offsetLeft + 25;
       const windowWidth = rightPos - leftPos;
       const targetScroll =
         windowWidth <= barWidth
           ? leftPos - (barWidth - windowWidth) / 2
-          : tab.offsetLeft - tabBar.offsetLeft - barWidth / 2 + tab.offsetWidth / 2;
+          : tab.offsetLeft - tabBarEl.offsetLeft - barWidth / 2 + tab.offsetWidth / 2;
       tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
     }, 350);
   }
@@ -161,14 +189,14 @@ export function createWindow(options) {
     }
   }
 
-  function setContent(content) {
+  function setContent(content: string) {
     options.content = content;
     const contentDiv = windowEl?.querySelector('.window-content');
     if (contentDiv) contentDiv.innerHTML = content;
   }
 
   function isOpen() {
-    return windowEl && windowEl.classList.contains('open');
+    return !!(windowEl && windowEl.classList.contains('open'));
   }
 
   return { open, close, setContent, isOpen, focus, id: options.id };

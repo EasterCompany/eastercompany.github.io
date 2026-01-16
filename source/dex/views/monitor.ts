@@ -1,4 +1,3 @@
-// @ts-nocheck
 // System Monitor Logic (Services, Models, Processes)
 import imaginatorSVG from '../components/imaginatorSVG.ts';
 import {
@@ -6,12 +5,17 @@ import {
   updateTabTimestamp,
   updateTabBadgeCount,
   smartFetch,
-  LOCAL_EVENT_SERVICE,
   isPublicMode,
   syncState,
 } from '../core/utils.ts';
 import { getLogsContent, updateLogs } from './logs.ts';
 import { updateChoresTab } from './chores.ts';
+
+declare global {
+  interface Window {
+    updateCountdownInterval?: any;
+  }
+}
 
 export const getGuardianContent = () => {
   const resetBtnStyle = isPublicMode() ? 'display: none;' : '';
@@ -193,18 +197,6 @@ export const getServiceLogsContent = () => {
         </div>`;
 };
 
-// Deprecated, but kept for safety if referenced elsewhere temporarily
-export const getSystemContent = () => {
-  return (
-    getAnalystContent() +
-    getProcessesContent() +
-    getServicesContent() +
-    getModelsContent() +
-    getHardwareContent() +
-    getServiceLogsContent()
-  );
-};
-
 export async function updateSystemTab() {
   // Start the smooth UI loop if not already running
   startAgentSmoothLoop();
@@ -221,7 +213,7 @@ export async function updateSystemTab() {
   await updateLogs();
 }
 
-let agentSmoothInterval = null;
+let agentSmoothInterval: any = null;
 
 function startAgentSmoothLoop() {
   if (agentSmoothInterval) return;
@@ -240,9 +232,9 @@ function startAgentSmoothLoop() {
   }, 1000);
 }
 
-export let lastServicesUpdate = null;
-export let lastModelsUpdate = null;
-export let lastProcessesUpdate = null;
+export let lastServicesUpdate: number | null = null;
+export let lastModelsUpdate: number | null = null;
+export let lastProcessesUpdate: number | null = null;
 
 async function fetchSystemData() {
   try {
@@ -292,7 +284,7 @@ export async function updateSystemMonitor() {
   const storageContainer = document.querySelector('#hw-storage .hw-content');
 
   // Helper to render hardware widgets
-  const renderHardwareWidgets = (data) => {
+  const renderHardwareWidgets = (data: any) => {
     if (!data) return;
 
     // OS & Architecture
@@ -332,7 +324,7 @@ export async function updateSystemMonitor() {
     // GPU
     if (gpuContainer) {
       if (data.GPU && data.GPU.length > 0) {
-        gpuContainer.innerHTML = data.GPU.map((gpu) => {
+        gpuContainer.innerHTML = data.GPU.map((gpu: any) => {
           const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
           return `
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
@@ -349,7 +341,7 @@ export async function updateSystemMonitor() {
 
     // Storage - Individual Devices
     if (storageContainer && data.STORAGE && data.STORAGE.length > 0) {
-      storageContainer.innerHTML = data.STORAGE.map((disk) => {
+      storageContainer.innerHTML = data.STORAGE.map((disk: any) => {
         const usedGB = (disk.USED / (1024 * 1024 * 1024)).toFixed(1);
         const sizeGB = (disk.SIZE / (1024 * 1024 * 1024)).toFixed(1);
         const percent = disk.SIZE > 0 ? ((disk.USED / disk.SIZE) * 100).toFixed(0) : 0;
@@ -369,7 +361,7 @@ export async function updateSystemMonitor() {
                             <span>${sizeGB} GB Total</span>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden;">
-                             <div style="background: ${percent > 90 ? '#cf6679' : '#03dac6'}; width: ${percent}%; height: 100%; box-shadow: 0 0 10px ${percent > 90 ? '#cf667944' : '#03dac644'};"></div>
+                             <div style="background: ${Number(percent) > 90 ? '#cf6679' : '#03dac6'}; width: ${percent}%; height: 100%; box-shadow: 0 0 10px ${Number(percent) > 90 ? '#cf667944' : '#03dac644'};"></div>
                         </div>
                     </div>`;
       }).join('');
@@ -424,7 +416,7 @@ export async function updateSystemMonitor() {
     const upstashWidget = document.querySelector('[data-service-id="upstash-redis-ro"]');
     if (upstashWidget) {
       upstashWidget.className = 'service-widget service-widget-offline';
-      upstashWidget.querySelector('.service-widget-status').textContent = 'ERROR';
+      (upstashWidget.querySelector('.service-widget-status') as HTMLElement).textContent = 'ERROR';
       const body = upstashWidget.querySelector('.service-widget-body');
       if (body) {
         body.innerHTML = `<div class="service-widget-footer offline"><span>CONNECTION FAILED</span></div>`;
@@ -434,7 +426,7 @@ export async function updateSystemMonitor() {
   }
 
   lastServicesUpdate = isPublicMode() ? syncState.lastDashboard || Date.now() : Date.now();
-  updateTabTimestamp(0, lastServicesUpdate);
+  updateTabTimestamp(0, lastServicesUpdate || 0);
   const services = data.services || [];
 
   // Start or update the countdown timer
@@ -456,13 +448,7 @@ export async function updateSystemMonitor() {
     if (!child.classList.contains('service-widget')) child.remove();
   });
 
-  function sanitizeValue(value) {
-    if (!value || value === 'N/A' || value === 'unknown' || value.trim() === '') {
-      return '-';
-    }
-    return value;
-  }
-  function extractMajorMinorPatch(versionStr) {
+  function extractMajorMinorPatch(versionStr: string) {
     if (!versionStr || versionStr === 'N/A' || versionStr === 'unknown') {
       return '-';
     }
@@ -470,12 +456,12 @@ export async function updateSystemMonitor() {
     if (match) return match[0];
     return versionStr.split('.').slice(0, 3).join('.') || '-';
   }
-  function truncateAddress(address) {
+  function truncateAddress(address: string) {
     if (!address || address.length <= 28) return address;
     return address.substring(0, 28) + '...';
   }
 
-  function formatUptime(uptimeStr) {
+  function formatUptime(uptimeStr: string) {
     if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-';
     const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);
     if (!match) return '-';
@@ -493,7 +479,7 @@ export async function updateSystemMonitor() {
     return `${Math.floor(totalSeconds)}s`;
   }
 
-  function generateWidgetHtml(service) {
+  function generateWidgetHtml(service: any) {
     // Special case for Upstash Read-Only service
     if (service.id === 'upstash-redis-ro') {
       const syncTs = isPublicMode()
@@ -565,11 +551,11 @@ export async function updateSystemMonitor() {
 
   const existingWidgetsMap = new Map(
     Array.from(widgetsContainer.querySelectorAll('.service-widget')).map((widget) => [
-      widget.dataset.serviceId,
+      (widget as HTMLElement).dataset.serviceId,
       widget,
     ])
   );
-  const incomingServiceIds = new Set(services.map((s) => s.id));
+  const incomingServiceIds = new Set(services.map((s: any) => s.id));
 
   for (const [id, widget] of existingWidgetsMap) {
     if (!incomingServiceIds.has(id)) {
@@ -578,7 +564,7 @@ export async function updateSystemMonitor() {
   }
 
   const processedServiceIds = new Set();
-  services.forEach((service) => {
+  services.forEach((service: any) => {
     if (processedServiceIds.has(service.id)) return;
     processedServiceIds.add(service.id);
 
@@ -587,9 +573,6 @@ export async function updateSystemMonitor() {
     if (existingWidget && existingWidget.parentNode) {
       if (service.id === 'upstash-redis-ro') {
         // Only update the sync timestamp, leave the countdown element alone to avoid flickering
-        // Use lastFrontendSyncTs (time of last successful client fetch) if available
-        // Fallback to lastDashboardSyncTs (time of data origin) if available
-        // Finally fallback to Date.now() only if nothing else exists
         const syncTs = isPublicMode()
           ? syncState.lastFrontend || syncState.lastDashboard || Date.now()
           : Date.now();
@@ -632,7 +615,7 @@ export async function updateModelsTab() {
     if (!child.classList.contains('service-widget')) child.remove();
   });
 
-  function generateWhisperWidgetHtml(whisper) {
+  function generateWhisperWidgetHtml(whisper: any) {
     const isReady = whisper.status === 'Ready';
     const statusClass = isReady ? 'service-widget-online' : 'service-widget-offline';
     const statusText = isReady ? 'READY' : 'NOT FOUND';
@@ -658,7 +641,7 @@ export async function updateModelsTab() {
                 </div>`;
   }
 
-  function generateXTTSWidgetHtml(xtts) {
+  function generateXTTSWidgetHtml(xtts: any) {
     const isReady = xtts.status === 'Ready';
     const statusClass = isReady ? 'service-widget-online' : 'service-widget-offline';
     const statusText = isReady ? 'READY' : 'NOT FOUND';
@@ -684,7 +667,7 @@ export async function updateModelsTab() {
                 </div>`;
   }
 
-  function generateModelWidgetHtml(model) {
+  function generateModelWidgetHtml(model: any) {
     const isDownloaded = model.status === 'Downloaded';
     const statusClass = isDownloaded ? 'service-widget-online' : 'service-widget-offline';
     const statusText = isDownloaded ? 'OK' : 'MISSING';
@@ -816,14 +799,14 @@ export async function updateProcessesTab(isSmoothMode = false) {
     const systemData = guardianStatus.system || {};
 
     const now = Math.floor(Date.now() / 1000);
-    const aliases = {
+    const aliases: Record<string, string> = {
       sentry: 'Sentry',
       synthesis: 'Synthesis',
       alert_review: 'Alert Review',
       construction: 'Construction',
     };
 
-    const formatDuration = (seconds) => {
+    const formatDuration = (seconds: number) => {
       if (seconds < 0) seconds = 0;
       const h = Math.floor(seconds / 3600);
       const m = Math.floor((seconds % 3600) / 60);
@@ -833,12 +816,17 @@ export async function updateProcessesTab(isSmoothMode = false) {
       return `${s}s`;
     };
 
-    const updateProtocolWidget = (el, statsEl, protocolData, protocolName) => {
+    const updateProtocolWidget = (
+      el: HTMLElement,
+      statsEl: HTMLElement | null,
+      protocolData: any,
+      protocolName: string
+    ) => {
       if (!el) return;
       const alias = aliases[protocolName] || protocolName.toUpperCase();
 
       // Update label if exists
-      const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
+      const labelEl = el.parentElement?.querySelector('span[style*="text-transform: uppercase"]');
       if (labelEl) labelEl.textContent = alias;
 
       if (!protocolData) {
@@ -994,20 +982,25 @@ export async function updateProcessesTab(isSmoothMode = false) {
       queue = processesData.queue || [];
       history = processesData.history || [];
       // Ensure newest is first
-      history.sort((a, b) => (b.end_time || 0) - (a.end_time || 0));
+      history.sort((a: any, b: any) => (b.end_time || 0) - (a.end_time || 0));
     }
   }
 
   // Active Processes Rendering
-  if (processes.length === 0) {
-    if (!widgetsContainer.querySelector('.tab-placeholder')) {
-      widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+  if (widgetsContainer) {
+    if (processes.length === 0) {
+      if (!widgetsContainer.querySelector('.tab-placeholder')) {
+        widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No active processes.');
+      }
+    } else {
+      if (
+        widgetsContainer.querySelector('.tab-placeholder') ||
+        widgetsContainer.querySelector('p')
+      ) {
+        widgetsContainer.innerHTML = '';
+      }
+      renderProcessList(widgetsContainer, processes, false);
     }
-  } else {
-    if (widgetsContainer.querySelector('.tab-placeholder') || widgetsContainer.querySelector('p')) {
-      widgetsContainer.innerHTML = '';
-    }
-    renderProcessList(widgetsContainer, processes, false);
   }
 
   // Queue Processes Rendering
@@ -1044,8 +1037,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
   updateTabBadgeCount(1, processes.length);
 }
 
-function renderProcessList(container, list, isHistory) {
-  function generateProcessWidgetHtml(proc) {
+function renderProcessList(container: HTMLElement, list: any[], isHistory: boolean) {
+  function generateProcessWidgetHtml(proc: any) {
     let durationStr = '';
     if (proc.end_time) {
       const dur = proc.end_time - proc.start_time;
@@ -1060,7 +1053,7 @@ function renderProcessList(container, list, isHistory) {
 
     // Pretty-print common system IDs
     let displayName = proc.channel_id;
-    const idMap = {
+    const idMap: Record<string, string> = {
       'system-guardian': 'Guardian Agent',
       'system-cli-op': 'CLI Operation',
       'system-analyzer': 'Analyzer Agent',
@@ -1116,14 +1109,14 @@ function renderProcessList(container, list, isHistory) {
   const selector = isHistory ? '.process-history-item' : '.process-widget';
   const existingWidgetsMap = new Map(
     Array.from(container.querySelectorAll(selector)).map((widget) => [
-      widget.dataset.channelId,
+      (widget as HTMLElement).dataset.channelId,
       widget,
     ])
   );
   const incomingIds = new Set(list.map((p) => `${p.channel_id}-${p.start_time}`));
 
   for (const [id, widget] of existingWidgetsMap) {
-    if (!incomingIds.has(id)) {
+    if (id && !incomingIds.has(id)) {
       widget.remove();
     }
   }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { smartFetch, createPlaceholderMessage } from '../core/utils.ts';
 
 export const getWebContent = () => {
@@ -37,7 +36,7 @@ export async function updateWebTab() {
   await renderWebHistory(container);
 }
 
-async function renderWebHistory(container) {
+async function renderWebHistory(container: HTMLElement) {
   try {
     const response = await smartFetch('/web/history');
     if (!response.ok) throw new Error('Failed to fetch history');
@@ -54,7 +53,7 @@ async function renderWebHistory(container) {
                 <div class="web-carousel" style="flex: 1; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding-bottom: 5px; scroll-behavior: smooth; min-height: 0;">
         `;
 
-    history.forEach((item, index) => {
+    history.forEach((item: any, index: number) => {
       const date = new Date(item.timestamp * 1000).toLocaleString([], {
         dateStyle: 'short',
         timeStyle: 'short',
@@ -91,9 +90,9 @@ async function renderWebHistory(container) {
 
     container.innerHTML = html;
 
-    const carousel = container.querySelector('.web-carousel');
-    const prevBtn = container.querySelector('#web-prev-btn');
-    const nextBtn = container.querySelector('#web-next-btn');
+    const carousel = container.querySelector('.web-carousel') as HTMLElement;
+    const prevBtn = container.querySelector('#web-prev-btn') as HTMLElement;
+    const nextBtn = container.querySelector('#web-next-btn') as HTMLElement;
 
     if (prevBtn) {
       prevBtn.onclick = () => {
@@ -105,7 +104,7 @@ async function renderWebHistory(container) {
         carousel.scrollBy({ left: carousel.offsetWidth, behavior: 'smooth' });
       };
     }
-  } catch (e) {
+  } catch (e: any) {
     container.innerHTML = createPlaceholderMessage(
       'error',
       'Failed to load web history.',

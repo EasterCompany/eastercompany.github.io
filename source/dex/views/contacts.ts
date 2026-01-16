@@ -1,11 +1,5 @@
-// @ts-nocheck
 // Contacts Tab Logic (Synced with Discord)
-import {
-  createPlaceholderMessage,
-  updateTabTimestamp,
-  smartDiscordFetch,
-  isPublicMode,
-} from '../core/utils.ts';
+import { createPlaceholderMessage, smartDiscordFetch, isPublicMode } from '../core/utils.ts';
 import { showUserProfile } from '../components/userProfile.ts';
 
 export const getContactsContent = () => `
@@ -18,7 +12,7 @@ export const getContactsContent = () => `
     </div>
 `;
 
-export let lastContactsUpdate = null;
+export let lastContactsUpdate: number | null = null;
 
 export async function updateContactsTab() {
   const container = document.getElementById('contacts-list');
@@ -41,8 +35,9 @@ export async function updateContactsTab() {
   // Attach click listener for profiles (Delegation)
   if (!container.dataset.listenerAttached) {
     container.onclick = (e) => {
-      const card = e.target.closest('.user-profile-card');
-      if (card) {
+      const target = e.target as HTMLElement;
+      const card = target.closest('.user-profile-card') as HTMLElement;
+      if (card && card.dataset.user) {
         try {
           const userData = JSON.parse(card.dataset.user);
           showUserProfile(userData);
@@ -73,7 +68,7 @@ export async function updateContactsTab() {
     }
 
     // Sort: Me > Master > Admin > Moderator > Contributor > User
-    const levelOrder = {
+    const levelOrder: Record<string, number> = {
       Me: 0,
       Master: 1,
       Admin: 2,
@@ -82,7 +77,7 @@ export async function updateContactsTab() {
       User: 5,
     };
 
-    members.sort((a, b) => {
+    members.sort((a: any, b: any) => {
       const orderA = levelOrder[a.level] ?? 10;
       const orderB = levelOrder[b.level] ?? 10;
       if (orderA !== orderB) return orderA - orderB;
@@ -90,7 +85,7 @@ export async function updateContactsTab() {
     });
 
     container.innerHTML = members
-      .map((m) => {
+      .map((m: any) => {
         // Convert decimal color to hex
         // Discord uses 0 for no color, we treat it as no color
         const hasColor = m.color && m.color !== 0;

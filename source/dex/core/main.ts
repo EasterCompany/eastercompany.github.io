@@ -1,8 +1,7 @@
-// @ts-nocheck
 // Easter Company - Universal JS Entrypoint
 import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from './styler.ts';
 import { createWindow } from './Window.ts';
-import { initTheme, applyTheme, getCurrentTheme } from './theme.ts';
+import { initTheme } from './theme.ts';
 import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.ts';
 import { updateIdeasTab, getRoadmapTabContent, getBlueprintsTabContent } from '../views/ideas.ts';
 import { getChoresContent, updateChoresTab } from '../views/chores.ts';
@@ -22,16 +21,16 @@ import {
   getServiceLogsContent,
 } from '../views/monitor.ts';
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.ts';
-import { getLogsContent, updateLogs } from '../views/logs.ts';
+import { updateLogs } from '../views/logs.ts';
 import { getWebContent, updateWebTab } from '../views/web.ts';
 import { initCliDashboard } from '../views/cli.ts';
-import {
-  getEventServiceUrl,
-  getLastBadgeCount,
-  updateGlobalBadgeCount,
-  smartFetch,
-  isPublicMode,
-} from './utils.ts';
+import { updateGlobalBadgeCount, smartFetch, isPublicMode } from './utils.ts';
+
+declare global {
+  interface Window {
+    dexter: any;
+  }
+}
 
 async function checkServiceHealth() {
   if (isPublicMode()) return; // Snapshots handle health in public mode
@@ -68,12 +67,12 @@ function onReady() {
   }
 
   // --- 1. Single Window Manager Logic & Definitions ---
-  let activeWindows = [];
+  let activeWindows: any[] = [];
   const container = document.getElementById('windows-container');
   if (container) container.setAttribute('data-count', '0');
 
   // Helper to save state
-  const saveWindowState = (winId) => {
+  const saveWindowState = (winId: string) => {
     localStorage.setItem('dex_last_window', winId);
   };
 
@@ -92,7 +91,7 @@ function onReady() {
       window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
 
     if (container) {
-      container.setAttribute('data-count', activeWindows.length);
+      container.setAttribute('data-count', activeWindows.length.toString());
     }
 
     // Manage per-window header close button visibility
@@ -123,7 +122,11 @@ function onReady() {
       if (closeAllWindowsIcon) {
         closeAllWindowsIcon.style.display = isMobile ? 'none' : 'block';
       }
-      document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
+      (document.querySelector('main') as HTMLElement)?.style.setProperty(
+        'opacity',
+        '0',
+        'important'
+      );
       document.body.style.overflow = 'hidden';
 
       navbar?.classList.add('window-open');
@@ -156,23 +159,23 @@ function onReady() {
                   `;
 
           // Re-attach listeners to new DOM elements
-          document.getElementById('switch-alerts').addEventListener('click', () => {
+          document.getElementById('switch-alerts')?.addEventListener('click', () => {
             saveWindowState('alerts-window');
             toggleWindow(alertsWindow);
           });
-          document.getElementById('switch-events').addEventListener('click', () => {
+          document.getElementById('switch-events')?.addEventListener('click', () => {
             saveWindowState('events-window');
             toggleWindow(eventsWindow);
           });
-          document.getElementById('switch-monitor').addEventListener('click', () => {
+          document.getElementById('switch-monitor')?.addEventListener('click', () => {
             saveWindowState('monitor-window');
             toggleWindow(monitorWindow);
           });
-          document.getElementById('switch-contacts').addEventListener('click', () => {
+          document.getElementById('switch-contacts')?.addEventListener('click', () => {
             saveWindowState('contacts-window');
             toggleWindow(contactsWindow);
           });
-          document.getElementById('switch-workspace').addEventListener('click', () => {
+          document.getElementById('switch-workspace')?.addEventListener('click', () => {
             saveWindowState('workspace-window');
             toggleWindow(workspaceWindow);
           });
@@ -186,7 +189,11 @@ function onReady() {
       navbar?.classList.remove('window-open');
       if (closeAllWindowsIcon) closeAllWindowsIcon.style.display = 'none';
       if (container) container.style.paddingTop = '100px';
-      document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+      (document.querySelector('main') as HTMLElement)?.style.setProperty(
+        'opacity',
+        '1',
+        'important'
+      );
       document.body.style.overflow = '';
 
       if (isRoot || isErrorPage) {
@@ -204,7 +211,7 @@ function onReady() {
     updateGlobalBadgeCount();
   }
 
-  function toggleWindow(win) {
+  function toggleWindow(win: any) {
     if (win.isOpen()) {
       win.close();
       return;
@@ -339,10 +346,10 @@ function onReady() {
 
   // Global API for cross-linking
   window.dexter = {
-    viewEvent: (id) => {
+    viewEvent: (id: string) => {
       if (!eventsWindow.isOpen()) toggleWindow(eventsWindow);
       setTimeout(() => {
-        const el = document.querySelector(`.event-item[data-event-id="${id}"]`);
+        const el = document.querySelector(`.event-item[data-event-id="${id}"]`) as HTMLElement;
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           el.classList.add('flash-highlight');
@@ -351,10 +358,10 @@ function onReady() {
         }
       }, 500);
     },
-    viewAlert: (id) => {
+    viewAlert: (id: string) => {
       if (!alertsWindow.isOpen()) toggleWindow(alertsWindow);
       setTimeout(() => {
-        const el = document.querySelector(`.event-item[data-alert-id="${id}"]`);
+        const el = document.querySelector(`.event-item[data-alert-id="${id}"]`) as HTMLElement;
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           el.classList.add('flash-highlight');
@@ -396,7 +403,7 @@ function onReady() {
         if (!isMobile) {
           // Position dropdown relative to button for desktop
           const rect = menuBtn.getBoundingClientRect();
-          const navEl = document.querySelector('nav');
+          const navEl = document.querySelector('nav') as HTMLElement;
           const navRect = navEl.getBoundingClientRect();
 
           // Width of dropdown is 220px (from CSS).
@@ -438,7 +445,11 @@ function onReady() {
           const navEl = document.querySelector('nav');
           if (nowActive) {
             document.querySelector('footer')?.classList.add('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '0', 'important');
+            (document.querySelector('main') as HTMLElement)?.style.setProperty(
+              'opacity',
+              '0',
+              'important'
+            );
             navEl?.classList.add('window-open');
             container?.classList.add('menu-open');
             updateNavbarState(true);
@@ -446,7 +457,11 @@ function onReady() {
             container?.classList.remove('menu-open');
             if (activeWindows.length === 0) {
               document.querySelector('footer')?.classList.remove('hide');
-              document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+              (document.querySelector('main') as HTMLElement)?.style.setProperty(
+                'opacity',
+                '1',
+                'important'
+              );
               navEl?.classList.remove('window-open');
               updateNavbarState(false);
             }
@@ -470,7 +485,7 @@ function onReady() {
     }
 
     // Dropdown Item Listeners
-    const attachItem = (id, win, storageId) => {
+    const attachItem = (id: string, win: any, storageId: string) => {
       const el = document.getElementById(id);
       if (el) {
         el.onclick = (e) => {
@@ -496,7 +511,11 @@ function onReady() {
           const isMobile = window.innerWidth < 880;
           if (isMobile && activeWindows.length === 0) {
             document.querySelector('footer')?.classList.remove('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+            (document.querySelector('main') as HTMLElement)?.style.setProperty(
+              'opacity',
+              '1',
+              'important'
+            );
             document.querySelector('nav')?.classList.remove('window-open');
             updateNavbarState(false);
           }
@@ -526,7 +545,11 @@ function onReady() {
         if (isMobile) {
           if (activeWindows.length === 0) {
             document.querySelector('footer')?.classList.remove('hide');
-            document.querySelector('main')?.style.setProperty('opacity', '1', 'important');
+            (document.querySelector('main') as HTMLElement)?.style.setProperty(
+              'opacity',
+              '1',
+              'important'
+            );
             document.querySelector('nav')?.classList.remove('window-open');
             updateNavbarState(false);
           }
