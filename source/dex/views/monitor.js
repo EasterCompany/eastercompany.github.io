@@ -645,7 +645,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
 
   // --- Update Guardian Status ---
   const sentryVal = document.getElementById('guardian-sentry-val');
-  const architectVal = document.getElementById('guardian-architect-val');
   const idleVal = document.getElementById('guardian-idle-val');
   const totalIdleVal = document.getElementById('guardian-total-idle');
   const totalActiveVal = document.getElementById('guardian-total-active');
@@ -715,7 +714,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
       const now = Math.floor(Date.now() / 1000);
       const aliases = { 
         "sentry": "Sentry", 
-        "architect": "Architect", 
         "synthesis": "Synthesis",
         "alert_review": "Alert Review"
       };
@@ -783,7 +781,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
 
       // Guardian Protocols
       if (sentryVal) updateProtocolWidget(sentryVal, document.getElementById('guardian-sentry-stats'), guardianData.protocols.sentry, 'sentry');
-      if (architectVal) updateProtocolWidget(architectVal, document.getElementById('guardian-architect-stats'), guardianData.protocols.architect, 'architect');
       
       // Analyzer Protocols
       const synthesisVal = document.getElementById('analyzer-synthesis-val');
@@ -834,7 +831,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
       if (totalWasteVal) totalWasteVal.textContent = formatDuration(systemData.metrics?.total_waste_time || 0);
 
     } else {
-    const indicators = [sentryVal, architectVal, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
+    const indicators = [sentryVal, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
     indicators.forEach(el => {
       if (el) {
         el.textContent = "-";

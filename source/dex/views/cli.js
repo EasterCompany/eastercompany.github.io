@@ -34,19 +34,18 @@ const CLI_COMMANDS = [
     id: 'guardian',
     title: 'Guardian',
     icon: 'bx-shield-quarter',
-    description: 'Run the Guardian Technical Sentry system (Tier 1 & Tier 2).',
+    description: 'Run the Guardian Technical Sentry system (Tier 1).',
     usage: 'dex guardian [tier]',
     category: 'cognitive',
     docs: {
-      overview: 'Guardian is the cognitive sentry of the ecosystem. It operates in two specialized tiers to maintain system health and architectural integrity.',
+      overview: 'Guardian is the cognitive sentry of the ecosystem. It maintains system health and architectural integrity.',
       details: [
         'Tier 1 (Technical Sentry): High-fidelity anomaly detection across logs, events, and metrics.',
-        'Tier 2 (Architect): Synthesizes Tier 1 findings into actionable structural Blueprints.',
         'Automated Trigger: Activates after 5 minutes of system idle time.',
         'CLI Proxy: Heavy lifting is proxied to the event service to preserve local resources.',
         'Outcome Tracking: Records scientific buckets for Active, Idle, and Waste time.'
       ],
-      extended_usage: 'dex guardian [0|1|2] [--force]\n0 = Full Analysis (Default)\n1 = Tier 1 Only (Reports)\n2 = Tier 2 Only (Blueprints)'
+      extended_usage: 'dex guardian [0|1] [--force]\n0 = Full Analysis (Default)\n1 = Tier 1 Only (Reports)'
     },
     demo_output: [
       '█ \x1b[1mGUARDIAN TECHNICAL SENTRY\x1b[0m █',
@@ -55,7 +54,7 @@ const CLI_COMMANDS = [
       ' \x1b[32m✓\x1b[0m No ongoing processes detected.',
       ' \x1b[32m✓\x1b[0m System idle time requirement met (312s).',
       '',
-      '\x1b[1mInitializing Full Analysis (T1 + T2)...\x1b[0m',
+      '\x1b[1mInitializing Sentry Analysis...\x1b[0m',
       '\x1b[94m→ Executing Tier 1: Technical Sentry...\x1b[0m',
       ' \x1b[90m⚙️  Auditing 50 system events...\x1b[0m',
       ' \x1b[90m⚙️  Analyzing recent service logs...\x1b[0m',
@@ -64,13 +63,6 @@ const CLI_COMMANDS = [
       '# [SYSTEM] Service Connectivity Alert',
       '**Priority**: high',
       '**Body**: dex-tts-service reported 3 consecutive timeouts.',
-      '',
-      '\x1b[95m→ Executing Tier 2: Architect Analysis...\x1b[0m',
-      ' \x1b[90m⚙️  Synthesizing Tier 1 reports...\x1b[0m',
-      '',
-      '# [BLUEPRINT] Automated Service Recovery',
-      '**Category**: architecture',
-      '**Summary**: Implement exponential backoff for TTS connection retries.',
       '',
       '\x1b[32m✓ Guardian run completed successfully.\x1b[0m',
       '\x1b[90m  Duration: 14.2s | Waste: 0s | Reliability: 100%\x1b[0m'
