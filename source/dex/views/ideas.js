@@ -2,7 +2,7 @@
 import { getRoadmapContent, updateRoadmapTab, getRoadmapActions } from './roadmap.js';
 import { getBlueprintsContent, updateBlueprintsTab, getBlueprintActions } from './blueprints.js';
 
-export const getIdeasContent = () => `
+export const getRoadmapTabContent = () => `
     <div class="ideas-container">
         <div class="roadmap-section" style="margin-bottom: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
@@ -14,7 +14,11 @@ export const getIdeasContent = () => `
             </div>
             ${getRoadmapContent()}
         </div>
+    </div>
+`;
 
+export const getBlueprintsTabContent = () => `
+    <div class="ideas-container">
         <div class="blueprints-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <div class="system-section-header" style="margin: 0; display: flex; align-items: center; gap: 10px;">
@@ -29,6 +33,8 @@ export const getIdeasContent = () => `
 `;
 
 export async function updateIdeasTab() {
+    // When using tabs, we might want to update both or just the visible one.
+    // For simplicity, we update both as they are separate data sources.
     await Promise.all([
         updateRoadmapTab(),
         updateBlueprintsTab()

@@ -3,7 +3,7 @@ import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from '
 import { createWindow } from './Window.js';
 import { initTheme, applyTheme, getCurrentTheme } from './theme.js';
 import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.js';
-import { getIdeasContent, updateIdeasTab } from '../views/ideas.js';
+import { updateIdeasTab, getRoadmapTabContent, getBlueprintsTabContent } from '../views/ideas.js';
 import { getChoresContent, updateChoresTab } from '../views/chores.js';
 import { checkBackgroundBlueprints } from '../views/blueprints.js';
 import { getContactsContent, updateContactsTab } from '../views/contacts.js';
@@ -279,7 +279,10 @@ function onReady() {
     id: 'workspace-window',
     title: 'Workspace',
     icon: 'bx-brain',
-    content: getIdeasContent(),
+    tabs: [
+      { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapTabContent() },
+      { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() }
+    ],
     onOpen: () => updateIdeasTab(),
     onClose: () => {
       const idx = activeWindows.indexOf(workspaceWindow);
