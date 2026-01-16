@@ -1,12 +1,22 @@
 // System Monitor Logic (Services, Models, Processes)
 import imaginatorSVG from '../components/imaginatorSVG.js';
-import { createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch, LOCAL_EVENT_SERVICE, isPublicMode, syncState } from '../core/utils.js';
+import {
+  createPlaceholderMessage,
+  updateTabTimestamp,
+  updateTabBadgeCount,
+  smartFetch,
+  LOCAL_EVENT_SERVICE,
+  isPublicMode,
+  syncState,
+} from '../core/utils.js';
 import { getLogsContent, updateLogs } from './logs.js';
 import { updateChoresTab } from './chores.js';
 
 export const getGuardianContent = () => {
   const resetBtnStyle = isPublicMode() ? 'display: none;' : '';
-  const approximationText = isPublicMode() ? '<span style="color: #666; font-size: 0.6em; margin-left: 10px; font-weight: normal; font-style: italic;">* Public data is approximated</span>' : '';
+  const approximationText = isPublicMode()
+    ? '<span style="color: #666; font-size: 0.6em; margin-left: 10px; font-weight: normal; font-style: italic;">* Public data is approximated</span>'
+    : '';
   return `
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
@@ -184,7 +194,14 @@ export const getServiceLogsContent = () => {
 
 // Deprecated, but kept for safety if referenced elsewhere temporarily
 export const getSystemContent = () => {
-  return getAnalystContent() + getProcessesContent() + getServicesContent() + getModelsContent() + getHardwareContent() + getServiceLogsContent();
+  return (
+    getAnalystContent() +
+    getProcessesContent() +
+    getServicesContent() +
+    getModelsContent() +
+    getHardwareContent() +
+    getServiceLogsContent()
+  );
 };
 
 export async function updateSystemTab() {
@@ -196,7 +213,7 @@ export async function updateSystemTab() {
     updateProcessesTab(),
     updateSystemMonitor(),
     updateModelsTab(),
-    updateChoresTab()
+    updateChoresTab(),
   ]);
 
   // Update logs separately
@@ -314,14 +331,16 @@ export async function updateSystemMonitor() {
     // GPU
     if (gpuContainer) {
       if (data.GPU && data.GPU.length > 0) {
-        gpuContainer.innerHTML = data.GPU.map(gpu => {
+        gpuContainer.innerHTML = data.GPU.map((gpu) => {
           const vramGB = (gpu.VRAM / (1024 * 1024 * 1024)).toFixed(1);
           return `
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                             <span style="font-size: 1.1em; color: #fff; font-weight: 400;">${gpu.LABEL}</span>
                             <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${vramGB} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
                         </div>`;
-        }).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>');
+        }).join(
+          '<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>'
+        );
       } else {
         gpuContainer.innerHTML = `<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>`;
       }
@@ -329,7 +348,7 @@ export async function updateSystemMonitor() {
 
     // Storage - Individual Devices
     if (storageContainer && data.STORAGE && data.STORAGE.length > 0) {
-      storageContainer.innerHTML = data.STORAGE.map(disk => {
+      storageContainer.innerHTML = data.STORAGE.map((disk) => {
         const usedGB = (disk.USED / (1024 * 1024 * 1024)).toFixed(1);
         const sizeGB = (disk.SIZE / (1024 * 1024 * 1024)).toFixed(1);
         const percent = disk.SIZE > 0 ? ((disk.USED / disk.SIZE) * 100).toFixed(0) : 0;
@@ -368,13 +387,17 @@ export async function updateSystemMonitor() {
         if (hwData) {
           renderHardwareWidgets(hwData);
           hardwareRefreshBtn.innerHTML = "<i class='bx bx-check'></i>";
-          setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+          setTimeout(() => {
+            hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
         } else {
           hardwareRefreshBtn.innerHTML = "<i class='bx bx-error'></i>";
-          setTimeout(() => { hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+          setTimeout(() => {
+            hardwareRefreshBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
         }
       };
-      hardwareRefreshBtn.dataset.listenerAttached = "true";
+      hardwareRefreshBtn.dataset.listenerAttached = 'true';
     }
 
     // Initial Load (if CPU container is empty)
@@ -390,22 +413,26 @@ export async function updateSystemMonitor() {
 
   if (!data || !data.services) {
     if (widgetsContainer.children.length === 0) {
-      widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load system metrics.', 'The event service may be offline.');
+      widgetsContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load system metrics.',
+        'The event service may be offline.'
+      );
     }
     // If data fetch fails, specifically mark the upstash widget as offline
     const upstashWidget = document.querySelector('[data-service-id="upstash-redis-ro"]');
     if (upstashWidget) {
-        upstashWidget.className = 'service-widget service-widget-offline';
-        upstashWidget.querySelector('.service-widget-status').textContent = 'ERROR';
-        const body = upstashWidget.querySelector('.service-widget-body');
-        if (body) {
-            body.innerHTML = `<div class="service-widget-footer offline"><span>CONNECTION FAILED</span></div>`;
-        }
+      upstashWidget.className = 'service-widget service-widget-offline';
+      upstashWidget.querySelector('.service-widget-status').textContent = 'ERROR';
+      const body = upstashWidget.querySelector('.service-widget-body');
+      if (body) {
+        body.innerHTML = `<div class="service-widget-footer offline"><span>CONNECTION FAILED</span></div>`;
+      }
     }
     return;
   }
 
-  lastServicesUpdate = isPublicMode() ? (syncState.lastDashboard || Date.now()) : Date.now();
+  lastServicesUpdate = isPublicMode() ? syncState.lastDashboard || Date.now() : Date.now();
   updateTabTimestamp(0, lastServicesUpdate);
   const services = data.services || [];
 
@@ -424,22 +451,55 @@ export async function updateSystemMonitor() {
     }, 1000);
   }
 
-  Array.from(widgetsContainer.children).forEach(child => {
+  Array.from(widgetsContainer.children).forEach((child) => {
     if (!child.classList.contains('service-widget')) child.remove();
   });
 
-  function sanitizeValue(value) { if (!value || value === 'N/A' || value === 'unknown' || value.trim() === '') { return '-'; } return value; }
-  function extractMajorMinorPatch(versionStr) { if (!versionStr || versionStr === 'N/A' || versionStr === 'unknown') { return '-'; } const match = versionStr.match(/^(\d+\.\d+\.\d+)/); if (match) return match[0]; return versionStr.split('.').slice(0, 3).join('.') || '-'; }
-  function truncateAddress(address) { if (!address || address.length <= 28) return address; return address.substring(0, 28) + '...'; }
+  function sanitizeValue(value) {
+    if (!value || value === 'N/A' || value === 'unknown' || value.trim() === '') {
+      return '-';
+    }
+    return value;
+  }
+  function extractMajorMinorPatch(versionStr) {
+    if (!versionStr || versionStr === 'N/A' || versionStr === 'unknown') {
+      return '-';
+    }
+    const match = versionStr.match(/^(\d+\.\d+\.\d+)/);
+    if (match) return match[0];
+    return versionStr.split('.').slice(0, 3).join('.') || '-';
+  }
+  function truncateAddress(address) {
+    if (!address || address.length <= 28) return address;
+    return address.substring(0, 28) + '...';
+  }
 
-  function formatUptime(uptimeStr) { if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-'; const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/); if (!match) return '-'; const days = parseInt(match[1]) || 0; const hours = parseInt(match[2]) || 0; const minutes = parseInt(match[3]) || 0; const seconds = parseFloat(match[4]) || 0; const totalSeconds = (days * 86400) + (hours * 3600) + (minutes * 60) + seconds; const totalDays = Math.floor(totalSeconds / 86400); if (totalDays > 0) return `${totalDays}d`; const totalHours = Math.floor(totalSeconds / 3600); if (totalHours > 0) return `${totalHours}h`; const totalMinutes = Math.floor(totalSeconds / 60); if (totalMinutes > 0) return `${totalMinutes}m`; return `${Math.floor(totalSeconds)}s`; }
+  function formatUptime(uptimeStr) {
+    if (!uptimeStr || uptimeStr === 'N/A' || uptimeStr === 'unknown') return '-';
+    const match = uptimeStr.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);
+    if (!match) return '-';
+    const days = parseInt(match[1]) || 0;
+    const hours = parseInt(match[2]) || 0;
+    const minutes = parseInt(match[3]) || 0;
+    const seconds = parseFloat(match[4]) || 0;
+    const totalSeconds = days * 86400 + hours * 3600 + minutes * 60 + seconds;
+    const totalDays = Math.floor(totalSeconds / 86400);
+    if (totalDays > 0) return `${totalDays}d`;
+    const totalHours = Math.floor(totalSeconds / 3600);
+    if (totalHours > 0) return `${totalHours}h`;
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    if (totalMinutes > 0) return `${totalMinutes}m`;
+    return `${Math.floor(totalSeconds)}s`;
+  }
 
   function generateWidgetHtml(service) {
     // Special case for Upstash Read-Only service
     if (service.id === 'upstash-redis-ro') {
-        const syncTs = isPublicMode() ? (syncState.lastFrontend || syncState.lastDashboard || Date.now()) : Date.now();
-        const lastSynced = new Date(syncTs).toLocaleTimeString();
-        return `
+      const syncTs = isPublicMode()
+        ? syncState.lastFrontend || syncState.lastDashboard || Date.now()
+        : Date.now();
+      const lastSynced = new Date(syncTs).toLocaleTimeString();
+      return `
             <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
                 <div class="service-widget-header">
                     <i class="bx bx-check-circle"></i>
@@ -495,13 +555,20 @@ export async function updateSystemMonitor() {
       detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold;"><span>OFFLINE</span></div>`;
     }
 
-    const displayAddress = isPublicMode() ? "easter.company" : truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '');
+    const displayAddress = isPublicMode()
+      ? 'easter.company'
+      : truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '');
 
     return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${displayAddress}</span></div>${detailsHtml}</div></div>`;
   }
 
-  const existingWidgetsMap = new Map(Array.from(widgetsContainer.querySelectorAll('.service-widget')).map(widget => [widget.dataset.serviceId, widget]));
-  const incomingServiceIds = new Set(services.map(s => s.id));
+  const existingWidgetsMap = new Map(
+    Array.from(widgetsContainer.querySelectorAll('.service-widget')).map((widget) => [
+      widget.dataset.serviceId,
+      widget,
+    ])
+  );
+  const incomingServiceIds = new Set(services.map((s) => s.id));
 
   for (const [id, widget] of existingWidgetsMap) {
     if (!incomingServiceIds.has(id)) {
@@ -510,7 +577,7 @@ export async function updateSystemMonitor() {
   }
 
   const processedServiceIds = new Set();
-  services.forEach(service => {
+  services.forEach((service) => {
     if (processedServiceIds.has(service.id)) return;
     processedServiceIds.add(service.id);
 
@@ -522,7 +589,9 @@ export async function updateSystemMonitor() {
         // Use lastFrontendSyncTs (time of last successful client fetch) if available
         // Fallback to lastDashboardSyncTs (time of data origin) if available
         // Finally fallback to Date.now() only if nothing else exists
-        const syncTs = isPublicMode() ? (syncState.lastFrontend || syncState.lastDashboard || Date.now()) : Date.now();
+        const syncTs = isPublicMode()
+          ? syncState.lastFrontend || syncState.lastDashboard || Date.now()
+          : Date.now();
         const lastSynced = new Date(syncTs).toLocaleTimeString();
         const syncLabel = existingWidget.querySelector('.sync-time-label');
         if (syncLabel) syncLabel.textContent = `Last synced: ${lastSynced}`;
@@ -543,7 +612,11 @@ export async function updateModelsTab() {
 
   if (!data) {
     if (widgetsContainer.children.length === 0) {
-      widgetsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load model status.', 'The event service may be offline.');
+      widgetsContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load model status.',
+        'The event service may be offline.'
+      );
     }
     return;
   }
@@ -554,7 +627,7 @@ export async function updateModelsTab() {
   const models = data.models || [];
   const whisperStatus = data.whisper;
 
-  Array.from(widgetsContainer.children).forEach(child => {
+  Array.from(widgetsContainer.children).forEach((child) => {
     if (!child.classList.contains('service-widget')) child.remove();
   });
 
@@ -614,7 +687,8 @@ export async function updateModelsTab() {
     const isDownloaded = model.status === 'Downloaded';
     const statusClass = isDownloaded ? 'service-widget-online' : 'service-widget-offline';
     const statusText = isDownloaded ? 'OK' : 'MISSING';
-    const sizeDisplay = isDownloaded && model.size > 0 ? `${(model.size / 1e9).toFixed(2)} GB` : '-';
+    const sizeDisplay =
+      isDownloaded && model.size > 0 ? `${(model.size / 1e9).toFixed(2)} GB` : '-';
 
     let modelDisplayName = model.name;
     if (model.type === 'custom' && modelDisplayName.endsWith(':latest')) {
@@ -661,9 +735,9 @@ export async function updateProcessesTab(isSmoothMode = false) {
   if (pauseBtn && !pauseBtn.dataset.listenerAttached) {
     pauseBtn.onclick = async () => {
       // If we see a play icon, it means we are paused and want to resume
-      const isPaused = pauseBtn.querySelector('.bx-play'); 
+      const isPaused = pauseBtn.querySelector('.bx-play');
       const endpoint = isPaused ? '/agent/resume' : '/agent/pause';
-      
+
       pauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
         await smartFetch(endpoint, { method: 'POST' });
@@ -672,7 +746,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         pauseBtn.innerHTML = "<i class='bx bx-error'></i>";
       }
     };
-    pauseBtn.dataset.listenerAttached = "true";
+    pauseBtn.dataset.listenerAttached = 'true';
   }
 
   if (resetBtn && !resetBtn.dataset.listenerAttached) {
@@ -682,14 +756,16 @@ export async function updateProcessesTab(isSmoothMode = false) {
         await smartFetch('/guardian/reset?protocol=all', { method: 'POST' });
         setTimeout(() => {
           resetBtn.innerHTML = "<i class='bx bx-check'></i>";
-          setTimeout(() => { resetBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+          setTimeout(() => {
+            resetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
         }, 500);
         updateProcessesTab(); // refresh immediately
       } catch (e) {
         resetBtn.innerHTML = "<i class='bx bx-error'></i>";
       }
     };
-    resetBtn.dataset.listenerAttached = "true";
+    resetBtn.dataset.listenerAttached = 'true';
   }
 
   if (analyzerResetBtn && !analyzerResetBtn.dataset.listenerAttached) {
@@ -699,14 +775,16 @@ export async function updateProcessesTab(isSmoothMode = false) {
         await smartFetch('/analyzer/reset?protocol=synthesis', { method: 'POST' });
         setTimeout(() => {
           analyzerResetBtn.innerHTML = "<i class='bx bx-check'></i>";
-          setTimeout(() => { analyzerResetBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+          setTimeout(() => {
+            analyzerResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
         }, 500);
         updateProcessesTab(); // refresh immediately
       } catch (e) {
         analyzerResetBtn.innerHTML = "<i class='bx bx-error'></i>";
       }
     };
-    analyzerResetBtn.dataset.listenerAttached = "true";
+    analyzerResetBtn.dataset.listenerAttached = 'true';
   }
 
   if (fabricatorResetBtn && !fabricatorResetBtn.dataset.listenerAttached) {
@@ -716,155 +794,184 @@ export async function updateProcessesTab(isSmoothMode = false) {
         await smartFetch('/fabricator/reset?protocol=construction', { method: 'POST' });
         setTimeout(() => {
           fabricatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
-          setTimeout(() => { fabricatorResetBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+          setTimeout(() => {
+            fabricatorResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
         }, 500);
         updateProcessesTab(); // refresh immediately
       } catch (e) {
         fabricatorResetBtn.innerHTML = "<i class='bx bx-error'></i>";
       }
     };
-    fabricatorResetBtn.dataset.listenerAttached = "true";
+    fabricatorResetBtn.dataset.listenerAttached = 'true';
   }
 
-    const guardianStatus = await fetchGuardianStatus();
-    if (guardianStatus && guardianStatus.agents) {
-      const guardianData = guardianStatus.agents.guardian || { protocols: {} };
-      const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
-      const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
-      const fabricatorData = guardianStatus.agents.fabricator || { protocols: {} };
-      const systemData = guardianStatus.system || {};
+  const guardianStatus = await fetchGuardianStatus();
+  if (guardianStatus && guardianStatus.agents) {
+    const guardianData = guardianStatus.agents.guardian || { protocols: {} };
+    const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
+    const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
+    const fabricatorData = guardianStatus.agents.fabricator || { protocols: {} };
+    const systemData = guardianStatus.system || {};
 
-      const now = Math.floor(Date.now() / 1000);
-      const aliases = { 
-        "sentry": "Sentry", 
-        "synthesis": "Synthesis",
-        "alert_review": "Alert Review",
-        "construction": "Construction"
-      };
+    const now = Math.floor(Date.now() / 1000);
+    const aliases = {
+      sentry: 'Sentry',
+      synthesis: 'Synthesis',
+      alert_review: 'Alert Review',
+      construction: 'Construction',
+    };
 
-      const formatDuration = (seconds) => {
-        if (seconds < 0) seconds = 0;
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = seconds % 60;
-        if (h > 0) return `${h}h ${m}m`;
-        if (m > 0) return `${m}m ${s}s`;
-        return `${s}s`;
-      };
+    const formatDuration = (seconds) => {
+      if (seconds < 0) seconds = 0;
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      if (h > 0) return `${h}h ${m}m`;
+      if (m > 0) return `${m}m ${s}s`;
+      return `${s}s`;
+    };
 
-      const updateProtocolWidget = (el, statsEl, protocolData, protocolName) => {
-        if (!el) return;
-        const alias = aliases[protocolName] || protocolName.toUpperCase();
-        
-        // Update label if exists
-        const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
-        if (labelEl) labelEl.textContent = alias;
+    const updateProtocolWidget = (el, statsEl, protocolData, protocolName) => {
+      if (!el) return;
+      const alias = aliases[protocolName] || protocolName.toUpperCase();
 
-        if (!protocolData) {
-            el.textContent = "Inactive";
-            el.style.color = "#666";
-            return;
+      // Update label if exists
+      const labelEl = el.parentElement.querySelector('span[style*="text-transform: uppercase"]');
+      if (labelEl) labelEl.textContent = alias;
+
+      if (!protocolData) {
+        el.textContent = 'Inactive';
+        el.style.color = '#666';
+        return;
+      }
+
+      const status = protocolData.status; // "Ready", "Working", "Cooldown"
+
+      if (status === 'Working') {
+        el.textContent = 'Working';
+        el.style.color = '#bb86fc';
+      } else if (status === 'Ready') {
+        el.textContent = 'Ready';
+        el.style.color = '#5eff5e';
+      } else {
+        // Cooldown
+        // Use backend provided cooldown or calculate locally if public mode drift
+        let remaining = protocolData.cooldown;
+        if (isPublicMode()) {
+          remaining = protocolData.next_run - now;
         }
-
-        const status = protocolData.status; // "Ready", "Working", "Cooldown"
-        
-        if (status === "Working") {
-            el.textContent = "Working";
-            el.style.color = "#bb86fc";
-        } else if (status === "Ready") {
-            el.textContent = "Ready";
-            el.style.color = "#5eff5e";
+        if (remaining <= 0) {
+          el.textContent = 'Ready';
+          el.style.color = '#5eff5e';
         } else {
-            // Cooldown
-            // Use backend provided cooldown or calculate locally if public mode drift
-            let remaining = protocolData.cooldown;
-            if (isPublicMode()) {
-                 remaining = protocolData.next_run - now;
-            }
-            if (remaining <= 0) {
-                 el.textContent = "Ready";
-                 el.style.color = "#5eff5e";
-            } else {
-                 const mins = Math.floor(remaining / 60);
-                 const secs = remaining % 60;
-                 el.textContent = `${mins}m ${secs}s`;
-                 el.style.color = "#fff";
-            }
+          const mins = Math.floor(remaining / 60);
+          const secs = remaining % 60;
+          el.textContent = `${mins}m ${secs}s`;
+          el.style.color = '#fff';
         }
+      }
 
-        if (statsEl && protocolData.stats) {
-          statsEl.innerHTML = `
+      if (statsEl && protocolData.stats) {
+        statsEl.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 2px;">
               <span>Runs: ${protocolData.stats.runs || 0}</span>
               <span style="color: ${protocolData.stats.failures > 0 ? '#ffa500' : '#666'}">Fails: ${protocolData.stats.failures || 0}</span>
               <span style="color: ${protocolData.stats.aborted > 0 ? '#ff4d4d' : '#666'}">Aborted: ${protocolData.stats.aborted || 0}</span>
             </div>
           `;
-        }
-      };
+      }
+    };
 
-      // Guardian Protocols
-      if (sentryVal) updateProtocolWidget(sentryVal, document.getElementById('guardian-sentry-stats'), guardianData.protocols.sentry, 'sentry');
-      
-      // Analyzer Protocols
-      const synthesisVal = document.getElementById('analyzer-synthesis-val');
-      const synthesisStats = document.getElementById('analyzer-synthesis-stats');
-      if (synthesisVal) updateProtocolWidget(synthesisVal, synthesisStats, analyzerData.protocols.synthesis, 'synthesis');
+    // Guardian Protocols
+    if (sentryVal)
+      updateProtocolWidget(
+        sentryVal,
+        document.getElementById('guardian-sentry-stats'),
+        guardianData.protocols.sentry,
+        'sentry'
+      );
 
-      // Imaginator Protocols
-      const imaginatorVal = document.getElementById('imaginator-alert_review-val');
-      const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
-      if (imaginatorVal) updateProtocolWidget(imaginatorVal, imaginatorStats, imaginatorData.protocols.alert_review, 'alert_review');
+    // Analyzer Protocols
+    const synthesisVal = document.getElementById('analyzer-synthesis-val');
+    const synthesisStats = document.getElementById('analyzer-synthesis-stats');
+    if (synthesisVal)
+      updateProtocolWidget(
+        synthesisVal,
+        synthesisStats,
+        analyzerData.protocols.synthesis,
+        'synthesis'
+      );
 
-      // Fabricator Protocols
-      const fabricatorVal = document.getElementById('fabricator-construction-val');
-      const fabricatorStats = document.getElementById('fabricator-construction-stats');
-      if (fabricatorVal) updateProtocolWidget(fabricatorVal, fabricatorStats, fabricatorData.protocols.construction, 'construction');
+    // Imaginator Protocols
+    const imaginatorVal = document.getElementById('imaginator-alert_review-val');
+    const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
+    if (imaginatorVal)
+      updateProtocolWidget(
+        imaginatorVal,
+        imaginatorStats,
+        imaginatorData.protocols.alert_review,
+        'alert_review'
+      );
 
-      // System State
-      const stateLabel = document.getElementById('system-state-label');
-      const stateVal = document.getElementById('system-state-val');
-      
-      if (stateVal && systemData.state) {
-        const state = systemData.state;
-        const duration = formatDuration(systemData.state_time || 0);
+    // Fabricator Protocols
+    const fabricatorVal = document.getElementById('fabricator-construction-val');
+    const fabricatorStats = document.getElementById('fabricator-construction-stats');
+    if (fabricatorVal)
+      updateProtocolWidget(
+        fabricatorVal,
+        fabricatorStats,
+        fabricatorData.protocols.construction,
+        'construction'
+      );
 
-        if (stateLabel) stateLabel.textContent = `State: ${state.toUpperCase()}`;
-        stateVal.textContent = duration;
+    // System State
+    const stateLabel = document.getElementById('system-state-label');
+    const stateVal = document.getElementById('system-state-val');
 
-        if (state === 'idle') {
-          stateVal.style.color = systemData.state_time > 300 ? "#5eff5e" : "#fff";
-        } else {
-          stateVal.style.color = "#bb86fc"; 
-        }
+    if (stateVal && systemData.state) {
+      const state = systemData.state;
+      const duration = formatDuration(systemData.state_time || 0);
 
-        if (pauseBtn) {
-            // Check if we are currently loading (don't overwrite spinner)
-            const isLoading = pauseBtn.querySelector('.bx-loader-alt') || pauseBtn.querySelector('.bx-error');
-            if (!isLoading) {
-                if (state === 'paused') {
-                    pauseBtn.innerHTML = "<i class='bx bx-play'></i>";
-                    pauseBtn.title = "Resume System";
-                    pauseBtn.style.color = "#ff9800";
-                } else {
-                    pauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
-                    pauseBtn.title = "Pause System";
-                    pauseBtn.style.color = "";
-                }
-            }
-        }
+      if (stateLabel) stateLabel.textContent = `State: ${state.toUpperCase()}`;
+      stateVal.textContent = duration;
+
+      if (state === 'idle') {
+        stateVal.style.color = systemData.state_time > 300 ? '#5eff5e' : '#fff';
+      } else {
+        stateVal.style.color = '#bb86fc';
       }
 
-      if (totalIdleVal) totalIdleVal.textContent = formatDuration(systemData.metrics?.total_idle_time || 0);
-      if (totalActiveVal) totalActiveVal.textContent = formatDuration(systemData.metrics?.total_active_time || 0);
-      if (totalWasteVal) totalWasteVal.textContent = formatDuration(systemData.metrics?.total_waste_time || 0);
+      if (pauseBtn) {
+        // Check if we are currently loading (don't overwrite spinner)
+        const isLoading =
+          pauseBtn.querySelector('.bx-loader-alt') || pauseBtn.querySelector('.bx-error');
+        if (!isLoading) {
+          if (state === 'paused') {
+            pauseBtn.innerHTML = "<i class='bx bx-play'></i>";
+            pauseBtn.title = 'Resume System';
+            pauseBtn.style.color = '#ff9800';
+          } else {
+            pauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
+            pauseBtn.title = 'Pause System';
+            pauseBtn.style.color = '';
+          }
+        }
+      }
+    }
 
-    } else {
+    if (totalIdleVal)
+      totalIdleVal.textContent = formatDuration(systemData.metrics?.total_idle_time || 0);
+    if (totalActiveVal)
+      totalActiveVal.textContent = formatDuration(systemData.metrics?.total_active_time || 0);
+    if (totalWasteVal)
+      totalWasteVal.textContent = formatDuration(systemData.metrics?.total_waste_time || 0);
+  } else {
     const indicators = [sentryVal, idleVal, totalIdleVal, totalActiveVal, totalWasteVal];
-    indicators.forEach(el => {
+    indicators.forEach((el) => {
       if (el) {
-        el.textContent = "-";
-        el.style.color = "#666";
+        el.textContent = '-';
+        el.style.color = '#666';
       }
     });
   }
@@ -906,7 +1013,10 @@ export async function updateProcessesTab(isSmoothMode = false) {
   const queueContainer = document.getElementById('processes-queue-widgets');
   if (queueContainer) {
     if (queue.length === 0) {
-      if (!queueContainer.querySelector('.tab-placeholder') && !queueContainer.querySelector('div[style*="font-style: italic"]')) {
+      if (
+        !queueContainer.querySelector('.tab-placeholder') &&
+        !queueContainer.querySelector('div[style*="font-style: italic"]')
+      ) {
         queueContainer.innerHTML = `<div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">Queue is empty</div>`;
       }
     } else {
@@ -940,18 +1050,19 @@ function renderProcessList(container, list, isHistory) {
       const dur = proc.end_time - proc.start_time;
       durationStr = `${dur}s`;
     } else {
-      const dur = Math.floor((Date.now() / 1000) - proc.start_time);
+      const dur = Math.floor(Date.now() / 1000 - proc.start_time);
       durationStr = `${dur}s`;
     }
 
-    const retryBadge = proc.retries > 0 ? `<span class="process-retry-badge">Retry ${proc.retries}</span>` : '';
+    const retryBadge =
+      proc.retries > 0 ? `<span class="process-retry-badge">Retry ${proc.retries}</span>` : '';
 
     // Pretty-print common system IDs
     let displayName = proc.channel_id;
     const idMap = {
       'system-guardian': 'Guardian Agent',
       'system-cli-op': 'CLI Operation',
-      'system-analyzer': 'Analyzer Agent'
+      'system-analyzer': 'Analyzer Agent',
     };
     if (idMap[displayName]) {
       displayName = idMap[displayName];
@@ -1002,8 +1113,13 @@ function renderProcessList(container, list, isHistory) {
   }
 
   const selector = isHistory ? '.process-history-item' : '.process-widget';
-  const existingWidgetsMap = new Map(Array.from(container.querySelectorAll(selector)).map(widget => [widget.dataset.channelId, widget]));
-  const incomingIds = new Set(list.map(p => `${p.channel_id}-${p.start_time}`));
+  const existingWidgetsMap = new Map(
+    Array.from(container.querySelectorAll(selector)).map((widget) => [
+      widget.dataset.channelId,
+      widget,
+    ])
+  );
+  const incomingIds = new Set(list.map((p) => `${p.channel_id}-${p.start_time}`));
 
   for (const [id, widget] of existingWidgetsMap) {
     if (!incomingIds.has(id)) {
@@ -1012,7 +1128,7 @@ function renderProcessList(container, list, isHistory) {
   }
 
   const processedIds = new Set();
-  list.forEach(proc => {
+  list.forEach((proc) => {
     const uniqueId = `${proc.channel_id}-${proc.start_time}`;
     if (processedIds.has(uniqueId)) return;
     processedIds.add(uniqueId);

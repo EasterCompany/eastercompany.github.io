@@ -436,124 +436,134 @@ const PROFILE_STYLES = `
 
 // --- Mock Data Generator (Fallback) ---
 function getMockData(userId, username) {
-    const isMaster = userId === '313071000877137920';
-    
-    const base = isMaster ? {
-        techLevel: 11, 
+  const isMaster = userId === '313071000877137920';
+
+  const base = isMaster
+    ? {
+        techLevel: 11,
         commStyle: 'Direct / Efficient',
         patience: 'Infinite',
         vibe: 'Architect',
         facts: [
-            { k: 'Role', v: 'Creator' },
-            { k: 'Lang', v: 'Go' },
-            { k: 'OS', v: 'Linux' },
-            { k: 'Editor', v: 'Neovim' }
+          { k: 'Role', v: 'Creator' },
+          { k: 'Lang', v: 'Go' },
+          { k: 'OS', v: 'Linux' },
+          { k: 'Editor', v: 'Neovim' },
         ],
         badges: ['Creator', 'Admin', 'Architect'],
         stats: { msgs: 14052, tokens: '45.2M', lastSeen: 'Now' },
         topics: [
-            { name: "System Architecture", val: 85 },
-            { name: "Code Review", val: 60 },
-            { name: "Music / Vibes", val: 30 },
-            { name: "Debugging", val: 45 }
+          { name: 'System Architecture', val: 85 },
+          { name: 'Code Review', val: 60 },
+          { name: 'Music / Vibes', val: 30 },
+          { name: 'Debugging', val: 45 },
         ],
-        traits: { openness: 95, conscientiousness: 90, extraversion: 40, agreeableness: 60, neuroticism: 15 },
+        traits: {
+          openness: 95,
+          conscientiousness: 90,
+          extraversion: 40,
+          agreeableness: 60,
+          neuroticism: 15,
+        },
         dossier: {
-            identity: {
-                fullName: "Owen Easter",
-                ageRange: "25-30",
-                gender: "Male",
-                location: "United Kingdom",
-                sexuality: "Heterosexual",
-                relationship: "Single"
-            },
-            career: {
-                jobTitle: "Founder / Systems Architect",
-                company: "Easter Company",
-                skills: ["Go", "Distributed Systems", "AI Integration"]
-            },
-            personal: {
-                hobbies: ["Synthwave Production", "Coding", "Gaming"],
-                habits: ["Late Night Coding", "Coffee Consumption", "System Optimization"],
-                vices: ["Perfectionism"],
-                virtues: ["Efficiency", "Vision"]
-            },
-            social: [
-                { name: "Dexter", relation: "Creation / AI", trust: "100%" },
-                { name: "Sarah", relation: "Close Friend", trust: "95%" },
-                { name: "Mike", relation: "Developer Peer", trust: "88%" }
-            ]
-        }
-    } : {
+          identity: {
+            fullName: 'Owen Easter',
+            ageRange: '25-30',
+            gender: 'Male',
+            location: 'United Kingdom',
+            sexuality: 'Heterosexual',
+            relationship: 'Single',
+          },
+          career: {
+            jobTitle: 'Founder / Systems Architect',
+            company: 'Easter Company',
+            skills: ['Go', 'Distributed Systems', 'AI Integration'],
+          },
+          personal: {
+            hobbies: ['Synthwave Production', 'Coding', 'Gaming'],
+            habits: ['Late Night Coding', 'Coffee Consumption', 'System Optimization'],
+            vices: ['Perfectionism'],
+            virtues: ['Efficiency', 'Vision'],
+          },
+          social: [
+            { name: 'Dexter', relation: 'Creation / AI', trust: '100%' },
+            { name: 'Sarah', relation: 'Close Friend', trust: '95%' },
+            { name: 'Mike', relation: 'Developer Peer', trust: '88%' },
+          ],
+        },
+      }
+    : {
         // Random generation for others
         techLevel: [2, 4, 6, 8, 3, 5][Math.floor(Math.random() * 6)],
-        commStyle: ['Verbose', 'Casual', 'Formal', 'Chaotic', 'Inquisitive'][Math.floor(Math.random() * 5)],
+        commStyle: ['Verbose', 'Casual', 'Formal', 'Chaotic', 'Inquisitive'][
+          Math.floor(Math.random() * 5)
+        ],
         patience: Math.random() > 0.5 ? 'High' : 'Medium',
         vibe: ['NPC', 'Guest', 'Lurker', 'Regular', 'Fan'][Math.floor(Math.random() * 5)],
         facts: [
-            { k: 'Role', v: 'User' },
-            { k: 'Interest', v: Math.random() > 0.5 ? 'Coding' : 'Gaming' }
+          { k: 'Role', v: 'User' },
+          { k: 'Interest', v: Math.random() > 0.5 ? 'Coding' : 'Gaming' },
         ],
         badges: ['User'],
         stats: {
-            msgs: Math.floor(Math.random() * 500),
-            tokens: Math.floor(Math.random() * 100) + 'K',
-            lastSeen: Math.floor(Math.random() * 24) + 'h ago'
+          msgs: Math.floor(Math.random() * 500),
+          tokens: Math.floor(Math.random() * 100) + 'K',
+          lastSeen: Math.floor(Math.random() * 24) + 'h ago',
         },
         topics: [
-            { name: "General Chat", val: 80 },
-            { name: "Troubleshooting", val: 40 },
-            { name: "Off-Topic", val: 20 }
+          { name: 'General Chat', val: 80 },
+          { name: 'Troubleshooting', val: 40 },
+          { name: 'Off-Topic', val: 20 },
         ],
-        traits: { 
-            openness: Math.floor(Math.random() * 100), 
-            conscientiousness: Math.floor(Math.random() * 100), 
-            extraversion: Math.floor(Math.random() * 100), 
-            agreeableness: Math.floor(Math.random() * 100), 
-            neuroticism: Math.floor(Math.random() * 100) 
+        traits: {
+          openness: Math.floor(Math.random() * 100),
+          conscientiousness: Math.floor(Math.random() * 100),
+          extraversion: Math.floor(Math.random() * 100),
+          agreeableness: Math.floor(Math.random() * 100),
+          neuroticism: Math.floor(Math.random() * 100),
         },
         dossier: {
-            identity: {
-                fullName: "Unknown Subject",
-                ageRange: "Unknown",
-                gender: "Unknown",
-                location: "Global",
-                sexuality: "Unknown",
-                relationship: "Unknown"
-            },
-            career: {
-                jobTitle: "Unknown",
-                company: "Unknown",
-                skills: ["General User"]
-            },
-            personal: {
-                hobbies: ["Lurking", "Chatting"],
-                habits: ["Unknown"],
-                vices: ["None Observed"],
-                virtues: ["None Observed"]
-            },
-            social: []
-        }
-    };
-    
-    return { ...base, id: userId, username };
+          identity: {
+            fullName: 'Unknown Subject',
+            ageRange: 'Unknown',
+            gender: 'Unknown',
+            location: 'Global',
+            sexuality: 'Unknown',
+            relationship: 'Unknown',
+          },
+          career: {
+            jobTitle: 'Unknown',
+            company: 'Unknown',
+            skills: ['General User'],
+          },
+          personal: {
+            hobbies: ['Lurking', 'Chatting'],
+            habits: ['Unknown'],
+            vices: ['None Observed'],
+            virtues: ['None Observed'],
+          },
+          social: [],
+        },
+      };
+
+  return { ...base, id: userId, username };
 }
 
 // --- Main Function ---
 export function showUserProfile(user) {
-    // 1. Inject Styles if missing
-    if (!document.getElementById('dex-profile-styles')) {
-        const styleEl = document.createElement('style');
-        styleEl.id = 'dex-profile-styles';
-        styleEl.textContent = PROFILE_STYLES;
-        document.head.appendChild(styleEl);
-    }
+  // 1. Inject Styles if missing
+  if (!document.getElementById('dex-profile-styles')) {
+    const styleEl = document.createElement('style');
+    styleEl.id = 'dex-profile-styles';
+    styleEl.textContent = PROFILE_STYLES;
+    document.head.appendChild(styleEl);
+  }
 
-    // 2. Render Skeleton Overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'profile-overlay';
-    // Skeleton content
-    overlay.innerHTML = `
+  // 2. Render Skeleton Overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'profile-overlay';
+  // Skeleton content
+  overlay.innerHTML = `
         <div class="profile-card" style="height: 400px; justify-content: center; align-items: center;">
             <div style="text-align: center;">
                 <div style="font-size: 3em; color: #bb86fc;"><i class='bx bx-loader-alt spin'></i></div>
@@ -561,65 +571,71 @@ export function showUserProfile(user) {
             </div>
         </div>
     `;
-    
-    // Close logic
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-            setTimeout(() => overlay.remove(), 300);
-        }
+
+  // Close logic
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(() => overlay.remove(), 300);
+    }
+  });
+
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('active'));
+  document.body.style.overflow = 'hidden';
+
+  // 3. Fetch Data
+  smartDiscordFetch(`/profile/${user.id}`)
+    .then(async (res) => {
+      if (res.ok) {
+        const data = await res.json();
+        renderProfileContent(overlay, user, data);
+      } else {
+        // Fallback to mock if not found (404)
+        console.log('Profile not found or error, using mock data.');
+        const mock = getMockData(user.id, user.username);
+        renderProfileContent(overlay, user, mock);
+      }
+    })
+    .catch((err) => {
+      console.error('Profile fetch error:', err);
+      const mock = getMockData(user.id, user.username);
+      renderProfileContent(overlay, user, mock);
     });
-
-    document.body.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add('active'));
-    document.body.style.overflow = 'hidden';
-
-    // 3. Fetch Data
-    smartDiscordFetch(`/profile/${user.id}`)
-        .then(async (res) => {
-            if (res.ok) {
-                const data = await res.json();
-                renderProfileContent(overlay, user, data);
-            } else {
-                // Fallback to mock if not found (404)
-                console.log("Profile not found or error, using mock data.");
-                const mock = getMockData(user.id, user.username);
-                renderProfileContent(overlay, user, mock);
-            }
-        })
-        .catch(err => {
-            console.error("Profile fetch error:", err);
-            const mock = getMockData(user.id, user.username);
-            renderProfileContent(overlay, user, mock);
-        });
 }
 
 function renderProfileContent(overlay, user, data) {
-    const statusColor = user.status === 'online' ? '#03dac6' : (user.status === 'idle' ? '#ffb74d' : '#cf6679');
+  const statusColor =
+    user.status === 'online' ? '#03dac6' : user.status === 'idle' ? '#ffb74d' : '#cf6679';
 
-    // 3. Render Helpers
-    const renderOverview = () => {
-        const badgesHtml = (data.badges || []).map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('');
-        const factsHtml = (data.attributes || data.facts || []).map(f => {
-            // Handle both backend 'attributes' and mock 'facts' structures
-            const key = f.key || f.k;
-            const val = f.value || f.v;
-            return `
+  // 3. Render Helpers
+  const renderOverview = () => {
+    const badgesHtml = (data.badges || [])
+      .map((b) => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`)
+      .join('');
+    const factsHtml = (data.attributes || data.facts || [])
+      .map((f) => {
+        // Handle both backend 'attributes' and mock 'facts' structures
+        const key = f.key || f.k;
+        const val = f.value || f.v;
+        return `
             <div class="fact-chip">
                 <span class="fact-key">${key}:</span>
                 <span class="fact-val">${val}</span>
             </div>
-        `}).join('');
-        
-        // Handle nested or flat cognitive model
-        const cm = data.cognitive_model || data;
-        const techLevel = cm.technical_level || cm.techLevel || 0;
-        const commStyle = cm.communication_style || cm.commStyle || 'Unknown';
-        const patience = cm.patience_level || cm.patience || 'Unknown';
-        const vibe = cm.vibe || 'Unknown';
+        `;
+      })
+      .join('');
 
-        return `
+    // Handle nested or flat cognitive model
+    const cm = data.cognitive_model || data;
+    const techLevel = cm.technical_level || cm.techLevel || 0;
+    const commStyle = cm.communication_style || cm.commStyle || 'Unknown';
+    const patience = cm.patience_level || cm.patience || 'Unknown';
+    const vibe = cm.vibe || 'Unknown';
+
+    return `
             <div class="overview-grid">
                 <div class="profile-section">
                     <div class="profile-section-title"><i class='bx bx-brain'></i> Cognitive Model</div>
@@ -668,16 +684,16 @@ function renderProfileContent(overlay, user, data) {
                 </div>
             </div>
         `;
-    };
+  };
 
-    const renderDossier = () => {
-        const d = data.dossier || {};
-        const identity = d.identity || {};
-        const career = d.career || {};
-        const personal = d.personal || {};
-        const social = d.social || [];
+  const renderDossier = () => {
+    const d = data.dossier || {};
+    const identity = d.identity || {};
+    const career = d.career || {};
+    const personal = d.personal || {};
+    const social = d.social || [];
 
-        return `
+    return `
             <div class="dossier-grid">
                 <!-- Identity Column -->
                 <div class="dossier-column">
@@ -715,7 +731,7 @@ function renderProfileContent(overlay, user, data) {
                         <div style="height: 15px;"></div>
                          <div class="dossier-label">Key Skills</div>
                          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
-                            ${(career.skills || []).map(s => `<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${s}</span>`).join('')}
+                            ${(career.skills || []).map((s) => `<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${s}</span>`).join('')}
                          </div>
                     </div>
                 </div>
@@ -727,21 +743,21 @@ function renderProfileContent(overlay, user, data) {
                     <div class="dossier-item">
                         <div class="dossier-label"><i class='bx bx-joystick'></i> Hobbies</div>
                         <div style="margin-top: 10px;">
-                            ${(personal.hobbies || []).map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
+                            ${(personal.hobbies || []).map((h) => `<div class="dossier-list-item">${h}</div>`).join('')}
                         </div>
                     </div>
 
                     <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-sync'></i> Habits</div>
                         <div style="margin-top: 10px;">
-                            ${(personal.habits || []).map(h => `<div class="dossier-list-item">${h}</div>`).join('')}
+                            ${(personal.habits || []).map((h) => `<div class="dossier-list-item">${h}</div>`).join('')}
                         </div>
                     </div>
 
                      <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-error-circle'></i> Known Vices</div>
                         <div style="margin-top: 10px;">
-                            ${(personal.vices || []).map(h => `<div class="dossier-list-item" style="color: #cf6679;">${h}</div>`).join('')}
+                            ${(personal.vices || []).map((h) => `<div class="dossier-list-item" style="color: #cf6679;">${h}</div>`).join('')}
                         </div>
                     </div>
                 </div>
@@ -750,57 +766,75 @@ function renderProfileContent(overlay, user, data) {
                 <div class="dossier-column">
                     <div class="profile-section-title"><i class='bx bx-network-chart'></i> Known Associates</div>
                     <div class="dossier-item" style="background: none; border: none; padding: 0;">
-                        ${social.length > 0 ? social.map(s => `
+                        ${
+                          social.length > 0
+                            ? social
+                                .map(
+                                  (s) => `
                             <div class="friend-chip">
-                                <div style="width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">${s.name.substring(0,1)}</div>
+                                <div style="width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">${s.name.substring(0, 1)}</div>
                                 <div style="flex: 1;">
                                     <div style="color: #fff; font-weight: 500;">${s.name}</div>
                                     <div style="font-size: 0.75em; color: #888;">${s.relation}</div>
                                 </div>
                                 <div style="font-size: 0.8em; color: #03dac6;">${s.trust}</div>
                             </div>
-                        `).join('') : '<div style="color: #666; font-style: italic;">No associates mapped.</div>'}
+                        `
+                                )
+                                .join('')
+                            : '<div style="color: #666; font-style: italic;">No associates mapped.</div>'
+                        }
                     </div>
                 </div>
             </div>
         `;
-    };
+  };
 
-    const renderPsychometrics = () => {
-        const traits = data.traits || {};
-        return `
+  const renderPsychometrics = () => {
+    const traits = data.traits || {};
+    return `
         <div class="profile-section-title"><i class='bx bx-radar'></i> Personality Matrix (OCEAN)</div>
         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
-            ${Object.entries(traits).map(([trait, val]) => `
+            ${Object.entries(traits)
+              .map(
+                ([trait, val]) => `
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                     <div style="width: 10px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 5px; position: relative; overflow: hidden;">
                         <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${val}%; background: ${val > 50 ? '#03dac6' : '#cf6679'}; transition: height 1s;"></div>
                     </div>
-                    <div style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #aaa;">${trait.substring(0,4)}</div>
+                    <div style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #aaa;">${trait.substring(0, 4)}</div>
                     <div style="font-family: monospace;">${val}%</div>
                 </div>
-            `).join('')}
+            `
+              )
+              .join('')}
         </div>
         <div style="margin-top: 40px;">
             <div class="profile-section-title"><i class='bx bx-message-square-detail'></i> Sentiment History</div>
             <div style="height: 100px; border-bottom: 1px solid #333; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 5px;">
-                ${Array.from({length: 40}).map(() => {
+                ${Array.from({ length: 40 })
+                  .map(() => {
                     const h = Math.floor(Math.random() * 80) + 10;
-                    const c = Math.random() > 0.7 ? '#cf6679' : (Math.random() > 0.5 ? '#03dac6' : '#444');
-                    return `<div style="flex: 1; background: ${c}; height: ${h}%; border-radius: 2px;"></div>`
-                }).join('')}
+                    const c =
+                      Math.random() > 0.7 ? '#cf6679' : Math.random() > 0.5 ? '#03dac6' : '#444';
+                    return `<div style="flex: 1; background: ${c}; height: ${h}%; border-radius: 2px;"></div>`;
+                  })
+                  .join('')}
             </div>
             <div style="font-family: monospace; color: #666; font-size: 0.7em; margin-top: 5px; display: flex; justify-content: space-between;">
                 <span>30 Days Ago</span>
                 <span>Today</span>
             </div>
         </div>
-    `};
+    `;
+  };
 
-    const renderTopicMap = () => `
+  const renderTopicMap = () => `
         <div class="profile-section-title"><i class='bx bx-map-alt'></i> Conversation Topics</div>
         <div style="margin-top: 20px;">
-            ${(data.topics || []).map(t => `
+            ${(data.topics || [])
+              .map(
+                (t) => `
                 <div class="topic-bar">
                     <div class="topic-header">
                         <span style="color: #eee;">${t.name}</span>
@@ -810,16 +844,18 @@ function renderProfileContent(overlay, user, data) {
                         <div class="topic-fill" style="width: ${t.val}%"></div>
                     </div>
                 </div>
-            `).join('')}
+            `
+              )
+              .join('')}
         </div>
     `;
 
-    const renderRawData = () => `
+  const renderRawData = () => `
         <div class="profile-section-title"><i class='bx bx-code-alt'></i> Raw Profile JSON</div>
         <div class="raw-json">${JSON.stringify(data, null, 2)}</div>
     `;
 
-    const html = `
+  const html = `
         <div class="profile-card">
             <button class="close-profile-btn" onclick="document.querySelector('.profile-overlay').click()"><i class='bx bx-x'></i></button>
             
@@ -830,7 +866,7 @@ function renderProfileContent(overlay, user, data) {
                 </div>
                 <div class="profile-identity">
                     <h2>${escapeHtml(user.username)}</h2>
-                    <div class="profile-badges">${(data.badges || []).map(b => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('')}</div>
+                    <div class="profile-badges">${(data.badges || []).map((b) => `<span class="profile-badge ${b === 'Creator' ? 'master' : ''}">${b}</span>`).join('')}</div>
                 </div>
             </div>
             
@@ -861,39 +897,39 @@ function renderProfileContent(overlay, user, data) {
         </div>
     `;
 
-    overlay.innerHTML = html;
+  overlay.innerHTML = html;
 
-    // Elements
-    const card = overlay.querySelector('.profile-card');
-    const expandBtn = overlay.querySelector('#profile-expand-toggle');
-    const tabs = overlay.querySelectorAll('.profile-tab-btn');
-    const contents = overlay.querySelectorAll('.tab-content');
-    const closeBtn = overlay.querySelector('.close-profile-btn');
+  // Elements
+  const card = overlay.querySelector('.profile-card');
+  const expandBtn = overlay.querySelector('#profile-expand-toggle');
+  const tabs = overlay.querySelectorAll('.profile-tab-btn');
+  const contents = overlay.querySelectorAll('.tab-content');
+  const closeBtn = overlay.querySelector('.close-profile-btn');
 
-    // Close Button
-    closeBtn.addEventListener('click', () => {
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        setTimeout(() => overlay.remove(), 300);
+  // Close Button
+  closeBtn.addEventListener('click', () => {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(() => overlay.remove(), 300);
+  });
+
+  // Tab Switching
+  tabs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tabs.forEach((t) => t.classList.remove('active'));
+      contents.forEach((c) => c.classList.remove('active'));
+
+      btn.classList.add('active');
+      overlay.querySelector(`#tab-${btn.dataset.tab}`).classList.add('active');
     });
+  });
 
-    // Tab Switching
-    tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            contents.forEach(c => c.classList.remove('active'));
-            
-            btn.classList.add('active');
-            overlay.querySelector(`#tab-${btn.dataset.tab}`).classList.add('active');
-        });
-    });
-
-    // Expand / Collapse
-    expandBtn.addEventListener('click', () => {
-        card.classList.toggle('expanded');
-        const isExpanded = card.classList.contains('expanded');
-        expandBtn.innerHTML = isExpanded 
-            ? `<i class='bx bx-collapse-alt'></i> Collapse View` 
-            : `<i class='bx bx-expand-alt'></i> Detailed Analysis`;
-    });
+  // Expand / Collapse
+  expandBtn.addEventListener('click', () => {
+    card.classList.toggle('expanded');
+    const isExpanded = card.classList.contains('expanded');
+    expandBtn.innerHTML = isExpanded
+      ? `<i class='bx bx-collapse-alt'></i> Collapse View`
+      : `<i class='bx bx-expand-alt'></i> Detailed Analysis`;
+  });
 }

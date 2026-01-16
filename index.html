@@ -2,802 +2,978 @@
 <html lang="en-GB">
   <head>
 <!-- HEAD_START -->
-<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Home - Easter Company</title>
 
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="revised" content="2026-01-16">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Easter">
-  <meta name="theme-color" content="#050507">
+<!-- SEO Meta Tags -->
+<meta
+  name="description"
+  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
+/>
+<meta name="revised" content="2026-01-16" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Easter" />
+<meta name="theme-color" content="#050507" />
 
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="Easter Company">
-  <meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="Easter Company" />
+<meta
+  property="og:description"
+  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
+/>
   <meta property="og:url" content="https://easter.company">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=7e009ace">
-  <meta property="fb:app_id" content="1541540286236316">
+<meta property="og:type" content="website" />
+<meta
+  property="og:image"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=c3975320"
+/>
+<meta property="fb:app_id" content="1541540286236316" />
 
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Easter Company">
-  <meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products.">
-  <meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=7e009ace">
-  <meta name="twitter:site" content="@eastercompany">
-  <meta name="twitter:creator" content="@eastercompany">
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Easter Company" />
+<meta
+  name="twitter:description"
+  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
+/>
+<meta
+  name="twitter:image"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=c3975320"
+/>
+<meta name="twitter:site" content="@eastercompany" />
+<meta name="twitter:creator" content="@eastercompany" />
 
-  <!-- Favicons and Icons -->
-  <link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=7e009ace" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=7e009ace">
-  <link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=7e009ace">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=7e009ace">
-  <link rel="manifest" href="/site.webmanifest?last_build=7e009ace">
+<!-- Favicons and Icons -->
+<link
+  rel="icon"
+  type="image/png"
+  href="/static/meta/favicon-96x96.png?last_build=c3975320"
+  sizes="96x96"
+/>
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=c3975320" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=c3975320" />
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/static/meta/apple-touch-icon.png?last_build=c3975320"
+/>
+<link rel="manifest" href="/site.webmanifest?last_build=c3975320" />
 
-  <!-- Canonical URL -->
+<!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
-
 <!-- HEAD_END -->
-  <style>
-    html {
-      -webkit-text-size-adjust: 100%; /* Prevent font inflation on iOS */
-      text-size-adjust: 100%;
-    }
-    .hero-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 0;
-      margin: 0;
-      position: relative;
-      z-index: 1;
-    }
-    .easter-hero-logo {
-      width: clamp(200px, 40vw, 500px); /* Big logo */
-      height: auto;
-      margin-bottom: 20px; /* Space between logo and subtitle */
-      z-index: 2;
-      filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.2));
-      transform: translateY(-5%); /* A little above center */
-    }
-    .easter-hero-subtitle {
-      user-select: none;
-      width: 100%;
-      max-width: 900px;
-      height: auto;
-      z-index: 2;
-      margin-top: 1rem;
-      margin-bottom: 3rem;
-      transform: translateY(-5%);
-      display: block;
-    }
-    .dexter-hero-logo {
-      user-select: none;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2rem, 10vw, 4rem);
-      letter-spacing: -0.05em;
-      background: linear-gradient(180deg, #fff 0%, #666 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1;
-      text-align: center;
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
-    }
-    .dexter-subtitle {
-      user-select: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(0.6rem, 1.5vw, 0.9rem);
-      color: var(--neon-blue);
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      margin-top: 0.5rem;
-      opacity: 0.8;
-      text-align: center;
-    }
-    .bashful-subtitle {
-      user-select: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(0.6rem, 1.5vw, 0.9rem);
-      color: #27c93f;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      margin-top: 0.5rem;
-      opacity: 0.8;
-      text-align: center;
-    }
-
-    .est-text {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      margin-top: -1.5rem;
-      margin-bottom: 3rem;
-      z-index: 2;
-    }
-
-    .hero-icons {
-      display: flex;
-      gap: 50px;
-      margin-bottom: 0;
-      z-index: 2;
-      align-items: center;
-    }
-
-    .hero-icon {
-      height: 32px;
-      width: auto;
-      opacity: 0.5;
-      transition: all 0.3s ease;
-      filter: grayscale(100%);
-    }
-    .hero-icon:hover {
-      opacity: 1;
-      filter: grayscale(0%) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-      transform: translateY(-3px);
-    }
-
-    @media (max-width: 879px) {
-      .hero-icons {
-        display: none;
+    <style>
+      html {
+        -webkit-text-size-adjust: 100%; /* Prevent font inflation on iOS */
+        text-size-adjust: 100%;
       }
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #050507;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* Scroll Indicator */
-    .scroll-indicator {
-      margin-top: auto;
-      margin-bottom: 140px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      color: rgba(255, 255, 255, 0.3);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      z-index: 2;
-      pointer-events: none;
-      text-transform: uppercase;
-    }
-    .scroll-indicator i {
-      font-size: 1.5rem;
-      animation: bounce 2s infinite;
-    }
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-      40% {transform: translateY(-10px);}
-      60% {transform: translateY(-5px);}
-    }
-
-    /* Content Section */
-    .content-section {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 100px 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-      position: relative;
-      z-index: 1;
-    }
-    .products-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @media (max-width: 768px) {
-      .products-grid {
-        grid-template-columns: 1fr;
+      .hero-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        z-index: 1;
       }
-    }
-    .widget {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-    }
-    .widget.full-width {
-      grid-column: span 2;
-    }
-    @media (max-width: 768px) {
-      .widget.full-width {
-        grid-column: span 1;
-      }
-    }
-    .widget:hover {
-      transform: translateY(-10px);
-      border-color: var(--neon-blue);
-      box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
-      text-decoration: none;
-    }
-    .widget:hover h3,
-    .widget:hover p {
-      text-decoration: none;
-    }
-    .widget-image {
-      width: 100%;
-      height: 200px;
-      background: rgba(255, 255, 255, 0.02);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-      color: #fff;
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .widget-image i,
-    .widget-image img {
-      max-width: 50%;
-      max-height: 40%;
-      opacity: 0.7;
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
-    }
-    .widget-content {
-      padding: 25px;
-    }
-    .widget-content h3 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.2rem;
-      color: #fff;
-      margin-bottom: 12px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .widget-content h3 img,
-    .widget-text-content h3 img {
-      height: 20px;
-      width: auto;
-      opacity: 0.7;
-    }
-    .widget-text-content h3 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.2rem;
-      color: #fff;
-      margin-bottom: 12px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .widget-content p {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      color: #888;
-      line-height: 1.6;
-      text-align: left;
-      margin: 0;
-    }
-
-    /* Clients Marquee */
-    .clients-marquee {
-      width: 100%;
-      max-width: 1200px;
-      margin: 50px auto 0 auto;
-      padding: 0 20px 100px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      position: relative;
-      z-index: 1;
-      overflow: hidden;
-      /* Mask for fade effect */
-      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    }
-
-    .marquee-row {
-      display: flex;
-      width: 100%;
-      overflow: hidden;
-      user-select: none;
-    }
-
-    .marquee-content {
-      display: flex;
-      flex-shrink: 0;
-      align-items: center;
-      gap: 60px;
-      padding: 0 30px;
-      min-width: 100%;
-      will-change: transform;
-      transform: translate3d(0, 0, 0); /* Force hardware acceleration */
-    }
-
-    .scroll-left .marquee-content {
-      animation: scrollLeft 75s linear infinite;
-    }
-
-    .scroll-right .marquee-content {
-      animation: scrollRight 75s linear infinite;
-    }
-
-    /* Pause on hover */
-    .marquee-row:hover .marquee-content {
-      animation-play-state: paused;
-    }
-
-    @keyframes scrollLeft {
-      from { transform: translateX(0); }
-      to { transform: translateX(-100%); }
-    }
-
-    @keyframes scrollRight {
-      from { transform: translateX(-100%); }
-      to { transform: translateX(0); }
-    }
-
-    .clients-marquee img {
-      display: block;
-      height: 28px; /* Standardized height */
-      width: auto;
-      opacity: 0.4;
-      transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
-      /* filter: grayscale(100%); - Removed to show colors but dim */
-      will-change: transform, opacity, filter;
-    }
-
-    .clients-marquee img:hover {
-      opacity: 1;
-      filter: none;
-      transform: scale(1.05);
-    }
-
-    .section-header {
-      width: 100%;
-      max-width: 1200px;
-      margin: 120px auto 0 auto;
-      padding: 0 20px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--neon-blue);
-      text-transform: uppercase;
-      letter-spacing: 0.4em;
-      opacity: 0.5;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      z-index: 1;
-      position: relative;
-    }
-    .section-header::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
-    }
-
-    /* About Us Section */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 30px;
-      width: 100%;
-      max-width: 1200px;
-      margin: 50px auto 100px auto;
-      padding: 0 20px;
-    }
-    @media (max-width: 900px) {
-      .about-grid { grid-template-columns: 1fr; }
-    }
-
-    .terminal-window {
-      background: #050507;
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 25px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      color: #a9a9b3;
-      position: relative;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-height: 300px;
-      text-align: left;
-    }
-    @media (max-width: 900px) {
-      .terminal-window {
+      .easter-hero-logo {
+        width: clamp(200px, 40vw, 500px); /* Big logo */
         height: auto;
-        min-height: auto;
+        margin-bottom: 20px; /* Space between logo and subtitle */
+        z-index: 2;
+        filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.2));
+        transform: translateY(-5%); /* A little above center */
       }
-    }
-    .terminal-header {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot.red { background: #ff5f56; }
-    .dot.yellow { background: #ffbd2e; }
-    .dot.green { background: #27c93f; }
-    
-        .terminal-body {
-          text-align: left;
+      .easter-hero-subtitle {
+        user-select: none;
+        width: 100%;
+        max-width: 900px;
+        height: auto;
+        z-index: 2;
+        margin-top: 1rem;
+        margin-bottom: 3rem;
+        transform: translateY(-5%);
+        display: block;
+      }
+      .dexter-hero-logo {
+        user-select: none;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 800;
+        font-size: clamp(2rem, 10vw, 4rem);
+        letter-spacing: -0.05em;
+        background: linear-gradient(180deg, #fff 0%, #666 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        text-align: center;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+      }
+      .dexter-subtitle {
+        user-select: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+        color: var(--neon-blue);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin-top: 0.5rem;
+        opacity: 0.8;
+        text-align: center;
+      }
+      .bashful-subtitle {
+        user-select: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+        color: #27c93f;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin-top: 0.5rem;
+        opacity: 0.8;
+        text-align: center;
+      }
+
+      .est-text {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        margin-top: -1.5rem;
+        margin-bottom: 3rem;
+        z-index: 2;
+      }
+
+      .hero-icons {
+        display: flex;
+        gap: 50px;
+        margin-bottom: 0;
+        z-index: 2;
+        align-items: center;
+      }
+
+      .hero-icon {
+        height: 32px;
+        width: auto;
+        opacity: 0.5;
+        transition: all 0.3s ease;
+        filter: grayscale(100%);
+      }
+      .hero-icon:hover {
+        opacity: 1;
+        filter: grayscale(0%) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        transform: translateY(-3px);
+      }
+
+      @media (max-width: 879px) {
+        .hero-icons {
+          display: none;
         }
-        .terminal-body p {
-          margin: 5px 0;
-          line-height: 1.5;
-          overflow-wrap: break-word;
-          word-wrap: break-word;
-          text-align: left;
-        }    .cmd { color: var(--neon-blue); }
-    .string { color: #ce9178; }
-    .comment { color: #6a9955; font-style: italic; }
-    .cursor { animation: blink 1s step-end infinite; color: var(--neon-blue); }
-    @keyframes blink { 50% { opacity: 0; } }
+      }
 
-    .stats-grid {
-      display: grid;
-      grid-template-rows: repeat(3, 1fr);
-      gap: 20px;
-    }
-    @media (max-width: 900px) {
-      .stats-grid { grid-template-rows: auto; grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .stats-grid { grid-template-columns: 1fr; }
-    }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #050507;
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
 
-    .stat-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-    .stat-card:hover {
-      transform: translateX(-5px);
-      border-color: var(--neon-blue);
-      box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
-    }
-    .stat-number {
-      font-family: 'Poppins', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
-      line-height: 1;
-    }
-    .stat-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-    }
+      /* Scroll Indicator */
+      .scroll-indicator {
+        margin-top: auto;
+        margin-bottom: 140px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        color: rgba(255, 255, 255, 0.3);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease;
+        z-index: 2;
+        pointer-events: none;
+        text-transform: uppercase;
+      }
+      .scroll-indicator i {
+        font-size: 1.5rem;
+        animation: bounce 2s infinite;
+      }
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
 
-    .about-bio {
-      grid-column: 1 / -1;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 40px;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-    .about-bio:hover {
-      border-color: var(--neon-blue);
-    }
-    .about-bio h3 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.5rem;
-      color: #fff;
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
-    .about-bio p {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      color: #888;
-      line-height: 1.8;
-      margin: 0;
-    }
-  </style>
-  <link rel="stylesheet" href="/dist/dex.7e009ace.css"></head>
+      /* Content Section */
+      .content-section {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 100px 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        position: relative;
+        z-index: 1;
+      }
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (max-width: 768px) {
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .widget {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+      }
+      .widget.full-width {
+        grid-column: span 2;
+      }
+      @media (max-width: 768px) {
+        .widget.full-width {
+          grid-column: span 1;
+        }
+      }
+      .widget:hover {
+        transform: translateY(-10px);
+        border-color: var(--neon-blue);
+        box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
+        text-decoration: none;
+      }
+      .widget:hover h3,
+      .widget:hover p {
+        text-decoration: none;
+      }
+      .widget-image {
+        width: 100%;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.02);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        color: #fff;
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .widget-image i,
+      .widget-image img {
+        max-width: 50%;
+        max-height: 40%;
+        opacity: 0.7;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+      }
+      .widget-content {
+        padding: 25px;
+      }
+      .widget-content h3 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #fff;
+        margin-bottom: 12px;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .widget-content h3 img,
+      .widget-text-content h3 img {
+        height: 20px;
+        width: auto;
+        opacity: 0.7;
+      }
+      .widget-text-content h3 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #fff;
+        margin-bottom: 12px;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .widget-content p {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        color: #888;
+        line-height: 1.6;
+        text-align: left;
+        margin: 0;
+      }
+
+      /* Clients Marquee */
+      .clients-marquee {
+        width: 100%;
+        max-width: 1200px;
+        margin: 50px auto 0 auto;
+        padding: 0 20px 100px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        /* Mask for fade effect */
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+
+      .marquee-row {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+        user-select: none;
+      }
+
+      .marquee-content {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        gap: 60px;
+        padding: 0 30px;
+        min-width: 100%;
+        will-change: transform;
+        transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+      }
+
+      .scroll-left .marquee-content {
+        animation: scrollLeft 75s linear infinite;
+      }
+
+      .scroll-right .marquee-content {
+        animation: scrollRight 75s linear infinite;
+      }
+
+      /* Pause on hover */
+      .marquee-row:hover .marquee-content {
+        animation-play-state: paused;
+      }
+
+      @keyframes scrollLeft {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-100%);
+        }
+      }
+
+      @keyframes scrollRight {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .clients-marquee img {
+        display: block;
+        height: 28px; /* Standardized height */
+        width: auto;
+        opacity: 0.4;
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease,
+          filter 0.3s ease;
+        /* filter: grayscale(100%); - Removed to show colors but dim */
+        will-change: transform, opacity, filter;
+      }
+
+      .clients-marquee img:hover {
+        opacity: 1;
+        filter: none;
+        transform: scale(1.05);
+      }
+
+      .section-header {
+        width: 100%;
+        max-width: 1200px;
+        margin: 120px auto 0 auto;
+        padding: 0 20px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--neon-blue);
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
+        opacity: 0.5;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        z-index: 1;
+        position: relative;
+      }
+      .section-header::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
+      }
+
+      /* About Us Section */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 30px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 50px auto 100px auto;
+        padding: 0 20px;
+      }
+      @media (max-width: 900px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .terminal-window {
+        background: #050507;
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 25px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        color: #a9a9b3;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 300px;
+        text-align: left;
+      }
+      @media (max-width: 900px) {
+        .terminal-window {
+          height: auto;
+          min-height: auto;
+        }
+      }
+      .terminal-header {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .dot.red {
+        background: #ff5f56;
+      }
+      .dot.yellow {
+        background: #ffbd2e;
+      }
+      .dot.green {
+        background: #27c93f;
+      }
+
+      .terminal-body {
+        text-align: left;
+      }
+      .terminal-body p {
+        margin: 5px 0;
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        text-align: left;
+      }
+      .cmd {
+        color: var(--neon-blue);
+      }
+      .string {
+        color: #ce9178;
+      }
+      .comment {
+        color: #6a9955;
+        font-style: italic;
+      }
+      .cursor {
+        animation: blink 1s step-end infinite;
+        color: var(--neon-blue);
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-rows: repeat(3, 1fr);
+        gap: 20px;
+      }
+      @media (max-width: 900px) {
+        .stats-grid {
+          grid-template-rows: auto;
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 600px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .stat-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+      .stat-card:hover {
+        transform: translateX(-5px);
+        border-color: var(--neon-blue);
+        box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
+      }
+      .stat-number {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 5px;
+        line-height: 1;
+      }
+      .stat-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+      }
+
+      .about-bio {
+        grid-column: 1 / -1;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 40px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+      .about-bio:hover {
+        border-color: var(--neon-blue);
+      }
+      .about-bio h3 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #fff;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+      .about-bio p {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        color: #888;
+        line-height: 1.8;
+        margin: 0;
+      }
+    </style>
+    <link rel="stylesheet" href="/dist/dex.7e009ace.css" />
+  <link rel="stylesheet" href="/dist/dex.c3975320.css"></head>
   <body>
     <main id="main">
-    <section class="hero-section" style="min-height: 100vh; padding-top: 15vh;">
-      <img src="/static/assets/logo/easter_logo.svg" alt="Easter Company Logo" class="easter-hero-logo" />
-      <svg viewBox="0 0 1600 450" class="easter-hero-subtitle">
-        <text x="50%" y="85%" text-anchor="middle" style="font-family: 'Poppins', sans-serif; font-size: 280px; font-weight: 700; fill: transparent; stroke: rgba(255,255,255,0.3); stroke-width: 4px; letter-spacing: 10px;">
-          COMPANY
-        </text>
-        <text x="50%" y="60%" text-anchor="middle" style="font-family: 'Poppins', sans-serif; font-size: 280px; font-weight: 700; fill: transparent; stroke: rgba(255,255,255,0.9); stroke-width: 4px; letter-spacing: 10px;">
-          EASTER
-        </text>
-      </svg>
+      <section class="hero-section" style="min-height: 100vh; padding-top: 15vh">
+        <img
+          src="/static/assets/logo/easter_logo.svg"
+          alt="Easter Company Logo"
+          class="easter-hero-logo"
+        />
+        <svg viewBox="0 0 1600 450" class="easter-hero-subtitle">
+          <text
+            x="50%"
+            y="85%"
+            text-anchor="middle"
+            style="
+              font-family: 'Poppins', sans-serif;
+              font-size: 280px;
+              font-weight: 700;
+              fill: transparent;
+              stroke: rgba(255, 255, 255, 0.3);
+              stroke-width: 4px;
+              letter-spacing: 10px;
+            "
+          >
+            COMPANY
+          </text>
+          <text
+            x="50%"
+            y="60%"
+            text-anchor="middle"
+            style="
+              font-family: 'Poppins', sans-serif;
+              font-size: 280px;
+              font-weight: 700;
+              fill: transparent;
+              stroke: rgba(255, 255, 255, 0.9);
+              stroke-width: 4px;
+              letter-spacing: 10px;
+            "
+          >
+            EASTER
+          </text>
+        </svg>
 
-      <div class="est-text">EST. 2016</div>
+        <div class="est-text">EST. 2016</div>
 
-      <div class="hero-icons">
-        <a href="/dexter" title="Dexter AI">
-          <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter" class="hero-icon" />
-        </a>
-        <a href="https://bashful-sh.github.io" target="_blank" title="Bashful CLI">
-          <img src="/static/assets/bashful-icon.svg" alt="Bashful" class="hero-icon" />
-        </a>
-        <a href="#" title="Overlord Framework">
-          <img src="/static/assets/logo/overlord_logo.svg" alt="Overlord" class="hero-icon" />
-        </a>
-      </div>
-
-      <div class="scroll-indicator" id="scroll-indicator">
-        <span>Scroll Down</span>
-        <i class='bx bx-chevron-down'></i>
-      </div>
-    </section>
-
-    <div class="section-header" style="font-size: 1rem;">&gt;&gt; INFO</div>
-    <section class="content-section products-grid">
-      <a href="/dexter" class="widget">
-        <div class="widget-image" style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
-          <h1 class="dexter-hero-logo">DEXTER</h1>
-          <p class="dexter-subtitle">M.XIV: Self Evolving AI</p>
+        <div class="hero-icons">
+          <a href="/dexter" title="Dexter AI">
+            <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter" class="hero-icon" />
+          </a>
+          <a href="https://bashful-sh.github.io" target="_blank" title="Bashful CLI">
+            <img src="/static/assets/bashful-icon.svg" alt="Bashful" class="hero-icon" />
+          </a>
+          <a href="#" title="Overlord Framework">
+            <img src="/static/assets/logo/overlord_logo.svg" alt="Overlord" class="hero-icon" />
+          </a>
         </div>
-        <div class="widget-content">
-          <h3>Dexter AI <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter Icon" /></h3>
+
+        <div class="scroll-indicator" id="scroll-indicator">
+          <span>Scroll Down</span>
+          <i class="bx bx-chevron-down"></i>
+        </div>
+      </section>
+
+      <div class="section-header" style="font-size: 1rem">&gt;&gt; INFO</div>
+      <section class="content-section products-grid">
+        <a href="/dexter" class="widget">
+          <div
+            class="widget-image"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 20px;
+              text-align: center;
+            "
+          >
+            <h1 class="dexter-hero-logo">DEXTER</h1>
+            <p class="dexter-subtitle">M.XIV: Self Evolving AI</p>
+          </div>
+          <div class="widget-content">
+            <h3>Dexter AI <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter Icon" /></h3>
+            <p>
+              A recusrive engineering, self evolving artificial intelligence platform. M.XIV (Mark
+              14) brings aevent driven micro service architecture with recursive learning, sleep,
+              dream, security & self-development cycles powered by a tier based agent-protocol
+              system.
+            </p>
+          </div>
+        </a>
+
+        <a
+          href="https://bashful-sh.github.io"
+          class="widget"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div
+            class="widget-image"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 20px;
+              text-align: center;
+            "
+          >
+            <h1 class="dexter-hero-logo">BASHFUL</h1>
+            <p class="bashful-subtitle">For Modern Terminals</p>
+          </div>
+          <div class="widget-content">
+            <h3>Bashful CLI <img src="/static/assets/bashful-icon.svg" alt="Bashful Icon" /></h3>
+            <p>
+              A high-performance command-line interface for the modern engineer which extends bash
+              with a superset of commands needed for complex system management. Empowering both
+              human and AI developers. Easily integrates with Dexter and other models automatically.
+            </p>
+          </div>
+        </a>
+
+        <div class="widget full-width vertical-split" style="min-height: 468px">
+          <div class="widget-text-content">
+            <h3>
+              Overlord Framework
+              <img src="/static/assets/logo/overlord_logo.svg" alt="Overlord Icon" />
+            </h3>
+            <p>
+              A true full-stack ecosystem designed to streamline the development of high-performance
+              web and native applications. Overlord provides a unified project structure, code
+              generation, and a powerful state management library, all with built-in AI integration
+              hooks for creating intelligent, data-driven experiences.
+            </p>
+          </div>
+          <div class="widget-video-content">
+            <video
+              autoplay
+              muted
+              loop
+              playsinline
+              src="/static/assets/showcase/overlord.mp4"
+            ></video>
+          </div>
+        </div>
+      </section>
+
+      <div class="about-grid" style="margin-top: 100px">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <div class="terminal-body">
+            <p><span class="cmd">root@easter:~$</span> ./mission_statement.sh</p>
+            <p>&gt; Initializing core philosophy...</p>
+            <p>&gt; Loading "Recursive Engineering" modules...</p>
+            <p>&gt; [SUCCESS] Vision loaded.</p>
+            <br />
+            <p class="comment"># We bridge the gap between abstract idea and</p>
+            <p class="comment"># concrete implementation. We build intelligence</p>
+            <p class="comment"># that builds itself.</p>
+            <br />
+            <p><span class="cmd">root@easter:~$</span> cat locations.txt</p>
+            <p>Highlands of Scotland, United Kingdom</p>
+            <p>New York, United States</p>
+            <p>New Jersey, United States</p>
+            <br />
+            <p><span class="cmd">root@easter:~$</span> <span class="cursor">_</span></p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">2016</div>
+            <div class="stat-label">Founded</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Years R&D</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Independent</div>
+          </div>
+        </div>
+
+        <div class="about-bio">
+          <h3>Our Story</h3>
           <p>
-              A recusrive engineering, self evolving artificial intelligence platform.
-              M.XIV (Mark 14) brings aevent driven micro service architecture with
-              recursive learning, sleep, dream, security & self-development cycles
-              powered by a tier based agent-protocol system.
+            Easter Company is a specialized engineering firm dedicated to the pursuit of recursive
+            intelligence and high-fidelity digital implementation. Founded in 2016 as a research
+            initiative, we have evolved into a strategic partner for global industry leaders across
+            AI, Finance, and Luxury Retail sectors.
+            <br /><br />
+            Our core mission is to eliminate the friction between abstract vision and concrete
+            reality. We believe that modern software systems should be as dynamic as the people who
+            use them—evolving, learning, and self-correcting. Operating from our bases in the
+            Highlands of Scotland and New York, we act as a distributed nerve center for
+            cutting-edge innovation, delivering products that define their respective niches.
           </p>
         </div>
-      </a>
-
-      <a href="https://bashful-sh.github.io" class="widget" target="_blank" rel="noopener noreferrer">
-        <div class="widget-image" style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
-          <h1 class="dexter-hero-logo">BASHFUL</h1>
-          <p class="bashful-subtitle">For Modern Terminals</p>
-        </div>
-        <div class="widget-content">
-          <h3>Bashful CLI <img src="/static/assets/bashful-icon.svg" alt="Bashful Icon" /></h3>
-          <p>
-              A high-performance command-line interface for the modern engineer which extends bash with a superset of commands needed for complex system management.
-              Empowering both human and AI developers.
-              Easily integrates with Dexter and other models automatically.
-          </p>
-        </div>
-      </a>
-
-      <div class="widget full-width vertical-split" style="min-height:468px;">
-        <div class="widget-text-content">
-          <h3>Overlord Framework <img src="/static/assets/logo/overlord_logo.svg" alt="Overlord Icon" /></h3>
-          <p>A true full-stack ecosystem designed to streamline the development of high-performance web and native applications. Overlord provides a unified project structure, code generation, and a powerful state management library, all with built-in AI integration hooks for creating intelligent, data-driven experiences.</p>
-        </div>
-        <div class="widget-video-content">
-          <video autoplay muted loop playsinline src="/static/assets/showcase/overlord.mp4"></video>
-        </div>
-      </div>
-    </section>
-
-    <div class="about-grid" style="margin-top: 100px;">
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="dot red"></div>
-          <div class="dot yellow"></div>
-          <div class="dot green"></div>
-        </div>
-        <div class="terminal-body">
-          <p><span class="cmd">root@easter:~$</span> ./mission_statement.sh</p>
-          <p>> Initializing core philosophy...</p>
-          <p>> Loading "Recursive Engineering" modules...</p>
-          <p>> [SUCCESS] Vision loaded.</p>
-          <br>
-          <p class="comment"># We bridge the gap between abstract idea and</p>
-          <p class="comment"># concrete implementation. We build intelligence</p>
-          <p class="comment"># that builds itself.</p>
-          <br>
-          <p><span class="cmd">root@easter:~$</span> cat locations.txt</p>
-          <p>Highlands of Scotland, United Kingdom</p>
-          <p>New York, United States</p>
-          <p>New Jersey, United States</p>
-          <br>
-          <p><span class="cmd">root@easter:~$</span> <span class="cursor">_</span></p>
-        </div>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number">2016</div>
-          <div class="stat-label">Founded</div>
+      <div class="clients-marquee">
+        <!-- Row 1: Left Scroll -->
+        <div class="marquee-row scroll-left">
+          <div class="marquee-content">
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+            <img src="/static/assets/clients/dior.svg" alt="Dior" />
+            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+            <img src="/static/assets/clients/boss.svg" alt="Boss" />
+            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+          </div>
+          <!-- Duplicate for loop -->
+          <div class="marquee-content">
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+            <img src="/static/assets/clients/dior.svg" alt="Dior" />
+            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+            <img src="/static/assets/clients/boss.svg" alt="Boss" />
+            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">10+</div>
-          <div class="stat-label">Years R&D</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Independent</div>
-        </div>
-      </div>
 
-      <div class="about-bio">
-        <h3>Our Story</h3>
-        <p>
-          Easter Company is a specialized engineering firm dedicated to the pursuit of recursive intelligence and high-fidelity digital implementation. 
-          Founded in 2016 as a research initiative, we have evolved into a strategic partner for global industry leaders across AI, Finance, and Luxury Retail sectors.
-          <br><br>
-          Our core mission is to eliminate the friction between abstract vision and concrete reality. We believe that modern software systems should be as 
-          dynamic as the people who use them—evolving, learning, and self-correcting. Operating from our bases in the Highlands of Scotland and New York, 
-          we act as a distributed nerve center for cutting-edge innovation, delivering products that define their respective niches.
-        </p>
-      </div>
-    </div>
-    
-    <div class="clients-marquee">
-      <!-- Row 1: Left Scroll -->
-      <div class="marquee-row scroll-left">
-        <div class="marquee-content">
-          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-          <img src="/static/assets/clients/dior.svg" alt="Dior" />
-          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-          <img src="/static/assets/clients/boss.svg" alt="Boss" />
-          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
-        </div>
-        <!-- Duplicate for loop -->
-        <div class="marquee-content">
-          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-          <img src="/static/assets/clients/dior.svg" alt="Dior" />
-          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-          <img src="/static/assets/clients/boss.svg" alt="Boss" />
-          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+        <!-- Row 2: Right Scroll (Reverse Order) -->
+        <div class="marquee-row scroll-right">
+          <div class="marquee-content">
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+            <img src="/static/assets/clients/boss.svg" alt="Boss" />
+            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+            <img src="/static/assets/clients/dior.svg" alt="Dior" />
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+          </div>
+          <!-- Duplicate for loop -->
+          <div class="marquee-content">
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
+            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
+            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
+            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
+            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
+            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
+            <img src="/static/assets/clients/boss.svg" alt="Boss" />
+            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
+            <img src="/static/assets/clients/dior.svg" alt="Dior" />
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+          </div>
         </div>
       </div>
 
-      <!-- Row 2: Right Scroll (Reverse Order) -->
-      <div class="marquee-row scroll-right">
-        <div class="marquee-content">
-          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
-          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-          <img src="/static/assets/clients/boss.svg" alt="Boss" />
-          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-          <img src="/static/assets/clients/dior.svg" alt="Dior" />
-          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+      <section class="content-section">
+        <div class="widget">
+          <div class="widget-image">
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+          </div>
+          <div class="widget-content">
+            <h3>Emperia</h3>
+            <p>
+              Building the future of retail with immersive virtual stores and Unreal Engine 5
+              infrastructure for global luxury brands.
+            </p>
+          </div>
         </div>
-        <!-- Duplicate for loop -->
-        <div class="marquee-content">
-          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
-          <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-          <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-          <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-          <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-          <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-          <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-          <img src="/static/assets/clients/boss.svg" alt="Boss" />
-          <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-          <img src="/static/assets/clients/dior.svg" alt="Dior" />
-          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-        </div>
-      </div>
-    </div>
 
-    <section class="content-section">
-      <div class="widget">
-        <div class="widget-image">
-          <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+        <div class="widget">
+          <div class="widget-image">
+            <img src="/static/assets/clients/dior.svg" alt="Dior" />
+          </div>
+          <div class="widget-content">
+            <h3>Dior</h3>
+            <p>
+              Delivering high-fidelity digital couture experiences and interactive virtual
+              environments for world-renowned fashion campaigns.
+            </p>
+          </div>
         </div>
-        <div class="widget-content">
-          <h3>Emperia</h3>
-          <p>Building the future of retail with immersive virtual stores and Unreal Engine 5 infrastructure for global luxury brands.</p>
-        </div>
-      </div>
 
-      <div class="widget">
-        <div class="widget-image">
-          <img src="/static/assets/clients/dior.svg" alt="Dior" />
+        <div class="widget">
+          <div class="widget-image">
+            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+          </div>
+          <div class="widget-content">
+            <h3>Bloomingdales</h3>
+            <p>
+              Developing the landmark 150th Anniversary virtual experience, bringing high-end retail
+              directly to the browser with native performance.
+            </p>
+          </div>
         </div>
-        <div class="widget-content">
-          <h3>Dior</h3>
-          <p>Delivering high-fidelity digital couture experiences and interactive virtual environments for world-renowned fashion campaigns.</p>
-        </div>
-      </div>
 
-      <div class="widget">
-        <div class="widget-image">
-          <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
+        <div class="widget">
+          <div class="widget-image">
+            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+          </div>
+          <div class="widget-content">
+            <h3>Lacoste</h3>
+            <p>
+              Streamlining global deployments for immersive seasonal campaigns and automated
+              interactive brand activations across Europe.
+            </p>
+          </div>
         </div>
-        <div class="widget-content">
-          <h3>Bloomingdales</h3>
-          <p>Developing the landmark 150th Anniversary virtual experience, bringing high-end retail directly to the browser with native performance.</p>
-        </div>
-      </div>
 
-      <div class="widget">
-        <div class="widget-image">
-          <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
+        <div class="widget">
+          <div class="widget-image">
+            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+          </div>
+          <div class="widget-content">
+            <h3>Walmart</h3>
+            <p>
+              Pioneering next-generation retail solutions through innovative AI system architecture
+              and large-scale distributed infrastructure.
+            </p>
+          </div>
         </div>
-        <div class="widget-content">
-          <h3>Lacoste</h3>
-          <p>Streamlining global deployments for immersive seasonal campaigns and automated interactive brand activations across Europe.</p>
-        </div>
-      </div>
 
-      <div class="widget">
-        <div class="widget-image">
-          <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
+        <div class="widget">
+          <div class="widget-image">
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+          </div>
+          <div class="widget-content">
+            <h3>European Union</h3>
+            <p>
+              Contributing to the PHEMS initiative, utilizing federated learning for biomedical
+              research and life-saving early warning diagnostics.
+            </p>
+          </div>
         </div>
-        <div class="widget-content">
-          <h3>Walmart</h3>
-          <p>Pioneering next-generation retail solutions through innovative AI system architecture and large-scale distributed infrastructure.</p>
-        </div>
-      </div>
+      </section>
 
-      <div class="widget">
-        <div class="widget-image">
-          <img src="/static/assets/clients/european-union.svg" alt="European Union" />
-        </div>
-        <div class="widget-content">
-          <h3>European Union</h3>
-          <p>Contributing to the PHEMS initiative, utilizing federated learning for biomedical research and life-saving early warning diagnostics.</p>
-        </div>
-      </div>
-    </section>
-
-    <div style="height: 150px; width: 100%;"></div>
+      <div style="height: 150px; width: 100%"></div>
     </main>
 
     <script>
@@ -806,12 +982,12 @@
         const contributeBtn = document.getElementById('open-contribute-btn');
         const scrollIndicator = document.getElementById('scroll-indicator');
 
-        if(dexBtn) {
+        if (dexBtn) {
           dexBtn.addEventListener('click', () => {
             window.location.href = '/dexter';
           });
         }
-        if(contributeBtn) {
+        if (contributeBtn) {
           contributeBtn.addEventListener('click', () => {
             window.location.href = '/contribute';
           });
@@ -830,5 +1006,6 @@
       });
     </script>
 
-  <script src="/dist/dex.7e009ace.js" defer></script></body>
+    
+  <script src="/dist/dex.c3975320.js" defer></script></body>
 </html>

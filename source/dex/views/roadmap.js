@@ -48,7 +48,12 @@ export async function updateRoadmapTab(forceReRender = false) {
       if (isConsumed) borderClass = 'event-border-purple';
 
       const utcDate = new Date(item.created_at * 1000);
-      const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const dateStr = utcDate.toLocaleDateString(navigator.language, {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 
       const tempDiv = document.createElement('div');
       tempDiv.className = `event-item notification-item ${borderClass} cursor-pointer ${isExpanded ? 'expanded' : ''}`;
@@ -79,7 +84,10 @@ export async function updateRoadmapTab(forceReRender = false) {
           <div class="event-service">ROADMAP ${statusBadge}</div>
           <div class="event-message" style="white-space: pre-wrap;">${escapeHtml(item.content)}</div>
           <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-            ${isPublicMode() ? '' : `
+            ${
+              isPublicMode()
+                ? ''
+                : `
             <div class="event-details-header" style="margin-bottom: 15px;">
               <h5 style="margin: 0; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Item Controls</h5>
               <i class="bx bx-x close-details-btn"></i>
@@ -91,7 +99,8 @@ export async function updateRoadmapTab(forceReRender = false) {
               </button>
               <button class="notif-action-btn delete-btn danger"><i class='bx bx-trash'></i> Delete</button>
             </div>
-            `}
+            `
+            }
             ${isConsumed ? `<div style="margin-top: 15px; font-size: 0.8em; color: #888;">Consumed at: ${new Date(item.consumed_at * 1000).toLocaleString()}</div>` : ''}
           </div>
         </div>
@@ -100,14 +109,16 @@ export async function updateRoadmapTab(forceReRender = false) {
       // Prevent close on detail interaction
       const detailsContentEl = tempDiv.querySelector('.event-details');
       if (detailsContentEl) {
-          detailsContentEl.addEventListener('click', (e) => {
-              e.stopPropagation();
-          });
+        detailsContentEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
       }
 
       // Button listeners
       tempDiv.querySelector('.edit-btn')?.addEventListener('click', () => startEditing(item));
-      tempDiv.querySelector('.publish-toggle-btn')?.addEventListener('click', () => togglePublish(item));
+      tempDiv
+        .querySelector('.publish-toggle-btn')
+        ?.addEventListener('click', () => togglePublish(item));
       tempDiv.querySelector('.delete-btn')?.addEventListener('click', () => deleteItem(item.id));
       tempDiv.querySelector('.close-details-btn')?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -120,11 +131,11 @@ export async function updateRoadmapTab(forceReRender = false) {
     };
 
     const currentChildren = Array.from(roadmapContainer.children);
-    const currentMap = new Map(currentChildren.map(el => [el.dataset.itemId, el]));
-    const newIds = new Set(items.map(e => e.id));
+    const currentMap = new Map(currentChildren.map((el) => [el.dataset.itemId, el]));
+    const newIds = new Set(items.map((e) => e.id));
 
     // Remove old items OR placeholders
-    currentChildren.forEach(child => {
+    currentChildren.forEach((child) => {
       const id = child.dataset.itemId;
       if (!id || !newIds.has(id)) {
         child.remove();
@@ -132,7 +143,13 @@ export async function updateRoadmapTab(forceReRender = false) {
     });
 
     if (!currentItems || currentItems.length === 0) {
-      roadmapContainer.innerHTML = createPlaceholderMessage('empty', 'Your roadmap is empty.', isPublicMode() ? 'Dexter is currently idle.' : 'Click "New Idea" to start planning Dexter\'s future.');
+      roadmapContainer.innerHTML = createPlaceholderMessage(
+        'empty',
+        'Your roadmap is empty.',
+        isPublicMode()
+          ? 'Dexter is currently idle.'
+          : 'Click "New Idea" to start planning Dexter\'s future.'
+      );
       return;
     }
 
@@ -153,10 +170,13 @@ export async function updateRoadmapTab(forceReRender = false) {
       }
       previousElement = el;
     });
-
   } catch (e) {
     if (roadmapContainer.children.length === 0) {
-        roadmapContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load roadmap.', 'The event service may be offline.');
+      roadmapContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load roadmap.',
+        'The event service may be offline.'
+      );
     }
   }
 }
@@ -174,7 +194,7 @@ function attachRoadmapListeners() {
       document.getElementById('roadmap-editor-input').value = '';
       document.getElementById('roadmap-editor-container').style.display = 'block';
     };
-    newBtn.dataset.listenerAttached = "true";
+    newBtn.dataset.listenerAttached = 'true';
   }
 
   if (cancelBtn && !cancelBtn.dataset.listenerAttached) {
@@ -182,7 +202,7 @@ function attachRoadmapListeners() {
       document.getElementById('roadmap-editor-container').style.display = 'none';
       editingItemId = null;
     };
-    cancelBtn.dataset.listenerAttached = "true";
+    cancelBtn.dataset.listenerAttached = 'true';
   }
 
   if (saveBtn && !saveBtn.dataset.listenerAttached) {
@@ -190,9 +210,7 @@ function attachRoadmapListeners() {
       const content = document.getElementById('roadmap-editor-input').value;
       if (!content.trim()) return;
 
-      const url = editingItemId
-        ? `/roadmap/${editingItemId}`
-        : `/roadmap`;
+      const url = editingItemId ? `/roadmap/${editingItemId}` : `/roadmap`;
 
       const method = editingItemId ? 'PATCH' : 'POST';
 
@@ -200,21 +218,23 @@ function attachRoadmapListeners() {
         await smartFetch(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content })
+          body: JSON.stringify({ content }),
         });
         document.getElementById('roadmap-editor-container').style.display = 'none';
         updateRoadmapTab(true);
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+      }
     };
-    saveBtn.dataset.listenerAttached = "true";
+    saveBtn.dataset.listenerAttached = 'true';
   }
 
   if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
     expandAllBtn.onclick = () => {
-      currentItems.forEach(item => activeExpandedIds.add(item.id));
+      currentItems.forEach((item) => activeExpandedIds.add(item.id));
       updateRoadmapTab(true);
     };
-    expandAllBtn.dataset.listenerAttached = "true";
+    expandAllBtn.dataset.listenerAttached = 'true';
   }
 
   if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
@@ -222,7 +242,7 @@ function attachRoadmapListeners() {
       activeExpandedIds.clear();
       updateRoadmapTab(true);
     };
-    closeAllBtn.dataset.listenerAttached = "true";
+    closeAllBtn.dataset.listenerAttached = 'true';
   }
 }
 
@@ -240,18 +260,22 @@ async function togglePublish(item) {
     await smartFetch(`/roadmap/${item.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ state: newState })
+      body: JSON.stringify({ state: newState }),
     });
     updateRoadmapTab(true);
-  } catch (e) { console.error(e); }
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 async function deleteItem(id) {
-  if (!confirm("Delete this roadmap item?")) return;
+  if (!confirm('Delete this roadmap item?')) return;
 
   try {
     await smartFetch(`/roadmap/${id}`, { method: 'DELETE' });
     activeExpandedIds.delete(id);
     updateRoadmapTab(true);
-  } catch (e) { console.error(e); }
+  } catch (e) {
+    console.error(e);
+  }
 }

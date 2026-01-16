@@ -1,7 +1,12 @@
 // Shared Utility Functions
 
 export function createPlaceholderMessage(type, message, actionText = null) {
-  const iconMap = { config: 'bx-cog', error: 'bx-error-circle', empty: 'bx-info-circle', offline: 'bx-wifi-off' };
+  const iconMap = {
+    config: 'bx-cog',
+    error: 'bx-error-circle',
+    empty: 'bx-info-circle',
+    offline: 'bx-wifi-off',
+  };
   const icon = iconMap[type] || 'bx-info-circle';
   const actionHtml = actionText ? `<p class="placeholder-action">${actionText}</p>` : '';
   return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
@@ -10,15 +15,17 @@ export function createPlaceholderMessage(type, message, actionText = null) {
 export function escapeHtml(text) {
   if (!text) return text;
   return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 export function updateTabTimestamp(tabIndex, timestamp) {
-  const subtitleElement = document.querySelector(`.tab[data-tab-index="${tabIndex}"] .tab-subtitle`);
+  const subtitleElement = document.querySelector(
+    `.tab[data-tab-index="${tabIndex}"] .tab-subtitle`
+  );
   if (!subtitleElement) return;
   if (!timestamp) {
     subtitleElement.textContent = 'Last updated: never';
@@ -151,7 +158,9 @@ export function updatePendingBlueprintCount() {
   const blueprintsList = document.getElementById('blueprints-list');
   if (!blueprintsList) return;
 
-  const pendingCount = blueprintsList.querySelectorAll('.event-item:not(.blueprint-approved)').length;
+  const pendingCount = blueprintsList.querySelectorAll(
+    '.event-item:not(.blueprint-approved)'
+  ).length;
   lastPendingBlueprints = pendingCount;
   updateGlobalBadgeCount();
 }
@@ -174,15 +183,15 @@ export const LOCAL_EVENT_SERVICE = 'http://127.0.0.1:8100';
 export const LOCAL_DISCORD_SERVICE = 'http://127.0.0.1:8300';
 
 const ANSI_MAP = {
-  '31': 'ansi-red',
-  '91': 'ansi-bright-red',
-  '32': 'ansi-green',
-  '33': 'ansi-yellow',
-  '34': 'ansi-blue',
-  '35': 'ansi-purple',
-  '36': 'ansi-cyan',
-  '37': 'ansi-white',
-  '90': 'ansi-dark-gray'
+  31: 'ansi-red',
+  91: 'ansi-bright-red',
+  32: 'ansi-green',
+  33: 'ansi-yellow',
+  34: 'ansi-blue',
+  35: 'ansi-purple',
+  36: 'ansi-cyan',
+  37: 'ansi-white',
+  90: 'ansi-dark-gray',
 };
 
 /**
@@ -233,26 +242,32 @@ export function renderMarkdown(text) {
 
   // Tables
   html = html.replace(/^\|(.+)\|$/gm, (match, content) => {
-    const cells = content.split('|').map(c => c.trim());
-    if (cells.every(c => c.match(/^:?-+:?$/))) {
+    const cells = content.split('|').map((c) => c.trim());
+    if (cells.every((c) => c.match(/^:?-+:?$/))) {
       return ''; // Hide the separator row
     }
-    // If it's the first row, we might want to style it as a header, 
+    // If it's the first row, we might want to style it as a header,
     // but for now, we'll just make them all rows.
-    return `<div class="md-table-row">${cells.map(c => `<span class="md-table-cell">${c}</span>`).join('')}</div>`;
+    return `<div class="md-table-row">${cells.map((c) => `<span class="md-table-cell">${c}</span>`).join('')}</div>`;
   });
 
   // Bullet Points
-  html = html.replace(/^- (.*$)/gm, '<div class="md-list-item"><span class="md-bullet">•</span> $1</div>');
+  html = html.replace(
+    /^- (.*$)/gm,
+    '<div class="md-list-item"><span class="md-bullet">•</span> $1</div>'
+  );
 
   // Numbered Lists
-  html = html.replace(/^(\d+)\. (.*$)/gm, '<div class="md-list-item"><span class="md-number">$1.</span> $2</div>');
+  html = html.replace(
+    /^(\d+)\. (.*$)/gm,
+    '<div class="md-list-item"><span class="md-number">$1.</span> $2</div>'
+  );
 
   return html;
 }
 
-const UPSTASH_URL = "https://sterling-javelin-12539.upstash.io";
-const UPSTASH_TOKEN = "AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw"; // Read Only
+const UPSTASH_URL = 'https://sterling-javelin-12539.upstash.io';
+const UPSTASH_TOKEN = 'AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw'; // Read Only
 
 export function isPublicMode() {
   return window.location.hostname.includes('easter.company');
@@ -262,7 +277,7 @@ export function isPublicMode() {
 let DASHBOARD_CACHE = null;
 export const syncState = {
   lastDashboard: 0,
-  lastFrontend: 0
+  lastFrontend: 0,
 };
 let isRefreshing = false;
 let lastSyncAttempt = 0;
@@ -278,7 +293,7 @@ function loadDashboardFromStorage() {
       const data = JSON.parse(stored);
       DASHBOARD_CACHE = data;
       // Handle missing timestamp (migration)
-      syncState.lastDashboard = (data.timestamp ? data.timestamp * 1000 : 0);
+      syncState.lastDashboard = data.timestamp ? data.timestamp * 1000 : 0;
       // Note: we don't set lastFrontend here as we don't know when the local storage was written
     } catch (e) {
       DASHBOARD_CACHE = null;
@@ -290,7 +305,7 @@ async function refreshDashboardCache() {
   if (!isPublicMode() || isRefreshing) return;
   isRefreshing = true;
   lastSyncAttempt = Math.floor(Date.now() / 1000);
-  
+
   try {
     const snapshot = await upstashCommand('GET', 'state:dashboard:full');
     if (snapshot) {
@@ -298,12 +313,12 @@ async function refreshDashboardCache() {
         const data = JSON.parse(snapshot);
         DASHBOARD_CACHE = data;
         // Handle missing timestamp (migration)
-        syncState.lastDashboard = (data.timestamp ? data.timestamp * 1000 : Date.now());
+        syncState.lastDashboard = data.timestamp ? data.timestamp * 1000 : Date.now();
         syncState.lastFrontend = Date.now();
         localStorage.setItem(CACHE_KEY, JSON.stringify(data));
         // console.log('✨ Dashboard snapshot synchronized');
       } catch (e) {
-        console.error("Failed to parse dashboard snapshot:", e);
+        console.error('Failed to parse dashboard snapshot:', e);
       }
     }
   } finally {
@@ -334,7 +349,7 @@ async function initDashboardSync() {
   loadDashboardFromStorage();
 
   const now = Math.floor(Date.now() / 1000);
-  const cacheAge = DASHBOARD_CACHE ? (now - DASHBOARD_CACHE.timestamp) : Infinity;
+  const cacheAge = DASHBOARD_CACHE ? now - DASHBOARD_CACHE.timestamp : Infinity;
 
   // PROACTIVE FETCH: If no cache or cache is over 2 mins old, fetch immediately
   if (!DASHBOARD_CACHE || cacheAge > 120) {
@@ -345,7 +360,7 @@ async function initDashboardSync() {
   setInterval(() => {
     const clock = new Date();
     const currentNow = Math.floor(Date.now() / 1000);
-    const currentAge = DASHBOARD_CACHE ? (currentNow - DASHBOARD_CACHE.timestamp) : Infinity;
+    const currentAge = DASHBOARD_CACHE ? currentNow - DASHBOARD_CACHE.timestamp : Infinity;
     const timeSinceLastAttempt = currentNow - lastSyncAttempt;
 
     // Refresh logic: Every minute at :59 OR if data is > 5 mins old
@@ -373,13 +388,13 @@ async function upstashCommand(command, ...args) {
     const response = await fetch(UPSTASH_URL, {
       method: 'POST',
       headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` },
-      body: JSON.stringify([command, ...args])
+      body: JSON.stringify([command, ...args]),
     });
     const data = await response.json();
     if (data.error) throw new Error(data.error);
     return data.result;
   } catch (e) {
-    console.error("Upstash Error:", e);
+    console.error('Upstash Error:', e);
     return null;
   }
 }
@@ -400,7 +415,9 @@ export async function smartFetch(endpoint, options = {}) {
     if (!DASHBOARD_CACHE) {
       // If still no cache, wait a tiny bit or try one more upstash call if it's critical
       // For now, we return error to avoid infinite loops, refreshDashboardCache handles the background fetch
-      return new Response(JSON.stringify({ error: "Initializing dashboard cache..." }), { status: 503 });
+      return new Response(JSON.stringify({ error: 'Initializing dashboard cache...' }), {
+        status: 503,
+      });
     }
 
     // 1. System Monitor & Status
@@ -421,11 +438,14 @@ export async function smartFetch(endpoint, options = {}) {
       const order = urlParams.get('order') || 'desc';
 
       let events = [];
-      
+
       // Route to correct pool in cache
       if (type === 'system.notification.generated') {
         events = [...(DASHBOARD_CACHE.alerts || [])];
-      } else if (type === 'system.blueprint.generated' || endpoint.includes('event.type=system.blueprint.generated')) {
+      } else if (
+        type === 'system.blueprint.generated' ||
+        endpoint.includes('event.type=system.blueprint.generated')
+      ) {
         events = [...(DASHBOARD_CACHE.blueprints || [])];
       } else if (category === 'messaging') {
         events = [...(DASHBOARD_CACHE.messaging_events || [])];
@@ -446,7 +466,9 @@ export async function smartFetch(endpoint, options = {}) {
         events.sort((a, b) => b.timestamp - a.timestamp);
       }
 
-      return new Response(JSON.stringify({ events: events, count: events.length }), { status: 200 });
+      return new Response(JSON.stringify({ events: events, count: events.length }), {
+        status: 200,
+      });
     }
 
     // 4. Logs (Not public, return empty)
@@ -471,7 +493,7 @@ export async function smartFetch(endpoint, options = {}) {
       if (profile) {
         return new Response(JSON.stringify(profile), { status: 200 });
       }
-      return new Response(JSON.stringify({ error: "Profile not found" }), { status: 404 });
+      return new Response(JSON.stringify({ error: 'Profile not found' }), { status: 404 });
     }
 
     // 8. Web History
@@ -485,7 +507,7 @@ export async function smartFetch(endpoint, options = {}) {
     }
 
     // Default: Return 404 for unsupported public endpoints
-    return new Response(JSON.stringify({ error: "Not available in public demo" }), { status: 404 });
+    return new Response(JSON.stringify({ error: 'Not available in public demo' }), { status: 404 });
   }
 
   // --- STANDARD MODE ---
@@ -540,25 +562,29 @@ export async function smartDiscordFetch(endpoint, options = {}) {
   // --- PUBLIC MODE ADAPTER ---
   if (isPublicMode()) {
     if (!DASHBOARD_CACHE) {
-      return new Response(JSON.stringify({ error: "Initializing dashboard cache..." }), { status: 503 });
+      return new Response(JSON.stringify({ error: 'Initializing dashboard cache...' }), {
+        status: 503,
+      });
     }
 
     // 1. Contacts List
     if (endpoint === '/contacts') {
-      return new Response(JSON.stringify(DASHBOARD_CACHE.contacts || { members: [] }), { status: 200 });
+      return new Response(JSON.stringify(DASHBOARD_CACHE.contacts || { members: [] }), {
+        status: 200,
+      });
     }
 
     // 2. Individual Member Context
     if (endpoint.startsWith('/member/')) {
       const userID = endpoint.split('/')[2];
-      const member = (DASHBOARD_CACHE.contacts?.members || []).find(m => m.id === userID);
+      const member = (DASHBOARD_CACHE.contacts?.members || []).find((m) => m.id === userID);
       if (member) {
         return new Response(JSON.stringify(member), { status: 200 });
       }
-      return new Response(JSON.stringify({ error: "Member not found" }), { status: 404 });
+      return new Response(JSON.stringify({ error: 'Member not found' }), { status: 404 });
     }
 
-    return new Response(JSON.stringify({ error: "Discord API not public" }), { status: 404 });
+    return new Response(JSON.stringify({ error: 'Discord API not public' }), { status: 404 });
   }
 
   // --- STANDARD MODE ---

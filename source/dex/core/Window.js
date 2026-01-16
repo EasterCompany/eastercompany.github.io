@@ -7,53 +7,56 @@ let windowZIndex = 1000;
  * @param {object} options - Configuration for the window.
  */
 export function createWindow(options) {
-    let windowEl = null;
-    let closeCallback = options.onClose || null;
-    let openCallback = options.onOpen || null;
+  let windowEl = null;
+  let closeCallback = options.onClose || null;
+  let openCallback = options.onOpen || null;
 
-    function focus() {
-        if (windowEl) {
-            windowEl.style.zIndex = ++windowZIndex;
-        }
+  function focus() {
+    if (windowEl) {
+      windowEl.style.zIndex = ++windowZIndex;
+    }
+  }
+
+  function open() {
+    if (windowEl) {
+      windowEl.classList.add('open');
+      focus();
+      window.addEventListener('resize', handleResize);
+      if (openCallback) setTimeout(openCallback, 10);
+      return;
     }
 
-    function open() {
-        if (windowEl) {
-            windowEl.classList.add('open');
-            focus();
-            window.addEventListener('resize', handleResize);
-            if (openCallback) setTimeout(openCallback, 10);
-            return;
-        }
+    let container = document.getElementById('windows-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'windows-container';
+      container.className = 'windows-container';
+      document.body.appendChild(container);
+    }
 
-        let container = document.getElementById('windows-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'windows-container';
-            container.className = 'windows-container';
-            document.body.appendChild(container);
-        }
+    windowEl = document.createElement('div');
+    windowEl.id = options.id;
+    windowEl.className = 'window';
+    if (options.tabs && options.tabs.length > 0) {
+      windowEl.classList.add('has-tabs');
+    }
+    windowEl.style.zIndex = ++windowZIndex;
 
-        windowEl = document.createElement('div');
-        windowEl.id = options.id;
-        windowEl.className = 'window';
-        if (options.tabs && options.tabs.length > 0) {
-            windowEl.classList.add('has-tabs');
-        }
-        windowEl.style.zIndex = ++windowZIndex;
+    // Add focus listener
+    windowEl.addEventListener('mousedown', focus);
 
-        // Add focus listener
-        windowEl.addEventListener('mousedown', focus);
+    const iconClass = options.icon || 'bx-window';
+    let tabBarHTML = '';
+    let windowTitleHTML = '';
+    let contentHTML;
 
-        const iconClass = options.icon || 'bx-window';
-        let tabBarHTML = '';
-        let windowTitleHTML = '';
-        let contentHTML;
-
-        if (options.tabs && options.tabs.length > 0) {
-            const tabTitles = options.tabs.map((tab, index) => {
-                const iconHtml = tab.icon ? `<i class="bx ${tab.icon}"></i>` : `<span class="tab-glyph">${tab.title?.charAt(0).toUpperCase() || '?'}</span>`;
-                return `
+    if (options.tabs && options.tabs.length > 0) {
+      const tabTitles = options.tabs
+        .map((tab, index) => {
+          const iconHtml = tab.icon
+            ? `<i class="bx ${tab.icon}"></i>`
+            : `<span class="tab-glyph">${tab.title?.charAt(0).toUpperCase() || '?'}</span>`;
+          return `
                     <div class="tab ${index === 0 ? 'active' : ''}" data-tab-index="${index}">
                         ${iconHtml}
                         <span class="tab-title">${tab.title}</span>
@@ -61,17 +64,23 @@ export function createWindow(options) {
                         <span class="notification-badge" style="display: none;">0</span>
                     </div>
                 `;
-            }).join('');
+        })
+        .join('');
 
-            tabBarHTML = `<div class="tab-bar">${tabTitles}</div>`;
-            const tabContents = options.tabs.map((tab, index) => `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>`).join('');
-            contentHTML = `<div class="window-content">${tabContents}</div>`;
-        } else {
-            if (options.title) windowTitleHTML = `<div class="window-title">${options.title}</div>`;
-            contentHTML = `<div class="window-content">${options.content || ''}</div>`;
-        }
+      tabBarHTML = `<div class="tab-bar">${tabTitles}</div>`;
+      const tabContents = options.tabs
+        .map(
+          (tab, index) =>
+            `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>`
+        )
+        .join('');
+      contentHTML = `<div class="window-content">${tabContents}</div>`;
+    } else {
+      if (options.title) windowTitleHTML = `<div class="window-title">${options.title}</div>`;
+      contentHTML = `<div class="window-content">${options.content || ''}</div>`;
+    }
 
-        windowEl.innerHTML = `
+    windowEl.innerHTML = `
             <div class="window-header">
                 <i class="bx ${iconClass}"></i>
                 ${tabBarHTML}
@@ -80,80 +89,86 @@ export function createWindow(options) {
             </div>
             ${contentHTML}
         `;
-        container.appendChild(windowEl);
+    container.appendChild(windowEl);
 
-        windowEl.querySelector('.window-close')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            close();
+    windowEl.querySelector('.window-close')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      close();
+    });
+
+    window.addEventListener('resize', handleResize);
+
+    if (options.tabs) {
+      windowEl.querySelectorAll('.tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const idx = tab.getAttribute('data-tab-index');
+          windowEl.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+          tab.classList.add('active');
+          windowEl.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('active'));
+          windowEl.querySelector(`.tab-content[data-tab-content="${idx}"]`).classList.add('active');
+          scrollToActiveTab(tab, windowEl);
         });
-
-        window.addEventListener('resize', handleResize);
-
-        if (options.tabs) {
-            windowEl.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const idx = tab.getAttribute('data-tab-index');
-                    windowEl.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    windowEl.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    windowEl.querySelector(`.tab-content[data-tab-content="${idx}"]`).classList.add('active');
-                    scrollToActiveTab(tab, windowEl);
-                });
-            });
-        }
-
-        setTimeout(() => {
-            windowEl.classList.add('open');
-            if (openCallback) openCallback();
-        }, 10);
+      });
     }
 
-    function handleResize() {
-        if (!windowEl || !windowEl.classList.contains('open')) return;
-        const activeTab = windowEl.querySelector('.tab.active');
-        if (activeTab) scrollToActiveTab(activeTab, windowEl);
-    }
+    setTimeout(() => {
+      windowEl.classList.add('open');
+      if (openCallback) openCallback();
+    }, 10);
+  }
 
-    function scrollToActiveTab(tab, windowEl) {
-        setTimeout(() => {
-            const tabBar = windowEl.querySelector('.tab-bar');
-            if (!tabBar) return;
-            const tabs = Array.from(tabBar.querySelectorAll('.tab'));
-            const currentIndex = tabs.indexOf(tab);
-            const barWidth = tabBar.clientWidth;
-            const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
-            const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
-            const leftPos = (leftNeighbor.offsetLeft - tabBar.offsetLeft) - 25;
-            const rightPos = (rightNeighbor.offsetLeft + rightNeighbor.offsetWidth) - tabBar.offsetLeft + 25;
-            const windowWidth = rightPos - leftPos;
-            const targetScroll = windowWidth <= barWidth ? leftPos - (barWidth - windowWidth) / 2 : (tab.offsetLeft - tabBar.offsetLeft) - (barWidth / 2) + (tab.offsetWidth / 2);
-            tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
-        }, 350);
-    }
+  function handleResize() {
+    if (!windowEl || !windowEl.classList.contains('open')) return;
+    const activeTab = windowEl.querySelector('.tab.active');
+    if (activeTab) scrollToActiveTab(activeTab, windowEl);
+  }
 
-    function close(immediate = false) {
-        if (!windowEl) return;
-        window.removeEventListener('resize', handleResize);
-        if (immediate) {
-            windowEl.remove();
-            windowEl = null;
-        } else {
-            windowEl.classList.remove('open');
-            if (closeCallback) closeCallback();
-            setTimeout(() => {
-                windowEl?.remove();
-                windowEl = null;
-            }, 400);
-        }
-    }
+  function scrollToActiveTab(tab, windowEl) {
+    setTimeout(() => {
+      const tabBar = windowEl.querySelector('.tab-bar');
+      if (!tabBar) return;
+      const tabs = Array.from(tabBar.querySelectorAll('.tab'));
+      const currentIndex = tabs.indexOf(tab);
+      const barWidth = tabBar.clientWidth;
+      const leftNeighbor = tabs[Math.max(0, currentIndex - 2)];
+      const rightNeighbor = tabs[Math.min(tabs.length - 1, currentIndex + 2)];
+      const leftPos = leftNeighbor.offsetLeft - tabBar.offsetLeft - 25;
+      const rightPos =
+        rightNeighbor.offsetLeft + rightNeighbor.offsetWidth - tabBar.offsetLeft + 25;
+      const windowWidth = rightPos - leftPos;
+      const targetScroll =
+        windowWidth <= barWidth
+          ? leftPos - (barWidth - windowWidth) / 2
+          : tab.offsetLeft - tabBar.offsetLeft - barWidth / 2 + tab.offsetWidth / 2;
+      tabBar.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    }, 350);
+  }
 
-    function setContent(content) {
-        options.content = content;
-        const contentDiv = windowEl?.querySelector('.window-content');
-        if (contentDiv) contentDiv.innerHTML = content;
+  function close(immediate = false) {
+    if (!windowEl) return;
+    window.removeEventListener('resize', handleResize);
+    if (immediate) {
+      windowEl.remove();
+      windowEl = null;
+    } else {
+      windowEl.classList.remove('open');
+      if (closeCallback) closeCallback();
+      setTimeout(() => {
+        windowEl?.remove();
+        windowEl = null;
+      }, 400);
     }
-    
-    function isOpen() { return windowEl && windowEl.classList.contains('open'); }
+  }
 
-    return { open, close, setContent, isOpen, focus, id: options.id };
+  function setContent(content) {
+    options.content = content;
+    const contentDiv = windowEl?.querySelector('.window-content');
+    if (contentDiv) contentDiv.innerHTML = content;
+  }
+
+  function isOpen() {
+    return windowEl && windowEl.classList.contains('open');
+  }
+
+  return { open, close, setContent, isOpen, focus, id: options.id };
 }

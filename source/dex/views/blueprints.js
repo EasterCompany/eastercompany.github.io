@@ -1,7 +1,14 @@
 // Blueprints Tab Logic
 import {
-  createPlaceholderMessage, updateTabTimestamp, updateTabBadgeCount, smartFetch,
-  LOCAL_EVENT_SERVICE, escapeHtml, updatePendingBlueprintCount, setPendingBlueprints, isPublicMode
+  createPlaceholderMessage,
+  updateTabTimestamp,
+  updateTabBadgeCount,
+  smartFetch,
+  LOCAL_EVENT_SERVICE,
+  escapeHtml,
+  updatePendingBlueprintCount,
+  setPendingBlueprints,
+  isPublicMode,
 } from '../core/utils.js';
 
 export const getBlueprintActions = () => `
@@ -44,7 +51,11 @@ export async function updateBlueprintsTab(forceReRender = false) {
     updateTabTimestamp(2, lastBlueprintsUpdate); // Index 2 (Ideas) in mainWindow
 
     if (allBlueprints.length === 0) {
-      blueprintsContainer.innerHTML = createPlaceholderMessage('empty', 'No architectural blueprints generated yet.', 'The Guardian will generate these when idle.');
+      blueprintsContainer.innerHTML = createPlaceholderMessage(
+        'empty',
+        'No architectural blueprints generated yet.',
+        'The Guardian will generate these when idle.'
+      );
       updateTabBadgeCount(2, 0);
       return;
     }
@@ -58,21 +69,38 @@ export async function updateBlueprintsTab(forceReRender = false) {
       if (typeof blueprintData === 'string') {
         try {
           blueprintData = JSON.parse(blueprintData);
-        } catch (e) { return null; }
+        } catch (e) {
+          return null;
+        }
       }
 
       const title = (blueprintData.title || 'Untitled Blueprint').trim();
-      const summary = (blueprintData.summary || blueprintData.body || 'No summary provided.').trim();
+      const summary = (
+        blueprintData.summary ||
+        blueprintData.body ||
+        'No summary provided.'
+      ).trim();
       const content = (blueprintData.content || '').trim();
       const category = (blueprintData.category || 'architecture').trim();
-      const relatedServices = (blueprintData.related_services || blueprintData.affected_services || []).map(s => s.trim());
-      const implementationPath = (blueprintData.implementation_path || []).map(s => s.trim());
+      const relatedServices = (
+        blueprintData.related_services ||
+        blueprintData.affected_services ||
+        []
+      ).map((s) => s.trim());
+      const implementationPath = (blueprintData.implementation_path || []).map((s) => s.trim());
       const sourceEventIDs = blueprintData.source_event_ids || [];
       const isApproved = blueprintData.approved === true;
 
       const utcDate = new Date(event.timestamp * 1000);
-      const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
+      const timeStr = utcDate.toLocaleTimeString(navigator.language, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      const dateStr = utcDate.toLocaleDateString(navigator.language, {
+        month: 'short',
+        day: 'numeric',
+      });
 
       const isExpanded = activeExpandedIds.has(event.id);
       const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
@@ -84,16 +112,17 @@ export async function updateBlueprintsTab(forceReRender = false) {
 
       if (isApproved) {
         tempDiv.style.boxShadow = '0 0 20px rgba(3, 218, 198, 0.15)';
-        tempDiv.style.background = 'linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)';
+        tempDiv.style.background =
+          'linear-gradient(135deg, rgba(3, 218, 198, 0.05) 0%, rgba(187, 134, 252, 0.05) 100%)';
       }
 
       const iconMap = {
-        'architecture': 'bx-vector',
-        'optimization': 'bx-trending-up',
-        'feature': 'bx-extension',
-        'security': 'bx-shield-lock'
+        architecture: 'bx-vector',
+        optimization: 'bx-trending-up',
+        feature: 'bx-extension',
+        security: 'bx-shield-lock',
       };
-      const icon = isApproved ? 'bx-check-shield' : (iconMap[category] || 'bx-paint');
+      const icon = isApproved ? 'bx-check-shield' : iconMap[category] || 'bx-paint';
 
       tempDiv.onclick = function (e) {
         const isCurrentlyExpanded = this.classList.contains('expanded');
@@ -115,7 +144,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
         pathHtml = `
                     <div class="blueprint-path" style="margin-top: 15px;">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Proposed Steps</h5>
-                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${implementationPath.map(step => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}</ul></div>
+                        <div class="detail-pre"><ul style="margin: 0; padding-left: 20px;">${implementationPath.map((step) => `<li style="margin-bottom: 5px;">${escapeHtml(step)}</li>`).join('')}</ul></div>
                     </div>
                 `;
       }
@@ -126,23 +155,29 @@ export async function updateBlueprintsTab(forceReRender = false) {
                     <div class="blueprint-source" style="margin-top: 15px;">
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Source Alerts</h5>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            ${sourceEventIDs.map(id => `
+                            ${sourceEventIDs
+                              .map(
+                                (id) => `
                                 <a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
                                     <i class='bx bx-link-external'></i> ${id.substring(0, 8)}...
                                 </a>
-                            `).join('')}
+                            `
+                              )
+                              .join('')}
                         </div>
                     </div>
                 `;
       }
 
-      let relatedServicesHtml = relatedServices.length > 0
-        ? `<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${relatedServices.join(', ')}</span></div>`
-        : '<div></div>';
+      let relatedServicesHtml =
+        relatedServices.length > 0
+          ? `<div style="display: flex; align-items: center; gap: 8px; color: #666; font-size: 0.75em;"><span style="font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Related:</span> <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${relatedServices.join(', ')}</span></div>`
+          : '<div></div>';
 
       const publicMode = isPublicMode();
 
-      let actionButtonsHtml = !isApproved ? `
+      let actionButtonsHtml = !isApproved
+        ? `
                 <div class="blueprint-actions" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 20px;">
                     ${relatedServicesHtml}
                     <div style="display: ${publicMode ? 'none' : 'flex'}; gap: 10px;">
@@ -150,7 +185,8 @@ export async function updateBlueprintsTab(forceReRender = false) {
                         <button class="blueprint-delete-btn" style="background: rgba(207, 102, 121, 0.1); color: #cf6679; border: 1px solid rgba(207, 102, 121, 0.2); padding: 6px 15px; border-radius: 4px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s;"><i class='bx bx-x'></i> Decline</button>
                     </div>
                 </div>
-            ` : `
+            `
+        : `
                 <div class="blueprint-status-badge" style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px;">
                     ${relatedServicesHtml}
                     <div style="display: flex; align-items: center; gap: 15px;">
@@ -196,7 +232,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
           try {
             const res = await smartFetch(`/events/${event.id}`, {
               method: 'PATCH',
-              body: JSON.stringify({ approved: true })
+              body: JSON.stringify({ approved: true }),
             });
             if (res.ok) {
               updateBlueprintsTab(true);
@@ -212,10 +248,12 @@ export async function updateBlueprintsTab(forceReRender = false) {
         deleteBtn.onclick = async (e) => {
           e.stopPropagation();
           const isActuallyDecline = !isApproved;
-          deleteBtn.innerHTML = isActuallyDecline ? "<i class='bx bx-loader-alt spin'></i> Declining..." : "<i class='bx bx-loader-alt spin'></i> Deleting...";
+          deleteBtn.innerHTML = isActuallyDecline
+            ? "<i class='bx bx-loader-alt spin'></i> Declining..."
+            : "<i class='bx bx-loader-alt spin'></i> Deleting...";
           try {
             const res = await smartFetch(`/events/${event.id}`, {
-              method: 'DELETE'
+              method: 'DELETE',
             });
             if (res.ok) {
               updateBlueprintsTab(true);
@@ -249,10 +287,10 @@ export async function updateBlueprintsTab(forceReRender = false) {
     };
 
     const currentChildren = Array.from(blueprintsContainer.children);
-    const currentMap = new Map(currentChildren.map(el => [el.dataset.blueprintId, el]));
-    const newIds = new Set(allBlueprints.map(e => e.id));
+    const currentMap = new Map(currentChildren.map((el) => [el.dataset.blueprintId, el]));
+    const newIds = new Set(allBlueprints.map((e) => e.id));
 
-    currentChildren.forEach(child => {
+    currentChildren.forEach((child) => {
       const id = child.dataset.blueprintId;
       if (!id || !newIds.has(id)) {
         child.remove();
@@ -277,11 +315,14 @@ export async function updateBlueprintsTab(forceReRender = false) {
 
     updateTabBadgeCount(2, allBlueprints.length);
     updatePendingBlueprintCount();
-
   } catch (error) {
     console.error('Error fetching blueprints:', error);
     if (blueprintsContainer.children.length === 0) {
-      blueprintsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load blueprints.', 'The event service may be offline.');
+      blueprintsContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load blueprints.',
+        'The event service may be offline.'
+      );
     }
   }
 }
@@ -295,10 +336,14 @@ export async function checkBackgroundBlueprints() {
     const allBlueprints = data.events || [];
 
     let pendingCount = 0;
-    allBlueprints.forEach(event => {
+    allBlueprints.forEach((event) => {
       let evtData = event.event;
       if (typeof evtData === 'string') {
-        try { evtData = JSON.parse(evtData); } catch (e) { evtData = {}; }
+        try {
+          evtData = JSON.parse(evtData);
+        } catch (e) {
+          evtData = {};
+        }
       }
       if (evtData.approved !== true) {
         pendingCount++;
@@ -318,10 +363,10 @@ function attachBlueprintActionListeners() {
 
   if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
     expandAllBtn.onclick = () => {
-      currentFilteredBlueprints.forEach(b => activeExpandedIds.add(b.id));
+      currentFilteredBlueprints.forEach((b) => activeExpandedIds.add(b.id));
       updateBlueprintsTab(true);
     };
-    expandAllBtn.dataset.listenerAttached = "true";
+    expandAllBtn.dataset.listenerAttached = 'true';
   }
 
   if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
@@ -329,12 +374,12 @@ function attachBlueprintActionListeners() {
       activeExpandedIds.clear();
       updateBlueprintsTab(true);
     };
-    closeAllBtn.dataset.listenerAttached = "true";
+    closeAllBtn.dataset.listenerAttached = 'true';
   }
 
   if (clearBtn && !clearBtn.dataset.listenerAttached) {
     clearBtn.onclick = async () => {
-      if (!confirm("Are you sure you want to delete all UNAPPROVED blueprints?")) return;
+      if (!confirm('Are you sure you want to delete all UNAPPROVED blueprints?')) return;
 
       clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
       try {
@@ -345,11 +390,11 @@ function attachBlueprintActionListeners() {
         activeExpandedIds.clear();
         updateBlueprintsTab(true);
       } catch (e) {
-        console.error("Failed to clear blueprints:", e);
+        console.error('Failed to clear blueprints:', e);
       } finally {
         clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
       }
     };
-    clearBtn.dataset.listenerAttached = "true";
+    clearBtn.dataset.listenerAttached = 'true';
   }
 }

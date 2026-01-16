@@ -1,5 +1,12 @@
 // Events Timeline Logic
-import { createPlaceholderMessage, updateTabTimestamp, escapeHtml, smartFetch, renderMarkdown, isPublicMode } from '../core/utils.js';
+import {
+  createPlaceholderMessage,
+  updateTabTimestamp,
+  escapeHtml,
+  smartFetch,
+  renderMarkdown,
+  isPublicMode,
+} from '../core/utils.js';
 import { formatEventSummary } from '../core/templates.js';
 
 export const getEventsContent = () => `
@@ -38,166 +45,229 @@ let currentFilteredEvents = [];
 let currentFilter = 'all';
 
 const CATEGORIES = {
-    messaging: [
-        'message_received', 'messaging.user.sent_message', 'messaging.bot.sent_message',
-        'messaging.user.transcribed', 'voice_transcribed', 'bot_response',
-        'messaging.user.joined_voice', 'messaging.user.left_voice',
-        'messaging.bot.joined_voice', 'messaging.bot.voice_response',
-        'messaging.user.speaking.started', 'messaging.user.speaking.stopped',
-        'messaging.webhook.message'
-    ],
-    system: [
-        'system.cli.command', 'system.cli.status', 'system.status.change',
-        'metric_recorded', 'log_entry', 'error_occurred', 'webhook.processed',
-        'messaging.bot.status_update', 'messaging.user.joined_server',
-        'system.test.completed', 'system.build.completed',
-        'system.roadmap.created', 'system.roadmap.updated',
-        'system.process.registered', 'system.process.unregistered'
-    ],
-    cognitive: [
-        'engagement.decision', 'system.analysis.audit', 'system.blueprint.generated',
-        'analysis.link.completed', 'analysis.visual.completed', 'analysis.router.decision',
-        'analysis.user.message_signals'
-    ],
-    moderation: [
-        'moderation.explicit_content.deleted'
-    ]
+  messaging: [
+    'message_received',
+    'messaging.user.sent_message',
+    'messaging.bot.sent_message',
+    'messaging.user.transcribed',
+    'voice_transcribed',
+    'bot_response',
+    'messaging.user.joined_voice',
+    'messaging.user.left_voice',
+    'messaging.bot.joined_voice',
+    'messaging.bot.voice_response',
+    'messaging.user.speaking.started',
+    'messaging.user.speaking.stopped',
+    'messaging.webhook.message',
+  ],
+  system: [
+    'system.cli.command',
+    'system.cli.status',
+    'system.status.change',
+    'metric_recorded',
+    'log_entry',
+    'error_occurred',
+    'webhook.processed',
+    'messaging.bot.status_update',
+    'messaging.user.joined_server',
+    'system.test.completed',
+    'system.build.completed',
+    'system.roadmap.created',
+    'system.roadmap.updated',
+    'system.process.registered',
+    'system.process.unregistered',
+  ],
+  cognitive: [
+    'engagement.decision',
+    'system.analysis.audit',
+    'system.blueprint.generated',
+    'analysis.link.completed',
+    'analysis.visual.completed',
+    'analysis.router.decision',
+    'analysis.user.message_signals',
+  ],
+  moderation: ['moderation.explicit_content.deleted'],
 };
 
 const EVENT_ICONS = {
-    'message_received': 'bx-message-detail',
-    'messaging.user.sent_message': 'bx-message-rounded-dots',
-    'messaging.bot.sent_message': 'bx-bot',
-    'messaging.user.transcribed': 'bx-microphone',
-    'voice_transcribed': 'bx-microphone',
-    'messaging.user.joined_voice': 'bx-phone-incoming',
-    'messaging.user.left_voice': 'bx-phone-outgoing',
-    'messaging.webhook.message': 'bx-cloud-lightning',
-    'system.cli.command': 'bx-terminal',
-    'system.cli.status': 'bx-info-circle',
-    'system.test.completed': 'bx-check-shield',
-    'system.build.completed': 'bx-package',
-    'system.roadmap.created': 'bx-map-pin',
-    'system.roadmap.updated': 'bx-map-alt',
-    'system.process.registered': 'bx-play-circle',
-    'system.process.unregistered': 'bx-stop-circle',
-    'error_occurred': 'bx-error-alt',
-    'engagement.decision': 'bx-brain',
-    'system.analysis.audit': 'bx-search-alt',
-    'system.blueprint.generated': 'bx-paint',
-    'analysis.link.completed': 'bx-link',
-    'analysis.visual.completed': 'bx-image',
-    'analysis.router.decision': 'bx-git-branch',
-    'analysis.user.message_signals': 'bx-pulse',
-    'moderation.explicit_content.deleted': 'bx-shield-x',
-    'system.status.change': 'bx-refresh',
-    'metric_recorded': 'bx-line-chart'
+  message_received: 'bx-message-detail',
+  'messaging.user.sent_message': 'bx-message-rounded-dots',
+  'messaging.bot.sent_message': 'bx-bot',
+  'messaging.user.transcribed': 'bx-microphone',
+  voice_transcribed: 'bx-microphone',
+  'messaging.user.joined_voice': 'bx-phone-incoming',
+  'messaging.user.left_voice': 'bx-phone-outgoing',
+  'messaging.webhook.message': 'bx-cloud-lightning',
+  'system.cli.command': 'bx-terminal',
+  'system.cli.status': 'bx-info-circle',
+  'system.test.completed': 'bx-check-shield',
+  'system.build.completed': 'bx-package',
+  'system.roadmap.created': 'bx-map-pin',
+  'system.roadmap.updated': 'bx-map-alt',
+  'system.process.registered': 'bx-play-circle',
+  'system.process.unregistered': 'bx-stop-circle',
+  error_occurred: 'bx-error-alt',
+  'engagement.decision': 'bx-brain',
+  'system.analysis.audit': 'bx-search-alt',
+  'system.blueprint.generated': 'bx-paint',
+  'analysis.link.completed': 'bx-link',
+  'analysis.visual.completed': 'bx-image',
+  'analysis.router.decision': 'bx-git-branch',
+  'analysis.user.message_signals': 'bx-pulse',
+  'moderation.explicit_content.deleted': 'bx-shield-x',
+  'system.status.change': 'bx-refresh',
+  metric_recorded: 'bx-line-chart',
 };
 
 function getEventCategory(type) {
-    for (const [cat, types] of Object.entries(CATEGORIES)) {
-        if (types.includes(type)) return cat;
-    }
-    return 'system'; // Default
+  for (const [cat, types] of Object.entries(CATEGORIES)) {
+    if (types.includes(type)) return cat;
+  }
+  return 'system'; // Default
 }
 
 function getEventIcon(type) {
-    return EVENT_ICONS[type] || 'bx-square-rounded';
+  return EVENT_ICONS[type] || 'bx-square-rounded';
 }
 
 export async function updateEventsTimeline(forceReRender = false) {
-    const eventsContainer = document.getElementById('events-timeline');
-    if (!eventsContainer) return;
+  const eventsContainer = document.getElementById('events-timeline');
+  if (!eventsContainer) return;
 
-    // Attach button listeners if not already attached
-    attachEventActionListeners();
+  // Attach button listeners if not already attached
+  attachEventActionListeners();
 
-    // Fetch MORE events if we are filtering, to ensure we have enough data
-    const fetchCount = currentFilter === 'all' ? 100 : 250;
-    let url = `/events?ml=${fetchCount}&format=json`;
-    if (currentFilter !== 'all') {
-        url += `&category=${currentFilter}`;
+  // Fetch MORE events if we are filtering, to ensure we have enough data
+  const fetchCount = currentFilter === 'all' ? 100 : 250;
+  let url = `/events?ml=${fetchCount}&format=json`;
+  if (currentFilter !== 'all') {
+    url += `&category=${currentFilter}`;
+  }
+
+  try {
+    const response = await smartFetch(url);
+    if (!response.ok) throw new Error('Service unreachable');
+
+    const data = await response.json();
+    const allEvents = data.events || [];
+
+    // UI ONLY: Filter out primary structural events that belong in dedicated windows
+    currentFilteredEvents = allEvents.filter((e) => {
+      let ed = e.event;
+      if (typeof ed === 'string') {
+        try {
+          ed = JSON.parse(ed);
+        } catch {
+          return true;
+        }
+      }
+      const type = ed.type;
+      if (type === 'system.blueprint.generated' || type === 'system.notification.generated')
+        return false;
+      return true;
+    });
+
+    lastEventsUpdate = Date.now();
+    updateTabTimestamp(1, lastEventsUpdate); // Index 1 in mainWindow
+
+    if (currentFilteredEvents.length === 0) {
+      eventsContainer.innerHTML = createPlaceholderMessage(
+        'empty',
+        'No events found for this filter.'
+      );
+      return;
     }
 
-    try {
-        const response = await smartFetch(url);
-        if (!response.ok) throw new Error('Service unreachable');
+    if (forceReRender) {
+      eventsContainer.innerHTML = '';
+    }
 
-        const data = await response.json();
-        const allEvents = data.events || [];
-
-        // UI ONLY: Filter out primary structural events that belong in dedicated windows
-        currentFilteredEvents = allEvents.filter(e => {
-            let ed = e.event;
-            if (typeof ed === 'string') { try { ed = JSON.parse(ed); } catch { return true; } }
-            const type = ed.type;
-            if (type === 'system.blueprint.generated' || type === 'system.notification.generated') return false;
-            return true;
-        });
-
-        lastEventsUpdate = Date.now();
-        updateTabTimestamp(1, lastEventsUpdate); // Index 1 in mainWindow
-
-        if (currentFilteredEvents.length === 0) {
-            eventsContainer.innerHTML = createPlaceholderMessage('empty', 'No events found for this filter.');
-            return;
+    const createEventElement = (event) => {
+      let eventData = event.event;
+      if (typeof eventData === 'string') {
+        try {
+          eventData = JSON.parse(eventData);
+        } catch (e) {
+          return null;
         }
+      }
 
-        if (forceReRender) {
-            eventsContainer.innerHTML = '';
+      const type = eventData.type;
+      const category = getEventCategory(type);
+      const icon = getEventIcon(type);
+
+      const isExpandable =
+        type === 'engagement.decision' ||
+        type === 'messaging.bot.sent_message' ||
+        type === 'messaging.user.sent_message' ||
+        type === 'moderation.explicit_content.deleted' ||
+        type === 'analysis.link.completed' ||
+        type === 'analysis.visual.completed' ||
+        type === 'analysis.router.decision' ||
+        type === 'analysis.user.message_signals' ||
+        type === 'system.cli.command' ||
+        type === 'system.analysis.audit' ||
+        type === 'system.test.completed' ||
+        type === 'error_occurred' ||
+        type === 'system.cli.status' ||
+        type === 'system.attention.expired' ||
+        type.startsWith('system.roadmap') ||
+        type.startsWith('system.process');
+      let borderClass = 'event-border-grey';
+      if (isExpandable) {
+        if (type === 'moderation.explicit_content.deleted' || type === 'error_occurred') {
+          borderClass = 'event-border-red';
+        } else if (
+          type === 'analysis.link.completed' ||
+          type === 'analysis.visual.completed' ||
+          type === 'analysis.router.decision' ||
+          type === 'system.analysis.audit' ||
+          type === 'analysis.user.message_signals'
+        ) {
+          borderClass = 'event-border-purple';
+        } else if (type === 'system.attention.expired') {
+          borderClass = 'event-border-orange';
+        } else if (type === 'system.cli.command' || type === 'system.cli.status') {
+          borderClass = 'event-border-orange';
+        } else if (type === 'system.test.completed') {
+          const passed =
+            eventData.test?.status === 'OK' &&
+            eventData.lint?.status === 'OK' &&
+            eventData.format?.status === 'OK';
+          borderClass = passed ? 'event-border-blue' : 'event-border-red';
+        } else {
+          borderClass = 'event-border-blue';
         }
+      }
+      const cursorClass = isExpandable ? 'cursor-pointer' : '';
 
-        const createEventElement = (event) => {
-            let eventData = event.event;
-            if (typeof eventData === 'string') {
-                try {
-                    eventData = JSON.parse(eventData);
-                } catch (e) {
-                    return null;
-                }
-            }
+      const isExpanded = activeExpandedIds.has(event.id);
+      const expandedClass = isExpanded ? 'expanded' : '';
+      const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
 
-            const type = eventData.type;
-            const category = getEventCategory(type);
-            const icon = getEventIcon(type);
+      const utcDate = new Date(event.timestamp * 1000);
+      const timeStr = utcDate.toLocaleTimeString(navigator.language, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      const dateStr = utcDate.toLocaleDateString(navigator.language, {
+        month: 'short',
+        day: 'numeric',
+      });
 
-            const isExpandable = type === 'engagement.decision' || type === 'messaging.bot.sent_message' || type === 'messaging.user.sent_message' || type === 'moderation.explicit_content.deleted' || type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'analysis.user.message_signals' || type === 'system.cli.command' || type === 'system.analysis.audit' || type === 'system.test.completed' || type === 'error_occurred' || type === 'system.cli.status' || type === 'system.attention.expired' || type.startsWith('system.roadmap') || type.startsWith('system.process');
-            let borderClass = 'event-border-grey';
-            if (isExpandable) {
-                if (type === 'moderation.explicit_content.deleted' || type === 'error_occurred') {
-                    borderClass = 'event-border-red';
-                } else if (type === 'analysis.link.completed' || type === 'analysis.visual.completed' || type === 'analysis.router.decision' || type === 'system.analysis.audit' || type === 'analysis.user.message_signals') {
-                    borderClass = 'event-border-purple';
-                } else if (type === 'system.attention.expired') {
-                    borderClass = 'event-border-orange';
-                } else if (type === 'system.cli.command' || type === 'system.cli.status') {
-                    borderClass = 'event-border-orange';
-                } else if (type === 'system.test.completed') {
-                    const passed = (eventData.test?.status === 'OK' && eventData.lint?.status === 'OK' && eventData.format?.status === 'OK');
-                    borderClass = passed ? 'event-border-blue' : 'event-border-red';
-                } else {
-                    borderClass = 'event-border-blue';
-                }
-            }
-            const cursorClass = isExpandable ? 'cursor-pointer' : '';
+      const summary = formatEventSummary(type, eventData);
+      const userLevel = eventData.user_level
+        ? `<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${eventData.user_level})</span>`
+        : '';
 
-            const isExpanded = activeExpandedIds.has(event.id);
-            const expandedClass = isExpanded ? 'expanded' : '';
-            const detailsStyle = isExpanded ? 'display: block;' : 'display: none;';
-
-            const utcDate = new Date(event.timestamp * 1000);
-            const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
-
-            const summary = formatEventSummary(type, eventData);
-            const userLevel = eventData.user_level ? `<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${eventData.user_level})</span>` : '';
-
-            let detailsHtml = '';
-            if (isExpandable) {
-                let detailsContent = '';
-                if (type === 'engagement.decision') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+      let detailsHtml = '';
+      if (isExpandable) {
+        let detailsContent = '';
+        if (type === 'engagement.decision') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Engagement Model:</span>
                             <span class="detail-value">${eventData.engagement_model || 'N/A'}</span>
@@ -215,12 +285,13 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${eventData.engagement_raw || 'None'}</pre>
                         </div>
                     `;
-                } else if (type === 'system.attention.expired') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    const idleTime = eventData.timestamp - eventData.last_active;
-                    const idleMinutes = Math.floor(idleTime / 60);
-                    
-                    detailsContent = `
+        } else if (type === 'system.attention.expired') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          const idleTime = eventData.timestamp - eventData.last_active;
+          const idleMinutes = Math.floor(idleTime / 60);
+
+          detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Protocol:</span>
                             <span class="detail-value" style="color: #bb86fc;">${eventData.tier}</span>
@@ -238,12 +309,13 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <div class="detail-pre">${renderMarkdown(eventData.last_output || 'None')}</div>
                         </div>
                     `;
-                } else if (type === 'messaging.bot.sent_message') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    
-                    let metricsHtml = '';
-                    if (eventData.eval_count) {
-                        metricsHtml = `
+        } else if (type === 'messaging.bot.sent_message') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+
+          let metricsHtml = '';
+          if (eventData.eval_count) {
+            metricsHtml = `
                             <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tokens (In/Out)</div>
@@ -263,18 +335,20 @@ export async function updateEventsTimeline(forceReRender = false) {
                                 </div>
                             </div>
                         `;
-                    }
+          }
 
-                    let historyHtml = '';
-                    if (eventData.chat_history && eventData.chat_history.length > 0) {
-                        const totalTurns = eventData.chat_history.length;
-                        const slides = eventData.chat_history.map((m, index) => {
-                            let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
-                            if (!m.name && roleName === 'ASSISTANT') roleName = 'DEXTER';
-                            
-                            const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
-                            const displayStyle = index === totalTurns - 1 ? 'block' : 'none'; // Default to showing Dexter's response
-                            return `
+          let historyHtml = '';
+          if (eventData.chat_history && eventData.chat_history.length > 0) {
+            const totalTurns = eventData.chat_history.length;
+            const slides = eventData.chat_history
+              .map((m, index) => {
+                let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
+                if (!m.name && roleName === 'ASSISTANT') roleName = 'DEXTER';
+
+                const roleColor =
+                  m.role === 'user' ? '#03dac6' : m.role === 'system' ? '#ffb74d' : '#bb86fc';
+                const displayStyle = index === totalTurns - 1 ? 'block' : 'none'; // Default to showing Dexter's response
+                return `
                                 <div class="history-slide" data-index="${index}" style="display: ${displayStyle};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                         <span style="font-size: 0.7em; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${roleName}</span>
@@ -283,9 +357,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${escapeHtml(m.content)}</div>
                                 </div>
                             `;
-                        }).join('');
+              })
+              .join('');
 
-                        historyHtml = `
+            historyHtml = `
                             <div class="event-detail-block">
                                 ${stylisedHeader('Turn-by-Turn History')}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
@@ -297,15 +372,17 @@ export async function updateEventsTimeline(forceReRender = false) {
                                 </div>
                             </div>
                         `;
-                    }
+          }
 
-                    detailsContent = `
+          detailsContent = `
                         ${metricsHtml}
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
                             <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                         </div>
-                        ${historyHtml || `
+                        ${
+                          historyHtml ||
+                          `
                             <div class="event-detail-block">
                                 ${stylisedHeader('Raw Input (Prompt)')}
                                 <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
@@ -314,14 +391,17 @@ export async function updateEventsTimeline(forceReRender = false) {
                                 ${stylisedHeader('Raw Response Output')}
                                 <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
                             </div>
-                        `}
+                        `
+                        }
                     `;
-                } else if (type === 'analysis.user.message_signals') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    const s = eventData.signals || {};
-                    const sentimentColor = s.sentiment > 0.3 ? '#03dac6' : (s.sentiment < -0.3 ? '#cf6679' : '#aaa');
-                    
-                    detailsContent = `
+        } else if (type === 'analysis.user.message_signals') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          const s = eventData.signals || {};
+          const sentimentColor =
+            s.sentiment > 0.3 ? '#03dac6' : s.sentiment < -0.3 ? '#cf6679' : '#aaa';
+
+          detailsContent = `
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Sentiment</div>
@@ -343,7 +423,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         <div class="event-detail-block">
                             ${stylisedHeader('Extracted Topics')}
                             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                ${(s.topics || []).map(t => `<span class="profile-badge">${t}</span>`).join('') || '<span style="color: #666;">No topics mapped.</span>'}
+                                ${(s.topics || []).map((t) => `<span class="profile-badge">${t}</span>`).join('') || '<span style="color: #666;">No topics mapped.</span>'}
                             </div>
                         </div>
                         <div class="event-detail-block" style="margin-top: 15px;">
@@ -351,9 +431,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
                         </div>
                     `;
-                } else if (type === 'moderation.explicit_content.deleted') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'moderation.explicit_content.deleted') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Message ID:</span>
                             <span class="detail-value">${eventData.message_id || 'N/A'}</span>
@@ -367,9 +448,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.raw_output) || 'None'}</pre>
                         </div>
                     `;
-                } else if (type === 'analysis.link.completed') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'analysis.link.completed') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">URL:</span>
                             <span class="detail-value"><a href="${eventData.url}" target="_blank" class="attachment-link">${eventData.url}</a></span>
@@ -387,18 +469,17 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.summary) || 'None'}</pre>
                         </div>
                     `;
-                } else if (type === 'analysis.visual.completed') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    let imageHtml = '';
-                    if (eventData.base64_preview) {
-                        imageHtml = 
-                        `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`
-                    } else if (eventData.url) {
-                        imageHtml = 
-                        `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`
-                    }
+        } else if (type === 'analysis.visual.completed') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          let imageHtml = '';
+          if (eventData.base64_preview) {
+            imageHtml = `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+          } else if (eventData.url) {
+            imageHtml = `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+          }
 
-                    detailsContent = `
+          detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Filename:</span>
                             <span class="detail-value">${eventData.filename}</span>
@@ -409,9 +490,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.description) || 'None'}</pre>
                         </div>
                     `;
-                } else if (type === 'analysis.router.decision') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'analysis.router.decision') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Decision:</span>
                             <span class="detail-value" style="color: #bb86fc; font-weight: bold;">${eventData.decision}</span>
@@ -433,9 +515,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.raw_input) || 'None'}</pre>
                         </div>
                     `;
-                } else if (type === 'system.cli.command') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'system.cli.command') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Command:</span>
                             <span class="detail-value">dex ${eventData.command || 'unknown'}</span>
@@ -461,32 +544,35 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.output) || 'No output recorded.'}</pre>
                         </div>
                     `;
-                } else if (type === 'system.analysis.audit') {
-                    const statusColor = eventData.success ? '#03dac6' : '#ff4d4d';
-                    const statusText = eventData.success ? 'SUCCESS' : 'FAILED';
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    
-                    let errorHtml = '';
-                    if (eventData.error) {
-                        errorHtml = `
+        } else if (type === 'system.analysis.audit') {
+          const statusColor = eventData.success ? '#03dac6' : '#ff4d4d';
+          const statusText = eventData.success ? 'SUCCESS' : 'FAILED';
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+
+          let errorHtml = '';
+          if (eventData.error) {
+            errorHtml = `
                             <div class="event-detail-block">
                                 ${stylisedHeader('Error')}
                                 <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${escapeHtml(eventData.error)}</pre>
                             </div>
                         `;
-                    }
+          }
 
-                    let historyHtml = '';
-                    if (eventData.chat_history && eventData.chat_history.length > 0) {
-                        const totalTurns = eventData.chat_history.length;
-                        const slides = eventData.chat_history.map((m, index) => {
-                            let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
-                            if (!m.name && roleName === 'USER') roleName = 'SYSTEM';
-                            if (!m.name && roleName === 'ASSISTANT') roleName = 'AGENT';
-                            
-                            const roleColor = m.role === 'user' ? '#03dac6' : (m.role === 'system' ? '#ffb74d' : '#bb86fc');
-                            const displayStyle = index === 0 ? 'block' : 'none';
-                            return `
+          let historyHtml = '';
+          if (eventData.chat_history && eventData.chat_history.length > 0) {
+            const totalTurns = eventData.chat_history.length;
+            const slides = eventData.chat_history
+              .map((m, index) => {
+                let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
+                if (!m.name && roleName === 'USER') roleName = 'SYSTEM';
+                if (!m.name && roleName === 'ASSISTANT') roleName = 'AGENT';
+
+                const roleColor =
+                  m.role === 'user' ? '#03dac6' : m.role === 'system' ? '#ffb74d' : '#bb86fc';
+                const displayStyle = index === 0 ? 'block' : 'none';
+                return `
                                 <div class="history-slide" data-index="${index}" style="display: ${displayStyle};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                         <span style="font-size: 0.7em; text-transform: uppercase; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${roleName}</span>
@@ -495,9 +581,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${escapeHtml(m.content)}</div>
                                 </div>
                             `;
-                        }).join('');
+              })
+              .join('');
 
-                        historyHtml = `
+            historyHtml = `
                             <div class="event-detail-block">
                                 ${stylisedHeader('Turn-by-Turn History')}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
@@ -509,43 +596,51 @@ export async function updateEventsTimeline(forceReRender = false) {
                                 </div>
                             </div>
                         `;
-                    }
+          }
 
-                    let correctionsHtml = '';
-                    if (eventData.corrections && eventData.corrections.length > 0) {
-                        const correctionItems = eventData.corrections.map((c, i) => `
+          let correctionsHtml = '';
+          if (eventData.corrections && eventData.corrections.length > 0) {
+            const correctionItems = eventData.corrections
+              .map(
+                (c, i) => `
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(255, 77, 77, 0.1); border-left: 2px solid #ff4d4d; font-size: 0.85em;">
                                 <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${c.type}] ${c.guidance}</div>
                                 ${c.snippet ? `<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${escapeHtml(c.snippet)}</div>` : ''}
                             </div>
-                        `).join('');
-                        
-                        correctionsHtml = `
+                        `
+              )
+              .join('');
+
+            correctionsHtml = `
                             <div class="event-detail-block">
                                 ${stylisedHeader(`Corrections (${eventData.corrections.length})`)}
                                 ${correctionItems}
                             </div>
                         `;
-                    }
+          }
 
-                    let resultsHtml = '';
-                    if (eventData.parsed_results && eventData.parsed_results.length > 0) {
-                        const resultItems = eventData.parsed_results.map(r => `
+          let resultsHtml = '';
+          if (eventData.parsed_results && eventData.parsed_results.length > 0) {
+            const resultItems = eventData.parsed_results
+              .map(
+                (r) => `
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(3, 218, 198, 0.1); border-left: 2px solid #03dac6; font-size: 0.85em;">
                                 <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${escapeHtml(r.title)}</div>
                                 <div style="color: #ddd;">${escapeHtml(r.summary)}</div>
                             </div>
-                        `).join('');
+                        `
+              )
+              .join('');
 
-                        resultsHtml = `
+            resultsHtml = `
                             <div class="event-detail-block">
                                 ${stylisedHeader('Parsed Results')}
                                 ${resultItems}
                             </div>
                         `;
-                    }
+          }
 
-                    detailsContent = `
+          detailsContent = `
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 120px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
@@ -573,9 +668,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                         ${correctionsHtml}
                         ${historyHtml}
                     `;
-                } else if (type === 'system.test.completed') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'system.test.completed') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row">
                             <span class="detail-label">Service:</span>
                             <span class="detail-value">${eventData.service_name}</span>
@@ -597,9 +693,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${eventData.test?.status || 'N/A'}: ${eventData.test?.details || eventData.test?.message || 'OK'}</pre>
                         </div>
                     `;
-                } else if (type === 'error_occurred') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'error_occurred') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Severity:</span>
                             <span class="detail-value" style="color: #ff4d4d;">${eventData.severity || 'high'}</span>
@@ -613,9 +710,10 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${JSON.stringify(eventData.context || {}, null, 2)}</pre>
                         </div>
                     `;
-                } else if (type === 'system.cli.status') {
-                    const stylisedHeader = (text) => `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
-                    detailsContent = `
+        } else if (type === 'system.cli.status') {
+          const stylisedHeader = (text) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Status:</span>
                             <span class="detail-value">${eventData.status}</span>
@@ -625,13 +723,14 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.message)}</pre>
                         </div>
                     `;
-                } else if (type === 'messaging.user.sent_message') {
-                    let attachmentsHtml = '';
-                    if (eventData.attachments && eventData.attachments.length > 0) {
-                        const attachmentsList = eventData.attachments.map(att => {
-                            const isImage = att.content_type && att.content_type.startsWith('image/');
-                            const sizeStr = (att.size / 1024).toFixed(1) + ' KB';
-                            return `
+        } else if (type === 'messaging.user.sent_message') {
+          let attachmentsHtml = '';
+          if (eventData.attachments && eventData.attachments.length > 0) {
+            const attachmentsList = eventData.attachments
+              .map((att) => {
+                const isImage = att.content_type && att.content_type.startsWith('image/');
+                const sizeStr = (att.size / 1024).toFixed(1) + ' KB';
+                return `
                                 <div class="attachment-item">
                                     ${isImage ? `<div class="attachment-thumb-container"><img src="${att.url}" alt="${att.filename}" class="attachment-thumb"></div>` : `<div class="attachment-icon-container"><i class='bx bx-file attachment-icon'></i></div>`}
                                     <div class="attachment-info">
@@ -639,16 +738,17 @@ export async function updateEventsTimeline(forceReRender = false) {
                                         <span class="attachment-meta">${att.content_type} • ${sizeStr}</span>
                                     </div>
                                 </div>`;
-                        }).join('');
+              })
+              .join('');
 
-                        attachmentsHtml = `
+            attachmentsHtml = `
                             <div class="event-detail-block">
                                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Attachments</h5>
                                 <div class="attachments-grid">${attachmentsList}</div>
                             </div>`;
-                    }
+          }
 
-                    detailsContent = `
+          detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Message ID:</span>
                             <span class="detail-value">${eventData.message_id || 'N/A'}</span>
@@ -659,35 +759,35 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                         ${attachmentsHtml}
                     `;
-                }
+        }
 
-                detailsHtml = `
+        detailsHtml = `
                     <div class="event-details" style="${detailsStyle}">
                         ${detailsContent}
                     </div>
                 `;
-            }
+      }
 
-            const tempDiv = document.createElement('div');
-            tempDiv.className = `event-item ${borderClass} ${cursorClass} ${expandedClass}`;
-            tempDiv.dataset.eventId = event.id;
-            tempDiv.onclick = function (e) {
-                if (!isExpandable) return;
-                const isCurrentlyExpanded = this.classList.contains('expanded');
-                if (isCurrentlyExpanded) {
-                    this.classList.remove('expanded');
-                    activeExpandedIds.delete(event.id);
-                    const details = this.querySelector('.event-details');
-                    if (details) details.style.display = 'none';
-                } else {
-                    this.classList.add('expanded');
-                    activeExpandedIds.add(event.id);
-                    const details = this.querySelector('.event-details');
-                    if (details) details.style.display = 'block';
-                }
-            };
+      const tempDiv = document.createElement('div');
+      tempDiv.className = `event-item ${borderClass} ${cursorClass} ${expandedClass}`;
+      tempDiv.dataset.eventId = event.id;
+      tempDiv.onclick = function (e) {
+        if (!isExpandable) return;
+        const isCurrentlyExpanded = this.classList.contains('expanded');
+        if (isCurrentlyExpanded) {
+          this.classList.remove('expanded');
+          activeExpandedIds.delete(event.id);
+          const details = this.querySelector('.event-details');
+          if (details) details.style.display = 'none';
+        } else {
+          this.classList.add('expanded');
+          activeExpandedIds.add(event.id);
+          const details = this.querySelector('.event-details');
+          if (details) details.style.display = 'block';
+        }
+      };
 
-            tempDiv.innerHTML = `
+      tempDiv.innerHTML = `
                 <div class="event-time">
                     <span class="event-time-main">${timeStr}</span>
                     <span class="event-date">${dateStr}</span>
@@ -703,188 +803,198 @@ export async function updateEventsTimeline(forceReRender = false) {
                 </div>
             `;
 
-            // Prevent close on detail interaction
-            const detailsContentEl = tempDiv.querySelector('.event-details');
-            if (detailsContentEl) {
-                detailsContentEl.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
+      // Prevent close on detail interaction
+      const detailsContentEl = tempDiv.querySelector('.event-details');
+      if (detailsContentEl) {
+        detailsContentEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      if (isExpandable) {
+        const closeBtn = tempDiv.querySelector('.close-details-btn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const item = e.target.closest('.event-item');
+            if (item) {
+              item.classList.remove('expanded');
+              activeExpandedIds.delete(event.id);
+              const details = item.querySelector('.event-details');
+              if (details) details.style.display = 'none';
             }
+          });
+        }
+      }
 
-            if (isExpandable) {
-                const closeBtn = tempDiv.querySelector('.close-details-btn');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const item = e.target.closest('.event-item');
-                        if (item) {
-                            item.classList.remove('expanded');
-                            activeExpandedIds.delete(event.id);
-                            const details = item.querySelector('.event-details');
-                            if (details) details.style.display = 'none';
-                        }
-                    });
-                }
-            }
+      // Carousel Logic
+      const prevBtn = tempDiv.querySelector('.prev-btn');
+      const nextBtn = tempDiv.querySelector('.next-btn');
+      if (prevBtn && nextBtn) {
+        let currentSlide = 0;
+        const slides = tempDiv.querySelectorAll('.history-slide');
+        const total = slides.length;
 
-            // Carousel Logic
-            const prevBtn = tempDiv.querySelector('.prev-btn');
-            const nextBtn = tempDiv.querySelector('.next-btn');
-            if (prevBtn && nextBtn) {
-                let currentSlide = 0;
-                const slides = tempDiv.querySelectorAll('.history-slide');
-                const total = slides.length;
+        const updateCarousel = () => {
+          slides.forEach((slide, index) => {
+            slide.style.display = index === currentSlide ? 'block' : 'none';
+          });
+          prevBtn.disabled = currentSlide === 0;
+          nextBtn.disabled = currentSlide === total - 1;
 
-                const updateCarousel = () => {
-                    slides.forEach((slide, index) => {
-                        slide.style.display = index === currentSlide ? 'block' : 'none';
-                    });
-                    prevBtn.disabled = currentSlide === 0;
-                    nextBtn.disabled = currentSlide === total - 1;
-                    
-                    // Update opacity/style for disabled state
-                    prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
-                    nextBtn.style.opacity = currentSlide === total - 1 ? '0.5' : '1';
-                };
-
-                prevBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent toggling the event expansion
-                    if (currentSlide > 0) {
-                        currentSlide--;
-                        updateCarousel();
-                    }
-                });
-
-                nextBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (currentSlide < total - 1) {
-                        currentSlide++;
-                        updateCarousel();
-                    }
-                });
-                
-                // Initial state check
-                updateCarousel();
-            }
-
-            return tempDiv;
+          // Update opacity/style for disabled state
+          prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
+          nextBtn.style.opacity = currentSlide === total - 1 ? '0.5' : '1';
         };
 
-        const currentChildren = Array.from(eventsContainer.children);
-        const currentMap = new Map(currentChildren.map(el => [el.dataset.eventId, el]));
-        const newIds = new Set(currentFilteredEvents.map(e => e.id));
-
-        // 1. Remove old events or placeholders
-        currentChildren.forEach(child => {
-            const id = child.dataset.eventId;
-            if (!id || !newIds.has(id)) {
-                child.remove();
-            }
+        prevBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent toggling the event expansion
+          if (currentSlide > 0) {
+            currentSlide--;
+            updateCarousel();
+          }
         });
 
-        let previousElement = null;
-
-        currentFilteredEvents.forEach((event, index) => {
-            let el = currentMap.get(event.id);
-            if (!el || forceReRender) {
-                if (el) el.remove();
-                el = createEventElement(event);
-                if (!el) return;
-            }
-            if (index === 0) {
-                if (eventsContainer.firstElementChild !== el) {
-                    eventsContainer.prepend(el);
-                }
-            } else {
-                if (previousElement && previousElement.nextElementSibling !== el) {
-                    previousElement.after(el);
-                }
-            }
-            previousElement = el;
+        nextBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (currentSlide < total - 1) {
+            currentSlide++;
+            updateCarousel();
+          }
         });
 
-        lastEventsUpdate = Date.now();
-        updateTabTimestamp(1, lastEventsUpdate); // Index 1
+        // Initial state check
+        updateCarousel();
+      }
 
-    } catch (error) {
-        console.error('Error fetching events:', error);
-        if (eventsContainer.children.length === 0) {
-            eventsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load events.', 'The event service may be offline.');
+      return tempDiv;
+    };
+
+    const currentChildren = Array.from(eventsContainer.children);
+    const currentMap = new Map(currentChildren.map((el) => [el.dataset.eventId, el]));
+    const newIds = new Set(currentFilteredEvents.map((e) => e.id));
+
+    // 1. Remove old events or placeholders
+    currentChildren.forEach((child) => {
+      const id = child.dataset.eventId;
+      if (!id || !newIds.has(id)) {
+        child.remove();
+      }
+    });
+
+    let previousElement = null;
+
+    currentFilteredEvents.forEach((event, index) => {
+      let el = currentMap.get(event.id);
+      if (!el || forceReRender) {
+        if (el) el.remove();
+        el = createEventElement(event);
+        if (!el) return;
+      }
+      if (index === 0) {
+        if (eventsContainer.firstElementChild !== el) {
+          eventsContainer.prepend(el);
         }
+      } else {
+        if (previousElement && previousElement.nextElementSibling !== el) {
+          previousElement.after(el);
+        }
+      }
+      previousElement = el;
+    });
+
+    lastEventsUpdate = Date.now();
+    updateTabTimestamp(1, lastEventsUpdate); // Index 1
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    if (eventsContainer.children.length === 0) {
+      eventsContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load events.',
+        'The event service may be offline.'
+      );
     }
+  }
 }
 
 function attachEventActionListeners() {
-    const expandAllBtn = document.getElementById('events-expand-all');
-    const closeAllBtn = document.getElementById('events-close-all');
-    const filterContainer = document.getElementById('event-filters');
+  const expandAllBtn = document.getElementById('events-expand-all');
+  const closeAllBtn = document.getElementById('events-close-all');
+  const filterContainer = document.getElementById('event-filters');
 
-    if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
-        expandAllBtn.onclick = () => {
-            currentFilteredEvents.forEach(e => activeExpandedIds.add(e.id));
-            updateEventsTimeline(true);
-        };
-        expandAllBtn.dataset.listenerAttached = "true";
-    }
+  if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
+    expandAllBtn.onclick = () => {
+      currentFilteredEvents.forEach((e) => activeExpandedIds.add(e.id));
+      updateEventsTimeline(true);
+    };
+    expandAllBtn.dataset.listenerAttached = 'true';
+  }
 
-    if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
-        closeAllBtn.onclick = () => {
-            activeExpandedIds.clear();
-            updateEventsTimeline(true);
-        };
-        closeAllBtn.dataset.listenerAttached = "true";
-    }
+  if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
+    closeAllBtn.onclick = () => {
+      activeExpandedIds.clear();
+      updateEventsTimeline(true);
+    };
+    closeAllBtn.dataset.listenerAttached = 'true';
+  }
 
-    if (filterContainer && !filterContainer.dataset.listenerAttached) {
-        filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.onclick = () => {
-                filterContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                updateEventsTimeline(true);
-            };
-        });
-        filterContainer.dataset.listenerAttached = "true";
-    }
+  if (filterContainer && !filterContainer.dataset.listenerAttached) {
+    filterContainer.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.onclick = () => {
+        filterContainer
+          .querySelectorAll('.filter-btn')
+          .forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        updateEventsTimeline(true);
+      };
+    });
+    filterContainer.dataset.listenerAttached = 'true';
+  }
 
-    // Force active state to match currentFilter (in case window was re-opened with cached HTML)
-    if (filterContainer) {
-        filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
-            if (btn.dataset.filter === currentFilter) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
+  // Force active state to match currentFilter (in case window was re-opened with cached HTML)
+  if (filterContainer) {
+    filterContainer.querySelectorAll('.filter-btn').forEach((btn) => {
+      if (btn.dataset.filter === currentFilter) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
 
-    const clearBtn = document.getElementById('events-clear');
-    if (clearBtn && !clearBtn.dataset.listenerAttached) {
-        clearBtn.onclick = async () => {
-            const filterName = currentFilter === 'all' ? 'ALL' : currentFilter.toUpperCase();
-            if (!confirm(`Are you sure you want to delete ${filterName} events from the backend? This cannot be undone.`)) return;
+  const clearBtn = document.getElementById('events-clear');
+  if (clearBtn && !clearBtn.dataset.listenerAttached) {
+    clearBtn.onclick = async () => {
+      const filterName = currentFilter === 'all' ? 'ALL' : currentFilter.toUpperCase();
+      if (
+        !confirm(
+          `Are you sure you want to delete ${filterName} events from the backend? This cannot be undone.`
+        )
+      )
+        return;
 
-            clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
-            try {
-                let url = '/events';
-                if (currentFilter !== 'all') {
-                    url += `?category=${currentFilter}`;
-                } else {
-                    // Protect structural events from 'Clear All' in general timeline
-                    url += `?exclude_types=system.blueprint.generated,system.notification.generated`;
-                }
-                const response = await smartFetch(url, { method: 'DELETE' });
-                if (!response.ok) throw new Error("Failed to delete events");
-                
-                activeExpandedIds.clear();
-                updateEventsTimeline(true);
-            } catch (e) {
-                console.error("Failed to clear events:", e);
-                alert("Failed to clear events. Check console.");
-            } finally {
-                clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
-            }
-        };
-        clearBtn.dataset.listenerAttached = "true";
-    }
+      clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
+      try {
+        let url = '/events';
+        if (currentFilter !== 'all') {
+          url += `?category=${currentFilter}`;
+        } else {
+          // Protect structural events from 'Clear All' in general timeline
+          url += `?exclude_types=system.blueprint.generated,system.notification.generated`;
+        }
+        const response = await smartFetch(url, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Failed to delete events');
+
+        activeExpandedIds.clear();
+        updateEventsTimeline(true);
+      } catch (e) {
+        console.error('Failed to clear events:', e);
+        alert('Failed to clear events. Check console.');
+      } finally {
+        clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
+      }
+    };
+    clearBtn.dataset.listenerAttached = 'true';
+  }
 }

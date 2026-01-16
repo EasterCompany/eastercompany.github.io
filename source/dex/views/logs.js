@@ -2,7 +2,7 @@
 import { smartFetch, ansiToHtml, createPlaceholderMessage, isPublicMode } from '../core/utils.js';
 
 export function getLogsContent() {
-    return `
+  return `
         <div id="logs-container" class="logs-container"></div>
     `;
 }
@@ -10,53 +10,60 @@ export function getLogsContent() {
 export let lastLogsUpdate = null;
 
 export async function updateLogs() {
-    const logsContainer = document.getElementById('logs-container');
-    if (!logsContainer) return false;
+  const logsContainer = document.getElementById('logs-container');
+  if (!logsContainer) return false;
 
-    // Reset class state - grid layout should be active when content is present
-    logsContainer.classList.remove('placeholder-active');
+  // Reset class state - grid layout should be active when content is present
+  logsContainer.classList.remove('placeholder-active');
 
-    try {
-        const response = await smartFetch('/logs');
-        if (!response.ok) throw new Error('Logs offline');
+  try {
+    const response = await smartFetch('/logs');
+    if (!response.ok) throw new Error('Logs offline');
 
-        const logsData = await response.json();
-        if (!logsData || logsData.length === 0) {
-            logsContainer.innerHTML = createPlaceholderMessage('empty', 'No logs found.', 'Services are quiet.');
-            logsContainer.classList.add('placeholder-active'); // Enable center layout
-            return false;
+    const logsData = await response.json();
+    if (!logsData || logsData.length === 0) {
+      logsContainer.innerHTML = createPlaceholderMessage(
+        'empty',
+        'No logs found.',
+        'Services are quiet.'
+      );
+      logsContainer.classList.add('placeholder-active'); // Enable center layout
+      return false;
+    }
+
+    const hiddenServiceIDs = ['local-ollama-0', 'local-cache-0'];
+    const filteredLogsData = logsData.filter(
+      (logReport) => !hiddenServiceIDs.includes(logReport.id)
+    );
+
+    // Reverse the order of log reports so newest appear at the top
+    filteredLogsData.forEach((logReport) => {
+      if (logReport.logs && Array.isArray(logReport.logs)) {
+        logReport.logs.reverse();
+      } else {
+        logReport.logs = [];
+      }
+    });
+    filteredLogsData.reverse();
+
+    const logsHtml = filteredLogsData
+      .map((logReport) => {
+        const rawLogs = logReport.logs.join('\n');
+
+        // Ensure exactly 25 lines
+        let lines = [...logReport.logs];
+        if (lines.length < 25) {
+          const paddingNeeded = 25 - lines.length;
+          for (let i = 0; i < paddingNeeded; i++) {
+            lines.push(''); // Add empty lines
+          }
+        } else if (lines.length > 25) {
+          lines = lines.slice(-25); // Take last 25 if somehow more
         }
 
-        const hiddenServiceIDs = ["local-ollama-0", "local-cache-0"];
-        const filteredLogsData = logsData.filter(logReport => !hiddenServiceIDs.includes(logReport.id));
+        const styledLogs = lines.map((line) => ansiToHtml(line)).join('\n');
 
-        // Reverse the order of log reports so newest appear at the top
-        filteredLogsData.forEach(logReport => {
-            if (logReport.logs && Array.isArray(logReport.logs)) {
-                logReport.logs.reverse();
-            } else {
-                logReport.logs = [];
-            }
-        });
-        filteredLogsData.reverse();
-
-        const logsHtml = filteredLogsData.map(logReport => {
-            const rawLogs = logReport.logs.join('\n');
-            
-            // Ensure exactly 25 lines
-            let lines = [...logReport.logs];
-            if (lines.length < 25) {
-                const paddingNeeded = 25 - lines.length;
-                for (let i = 0; i < paddingNeeded; i++) {
-                    lines.push(''); // Add empty lines
-                }
-            } else if (lines.length > 25) {
-                lines = lines.slice(-25); // Take last 25 if somehow more
-            }
-
-            const styledLogs = lines.map(line => ansiToHtml(line)).join('\n');
-            
-            return `
+        return `
                 <div class="log-report">
                     <div class="log-report-header">
                         <h3>${logReport.id}</h3>
@@ -72,52 +79,56 @@ export async function updateLogs() {
                     <pre class="log-content">${styledLogs}</pre>
                 </div>
             `;
-        }).join('');
+      })
+      .join('');
 
-        logsContainer.innerHTML = logsHtml;
+    logsContainer.innerHTML = logsHtml;
 
-        // Add event listeners for copy buttons
-        document.querySelectorAll('.copy-logs-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const logs = unescape(btn.dataset.logs);
-                navigator.clipboard.writeText(logs).then(() => {
-                    const icon = btn.querySelector('i');
-                    icon.classList.remove('bx-copy');
-                    icon.classList.add('bx-check');
-                    setTimeout(() => {
-                        icon.classList.remove('bx-check');
-                        icon.classList.add('bx-copy');
-                    }, 2000);
-                });
-            });
+    // Add event listeners for copy buttons
+    document.querySelectorAll('.copy-logs-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const logs = unescape(btn.dataset.logs);
+        navigator.clipboard.writeText(logs).then(() => {
+          const icon = btn.querySelector('i');
+          icon.classList.remove('bx-copy');
+          icon.classList.add('bx-check');
+          setTimeout(() => {
+            icon.classList.remove('bx-check');
+            icon.classList.add('bx-copy');
+          }, 2000);
         });
+      });
+    });
 
-        // Add event listeners for clear buttons
-        document.querySelectorAll('.clear-logs-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const serviceId = btn.dataset.serviceId;
-                if (!confirm(`Are you sure you want to clear logs for ${serviceId}?`)) return;
+    // Add event listeners for clear buttons
+    document.querySelectorAll('.clear-logs-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const serviceId = btn.dataset.serviceId;
+        if (!confirm(`Are you sure you want to clear logs for ${serviceId}?`)) return;
 
-                try {
-                    const res = await smartFetch(`/logs?service_id=${serviceId}`, { method: 'DELETE' });
-                    if (res.ok) {
-                        updateLogs(); // Refresh
-                    }
-                } catch (e) {
-                    console.error("Error clearing logs:", e);
-                }
-            });
-        });
-
-        lastLogsUpdate = Date.now();
-        return true;
-
-    } catch (error) {
-        console.error('Error fetching logs:', error);
-        if (logsContainer.children.length === 0) {
-            logsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load logs.', 'The event service may be offline.');
-            logsContainer.classList.add('placeholder-active'); // Ensure layout switches to center the error
+        try {
+          const res = await smartFetch(`/logs?service_id=${serviceId}`, { method: 'DELETE' });
+          if (res.ok) {
+            updateLogs(); // Refresh
+          }
+        } catch (e) {
+          console.error('Error clearing logs:', e);
         }
-        return false;
+      });
+    });
+
+    lastLogsUpdate = Date.now();
+    return true;
+  } catch (error) {
+    console.error('Error fetching logs:', error);
+    if (logsContainer.children.length === 0) {
+      logsContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load logs.',
+        'The event service may be offline.'
+      );
+      logsContainer.classList.add('placeholder-active'); // Ensure layout switches to center the error
     }
+    return false;
+  }
 }

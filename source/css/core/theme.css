@@ -15,66 +15,84 @@
 
 /* Dark Theme (Default) */
 body.theme-dark {
-    --bg-blur: 100px;
-    --bg-opacity: 1;
-    --bg-blend: normal;
-    --bg-filter: none;
-    --gradient-1: #0f0f12;
-    --gradient-2: #0a0a0e;
-    --gradient-3: #08080a;
-    --gradient-4: #050507;
-    --gradient-5: #000000;
+  --bg-blur: 100px;
+  --bg-opacity: 1;
+  --bg-blend: normal;
+  --bg-filter: none;
+  --gradient-1: #0f0f12;
+  --gradient-2: #0a0a0e;
+  --gradient-3: #08080a;
+  --gradient-4: #050507;
+  --gradient-5: #000000;
 }
 
 @property --blink-opacity {
-  syntax: "<number>";
+  syntax: '<number>';
   inherits: false;
   initial-value: 1;
 }
 
 @keyframes smoothBg {
   from {
-    background-position: 50% 50%, 50% 50%;
+    background-position:
+      50% 50%,
+      50% 50%;
   }
   to {
-    background-position: 350% 50%, 350% 50%;
+    background-position:
+      350% 50%,
+      350% 50%;
   }
 }
 
-@keyframes fadeInBackground { from { opacity: 0; } to { opacity: var(--bg-opacity, 0.5); } }
-@keyframes fadeOutBackground { from { opacity: var(--bg-opacity, 0.5); } to { opacity: 0; } }
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--bg-opacity, 0.5);
+  }
+}
+@keyframes fadeOutBackground {
+  from {
+    opacity: var(--bg-opacity, 0.5);
+  }
+  to {
+    opacity: 0;
+  }
+}
 
 /* Light Theme (Heavenly) */
 body.theme-light {
-    --bg-blur: 60px;
-    --bg-opacity: 0.5;
-    --bg-blend: screen;
-    --bg-filter: none;
-    --gradient-1: #FFFFFF;
-    --gradient-2: #D4F1F9;
-    --gradient-3: #E1BEE7;
-    --gradient-4: #F8BBD0;
-    --gradient-5: #FFFFFF;
+  --bg-blur: 60px;
+  --bg-opacity: 0.5;
+  --bg-blend: screen;
+  --bg-filter: none;
+  --gradient-1: #ffffff;
+  --gradient-2: #d4f1f9;
+  --gradient-3: #e1bee7;
+  --gradient-4: #f8bbd0;
+  --gradient-5: #ffffff;
 }
 
 /* Light & Legacy Theme Specific Overrides */
 body.theme-light .dropdown-item i,
 body.theme-legacy .dropdown-item i {
-    color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 /* Legacy Theme (Original Animated) */
 body.theme-legacy {
-    --bg-blur: 25px;
-    --bg-opacity: 0.25;
-    --bg-blend: difference;
-    --bg-filter: invert(100%);
-    --gradient-1: #32FFaa;
-    --gradient-2: #FF32aa;
-    --gradient-3: #4444FF;
-    --gradient-4: #6666FF;
-    --gradient-5: #ddddFF;
-    --stripe-color: #FFF;
+  --bg-blur: 25px;
+  --bg-opacity: 0.25;
+  --bg-blend: difference;
+  --bg-filter: invert(100%);
+  --gradient-1: #32ffaa;
+  --gradient-2: #ff32aa;
+  --gradient-3: #4444ff;
+  --gradient-4: #6666ff;
+  --gradient-5: #ddddff;
+  --stripe-color: #fff;
 }
 
 .background {
@@ -91,7 +109,7 @@ body.theme-legacy {
   animation: fadeInBackground 0.6s ease forwards;
   overflow: hidden;
   pointer-events: none;
-  
+
   --stripes: repeating-linear-gradient(
     100deg,
     var(--stripe-color) 0%,
@@ -100,7 +118,7 @@ body.theme-legacy {
     transparent 12%,
     var(--stripe-color) 16%
   );
-  
+
   --rainbow: repeating-linear-gradient(
     -60deg,
     var(--gradient-1) 10%,
@@ -109,10 +127,12 @@ body.theme-legacy {
     var(--gradient-4) 25%,
     var(--gradient-5) 30%
   );
-  
+
   background-image: var(--stripes), var(--rainbow);
   background-size: 300%, 200%;
-  background-position: 50% 50%, 50% 50%;
+  background-position:
+    50% 50%,
+    50% 50%;
   filter: blur(var(--bg-blur)) var(--bg-filter);
   -webkit-mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
   mask-image: radial-gradient(ellipse at 110% 0%, black 25%, transparent 96%);
@@ -120,7 +140,7 @@ body.theme-legacy {
 }
 
 .background::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: var(--stripes), var(--rainbow);
@@ -137,13 +157,13 @@ body.theme-legacy .background::after {
 /* Global Grid Overlay - Only for Dark Theme */
 .grid-overlay {
   position: fixed;
-  top: 0; 
-  left: 0; 
-  width: 100%; 
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
   background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
   z-index: -1;
@@ -189,51 +209,91 @@ body:not(.theme-light):not(.theme-legacy) .grid-overlay {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
-.theme-preview { width: 120px; min-width: 120px; position: relative; overflow: hidden; }
+.theme-preview {
+  width: 120px;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+}
 
 /* Theme Previews */
 .theme-preview-dark {
-    background-color: #0a0a0a !important;
-    background-image: none !important;
+  background-color: #0a0a0a !important;
+  background-image: none !important;
 }
 
 .theme-preview-light {
-    background-color: #ffffff !important;
-    background-image: linear-gradient(
-        135deg,
-        #D4F1F9 0%,
-        #E1BEE7 50%,
-        #F8BBD0 100%
-    ) !important;
-    opacity: 0.8 !important;
+  background-color: #ffffff !important;
+  background-image: linear-gradient(135deg, #d4f1f9 0%, #e1bee7 50%, #f8bbd0 100%) !important;
+  opacity: 0.8 !important;
 }
 
 .theme-preview-legacy {
-    background: repeating-linear-gradient(
-        -60deg,
-        #32FFaa 10%,
-        #FF32aa 15%,
-        #4444FF 20%,
-        #6666FF 25%,
-        #ddddFF 30%
-    ) !important;
-    background-size: 200% 200% !important;
-    animation: smoothBg 10s linear infinite !important;
+  background: repeating-linear-gradient(
+    -60deg,
+    #32ffaa 10%,
+    #ff32aa 15%,
+    #4444ff 20%,
+    #6666ff 25%,
+    #ddddff 30%
+  ) !important;
+  background-size: 200% 200% !important;
+  animation: smoothBg 10s linear infinite !important;
 }
 
-.theme-info { padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; }
-.theme-info h3 { font-size: 1em; margin-bottom: 6px; color: #eee; text-align: left; }
-.theme-info p { font-size: 0.8em; color: #999; line-height: 1.3; text-align: left; margin-bottom: 8px; }
+.theme-info {
+  padding: 12px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+.theme-info h3 {
+  font-size: 1em;
+  margin-bottom: 6px;
+  color: #eee;
+  text-align: left;
+}
+.theme-info p {
+  font-size: 0.8em;
+  color: #999;
+  line-height: 1.3;
+  text-align: left;
+  margin-bottom: 8px;
+}
 
 @media (min-width: 880px) {
-  .theme-selector { flex-direction: row; gap: 20px; padding: 20px; align-items: stretch; }
-  .theme-card { flex-direction: column; flex: 1; min-height: 0; height: 100%; }
-  .theme-card:hover { transform: translateY(-4px); }
-  .theme-preview { width: 100%; min-width: 0; flex: 1; min-height: 200px; }
-  .theme-info { padding: 15px; flex: 0; }
-  .theme-info h3, .theme-info p { text-align: center; }
+  .theme-selector {
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+    align-items: stretch;
+  }
+  .theme-card {
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+  .theme-card:hover {
+    transform: translateY(-4px);
+  }
+  .theme-preview {
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    min-height: 200px;
+  }
+  .theme-info {
+    padding: 15px;
+    flex: 0;
+  }
+  .theme-info h3,
+  .theme-info p {
+    text-align: center;
+  }
 }
 
 .metadata-value {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }

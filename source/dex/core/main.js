@@ -18,17 +18,23 @@ import {
   getServicesContent,
   getModelsContent,
   getHardwareContent,
-  getServiceLogsContent
+  getServiceLogsContent,
 } from '../views/monitor.js';
 import { getSettingsContent, attachSettingsListeners } from '../views/settings.js';
 import { getLogsContent, updateLogs } from '../views/logs.js';
 import { getWebContent, updateWebTab } from '../views/web.js';
 import { initCliDashboard } from '../views/cli.js';
-import { getEventServiceUrl, getLastBadgeCount, updateGlobalBadgeCount, smartFetch, isPublicMode } from './utils.js';
+import {
+  getEventServiceUrl,
+  getLastBadgeCount,
+  updateGlobalBadgeCount,
+  smartFetch,
+  isPublicMode,
+} from './utils.js';
 
 async function checkServiceHealth() {
   if (isPublicMode()) return; // Snapshots handle health in public mode
-  
+
   // Use smartFetch which handles the fallback logic and public mode
   try {
     const response = await smartFetch('/system/status', { method: 'GET' }); // Changed to GET as smartFetch wrapper mocks Response
@@ -41,7 +47,9 @@ async function checkServiceHealth() {
 function onReady() {
   // Enforce HTTPS on production domain
   if (window.location.protocol === 'http:' && window.location.hostname === 'easter.company') {
-    window.location.replace('https://' + window.location.hostname + window.location.pathname + window.location.search);
+    window.location.replace(
+      'https://' + window.location.hostname + window.location.pathname + window.location.search
+    );
     return;
   }
 
@@ -79,14 +87,15 @@ function onReady() {
     const navbar = document.querySelector('nav');
     const footer = document.querySelector('footer');
     const isRoot = window.location.pathname === '/' || window.location.pathname === '/index.html';
-    const isErrorPage = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
+    const isErrorPage =
+      window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
 
     if (container) {
       container.setAttribute('data-count', activeWindows.length);
     }
 
     // Manage per-window header close button visibility
-    activeWindows.forEach(win => {
+    activeWindows.forEach((win) => {
       const winEl = document.getElementById(win.id);
       if (winEl) winEl.classList.remove('hide-close');
     });
@@ -118,16 +127,22 @@ function onReady() {
 
       navbar?.classList.add('window-open');
 
-      if (container) container.style.paddingTop = '60px'; 
+      if (container) container.style.paddingTop = '60px';
 
       // Navbar Transformation
       if (navMenuContainer) navMenuContainer.style.display = isMobile ? 'flex' : 'none';
       if (settingsIcon) settingsIcon.style.display = isMobile ? 'block' : 'none';
-      
+
       // Desktop-only Switcher logic
       if (!isMobile && navWindowSwitcher) {
         const currentWinId = activeWindows[0].id;
-        const dropdownWindows = ['alerts-window', 'events-window', 'monitor-window', 'contacts-window', 'workspace-window'];
+        const dropdownWindows = [
+          'alerts-window',
+          'events-window',
+          'monitor-window',
+          'contacts-window',
+          'workspace-window',
+        ];
         const isMainWindow = dropdownWindows.includes(currentWinId);
 
         if (isMainWindow) {
@@ -140,18 +155,32 @@ function onReady() {
                   `;
 
           // Re-attach listeners to new DOM elements
-          document.getElementById('switch-alerts').addEventListener('click', () => { saveWindowState('alerts-window'); toggleWindow(alertsWindow); });
-          document.getElementById('switch-events').addEventListener('click', () => { saveWindowState('events-window'); toggleWindow(eventsWindow); });
-          document.getElementById('switch-monitor').addEventListener('click', () => { saveWindowState('monitor-window'); toggleWindow(monitorWindow); });
-          document.getElementById('switch-contacts').addEventListener('click', () => { saveWindowState('contacts-window'); toggleWindow(contactsWindow); });
-          document.getElementById('switch-workspace').addEventListener('click', () => { saveWindowState('workspace-window'); toggleWindow(workspaceWindow); });
+          document.getElementById('switch-alerts').addEventListener('click', () => {
+            saveWindowState('alerts-window');
+            toggleWindow(alertsWindow);
+          });
+          document.getElementById('switch-events').addEventListener('click', () => {
+            saveWindowState('events-window');
+            toggleWindow(eventsWindow);
+          });
+          document.getElementById('switch-monitor').addEventListener('click', () => {
+            saveWindowState('monitor-window');
+            toggleWindow(monitorWindow);
+          });
+          document.getElementById('switch-contacts').addEventListener('click', () => {
+            saveWindowState('contacts-window');
+            toggleWindow(contactsWindow);
+          });
+          document.getElementById('switch-workspace').addEventListener('click', () => {
+            saveWindowState('workspace-window');
+            toggleWindow(workspaceWindow);
+          });
         } else {
           navWindowSwitcher.innerHTML = '';
         }
       } else if (navWindowSwitcher) {
-        navWindowSwitcher.innerHTML = ''; 
+        navWindowSwitcher.innerHTML = '';
       }
-
     } else {
       navbar?.classList.remove('window-open');
       if (closeAllWindowsIcon) closeAllWindowsIcon.style.display = 'none';
@@ -192,7 +221,7 @@ function onReady() {
 
   function closeAll() {
     const windowsToClose = [...activeWindows];
-    windowsToClose.forEach(win => win.close());
+    windowsToClose.forEach((win) => win.close());
     activeWindows = [];
   }
 
@@ -210,7 +239,7 @@ function onReady() {
       const idx = activeWindows.indexOf(alertsWindow);
       if (idx > -1) activeWindows.splice(idx, 1);
       recalculateLayout();
-    }
+    },
   });
 
   const eventsWindow = createWindow({
@@ -226,7 +255,7 @@ function onReady() {
       const idx = activeWindows.indexOf(eventsWindow);
       if (idx > -1) activeWindows.splice(idx, 1);
       recalculateLayout();
-    }
+    },
   });
 
   const contactsWindow = createWindow({
@@ -239,7 +268,7 @@ function onReady() {
       const idx = activeWindows.indexOf(contactsWindow);
       if (idx > -1) activeWindows.splice(idx, 1);
       recalculateLayout();
-    }
+    },
   });
 
   const monitorWindow = createWindow({
@@ -253,8 +282,8 @@ function onReady() {
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
       { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() },
-      { icon: 'bx-task', title: 'Chores', content: getChoresContent() }
-    ].filter(tab => {
+      { icon: 'bx-task', title: 'Chores', content: getChoresContent() },
+    ].filter((tab) => {
       if (isPublicMode()) {
         return tab.title !== 'Hardware' && tab.title !== 'Logs';
       }
@@ -272,7 +301,7 @@ function onReady() {
       const idx = activeWindows.indexOf(monitorWindow);
       if (idx > -1) activeWindows.splice(idx, 1);
       recalculateLayout();
-    }
+    },
   });
 
   const workspaceWindow = createWindow({
@@ -281,14 +310,14 @@ function onReady() {
     icon: 'bx-brain',
     tabs: [
       { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapTabContent() },
-      { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() }
+      { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() },
     ],
     onOpen: () => updateIdeasTab(),
     onClose: () => {
       const idx = activeWindows.indexOf(workspaceWindow);
       if (idx > -1) activeWindows.splice(idx, 1);
       recalculateLayout();
-    }
+    },
   });
 
   const settingsWindow = createWindow({
@@ -304,35 +333,35 @@ function onReady() {
       const idx = activeWindows.indexOf(settingsWindow);
       if (idx > -1) activeWindows.splice(idx, 1);
       recalculateLayout();
-    }
+    },
   });
 
   // Global API for cross-linking
   window.dexter = {
-      viewEvent: (id) => {
-          if (!eventsWindow.isOpen()) toggleWindow(eventsWindow);
-          setTimeout(() => {
-              const el = document.querySelector(`.event-item[data-event-id="${id}"]`);
-              if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  el.classList.add('flash-highlight');
-                  if (!el.classList.contains('expanded')) el.click();
-                  setTimeout(() => el.classList.remove('flash-highlight'), 2000);
-              }
-          }, 500);
-      },
-      viewAlert: (id) => {
-          if (!alertsWindow.isOpen()) toggleWindow(alertsWindow);
-          setTimeout(() => {
-              const el = document.querySelector(`.event-item[data-alert-id="${id}"]`);
-              if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  el.classList.add('flash-highlight');
-                  if (!el.classList.contains('expanded')) el.click();
-                  setTimeout(() => el.classList.remove('flash-highlight'), 2000);
-              }
-          }, 500);
-      }
+    viewEvent: (id) => {
+      if (!eventsWindow.isOpen()) toggleWindow(eventsWindow);
+      setTimeout(() => {
+        const el = document.querySelector(`.event-item[data-event-id="${id}"]`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('flash-highlight');
+          if (!el.classList.contains('expanded')) el.click();
+          setTimeout(() => el.classList.remove('flash-highlight'), 2000);
+        }
+      }, 500);
+    },
+    viewAlert: (id) => {
+      if (!alertsWindow.isOpen()) toggleWindow(alertsWindow);
+      setTimeout(() => {
+        const el = document.querySelector(`.event-item[data-alert-id="${id}"]`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('flash-highlight');
+          if (!el.classList.contains('expanded')) el.click();
+          setTimeout(() => el.classList.remove('flash-highlight'), 2000);
+        }
+      }, 500);
+    },
   };
 
   const closeDropdown = () => {
@@ -362,42 +391,42 @@ function onReady() {
       menuBtn.onclick = (e) => {
         e.stopPropagation();
         const isMobile = window.innerWidth < 880;
-        
+
         if (!isMobile) {
-            // Position dropdown relative to button for desktop
-            const rect = menuBtn.getBoundingClientRect();
-            const navEl = document.querySelector('nav');
-            const navRect = navEl.getBoundingClientRect();
-            
-            // Width of dropdown is 220px (from CSS).
-            const dropdownWidth = 220;
-            const gap = 10; // Vertical gap from navbar bottom
-            
-            // Target: Center of button
-            const btnCenter = rect.left + rect.width / 2;
-            let leftPos = btnCenter - dropdownWidth / 2;
-            
-            // Constraint: Right edge of dropdown must not exceed right edge of navbar (minus padding)
-            const maxRight = navRect.right - 10; 
-            
-            if (leftPos + dropdownWidth > maxRight) {
-                leftPos = maxRight - dropdownWidth;
-            }
-            
-            // Basic viewport boundary check (left side)
-            if (leftPos < 10) leftPos = 10;
-            
-            // Align to bottom of navbar + gap
-            dropdown.style.top = (navRect.bottom + gap) + 'px';
-            dropdown.style.left = leftPos + 'px';
-            dropdown.style.right = 'auto';
-            dropdown.style.transform = 'none'; // Reset any CSS transforms
+          // Position dropdown relative to button for desktop
+          const rect = menuBtn.getBoundingClientRect();
+          const navEl = document.querySelector('nav');
+          const navRect = navEl.getBoundingClientRect();
+
+          // Width of dropdown is 220px (from CSS).
+          const dropdownWidth = 220;
+          const gap = 10; // Vertical gap from navbar bottom
+
+          // Target: Center of button
+          const btnCenter = rect.left + rect.width / 2;
+          let leftPos = btnCenter - dropdownWidth / 2;
+
+          // Constraint: Right edge of dropdown must not exceed right edge of navbar (minus padding)
+          const maxRight = navRect.right - 10;
+
+          if (leftPos + dropdownWidth > maxRight) {
+            leftPos = maxRight - dropdownWidth;
+          }
+
+          // Basic viewport boundary check (left side)
+          if (leftPos < 10) leftPos = 10;
+
+          // Align to bottom of navbar + gap
+          dropdown.style.top = navRect.bottom + gap + 'px';
+          dropdown.style.left = leftPos + 'px';
+          dropdown.style.right = 'auto';
+          dropdown.style.transform = 'none'; // Reset any CSS transforms
         } else {
-            // Mobile: Reset inline styles to let CSS handle fixed full screen
-            dropdown.style.top = '';
-            dropdown.style.left = '';
-            dropdown.style.right = '';
-            dropdown.style.transform = '';
+          // Mobile: Reset inline styles to let CSS handle fixed full screen
+          dropdown.style.top = '';
+          dropdown.style.left = '';
+          dropdown.style.right = '';
+          dropdown.style.transform = '';
         }
 
         dropdown.classList.toggle('active');
@@ -513,7 +542,8 @@ function onReady() {
 
   // Initialize visibility after setup
   const isRootPath = window.location.pathname === '/' || window.location.pathname === '/index.html';
-  const isError = window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
+  const isError =
+    window.location.pathname.includes('404') || !!document.getElementById('error-main-view');
   if (!isRootPath && !isError) {
     document.querySelector('footer')?.classList.add('hide');
   }
@@ -538,7 +568,7 @@ function onReady() {
         checkBackgroundAlerts();
       }
     }
-    
+
     if (workspaceWindow.isOpen()) {
       updateIdeasTab();
     } else {
@@ -555,8 +585,8 @@ function onReady() {
   }, 5000);
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", onReady);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', onReady);
 } else {
   onReady();
 }

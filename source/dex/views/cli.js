@@ -5,19 +5,20 @@ const CLI_COMMANDS = [
     id: 'chat',
     title: 'Chat',
     icon: 'bx-message-rounded-dots',
-    description: 'Direct natural language interaction with Dexter\'s cognitive core.',
+    description: "Direct natural language interaction with Dexter's cognitive core.",
     usage: 'dex chat',
     category: 'cognitive',
     dummy: true,
     docs: {
-      overview: 'The Cognitive Chat interface (Alpha) allows direct interaction with Dexter\'s strategic layer using natural language.',
+      overview:
+        "The Cognitive Chat interface (Alpha) allows direct interaction with Dexter's strategic layer using natural language.",
       details: [
         'Context-aware reasoning based on system-wide events.',
         'Multi-modal input support (text, voice, images).',
         'Deep integration with the Roadmap and Blueprint systems.',
-        'Real-time access to logs and service status.'
+        'Real-time access to logs and service status.',
       ],
-      extended_usage: 'dex chat [--voice] [--vision]'
+      extended_usage: 'dex chat [--voice] [--vision]',
     },
     demo_output: [
       '\x1b[35m[DEXTER]\x1b[0m Initializing neural uplink...',
@@ -26,9 +27,9 @@ const CLI_COMMANDS = [
       '',
       'Owen: "Dexter, what\'s the status of the new event service build?"',
       'Dexter: "The build completed 5 minutes ago (v2.8.198). All 42 tests passed.',
-      '        I\'ve noticed a slight increase in latency on the Redis cache,',
-      '        should I run a diagnostic?"'
-    ]
+      "        I've noticed a slight increase in latency on the Redis cache,",
+      '        should I run a diagnostic?"',
+    ],
   },
   {
     id: 'guardian',
@@ -38,14 +39,16 @@ const CLI_COMMANDS = [
     usage: 'dex guardian [tier]',
     category: 'cognitive',
     docs: {
-      overview: 'Guardian is the cognitive sentry of the ecosystem. It maintains system health and architectural integrity.',
+      overview:
+        'Guardian is the cognitive sentry of the ecosystem. It maintains system health and architectural integrity.',
       details: [
         'Tier 1 (Technical Sentry): High-fidelity anomaly detection across logs, events, and metrics.',
         'Automated Trigger: Activates after 5 minutes of system idle time.',
         'CLI Proxy: Heavy lifting is proxied to the event service to preserve local resources.',
-        'Outcome Tracking: Records scientific buckets for Active, Idle, and Waste time.'
+        'Outcome Tracking: Records scientific buckets for Active, Idle, and Waste time.',
       ],
-      extended_usage: 'dex guardian [0|1] [--force]\n0 = Full Analysis (Default)\n1 = Tier 1 Only (Reports)'
+      extended_usage:
+        'dex guardian [0|1] [--force]\n0 = Full Analysis (Default)\n1 = Tier 1 Only (Reports)',
     },
     demo_output: [
       '█ \x1b[1mGUARDIAN TECHNICAL SENTRY\x1b[0m █',
@@ -65,8 +68,8 @@ const CLI_COMMANDS = [
       '**Body**: dex-tts-service reported 3 consecutive timeouts.',
       '',
       '\x1b[32m✓ Guardian run completed successfully.\x1b[0m',
-      '\x1b[90m  Duration: 14.2s | Waste: 0s | Reliability: 100%\x1b[0m'
-    ]
+      '\x1b[90m  Duration: 14.2s | Waste: 0s | Reliability: 100%\x1b[0m',
+    ],
   },
   {
     id: 'test',
@@ -81,9 +84,9 @@ const CLI_COMMANDS = [
         'Runs go test for all backend services.',
         'Executes static analysis via golangci-lint.',
         'Runs Python unit tests for TTS logic.',
-        'Validates configuration schemas.'
+        'Validates configuration schemas.',
       ],
-      extended_usage: 'dex test [service] [--models]'
+      extended_usage: 'dex test [service] [--models]',
     },
     demo_output: [
       '█ \x1b[1mTESTING ALL SERVICES\x1b[0m █',
@@ -113,8 +116,8 @@ const CLI_COMMANDS = [
       'cli             \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       896.2ms   ',
       'event           \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       \x1b[32m✓ PASS\x1b[0m       1.37s     ',
       '',
-      '\x1b[32m✓ All tests passed!\x1b[0m'
-    ]
+      '\x1b[32m✓ All tests passed!\x1b[0m',
+    ],
   },
   {
     id: 'build',
@@ -124,15 +127,16 @@ const CLI_COMMANDS = [
     usage: 'dex build [major|minor|patch]',
     category: 'lifecycle',
     docs: {
-      overview: 'The primary entry point for ecosystem evolution. Handles versioning and deployment.',
+      overview:
+        'The primary entry point for ecosystem evolution. Handles versioning and deployment.',
       details: [
         'Increments semantic versioning automatically.',
         'Bundles JS/CSS assets with content hashing.',
         'Builds Go binaries and Python environments.',
         'Creates Git tags and pushes to remotes.',
-        'Handles post-build service restarts.'
+        'Handles post-build service restarts.',
       ],
-      extended_usage: 'dex build [patch|minor|major] [--force]'
+      extended_usage: 'dex build [patch|minor|major] [--force]',
     },
     demo_output: [
       '█ \x1b[1mBUILDING ALL SERVICES FROM LOCAL SOURCE\x1b[0m █',
@@ -164,8 +168,8 @@ const CLI_COMMANDS = [
       '───────  ────────────────────  ───────────  ───────────────────────────────────────',
       'cli      2.8.142 -> 2.8.143    +12 KB       release: publish patch version 2.8.143 ',
       '',
-      '\x1b[32m✓ Build complete.\x1b[0m'
-    ]
+      '\x1b[32m✓ Build complete.\x1b[0m',
+    ],
   },
   {
     id: 'update',
@@ -180,9 +184,9 @@ const CLI_COMMANDS = [
         'In DEV mode: Clones fresh source and rebuilds everything.',
         'In USER mode: Downloads latest binaries from easter.company.',
         'Verifies checksums for all downloads.',
-        'Automatically updates environment paths.'
+        'Automatically updates environment paths.',
       ],
-      extended_usage: 'dex update'
+      extended_usage: 'dex update',
     },
     demo_output: [
       '█ \x1b[1mDEVELOPER UPDATE - NUCLEAR FRESH INSTALL\x1b[0m █',
@@ -196,8 +200,8 @@ const CLI_COMMANDS = [
       '  Building cli via Makefile...',
       '\x1b[32m  ✓ cli updated (all binaries installed)\x1b[0m',
       '\x1b[32m✓ Update complete!\x1b[0m',
-      'Run \'dex version\' to verify'
-    ]
+      "Run 'dex version' to verify",
+    ],
   },
   {
     id: 'restart',
@@ -212,9 +216,9 @@ const CLI_COMMANDS = [
         'Interfaces with systemd units.',
         'Supports starting, stopping, and restarting.',
         'Displays detailed uptime and PID info.',
-        'Monitors resource consumption per service.'
+        'Monitors resource consumption per service.',
       ],
-      extended_usage: 'dex start\ndex stop\ndex restart'
+      extended_usage: 'dex start\ndex stop\ndex restart',
     },
     demo_output: [
       '→ Restarting dex-event-service...',
@@ -223,8 +227,8 @@ const CLI_COMMANDS = [
       '→ Verifying health check (http://127.0.0.1:8100/status)...',
       '\x1b[32m✓\x1b[0m Response received in 12ms.',
       '',
-      '\x1b[1mService uptime: 4 seconds\x1b[0m'
-    ]
+      '\x1b[1mService uptime: 4 seconds\x1b[0m',
+    ],
   },
   {
     id: 'status',
@@ -234,14 +238,15 @@ const CLI_COMMANDS = [
     usage: 'dex status [service]',
     category: 'system',
     docs: {
-      overview: 'The Status command provides a high-level overview of the health, versioning, and connectivity of all services in the Dexter network.',
+      overview:
+        'The Status command provides a high-level overview of the health, versioning, and connectivity of all services in the Dexter network.',
       details: [
         'Reports status (online/offline/degraded).',
         'Displays version strings and build hashes.',
         'Shows network addresses and ports.',
-        'Validates internal service-to-service communication.'
+        'Validates internal service-to-service communication.',
       ],
-      extended_usage: 'dex status [service_id|all]'
+      extended_usage: 'dex status [service_id|all]',
     },
     demo_output: [
       '█ \x1b[1mSERVICE STATUS\x1b[0m █',
@@ -254,8 +259,8 @@ const CLI_COMMANDS = [
       'tts      127.0.0.1:8200   0.0.25   main     f2e1d0c  \x1b[32mOK\x1b[0m       14h22m           0.0%     1.2 GB',
       'web      127.0.0.1:8400   0.0.5    main     b1c2d3e  \x1b[32mOK\x1b[0m       14h22m           0.0%     42.1 MB',
       'ollama   127.0.0.1:11434  0.5.4    \x1b[90m--\x1b[0m       \x1b[90m--\x1b[0m       \x1b[32mOK\x1b[0m       4d12h            0.5%     8.4 GB',
-      'cache    127.0.0.1:6379   7.4.1    \x1b[90m--\x1b[0m       \x1b[90m--\x1b[0m       \x1b[32mOK\x1b[0m       32d              0.1%     4.2 MB'
-    ]
+      'cache    127.0.0.1:6379   7.4.1    \x1b[90m--\x1b[0m       \x1b[90m--\x1b[0m       \x1b[32mOK\x1b[0m       32d              0.1%     4.2 MB',
+    ],
   },
   {
     id: 'logs',
@@ -265,14 +270,15 @@ const CLI_COMMANDS = [
     usage: 'dex logs <service> [-f]',
     category: 'system',
     docs: {
-      overview: 'Logs provides real-time observability into the background processes of the Dexter services.',
+      overview:
+        'Logs provides real-time observability into the background processes of the Dexter services.',
       details: [
         'Tail live output from systemd services.',
         'Support for following (-f) and history limiting.',
         'ANSI color support for terminal readability.',
-        'Aggregated view for multi-instance deployments.'
+        'Aggregated view for multi-instance deployments.',
       ],
-      extended_usage: 'dex logs <service_id> [-f]'
+      extended_usage: 'dex logs <service_id> [-f]',
     },
     demo_output: [
       '\x1b[34m[DISCORD]\x1b[0m \x1b[90m14:30:05\x1b[0m [INFO] Joined voice channel: 1437617331...',
@@ -280,8 +286,8 @@ const CLI_COMMANDS = [
       '\x1b[35m[EVENT]\x1b[0m   \x1b[90m14:30:09\x1b[0m [INFO] Emitted: messaging.user.speaking.started',
       '\x1b[32m[TTS]\x1b[0m     \x1b[90m14:30:12\x1b[0m [INFO] Generating audio for 12 words...',
       '\x1b[34m[DISCORD]\x1b[0m \x1b[90m14:30:15\x1b[0m [SUCCESS] Audio playback completed.',
-      '\x1b[90m[Watching for new logs...]\x1b[0m'
-    ]
+      '\x1b[90m[Watching for new logs...]\x1b[0m',
+    ],
   },
   {
     id: 'event',
@@ -296,9 +302,10 @@ const CLI_COMMANDS = [
         'Query the history of the system event log.',
         'Manually reset analyst tier timers.',
         'Filter events by type, service, or count.',
-        'Delete historical events matching patterns.'
+        'Delete historical events matching patterns.',
       ],
-      extended_usage: 'dex event log [-n count] [-t type]\ndex event analyst [status|reset]\ndex event delete <pattern>'
+      extended_usage:
+        'dex event log [-n count] [-t type]\ndex event analyst [status|reset]\ndex event delete <pattern>',
     },
     demo_output: [
       '█ \x1b[1mLAST 20 EVENTS\x1b[0m █',
@@ -307,8 +314,8 @@ const CLI_COMMANDS = [
       '\x1b[90m14:42:02\x1b[0m \x1b[90mevent          \x1b[0m | \x1b[35m[INFO] Analysis complete: No significant insights found.\x1b[0m',
       '\x1b[90m14:45:10\x1b[0m \x1b[90mdiscord        \x1b[0m | \x1b[34moweneaster: Dexter, run a system scan.\x1b[0m',
       '\x1b[90m14:45:12\x1b[0m \x1b[90mevent          \x1b[0m | \x1b[32mPROC+: system-cli-op (started)\x1b[0m',
-      '\x1b[90m14:45:15\x1b[0m \x1b[90mcli            \x1b[0m | \x1b[31m[ERROR] Connection timeout to Redis.\x1b[0m'
-    ]
+      '\x1b[90m14:45:15\x1b[0m \x1b[90mcli            \x1b[0m | \x1b[31m[ERROR] Connection timeout to Redis.\x1b[0m',
+    ],
   },
   {
     id: 'discord',
@@ -323,9 +330,9 @@ const CLI_COMMANDS = [
         'List all guild members and their permission levels.',
         'Inspect channel structures and user presence.',
         'Toggle "Quiet Mode" for public interactions.',
-        'Check raw service state and gateway health.'
+        'Check raw service state and gateway health.',
       ],
-      extended_usage: 'dex discord contacts\ndex discord quiet [on|off]'
+      extended_usage: 'dex discord contacts\ndex discord quiet [on|off]',
     },
     demo_output: [
       '█ \x1b[1mDISCORD CONTACTS\x1b[0m █',
@@ -339,25 +346,25 @@ const CLI_COMMANDS = [
       '\x1b[35mDEXTER (ME)\x1b[0m     Dexter          \x1b[32monline\x1b[0m   \x1b[90m1313...0432\x1b[0m',
       '\x1b[35mMASTER\x1b[0m          oweneaster      \x1b[32monline\x1b[0m   \x1b[90m3130...7920\x1b[0m',
       '\x1b[31mADMIN\x1b[0m           Developer       \x1b[33midle\x1b[0m     \x1b[90m4242...8181\x1b[0m',
-      '\x1b[37mUSER\x1b[0m            GuestUser       \x1b[90moffline\x1b[0m  \x1b[90m9999...9999\x1b[0m'
-    ]
+      '\x1b[37mUSER\x1b[0m            GuestUser       \x1b[90moffline\x1b[0m  \x1b[90m9999...9999\x1b[0m',
+    ],
   },
   {
     id: 'ollama',
     title: 'Ollama',
     icon: 'bx-brain',
-    description: 'Run the system \'ollama\' executable or sync models.',
+    description: "Run the system 'ollama' executable or sync models.",
     usage: 'dex ollama [pull|sync|list]',
     category: 'system',
     docs: {
       overview: 'Proxy command for managing local LLMs and neural vision models.',
       details: [
         'Wraps the system ollama binary.',
-        'Added \'pull\' subcommand to sync all Dexter-required models.',
+        "Added 'pull' subcommand to sync all Dexter-required models.",
         'Synchronizes custom model templates automatically.',
-        'Validates model weight checksums.'
+        'Validates model weight checksums.',
       ],
-      extended_usage: 'dex ollama pull\ndex ollama run gemma3:12b'
+      extended_usage: 'dex ollama pull\ndex ollama run gemma3:12b',
     },
     demo_output: [
       '\x1b[34m[OLLAMA]\x1b[0m Synchronizing custom Dexter models...',
@@ -367,8 +374,8 @@ const CLI_COMMANDS = [
       'Creating custom Dexter models...',
       '  Rebuilding dex-analyst-guardian from gpt-oss:20b...',
       '\x1b[32m✓   Created dex-analyst-guardian\x1b[0m',
-      '\x1b[32m✓ Ollama models are up-to-date.\x1b[0m'
-    ]
+      '\x1b[32m✓ Ollama models are up-to-date.\x1b[0m',
+    ],
   },
   {
     id: 'system',
@@ -383,9 +390,9 @@ const CLI_COMMANDS = [
         'Scans and reports CPU, GPU, RAM, and Storage vitals.',
         'Validates presence of required system packages.',
         'Handles automatic installation of missing dependencies.',
-        'Exports telemetry data in JSON format.'
+        'Exports telemetry data in JSON format.',
       ],
-      extended_usage: 'dex system scan\ndex system validate\ndex system install <package>'
+      extended_usage: 'dex system scan\ndex system validate\ndex system install <package>',
     },
     demo_output: [
       '█ \x1b[1mSYSTEM CONFIGURATION\x1b[0m █',
@@ -399,8 +406,8 @@ const CLI_COMMANDS = [
       'Storage         2.0 TB (1 devices)',
       '                /dev/nvme0n1p3: 450.2 GB / 1862.4 GB (/)',
       'Packages        ',
-      '                \x1b[32m✓ 12 checks passed\x1b[0m'
-    ]
+      '                \x1b[32m✓ 12 checks passed\x1b[0m',
+    ],
   },
   {
     id: 'config',
@@ -415,9 +422,9 @@ const CLI_COMMANDS = [
         'View service definitions (domains, ports, IDs).',
         'Modify environment-specific parameters.',
         'Update authentication secrets and API endpoints.',
-        'Supports JSON path traversal for deep fields.'
+        'Supports JSON path traversal for deep fields.',
       ],
-      extended_usage: 'dex config <service> [field]\ndex config reset'
+      extended_usage: 'dex config <service> [field]\ndex config reset',
     },
     demo_output: [
       '{',
@@ -427,16 +434,16 @@ const CLI_COMMANDS = [
       '  "port": 8100,',
       '  "domain": "127.0.0.1",',
       '  "log_path": "~/Dexter/logs/event-service.log"',
-      '}'
-    ]
-  }
+      '}',
+    ],
+  },
 ];
 
 export const getCliInterfaceContent = () => {
   const categories = {
     cognitive: { title: 'Cognitive Core', icon: 'bx-brain', color: '#bb86fc' },
     lifecycle: { title: 'Development Lifecycle', icon: 'bx-git-branch', color: '#03dac6' },
-    system: { title: 'System Management', icon: 'bx-cog', color: '#aaa' }
+    system: { title: 'System Management', icon: 'bx-cog', color: '#aaa' },
   };
 
   let html = `
@@ -466,7 +473,7 @@ export const getCliInterfaceContent = () => {
     `;
 
   for (const [catId, catInfo] of Object.entries(categories)) {
-    const commands = CLI_COMMANDS.filter(cmd => cmd.category === catId);
+    const commands = CLI_COMMANDS.filter((cmd) => cmd.category === catId);
     if (commands.length === 0) continue;
 
     html += `
@@ -476,7 +483,9 @@ export const getCliInterfaceContent = () => {
                     <h2 style="font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; color: #eee; margin: 0;">${catInfo.title}</h2>
                 </div>
                 <div class="cli-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 20px;">
-                    ${commands.map(cmd => `
+                    ${commands
+                      .map(
+                        (cmd) => `
                         <div class="cli-command-card ${cmd.dummy ? 'dummy' : ''}" data-cmd="${cmd.id}" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 25px; transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden;">
                             <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 0%, ${catInfo.color}11, transparent 70%); pointer-events: none;"></div>
                             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; position: relative; z-index: 1;">
@@ -488,7 +497,9 @@ export const getCliInterfaceContent = () => {
                                 <span style="opacity: 0.5;">$</span> ${cmd.usage}
                             </div>
                         </div>
-                    `).join('')}
+                    `
+                      )
+                      .join('')}
                 </div>
             </div>
         `;
@@ -562,21 +573,29 @@ function openTerminal(cmdInfo) {
   body.innerHTML = '';
 
   // Render Documentation
-  const docData = cmdInfo.docs || { overview: cmdInfo.description, details: [], extended_usage: cmdInfo.usage };
+  const docData = cmdInfo.docs || {
+    overview: cmdInfo.description,
+    details: [],
+    extended_usage: cmdInfo.usage,
+  };
   docs.innerHTML = `
         <div class="cli-docs-section">
             <h4>Command Overview</h4>
             <h2>${cmdInfo.title}</h2>
             <p>${docData.overview}</p>
         </div>
-        ${docData.details.length > 0 ? `
+        ${
+          docData.details.length > 0
+            ? `
             <div class="cli-docs-section">
                 <h4>Core Features</h4>
                 <ul class="cli-docs-list">
-                    ${docData.details.map(d => `<li>${d}</li>`).join('')}
+                    ${docData.details.map((d) => `<li>${d}</li>`).join('')}
                 </ul>
             </div>
-        ` : ''}
+        `
+            : ''
+        }
         <div class="cli-docs-section">
             <h4>Detailed Usage</h4>
             <pre class="cli-docs-usage">${docData.extended_usage}</pre>
@@ -618,7 +637,7 @@ function logToTerminal(body, text, type = 'output') {
 }
 
 async function showDemoCommand(cmdId) {
-  const cmdInfo = CLI_COMMANDS.find(c => c.id === cmdId);
+  const cmdInfo = CLI_COMMANDS.find((c) => c.id === cmdId);
   if (!cmdInfo) return;
 
   const body = openTerminal(cmdInfo);
@@ -628,7 +647,7 @@ async function showDemoCommand(cmdId) {
 
   // Simulate realistic terminal output with delays
   for (const line of demoLines) {
-    await new Promise(resolve => setTimeout(resolve, 400 + Math.random() * 600));
+    await new Promise((resolve) => setTimeout(resolve, 400 + Math.random() * 600));
 
     let type = 'output';
     if (line.includes('[ERROR]')) type = 'error';
@@ -668,7 +687,7 @@ export function initCliDashboard() {
   }
 
   // Add interactivity
-  container.querySelectorAll('.cli-command-card').forEach(card => {
+  container.querySelectorAll('.cli-command-card').forEach((card) => {
     card.addEventListener('mouseenter', () => {
       card.style.transform = 'translateY(-5px)';
       card.style.borderColor = 'rgba(255,255,255,0.15)';

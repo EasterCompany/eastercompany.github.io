@@ -2,16 +2,18 @@
 import { getCurrentTheme, setTheme, THEMES } from '../core/theme.js';
 
 export function getSettingsContent() {
-    const currentTheme = getCurrentTheme();
-    const supported = 'Notification' in window;
-    const notificationState = { 
-        enabled: supported && Notification.permission === 'granted', 
-        supported: supported 
-    };
+  const currentTheme = getCurrentTheme();
+  const supported = 'Notification' in window;
+  const notificationState = {
+    enabled: supported && Notification.permission === 'granted',
+    supported: supported,
+  };
 
-    return `
+  return `
             <div class="theme-selector">
-                ${Object.values(THEMES).map(theme => `
+                ${Object.values(THEMES)
+                  .map(
+                    (theme) => `
                     <div class="theme-card ${currentTheme === theme ? 'active' : ''}" data-theme="${theme}">
                         <div class="theme-preview theme-preview-${theme.toLowerCase()}"></div>
                         <div class="theme-info">
@@ -20,7 +22,9 @@ export function getSettingsContent() {
                             <span class="theme-badge">${currentTheme === theme ? 'Active' : 'Select'}</span>
                         </div>
                     </div>
-                `).join('')}
+                `
+                  )
+                  .join('')}
             </div>
 
             <div class="settings-divider"></div>
@@ -53,30 +57,34 @@ export function getSettingsContent() {
 }
 
 export function attachSettingsListeners(settingsWindowInstance) {
-    const settingsContent = document.querySelector('#settings-window .window-content');
-    if (!settingsContent) return;
+  const settingsContent = document.querySelector('#settings-window .window-content');
+  if (!settingsContent) return;
 
-    settingsContent.querySelectorAll('.theme-card').forEach(card => {
-        card.addEventListener('click', function () {
-            const newTheme = this.dataset.theme;
-            setTheme(newTheme);
-            settingsWindowInstance.setContent(getSettingsContent());
-            attachSettingsListeners(settingsWindowInstance);
-        });
+  settingsContent.querySelectorAll('.theme-card').forEach((card) => {
+    card.addEventListener('click', function () {
+      const newTheme = this.dataset.theme;
+      setTheme(newTheme);
+      settingsWindowInstance.setContent(getSettingsContent());
+      attachSettingsListeners(settingsWindowInstance);
     });
+  });
 
-    const notificationToggle = document.getElementById('notifications-toggle');
-    if (notificationToggle && 'Notification' in window) {
-        notificationToggle.onclick = async (e) => {
-            if (e.target.checked) {
-                try { const permission = await Notification.requestPermission(); if (permission !== 'granted') e.target.checked = false; }
-                catch (error) { e.target.checked = false; }
-            } else if (Notification.permission === 'granted') {
-                alert('To disable notifications, please use your browser settings.');
-                e.target.checked = true;
-            }
-        };
-    } else if (notificationToggle) {
-        notificationToggle.disabled = true;
-    }
+  const notificationToggle = document.getElementById('notifications-toggle');
+  if (notificationToggle && 'Notification' in window) {
+    notificationToggle.onclick = async (e) => {
+      if (e.target.checked) {
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission !== 'granted') e.target.checked = false;
+        } catch (error) {
+          e.target.checked = false;
+        }
+      } else if (Notification.permission === 'granted') {
+        alert('To disable notifications, please use your browser settings.');
+        e.target.checked = true;
+      }
+    };
+  } else if (notificationToggle) {
+    notificationToggle.disabled = true;
+  }
 }

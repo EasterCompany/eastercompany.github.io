@@ -1,7 +1,7 @@
 import { smartFetch, createPlaceholderMessage } from '../core/utils.js';
 
 export const getChoresContent = () => {
-    return `
+  return `
         <div class="system-section-header">
             <i class='bx bx-task' style="color: #03dac6;"></i>
             <h2>Active Chores</h2>
@@ -27,78 +27,86 @@ export const getChoresContent = () => {
 };
 
 export async function updateChoresTab() {
-    const container = document.getElementById('chores-list');
-    const createBtn = document.getElementById('create-chore-btn');
-    const form = document.getElementById('create-chore-form');
-    const saveBtn = document.getElementById('save-chore-btn');
-    const cancelBtn = document.getElementById('cancel-chore-btn');
+  const container = document.getElementById('chores-list');
+  const createBtn = document.getElementById('create-chore-btn');
+  const form = document.getElementById('create-chore-form');
+  const saveBtn = document.getElementById('save-chore-btn');
+  const cancelBtn = document.getElementById('cancel-chore-btn');
 
-    // Attach Listeners
-    if (createBtn && !createBtn.dataset.listenerAttached) {
-        createBtn.onclick = () => {
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        };
-        createBtn.dataset.listenerAttached = "true";
+  // Attach Listeners
+  if (createBtn && !createBtn.dataset.listenerAttached) {
+    createBtn.onclick = () => {
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    };
+    createBtn.dataset.listenerAttached = 'true';
+  }
+
+  if (cancelBtn && !cancelBtn.dataset.listenerAttached) {
+    cancelBtn.onclick = () => {
+      form.style.display = 'none';
+    };
+    cancelBtn.dataset.listenerAttached = 'true';
+  }
+
+  if (saveBtn && !saveBtn.dataset.listenerAttached) {
+    saveBtn.onclick = async () => {
+      const instruction = document.getElementById('new-chore-instruction').value;
+      const url = document.getElementById('new-chore-url').value;
+      const ownerId = document.getElementById('new-chore-owner').value || '313071000877137920';
+
+      if (!instruction) return;
+
+      saveBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch('/chores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            owner_id: ownerId,
+            natural_instruction: instruction,
+            entry_url: url,
+            schedule: 'every_6h',
+          }),
+        });
+        form.style.display = 'none';
+        document.getElementById('new-chore-instruction').value = '';
+        document.getElementById('new-chore-url').value = '';
+        updateChoresTab();
+      } catch (e) {
+        console.error(e);
+        alert('Failed to create chore');
+      } finally {
+        saveBtn.innerHTML = 'Create Task';
+      }
+    };
+    saveBtn.dataset.listenerAttached = 'true';
+  }
+
+  if (!container) return;
+
+  try {
+    const response = await smartFetch('/chores');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const chores = await response.json();
+
+    if (!Array.isArray(chores) || chores.length === 0) {
+      container.innerHTML = createPlaceholderMessage(
+        'empty',
+        'No active chores.',
+        'Create one to start monitoring.'
+      );
+      return;
     }
 
-    if (cancelBtn && !cancelBtn.dataset.listenerAttached) {
-        cancelBtn.onclick = () => { form.style.display = 'none'; };
-        cancelBtn.dataset.listenerAttached = "true";
-    }
+    const html = chores
+      .map((chore) => {
+        const lastRun =
+          chore.last_run === 0 ? 'Never' : new Date(chore.last_run * 1000).toLocaleString();
+        const memoryCount = chore.memory ? chore.memory.length : 0;
+        const statusColor = chore.status === 'active' ? '#03dac6' : '#666';
 
-    if (saveBtn && !saveBtn.dataset.listenerAttached) {
-        saveBtn.onclick = async () => {
-            const instruction = document.getElementById('new-chore-instruction').value;
-            const url = document.getElementById('new-chore-url').value;
-            const ownerId = document.getElementById('new-chore-owner').value || "313071000877137920";
-            
-            if (!instruction) return;
-
-            saveBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
-            try {
-                await smartFetch('/chores', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        owner_id: ownerId,
-                        natural_instruction: instruction,
-                        entry_url: url,
-                        schedule: "every_6h"
-                    })
-                });
-                form.style.display = 'none';
-                document.getElementById('new-chore-instruction').value = '';
-                document.getElementById('new-chore-url').value = '';
-                updateChoresTab(); 
-            } catch (e) {
-                console.error(e);
-                alert("Failed to create chore");
-            } finally {
-                saveBtn.innerHTML = "Create Task";
-            }
-        };
-        saveBtn.dataset.listenerAttached = "true";
-    }
-
-    if (!container) return;
-
-    try {
-        const response = await smartFetch('/chores');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const chores = await response.json();
-
-        if (!Array.isArray(chores) || chores.length === 0) {
-            container.innerHTML = createPlaceholderMessage('empty', 'No active chores.', 'Create one to start monitoring.');
-            return;
-        }
-
-        const html = chores.map(chore => {
-            const lastRun = chore.last_run === 0 ? 'Never' : new Date(chore.last_run * 1000).toLocaleString();
-            const memoryCount = chore.memory ? chore.memory.length : 0;
-            const statusColor = chore.status === 'active' ? '#03dac6' : '#666';
-            
-            return `
+        return `
                 <div class="service-widget" style="border-left: 3px solid ${statusColor}; width: 100%;">
                     <div class="service-widget-header">
                         <i class='bx bx-search-alt' style="color: ${statusColor}"></i>
@@ -127,22 +135,22 @@ export async function updateChoresTab() {
                     </div>
                 </div>
             `;
-        }).join('');
+      })
+      .join('');
 
-        container.innerHTML = html;
+    container.innerHTML = html;
 
-        // Attach delete listeners
-        container.querySelectorAll('.delete-chore-btn').forEach(btn => {
-            btn.onclick = async (e) => {
-                e.stopPropagation();
-                if (confirm('Delete this chore?')) {
-                    await smartFetch(`/chores/${btn.dataset.id}`, { method: 'DELETE' });
-                    updateChoresTab();
-                }
-            };
-        });
-
-    } catch (e) {
-        console.error("Failed to fetch chores", e);
-    }
+    // Attach delete listeners
+    container.querySelectorAll('.delete-chore-btn').forEach((btn) => {
+      btn.onclick = async (e) => {
+        e.stopPropagation();
+        if (confirm('Delete this chore?')) {
+          await smartFetch(`/chores/${btn.dataset.id}`, { method: 'DELETE' });
+          updateChoresTab();
+        }
+      };
+    });
+  } catch (e) {
+    console.error('Failed to fetch chores', e);
+  }
 }

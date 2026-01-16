@@ -33,10 +33,7 @@ export const getBlueprintsTabContent = () => `
 `;
 
 export async function updateIdeasTab() {
-    // When using tabs, we might want to update both or just the visible one.
-    // For simplicity, we update both as they are separate data sources.
-    await Promise.all([
-        updateRoadmapTab(),
-        updateBlueprintsTab()
-    ]);
+  // When using tabs, we might want to update both or just the visible one.
+  // For simplicity, we update both as they are separate data sources.
+  await Promise.all([updateRoadmapTab(), updateBlueprintsTab()]);
 }

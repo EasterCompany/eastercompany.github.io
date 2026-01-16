@@ -1,5 +1,14 @@
 // Alerts Tab Logic
-import { createPlaceholderMessage, updateTabTimestamp, updateUnreadAlertCount, escapeHtml, smartFetch, renderMarkdown, setUnreadAlerts, isPublicMode } from '../core/utils.js';
+import {
+  createPlaceholderMessage,
+  updateTabTimestamp,
+  updateUnreadAlertCount,
+  escapeHtml,
+  smartFetch,
+  renderMarkdown,
+  setUnreadAlerts,
+  isPublicMode,
+} from '../core/utils.js';
 
 export const getAlertsContent = () => `
     <div class="system-section-header" style="margin-bottom: 20px;">
@@ -59,12 +68,12 @@ export async function updateAlertsTab(forceReRender = false) {
     const now = Date.now();
     const persistenceThreshold = 24 * 60 * 60 * 1000; // 24 hours
 
-    const filteredAlerts = allAlerts.filter(event => {
+    const filteredAlerts = allAlerts.filter((event) => {
       const readTSStr = localStorage.getItem(`alert_read_ts_${event.id}`);
       if (!readTSStr) return true; // Keep unread
 
       const readTS = parseInt(readTSStr);
-      return (now - readTS) < persistenceThreshold; // Keep if read within last 24h
+      return now - readTS < persistenceThreshold; // Keep if read within last 24h
     });
 
     // Sort: Priority (Desc) -> Time (Desc)
@@ -72,7 +81,11 @@ export async function updateAlertsTab(forceReRender = false) {
       const getPriority = (evt) => {
         let data = evt.event;
         if (typeof data === 'string') {
-          try { data = JSON.parse(data); } catch (e) { return 'low'; }
+          try {
+            data = JSON.parse(data);
+          } catch (e) {
+            return 'low';
+          }
         }
         return (data.priority || 'low').toLowerCase();
       };
@@ -98,19 +111,23 @@ export async function updateAlertsTab(forceReRender = false) {
     const getPriority = (evt) => {
       let data = evt.event;
       if (typeof data === 'string') {
-        try { data = JSON.parse(data); } catch (e) { return 'low'; }
+        try {
+          data = JSON.parse(data);
+        } catch (e) {
+          return 'low';
+        }
       }
       return (data.priority || 'low').toLowerCase();
     };
 
     // Build Display List with Dividers
     const displayList = [];
-    const uniquePriorities = new Set(filteredAlerts.map(n => getPriority(n)));
+    const uniquePriorities = new Set(filteredAlerts.map((n) => getPriority(n)));
     const showDividers = uniquePriorities.size > 1;
 
     if (filteredAlerts.length > 0) {
       let lastPriority = null;
-      filteredAlerts.forEach(n => {
+      filteredAlerts.forEach((n) => {
         const p = getPriority(n);
         if (showDividers && p !== lastPriority) {
           displayList.push({ id: `divider-${p}`, type: 'divider', label: p.toUpperCase() });
@@ -135,7 +152,9 @@ export async function updateAlertsTab(forceReRender = false) {
       if (typeof alertData === 'string') {
         try {
           alertData = JSON.parse(alertData);
-        } catch (e) { return null; }
+        } catch (e) {
+          return null;
+        }
       }
 
       const title = (alertData.title || 'Untitled Alert').trim();
@@ -153,8 +172,15 @@ export async function updateAlertsTab(forceReRender = false) {
       const isRead = !!readTS;
 
       const utcDate = new Date(alertEvent.timestamp * 1000);
-      const timeStr = utcDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      const dateStr = utcDate.toLocaleDateString(navigator.language, { month: 'short', day: 'numeric' });
+      const timeStr = utcDate.toLocaleTimeString(navigator.language, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      const dateStr = utcDate.toLocaleDateString(navigator.language, {
+        month: 'short',
+        day: 'numeric',
+      });
 
       // Styling
       let borderClass = isRead ? 'event-border-grey' : 'event-border-blue';
@@ -180,7 +206,7 @@ export async function updateAlertsTab(forceReRender = false) {
             <div style="flex: 1; min-width: 150px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related Events</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
-                    ${relatedEventIDs.map(id => `<a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${id.substring(0, 8)}...</a>`).join(', ')}
+                    ${relatedEventIDs.map((id) => `<a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${id.substring(0, 8)}...</a>`).join(', ')}
                 </div>
             </div>`;
       }
@@ -226,7 +252,7 @@ export async function updateAlertsTab(forceReRender = false) {
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                     <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related</div>
-                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${(alertData.related_services && alertData.related_services.length > 0) ? alertData.related_services.join(', ') : (alertData.related || 'SYSTEM')}</div>
+                        <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${alertData.related_services && alertData.related_services.length > 0 ? alertData.related_services.join(', ') : alertData.related || 'SYSTEM'}</div>
                     </div>
                     <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Category</div>
@@ -239,7 +265,6 @@ export async function updateAlertsTab(forceReRender = false) {
 
                 ${reportBodyHtml}
             `;
-
 
       const tempDiv = document.createElement('div');
       tempDiv.className = `event-item notification-item ${borderClass} ${readClass} ${expandedClass} cursor-pointer priority-${priority}`;
@@ -276,15 +301,20 @@ export async function updateAlertsTab(forceReRender = false) {
 
       const summary = `${protocol ? protocol.toUpperCase() : 'GUARDIAN'} ALERT: ${summaryContent || title}`;
       const iconMap = {
-        'system': 'bx-cog',
-        'messaging': 'bx-message-detail',
-        'cognitive': 'bx-brain',
-        'moderation': 'bx-shield-x',
-        'lifecycle': 'bx-git-branch'
+        system: 'bx-cog',
+        messaging: 'bx-message-detail',
+        cognitive: 'bx-brain',
+        moderation: 'bx-shield-x',
+        lifecycle: 'bx-git-branch',
       };
       const icon = iconMap[category] || 'bx-bell';
 
-      const priorityColor = priority === 'high' || priority === 'critical' ? '#ff4d4d' : priority === 'medium' ? '#ffa500' : '#888';
+      const priorityColor =
+        priority === 'high' || priority === 'critical'
+          ? '#ff4d4d'
+          : priority === 'medium'
+            ? '#ffa500'
+            : '#888';
 
       tempDiv.innerHTML = `
                 <div class="event-time">
@@ -342,11 +372,11 @@ export async function updateAlertsTab(forceReRender = false) {
 
     // Basic diffing and rendering logic for alerts
     const currentChildren = Array.from(alertsContainer.children);
-    const currentMap = new Map(currentChildren.map(el => [el.dataset.alertId, el]));
-    const newIds = new Set(displayList.map(e => e.id));
+    const currentMap = new Map(currentChildren.map((el) => [el.dataset.alertId, el]));
+    const newIds = new Set(displayList.map((e) => e.id));
 
     // Remove old alerts OR placeholders (anything without a valid current ID)
-    currentChildren.forEach(child => {
+    currentChildren.forEach((child) => {
       const id = child.dataset.alertId;
       if (!id || !newIds.has(id)) {
         child.remove();
@@ -381,11 +411,14 @@ export async function updateAlertsTab(forceReRender = false) {
     lastAlertsUpdate = Date.now();
     updateTabTimestamp(0, lastAlertsUpdate); // Index 0 for Alerts
     updateUnreadAlertCount(); // Update badge on each refresh
-
   } catch (error) {
     console.error('Error fetching alerts:', error);
     if (alertsContainer.children.length === 0) {
-      alertsContainer.innerHTML = createPlaceholderMessage('offline', 'Failed to load alerts.', 'The event service may be offline.');
+      alertsContainer.innerHTML = createPlaceholderMessage(
+        'offline',
+        'Failed to load alerts.',
+        'The event service may be offline.'
+      );
     }
   }
 }
@@ -398,19 +431,19 @@ function attachActionListeners() {
 
   if (readAllBtn && !readAllBtn.dataset.listenerAttached) {
     readAllBtn.onclick = () => {
-      currentFilteredAlerts.forEach(notif => {
+      currentFilteredAlerts.forEach((notif) => {
         if (!localStorage.getItem(`alert_read_ts_${notif.id}`)) {
           localStorage.setItem(`alert_read_ts_${notif.id}`, Date.now().toString());
         }
       });
       updateAlertsTab(true);
     };
-    readAllBtn.dataset.listenerAttached = "true";
+    readAllBtn.dataset.listenerAttached = 'true';
   }
 
   if (expandAllBtn && !expandAllBtn.dataset.listenerAttached) {
     expandAllBtn.onclick = () => {
-      currentFilteredAlerts.forEach(notif => {
+      currentFilteredAlerts.forEach((notif) => {
         activeExpandedIds.add(notif.id);
         if (!localStorage.getItem(`alert_read_ts_${notif.id}`)) {
           localStorage.setItem(`alert_read_ts_${notif.id}`, Date.now().toString());
@@ -418,7 +451,7 @@ function attachActionListeners() {
       });
       updateAlertsTab(true);
     };
-    expandAllBtn.dataset.listenerAttached = "true";
+    expandAllBtn.dataset.listenerAttached = 'true';
   }
 
   if (closeAllBtn && !closeAllBtn.dataset.listenerAttached) {
@@ -426,30 +459,30 @@ function attachActionListeners() {
       activeExpandedIds.clear();
       updateAlertsTab(true);
     };
-    closeAllBtn.dataset.listenerAttached = "true";
+    closeAllBtn.dataset.listenerAttached = 'true';
   }
 
   if (clearBtn && !clearBtn.dataset.listenerAttached) {
     clearBtn.onclick = async () => {
-      if (!confirm("Are you sure you want to delete all alerts from the backend?")) return;
+      if (!confirm('Are you sure you want to delete all alerts from the backend?')) return;
 
       clearBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i> Clearing...";
       try {
         await smartFetch('/events?type=system.notification.generated', { method: 'DELETE' });
 
-        const longAgo = Date.now() - (48 * 60 * 60 * 1000);
-        currentFilteredAlerts.forEach(notif => {
+        const longAgo = Date.now() - 48 * 60 * 60 * 1000;
+        currentFilteredAlerts.forEach((notif) => {
           localStorage.setItem(`alert_read_ts_${notif.id}`, longAgo.toString());
         });
         activeExpandedIds.clear();
         updateAlertsTab(true);
       } catch (e) {
-        console.error("Failed to clear alerts:", e);
+        console.error('Failed to clear alerts:', e);
       } finally {
         clearBtn.innerHTML = "<i class='bx bx-trash'></i> Clear";
       }
     };
-    clearBtn.dataset.listenerAttached = "true";
+    clearBtn.dataset.listenerAttached = 'true';
   }
 }
 
@@ -462,10 +495,14 @@ export async function checkBackgroundAlerts() {
     const allAlerts = data.events || [];
 
     let unreadCount = 0;
-    allAlerts.forEach(event => {
+    allAlerts.forEach((event) => {
       let evtData = event.event;
       if (typeof evtData === 'string') {
-        try { evtData = JSON.parse(evtData); } catch (e) { evtData = {}; }
+        try {
+          evtData = JSON.parse(evtData);
+        } catch (e) {
+          evtData = {};
+        }
       }
       const priority = (evtData.priority || 'low').toLowerCase();
       if (priority === 'low') return;

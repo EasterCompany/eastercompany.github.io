@@ -1,284 +1,285 @@
 /* --- High-Fidelity Gapless Grid Window System --- */
 .windows-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    gap: 2px; /* Minimal technical divider */
-    
-    /* Pinned to the top of the content area */
-    align-items: stretch;
-    justify-items: stretch;
-    
-    /* Default padding for floating navbar on Wide Desktop */
-    /* Floating nav is top: 20px, height: 60px. Bottom is at 80px. */
-    /* We use 80px here to have 0 gap by default. */
-    padding: 80px 0 0 0;
-    
-    box-sizing: border-box;
-    z-index: 900;
-    pointer-events: none;
-    background: transparent;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 2px; /* Minimal technical divider */
+
+  /* Pinned to the top of the content area */
+  align-items: stretch;
+  justify-items: stretch;
+
+  /* Default padding for floating navbar on Wide Desktop */
+  /* Floating nav is top: 20px, height: 60px. Bottom is at 80px. */
+  /* We use 80px here to have 0 gap by default. */
+  padding: 80px 0 0 0;
+
+  box-sizing: border-box;
+  z-index: 900;
+  pointer-events: none;
+  background: transparent;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* Hide windows when menu is open (Mobile) */
 .windows-container.menu-open {
-    display: none !important;
+  display: none !important;
 }
 
 /* Snapped State: Eliminate the gap when navbar darkens and stretches */
 /* JS triggers 'window-open' on the nav when it should be snapped/stretched */
 nav.window-open + .windows-container {
-    padding-top: 60px !important;
+  padding-top: 60px !important;
 }
 
 /* Force snap for standard/small screens regardless of JS class */
 @media (max-width: 1899px) {
-    .windows-container {
-        padding-top: 60px !important;
-    }
+  .windows-container {
+    padding-top: 60px !important;
+  }
 }
 
 /* Grid Layout Configurations */
 
 /* 1 Window: Centered Focus */
-.windows-container[data-count="1"] {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+.windows-container[data-count='1'] {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
 }
 
 /* Single window width limit on Wide Screens Only (Focus Mode) */
 @media (min-width: 1900px) {
-    .windows-container[data-count="1"] .window {
-        width: 70%;
-        max-width: 1400px;
-        justify-self: center;
-        margin-top: 20px; /* Aesthetic gap only in focus mode */
-        height: calc(100% - 40px); /* Leave space at bottom too */
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background-color: rgba(20, 20, 20, 0.8); /* Unified background */
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-    }
+  .windows-container[data-count='1'] .window {
+    width: 70%;
+    max-width: 1400px;
+    justify-self: center;
+    margin-top: 20px; /* Aesthetic gap only in focus mode */
+    height: calc(100% - 40px); /* Leave space at bottom too */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(20, 20, 20, 0.8); /* Unified background */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  }
 }
 
 /* Default/Snapped window (fills space entirely) */
-.windows-container[data-count="1"] .window {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    border: none;
+.windows-container[data-count='1'] .window {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border: none;
 }
 
 /* 2 Windows: Side-by-Side (2x1) */
-.windows-container[data-count="2"] {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+.windows-container[data-count='2'] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
 }
 
 .window {
-    position: relative;
-    background-color: rgba(20, 20, 20, 0.8); /* Unified technical background */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    
-    width: 100%;
-    height: 100%; /* Fill the grid quadrant */
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    pointer-events: auto;
-    
-    /* Animation logic */
-    opacity: 0;
-    transform: scale(0.98);
-    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
-                transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  background-color: rgba(20, 20, 20, 0.8); /* Unified technical background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  width: 100%;
+  height: 100%; /* Fill the grid quadrant */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+
+  /* Animation logic */
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* Force border-radius reset for all multi-window configurations or small views */
-.windows-container[data-count]:not([data-count="1"]) .window {
-    border-radius: 0 !important;
-    border: none;
+.windows-container[data-count]:not([data-count='1']) .window {
+  border-radius: 0 !important;
+  border: none;
 }
 
 @media (max-width: 1899px) {
-    .windows-container[data-count="1"] .window {
-        border-radius: 0 !important;
-        border: none;
-    }
+  .windows-container[data-count='1'] .window {
+    border-radius: 0 !important;
+    border: none;
+  }
 }
 
 .window.open {
-    opacity: 1;
-    transform: scale(1);
+  opacity: 1;
+  transform: scale(1);
 }
 
 .window-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    height: 50px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background-color: rgba(20, 20, 20, 0.8); /* Unified header background */
-    flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 50px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: rgba(20, 20, 20, 0.8); /* Unified header background */
+  flex-shrink: 0;
 }
 
 .window-header .bx:first-child {
-    font-size: 1.2em;
-    color: #bb86fc;
+  font-size: 1.2em;
+  color: #bb86fc;
 }
 
 .window-title {
-    flex-grow: 1;
-    text-align: center;
-    font-weight: 500;
-    color: #fff;
-    font-size: 0.95em;
-    padding: 0 15px;
-    height: 50px;
-    line-height: 50px;
+  flex-grow: 1;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+  font-size: 0.95em;
+  padding: 0 15px;
+  height: 50px;
+  line-height: 50px;
 }
 
 .window-close {
-    cursor: pointer;
-    font-size: 1.2em;
-    color: #666;
-    transition: color 0.2s;
-    height: 50px;
-    line-height: 50px;
-    display: flex;
-    align-items: center;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #666;
+  transition: color 0.2s;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .window-close:hover {
-    color: #ff4444;
+  color: #ff4444;
 }
 
 .window.hide-close .window-close {
-    display: none !important;
+  display: none !important;
 }
 
 .window-content {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 25px;
-    scrollbar-width: none;
-    display: flex;
-    flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 25px;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
 }
 
 .window-content::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* Tab Bar */
 .tab-bar {
-    display: flex;
-    margin: 0 15px;
-    height: 50px;
-    align-self: stretch;
-    flex-grow: 1;
+  display: flex;
+  margin: 0 15px;
+  height: 50px;
+  align-self: stretch;
+  flex-grow: 1;
 }
 
 .tab {
-    padding: 0 20px;
-    cursor: pointer;
-    color: #888;
-    transition: all 0.3s;
-    font-size: 0.85em;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 50px;
-    border-top: 2px solid transparent;
+  padding: 0 20px;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.3s;
+  font-size: 0.85em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  border-top: 2px solid transparent;
 }
 
 .tab-subtitle {
-    display: none !important;
+  display: none !important;
 }
 
 .tab.active {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
-    border-top: 2px solid #bb86fc;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 2px solid #bb86fc;
 }
 
 .tab-content {
-    display: none;
-    height: 100%;
+  display: none;
+  height: 100%;
 }
 
 .tab-content.active {
-    display: block;
+  display: block;
 }
 
 /* Window Header Logic */
 .window:not(.has-tabs) .window-header {
-    display: none !important;
+  display: none !important;
 }
 
 .window:not(.has-tabs) .window-content {
-    padding-top: 40px;
+  padding-top: 40px;
 }
 
 /* Hide secondary close button globally */
 .window-close {
-    display: none !important;
+  display: none !important;
 }
 
 /* Badge Styling */
 .notification-badge {
-    background-color: #ff4444;
-    color: white;
-    font-size: 0.7em;
-    font-weight: bold;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: #ff4444;
+  color: white;
+  font-size: 0.7em;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Mobile Adaptations */
 @media (max-width: 879px) {
-    .window-content {
-        padding: 15px;
-    }
+  .window-content {
+    padding: 15px;
+  }
 
-    .tab {
-        padding: 0 12px;
-        font-size: 1.2em; /* Emphasize icons */
-    }
+  .tab {
+    padding: 0 12px;
+    font-size: 1.2em; /* Emphasize icons */
+  }
 
-    .tab span:not(.notification-badge) {
-        display: none; /* Icon-only tabs on small mobile */
-    }
+  .tab span:not(.notification-badge) {
+    display: none; /* Icon-only tabs on small mobile */
+  }
 
-    .tab-bar {
-        margin: 0 5px;
-    }
+  .tab-bar {
+    margin: 0 5px;
+  }
 }
 
 /* Small View Adaptations (Below 1900px) */
 @media (max-width: 1899px) {
-    /* Hide header if no tabs */
-    .window:not(.has-tabs) .window-header {
-        display: none !important;
-    }
+  /* Hide header if no tabs */
+  .window:not(.has-tabs) .window-header {
+    display: none !important;
+  }
 
-    /* If tabs exist, show header but hide the close button (redundant with navbar close) */
-    .window.has-tabs .window-close {
-        display: none !important;
-    }
-    
-    /* Adjust padding if header is hidden to prevent content from hitting top edge too hard */
-    .window:not(.has-tabs) .window-content {
-        padding-top: 15px;
-    }
+  /* If tabs exist, show header but hide the close button (redundant with navbar close) */
+  .window.has-tabs .window-close {
+    display: none !important;
+  }
+
+  /* Adjust padding if header is hidden to prevent content from hitting top edge too hard */
+  .window:not(.has-tabs) .window-content {
+    padding-top: 15px;
+  }
 }
