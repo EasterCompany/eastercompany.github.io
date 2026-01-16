@@ -70,9 +70,13 @@ export const getGuardianContent = () => {
             <button id="fabricator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
-        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.5;">
-            <div style="text-align: center; color: #666; font-style: italic; font-size: 0.85em;">
-                Fabricator Agent coming soon...
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Construction Protocol</span>
+                    <span id="fabricator-construction-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="fabricator-construction-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                </div>
             </div>
         </div>
 
@@ -651,6 +655,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
   const totalWasteVal = document.getElementById('guardian-total-waste');
   const resetBtn = document.getElementById('guardian-reset-btn');
   const analyzerResetBtn = document.getElementById('analyzer-reset-btn');
+  const fabricatorResetBtn = document.getElementById('fabricator-reset-btn');
   const pauseBtn = document.getElementById('system-pause-toggle-btn');
 
   if (pauseBtn && !pauseBtn.dataset.listenerAttached) {
@@ -704,18 +709,37 @@ export async function updateProcessesTab(isSmoothMode = false) {
     analyzerResetBtn.dataset.listenerAttached = "true";
   }
 
+  if (fabricatorResetBtn && !fabricatorResetBtn.dataset.listenerAttached) {
+    fabricatorResetBtn.onclick = async () => {
+      fabricatorResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch('/fabricator/reset?protocol=construction', { method: 'POST' });
+        setTimeout(() => {
+          fabricatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => { fabricatorResetBtn.innerHTML = "<i class='bx bx-refresh'></i>"; }, 2000);
+        }, 500);
+        updateProcessesTab(); // refresh immediately
+      } catch (e) {
+        fabricatorResetBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
+    };
+    fabricatorResetBtn.dataset.listenerAttached = "true";
+  }
+
     const guardianStatus = await fetchGuardianStatus();
     if (guardianStatus && guardianStatus.agents) {
       const guardianData = guardianStatus.agents.guardian || { protocols: {} };
       const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
       const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
+      const fabricatorData = guardianStatus.agents.fabricator || { protocols: {} };
       const systemData = guardianStatus.system || {};
 
       const now = Math.floor(Date.now() / 1000);
       const aliases = { 
         "sentry": "Sentry", 
         "synthesis": "Synthesis",
-        "alert_review": "Alert Review"
+        "alert_review": "Alert Review",
+        "construction": "Construction"
       };
 
       const formatDuration = (seconds) => {
@@ -791,6 +815,11 @@ export async function updateProcessesTab(isSmoothMode = false) {
       const imaginatorVal = document.getElementById('imaginator-alert_review-val');
       const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
       if (imaginatorVal) updateProtocolWidget(imaginatorVal, imaginatorStats, imaginatorData.protocols.alert_review, 'alert_review');
+
+      // Fabricator Protocols
+      const fabricatorVal = document.getElementById('fabricator-construction-val');
+      const fabricatorStats = document.getElementById('fabricator-construction-stats');
+      if (fabricatorVal) updateProtocolWidget(fabricatorVal, fabricatorStats, fabricatorData.protocols.construction, 'construction');
 
       // System State
       const stateLabel = document.getElementById('system-state-label');
