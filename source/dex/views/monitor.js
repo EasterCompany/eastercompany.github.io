@@ -11,6 +11,7 @@ export const getGuardianContent = () => {
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
             <h2>Summary ${approximationText}</h2>
+            <button id="system-pause-toggle-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Toggle System Pause"><i class='bx bx-pause'></i></button>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
              <div class="guardian-indicator" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
@@ -651,6 +652,24 @@ export async function updateProcessesTab(isSmoothMode = false) {
   const totalWasteVal = document.getElementById('guardian-total-waste');
   const resetBtn = document.getElementById('guardian-reset-btn');
   const analyzerResetBtn = document.getElementById('analyzer-reset-btn');
+  const pauseBtn = document.getElementById('system-pause-toggle-btn');
+
+  if (pauseBtn && !pauseBtn.dataset.listenerAttached) {
+    pauseBtn.onclick = async () => {
+      // If we see a play icon, it means we are paused and want to resume
+      const isPaused = pauseBtn.querySelector('.bx-play'); 
+      const endpoint = isPaused ? '/agent/resume' : '/agent/pause';
+      
+      pauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch(endpoint, { method: 'POST' });
+        setTimeout(() => updateProcessesTab(), 500);
+      } catch (e) {
+        pauseBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
+    };
+    pauseBtn.dataset.listenerAttached = "true";
+  }
 
   if (resetBtn && !resetBtn.dataset.listenerAttached) {
     resetBtn.onclick = async () => {
@@ -791,6 +810,22 @@ export async function updateProcessesTab(isSmoothMode = false) {
           stateVal.style.color = systemData.state_time > 300 ? "#5eff5e" : "#fff";
         } else {
           stateVal.style.color = "#bb86fc"; 
+        }
+
+        if (pauseBtn) {
+            // Check if we are currently loading (don't overwrite spinner)
+            const isLoading = pauseBtn.querySelector('.bx-loader-alt') || pauseBtn.querySelector('.bx-error');
+            if (!isLoading) {
+                if (state === 'paused') {
+                    pauseBtn.innerHTML = "<i class='bx bx-play'></i>";
+                    pauseBtn.title = "Resume System";
+                    pauseBtn.style.color = "#ff9800";
+                } else {
+                    pauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
+                    pauseBtn.title = "Pause System";
+                    pauseBtn.style.color = "";
+                }
+            }
         }
       }
 
