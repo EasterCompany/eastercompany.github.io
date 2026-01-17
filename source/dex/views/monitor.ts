@@ -95,6 +95,22 @@ export const getGuardianContent = () => {
         </div>
 
         <div class="system-section-header" style="display: flex; align-items: center;">
+            <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em; margin-right: 10px;"></i>
+            <h2>Courier</h2>
+            <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+        </div>
+
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
+                    <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="system-section-header" style="display: flex; align-items: center;">
             ${imaginatorSVG}
             <h2>Imaginator</h2>
             <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
@@ -708,6 +724,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
   const resetBtn = document.getElementById('guardian-reset-btn');
   const analyzerResetBtn = document.getElementById('analyzer-reset-btn');
   const fabricatorResetBtn = document.getElementById('fabricator-reset-btn');
+  const courierResetBtn = document.getElementById('courier-reset-btn');
   const pauseBtn = document.getElementById('system-pause-toggle-btn');
 
   if (pauseBtn && !pauseBtn.dataset.listenerAttached) {
@@ -785,12 +802,32 @@ export async function updateProcessesTab(isSmoothMode = false) {
     fabricatorResetBtn.dataset.listenerAttached = 'true';
   }
 
+  if (courierResetBtn && !courierResetBtn.dataset.listenerAttached) {
+    courierResetBtn.onclick = async () => {
+      courierResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch('/agent/reset?protocol=researcher', { method: 'POST' });
+        setTimeout(() => {
+          courierResetBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => {
+            courierResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
+        }, 500);
+        updateProcessesTab(); // refresh immediately
+      } catch (e) {
+        courierResetBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
+    };
+    courierResetBtn.dataset.listenerAttached = 'true';
+  }
+
   const guardianStatus = await fetchGuardianStatus();
   if (guardianStatus && guardianStatus.agents) {
     const guardianData = guardianStatus.agents.guardian || { protocols: {} };
     const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
     const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
     const fabricatorData = guardianStatus.agents.fabricator || { protocols: {} };
+    const courierData = guardianStatus.agents.courier || { protocols: {} };
     const systemData = guardianStatus.system || {};
 
     const now = Math.floor(Date.now() / 1000);
@@ -799,6 +836,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
       synthesis: 'Synthesis',
       alert_review: 'Alert Review',
       construction: 'Construction',
+      researcher: 'Researcher',
     };
 
     const formatDuration = (seconds: number) => {
@@ -907,6 +945,17 @@ export async function updateProcessesTab(isSmoothMode = false) {
         fabricatorStats,
         fabricatorData.protocols.construction,
         'construction'
+      );
+
+    // Courier Protocols
+    const researcherVal = document.getElementById('courier-researcher-val');
+    const researcherStats = document.getElementById('courier-researcher-stats');
+    if (researcherVal)
+      updateProtocolWidget(
+        researcherVal,
+        researcherStats,
+        courierData.protocols.researcher,
+        'researcher'
       );
 
     // System State
