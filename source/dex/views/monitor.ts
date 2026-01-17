@@ -124,8 +124,7 @@ export const getGuardianContent = () => {
                     <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
-        </div>
-        <div class="system-monitor-widgets" style="margin-top: 0; padding-top: 0;"></div>`;
+        </div>`;
 };
 
 export const getProcessesContent = () => {

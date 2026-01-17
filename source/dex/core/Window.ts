@@ -75,6 +75,8 @@ export function createWindow(options: WindowOptions): WindowInstance {
     let windowTitleHTML = '';
     let contentHTML;
 
+    const spacerHTML = `<div class="window-bottom-spacer"></div>`;
+
     if (options.tabs && options.tabs.length > 0) {
       const tabTitles = options.tabs
         .map((tab, index) => {
@@ -96,13 +98,13 @@ export function createWindow(options: WindowOptions): WindowInstance {
       const tabContents = options.tabs
         .map(
           (tab, index) =>
-            `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}</div>`
+            `<div class="tab-content ${index === 0 ? 'active' : ''}" data-tab-content="${index}">${tab.content}${spacerHTML}</div>`
         )
         .join('');
       contentHTML = `<div class="window-content">${tabContents}</div>`;
     } else {
       if (options.title) windowTitleHTML = `<div class="window-title">${options.title}</div>`;
-      contentHTML = `<div class="window-content">${options.content || ''}</div>`;
+      contentHTML = `<div class="window-content">${options.content || ''}${spacerHTML}</div>`;
     }
 
     windowEl.innerHTML = `
