@@ -45,12 +45,25 @@ export const getChoresContent = () => {
                     </select>
                 </div>
 
-                <div class="task-input-group">
-                    <label id="task-owner-label" class="task-input-label">Report result to</label>
+                <div class="task-input-group" style="grid-column: span 2;">
+                    <label id="task-owner-label" class="task-input-label">Report results to (Select multiple)</label>
+                    <div id="selected-recipients" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 32px; padding: 5px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="color: #444; font-size: 0.8em; font-style: italic; padding: 4px;">No recipients selected</span>
+                    </div>
                     <select id="new-chore-owner" class="task-form-select">
-                        <option value="313071000877137920">Creator (Owen)</option>
-                        <option value="dexter">Dexter (Event Timeline)</option>
-                        <!-- Contacts will be injected here -->
+                        <option value="" disabled selected>Add recipient...</option>
+                        <optgroup label="System">
+                            <option value="dexter">Dexter (Event Timeline)</option>
+                        </optgroup>
+                        <optgroup label="Creators">
+                            <option value="313071000877137920">Owen (Creator)</option>
+                        </optgroup>
+                        <optgroup id="contacts-group" label="Users">
+                            <!-- Contacts will be injected here -->
+                        </optgroup>
+                        <optgroup id="channels-group" label="Channels">
+                            <!-- Channels will be injected here -->
+                        </optgroup>
                     </select>
                 </div>
             </div>
@@ -66,7 +79,11 @@ export const getChoresContent = () => {
 };
 
 let currentTasks: any[] = [];
-let ownerMap: Record<string, string> = { '313071000877137920': 'Owen' };
+let recipientMap: Record<string, string> = {
+  '313071000877137920': 'Owen',
+  dexter: 'Dexter',
+};
+let selectedRecipients: string[] = [];
 let editingChoreId: string | null = null;
 
 export async function updateChoresTab() {
@@ -75,8 +92,8 @@ export async function updateChoresTab() {
   const form = document.getElementById('create-chore-form');
   const saveBtn = document.getElementById('save-chore-btn');
   const cancelBtn = document.getElementById('cancel-chore-btn');
-  const ownerSelect = document.getElementById('new-chore-owner') as HTMLSelectElement;
-  const ownerLabel = document.getElementById('task-owner-label') as HTMLLabelElement;
+  const recipientSelect = document.getElementById('new-chore-owner') as HTMLSelectElement;
+  const selectedRecipientsContainer = document.getElementById('selected-recipients');
   const filterSelect = document.getElementById('task-filter-owner') as HTMLSelectElement;
 
   const instructionInput = document.getElementById('new-chore-instruction') as HTMLInputElement;
@@ -85,6 +102,49 @@ export async function updateChoresTab() {
 
   const formTitle = document.getElementById('form-title');
   const formIcon = document.getElementById('form-icon');
+
+  function renderSelectedRecipients() {
+    if (!selectedRecipientsContainer) return;
+    if (selectedRecipients.length === 0) {
+      selectedRecipientsContainer.innerHTML =
+        '<span style="color: #444; font-size: 0.8em; font-style: italic; padding: 4px;">No recipients selected</span>';
+      return;
+    }
+
+    selectedRecipientsContainer.innerHTML = selectedRecipients
+      .map((id) => {
+        const name = recipientMap[id] || id;
+        const isChannel = id.startsWith('channel:');
+        const icon = id === 'dexter' ? 'bx-terminal' : isChannel ? 'bx-hash' : 'bx-user';
+        const color = id === 'dexter' ? '#bb86fc' : isChannel ? '#03dac6' : '#fff';
+
+        return `
+        <div class="recipient-badge" style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.75em; color: ${color};">
+          <i class='bx ${icon}'></i>
+          <span>${name}</span>
+          <i class='bx bx-x remove-recipient' data-id="${id}" style="cursor: pointer; margin-left: 4px; opacity: 0.6;"></i>
+        </div>
+      `;
+      })
+      .join('');
+
+    // Attach remove listeners
+    selectedRecipientsContainer.querySelectorAll('.remove-recipient').forEach((btn) => {
+      (btn as HTMLElement).onclick = () => {
+        const id = (btn as HTMLElement).dataset.id;
+        selectedRecipients = selectedRecipients.filter((r) => r !== id);
+        renderSelectedRecipients();
+      };
+    });
+  }
+
+  function addRecipient(id: string) {
+    if (id && !selectedRecipients.includes(id)) {
+      selectedRecipients.push(id);
+      renderSelectedRecipients();
+    }
+    if (recipientSelect) recipientSelect.value = ''; // Reset dropdown
+  }
 
   function openForm(chore: any = null) {
     if (!form) return;
@@ -100,18 +160,11 @@ export async function updateChoresTab() {
 
       if (instructionInput) instructionInput.value = chore.natural_instruction;
       if (urlInput) urlInput.value = chore.execution_plan?.entry_url || '';
-      if (ownerSelect) ownerSelect.value = chore.owner_id;
       if (scheduleInput) scheduleInput.value = chore.schedule;
 
-      // Update the "Report result to" label
-      if (ownerSelect && ownerLabel) {
-        const selectedOption = ownerSelect.options[ownerSelect.selectedIndex];
-        if (selectedOption) {
-          let name = selectedOption.text.split(' (')[0];
-          if (selectedOption.value === 'dexter') name = 'Dexter';
-          ownerLabel.textContent = `Report result to: ${name}`;
-        }
-      }
+      // Handle legacy single owner_id if recipients is empty
+      selectedRecipients = chore.recipients || (chore.owner_id ? [chore.owner_id] : []);
+      renderSelectedRecipients();
     } else {
       if (formTitle) formTitle.textContent = 'Initialize Research Task';
       if (formIcon) {
@@ -122,32 +175,35 @@ export async function updateChoresTab() {
 
       if (instructionInput) instructionInput.value = '';
       if (urlInput) urlInput.value = '';
-      if (ownerSelect) ownerSelect.value = '313071000877137920';
       if (scheduleInput) scheduleInput.value = 'every_24h';
-      if (ownerLabel) ownerLabel.textContent = 'Report result to: Owen';
+      selectedRecipients = ['313071000877137920']; // Default to Owen
+      renderSelectedRecipients();
     }
 
     form.style.display = 'block';
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  const contactsGroup = document.getElementById('contacts-group');
+  const channelsGroup = document.getElementById('channels-group');
+
   // Populating Contacts Dropdown
-  if (ownerSelect && !ownerSelect.dataset.populated && !isPublicMode()) {
+  if (contactsGroup && !contactsGroup.dataset.populated && !isPublicMode()) {
     try {
       smartDiscordFetch('/contacts').then(async (resp) => {
         if (resp.ok) {
           const data = await resp.json();
           const members = data.members || [];
           members.forEach((m: any) => {
-            ownerMap[m.id] = m.nickname || m.username;
+            recipientMap[m.id] = m.nickname || m.username;
             if (m.id === '313071000877137920') return; // Skip Owen, already default
             const opt = document.createElement('option');
             opt.value = m.id;
             const nickname = m.nickname || m.username;
             opt.textContent = `${nickname} (${m.username})`;
-            ownerSelect.appendChild(opt);
+            contactsGroup.appendChild(opt);
           });
-          ownerSelect.dataset.populated = 'true';
+          contactsGroup.dataset.populated = 'true';
         }
       });
     } catch (e) {
@@ -155,17 +211,34 @@ export async function updateChoresTab() {
     }
   }
 
-  // Label Sync Listener
-  if (ownerSelect && ownerLabel && !ownerSelect.dataset.listenerAttached) {
-    ownerSelect.onchange = () => {
-      const selectedOption = ownerSelect.options[ownerSelect.selectedIndex];
-      if (selectedOption) {
-        let name = selectedOption.text.split(' (')[0];
-        if (selectedOption.value === 'dexter') name = 'Dexter';
-        ownerLabel.textContent = `Report result to: ${name}`;
-      }
+  // Populating Channels Dropdown
+  if (channelsGroup && !channelsGroup.dataset.populated && !isPublicMode()) {
+    try {
+      smartDiscordFetch('/channels').then(async (resp) => {
+        if (resp.ok) {
+          const channels = await resp.json();
+          channels.forEach((c: any) => {
+            const id = `channel:${c.id}`;
+            recipientMap[id] = `#${c.name}`;
+            const opt = document.createElement('option');
+            opt.value = id;
+            opt.textContent = `#${c.name} (${c.guild})`;
+            channelsGroup.appendChild(opt);
+          });
+          channelsGroup.dataset.populated = 'true';
+        }
+      });
+    } catch (e) {
+      console.warn('Failed to fetch channels for dropdown');
+    }
+  }
+
+  // Multi-select Dropdown Listener
+  if (recipientSelect && !recipientSelect.dataset.listenerAttached) {
+    recipientSelect.onchange = () => {
+      addRecipient(recipientSelect.value);
     };
-    ownerSelect.dataset.listenerAttached = 'true';
+    recipientSelect.dataset.listenerAttached = 'true';
   }
 
   // Filter Listener
@@ -179,7 +252,12 @@ export async function updateChoresTab() {
     const filterValue = filterSelect?.value || 'all';
 
     const filtered =
-      filterValue === 'all' ? currentTasks : currentTasks.filter((t) => t.owner_id === filterValue);
+      filterValue === 'all'
+        ? currentTasks
+        : currentTasks.filter((t) => {
+            const recipients = t.recipients || (t.owner_id ? [t.owner_id] : []);
+            return recipients.includes(filterValue);
+          });
 
     if (filtered.length === 0) {
       container.innerHTML = createPlaceholderMessage(
@@ -198,7 +276,16 @@ export async function updateChoresTab() {
           chore.last_run === 0 ? 'Never' : new Date(chore.last_run * 1000).toLocaleString();
         const memoryCount = chore.memory ? chore.memory.length : 0;
         const statusColor = chore.status === 'active' ? '#03dac6' : '#666';
-        const ownerName = ownerMap[chore.owner_id] || chore.owner_id.substring(0, 8);
+
+        const recipients = chore.recipients || (chore.owner_id ? [chore.owner_id] : []);
+        const recipientList = recipients
+          .map((r: string) => {
+            const name = recipientMap[r] || r.substring(0, 8);
+            const isChannel = r.startsWith('channel:');
+            const icon = r === 'dexter' ? 'bx-terminal' : isChannel ? 'bx-hash' : 'bx-user';
+            return `<span title="${name}" style="display: flex; align-items: center; gap: 3px;"><i class='bx ${icon}'></i>${name}</span>`;
+          })
+          .join("<span style='color: #444;'>, </span>");
 
         return `
                 <div class="service-widget wide-task-card" style="border-left: 4px solid ${statusColor}; width: 100%; display: flex; flex-direction: column; padding: 20px;">
@@ -207,8 +294,11 @@ export async function updateChoresTab() {
                             <i class='bx bx-search-alt' style="color: ${statusColor}; font-size: 1.5em; margin-top: 2px;"></i>
                             <div style="text-align: left;">
                                 <h3 style="font-size: 1.1em; white-space: normal; line-height: 1.4; font-weight: 600; margin: 0;">${chore.natural_instruction}</h3>
-                                <div style="margin-top: 8px; display: flex; gap: 15px; align-items: center;">
-                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-user' style="margin-right: 4px;"></i>${ownerName}</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                    <div style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace; display: flex; gap: 10px; align-items: center;">
+                                      <i class='bx bx-send' style="margin-right: -5px;"></i>
+                                      ${recipientList}
+                                    </div>
                                     <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}</span>
                                 </div>
                             </div>
@@ -288,11 +378,9 @@ export async function updateChoresTab() {
     saveBtn.onclick = async () => {
       const instructionInput = document.getElementById('new-chore-instruction') as HTMLInputElement;
       const urlInput = document.getElementById('new-chore-url') as HTMLInputElement;
-      const ownerInput = document.getElementById('new-chore-owner') as HTMLSelectElement;
       const scheduleInput = document.getElementById('new-chore-schedule') as HTMLSelectElement;
 
       const instruction = instructionInput?.value;
-      const ownerId = ownerInput?.value || '313071000877137920';
       const schedule = scheduleInput?.value || 'every_24h';
 
       if (!instruction) return;
@@ -307,7 +395,7 @@ export async function updateChoresTab() {
           method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            owner_id: ownerId,
+            recipients: selectedRecipients,
             natural_instruction: instruction,
             entry_url: urlInput?.value,
             schedule: schedule,
@@ -317,6 +405,7 @@ export async function updateChoresTab() {
         if (instructionInput) instructionInput.value = '';
         if (urlInput) urlInput.value = '';
         editingChoreId = null;
+        selectedRecipients = [];
         updateChoresTab();
       } catch (e) {
         console.error(e);
@@ -338,14 +427,18 @@ export async function updateChoresTab() {
     // Update filter dropdown with unique owners from current tasks
     if (filterSelect) {
       const currentFilter = filterSelect.value;
-      const uniqueOwners = Array.from(new Set(currentTasks.map((t) => t.owner_id)));
+      const allRecipients = new Set<string>();
+      currentTasks.forEach((t) => {
+        if (t.owner_id) allRecipients.add(t.owner_id);
+        if (t.recipients) t.recipients.forEach((r: string) => allRecipients.add(r));
+      });
 
       // Keep only 'all' and rebuild others
-      filterSelect.innerHTML = '<option value="all">All Owners</option>';
-      uniqueOwners.forEach((oid) => {
+      filterSelect.innerHTML = '<option value="all">All Recipients</option>';
+      allRecipients.forEach((rid) => {
         const opt = document.createElement('option');
-        opt.value = oid;
-        opt.textContent = ownerMap[oid] || `Owner: ${oid.substring(0, 8)}`;
+        opt.value = rid;
+        opt.textContent = recipientMap[rid] || `Recipient: ${rid.substring(0, 8)}`;
         filterSelect.appendChild(opt);
       });
       filterSelect.value = currentFilter;
