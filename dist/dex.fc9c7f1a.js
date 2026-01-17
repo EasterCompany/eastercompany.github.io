@@ -243,7 +243,6 @@
     <div class="progress-standby">
         <div class="radar-container">
             <div class="radar-circle"></div>
-            <div class="radar-circle" style="animation-delay: 1s;"></div>
             <div class="radar-circle" style="animation-delay: 2s;"></div>
             <div class="radar-brain"><i class='bx bx-brain'></i></div>
         </div>
