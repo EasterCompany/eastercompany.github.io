@@ -342,7 +342,12 @@ function predictDashboardTimers() {
   const status = DASHBOARD_CACHE.agent_status;
 
   // 1. System State Time (Increments)
-  if (status.system && typeof status.system.state_time === 'number') {
+  // Only predict/increment if the system is NOT paused.
+  if (
+    status.system &&
+    status.system.state !== 'paused' &&
+    typeof status.system.state_time === 'number'
+  ) {
     status.system.state_time += 1;
   }
 }
