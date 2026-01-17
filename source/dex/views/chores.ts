@@ -176,7 +176,7 @@ export async function updateChoresTab() {
       if (instructionInput) instructionInput.value = '';
       if (urlInput) urlInput.value = '';
       if (scheduleInput) scheduleInput.value = 'every_24h';
-      selectedRecipients = ['313071000877137920']; // Default to Owen
+      selectedRecipients = [];
       renderSelectedRecipients();
     }
 
@@ -384,6 +384,10 @@ export async function updateChoresTab() {
       const schedule = scheduleInput?.value || 'every_24h';
 
       if (!instruction) return;
+      if (selectedRecipients.length === 0) {
+        alert('Please add at least one recipient.');
+        return;
+      }
 
       const originalBtnHTML = saveBtn.innerHTML;
       saveBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
