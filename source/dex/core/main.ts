@@ -8,8 +8,8 @@ import {
   getRoadmapTabContent,
   getBlueprintsTabContent,
   getProgressTabContent,
+  getChoresTabContent,
 } from '../views/ideas.ts';
-import { getChoresContent, updateChoresTab } from '../views/chores.ts';
 import { checkBackgroundBlueprints } from '../views/blueprints.ts';
 import { getContactsContent, updateContactsTab } from '../views/contacts.ts';
 import { getEventsContent, updateEventsTimeline } from '../views/events.ts';
@@ -295,7 +295,6 @@ function onReady() {
       { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
       { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
       { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() },
-      { icon: 'bx-task', title: 'Chores', content: getChoresContent() },
     ].filter((tab) => {
       if (isPublicMode()) {
         return tab.title !== 'Hardware' && tab.title !== 'Logs';
@@ -308,7 +307,6 @@ function onReady() {
       updateModelsTab();
       updateWebTab();
       updateLogs();
-      updateChoresTab();
     },
     onClose: () => {
       const idx = activeWindows.indexOf(monitorWindow);
@@ -325,6 +323,7 @@ function onReady() {
       { icon: 'bx-loader-circle', title: 'Progress', content: getProgressTabContent() },
       { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapTabContent() },
       { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() },
+      { icon: 'bx-task', title: 'Chores', content: getChoresTabContent() },
     ],
     onOpen: () => updateIdeasTab(),
     onClose: () => {

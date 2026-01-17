@@ -1,7 +1,8 @@
-// Ideas Tab Logic (Roadmap + Blueprints + Progress)
+// Ideas Tab Logic (Roadmap + Blueprints + Progress + Chores)
 import { getRoadmapContent, updateRoadmapTab, getRoadmapActions } from './roadmap.ts';
 import { getBlueprintsContent, updateBlueprintsTab, getBlueprintActions } from './blueprints.ts';
 import { getProgressContent, updateProgressTab } from './progress.ts';
+import { getChoresContent, updateChoresTab } from './chores.ts';
 
 export const getProgressTabContent = () => `
     <div class="ideas-container">
@@ -47,8 +48,27 @@ export const getBlueprintsTabContent = () => `
     </div>
 `;
 
+export const getChoresTabContent = () => `
+    <div class="ideas-container">
+        <div class="chores-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <div class="system-section-header" style="margin: 0; display: flex; align-items: center; gap: 10px;">
+                    <i class='bx bx-task' style="color: #bb86fc;"></i>
+                    <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Autonomous Chores</h2>
+                </div>
+            </div>
+            ${getChoresContent()}
+        </div>
+    </div>
+`;
+
 export async function updateIdeasTab() {
   // When using tabs, we might want to update both or just the visible one.
   // For simplicity, we update both as they are separate data sources.
-  await Promise.all([updateRoadmapTab(), updateBlueprintsTab(), updateProgressTab()]);
+  await Promise.all([
+    updateRoadmapTab(),
+    updateBlueprintsTab(),
+    updateProgressTab(),
+    updateChoresTab(),
+  ]);
 }

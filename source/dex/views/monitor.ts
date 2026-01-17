@@ -9,7 +9,6 @@ import {
   syncState,
 } from '../core/utils.ts';
 import { getLogsContent, updateLogs } from './logs.ts';
-import { updateChoresTab } from './chores.ts';
 
 declare global {
   interface Window {
@@ -202,12 +201,7 @@ export async function updateSystemTab() {
   startAgentSmoothLoop();
 
   // Initial fetch for all system components
-  await Promise.all([
-    updateProcessesTab(),
-    updateSystemMonitor(),
-    updateModelsTab(),
-    updateChoresTab(),
-  ]);
+  await Promise.all([updateProcessesTab(), updateSystemMonitor(), updateModelsTab()]);
 
   // Update logs separately
   await updateLogs();
