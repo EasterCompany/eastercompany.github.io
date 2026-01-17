@@ -54,7 +54,7 @@ export const getChoresTabContent = () => `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <div class="system-section-header" style="margin: 0; display: flex; align-items: center; gap: 10px;">
                     <i class='bx bx-task' style="color: #bb86fc;"></i>
-                    <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Autonomous Chores</h2>
+                    <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Research Tasks</h2>
                 </div>
             </div>
             ${getChoresContent()}

@@ -323,7 +323,7 @@ function onReady() {
       { icon: 'bx-loader-circle', title: 'Progress', content: getProgressTabContent() },
       { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapTabContent() },
       { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() },
-      { icon: 'bx-task', title: 'Chores', content: getChoresTabContent() },
+      { icon: 'bx-task', title: 'Tasks', content: getChoresTabContent() },
     ],
     onOpen: () => updateIdeasTab(),
     onClose: () => {

@@ -1,26 +1,26 @@
-import { smartFetch, createPlaceholderMessage } from '../core/utils.ts';
+import { smartFetch, createPlaceholderMessage, isPublicMode } from '../core/utils.ts';
 
 export const getChoresContent = () => {
   return `
-        <div class="system-section-header">
-            <i class='bx bx-task' style="color: #03dac6;"></i>
-            <h2>Active Chores</h2>
-            <button id="create-chore-btn" class="notif-action-btn" style="margin-left: auto;" title="New Chore"><i class='bx bx-plus'></i></button>
+        <div class="system-section-header" style="margin-bottom: 15px;">
+            <i class='bx bx-list-check' style="color: #03dac6;"></i>
+            <h2>Active Tasks</h2>
+            <button id="create-chore-btn" class="notif-action-btn" style="margin-left: auto;" title="New Task"><i class='bx bx-plus'></i></button>
         </div>
-        
-        <!-- Create Chore Form -->
+
+        <!-- Create Task Form -->
         <div id="create-chore-form" style="display: none; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <h3 style="margin-top: 0; color: #fff; font-size: 1em; margin-bottom: 10px;">New Courier Task</h3>
             <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                 <input type="text" id="new-chore-instruction" placeholder="E.g., 'Find Fiat Punto in Belgrade'" style="flex: 2; min-width: 200px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
                 <input type="text" id="new-chore-url" placeholder="Entry URL (Optional)" style="flex: 1; min-width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
                 <input type="text" id="new-chore-owner" placeholder="Discord User ID" value="313071000877137920" style="flex: 1; min-width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
                 <button id="cancel-chore-btn" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Cancel</button>
                 <button id="save-chore-btn" style="background: #03dac6; border: none; color: #000; padding: 6px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">Create Task</button>
             </div>
         </div>
+
 
         <div id="chores-list" class="system-monitor-widgets" style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;"></div>
     `;
@@ -97,8 +97,10 @@ export async function updateChoresTab() {
     if (!Array.isArray(chores) || chores.length === 0) {
       container.innerHTML = createPlaceholderMessage(
         'empty',
-        'No active chores.',
-        'Create one to start monitoring.'
+        'No active tasks.',
+        isPublicMode()
+          ? 'Dexter is not currently performing research.'
+          : 'Click the plus icon to create a research task.'
       );
       return;
     }
@@ -149,7 +151,7 @@ export async function updateChoresTab() {
       (btn as HTMLElement).onclick = async (e) => {
         e.stopPropagation();
         const id = (btn as HTMLElement).dataset.id;
-        if (confirm('Delete this chore?')) {
+        if (confirm('Delete this task?')) {
           await smartFetch(`/chores/${id}`, { method: 'DELETE' });
           updateChoresTab();
         }
