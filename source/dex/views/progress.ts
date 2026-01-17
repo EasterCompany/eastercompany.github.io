@@ -32,13 +32,11 @@ function renderStandbyState() {
   return `
     <div class="progress-standby">
         <div class="radar-container">
-            <div class="radar-circle" style="animation-delay: 0s;"></div>
-            <div class="radar-circle" style="animation-delay: 1.5s;"></div>
-            <div class="radar-circle" style="animation-delay: 3s;"></div>
-            <div class="radar-circle" style="animation-delay: 4.5s;"></div>
+            <div class="orbit-ring orbit-1"></div>
+            <div class="orbit-ring orbit-2"></div>
             <div class="radar-brain"><i class='bx bx-brain'></i></div>
         </div>
-        <h3 style="margin-bottom: 10px; color: #bb86fc;">System Standby</h3>
+        <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
         <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5;">
             Dexter is currently monitoring system health. <br>
             No active missions in progress.
