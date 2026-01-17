@@ -17,83 +17,117 @@
   text-align: center;
   border: 1px solid rgba(187, 134, 252, 0.1);
   border-radius: 16px;
-  background: radial-gradient(circle at center, rgba(187, 134, 252, 0.03) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(187, 134, 252, 0.05) 0%, transparent 80%);
   position: relative;
   overflow: hidden;
+  perspective: 1000px;
 }
 
 .radar-container {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   margin-bottom: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform-style: preserve-3d;
 }
 
-/* The Orbiting Rings */
-.orbit-ring {
+/* 
+   THE STABLE ORBIT PATTERN:
+   1. The 'tilt' wrapper sets the 3D angle once.
+   2. The 'spinner' only handles 0-360 rotation on one axis.
+*/
+.orbit-tilt-wrapper {
   position: absolute;
-  border: 1px solid rgba(187, 134, 252, 0.2);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.orbit-1 {
   width: 100%;
   height: 100%;
-  border-top: 2px solid rgba(187, 134, 252, 0.5);
-  animation: orbit-rotate 8s infinite linear;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  will-change: transform;
 }
 
-.orbit-2 {
+.orbit-spinner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: orbit-spin 10s infinite linear;
+}
+
+.orbit-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* Ring 1 - Purple Glow */
+.orbit-ring-1 {
+  border-top-color: rgba(187, 134, 252, 0.6);
+  border-right-color: rgba(187, 134, 252, 0.1);
+  filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.4));
+}
+
+/* Ring 2 - Teal Glow (Reverse Spinner) */
+.orbit-ring-2 {
   width: 80%;
   height: 80%;
-  border-bottom: 2px solid rgba(3, 218, 198, 0.4);
-  animation: orbit-rotate-rev 6s infinite linear;
+  top: 10%;
+  left: 10%;
+  border-bottom-color: rgba(3, 218, 198, 0.5);
+  border-left-color: rgba(3, 218, 198, 0.1);
+  filter: drop-shadow(0 0 8px rgba(3, 218, 198, 0.3));
+  animation: orbit-spin-reverse 7s infinite linear;
 }
 
 .radar-brain {
-  font-size: 3.5rem;
+  font-size: 4rem;
   color: #bb86fc;
-  z-index: 2;
-  filter: drop-shadow(0 0 15px rgba(187, 134, 252, 0.3));
+  z-index: 10;
+  filter: drop-shadow(0 0 20px rgba(187, 134, 252, 0.4));
   animation: brain-float 4s infinite ease-in-out;
+  transform-origin: center center;
+  will-change: transform;
 }
 
-/* Animations - Mathematically perfect loops */
-@keyframes orbit-rotate {
+/* KEYFRAMES - Optimized for absolute smoothness */
+@keyframes orbit-spin {
   from {
-    transform: rotate3d(1, 1, 0, 0deg);
+    transform: rotateZ(0deg);
   }
   to {
-    transform: rotate3d(1, 1, 0, 360deg);
+    transform: rotateZ(360deg);
   }
 }
 
-@keyframes orbit-rotate-rev {
+@keyframes orbit-spin-reverse {
   from {
-    transform: rotate3d(-1, 1, 0, 360deg);
+    transform: rotateZ(360deg);
   }
   to {
-    transform: rotate3d(-1, 1, 0, 0deg);
+    transform: rotateZ(0deg);
   }
 }
 
 @keyframes brain-float {
   0%,
   100% {
-    transform: translateY(0) scale(1);
+    transform: translateZ(20px) translateY(0) scale(1);
     opacity: 0.8;
   }
   50% {
-    transform: translateY(-10px) scale(1.05);
+    transform: translateZ(20px) translateY(-12px) scale(1.05);
     opacity: 1;
   }
 }
 
-/* --- Thinking Stream (Terminal) --- */
+/* --- Rest of UI (Thinking Stream, Cards, etc.) --- */
 .thinking-stream-container {
   background: #0d0d0d;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -151,7 +185,6 @@
   min-width: 65px;
 }
 
-/* --- Active Task & Progress --- */
 .active-task-card {
   background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
   border: 1px solid rgba(187, 134, 252, 0.2);
@@ -188,7 +221,6 @@
   box-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
 }
 
-/* --- Completed Summary --- */
 .mission-summary-card {
   border: 1px solid rgba(3, 218, 198, 0.3);
   background: rgba(3, 218, 198, 0.02);

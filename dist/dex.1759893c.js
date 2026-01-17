@@ -242,8 +242,20 @@
   `;function Lt(){switch(ve){case"ACTIVE":return Ts();case"COMPLETED":return Ss();case"STANDBY":default:return $s()}}function $s(){return`
     <div class="progress-standby">
         <div class="radar-container">
-            <div class="orbit-ring orbit-1"></div>
-            <div class="orbit-ring orbit-2"></div>
+            <!-- First Orbit: Tilted Purple -->
+            <div class="orbit-tilt-wrapper" style="transform: rotateX(70deg) rotateY(15deg);">
+                <div class="orbit-spinner">
+                    <div class="orbit-ring orbit-ring-1"></div>
+                </div>
+            </div>
+            
+            <!-- Second Orbit: Opposing Tilt Teal -->
+            <div class="orbit-tilt-wrapper" style="transform: rotateX(60deg) rotateY(-25deg);">
+                <div class="orbit-spinner" style="animation-duration: 12s;">
+                    <div class="orbit-ring orbit-ring-2"></div>
+                </div>
+            </div>
+
             <div class="radar-brain"><i class='bx bx-brain'></i></div>
         </div>
         <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
