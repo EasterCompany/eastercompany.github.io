@@ -725,9 +725,10 @@ export async function updateProcessesTab(isSmoothMode = false) {
       pauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
         await smartFetch(endpoint, { method: 'POST' });
-        setTimeout(() => updateProcessesTab(), 500);
+        await updateProcessesTab(); // Refresh immediately after success
       } catch (e) {
         pauseBtn.innerHTML = "<i class='bx bx-error'></i>";
+        setTimeout(() => updateProcessesTab(), 2000); // Revert error after 2s
       }
     };
     pauseBtn.dataset.listenerAttached = 'true';
@@ -932,19 +933,14 @@ export async function updateProcessesTab(isSmoothMode = false) {
       }
 
       if (pauseBtn) {
-        // Check if we are currently loading (don't overwrite spinner)
-        const isLoading =
-          pauseBtn.querySelector('.bx-loader-alt') || pauseBtn.querySelector('.bx-error');
-        if (!isLoading) {
-          if (state === 'paused') {
-            pauseBtn.innerHTML = "<i class='bx bx-play'></i>";
-            pauseBtn.title = 'Resume System';
-            pauseBtn.style.color = '#ff9800';
-          } else {
-            pauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
-            pauseBtn.title = 'Pause System';
-            pauseBtn.style.color = '';
-          }
+        if (state === 'paused') {
+          pauseBtn.innerHTML = "<i class='bx bx-play'></i>";
+          pauseBtn.title = 'Resume System';
+          pauseBtn.style.color = '#ff9800';
+        } else {
+          pauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
+          pauseBtn.title = 'Pause System';
+          pauseBtn.style.color = '';
         }
       }
     }
