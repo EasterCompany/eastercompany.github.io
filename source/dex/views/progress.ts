@@ -33,17 +33,13 @@ function renderStandbyState() {
     <div class="progress-standby">
         <div class="radar-container">
             <!-- First Orbit: Tilted Purple -->
-            <div class="orbit-tilt-wrapper" style="transform: rotateX(70deg) rotateY(15deg);">
-                <div class="orbit-spinner">
-                    <div class="orbit-ring orbit-ring-1"></div>
-                </div>
+            <div class="orbit-tilt-wrapper" style="transform: rotateX(65deg) rotateY(20deg);">
+                <div class="orbit-ring orbit-ring-1"></div>
             </div>
             
             <!-- Second Orbit: Opposing Tilt Teal -->
-            <div class="orbit-tilt-wrapper" style="transform: rotateX(60deg) rotateY(-25deg);">
-                <div class="orbit-spinner" style="animation-duration: 12s;">
-                    <div class="orbit-ring orbit-ring-2"></div>
-                </div>
+            <div class="orbit-tilt-wrapper" style="transform: rotateX(65deg) rotateY(-20deg);">
+                <div class="orbit-ring orbit-ring-2"></div>
             </div>
 
             <div class="radar-brain"><i class='bx bx-brain'></i></div>

@@ -25,35 +25,23 @@
 
 .radar-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   margin-bottom: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transform-style: preserve-3d;
 }
 
-/* 
-   THE STABLE ORBIT PATTERN:
-   1. The 'tilt' wrapper sets the 3D angle once.
-   2. The 'spinner' only handles 0-360 rotation on one axis.
-*/
 .orbit-tilt-wrapper {
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
   pointer-events: none;
-  will-change: transform;
-}
-
-.orbit-spinner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  animation: orbit-spin 10s infinite linear;
+  /* Fixed center point */
+  margin-top: -110px;
+  margin-left: -110px;
 }
 
 .orbit-ring {
@@ -65,16 +53,21 @@
   border: 2px solid transparent;
   border-radius: 50%;
   box-sizing: border-box;
+  will-change: transform;
 }
 
-/* Ring 1 - Purple Glow */
+/* 
+   Single shared duration (10s) for all animations 
+   to ensure the loop-reset is perfectly synchronized.
+*/
+
 .orbit-ring-1 {
   border-top-color: rgba(187, 134, 252, 0.6);
   border-right-color: rgba(187, 134, 252, 0.1);
   filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.4));
+  animation: orbit-spin 10s infinite linear;
 }
 
-/* Ring 2 - Teal Glow (Reverse Spinner) */
 .orbit-ring-2 {
   width: 80%;
   height: 80%;
@@ -83,20 +76,28 @@
   border-bottom-color: rgba(3, 218, 198, 0.5);
   border-left-color: rgba(3, 218, 198, 0.1);
   filter: drop-shadow(0 0 8px rgba(3, 218, 198, 0.3));
-  animation: orbit-spin-reverse 7s infinite linear;
+  animation: orbit-spin-reverse 10s infinite linear;
 }
 
 .radar-brain {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  margin-top: -32px;
+  margin-left: -32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 4rem;
   color: #bb86fc;
   z-index: 10;
   filter: drop-shadow(0 0 20px rgba(187, 134, 252, 0.4));
-  animation: brain-float 4s infinite ease-in-out;
-  transform-origin: center center;
-  will-change: transform;
+  animation: brain-float 5s infinite ease-in-out;
+  will-change: transform, opacity;
 }
 
-/* KEYFRAMES - Optimized for absolute smoothness */
 @keyframes orbit-spin {
   from {
     transform: rotateZ(0deg);
@@ -115,19 +116,20 @@
   }
 }
 
+/* Float logic: Only Y-translation and opacity. No scaling. */
 @keyframes brain-float {
   0%,
   100% {
-    transform: translateZ(20px) translateY(0) scale(1);
-    opacity: 0.8;
+    transform: translateY(0);
+    opacity: 0.7;
   }
   50% {
-    transform: translateZ(20px) translateY(-12px) scale(1.05);
+    transform: translateY(-15px);
     opacity: 1;
   }
 }
 
-/* --- Rest of UI (Thinking Stream, Cards, etc.) --- */
+/* --- Rest of UI --- */
 .thinking-stream-container {
   background: #0d0d0d;
   border: 1px solid rgba(255, 255, 255, 0.1);
