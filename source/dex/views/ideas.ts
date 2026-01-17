@@ -2,7 +2,7 @@
 import { getRoadmapContent, updateRoadmapTab, getRoadmapActions } from './roadmap.ts';
 import { getBlueprintsContent, updateBlueprintsTab, getBlueprintActions } from './blueprints.ts';
 import { getProgressContent, updateProgressTab } from './progress.ts';
-import { getChoresContent, updateChoresTab } from './chores.ts';
+import { getChoresContent, updateChoresTab, getChoresActions } from './chores.ts';
 
 export const getProgressTabContent = () => `
     <div class="ideas-container">
@@ -56,6 +56,7 @@ export const getChoresTabContent = () => `
                     <i class='bx bx-task' style="color: #bb86fc;"></i>
                     <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Research Tasks</h2>
                 </div>
+                ${getChoresActions()}
             </div>
             ${getChoresContent()}
         </div>

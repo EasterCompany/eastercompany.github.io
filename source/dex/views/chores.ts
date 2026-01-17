@@ -1,13 +1,13 @@
 import { smartFetch, createPlaceholderMessage, isPublicMode } from '../core/utils.ts';
 
+export const getChoresActions = () => `
+  <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
+    <button id="create-chore-btn" class="notif-action-btn" style="${isPublicMode() ? 'display: none;' : ''}" title="New Task"><i class='bx bx-plus'></i></button>
+  </div>
+`;
+
 export const getChoresContent = () => {
   return `
-        <div class="system-section-header" style="margin-bottom: 15px;">
-            <i class='bx bx-list-check' style="color: #03dac6;"></i>
-            <h2>Active Tasks</h2>
-            <button id="create-chore-btn" class="notif-action-btn" style="margin-left: auto;" title="New Task"><i class='bx bx-plus'></i></button>
-        </div>
-
         <!-- Create Task Form -->
         <div id="create-chore-form" style="display: none; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
@@ -20,7 +20,6 @@ export const getChoresContent = () => {
                 <button id="save-chore-btn" style="background: #03dac6; border: none; color: #000; padding: 6px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">Create Task</button>
             </div>
         </div>
-
 
         <div id="chores-list" class="system-monitor-widgets" style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;"></div>
     `;
