@@ -32,8 +32,6 @@ function renderStandbyState() {
   return `
     <div class="progress-standby">
         <div class="radar-container">
-            <div class="orbit-ring orbit-ring-1"></div>
-            <div class="orbit-ring orbit-ring-2"></div>
             <div class="radar-brain"><i class='bx bx-brain'></i></div>
         </div>
         <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>

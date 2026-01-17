@@ -1,4 +1,4 @@
-/* Progress Tab Styles - Orbital Mission Control Aesthetic */
+/* Progress Tab Styles - Minimalist Floating Brain */
 
 .progress-container {
   display: flex;
@@ -7,7 +7,7 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* --- State: Standby (Orbital Design) --- */
+/* --- State: Standby --- */
 .progress-standby {
   display: flex;
   flex-direction: column;
@@ -18,95 +18,39 @@
   border: 1px solid rgba(187, 134, 252, 0.1);
   border-radius: 16px;
   background: radial-gradient(circle at center, rgba(187, 134, 252, 0.05) 0%, transparent 80%);
-  position: relative;
-  overflow: hidden;
-  perspective: 1200px;
 }
 
 .radar-container {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 150px;
+  height: 150px;
   margin-bottom: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-style: preserve-3d;
-}
-
-/* 
-   THE "FLATTENED" RING STRATEGY:
-   No nested wrappers. Tilt is baked into the keyframes.
-   This prevents the "70% snap" caused by layer recalculations.
-*/
-.orbit-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  pointer-events: none;
-  transform-origin: center center;
-  will-change: transform;
-}
-
-.orbit-ring-1 {
-  width: 200px;
-  height: 200px;
-  border-top-color: rgba(187, 134, 252, 0.6);
-  border-right-color: rgba(187, 134, 252, 0.1);
-  filter: drop-shadow(0 0 10px rgba(187, 134, 252, 0.4));
-  /* Baked Tilt: 65deg X, 20deg Y */
-  animation: ring-1-loop 12s infinite linear;
-}
-
-.orbit-ring-2 {
-  width: 150px;
-  height: 150px;
-  border-bottom-color: rgba(3, 218, 198, 0.5);
-  border-left-color: rgba(3, 218, 198, 0.1);
-  filter: drop-shadow(0 0 10px rgba(3, 218, 198, 0.3));
-  /* Baked Tilt: 60deg X, -25deg Y */
-  animation: ring-2-loop 12s infinite linear;
 }
 
 .radar-brain {
-  font-size: 4rem;
+  font-size: 5rem;
   color: #bb86fc;
-  z-index: 10;
-  filter: drop-shadow(0 0 25px rgba(187, 134, 252, 0.5));
-  animation: brain-float-simple 4s infinite ease-in-out;
-  transform-style: preserve-3d;
+  filter: drop-shadow(0 0 20px rgba(187, 134, 252, 0.4));
+  /* 
+     Perfect Float: 
+     4s duration, ease-in-out for smooth velocity changes, 
+     and translate3d for GPU acceleration.
+  */
+  animation: brain-float-perfect 4s infinite ease-in-out;
+  will-change: transform;
 }
 
-/* 
-   Keyframes with baked-in 3D angles.
-   Starting at 0 and ending at 360 is a perfect circular loop.
-*/
-@keyframes ring-1-loop {
-  from {
-    transform: rotateX(65deg) rotateY(20deg) rotateZ(0deg);
-  }
-  to {
-    transform: rotateX(65deg) rotateY(20deg) rotateZ(360deg);
-  }
-}
-
-@keyframes ring-2-loop {
-  from {
-    transform: rotateX(60deg) rotateY(-25deg) rotateZ(360deg);
-  }
-  to {
-    transform: rotateX(60deg) rotateY(-25deg) rotateZ(0deg);
-  }
-}
-
-@keyframes brain-float-simple {
+@keyframes brain-float-perfect {
   0%,
   100% {
-    transform: translateZ(30px) translateY(0);
+    transform: translate3d(0, 0, 0);
     opacity: 0.8;
   }
   50% {
-    transform: translateZ(30px) translateY(-15px);
+    transform: translate3d(0, -20px, 0);
     opacity: 1;
   }
 }
@@ -130,17 +74,6 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.terminal-controls {
-  display: flex;
-  gap: 6px;
-}
-
-.terminal-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
 .terminal-content {
   height: 250px;
   overflow-y: auto;
@@ -160,7 +93,6 @@
 .line-prefix {
   color: #bb86fc;
   font-weight: bold;
-  user-select: none;
 }
 
 .line-time {
@@ -179,66 +111,12 @@
   overflow: hidden;
 }
 
-.active-task-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle at top right, rgba(187, 134, 252, 0.1), transparent);
-}
-
-.task-progress-bar {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-  margin-top: 15px;
-  overflow: hidden;
-}
-
 .task-progress-fill {
   height: 100%;
   background: linear-gradient(to right, #bb86fc, #03dac6);
   width: 0%;
   transition: width 0.5s ease;
   box-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
-}
-
-.mission-summary-card {
-  border: 1px solid rgba(3, 218, 198, 0.3);
-  background: rgba(3, 218, 198, 0.02);
-  border-radius: 12px;
-  padding: 25px;
-  animation: slideUp 0.4s ease-out;
-}
-
-.summary-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.summary-stat {
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 6px;
-  text-align: center;
-}
-
-.summary-stat-value {
-  display: block;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #03dac6;
-}
-
-.summary-stat-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  color: #888;
-  letter-spacing: 1px;
 }
 
 @keyframes fadeIn {
