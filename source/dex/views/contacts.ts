@@ -136,9 +136,10 @@ export async function updateContactsTab() {
                         <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${statusColor}; border: 2px solid #1a1a1a; border-radius: 50%;"></div>
                     </div>
                     <div class="user-info" style="text-align: left; flex: 1; min-width: 0;">
-                        <h3 style="margin: 0; font-size: 0.95em; color: ${hasColor ? hexColor : '#fff'}; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${m.username}</h3>
+                        <h3 style="margin: 0; font-size: 0.95em; color: ${hasColor ? hexColor : '#fff'}; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${m.nickname || m.username}</h3>
                         <div style="display: flex; align-items: center; gap: 5px; margin-top: 2px;">
                             <span style="font-size: 0.75em; color: ${levelColor}; font-weight: 600; text-transform: uppercase;">${isMe ? 'DEXTER (ME)' : m.level}</span>
+                            <span style="font-size: 0.7em; color: #666; font-family: monospace;">(${m.username})</span>
                         </div>
                         <p style="margin: 4px 0 0 0; font-family: monospace; font-size: 0.65em; opacity: 0.4; text-align: left;">${m.id}</p>
                     </div>

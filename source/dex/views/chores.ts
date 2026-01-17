@@ -69,8 +69,8 @@ export async function updateChoresTab() {
           if (m.id === '313071000877137920') return; // Skip Owen, already default
           const opt = document.createElement('option');
           opt.value = m.id;
-          const displayName = m.global_name || m.username;
-          opt.textContent = `${displayName} (${m.username})`;
+          const nickname = m.nickname || m.username;
+          opt.textContent = `${nickname} (${m.username})`;
           ownerSelect.appendChild(opt);
         });
         ownerSelect.dataset.populated = 'true';
