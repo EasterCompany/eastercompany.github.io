@@ -32,7 +32,7 @@ export const getChoresContent = () => {
                 </div>
 
                 <div class="task-input-group">
-                    <label class="task-input-label">Assign Result To (Owner)</label>
+                    <label id="task-owner-label" class="task-input-label">Report result to</label>
                     <select id="new-chore-owner" class="task-form-select">
                         <option value="313071000877137920">Creator (Owen)</option>
                         <!-- Contacts will be injected here -->
@@ -57,27 +57,40 @@ export async function updateChoresTab() {
   const saveBtn = document.getElementById('save-chore-btn');
   const cancelBtn = document.getElementById('cancel-chore-btn');
   const ownerSelect = document.getElementById('new-chore-owner') as HTMLSelectElement;
+  const ownerLabel = document.getElementById('task-owner-label') as HTMLLabelElement;
 
   // Populating Contacts Dropdown
   if (ownerSelect && !ownerSelect.dataset.populated && !isPublicMode()) {
     try {
-      const resp = await smartDiscordFetch('/contacts');
-      if (resp.ok) {
-        const data = await resp.json();
-        const members = data.members || [];
-        members.forEach((m: any) => {
-          if (m.id === '313071000877137920') return; // Skip Owen, already default
-          const opt = document.createElement('option');
-          opt.value = m.id;
-          const nickname = m.nickname || m.username;
-          opt.textContent = `${nickname} (${m.username})`;
-          ownerSelect.appendChild(opt);
-        });
-        ownerSelect.dataset.populated = 'true';
-      }
+      smartDiscordFetch('/contacts').then(async (resp) => {
+        if (resp.ok) {
+          const data = await resp.json();
+          const members = data.members || [];
+          members.forEach((m: any) => {
+            if (m.id === '313071000877137920') return; // Skip Owen, already default
+            const opt = document.createElement('option');
+            opt.value = m.id;
+            const nickname = m.nickname || m.username;
+            opt.textContent = `${nickname} (${m.username})`;
+            ownerSelect.appendChild(opt);
+          });
+          ownerSelect.dataset.populated = 'true';
+        }
+      });
     } catch (e) {
       console.warn('Failed to fetch contacts for dropdown');
     }
+  }
+
+  // Label Sync Listener
+  if (ownerSelect && ownerLabel && !ownerSelect.dataset.listenerAttached) {
+    ownerSelect.onchange = () => {
+      const selectedOption = ownerSelect.options[ownerSelect.selectedIndex];
+      if (selectedOption) {
+        ownerLabel.textContent = `Report result to: ${selectedOption.text.split(' (')[0]}`;
+      }
+    };
+    ownerSelect.dataset.listenerAttached = 'true';
   }
 
   // Attach Listeners
