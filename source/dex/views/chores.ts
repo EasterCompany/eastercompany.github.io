@@ -19,8 +19,8 @@ export const getChoresContent = () => {
         <!-- Create Task Form -->
         <div id="create-chore-form" class="new-task-form-container" style="display: none;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <i class='bx bx-plus-circle' style="color: #bb86fc; font-size: 1.2em;"></i>
-                <h3 style="margin: 0; font-size: 1.1em; letter-spacing: 1px;">Initialize Research Task</h3>
+                <i id="form-icon" class='bx bx-plus-circle' style="color: #bb86fc; font-size: 1.2em;"></i>
+                <h3 id="form-title" style="margin: 0; font-size: 1.1em; letter-spacing: 1px;">Initialize Research Task</h3>
             </div>
 
             <div class="task-form-grid">
@@ -67,6 +67,7 @@ export const getChoresContent = () => {
 
 let currentTasks: any[] = [];
 let ownerMap: Record<string, string> = { '313071000877137920': 'Owen' };
+let editingChoreId: string | null = null;
 
 export async function updateChoresTab() {
   const container = document.getElementById('chores-list');
@@ -77,6 +78,58 @@ export async function updateChoresTab() {
   const ownerSelect = document.getElementById('new-chore-owner') as HTMLSelectElement;
   const ownerLabel = document.getElementById('task-owner-label') as HTMLLabelElement;
   const filterSelect = document.getElementById('task-filter-owner') as HTMLSelectElement;
+
+  const instructionInput = document.getElementById('new-chore-instruction') as HTMLInputElement;
+  const urlInput = document.getElementById('new-chore-url') as HTMLInputElement;
+  const scheduleInput = document.getElementById('new-chore-schedule') as HTMLSelectElement;
+
+  const formTitle = document.getElementById('form-title');
+  const formIcon = document.getElementById('form-icon');
+
+  function openForm(chore: any = null) {
+    if (!form) return;
+    editingChoreId = chore ? chore.id : null;
+
+    if (chore) {
+      if (formTitle) formTitle.textContent = 'Update Research Task';
+      if (formIcon) {
+        formIcon.className = 'bx bx-edit-alt';
+        formIcon.style.color = '#03dac6';
+      }
+      if (saveBtn) saveBtn.innerHTML = "<i class='bx bx-check'></i> Update Task";
+
+      if (instructionInput) instructionInput.value = chore.natural_instruction;
+      if (urlInput) urlInput.value = chore.execution_plan?.entry_url || '';
+      if (ownerSelect) ownerSelect.value = chore.owner_id;
+      if (scheduleInput) scheduleInput.value = chore.schedule;
+
+      // Update the "Report result to" label
+      if (ownerSelect && ownerLabel) {
+        const selectedOption = ownerSelect.options[ownerSelect.selectedIndex];
+        if (selectedOption) {
+          let name = selectedOption.text.split(' (')[0];
+          if (selectedOption.value === 'dexter') name = 'Dexter';
+          ownerLabel.textContent = `Report result to: ${name}`;
+        }
+      }
+    } else {
+      if (formTitle) formTitle.textContent = 'Initialize Research Task';
+      if (formIcon) {
+        formIcon.className = 'bx bx-plus-circle';
+        formIcon.style.color = '#bb86fc';
+      }
+      if (saveBtn) saveBtn.innerHTML = "<i class='bx bx-zap'></i> Deploy Task";
+
+      if (instructionInput) instructionInput.value = '';
+      if (urlInput) urlInput.value = '';
+      if (ownerSelect) ownerSelect.value = '313071000877137920';
+      if (scheduleInput) scheduleInput.value = 'every_24h';
+      if (ownerLabel) ownerLabel.textContent = 'Report result to: Owen';
+    }
+
+    form.style.display = 'block';
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   // Populating Contacts Dropdown
   if (ownerSelect && !ownerSelect.dataset.populated && !isPublicMode()) {
@@ -161,6 +214,7 @@ export async function updateChoresTab() {
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px; align-items: center;">
+                            <button class="icon-btn edit-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #bb86fc; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-edit-alt' style="font-size: 1.2em;"></i></button>
                             <button class="icon-btn delete-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-trash' style="font-size: 1.2em;"></i></button>
                         </div>
                     </div>
@@ -186,6 +240,16 @@ export async function updateChoresTab() {
 
     container.innerHTML = html;
 
+    // Attach edit listeners
+    container.querySelectorAll('.edit-chore-btn').forEach((btn) => {
+      (btn as HTMLElement).onclick = (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id;
+        const chore = currentTasks.find((t) => t.id === id);
+        if (chore) openForm(chore);
+      };
+    });
+
     // Attach delete listeners
     container.querySelectorAll('.delete-chore-btn').forEach((btn) => {
       (btn as HTMLElement).onclick = async (e) => {
@@ -202,7 +266,13 @@ export async function updateChoresTab() {
   // Attach Create/Cancel Listeners (only once)
   if (createBtn && !createBtn.dataset.listenerAttached) {
     createBtn.onclick = () => {
-      if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      if (form) {
+        if (form.style.display === 'none' || editingChoreId !== null) {
+          openForm(null);
+        } else {
+          form.style.display = 'none';
+        }
+      }
     };
     createBtn.dataset.listenerAttached = 'true';
   }
@@ -222,33 +292,37 @@ export async function updateChoresTab() {
       const scheduleInput = document.getElementById('new-chore-schedule') as HTMLSelectElement;
 
       const instruction = instructionInput?.value;
-      const url = urlInput?.value;
       const ownerId = ownerInput?.value || '313071000877137920';
       const schedule = scheduleInput?.value || 'every_24h';
 
       if (!instruction) return;
 
+      const originalBtnHTML = saveBtn.innerHTML;
       saveBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/chores', {
-          method: 'POST',
+        const method = editingChoreId ? 'PATCH' : 'POST';
+        const url = editingChoreId ? `/chores/${editingChoreId}` : '/chores';
+
+        await smartFetch(url, {
+          method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             owner_id: ownerId,
             natural_instruction: instruction,
-            entry_url: url,
+            entry_url: urlInput?.value,
             schedule: schedule,
           }),
         });
         if (form) form.style.display = 'none';
         if (instructionInput) instructionInput.value = '';
         if (urlInput) urlInput.value = '';
+        editingChoreId = null;
         updateChoresTab();
       } catch (e) {
         console.error(e);
-        alert('Failed to create research task');
+        alert(editingChoreId ? 'Failed to update research task' : 'Failed to create research task');
       } finally {
-        saveBtn.innerHTML = "<i class='bx bx-zap'></i> Deploy Task";
+        saveBtn.innerHTML = originalBtnHTML;
       }
     };
     saveBtn.dataset.listenerAttached = 'true';
