@@ -32,12 +32,12 @@ function renderStandbyState() {
   return `
     <div class="progress-standby">
         <div class="radar-container">
-            <!-- First Orbit: Tilted Purple -->
+            <!-- First Orbit: Purple -->
             <div class="orbit-tilt-wrapper" style="transform: rotateX(65deg) rotateY(20deg);">
                 <div class="orbit-ring orbit-ring-1"></div>
             </div>
             
-            <!-- Second Orbit: Opposing Tilt Teal -->
+            <!-- Second Orbit: Teal -->
             <div class="orbit-tilt-wrapper" style="transform: rotateX(65deg) rotateY(-20deg);">
                 <div class="orbit-ring orbit-ring-2"></div>
             </div>

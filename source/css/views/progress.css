@@ -65,7 +65,7 @@
   border-top-color: rgba(187, 134, 252, 0.6);
   border-right-color: rgba(187, 134, 252, 0.1);
   filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.4));
-  animation: orbit-spin 10s infinite linear;
+  animation: orbit-spin 10s infinite linear !important;
 }
 
 .orbit-ring-2 {
@@ -76,7 +76,7 @@
   border-bottom-color: rgba(3, 218, 198, 0.5);
   border-left-color: rgba(3, 218, 198, 0.1);
   filter: drop-shadow(0 0 8px rgba(3, 218, 198, 0.3));
-  animation: orbit-spin-reverse 10s infinite linear;
+  animation: orbit-spin-reverse 10s infinite linear !important;
 }
 
 .radar-brain {
