@@ -1,4 +1,4 @@
-/* Progress Tab Styles - Minimalist Floating Brain */
+/* Progress Tab Styles - Orbital Mission Control Aesthetic */
 
 .progress-container {
   display: flex;
@@ -7,7 +7,7 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* --- State: Standby --- */
+/* --- State: Standby (Orbital Design) --- */
 .progress-standby {
   display: flex;
   flex-direction: column;
@@ -18,44 +18,94 @@
   border: 1px solid rgba(187, 134, 252, 0.1);
   border-radius: 16px;
   background: radial-gradient(circle at center, rgba(187, 134, 252, 0.05) 0%, transparent 80%);
+  position: relative;
+  overflow: hidden;
+  perspective: 1200px;
 }
 
 .radar-container {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 220px;
+  height: 220px;
   margin-bottom: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform-style: preserve-3d;
 }
 
-.radar-brain {
-  font-size: 5rem;
-  color: #bb86fc;
-  filter: drop-shadow(0 0 20px rgba(187, 134, 252, 0.4));
-  /* 
-     Perfect Float: 
-     4s duration, ease-in-out for smooth velocity changes, 
-     and translate3d for GPU acceleration.
-  */
-  animation: brain-float-perfect 4s infinite ease-in-out;
+/* 
+   THE STABLE RING STRATEGY:
+   Tilt is baked into keyframes. 
+   Since the DOM is now persistent, these loops will never snap.
+*/
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  pointer-events: none;
+  transform-origin: center center;
   will-change: transform;
 }
 
-@keyframes brain-float-perfect {
+.orbit-ring-1 {
+  width: 200px;
+  height: 200px;
+  border-top-color: rgba(187, 134, 252, 0.6);
+  border-right-color: rgba(187, 134, 252, 0.1);
+  filter: drop-shadow(0 0 10px rgba(187, 134, 252, 0.4));
+  animation: ring-1-loop 10s infinite linear;
+}
+
+.orbit-ring-2 {
+  width: 150px;
+  height: 150px;
+  border-bottom-color: rgba(3, 218, 198, 0.5);
+  border-left-color: rgba(3, 218, 198, 0.1);
+  filter: drop-shadow(0 0 10px rgba(3, 218, 198, 0.3));
+  animation: ring-2-loop 8s infinite linear;
+}
+
+.radar-brain {
+  font-size: 4rem;
+  color: #bb86fc;
+  z-index: 10;
+  filter: drop-shadow(0 0 25px rgba(187, 134, 252, 0.5));
+  animation: brain-float-simple 4s infinite ease-in-out;
+  transform-style: preserve-3d;
+}
+
+@keyframes ring-1-loop {
+  from {
+    transform: rotateX(65deg) rotateY(20deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateX(65deg) rotateY(20deg) rotateZ(360deg);
+  }
+}
+
+@keyframes ring-2-loop {
+  from {
+    transform: rotateX(60deg) rotateY(-25deg) rotateZ(360deg);
+  }
+  to {
+    transform: rotateX(60deg) rotateY(-25deg) rotateZ(0deg);
+  }
+}
+
+@keyframes brain-float-simple {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.8;
+    transform: translateZ(30px) translateY(0);
+    opacity: 0.7;
   }
   50% {
-    transform: translate3d(0, -20px, 0);
+    transform: translateZ(30px) translateY(-15px);
     opacity: 1;
   }
 }
 
-/* --- Rest of UI (Thinking Stream, Cards, etc.) --- */
+/* --- Thinking Stream (Terminal) --- */
 .thinking-stream-container {
   background: #0d0d0d;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -101,6 +151,7 @@
   min-width: 65px;
 }
 
+/* --- Active Task & Progress --- */
 .active-task-card {
   background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
   border: 1px solid rgba(187, 134, 252, 0.2);
@@ -111,11 +162,29 @@
   overflow: hidden;
 }
 
+.active-task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at top right, rgba(187, 134, 252, 0.1), transparent);
+}
+
+.task-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+
 .task-progress-fill {
   height: 100%;
   background: linear-gradient(to right, #bb86fc, #03dac6);
   width: 0%;
-  transition: width 0.5s ease;
+  transition: width 0.3s ease;
   box-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
 }
 
@@ -125,16 +194,5 @@
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

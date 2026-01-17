@@ -4,19 +4,29 @@ import { escapeHtml } from '../core/utils.ts';
 type ProgressState = 'STANDBY' | 'ACTIVE' | 'COMPLETED';
 
 let currentState: ProgressState = 'STANDBY';
+let lastRenderedState: ProgressState | null = null;
+
 let liveLogs: { time: string; msg: string }[] = [];
 let activeTask: { title: string; progress: number } | null = null;
 let lastMissionSummary: { duration: string; steps: number; result: string } | null = null;
 
+/**
+ * Main entry point for the Progress Tab content.
+ * Returns a persistent root container.
+ */
 export const getProgressContent = () => {
   return `
     <div id="progress-view-root" class="progress-container">
-        ${renderState()}
+        <!-- Initial render will happen here -->
+        ${renderStateHTML()}
     </div>
   `;
 };
 
-function renderState() {
+/**
+ * Renders the HTML string for a specific state.
+ */
+function renderStateHTML() {
   switch (currentState) {
     case 'ACTIVE':
       return renderActiveState();
@@ -32,10 +42,15 @@ function renderStandbyState() {
   return `
     <div class="progress-standby">
         <div class="radar-container">
+            <!-- 
+               These rings are now part of a PERSISTENT DOM. 
+               They will never be removed/re-added while in Standby. 
+            -->
+            <div class="orbit-ring orbit-ring-1"></div>
+            <div class="orbit-ring orbit-ring-2"></div>
             <div class="radar-brain"><i class='bx bx-brain'></i></div>
         </div>
         <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
-
         <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5;">
             Dexter is currently monitoring system health. <br>
             No active missions in progress.
@@ -67,16 +82,16 @@ function renderActiveState() {
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
                 <h4 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 2px; color: #bb86fc;">Active Mission</h4>
-                <h2 style="margin: 5px 0 0 0; font-size: 1.2em;">${activeTask?.title || 'Processing Objective...'}</h2>
+                <h2 id="active-task-title" style="margin: 5px 0 0 0; font-size: 1.2em;">${activeTask?.title || 'Processing...'}</h2>
             </div>
             <div class="pulse-indicator" style="background: #bb86fc; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px #bb86fc;"></div>
         </div>
         <div class="task-progress-bar">
-            <div class="task-progress-fill" style="width: ${activeTask?.progress || 0}%"></div>
+            <div id="active-task-progress-fill" class="task-progress-fill" style="width: ${activeTask?.progress || 0}%"></div>
         </div>
         <div style="margin-top: 8px; display: flex; justify-content: space-between; font-size: 0.75em; font-family: 'JetBrains Mono'; color: #666;">
             <span>PHASE: IMPLEMENTATION</span>
-            <span>${activeTask?.progress || 0}% COMPLETE</span>
+            <span id="active-task-progress-text">${activeTask?.progress || 0}% COMPLETE</span>
         </div>
     </div>
 
@@ -92,29 +107,10 @@ function renderActiveState() {
         </div>
         <div id="terminal-output" class="terminal-content">
             ${logLines}
-            <div class="terminal-line"><span class="line-time"></span><span class="line-prefix">></span><span class="cursor-block">_</span></div>
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-        <div class="event-item notification-item event-border-grey" style="margin: 0; padding: 15px;">
-            <h5 style="margin: 0 0 10px 0; font-size: 0.7em; color: #888; text-transform: uppercase;">Visual Output</h5>
-            <div style="aspect-ratio: 16/9; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #444;">
-                <i class='bx bx-image' style="font-size: 2em;"></i>
-            </div>
-        </div>
-        <div class="event-item notification-item event-border-grey" style="margin: 0; padding: 15px;">
-            <h5 style="margin: 0 0 10px 0; font-size: 0.7em; color: #888; text-transform: uppercase;">Recent Steps</h5>
-            <div style="font-family: 'JetBrains Mono'; font-size: 0.75em;">
-                <div style="color: #03dac6; margin-bottom: 5px;"><i class='bx bx-check'></i> Analyzed codebase</div>
-                <div style="color: #03dac6; margin-bottom: 5px;"><i class='bx bx-check'></i> Drafted logic</div>
-                <div style="color: #bb86fc;"><i class='bx bx-loader-alt spin'></i> Writing tests</div>
-                <div style="color: #444;"><i class='bx bx-circle'></i> Deploying</div>
-            </div>
-        </div>
-    </div>
-
-    <div style="display: flex; gap: 10px; justify-content: center;">
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
         <button class="notif-action-btn danger" onclick="window.dispatchEvent(new CustomEvent('dex-mock-stop'))">
             <i class='bx bx-square'></i> Terminate Mission
         </button>
@@ -150,14 +146,6 @@ function renderCompletedState() {
             </div>
         </div>
 
-        <div style="margin-top: 25px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-            <h5 style="margin: 0 0 10px 0; font-size: 0.7em; color: #888; text-transform: uppercase;">Final Output</h5>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-family: 'JetBrains Mono'; font-size: 0.85em; color: #bb86fc;">${lastMissionSummary?.result || 'Blueprint: Event-Bus-Refactor'}</span>
-                <button class="notif-action-btn" style="padding: 4px 12px; font-size: 0.75em;">View Results</button>
-            </div>
-        </div>
-
         <div style="margin-top: 30px; display: flex; gap: 10px; justify-content: center;">
             <button class="notif-action-btn" onclick="window.dispatchEvent(new CustomEvent('dex-mock-reset'))">
                 <i class='bx bx-refresh'></i> Return to Standby
@@ -167,15 +155,57 @@ function renderCompletedState() {
   `;
 }
 
+/**
+ * Called by the global timer every 5 seconds.
+ * CRITICAL: We only update innerHTML if the STATE changed.
+ * This preserves running CSS animations.
+ */
 export async function updateProgressTab() {
   const root = document.getElementById('progress-view-root');
   if (!root) return;
-  root.innerHTML = renderState();
 
-  // Handle autoscroll for terminal
+  // 1. Only re-render the WHOLE block if the top-level state changed.
+  if (currentState !== lastRenderedState) {
+    root.innerHTML = renderStateHTML();
+    lastRenderedState = currentState;
+  }
+
+  // 2. Perform incremental updates for ACTIVE state
   if (currentState === 'ACTIVE') {
-    const terminal = document.getElementById('terminal-output');
-    if (terminal) terminal.scrollTop = terminal.scrollHeight;
+    updateActiveUI();
+  }
+}
+
+/**
+ * Updates specific sub-elements without touching the whole DOM.
+ */
+function updateActiveUI() {
+  const titleEl = document.getElementById('active-task-title');
+  const barEl = document.getElementById('active-task-progress-fill');
+  const textEl = document.getElementById('active-task-progress-text');
+  const terminalEl = document.getElementById('terminal-output');
+
+  if (titleEl && activeTask) titleEl.innerText = activeTask.title;
+  if (barEl && activeTask) barEl.style.width = `${activeTask.progress}%`;
+  if (textEl && activeTask) textEl.innerText = `${activeTask.progress}% COMPLETE`;
+
+  if (terminalEl) {
+    // Only add new lines
+    const currentLines = terminalEl.children.length;
+    if (liveLogs.length > currentLines) {
+      for (let i = currentLines; i < liveLogs.length; i++) {
+        const log = liveLogs[i];
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        line.innerHTML = `
+            <span class="line-time">${log.time}</span>
+            <span class="line-prefix">></span>
+            <span class="line-msg">${escapeHtml(log.msg)}</span>
+        `;
+        terminalEl.appendChild(line);
+      }
+      terminalEl.scrollTop = terminalEl.scrollHeight;
+    }
   }
 }
 
@@ -185,12 +215,10 @@ window.addEventListener('dex-mock-start', () => {
   liveLogs = [
     { time: new Date().toLocaleTimeString(), msg: 'Initializing cognitive engine...' },
     { time: new Date().toLocaleTimeString(), msg: 'Connecting to event-service...' },
-    { time: new Date().toLocaleTimeString(), msg: 'Fetching mission parameters from Roadmap...' },
   ];
-  activeTask = { title: 'Refactoring System Event Bus', progress: 15 };
+  activeTask = { title: 'Refactoring System Event Bus', progress: 10 };
   updateProgressTab();
 
-  // Simple simulation
   let count = 0;
   const interval = setInterval(() => {
     if (currentState !== 'ACTIVE') {
@@ -198,16 +226,15 @@ window.addEventListener('dex-mock-start', () => {
       return;
     }
     count++;
-    activeTask!.progress = Math.min(100, activeTask!.progress + Math.floor(Math.random() * 10));
+    activeTask!.progress = Math.min(100, activeTask!.progress + Math.floor(Math.random() * 15));
 
     const messages = [
-      'Analyzing file: internal/bus.go',
-      'Identified 3 performance bottlenecks.',
-      'Synthesizing optimization logic...',
-      'Applying transformations to service layer.',
-      'Running validation tests...',
-      'Verifying data integrity.',
-      'Cleaning up temporary artifacts.',
+      'Analyzing internal/bus.go...',
+      'Checking circular dependencies.',
+      'Optimizing channel throughput.',
+      'Writing unit tests for refactor.',
+      'Deploying to staging environment.',
+      'Verifying system integrity.',
     ];
 
     if (count < messages.length) {
@@ -217,14 +244,14 @@ window.addEventListener('dex-mock-start', () => {
     if (activeTask!.progress >= 100) {
       currentState = 'COMPLETED';
       lastMissionSummary = {
-        duration: '1m 15s',
-        steps: 24,
-        result: 'Optimized Event Bus Logic',
+        duration: '1m 12s',
+        steps: 32,
+        result: 'Optimized Event Bus',
       };
       clearInterval(interval);
     }
     updateProgressTab();
-  }, 2000);
+  }, 1500);
 });
 
 window.addEventListener('dex-mock-stop', () => {
