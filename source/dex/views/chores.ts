@@ -1,4 +1,9 @@
-import { smartFetch, createPlaceholderMessage, isPublicMode } from '../core/utils.ts';
+import {
+  smartFetch,
+  smartDiscordFetch,
+  createPlaceholderMessage,
+  isPublicMode,
+} from '../core/utils.ts';
 
 export const getChoresActions = () => `
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
@@ -9,15 +14,35 @@ export const getChoresActions = () => `
 export const getChoresContent = () => {
   return `
         <!-- Create Task Form -->
-        <div id="create-chore-form" style="display: none; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                <input type="text" id="new-chore-instruction" placeholder="E.g., 'Find Fiat Punto in Belgrade'" style="flex: 2; min-width: 200px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
-                <input type="text" id="new-chore-url" placeholder="Entry URL (Optional)" style="flex: 1; min-width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
-                <input type="text" id="new-chore-owner" placeholder="Discord User ID" value="313071000877137920" style="flex: 1; min-width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px 12px; border-radius: 4px;">
+        <div id="create-chore-form" class="new-task-form-container" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                <i class='bx bx-plus-circle' style="color: #bb86fc; font-size: 1.2em;"></i>
+                <h3 style="margin: 0; font-size: 1.1em; letter-spacing: 1px;">Initialize Research Task</h3>
             </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button id="cancel-chore-btn" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Cancel</button>
-                <button id="save-chore-btn" style="background: #03dac6; border: none; color: #000; padding: 6px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">Create Task</button>
+
+            <div class="task-form-grid">
+                <div class="task-input-group" style="grid-column: span 2;">
+                    <label class="task-input-label">Task Goal / Instruction</label>
+                    <input type="text" id="new-chore-instruction" class="task-form-input" placeholder="E.g., 'Analyze recent crypto market trends in Serbia'">
+                </div>
+                
+                <div class="task-input-group">
+                    <label class="task-input-label">Target URL (Optional)</label>
+                    <input type="text" id="new-chore-url" class="task-form-input" placeholder="https://example.com/data">
+                </div>
+
+                <div class="task-input-group">
+                    <label class="task-input-label">Assign Result To (Owner)</label>
+                    <select id="new-chore-owner" class="task-form-select">
+                        <option value="313071000877137920">Creator (Owen)</option>
+                        <!-- Contacts will be injected here -->
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                <button id="cancel-chore-btn" class="notif-action-btn" style="background: rgba(255,255,255,0.05);"><i class='bx bx-x'></i> Discard</button>
+                <button id="save-chore-btn" class="notif-action-btn" style="background: #bb86fc; color: #000; font-weight: 800; border: none; padding: 10px 25px;"><i class='bx bx-zap'></i> Deploy Task</button>
             </div>
         </div>
 
@@ -31,6 +56,29 @@ export async function updateChoresTab() {
   const form = document.getElementById('create-chore-form');
   const saveBtn = document.getElementById('save-chore-btn');
   const cancelBtn = document.getElementById('cancel-chore-btn');
+  const ownerSelect = document.getElementById('new-chore-owner') as HTMLSelectElement;
+
+  // Populating Contacts Dropdown
+  if (ownerSelect && !ownerSelect.dataset.populated && !isPublicMode()) {
+    try {
+      const resp = await smartDiscordFetch('/contacts');
+      if (resp.ok) {
+        const data = await resp.json();
+        const members = data.members || [];
+        members.forEach((m: any) => {
+          if (m.id === '313071000877137920') return; // Skip Owen, already default
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          const displayName = m.global_name || m.username;
+          opt.textContent = `${displayName} (${m.username})`;
+          ownerSelect.appendChild(opt);
+        });
+        ownerSelect.dataset.populated = 'true';
+      }
+    } catch (e) {
+      console.warn('Failed to fetch contacts for dropdown');
+    }
+  }
 
   // Attach Listeners
   if (createBtn && !createBtn.dataset.listenerAttached) {
@@ -77,7 +125,7 @@ export async function updateChoresTab() {
         updateChoresTab();
       } catch (e) {
         console.error(e);
-        alert('Failed to create chore');
+        alert('Failed to create research task');
       } finally {
         saveBtn.innerHTML = 'Create Task';
       }
