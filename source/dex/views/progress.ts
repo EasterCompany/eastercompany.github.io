@@ -32,8 +32,9 @@ function renderStandbyState() {
   return `
     <div class="progress-standby">
         <div class="radar-container">
-            <div class="radar-circle"></div>
-            <div class="radar-circle" style="animation-delay: 2s;"></div>
+            <div class="radar-circle" style="animation-delay: 0s;"></div>
+            <div class="radar-circle" style="animation-delay: 1.33s;"></div>
+            <div class="radar-circle" style="animation-delay: 2.66s;"></div>
             <div class="radar-brain"><i class='bx bx-brain'></i></div>
         </div>
         <h3 style="margin-bottom: 10px; color: #bb86fc;">System Standby</h3>

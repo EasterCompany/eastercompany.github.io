@@ -34,9 +34,10 @@
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  border: 2px solid rgba(187, 134, 252, 0.3);
+  border: 2px solid rgba(187, 134, 252, 0.4);
   border-radius: 50%;
-  animation: radar-pulse 4s infinite linear;
+  animation: radar-pulse 4s infinite ease-out;
+  pointer-events: none;
 }
 
 .radar-brain {
@@ -47,21 +48,22 @@
   font-size: 3rem;
   color: #bb86fc;
   opacity: 0.8;
-  animation: brain-glow 3s infinite ease-in-out;
+  animation: brain-glow 4s infinite ease-in-out;
+  z-index: 1;
 }
 
 @keyframes radar-pulse {
   0% {
-    transform: translate(-50%, -50%) scale(0.8);
+    transform: translate(-50%, -50%) scale(0.4);
     opacity: 0;
   }
 
-  20% {
+  10% {
     opacity: 0.4;
   }
 
   100% {
-    transform: translate(-50%, -50%) scale(2.2);
+    transform: translate(-50%, -50%) scale(2.5);
     opacity: 0;
   }
 }
@@ -70,12 +72,14 @@
   0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.7;
+    opacity: 0.6;
+    filter: drop-shadow(0 0 5px rgba(187, 134, 252, 0.2));
   }
 
   50% {
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: translate(-50%, -50%) scale(1.1);
     opacity: 1;
+    filter: drop-shadow(0 0 15px rgba(187, 134, 252, 0.5));
   }
 }
 
