@@ -304,6 +304,7 @@ export async function updateChoresTab() {
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px; align-items: center;">
+                            <button class="icon-btn reset-chore-btn" data-id="${chore.id}" title="Reset Progress" style="background: none; border: none; color: #ff9800; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-refresh' style="font-size: 1.2em;"></i></button>
                             <button class="icon-btn edit-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #bb86fc; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-edit-alt' style="font-size: 1.2em;"></i></button>
                             <button class="icon-btn delete-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-trash' style="font-size: 1.2em;"></i></button>
                         </div>
@@ -337,6 +338,23 @@ export async function updateChoresTab() {
         const id = (btn as HTMLElement).dataset.id;
         const chore = currentTasks.find((t) => t.id === id);
         if (chore) openForm(chore);
+      };
+    });
+
+    // Attach reset listeners
+    container.querySelectorAll('.reset-chore-btn').forEach((btn) => {
+      (btn as HTMLElement).onclick = async (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id;
+        if (confirm('Reset this task? It will be re-run immediately on the next cycle.')) {
+          (btn as HTMLElement).innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+          await smartFetch(`/chores/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ last_run: 0 }),
+          });
+          updateChoresTab();
+        }
       };
     });
 
