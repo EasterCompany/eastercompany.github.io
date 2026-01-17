@@ -1096,6 +1096,9 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
       'system-guardian': 'Guardian Agent',
       'system-cli-op': 'CLI Operation',
       'system-analyzer': 'Analyzer Agent',
+      'system-courier': 'Courier Agent',
+      'system-imaginator': 'Imaginator Agent',
+      'system-fabricator': 'Fabricator Agent',
     };
     if (idMap[displayName]) {
       displayName = idMap[displayName];
