@@ -392,33 +392,37 @@
             </div>
         </div>
 
-        <div id="chores-list" class="system-monitor-widgets" style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;"></div>
+        <div id="chores-list" class="tasks-vertical-list" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px;"></div>
     `,Pe=[],Ve={"313071000877137920":"Owen"};async function Oe(){let t=document.getElementById("chores-list"),e=document.getElementById("create-chore-btn"),s=document.getElementById("create-chore-form"),i=document.getElementById("save-chore-btn"),n=document.getElementById("cancel-chore-btn"),r=document.getElementById("new-chore-owner"),l=document.getElementById("task-owner-label"),g=document.getElementById("task-filter-owner");if(r&&!r.dataset.populated&&!B())try{Ee("/contacts").then(async d=>{d.ok&&(((await d.json()).members||[]).forEach(u=>{if(Ve[u.id]=u.nickname||u.username,u.id==="313071000877137920")return;let a=document.createElement("option");a.value=u.id;let b=u.nickname||u.username;a.textContent=`${b} (${u.username})`,r.appendChild(a)}),r.dataset.populated="true")})}catch{console.warn("Failed to fetch contacts for dropdown")}r&&l&&!r.dataset.listenerAttached&&(r.onchange=()=>{let d=r.options[r.selectedIndex];d&&(l.textContent=`Report result to: ${d.text.split(" (")[0]}`)},r.dataset.listenerAttached="true"),g&&!g.dataset.listenerAttached&&(g.onchange=()=>c(),g.dataset.listenerAttached="true");function c(){if(!t)return;let d=g?.value||"all",y=d==="all"?Pe:Pe.filter(u=>u.owner_id===d);if(y.length===0){t.innerHTML=N("empty",d==="all"?"No active tasks.":"No tasks found for this owner.",B()?"Dexter is not currently performing research.":"Click the plus icon to create a research task.");return}let m=y.map(u=>{let a=u.last_run===0?"Never":new Date(u.last_run*1e3).toLocaleString(),b=u.memory?u.memory.length:0,E=u.status==="active"?"#03dac6":"#666",w=Ve[u.owner_id]||u.owner_id.substring(0,8);return`
-                <div class="service-widget" style="border-left: 3px solid ${E}; width: 100%;">
-                    <div class="service-widget-header">
-                        <i class='bx bx-search-alt' style="color: ${E}"></i>
-                        <h3 style="font-size: 0.95em; white-space: normal; line-height: 1.4;">${u.natural_instruction}</h3>
-                        <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
-                            <span style="font-size: 0.65em; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; color: #888;">${w}</span>
-                            <button class="icon-btn delete-chore-btn" data-id="${u.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 5px;"><i class='bx bx-trash'></i></button>
+                <div class="service-widget wide-task-card" style="border-left: 4px solid ${E}; width: 100%; display: flex; flex-direction: column; padding: 20px;">
+                    <div class="service-widget-header" style="display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; gap: 15px; flex: 1;">
+                            <i class='bx bx-search-alt' style="color: ${E}; font-size: 1.5em; margin-top: 2px;"></i>
+                            <div style="text-align: left;">
+                                <h3 style="font-size: 1.1em; white-space: normal; line-height: 1.4; font-weight: 600; margin: 0;">${u.natural_instruction}</h3>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; align-items: center;">
+                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-user' style="margin-right: 4px;"></i>${w}</span>
+                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${u.schedule}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <button class="icon-btn delete-chore-btn" data-id="${u.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-trash' style="font-size: 1.2em;"></i></button>
                         </div>
                     </div>
-                    <div class="service-widget-body">
-                        <div class="service-widget-info">
-                            <span class="info-label">Schedule:</span>
-                            <span class="info-value">${u.schedule}</span>
+                    
+                    <div class="service-widget-body" style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Last Run</span>
+                            <span style="font-size: 0.85em; color: #fff; font-family: 'JetBrains Mono';">${a}</span>
                         </div>
-                        <div class="service-widget-info">
-                            <span class="info-label">Last Run:</span>
-                            <span class="info-value">${a}</span>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Items Found</span>
+                            <span style="font-size: 0.85em; color: #03dac6; font-weight: bold;">${b}</span>
                         </div>
-                        <div class="service-widget-info">
-                            <span class="info-label">Items Found:</span>
-                            <span class="info-value">${b}</span>
-                        </div>
-                        <div class="service-widget-info" style="grid-column: span 2; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px;">
-                            <span class="info-label">Target:</span>
-                            <span class="info-value" style="font-size: 0.8em; opacity: 0.8; word-break: break-all;">${u.execution_plan.entry_url||"Auto-detected"}</span>
+                        <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 200px;">
+                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Target Focus</span>
+                            <span style="font-size: 0.8em; color: #888; font-family: 'JetBrains Mono'; word-break: break-all;">${u.execution_plan.entry_url||"Autonomous Detection"}</span>
                         </div>
                     </div>
                 </div>

@@ -49,7 +49,7 @@ export const getChoresContent = () => {
             </div>
         </div>
 
-        <div id="chores-list" class="system-monitor-widgets" style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;"></div>
+        <div id="chores-list" class="tasks-vertical-list" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px;"></div>
     `;
 };
 
@@ -134,31 +134,35 @@ export async function updateChoresTab() {
         const ownerName = ownerMap[chore.owner_id] || chore.owner_id.substring(0, 8);
 
         return `
-                <div class="service-widget" style="border-left: 3px solid ${statusColor}; width: 100%;">
-                    <div class="service-widget-header">
-                        <i class='bx bx-search-alt' style="color: ${statusColor}"></i>
-                        <h3 style="font-size: 0.95em; white-space: normal; line-height: 1.4;">${chore.natural_instruction}</h3>
-                        <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
-                            <span style="font-size: 0.65em; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; color: #888;">${ownerName}</span>
-                            <button class="icon-btn delete-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 5px;"><i class='bx bx-trash'></i></button>
+                <div class="service-widget wide-task-card" style="border-left: 4px solid ${statusColor}; width: 100%; display: flex; flex-direction: column; padding: 20px;">
+                    <div class="service-widget-header" style="display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; gap: 15px; flex: 1;">
+                            <i class='bx bx-search-alt' style="color: ${statusColor}; font-size: 1.5em; margin-top: 2px;"></i>
+                            <div style="text-align: left;">
+                                <h3 style="font-size: 1.1em; white-space: normal; line-height: 1.4; font-weight: 600; margin: 0;">${chore.natural_instruction}</h3>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; align-items: center;">
+                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-user' style="margin-right: 4px;"></i>${ownerName}</span>
+                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <button class="icon-btn delete-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-trash' style="font-size: 1.2em;"></i></button>
                         </div>
                     </div>
-                    <div class="service-widget-body">
-                        <div class="service-widget-info">
-                            <span class="info-label">Schedule:</span>
-                            <span class="info-value">${chore.schedule}</span>
+                    
+                    <div class="service-widget-body" style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Last Run</span>
+                            <span style="font-size: 0.85em; color: #fff; font-family: 'JetBrains Mono';">${lastRun}</span>
                         </div>
-                        <div class="service-widget-info">
-                            <span class="info-label">Last Run:</span>
-                            <span class="info-value">${lastRun}</span>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Items Found</span>
+                            <span style="font-size: 0.85em; color: #03dac6; font-weight: bold;">${memoryCount}</span>
                         </div>
-                        <div class="service-widget-info">
-                            <span class="info-label">Items Found:</span>
-                            <span class="info-value">${memoryCount}</span>
-                        </div>
-                        <div class="service-widget-info" style="grid-column: span 2; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px;">
-                            <span class="info-label">Target:</span>
-                            <span class="info-value" style="font-size: 0.8em; opacity: 0.8; word-break: break-all;">${chore.execution_plan.entry_url || 'Auto-detected'}</span>
+                        <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 200px;">
+                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Target Focus</span>
+                            <span style="font-size: 0.8em; color: #888; font-family: 'JetBrains Mono'; word-break: break-all;">${chore.execution_plan.entry_url || 'Autonomous Detection'}</span>
                         </div>
                     </div>
                 </div>
