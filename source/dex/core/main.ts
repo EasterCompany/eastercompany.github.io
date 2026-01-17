@@ -2,8 +2,13 @@
 import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from './styler.ts';
 import { createWindow } from './Window.ts';
 import { initTheme } from './theme.ts';
-import { getAlertsContent, updateAlertsTab, checkBackgroundAlerts } from '../views/alerts.ts';
-import { updateIdeasTab, getRoadmapTabContent, getBlueprintsTabContent } from '../views/ideas.ts';
+import { updateAlertsTab, getAlertsContent, checkBackgroundAlerts } from '../views/alerts.ts';
+import {
+  updateIdeasTab,
+  getRoadmapTabContent,
+  getBlueprintsTabContent,
+  getProgressTabContent,
+} from '../views/ideas.ts';
 import { getChoresContent, updateChoresTab } from '../views/chores.ts';
 import { checkBackgroundBlueprints } from '../views/blueprints.ts';
 import { getContactsContent, updateContactsTab } from '../views/contacts.ts';
@@ -317,6 +322,7 @@ function onReady() {
     title: 'Workspace',
     icon: 'bx-brain',
     tabs: [
+      { icon: 'bx-loader-circle', title: 'Progress', content: getProgressTabContent() },
       { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapTabContent() },
       { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() },
     ],

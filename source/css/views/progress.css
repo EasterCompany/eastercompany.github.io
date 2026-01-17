@@ -1,0 +1,226 @@
+/* Progress Tab Styles - Mission Control Aesthetic */
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* --- State: Standby --- */
+.progress-standby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  border: 1px dashed rgba(187, 134, 252, 0.2);
+  border-radius: 12px;
+  background: rgba(187, 134, 252, 0.02);
+}
+
+.radar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 25px;
+}
+
+.radar-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(187, 134, 252, 0.3);
+  border-radius: 50%;
+  animation: radar-pulse 4s infinite linear;
+}
+
+.radar-brain {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: #bb86fc;
+  opacity: 0.8;
+  animation: brain-glow 3s infinite ease-in-out;
+}
+
+@keyframes radar-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes brain-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 5px rgba(187, 134, 252, 0.2));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 15px rgba(187, 134, 252, 0.6));
+  }
+}
+
+/* --- Thinking Stream (Terminal) --- */
+.thinking-stream-container {
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-header {
+  background: #1a1a1a;
+  padding: 8px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-content {
+  height: 250px;
+  overflow-y: auto;
+  padding: 15px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #d1d1d1;
+  line-height: 1.6;
+}
+
+.terminal-line {
+  margin-bottom: 4px;
+  display: flex;
+  gap: 10px;
+}
+
+.line-prefix {
+  color: #bb86fc;
+  font-weight: bold;
+  user-select: none;
+}
+
+.line-time {
+  color: #666;
+  font-size: 0.75rem;
+  min-width: 65px;
+}
+
+/* --- Active Task & Progress --- */
+.active-task-card {
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+  border: 1px solid rgba(187, 134, 252, 0.2);
+  border-left: 4px solid #bb86fc;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.active-task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at top right, rgba(187, 134, 252, 0.1), transparent);
+}
+
+.task-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+
+.task-progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, #bb86fc, #03dac6);
+  width: 0%;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
+}
+
+/* --- Completed Summary --- */
+.mission-summary-card {
+  border: 1px solid rgba(3, 218, 198, 0.3);
+  background: rgba(3, 218, 198, 0.02);
+  border-radius: 12px;
+  padding: 25px;
+  animation: slideUp 0.4s ease-out;
+}
+
+.summary-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.summary-stat {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.summary-stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #03dac6;
+}
+
+.summary-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #888;
+  letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
