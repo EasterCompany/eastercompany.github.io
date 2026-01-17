@@ -211,6 +211,7 @@ nav.window-open + .windows-container {
 .tab-content {
   display: none;
   height: 100%;
+  padding-bottom: 100px;
 }
 
 .tab-content.active {
