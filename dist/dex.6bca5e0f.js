@@ -383,9 +383,9 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 15px; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-                <button id="cancel-chore-btn" class="notif-action-btn" style="background: rgba(255,255,255,0.05);"><i class='bx bx-x'></i> Discard</button>
-                <button id="save-chore-btn" class="notif-action-btn" style="background: #bb86fc; color: #000; font-weight: 800; border: none; padding: 10px 25px;"><i class='bx bx-zap'></i> Deploy Task</button>
+            <div class="task-form-actions">
+                <button id="cancel-chore-btn" class="task-btn task-btn-discard"><i class='bx bx-x'></i> Discard</button>
+                <button id="save-chore-btn" class="task-btn task-btn-deploy"><i class='bx bx-zap'></i> Deploy Task</button>
             </div>
         </div>
 
