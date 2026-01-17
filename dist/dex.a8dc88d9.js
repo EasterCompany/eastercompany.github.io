@@ -1707,7 +1707,8 @@
                     <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
-        </div>`},Kt=()=>`
+        </div>
+        <div class="system-monitor-widgets" style="margin-top: 0; padding-top: 0;"></div>`},Kt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #03dac6;"></i>
             <h2>Active Processes</h2>
@@ -1728,7 +1729,7 @@
             <i class='bx bx-history' style="color: #888;"></i>
             <h2>Process History</h2>
         </div>
-        <div id="processes-history-widgets" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; opacity: 0.8;"></div>`,Zt=()=>`
+        <div id="processes-history-widgets" class="system-monitor-widgets" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; opacity: 0.8;"></div>`,Zt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2>Services</h2>
