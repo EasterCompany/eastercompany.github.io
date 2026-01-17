@@ -35,9 +35,21 @@ export const getChoresContent = () => {
                 </div>
 
                 <div class="task-input-group">
+                    <label class="task-input-label">Frequency (Schedule)</label>
+                    <select id="new-chore-schedule" class="task-form-select">
+                        <option value="every_1h">Once per Hour</option>
+                        <option value="every_6h">Once per 6 Hours</option>
+                        <option value="every_12h">Once per 12 Hours</option>
+                        <option value="every_24h" selected>Once per Day</option>
+                        <option value="every_168h">Once per Week</option>
+                    </select>
+                </div>
+
+                <div class="task-input-group">
                     <label id="task-owner-label" class="task-input-label">Report result to</label>
                     <select id="new-chore-owner" class="task-form-select">
                         <option value="313071000877137920">Creator (Owen)</option>
+                        <option value="dexter">Dexter (Event Timeline)</option>
                         <!-- Contacts will be injected here -->
                     </select>
                 </div>
@@ -95,7 +107,9 @@ export async function updateChoresTab() {
     ownerSelect.onchange = () => {
       const selectedOption = ownerSelect.options[ownerSelect.selectedIndex];
       if (selectedOption) {
-        ownerLabel.textContent = `Report result to: ${selectedOption.text.split(' (')[0]}`;
+        let name = selectedOption.text.split(' (')[0];
+        if (selectedOption.value === 'dexter') name = 'Dexter';
+        ownerLabel.textContent = `Report result to: ${name}`;
       }
     };
     ownerSelect.dataset.listenerAttached = 'true';
@@ -205,10 +219,12 @@ export async function updateChoresTab() {
       const instructionInput = document.getElementById('new-chore-instruction') as HTMLInputElement;
       const urlInput = document.getElementById('new-chore-url') as HTMLInputElement;
       const ownerInput = document.getElementById('new-chore-owner') as HTMLSelectElement;
+      const scheduleInput = document.getElementById('new-chore-schedule') as HTMLSelectElement;
 
       const instruction = instructionInput?.value;
       const url = urlInput?.value;
       const ownerId = ownerInput?.value || '313071000877137920';
+      const schedule = scheduleInput?.value || 'every_24h';
 
       if (!instruction) return;
 
@@ -221,7 +237,7 @@ export async function updateChoresTab() {
             owner_id: ownerId,
             natural_instruction: instruction,
             entry_url: url,
-            schedule: 'every_6h',
+            schedule: schedule,
           }),
         });
         if (form) form.style.display = 'none';
