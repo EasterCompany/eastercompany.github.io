@@ -121,14 +121,14 @@ function renderActiveState() {
 function renderCompletedState() {
   return `
     <div class="mission-summary-card">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-            <div style="background: rgba(3, 218, 198, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #03dac6; font-size: 1.5em;">
-                <i class='bx bx-check-double'></i>
-            </div>
-            <div>
-                <h4 style="margin: 0; color: #03dac6; text-transform: uppercase; letter-spacing: 2px;">Mission Accomplished</h4>
-                <p style="margin: 0; font-size: 0.9em; color: #888;">The objective was successfully fulfilled.</p>
-            </div>
+        <div class="success-icon-wrap">
+            <div class="success-pulse-ring"></div>
+            <i class='bx bx-check-double'></i>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h4 style="margin: 0; color: #03dac6; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">Mission Accomplished</h4>
+            <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #888;">The objective was successfully fulfilled by Dexter.</p>
         </div>
 
         <div class="summary-stat-grid">
@@ -138,15 +138,23 @@ function renderCompletedState() {
             </div>
             <div class="summary-stat">
                 <span class="summary-stat-value">${lastMissionSummary?.steps || '42'}</span>
-                <span class="summary-stat-label">Cognitive Steps</span>
+                <span class="summary-stat-label">Steps</span>
             </div>
             <div class="summary-stat">
-                <span class="summary-stat-value">Success</span>
-                <span class="summary-stat-label">Outcome</span>
+                <span class="summary-stat-value">100%</span>
+                <span class="summary-stat-label">Accuracy</span>
             </div>
         </div>
 
-        <div style="margin-top: 30px; display: flex; gap: 10px; justify-content: center;">
+        <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+            <h5 style="margin: 0 0 10px 0; font-size: 0.7em; color: #666; text-transform: uppercase; letter-spacing: 1px;">Final Result</h5>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-family: 'JetBrains Mono'; font-size: 0.9em; color: #bb86fc;">${lastMissionSummary?.result || 'Optimized Event Bus'}</span>
+                <i class='bx bx-chevron-right' style="color: #444;"></i>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center;">
             <button class="notif-action-btn" onclick="window.dispatchEvent(new CustomEvent('dex-mock-reset'))">
                 <i class='bx bx-refresh'></i> Return to Standby
             </button>
