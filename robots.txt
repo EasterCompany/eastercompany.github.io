@@ -5,6 +5,7 @@ Allow: /dist/
 Allow: /site.webmanifest
 Allow: /contribute/
 Allow: /dexter/
+Allow: /docs/
 Allow: /
 
 Sitemap: https://easter.company/sitemap.xml
