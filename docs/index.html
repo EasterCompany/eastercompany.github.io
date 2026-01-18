@@ -27,7 +27,7 @@
 <meta property="og:type" content="website" />
 <meta
   property="og:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=060512f1"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=089b39fe"
 />
 <meta property="fb:app_id" content="1541540286236316" />
 
@@ -40,7 +40,7 @@
 />
 <meta
   name="twitter:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=060512f1"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=089b39fe"
 />
 <meta name="twitter:site" content="@eastercompany" />
 <meta name="twitter:creator" content="@eastercompany" />
@@ -49,17 +49,17 @@
 <link
   rel="icon"
   type="image/png"
-  href="/static/meta/favicon-96x96.png?last_build=060512f1"
+  href="/static/meta/favicon-96x96.png?last_build=089b39fe"
   sizes="96x96"
 />
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=060512f1" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=060512f1" />
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=089b39fe" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=089b39fe" />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/meta/apple-touch-icon.png?last_build=060512f1"
+  href="/static/meta/apple-touch-icon.png?last_build=089b39fe"
 />
-<link rel="manifest" href="/site.webmanifest?last_build=060512f1" />
+<link rel="manifest" href="/site.webmanifest?last_build=089b39fe" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/docs">
@@ -175,7 +175,7 @@
       .markdown-body blockquote,
       .markdown-body .metadata-item {
         text-align: left !important;
-        font-size: 1.1rem; /* Standardized base size */
+        font-size: 1.1rem;
       }
 
       .markdown-body h1 {
@@ -288,12 +288,19 @@
         display: inline-block;
       }
 
+      /* Horizontal Rule */
+      .markdown-body hr {
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 3rem 0;
+      }
+
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
-  <link rel="stylesheet" href="/dist/dex.060512f1.css"></head>
+  <link rel="stylesheet" href="/dist/dex.089b39fe.css"></head>
   <body class="dex-page">
     <main id="main">
       <div class="docs-container">
@@ -334,195 +341,103 @@
       </div>
     </main>
 
-        <script>
+    <script>
+      function parseTable(lines) {
+        let html = '<table><thead>';
+        const rows = lines.map(line => {
+          const cells = line.split('|');
+          let filtered = cells;
+          if (line.trim().startsWith('|')) filtered = filtered.slice(1);
+          if (line.trim().endsWith('|')) filtered = filtered.slice(0, -1);
+          return filtered.map(cell => cell.trim());
+        }).filter(row => {
+          if (row.length === 0) return false;
+          const isSeparator = row.every(cell => cell.match(/^[:\s\-]+$/));
+          return !isSeparator;
+        });
 
-          function parseTable(lines) {
+        if (rows.length === 0) return '';
 
-            let html = '<table><thead>';
+        html += '<tr>' + rows[0].map(cell => `<th>${cell}</th>`).join('') + '</tr></thead><tbody>';
 
-            const rows = lines.map(line => {
+        for (let i = 1; i < rows.length; i++) {
+          html += '<tr>' + rows[i].map(cell => `<td>${cell}</td>`).join('') + '</tr>';
+        }
 
-              const cells = line.split('|');
+        html += '</tbody></table>';
+        return html;
+      }
 
-              let filtered = cells;
+      function renderMarkdown(text) {
+        if (!text) return '';
 
-              if (line.trim().startsWith('|')) filtered = filtered.slice(1);
+        try {
+          let escaped = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+          
+          let lines = escaped.split('\n');
+          let processedLines = [];
+          let tableBuffer = [];
 
-              if (line.trim().endsWith('|')) filtered = filtered.slice(0, -1);
-
-              return filtered.map(cell => cell.trim());
-
-            }).filter(row => {
-
-              if (row.length === 0) return false;
-
-              const isSeparator = row.every(cell => cell.match(/^[:\s\-]+$/));
-
-              return !isSeparator;
-
-            });
-
-    
-
-            if (rows.length === 0) return '';
-
-    
-
-            html += '<tr>' + rows[0].map(cell => `<th>${cell}</th>`).join('') + '</tr></thead><tbody>';
-
-    
-
-            for (let i = 1; i < rows.length; i++) {
-
-              html += '<tr>' + rows[i].map(cell => `<td>${cell}</td>`).join('') + '</tr>';
-
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            const nextLine = (lines[i+1] || '').trim();
+            
+            if (line.startsWith('|') || (line.includes('|') && nextLine.match(/^\|?[ :\s\-|]+$/))) {
+              tableBuffer.push(lines[i]);
+            } else {
+              if (tableBuffer.length > 0) {
+                processedLines.push(parseTable(tableBuffer));
+                tableBuffer = [];
+              }
+              processedLines.push(lines[i]);
             }
-
-    
-
-            html += '</tbody></table>';
-
-            return html;
-
+          }
+          if (tableBuffer.length > 0) {
+            processedLines.push(parseTable(tableBuffer));
           }
 
-    
+          let html = processedLines.join('\n');
 
-          function renderMarkdown(text) {
+          html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+          html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+          html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          html = html.replace(/^[\s]*[\-\*][\s]+(.*$)/gm, '<li>$1</li>');
+          html = html.replace(/\*([^* \n][^\*\n]*)\*/g, '<em>$1</em>');
+          html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+          html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+          html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+          html = html.replace(/^[\-\*]{3,}$/gm, '<hr/>');
+          html = html.replace(/  \n/g, '<br/>\n');
 
-            if (!text) return '';
-
-    
-
-            let escaped = text
-
-              .replace(/&/g, '&amp;')
-
-              .replace(/</g, '&lt;')
-
-              .replace(/>/g, '&gt;');
-
-            
-
-            let lines = escaped.split('\n');
-
-            let processedLines = [];
-
-            let tableBuffer = [];
-
-    
-
-            for (let i = 0; i < lines.length; i++) {
-
-              const line = lines[i].trim();
-
-              if (line.startsWith('|') || (line.includes('|') && lines[i+1]?.trim().match(/^\|?[ :\s\-|]+$/))) {
-
-                tableBuffer.push(lines[i]);
-
-              } else {
-
-                if (tableBuffer.length > 0) {
-
-                  processedLines.push(parseTable(tableBuffer));
-
-                  tableBuffer = [];
-
-                }
-
-                processedLines.push(lines[i]);
-
+          const outputLines = html.split('\n');
+          html = outputLines.map(p => {
+              const trimmed = p.trim();
+              if (trimmed.startsWith('<h') || trimmed.startsWith('<pre') || trimmed.startsWith('<li') || 
+                  trimmed.startsWith('<table') || trimmed.startsWith('</table') || trimmed.startsWith('<thead') || 
+                  trimmed.startsWith('</thead') || trimmed.startsWith('<tbody') || trimmed.startsWith('</tbody') || 
+                  trimmed.startsWith('<tr') || trimmed.startsWith('</tr') || trimmed.startsWith('<td') || 
+                  trimmed.startsWith('</td') || trimmed.startsWith('<th') || trimmed.startsWith('</th') || 
+                  trimmed.startsWith('<hr') || trimmed.startsWith('<div')) return p;
+              if (trimmed === '') return '';
+              
+              if (trimmed.startsWith('<strong>Date:</strong>') || 
+                  trimmed.startsWith('<strong>Authors:</strong>') || 
+                  trimmed.startsWith('<strong>Classification:</strong>')) {
+                  return '<div class="metadata-item">' + p + '</div>';
               }
 
-            }
+              return '<p>' + p + '</p>';
+          }).join('\n');
 
-            if (tableBuffer.length > 0) {
-
-              processedLines.push(parseTable(tableBuffer));
-
-            }
-
-    
-
-            let html = processedLines.join('\n');
-
-    
-
-            html = html.replace(/```([\s\S]*?)```/g, '<pre><code>
-    </code></pre>');
-
-            html = html.replace(/`([^`]+)`/g, '<code>
-    </code>');
-
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>
-    </strong>');
-
-            html = html.replace(/^[\s]*[\-\*][\s]+(.*$)/gm, '<li>
-    </li>');
-
-            html = html.replace(/\*([^* \n][^*\n]*)\*/g, '<em>
-    </em>');
-
-            html = html.replace(/^# (.*$)/gm, '<h1>
-    </h1>');
-
-            html = html.replace(/^## (.*$)/gm, '<h2>
-    </h2>');
-
-            html = html.replace(/^### (.*$)/gm, '<h3>
-    </h3>');
-
-            html = html.replace(/^[\-\*]{3,}$/gm, '<hr/>');
-
-            html = html.replace(/  \n/g, '<br/>\n');
-
-    
-
-            const outputLines = html.split('\n');
-
-            html = outputLines.map(p => {
-
-                const trimmed = p.trim();
-
-                if (trimmed.startsWith('<h') || trimmed.startsWith('<pre') || trimmed.startsWith('<li') || 
-
-                    trimmed.startsWith('<table') || trimmed.startsWith('</table') || trimmed.startsWith('<thead') || 
-
-                    trimmed.startsWith('</thead') || trimmed.startsWith('<tbody') || trimmed.startsWith('</tbody') || 
-
-                    trimmed.startsWith('<tr') || trimmed.startsWith('</tr') || trimmed.startsWith('<td') || 
-
-                    trimmed.startsWith('</td') || trimmed.startsWith('<th') || trimmed.startsWith('</th') || 
-
-                    trimmed.startsWith('<hr') || trimmed.startsWith('<div')) return p;
-
-                if (trimmed === '') return '';
-
-                
-
-                if (trimmed.startsWith('<strong>Date:</strong>') || 
-
-                    trimmed.startsWith('<strong>Authors:</strong>') || 
-
-                    trimmed.startsWith('<strong>Classification:</strong>')) {
-
-                    return '<div class="metadata-item">' + p + '</div>';
-
-                }
-
-    
-
-                return '<p>' + p + '</p>';
-
-            }).join('\n');
-
-    
-
-            return html;
-
-          }
-
-    
+          return html;
+        } catch (err) {
+          console.error('Markdown rendering error:', err);
+          return '<div class="error"><h1>Rendering Error</h1><p>The document could not be processed.</p></div>' + text;
+        }
+      }
 
       async function loadStudy(name) {
         const list = document.getElementById('docs-list');
@@ -556,5 +471,5 @@
       });
     </script>
     
-  <script src="/dist/dex.060512f1.js" defer></script></body>
+  <script src="/dist/dex.089b39fe.js" defer></script></body>
 </html>
