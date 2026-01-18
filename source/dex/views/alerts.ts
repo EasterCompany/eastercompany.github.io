@@ -121,10 +121,13 @@ export async function updateAlertsTab(forceReRender = false) {
 
     // Build Display List with Dividers
     const displayList: any[] = [];
-    const uniquePriorities = new Set(filteredAlerts.map((n: any) => getPriority(n)));
-    const showDividers = uniquePriorities.size > 1;
 
-    if (filteredAlerts.length > 0) {
+    if (filteredAlerts.length === 0) {
+      displayList.push({ id: 'placeholder-empty', type: 'placeholder', message: 'No alerts yet.' });
+    } else {
+      const uniquePriorities = new Set(filteredAlerts.map((n: any) => getPriority(n)));
+      const showDividers = uniquePriorities.size > 1;
+
       let lastPriority: string | null = null;
       filteredAlerts.forEach((n: any) => {
         const p = getPriority(n);
@@ -138,12 +141,6 @@ export async function updateAlertsTab(forceReRender = false) {
 
     if (forceReRender) {
       alertsContainer.innerHTML = '';
-    }
-
-    if (filteredAlerts.length === 0) {
-      alertsContainer.innerHTML = createPlaceholderMessage('empty', 'No alerts yet.');
-      updateUnreadAlertCount();
-      return;
     }
 
     const createAlertElement = (alertEvent: any) => {
@@ -370,6 +367,14 @@ export async function updateAlertsTab(forceReRender = false) {
       return div;
     };
 
+    const createPlaceholderElement = (item: any) => {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = createPlaceholderMessage('empty', item.message, null, item.id);
+      const el = tempDiv.firstElementChild as HTMLElement;
+      el.dataset.alertId = item.id;
+      return el;
+    };
+
     // Basic diffing and rendering logic for alerts
     const currentChildren = Array.from(alertsContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.alertId, el]));
@@ -391,6 +396,8 @@ export async function updateAlertsTab(forceReRender = false) {
         if (el) el.remove();
         if (item.type === 'divider') {
           el = createDividerElement(item);
+        } else if (item.type === 'placeholder') {
+          el = createPlaceholderElement(item);
         } else {
           const created = createAlertElement(item);
           if (!created) return;

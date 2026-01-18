@@ -3,7 +3,8 @@
 export function createPlaceholderMessage(
   type: string,
   message: string,
-  actionText: string | null = null
+  actionText: string | null = null,
+  id: string = 'default'
 ): string {
   const iconMap: Record<string, string> = {
     config: 'bx-cog',
@@ -13,7 +14,7 @@ export function createPlaceholderMessage(
   };
   const icon = iconMap[type] || 'bx-info-circle';
   const actionHtml = actionText ? `<p class="placeholder-action">${actionText}</p>` : '';
-  return `<div class="tab-placeholder"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
+  return `<div class="tab-placeholder" data-placeholder-id="${id}"><i class='bx ${icon} placeholder-icon'></i><p class="placeholder-message">${message}</p>${actionHtml}</div>`;
 }
 
 export function escapeHtml(text: string | null | undefined): string | null | undefined {
