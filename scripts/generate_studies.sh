@@ -48,14 +48,10 @@ for md_file in "$STUDIES_DIR"/*.md; do
     # Create the index.html for this study
     cp "$TEMPLATE_FILE" "$target_dir/index.html"
     
-    # Inject specific metadata
-    sed -i "s|<title>.*</title>|<title>$title - Architectural Study</title>|g" "$target_dir/index.html"
-    sed -i "s|property=\"og:title\" content=\".*\"|property=\"og:title\" content=\"$title\"|g" "$target_dir/index.html"
-    sed -i "s|name=\"twitter:title\" content=\".*\"|name=\"twitter:title\" content=\"$title\"|g" "$target_dir/index.html"
-    sed -i "s|name=\"description\" content=\".*\"|name=\"description\" content=\"$description\"|g" "$target_dir/index.html"
-    sed -i "s|property=\"og:description\" content=\".*\"|property=\"og:description\" content=\"$description\"|g" "$target_dir/index.html"
-    sed -i "s|name=\"twitter:description\" content=\".*\"|name=\"twitter:description\" content=\"$description\"|g" "$target_dir/index.html"
-    sed -i "s|property=\"og:type\" content=\".*\"|property=\"og:type\" content=\"article\"|g" "$target_dir/index.html"
+    # Inject temporary SEO metadata tags for build.sh to pick up
+    # We put them at the top of the file so grep finds them before any generic ones
+    sed -i "1i <meta name=\"dex-seo-title\" content=\"$title\">" "$target_dir/index.html"
+    sed -i "2i <meta name=\"dex-seo-description\" content=\"$description\">" "$target_dir/index.html"
 
     # Add a data attribute to body to tell the JS to load this specific study instantly
     sed -i "s|<body class=\"dex-page\">|<body class=\"dex-page\" data-auto-load-study=\"$slug\">|g" "$target_dir/index.html"
