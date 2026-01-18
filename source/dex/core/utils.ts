@@ -509,9 +509,9 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.web_history || []), { status: 200 });
     }
 
-    // 9. Chores (Not public, return empty)
+    // 9. Chores
     if (endpoint.startsWith('/chores')) {
-      return new Response(JSON.stringify([]), { status: 200 });
+      return new Response(JSON.stringify(DASHBOARD_CACHE.chores || []), { status: 200 });
     }
 
     // Default: Return 404 for unsupported public endpoints
