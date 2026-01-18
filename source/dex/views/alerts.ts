@@ -123,7 +123,11 @@ export async function updateAlertsTab(forceReRender = false) {
     const displayList: any[] = [];
 
     if (filteredAlerts.length === 0) {
-      displayList.push({ id: 'placeholder-empty', type: 'placeholder', message: 'No alerts yet.' });
+      displayList.push({
+        id: 'placeholder-empty',
+        type: 'placeholder',
+        message: 'No alerts, all systems nominal',
+      });
     } else {
       const uniquePriorities = new Set(filteredAlerts.map((n: any) => getPriority(n)));
       const showDividers = uniquePriorities.size > 1;
