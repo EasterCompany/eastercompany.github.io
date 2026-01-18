@@ -1,5 +1,6 @@
 // Settings Window Logic
 import { getCurrentTheme, setTheme, THEMES } from '../core/theme.ts';
+import { smartFetch } from '../core/utils.ts';
 import { WindowInstance } from '../core/Window.ts';
 
 export function getSettingsContent() {
@@ -54,6 +55,17 @@ export function getSettingsContent() {
                         </label>
                     </div>
                 </div>
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="settings-section">
+                <h2 class="settings-section-title">Service Configuration</h2>
+                <div id="service-config-list" class="settings-list">
+                    <div style="padding: 20px; text-align: center; color: #666;">
+                        <i class='bx bx-loader-alt spin'></i> Loading configuration...
+                    </div>
+                </div>
             </div>`;
 }
 
@@ -90,5 +102,85 @@ export function attachSettingsListeners(settingsWindowInstance: WindowInstance) 
     };
   } else if (notificationToggle) {
     notificationToggle.disabled = true;
+  }
+
+  loadServiceConfig();
+}
+
+async function loadServiceConfig() {
+  const container = document.getElementById('service-config-list');
+  if (!container) return;
+
+  try {
+    const response = await smartFetch('/system/options');
+    const data = await response.json();
+
+    if (!data || Object.keys(data).length === 0) {
+      container.innerHTML = `<div style="padding: 20px; text-align: center; color: #666;">No configurable services found.</div>`;
+      return;
+    }
+
+    let html = '';
+
+    // Helper to generate toggle HTML
+    const generateDeviceToggle = (label: string, serviceKey: string, currentDevice: string) => {
+      const isCuda = currentDevice === 'cuda';
+      return `
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <span class="settings-item-label">${label}</span>
+                <span class="settings-item-description">Enable GPU acceleration (CUDA)</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" class="service-device-toggle" data-service="${serviceKey}" ${isCuda ? 'checked' : ''}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>`;
+    };
+
+    // STT Config
+    if (data.stt) {
+      const device = data.stt.device || 'cpu';
+      html += generateDeviceToggle('STT Service', 'stt', device);
+    }
+
+    // TTS Config
+    if (data.tts) {
+      const device = data.tts.device || 'cpu';
+      html += generateDeviceToggle('TTS Service', 'tts', device);
+    }
+
+    container.innerHTML = html;
+
+    // Attach listeners
+    container.querySelectorAll('.service-device-toggle').forEach((toggle) => {
+      toggle.addEventListener('change', async (e) => {
+        const target = e.target as HTMLInputElement;
+        const service = target.dataset.service;
+        const value = target.checked ? 'cuda' : 'cpu';
+
+        // Disable while saving
+        target.disabled = true;
+
+        try {
+          await smartFetch('/system/options', {
+            method: 'POST',
+            body: JSON.stringify({
+              service: service,
+              key: 'device',
+              value: value,
+            }),
+          });
+        } catch (err) {
+          console.error('Failed to update config', err);
+          target.checked = !target.checked; // Revert
+          alert('Failed to update configuration.');
+        } finally {
+          target.disabled = false;
+        }
+      });
+    });
+  } catch (err) {
+    container.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>`;
   }
 }

@@ -117,3 +117,36 @@
   margin: 0;
   text-align: left;
 }
+
+/* Service Controls */
+.svc-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.svc-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+.svc-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.svc-restart:hover:not(:disabled) {
+  color: #03dac6;
+}
+.svc-stop:hover:not(:disabled) {
+  color: #ff6b6b;
+}
+.svc-start:hover:not(:disabled) {
+  color: #5eff5e;
+}
+.svc-btn.loading i {
+  animation: spin 1s linear infinite;
+}

@@ -412,6 +412,44 @@ export async function updateSystemMonitor() {
 
   if (!widgetsContainer) return;
 
+  // Add Service Control Listener
+  if (!widgetsContainer.dataset.controlsAttached) {
+    widgetsContainer.addEventListener('click', async (e) => {
+      const target = (e.target as HTMLElement).closest('.svc-btn');
+      if (!target) return;
+
+      const btn = target as HTMLButtonElement;
+      const action = btn.dataset.action;
+      const service = btn.dataset.service;
+      if (!action || !service) return;
+
+      const originalIcon = btn.innerHTML;
+      btn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      btn.classList.add('loading');
+      btn.disabled = true;
+
+      try {
+        await smartFetch(`/system/service/${action}`, {
+          method: 'POST',
+          body: JSON.stringify({ service }),
+        });
+        // Poll for update
+        setTimeout(() => updateSystemMonitor(), 1000);
+        setTimeout(() => updateSystemMonitor(), 3000);
+      } catch (err) {
+        console.error(err);
+        alert(`Failed to ${action} ${service}`);
+        btn.innerHTML = "<i class='bx bx-error'></i>";
+        setTimeout(() => {
+          btn.innerHTML = originalIcon;
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }, 2000);
+      }
+    });
+    widgetsContainer.dataset.controlsAttached = 'true';
+  }
+
   const data = await fetchSystemData();
 
   if (!data || !data.services) {
@@ -528,6 +566,20 @@ export async function updateSystemMonitor() {
 
     const uptime = formatUptime(service.uptime);
     let detailsHtml = '';
+
+    // Determine if service is manageable (not OS, CLI, or Prod)
+    const isManageable = service.type !== 'os' && service.type !== 'cli' && service.type !== 'prd';
+    let controlsHtml = '';
+
+    if (isManageable && !isPublicMode()) {
+      controlsHtml = `
+            <div class="service-controls" style="display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;">
+                <button class="svc-btn svc-restart" title="Restart Service" data-action="restart" data-service="${service.id}"><i class='bx bx-refresh'></i></button>
+                <button class="svc-btn svc-stop" title="Stop Service" data-action="stop" data-service="${service.id}" ${!isOnline ? 'disabled' : ''}><i class='bx bx-stop'></i></button>
+                <button class="svc-btn svc-start" title="Start Service" data-action="start" data-service="${service.id}" ${isOnline ? 'disabled' : ''}><i class='bx bx-play'></i></button>
+            </div>`;
+    }
+
     if (isOnline) {
       detailsHtml = `
                 <div class="service-widget-info">
@@ -547,9 +599,9 @@ export async function updateSystemMonitor() {
                         <i class="bx bxs-chip" style="color: ${memIconColor};"></i>
                         <span style="color: ${memTextColor};">${memDisplay}</span>
                     </div>
-                </div>`;
+                </div>${controlsHtml}`;
     } else {
-      detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold;"><span>OFFLINE</span></div>`;
+      detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold;"><span>OFFLINE</span></div>${controlsHtml}`;
     }
 
     const displayAddress = isPublicMode()
