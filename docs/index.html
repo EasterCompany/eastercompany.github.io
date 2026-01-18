@@ -27,7 +27,7 @@
 <meta property="og:type" content="website" />
 <meta
   property="og:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=d6853ba4"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=10d30d3e"
 />
 <meta property="fb:app_id" content="1541540286236316" />
 
@@ -40,7 +40,7 @@
 />
 <meta
   name="twitter:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=d6853ba4"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=10d30d3e"
 />
 <meta name="twitter:site" content="@eastercompany" />
 <meta name="twitter:creator" content="@eastercompany" />
@@ -49,28 +49,35 @@
 <link
   rel="icon"
   type="image/png"
-  href="/static/meta/favicon-96x96.png?last_build=d6853ba4"
+  href="/static/meta/favicon-96x96.png?last_build=10d30d3e"
   sizes="96x96"
 />
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=d6853ba4" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=d6853ba4" />
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=10d30d3e" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=10d30d3e" />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/meta/apple-touch-icon.png?last_build=d6853ba4"
+  href="/static/meta/apple-touch-icon.png?last_build=10d30d3e"
 />
-<link rel="manifest" href="/site.webmanifest?last_build=d6853ba4" />
+<link rel="manifest" href="/site.webmanifest?last_build=10d30d3e" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/docs">
 <!-- HEAD_END -->
 
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #050507;
+        font-family: 'Inter', sans-serif;
+        color: rgba(255, 255, 255, 0.9);
+        overflow-x: hidden;
+      }
       .docs-container {
         max-width: 1000px;
         margin: 0 auto;
-        padding: 100px 20px 60px;
-        color: rgba(255, 255, 255, 0.9);
+        padding: 120px 20px 60px;
         font-family: 'JetBrains Mono', monospace;
       }
       .docs-header {
@@ -82,6 +89,7 @@
         margin-bottom: 10px;
         font-weight: 700;
         color: #fff;
+        font-family: 'Poppins', sans-serif;
       }
       .docs-header p {
         color: rgba(255, 255, 255, 0.5);
@@ -188,7 +196,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
-  
+  <link rel="stylesheet" href="/dist/dex.10d30d3e.css"></head>
   <body class="dex-page">
     <main id="main">
       <div class="docs-container">
@@ -196,7 +204,7 @@
         <div id="docs-list">
           <div class="docs-header">
             <h1>STUDIES</h1>
-            <p>Architectural research and scientific explorations.</p>
+            <p>Architectural research and scientific explorations from the Dexter project.</p>
           </div>
 
           <div class="docs-grid">
@@ -230,9 +238,8 @@
       </div>
     </main>
 
-    
     <script>
-      // Simple Markdown Renderer (Mini version of Dexter's)
+      // Simple Markdown Renderer
       function renderMarkdown(text) {
         if (!text) return '';
         let html = text
@@ -240,21 +247,14 @@
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;');
 
-        // Multiline Code
         html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-        // Inline Code
         html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-        // Bold
         html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        // Italic
         html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-        // Headers
         html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
         html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
         html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-        // List items
         html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
-        // Paragraphs (simplified)
         html = html.split('\n\n').map(p => {
             if (p.startsWith('<h') || p.startsWith('<pre') || p.startsWith('<li>')) return p;
             return '<p>' + p + '</p>';
@@ -268,6 +268,8 @@
         const viewer = document.getElementById('docs-viewer');
         const content = document.getElementById('markdown-content');
 
+        if (!list || !viewer || !content) return;
+
         list.style.display = 'none';
         viewer.style.display = 'block';
         content.innerHTML = '<i class="bx bx-loader-alt spin"></i> Loading study...';
@@ -278,6 +280,7 @@
           const text = await response.text();
           content.innerHTML = renderMarkdown(text);
           document.title = name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' - Studies';
+          window.scrollTo(0, 0);
         } catch (e) {
           content.innerHTML = '<h1>Error</h1><p>Failed to load the study. It may have been moved or archived.</p>';
         }
@@ -291,5 +294,6 @@
         }
       });
     </script>
-  <script src="/dist/dex.d6853ba4.js" defer></script></body>
+    
+  <script src="/dist/dex.10d30d3e.js" defer></script></body>
 </html>
