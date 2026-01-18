@@ -6,7 +6,12 @@ Allow: /site.webmanifest
 Allow: /contribute/
 Allow: /dexter/
 Allow: /chat-cognitive-loop/
+Allow: /deterministic-vram-harmony/
+Allow: /distributed-event-driven-intelligence/
+Allow: /high-fidelity-audio-pipelines/
 Allow: /docs/
+Allow: /lazy-summarization/
+Allow: /the-7-part-versioning-standard/
 Allow: /
 
 Sitemap: https://easter.company/sitemap.xml
