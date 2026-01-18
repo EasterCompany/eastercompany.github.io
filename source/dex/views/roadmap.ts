@@ -133,9 +133,31 @@ export async function updateRoadmapTab(forceReRender = false) {
       return tempDiv;
     };
 
+    const createPlaceholderElement = (item: any) => {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = createPlaceholderMessage('empty', item.message, item.action, item.id);
+      const el = tempDiv.firstElementChild as HTMLElement;
+      el.dataset.itemId = item.id;
+      return el;
+    };
+
+    const displayList: any[] = [];
+    if (!items || items.length === 0) {
+      displayList.push({
+        id: 'placeholder-empty',
+        type: 'placeholder',
+        message: 'Your roadmap is empty.',
+        action: isPublicMode()
+          ? 'Dexter is currently idle.'
+          : 'Click "New Idea" to start planning Dexter\'s future.',
+      });
+    } else {
+      items.forEach((i: any) => displayList.push({ ...i, type: 'item' }));
+    }
+
     const currentChildren = Array.from(roadmapContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.itemId, el]));
-    const newIds = new Set(items.map((e: any) => e.id));
+    const newIds = new Set(displayList.map((e: any) => e.id));
 
     // Remove old items OR placeholders
     currentChildren.forEach((child) => {
@@ -145,25 +167,18 @@ export async function updateRoadmapTab(forceReRender = false) {
       }
     });
 
-    if (!currentItems || currentItems.length === 0) {
-      roadmapContainer.innerHTML = createPlaceholderMessage(
-        'empty',
-        'Your roadmap is empty.',
-        isPublicMode()
-          ? 'Dexter is currently idle.'
-          : 'Click "New Idea" to start planning Dexter\'s future.'
-      );
-      return;
-    }
-
     if (forceReRender) roadmapContainer.innerHTML = '';
 
     let previousElement: HTMLElement | null = null;
-    items.forEach((item: any, index: number) => {
-      let el = currentMap.get(item.id);
+    displayList.forEach((item: any, index: number) => {
+      let el = currentMap.get(item.id) as HTMLElement | null;
       if (!el || forceReRender) {
         if (el) el.remove();
-        el = createItemElement(item);
+        if (item.type === 'placeholder') {
+          el = createPlaceholderElement(item);
+        } else {
+          el = createItemElement(item);
+        }
         if (!el) return;
       }
       if (index === 0) {

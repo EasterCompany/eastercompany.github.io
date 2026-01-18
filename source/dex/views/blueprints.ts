@@ -49,20 +49,6 @@ export async function updateBlueprintsTab(forceReRender = false) {
     lastBlueprintsUpdate = Date.now();
     updateTabTimestamp(2, lastBlueprintsUpdate); // Index 2 (Ideas) in mainWindow
 
-    if (allBlueprints.length === 0) {
-      blueprintsContainer.innerHTML = createPlaceholderMessage(
-        'empty',
-        'No architectural blueprints generated yet.',
-        'The Guardian will generate these when idle.'
-      );
-      updateTabBadgeCount(2, 0);
-      return;
-    }
-
-    if (forceReRender) {
-      blueprintsContainer.innerHTML = '';
-    }
-
     const createBlueprintElement = (event: any) => {
       let blueprintData = event.event;
       if (typeof blueprintData === 'string') {
@@ -288,9 +274,33 @@ export async function updateBlueprintsTab(forceReRender = false) {
       return tempDiv;
     };
 
+    const createPlaceholderElement = (item: any) => {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = createPlaceholderMessage('empty', item.message, item.action, item.id);
+      const el = tempDiv.firstElementChild as HTMLElement;
+      el.dataset.blueprintId = item.id;
+      return el;
+    };
+
+    const displayList: any[] = [];
+    if (allBlueprints.length === 0) {
+      displayList.push({
+        id: 'placeholder-empty',
+        type: 'placeholder',
+        message: 'No architectural blueprints generated yet.',
+        action: 'The Guardian will generate these when idle.',
+      });
+    } else {
+      allBlueprints.forEach((b: any) => displayList.push({ ...b, type: 'blueprint' }));
+    }
+
+    if (forceReRender) {
+      blueprintsContainer.innerHTML = '';
+    }
+
     const currentChildren = Array.from(blueprintsContainer.children) as HTMLElement[];
     const currentMap = new Map(currentChildren.map((el) => [el.dataset.blueprintId, el]));
-    const newIds = new Set(allBlueprints.map((e: any) => e.id));
+    const newIds = new Set(displayList.map((e: any) => e.id));
 
     currentChildren.forEach((child) => {
       const id = child.dataset.blueprintId;
@@ -300,13 +310,16 @@ export async function updateBlueprintsTab(forceReRender = false) {
     });
 
     let previousElement: HTMLElement | null = null;
-    allBlueprints.forEach((event: any, index: number) => {
-      let el = currentMap.get(event.id);
+    displayList.forEach((item: any, index: number) => {
+      let el = currentMap.get(item.id) as HTMLElement | null;
       if (!el || forceReRender) {
         if (el) el.remove();
-        const created = createBlueprintElement(event);
-        if (!created) return;
-        el = created;
+        if (item.type === 'placeholder') {
+          el = createPlaceholderElement(item);
+        } else {
+          el = createBlueprintElement(item);
+        }
+        if (!el) return;
       }
       if (index === 0) {
         if (blueprintsContainer.firstElementChild !== el) blueprintsContainer.prepend(el);
