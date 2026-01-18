@@ -247,6 +247,9 @@ export function renderMarkdown(text: string): string | null | undefined {
   html = html.replace(/^## (.*$)/gm, '<h4 class="md-header">$1</h4>');
   html = html.replace(/^### (.*$)/gm, '<h5 class="md-header">$1</h5>');
 
+  // Pseudo-headers (Bold text on its own line)
+  html = html.replace(/^<strong>(.*)<\/strong>$/gm, '<h5 class="md-header">$1</h5>');
+
   // Tables
   html = html.replace(/^\|(.+)\|$/gm, (_match: string, content: string) => {
     const cells = content.split('|').map((c) => c.trim());
