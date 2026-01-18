@@ -52,9 +52,17 @@ export const getChoresContent = () => {
                         <input type="time" id="new-chore-time" class="task-form-input" style="flex: 1;" value="08:00">
                         <select id="new-chore-timezone" class="task-form-select" style="flex: 2;">
                             <option value="Local">Local (Server)</option>
-                            <option value="Europe/London">London (GMT/BST)</option>
+                            <option value="America/Los_Angeles">California (PST/PDT)</option>
+                            <option value="America/Chicago">Texas (CST/CDT)</option>
+                            <option value="America/Toronto">Toronto (EST/EDT)</option>
                             <option value="America/New_York">New York (EST/EDT)</option>
+                            <option value="Europe/London">London (GMT/BST)</option>
+                            <option value="Europe/Berlin">Berlin (CET/CEST)</option>
                             <option value="Europe/Belgrade">Belgrade (CET/CEST)</option>
+                            <option value="Europe/Moscow">Moscow (MSK)</option>
+                            <option value="Asia/Shanghai">Beijing (CST)</option>
+                            <option value="Asia/Tokyo">Tokyo (JST)</option>
+                            <option value="Asia/Seoul">Seoul (KST)</option>
                             <option value="UTC">UTC</option>
                         </select>
                     </div>
