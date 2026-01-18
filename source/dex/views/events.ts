@@ -226,6 +226,8 @@ export async function updateEventsTimeline(forceReRender = false) {
           type === 'analysis.user.message_signals'
         ) {
           borderClass = 'event-border-purple';
+        } else if (type === 'engagement.decision') {
+          borderClass = 'event-border-purple';
         } else if (type === 'system.attention.expired') {
           borderClass = 'event-border-orange';
         } else if (type === 'system.cli.command' || type === 'system.cli.status') {
