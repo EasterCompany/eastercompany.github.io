@@ -27,7 +27,7 @@
 <meta property="og:type" content="website" />
 <meta
   property="og:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=eb465556"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=acc4603a"
 />
 <meta property="fb:app_id" content="1541540286236316" />
 
@@ -40,7 +40,7 @@
 />
 <meta
   name="twitter:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=eb465556"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=acc4603a"
 />
 <meta name="twitter:site" content="@eastercompany" />
 <meta name="twitter:creator" content="@eastercompany" />
@@ -49,17 +49,17 @@
 <link
   rel="icon"
   type="image/png"
-  href="/static/meta/favicon-96x96.png?last_build=eb465556"
+  href="/static/meta/favicon-96x96.png?last_build=acc4603a"
   sizes="96x96"
 />
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=eb465556" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=eb465556" />
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=acc4603a" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=acc4603a" />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/meta/apple-touch-icon.png?last_build=eb465556"
+  href="/static/meta/apple-touch-icon.png?last_build=acc4603a"
 />
-<link rel="manifest" href="/site.webmanifest?last_build=eb465556" />
+<link rel="manifest" href="/site.webmanifest?last_build=acc4603a" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/docs">
@@ -70,7 +70,7 @@
         margin: 0;
         padding: 0;
         background-color: #050507;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Inter', sans-serif;
         color: rgba(255, 255, 255, 0.9);
         overflow-x: hidden;
       }
@@ -92,8 +92,7 @@
       }
       .docs-header p {
         color: #888;
-        font-size: 1.2rem;
-        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.1rem;
       }
       .docs-grid {
         display: grid;
@@ -125,9 +124,10 @@
         font-size: 1.4rem;
         margin-bottom: 12px;
         text-align: left;
+        font-weight: 700;
       }
       .study-card p {
-        font-size: 0.95rem;
+        font-size: 1rem;
         color: #888;
         line-height: 1.7;
         margin-bottom: 25px;
@@ -141,7 +141,6 @@
         letter-spacing: 2px;
         display: flex;
         justify-content: space-between;
-        font-family: 'JetBrains Mono', monospace;
         font-weight: 600;
       }
 
@@ -150,28 +149,12 @@
         display: none;
         animation: fadeIn 0.5s ease;
       }
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        color: #bb86fc;
-        text-decoration: none;
-        font-size: 0.9rem;
-        margin-bottom: 40px;
-        cursor: pointer;
-        font-family: 'JetBrains Mono', monospace;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      .back-link:hover {
-        color: #d7b7ff;
-      }
       .markdown-body {
         background: rgba(255, 255, 255, 0.01);
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 24px;
         padding: 80px;
-        line-height: 1.9;
+        line-height: 1.8;
         font-family: 'Inter', sans-serif;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
         text-align: left !important;
@@ -189,8 +172,10 @@
       .markdown-body h4,
       .markdown-body p,
       .markdown-body li,
-      .markdown-body blockquote {
+      .markdown-body blockquote,
+      .markdown-body .metadata-item {
         text-align: left !important;
+        font-size: 1.1rem; /* Standardized base size */
       }
 
       .markdown-body h1 {
@@ -200,7 +185,6 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         padding-bottom: 0.5em;
         color: #fff;
-        font-family: 'Poppins', sans-serif;
         font-weight: 800;
       }
       .markdown-body h2 {
@@ -208,7 +192,6 @@
         margin-top: 3rem;
         margin-bottom: 1.2rem;
         color: #fff;
-        font-family: 'Poppins', sans-serif;
         font-weight: 700;
       }
       .markdown-body h3 {
@@ -216,31 +199,25 @@
         margin-top: 2rem;
         margin-bottom: 1rem;
         color: #eee;
-        font-family: 'Poppins', sans-serif;
         font-weight: 600;
       }
-      .markdown-body p {
-        margin-bottom: 1.8rem;
+      .markdown-body p, .markdown-body li {
+        margin-bottom: 1.6rem;
         color: #bbb;
-        font-size: 1.15rem;
         letter-spacing: 0.01em;
       }
       .markdown-body ul,
       .markdown-body ol {
-        margin-bottom: 1.8rem;
+        margin-bottom: 1.6rem;
         padding-left: 1.5rem;
         color: #bbb;
-      }
-      .markdown-body li {
-        margin-bottom: 1rem;
-        font-size: 1.1rem;
       }
       .markdown-body code {
         font-family: 'JetBrains Mono', monospace;
         background: rgba(187, 134, 252, 0.12);
         padding: 0.2em 0.5em;
         border-radius: 6px;
-        font-size: 0.9em;
+        font-size: 0.95em;
         color: #bb86fc;
         border: 1px solid rgba(187, 134, 252, 0.2);
       }
@@ -270,12 +247,53 @@
         border-radius: 0 16px 16px 0;
       }
 
+      /* Table Styles */
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .markdown-body th, .markdown-body td {
+        padding: 15px 20px;
+        text-align: left !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 1rem;
+      }
+      .markdown-body th {
+        background: rgba(187, 134, 252, 0.1);
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .markdown-body td {
+        color: #bbb;
+      }
+
+      /* Metadata Styling */
+      .markdown-body .metadata-item {
+        margin-bottom: 0.6rem;
+        color: #777;
+        display: flex;
+        gap: 15px;
+      }
+      .markdown-body .metadata-item strong {
+        color: #bb86fc;
+        font-weight: 600;
+        min-width: 130px;
+        display: inline-block;
+      }
+
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
-  <link rel="stylesheet" href="/dist/dex.eb465556.css"></head>
+  <link rel="stylesheet" href="/dist/dex.acc4603a.css"></head>
   <body class="dex-page">
     <main id="main">
       <div class="docs-container">
@@ -317,25 +335,69 @@
     </main>
 
     <script>
+      function parseTable(lines) {
+        let html = '<table><thead>';
+        const rows = lines.map(line => 
+          line.split('|')
+            .filter((_, i, arr) => (i > 0 && i < arr.length - 1) || (line.trim().startsWith('|') ? i > 0 : true)) // Handle leading/trailing pipes
+            .map(cell => cell.trim())
+        ).filter(row => row.length > 0 && !row.every(cell => cell.match(/^[:\s\-]+$/)));
+
+        if (rows.length === 0) return '';
+
+        // Header
+        html += '<tr>' + rows[0].map(cell => `<th>${cell}</th>`).join('') + '</tr></thead><tbody>';
+
+        // Body
+        for (let i = 1; i < rows.length; i++) {
+          html += '<tr>' + rows[i].map(cell => `<td>${cell}</td>`).join('') + '</tr>';
+        }
+
+        html += '</tbody></table>';
+        return html;
+      }
+
       // Simple Markdown Renderer
       function renderMarkdown(text) {
         if (!text) return '';
-        let html = text
+        
+        // Pre-process tables
+        let lines = text.split('\n');
+        let processedLines = [];
+        let tableBuffer = [];
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith('|') || (line.includes('|') && lines[i+1]?.trim().match(/^\|?[:\s\-|]+$/))) {
+            tableBuffer.push(lines[i]);
+          } else {
+            if (tableBuffer.length > 0) {
+              processedLines.push(parseTable(tableBuffer));
+              tableBuffer = [];
+            }
+            processedLines.push(lines[i]);
+          }
+        }
+        if (tableBuffer.length > 0) {
+          processedLines.push(parseTable(tableBuffer));
+        }
+
+        let html = processedLines.join('\n')
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;');
 
-        // Multiline Code
+        // Multiline Code (Fixing escaping after table processing)
         html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
         // Inline Code
         html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
         // Bold
         html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
         
-        // List items (Improved: handle both - and * with indentation support)
+        // List items
         html = html.replace(/^[\s]*[\-\*][\s]+(.*$)/gm, '<li>$1</li>');
 
-        // Italic (Improved: non-greedy and avoid matching across multiple lines or list markers)
+        // Italic
         html = html.replace(/\*([^* \n][^*\n]*)\*/g, '<em>$1</em>');
 
         // Headers
@@ -343,9 +405,25 @@
         html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
         html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
         
-        const lines = html.split('\n\n');
-        html = lines.map(p => {
-            if (p.trim().startsWith('<h') || p.trim().startsWith('<pre') || p.trim().startsWith('<li')) return p;
+        // Horizontal Rule
+        html = html.replace(/^[\-\*]{3,}$/gm, '<hr/>');
+
+        // Line Breaks (Standard Markdown: two spaces at end of line)
+        html = html.replace(/  \n/g, '<br/>\n');
+
+        const outputLines = html.split('\n');
+        html = outputLines.map(p => {
+            const trimmed = p.trim();
+            if (trimmed.startsWith('<h') || trimmed.startsWith('<pre') || trimmed.startsWith('<li') || trimmed.startsWith('<table') || trimmed.startsWith('</table') || trimmed.startsWith('<tr>') || trimmed.startsWith('<td>') || trimmed.startsWith('<th>') || trimmed.startsWith('<hr')) return p;
+            if (trimmed === '') return '';
+            
+            // Apply metadata styling to relevant lines
+            if (trimmed.startsWith('<strong>Date:</strong>') || 
+                trimmed.startsWith('<strong>Authors:</strong>') || 
+                trimmed.startsWith('<strong>Classification:</strong>')) {
+                return '<div class="metadata-item">' + p + '</div>';
+            }
+
             return '<p>' + p + '</p>';
         }).join('\n');
 
@@ -384,5 +462,5 @@
       });
     </script>
     
-  <script src="/dist/dex.eb465556.js" defer></script></body>
+  <script src="/dist/dex.acc4603a.js" defer></script></body>
 </html>
