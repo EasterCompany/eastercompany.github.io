@@ -47,8 +47,17 @@ export const getChoresContent = () => {
                 </div>
 
                 <div id="new-chore-time-group" class="task-input-group" style="display: none;">
-                    <label class="task-input-label">Scheduled Time</label>
-                    <input type="time" id="new-chore-time" class="task-form-input" value="08:00">
+                    <label class="task-input-label">Scheduled Time & Timezone</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="time" id="new-chore-time" class="task-form-input" style="flex: 1;" value="08:00">
+                        <select id="new-chore-timezone" class="task-form-select" style="flex: 2;">
+                            <option value="Local">Local (Server)</option>
+                            <option value="Europe/London">London (GMT/BST)</option>
+                            <option value="America/New_York">New York (EST/EDT)</option>
+                            <option value="Europe/Belgrade">Belgrade (CET/CEST)</option>
+                            <option value="UTC">UTC</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="task-input-group" style="grid-column: span 2;">
@@ -106,7 +115,28 @@ export async function updateChoresTab() {
   const urlInput = document.getElementById('new-chore-url') as HTMLInputElement;
   const scheduleInput = document.getElementById('new-chore-schedule') as HTMLSelectElement;
   const timeInput = document.getElementById('new-chore-time') as HTMLInputElement;
+  const timezoneInput = document.getElementById('new-chore-timezone') as HTMLSelectElement;
   const timeGroup = document.getElementById('new-chore-time-group');
+
+  if (timezoneInput && !timezoneInput.dataset.initialValueAttached) {
+    const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // Check if userTz exists in our options, if not add it
+    let exists = false;
+    for (let i = 0; i < timezoneInput.options.length; i++) {
+      if (timezoneInput.options[i].value === userTz) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists) {
+      const opt = document.createElement('option');
+      opt.value = userTz;
+      opt.textContent = userTz.replace('_', ' ');
+      timezoneInput.appendChild(opt);
+    }
+    timezoneInput.value = userTz;
+    timezoneInput.dataset.initialValueAttached = 'true';
+  }
 
   if (scheduleInput && timeGroup && !scheduleInput.dataset.timeListenerAttached) {
     scheduleInput.addEventListener('change', () => {
@@ -180,6 +210,23 @@ export async function updateChoresTab() {
         if (timeGroup) timeGroup.style.display = chore.schedule === 'daily' ? 'block' : 'none';
       }
       if (timeInput && chore.run_at) timeInput.value = chore.run_at;
+      if (timezoneInput && chore.timezone) {
+        // Ensure the timezone exists in dropdown
+        let exists = false;
+        for (let i = 0; i < timezoneInput.options.length; i++) {
+          if (timezoneInput.options[i].value === chore.timezone) {
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          const opt = document.createElement('option');
+          opt.value = chore.timezone;
+          opt.textContent = chore.timezone.replace('_', ' ');
+          timezoneInput.appendChild(opt);
+        }
+        timezoneInput.value = chore.timezone;
+      }
 
       // Handle legacy single owner_id if recipients is empty
       selectedRecipients = chore.recipients || (chore.owner_id ? [chore.owner_id] : []);
@@ -318,7 +365,7 @@ export async function updateChoresTab() {
                                       <i class='bx bx-send' style="margin-right: -5px;"></i>
                                       ${recipientList}
                                     </div>
-                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}${chore.run_at ? ' @ ' + chore.run_at : ''}</span>
+                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}${chore.run_at ? ' @ ' + chore.run_at + (chore.timezone ? ' (' + chore.timezone.split('/').pop()?.replace('_', ' ') + ')' : '') : ''}</span>
                                 </div>
                             </div>
                         </div>
@@ -420,6 +467,7 @@ export async function updateChoresTab() {
       const instruction = instructionInput?.value;
       const schedule = scheduleInput?.value || 'every_24h';
       const runAt = schedule === 'daily' ? timeInput?.value : '';
+      const timezone = schedule === 'daily' ? timezoneInput?.value : '';
 
       if (!instruction) return;
       if (selectedRecipients.length === 0) {
@@ -442,6 +490,7 @@ export async function updateChoresTab() {
             entry_url: urlInput?.value,
             schedule: schedule,
             run_at: runAt,
+            timezone: timezone,
           }),
         });
         if (form) form.style.display = 'none';
