@@ -178,9 +178,15 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle at top right, rgba(187, 134, 252, 0.1), transparent);
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at top right, rgba(187, 134, 252, 0.12) 0%, transparent 60%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 4px;
+  pointer-events: none;
 }
 
 .task-progress-bar {
