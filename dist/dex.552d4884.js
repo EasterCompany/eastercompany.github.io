@@ -272,8 +272,8 @@
     <div class="active-task-card">
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>
-                <h4 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 2px; color: #bb86fc;">Active Mission</h4>
-                <h2 id="active-task-title" style="margin: 5px 0 0 0; font-size: 1.2em;">${Y?.title||"Processing..."}</h2>
+                <h4 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 2px; color: #bb86fc; text-align: left;">Active Mission</h4>
+                <h2 id="active-task-title" style="margin: 5px 0 0 0; font-size: 1.2em; text-align: left;">${Y?.title||"Processing..."}</h2>
             </div>
             <div class="pulse-indicator" style="background: #bb86fc; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px #bb86fc;"></div>
         </div>
