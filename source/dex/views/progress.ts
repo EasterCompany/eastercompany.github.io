@@ -96,11 +96,11 @@ function renderActiveState() {
     </div>
 
     <div class="thinking-stream-container">
-        <div class="terminal-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <div class="terminal-controls" style="display: flex; gap: 8px;">
-                <div class="terminal-dot" style="background: #ff5f56; width: 12px; height: 12px; border-radius: 50%;"></div>
-                <div class="terminal-dot" style="background: #ffbd2e; width: 12px; height: 12px; border-radius: 50%;"></div>
-                <div class="terminal-dot" style="background: #27c93f; width: 12px; height: 12px; border-radius: 50%;"></div>
+        <div class="terminal-header">
+            <div class="terminal-controls">
+                <div class="terminal-dot" style="background: #ff5f56;"></div>
+                <div class="terminal-dot" style="background: #ffbd2e;"></div>
+                <div class="terminal-dot" style="background: #27c93f;"></div>
             </div>
             <div style="font-family: 'JetBrains Mono'; font-size: 0.7em; color: rgba(255, 255, 255, 0.3); text-transform: uppercase;">dexter_mind_v2.0.sh</div>
         </div>
