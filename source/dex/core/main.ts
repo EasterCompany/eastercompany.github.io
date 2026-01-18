@@ -395,6 +395,7 @@ function onReady() {
   const setupNavbarListeners = () => {
     const menuBtn = document.getElementById('dexter-menu-btn');
     const settingsIcon = document.getElementById('settings-icon');
+    const docsIcon = document.getElementById('docs-icon');
     const closeAllBtn = document.getElementById('close-all-windows');
     const navLeftBtn = document.getElementById('nav-left-container');
     const dropdown = document.getElementById('dexter-dropdown');
@@ -479,6 +480,13 @@ function onReady() {
       settingsIcon.onclick = (e) => {
         e.stopPropagation();
         toggleWindow(settingsWindow);
+      };
+    }
+
+    if (docsIcon) {
+      docsIcon.onclick = (e) => {
+        e.stopPropagation();
+        window.location.href = '/docs';
       };
     }
 
