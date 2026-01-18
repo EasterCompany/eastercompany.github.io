@@ -531,14 +531,6 @@ function onReady() {
           closeAll();
         } else {
           const path = window.location.pathname;
-          const search = window.location.search;
-
-          // If we have a query string (e.g. ?study=...), clear it first to go "back" to the list
-          if (search !== '') {
-            window.location.search = '';
-            return;
-          }
-
           const isRoot = path === '/' || path === '/index.html';
           if (!isRoot) {
             const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;

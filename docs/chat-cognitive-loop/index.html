@@ -27,7 +27,7 @@
 <meta property="og:type" content="website" />
 <meta
   property="og:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=9192a7ca"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=7775b3e5"
 />
 <meta property="fb:app_id" content="1541540286236316" />
 
@@ -40,7 +40,7 @@
 />
 <meta
   name="twitter:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=9192a7ca"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=7775b3e5"
 />
 <meta name="twitter:site" content="@eastercompany" />
 <meta name="twitter:creator" content="@eastercompany" />
@@ -49,17 +49,17 @@
 <link
   rel="icon"
   type="image/png"
-  href="/static/meta/favicon-96x96.png?last_build=9192a7ca"
+  href="/static/meta/favicon-96x96.png?last_build=7775b3e5"
   sizes="96x96"
 />
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=9192a7ca" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=9192a7ca" />
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=7775b3e5" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=7775b3e5" />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/meta/apple-touch-icon.png?last_build=9192a7ca"
+  href="/static/meta/apple-touch-icon.png?last_build=7775b3e5"
 />
-<link rel="manifest" href="/site.webmanifest?last_build=9192a7ca" />
+<link rel="manifest" href="/site.webmanifest?last_build=7775b3e5" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/chat-cognitive-loop">
@@ -300,7 +300,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
-  <link rel="stylesheet" href="/dist/dex.9192a7ca.css"></head>
+  <link rel="stylesheet" href="/dist/dex.7775b3e5.css"></head>
   <body class="dex-page" data-auto-load-study="chat-cognitive-loop">
     <main id="main">
       <div class="docs-container">
@@ -312,7 +312,7 @@
           </div>
 
           <div class="docs-grid">
-            <a href="?study=chat-cognitive-loop" class="study-card">
+            <a href="/docs/chat-cognitive-loop/" class="study-card">
               <h3>Chat Cognitive Loops</h3>
               <p>A deep dive into the trade-offs between surgical accuracy and fluid latency in LLM interactions.</p>
               <div class="study-meta">
@@ -463,13 +463,15 @@
       }
 
       document.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(window.location.search);
-        const study = params.get('study') || document.body.getAttribute('data-auto-load-study');
+        // Prioritize static attribute (SSG) then fallback to query params (Legacy)
+        const study = document.body.getAttribute('data-auto-load-study') || 
+                      new URLSearchParams(window.location.search).get('study');
+        
         if (study) {
           loadStudy(study);
         }
       });
     </script>
     
-  <script src="/dist/dex.9192a7ca.js" defer></script></body>
+  <script src="/dist/dex.7775b3e5.js" defer></script></body>
 </html>
