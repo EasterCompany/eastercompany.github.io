@@ -32,19 +32,21 @@ for md_file in $(ls "$STUDIES_DIR"/*.md | sort -r); do
     if [ -z "$date_str" ]; then date_str="Jan 18, 2026"; fi
 
     # Extract Description (Abstract or first long paragraph)
-description=$(sed -n '/## Abstract/,/##/p' "$md_file" | grep -v "##" | tr '\n' ' ' | sed 's/  */ /g' | cut -c1-160)
+    description=$(sed -n '/## Abstract/,/##/p' "$md_file" | grep -v "##" | tr '\n' ' ' | sed 's/  */ /g' | cut -c1-160)
     if [ -z "$description" ]; then
         description=$(grep -v "^#" "$md_file" | grep -v "^---" | grep -v "^**" | grep "[a-zA-Z]" | head -n 1 | cut -c1-160)
     fi
     # Clean whitespace
-    description=$(echo "$description" | sed 's/^[ 	]*//;s/[ 	]*$//')
+    description=$(echo "$description" | sed 's/^[ \t]*//;s/[ \t]*$//')
+
+    # UI Summary (strip markdown formatting for clean cards)
+    summary=$(echo "$description" | sed 's/\*\*//g' | sed 's/\*//g')
+    summary=$(echo "$summary" | cut -c1-120)
+    if [ ${#description} -gt 120 ]; then summary="$summary..."; fi
 
     # SEO Description (escape quotes for meta tags using standard HTML entity)
     seo_description=$(echo "$description" | sed 's/"/\&quot;/g')
 
-    # Extract Short Summary for the Card (using unescaped description for UI)
-    summary=$(echo "$description" | cut -c1-120)
-    if [ ${#description} -gt 120 ]; then summary="$summary..."; fi
 
     # Add to the grid file
     cat <<EOF >> "$GRID_FILE"
