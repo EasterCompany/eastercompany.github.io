@@ -85,8 +85,8 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
             fi
         fi
 
-        # Remove old tags
-        sed -i 's|<link rel="stylesheet" href="/dist/dex\..*\.css">||g' "$html_file"
+        # Remove old tags (handling both > and /> endings)
+        sed -i 's|<link rel="stylesheet" href="/dist/dex\..*\.css"[^>]*>||g' "$html_file"
         sed -i 's|<script src="/dist/dex\..*\.js" defer></script>||g' "$html_file"
         # Also cleanup legacy root paths just in case
         sed -i 's|<link rel="stylesheet" href="/dex\..*\.css">||g' "$html_file"
