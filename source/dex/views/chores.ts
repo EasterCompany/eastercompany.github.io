@@ -219,7 +219,7 @@ export async function updateChoresTab() {
           const channels = await resp.json();
           channels.forEach((c: any) => {
             const id = `channel:${c.id}`;
-            recipientMap[id] = `#${c.name}`;
+            recipientMap[id] = c.name;
             const opt = document.createElement('option');
             opt.value = id;
             opt.textContent = `#${c.name} (${c.guild})`;
@@ -460,7 +460,9 @@ export async function updateChoresTab() {
       allRecipients.forEach((rid) => {
         const opt = document.createElement('option');
         opt.value = rid;
-        opt.textContent = recipientMap[rid] || `Recipient: ${rid.substring(0, 8)}`;
+        const isChannel = rid.startsWith('channel:');
+        const name = recipientMap[rid] || `Recipient: ${rid.substring(0, 8)}`;
+        opt.textContent = (isChannel && !name.startsWith('#') ? '#' : '') + name;
         filterSelect.appendChild(opt);
       });
       filterSelect.value = currentFilter;
