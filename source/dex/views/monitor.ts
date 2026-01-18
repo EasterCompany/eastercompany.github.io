@@ -153,10 +153,16 @@ export const getProcessesContent = () => {
 };
 
 export const getServicesContent = () => {
+  const controlsStyle = isPublicMode() ? 'display: none;' : 'display: flex;';
   return `
         <div class="system-section-header">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2>Services</h2>
+            <div id="global-service-controls" class="header-controls" style="margin-left: auto; gap: 8px; ${controlsStyle}">
+                <button id="global-restart-btn" class="notif-action-btn" title="Restart All Services"><i class='bx bx-refresh'></i></button>
+                <button id="global-stop-btn" class="notif-action-btn" title="Stop All Services"><i class='bx bx-stop'></i></button>
+                <button id="global-start-btn" class="notif-action-btn" title="Start All Services"><i class='bx bx-play'></i></button>
+            </div>
         </div>
         <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;
 };
@@ -285,6 +291,49 @@ async function fetchGuardianStatus() {
 export async function updateSystemMonitor() {
   const widgetsContainer = document.getElementById('services-widgets');
   const hardwareRefreshBtn = document.getElementById('hardware-refresh-btn');
+
+  // Global Service Controls
+  const globalRestartBtn = document.getElementById('global-restart-btn');
+  const globalStopBtn = document.getElementById('global-stop-btn');
+  const globalStartBtn = document.getElementById('global-start-btn');
+
+  const attachGlobalListener = (btn: HTMLElement | null, action: string) => {
+    if (btn && !btn.dataset.listenerAttached) {
+      btn.onclick = async () => {
+        const originalIcon = btn.innerHTML;
+        btn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+        (btn as HTMLButtonElement).disabled = true;
+        try {
+          await smartFetch(`/system/service/${action}`, {
+            method: 'POST',
+            body: JSON.stringify({ service: 'all' }),
+          });
+          // Poll for update
+          setTimeout(() => updateSystemMonitor(), 2000);
+          setTimeout(() => updateSystemMonitor(), 5000);
+          setTimeout(() => {
+            btn.innerHTML = "<i class='bx bx-check'></i>";
+            setTimeout(() => {
+              btn.innerHTML = originalIcon;
+              (btn as HTMLButtonElement).disabled = false;
+            }, 1000);
+          }, 1000);
+        } catch (err) {
+          console.error(err);
+          btn.innerHTML = "<i class='bx bx-error'></i>";
+          setTimeout(() => {
+            btn.innerHTML = originalIcon;
+            (btn as HTMLButtonElement).disabled = false;
+          }, 2000);
+        }
+      };
+      btn.dataset.listenerAttached = 'true';
+    }
+  };
+
+  attachGlobalListener(globalRestartBtn, 'restart');
+  attachGlobalListener(globalStopBtn, 'stop');
+  attachGlobalListener(globalStartBtn, 'start');
 
   // Hardware Containers
   const osContainer = document.querySelector('#hw-os .hw-content');
