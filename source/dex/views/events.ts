@@ -431,11 +431,80 @@ export async function updateEventsTimeline(forceReRender = false) {
           const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
 
+          let historyHtml = '';
+          // Parse raw input if it contains the chat history array structure
+          // The backend sends raw_input as a string representation of the array
+          let parsedHistory = [];
+          const rawInput = eventData.raw_input || '';
+          // Heuristic parsing for the Go-formatted log output: [{role ...} {role ...}]
+          if (rawInput.startsWith('[{') && rawInput.endsWith('}]')) {
+            // This is a rough parse for display purposes. Ideally backend sends structured history.
+            // We'll rely on the backend update if possible, but for now we try to extract
+            // segments that look like message objects.
+            const matches = rawInput.match(/{.*?}/g);
+            if (matches) {
+              parsedHistory = matches.map((m: string) => {
+                // Remove outer braces
+                const content = m.substring(1, m.length - 1);
+                // Extract role (first word)
+                const firstSpace = content.indexOf(' ');
+                const role = content.substring(0, firstSpace);
+                // Extract content (rest)
+                let text = content.substring(firstSpace + 1);
+                // Remove trailing [] which seems to be an empty Name field in Go struct
+                text = text.replace(/\[\]$/, '').trim();
+                return { role, content: text };
+              });
+            }
+          }
+
+          // Append the bot's actual response as the final turn
+          if (parsedHistory.length > 0 && eventData.response_raw) {
+            parsedHistory.push({ role: 'assistant', content: eventData.response_raw });
+          }
+
+          if (parsedHistory.length > 0) {
+            const totalTurns = parsedHistory.length;
+            const slides = parsedHistory
+              .map((m: any, index: number) => {
+                let roleName = m.role.toUpperCase();
+                if (roleName === 'ASSISTANT') roleName = 'DEXTER';
+
+                const roleColor =
+                  m.role === 'user' ? '#03dac6' : m.role === 'system' ? '#ffb74d' : '#bb86fc';
+                const displayStyle = index === totalTurns - 1 ? 'block' : 'none'; // Default to showing Dexter's response
+                return `
+                                <div class="history-slide" data-index="${index}" style="display: ${displayStyle};">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="font-size: 0.7em; color: ${roleColor}; letter-spacing: 1px; font-weight: bold;">${roleName}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${index + 1} of ${totalTurns}</span>
+                                    </div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${escapeHtml(m.content)}</div>
+                                </div>
+                            `;
+              })
+              .join('');
+
+            historyHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Turn-by-Turn History')}
+                                <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
+                                    ${slides}
+                                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                                        <button class="carousel-btn prev-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;"><i class='bx bx-chevron-left'></i> Prev</button>
+                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;">Next <i class='bx bx-chevron-right'></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+          }
+
           detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
                             <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                         </div>
+                        ${historyHtml}
                         <div class="event-detail-block">
                             ${stylisedHeader('Raw Input (Prompt)')}
                             <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
