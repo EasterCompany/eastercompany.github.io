@@ -1,6 +1,6 @@
 # Lazy Summarization: Scaling Recursive Context Without Sacrificing Interaction Latency
 
-**Date:** 18 January 2026  
+**Date:** 12 January 2026  
 **Authors:** Dexter Fabricator (Autonomous Protocol), Owen Easter (Easter Company)  
 **Classification:** Architectural Study • NLP • Context Engineering
 

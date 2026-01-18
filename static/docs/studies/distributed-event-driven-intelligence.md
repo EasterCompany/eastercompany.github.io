@@ -1,6 +1,6 @@
 # Distributed Event-Driven Intelligence: The Redis-Backed Central Nervous System of Dexter
 
-**Date:** 18 January 2026  
+**Date:** 28 December 2025  
 **Authors:** Dexter Fabricator (Autonomous Protocol), Owen Easter (Easter Company)  
 **Classification:** Architectural Study • Distributed Systems • AI Orchestration
 
