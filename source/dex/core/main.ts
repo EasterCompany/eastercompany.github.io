@@ -108,6 +108,7 @@ function onReady() {
     const navMenuContainer = document.getElementById('dexter-menu-container');
     const navWindowSwitcher = document.getElementById('nav-window-switcher');
     const settingsIcon = document.getElementById('settings-icon');
+    const docsIcon = document.getElementById('docs-icon');
     const closeAllWindowsIcon = document.getElementById('close-all-windows');
     const isMobile = window.innerWidth < 880;
 
@@ -140,6 +141,7 @@ function onReady() {
 
       // Navbar Transformation
       if (navMenuContainer) navMenuContainer.style.display = isMobile ? 'flex' : 'none';
+      if (docsIcon) docsIcon.style.display = isMobile ? 'block' : 'none';
       if (settingsIcon) settingsIcon.style.display = isMobile ? 'block' : 'none';
 
       // Desktop-only Switcher logic
@@ -209,6 +211,7 @@ function onReady() {
 
       // Navbar Revert
       if (navMenuContainer) navMenuContainer.style.display = 'flex';
+      if (docsIcon) docsIcon.style.display = 'block';
       if (settingsIcon) settingsIcon.style.display = 'block';
       if (navWindowSwitcher) navWindowSwitcher.innerHTML = '';
     }
