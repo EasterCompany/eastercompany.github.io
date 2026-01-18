@@ -821,6 +821,26 @@ export async function updateProcessesTab(isSmoothMode = false) {
     courierResetBtn.dataset.listenerAttached = 'true';
   }
 
+  const imaginatorResetBtn = document.getElementById('imaginator-reset-btn');
+  if (imaginatorResetBtn && !imaginatorResetBtn.dataset.listenerAttached) {
+    imaginatorResetBtn.onclick = async () => {
+      imaginatorResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      try {
+        await smartFetch('/agent/reset?protocol=alert_review', { method: 'POST' });
+        setTimeout(() => {
+          imaginatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => {
+            imaginatorResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
+        }, 500);
+        updateProcessesTab(); // refresh immediately
+      } catch (e) {
+        imaginatorResetBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
+    };
+    imaginatorResetBtn.dataset.listenerAttached = 'true';
+  }
+
   const guardianStatus = await fetchGuardianStatus();
   if (guardianStatus && guardianStatus.agents) {
     const guardianData = guardianStatus.agents.guardian || { protocols: {} };
