@@ -42,7 +42,13 @@ export const getChoresContent = () => {
                         <option value="every_12h">Once per 12 Hours</option>
                         <option value="every_24h" selected>Once per Day</option>
                         <option value="every_168h">Once per Week</option>
+                        <option value="daily">Daily (Fixed Time)</option>
                     </select>
+                </div>
+
+                <div id="new-chore-time-group" class="task-input-group" style="display: none;">
+                    <label class="task-input-label">Scheduled Time</label>
+                    <input type="time" id="new-chore-time" class="task-form-input" value="08:00">
                 </div>
 
                 <div class="task-input-group" style="grid-column: span 2;">
@@ -99,6 +105,15 @@ export async function updateChoresTab() {
   const instructionInput = document.getElementById('new-chore-instruction') as HTMLInputElement;
   const urlInput = document.getElementById('new-chore-url') as HTMLInputElement;
   const scheduleInput = document.getElementById('new-chore-schedule') as HTMLSelectElement;
+  const timeInput = document.getElementById('new-chore-time') as HTMLInputElement;
+  const timeGroup = document.getElementById('new-chore-time-group');
+
+  if (scheduleInput && timeGroup && !scheduleInput.dataset.timeListenerAttached) {
+    scheduleInput.addEventListener('change', () => {
+      timeGroup.style.display = scheduleInput.value === 'daily' ? 'block' : 'none';
+    });
+    scheduleInput.dataset.timeListenerAttached = 'true';
+  }
 
   const formTitle = document.getElementById('form-title');
   const formIcon = document.getElementById('form-icon');
@@ -160,7 +175,11 @@ export async function updateChoresTab() {
 
       if (instructionInput) instructionInput.value = chore.natural_instruction;
       if (urlInput) urlInput.value = chore.execution_plan?.entry_url || '';
-      if (scheduleInput) scheduleInput.value = chore.schedule;
+      if (scheduleInput) {
+        scheduleInput.value = chore.schedule;
+        if (timeGroup) timeGroup.style.display = chore.schedule === 'daily' ? 'block' : 'none';
+      }
+      if (timeInput && chore.run_at) timeInput.value = chore.run_at;
 
       // Handle legacy single owner_id if recipients is empty
       selectedRecipients = chore.recipients || (chore.owner_id ? [chore.owner_id] : []);
@@ -299,7 +318,7 @@ export async function updateChoresTab() {
                                       <i class='bx bx-send' style="margin-right: -5px;"></i>
                                       ${recipientList}
                                     </div>
-                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}</span>
+                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}${chore.run_at ? ' @ ' + chore.run_at : ''}</span>
                                 </div>
                             </div>
                         </div>
@@ -400,6 +419,7 @@ export async function updateChoresTab() {
 
       const instruction = instructionInput?.value;
       const schedule = scheduleInput?.value || 'every_24h';
+      const runAt = schedule === 'daily' ? timeInput?.value : '';
 
       if (!instruction) return;
       if (selectedRecipients.length === 0) {
@@ -421,6 +441,7 @@ export async function updateChoresTab() {
             natural_instruction: instruction,
             entry_url: urlInput?.value,
             schedule: schedule,
+            run_at: runAt,
           }),
         });
         if (form) form.style.display = 'none';
