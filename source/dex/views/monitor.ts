@@ -749,7 +749,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     resetBtn.onclick = async () => {
       resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/guardian/reset?protocol=all', { method: 'POST' });
+        await smartFetch('/agent/reset?protocol=all', { method: 'POST' });
         setTimeout(() => {
           resetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -768,7 +768,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     analyzerResetBtn.onclick = async () => {
       analyzerResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/analyzer/reset?protocol=synthesis', { method: 'POST' });
+        await smartFetch('/agent/reset?protocol=synthesis', { method: 'POST' });
         setTimeout(() => {
           analyzerResetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -787,7 +787,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     fabricatorResetBtn.onclick = async () => {
       fabricatorResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/fabricator/reset?protocol=construction', { method: 'POST' });
+        await smartFetch('/agent/reset?protocol=construction', { method: 'POST' });
         setTimeout(() => {
           fabricatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
