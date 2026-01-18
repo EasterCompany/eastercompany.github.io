@@ -49,14 +49,13 @@ for md_file in "$STUDIES_DIR"/*.md; do
     cp "$TEMPLATE_FILE" "$target_dir/index.html"
     
     # Inject specific metadata
-    # We use a custom marker or just replace the generic ones injected by build.sh later
-    # Actually, we should replace the ones in the file RIGHT NOW so build.sh sees them as "standard"
-    
     sed -i "s|<title>.*</title>|<title>$title - Architectural Study</title>|g" "$target_dir/index.html"
-    sed -i "s|property=\"og:title\" content=\".*\"|property=\"og:title\" content=\"$$title\"|g" "$target_dir/index.html"
-    sed -i "s|name=\"description\" content=\".*\"|name=\"description\" content=\"$$description\"|g" "$target_dir/index.html"
-    sed -i "s|property=\"og:description\" content=\".*\"|property=\"og:description\" content=\"$$description\"|g" "$target_dir/index.html"
-    sed -i "s|name=\"twitter:description\" content=\".*\"|name=\"twitter:description\" content=\"$$description\"|g" "$target_dir/index.html"
+    sed -i "s|property=\"og:title\" content=\".*\"|property=\"og:title\" content=\"$title\"|g" "$target_dir/index.html"
+    sed -i "s|name=\"twitter:title\" content=\".*\"|name=\"twitter:title\" content=\"$title\"|g" "$target_dir/index.html"
+    sed -i "s|name=\"description\" content=\".*\"|name=\"description\" content=\"$description\"|g" "$target_dir/index.html"
+    sed -i "s|property=\"og:description\" content=\".*\"|property=\"og:description\" content=\"$description\"|g" "$target_dir/index.html"
+    sed -i "s|name=\"twitter:description\" content=\".*\"|name=\"twitter:description\" content=\"$description\"|g" "$target_dir/index.html"
+    sed -i "s|property=\"og:type\" content=\".*\"|property=\"og:type\" content=\"article\"|g" "$target_dir/index.html"
 
     # Add a data attribute to body to tell the JS to load this specific study instantly
     sed -i "s|<body class=\"dex-page\">|<body class=\"dex-page\" data-auto-load-study=\"$slug\">|g" "$target_dir/index.html"

@@ -88,6 +88,9 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
             fi
         fi
 
+        # Extract specialized description if it exists (for SEO)
+        specialized_desc=$(grep -oP '(?<=<meta name="description" content=")[^"]*' "$html_file" | head -n 1 || true)
+
         # Remove old tags (handling both > and /> endings)
         sed -i 's|<link rel="stylesheet" href="/dist/dex\..*\.css"[^>]*>||g' "$html_file"
         sed -i 's|<script src="/dist/dex\..*\.js" defer></script>||g' "$html_file"
@@ -102,7 +105,7 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         if [ -f "$TEMPLATES_DIR/head.html" ]; then
             # Create a temporary file with the injection, replacing title and canonical
             # Using index() for literal matches instead of ~ for regex to avoid escape issues
-            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" -v canonical="$canonical_url" -v build_hash="$HASH" -v current_date="$CURRENT_DATE" '
+            awk -v head_file="$TEMPLATES_DIR/head.html" -v title="$full_title" -v canonical="$canonical_url" -v build_hash="$HASH" -v current_date="$CURRENT_DATE" -v spec_desc="$specialized_desc" '
                 /<head>/ {
                     print
                     print "<!-- HEAD_START -->"
@@ -119,6 +122,10 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
                         } else if (index(line, "name=\"revised\"") > 0) {
                             # Update revised date
                             gsub(/content="[^"]*"/, "content=\"" current_date "\"", line)
+                            print line
+                        } else if (spec_desc != "" && (index(line, "name=\"description\"") > 0 || index(line, "property=\"og:description\"") > 0 || index(line, "name=\"twitter:description\"") > 0)) {
+                            # Use specialized description if provided
+                            gsub(/content="[^"]*"/, "content=\"" spec_desc "\"", line)
                             print line
                         } else {
                             print line
