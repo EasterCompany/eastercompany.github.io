@@ -66,6 +66,17 @@ export function getSettingsContent() {
                         <i class='bx bx-loader-alt spin'></i> Loading configuration...
                     </div>
                 </div>
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="settings-section">
+                <h2 class="settings-section-title">Cognitive Optimization</h2>
+                <div id="ollama-config-list" class="settings-list">
+                    <div style="padding: 20px; text-align: center; color: #666;">
+                        <i class='bx bx-loader-alt spin'></i> Loading optimization settings...
+                    </div>
+                </div>
             </div>`;
 }
 
@@ -108,8 +119,9 @@ export function attachSettingsListeners(settingsWindowInstance: WindowInstance) 
 }
 
 async function loadServiceConfig() {
-  const container = document.getElementById('service-config-list');
-  if (!container) return;
+  const serviceContainer = document.getElementById('service-config-list');
+  const ollamaContainer = document.getElementById('ollama-config-list');
+  if (!serviceContainer || !ollamaContainer) return;
 
   const publicMode = isPublicMode();
 
@@ -117,14 +129,11 @@ async function loadServiceConfig() {
     const response = await smartFetch('/system/options');
     const data = await response.json();
 
-    if (!data || Object.keys(data).length === 0) {
-      container.innerHTML = `<div style="padding: 20px; text-align: center; color: #666;">No configurable services found.</div>`;
-      return;
-    }
+    const services = data.services || {};
+    const ollama = data.ollama || {};
 
-    let html = '';
-
-    // Helper to generate toggle HTML
+    // 1. Render Services
+    let serviceHtml = '';
     const generateDeviceToggle = (label: string, serviceKey: string, currentDevice: string) => {
       const isCuda = currentDevice === 'cuda';
       const disabledAttr = publicMode ? 'disabled' : '';
@@ -141,55 +150,89 @@ async function loadServiceConfig() {
         </div>`;
     };
 
-    // STT Config
-    if (data.stt) {
-      const device = data.stt.device || 'cpu';
-      html += generateDeviceToggle('STT Service', 'stt', device);
+    if (services.stt)
+      serviceHtml += generateDeviceToggle('STT Service', 'stt', services.stt.device || 'cpu');
+    if (services.tts)
+      serviceHtml += generateDeviceToggle('TTS Service', 'tts', services.tts.device || 'cpu');
+
+    if (!serviceHtml) {
+      serviceHtml = `<div style="padding: 20px; text-align: center; color: #666;">No configurable services found.</div>`;
+    } else if (publicMode) {
+      serviceHtml += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Service configuration is read-only in public mode.</div>`;
     }
 
-    // TTS Config
-    if (data.tts) {
-      const device = data.tts.device || 'cpu';
-      html += generateDeviceToggle('TTS Service', 'tts', device);
-    }
+    serviceContainer.innerHTML = serviceHtml;
+
+    // 2. Render Ollama Optimization
+    let ollamaHtml = '';
+    const forceUtilityCPU = ollama.force_utility_cpu !== false;
+    const disabledAttr = publicMode ? 'disabled' : '';
+
+    ollamaHtml += `
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <span class="settings-item-label">Static Utility Placement</span>
+                <span class="settings-item-description">Force utility models (summary, engagement, router) to CPU to prevent GPU swapping.</span>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="ollama-force-cpu-toggle" ${forceUtilityCPU ? 'checked' : ''} ${disabledAttr}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>`;
 
     if (publicMode) {
-      html += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Configuration is read-only in public mode.</div>`;
+      ollamaHtml += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Optimization is read-only in public mode.</div>`;
+    } else {
+      ollamaHtml += `<div style="font-size: 0.7em; color: #ffa500; font-style: italic; margin-top: 10px; text-align: center;"><i class='bx bx-info-circle'></i> Changing these settings requires a 'dex build' to re-apply.</div>`;
     }
 
-    container.innerHTML = html;
+    ollamaContainer.innerHTML = ollamaHtml;
 
-    // Attach listeners (skip in public mode)
     if (publicMode) return;
 
-    container.querySelectorAll('.service-device-toggle').forEach((toggle) => {
+    // Attach listeners for services
+    serviceContainer.querySelectorAll('.service-device-toggle').forEach((toggle) => {
       toggle.addEventListener('change', async (e) => {
         const target = e.target as HTMLInputElement;
         const service = target.dataset.service;
         const value = target.checked ? 'cuda' : 'cpu';
-
-        // Disable while saving
         target.disabled = true;
-
         try {
           await smartFetch('/system/options', {
             method: 'POST',
-            body: JSON.stringify({
-              service: service,
-              key: 'device',
-              value: value,
-            }),
+            body: JSON.stringify({ service, key: 'device', value }),
           });
         } catch (err) {
-          console.error('Failed to update config', err);
-          target.checked = !target.checked; // Revert
+          target.checked = !target.checked;
           alert('Failed to update configuration.');
         } finally {
           target.disabled = false;
         }
       });
     });
+
+    // Attach listener for Ollama
+    const forceCpuToggle = document.getElementById('ollama-force-cpu-toggle') as HTMLInputElement;
+    if (forceCpuToggle) {
+      forceCpuToggle.addEventListener('change', async (e) => {
+        const target = e.target as HTMLInputElement;
+        const value = target.checked ? 'true' : 'false';
+        target.disabled = true;
+        try {
+          await smartFetch('/system/options', {
+            method: 'POST',
+            body: JSON.stringify({ service: 'ollama', key: 'force_utility_cpu', value }),
+          });
+        } catch (err) {
+          target.checked = !target.checked;
+          alert('Failed to update optimization settings.');
+        } finally {
+          target.disabled = false;
+        }
+      });
+    }
   } catch (err) {
-    container.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>`;
+    serviceContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>`;
+    ollamaContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load optimization settings.</div>`;
   }
 }
