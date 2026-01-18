@@ -39,6 +39,9 @@ echo "Bundling JavaScript..."
 echo "Bundling CSS..."
 "$ESBUILD_BIN" "$CSS_ENTRY_POINT" --bundle --minify --outfile="$CSS_OUTPUT_FILE" --loader:.woff=file --loader:.woff2=file --loader:.eot=file --loader:.ttf=file --loader:.svg=file
 
+# 4.5 Generate Study Pages
+"$ROOT_DIR/scripts/generate_studies.sh"
+
 # 5. Inject head content, script tag, and link tag into HTML files
 echo "Injecting head content and build tags into HTML files..."
 SCRIPT_TAG="<script src=\"/dist/dex.$HASH.js\" defer></script>"

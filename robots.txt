@@ -5,6 +5,7 @@ Allow: /dist/
 Allow: /site.webmanifest
 Allow: /contribute/
 Allow: /dexter/
+Allow: /chat-cognitive-loop/
 Allow: /docs/
 Allow: /
 
