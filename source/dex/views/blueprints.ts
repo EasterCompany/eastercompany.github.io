@@ -288,7 +288,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
         id: 'placeholder-empty',
         type: 'placeholder',
         message: 'No architectural blueprints generated yet.',
-        action: 'The Guardian will generate these when idle.',
+        action: 'The Imaginator will synthesize these during system idle periods.',
       });
     } else {
       allBlueprints.forEach((b: any) => displayList.push({ ...b, type: 'blueprint' }));
