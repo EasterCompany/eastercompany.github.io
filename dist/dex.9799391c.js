@@ -188,7 +188,7 @@
                         <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Source Alerts</h5>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             ${C.map(k=>`
-                                <a href="#" onclick="window.dexter.viewEvent('${k}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
+                                <a href="#" onclick="window.dexter.viewAlert('${k}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
                                     <i class='bx bx-link-external'></i> ${k.substring(0,8)}...
                                 </a>
                             `).join("")}

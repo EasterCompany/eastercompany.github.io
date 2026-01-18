@@ -146,7 +146,7 @@ export async function updateBlueprintsTab(forceReRender = false) {
                             ${sourceEventIDs
                               .map(
                                 (id: string) => `
-                                <a href="#" onclick="window.dexter.viewEvent('${id}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
+                                <a href="#" onclick="window.dexter.viewAlert('${id}'); return false;" style="color: #03dac6; text-decoration: none; font-size: 0.75em; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(3, 218, 198, 0.05); border: 1px solid rgba(3, 218, 198, 0.1); border-radius: 4px;">
                                     <i class='bx bx-link-external'></i> ${id.substring(0, 8)}...
                                 </a>
                             `
