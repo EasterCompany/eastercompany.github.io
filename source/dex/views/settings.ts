@@ -1,6 +1,6 @@
 // Settings Window Logic
 import { getCurrentTheme, setTheme, THEMES } from '../core/theme.ts';
-import { smartFetch } from '../core/utils.ts';
+import { smartFetch, isPublicMode } from '../core/utils.ts';
 import { WindowInstance } from '../core/Window.ts';
 
 export function getSettingsContent() {
@@ -111,6 +111,8 @@ async function loadServiceConfig() {
   const container = document.getElementById('service-config-list');
   if (!container) return;
 
+  const publicMode = isPublicMode();
+
   try {
     const response = await smartFetch('/system/options');
     const data = await response.json();
@@ -125,6 +127,7 @@ async function loadServiceConfig() {
     // Helper to generate toggle HTML
     const generateDeviceToggle = (label: string, serviceKey: string, currentDevice: string) => {
       const isCuda = currentDevice === 'cuda';
+      const disabledAttr = publicMode ? 'disabled' : '';
       return `
         <div class="settings-item">
             <div class="settings-item-info">
@@ -132,7 +135,7 @@ async function loadServiceConfig() {
                 <span class="settings-item-description">Enable GPU acceleration (CUDA)</span>
             </div>
             <label class="toggle-switch">
-                <input type="checkbox" class="service-device-toggle" data-service="${serviceKey}" ${isCuda ? 'checked' : ''}>
+                <input type="checkbox" class="service-device-toggle" data-service="${serviceKey}" ${isCuda ? 'checked' : ''} ${disabledAttr}>
                 <span class="toggle-slider"></span>
             </label>
         </div>`;
@@ -150,9 +153,15 @@ async function loadServiceConfig() {
       html += generateDeviceToggle('TTS Service', 'tts', device);
     }
 
+    if (publicMode) {
+      html += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Configuration is read-only in public mode.</div>`;
+    }
+
     container.innerHTML = html;
 
-    // Attach listeners
+    // Attach listeners (skip in public mode)
+    if (publicMode) return;
+
     container.querySelectorAll('.service-device-toggle').forEach((toggle) => {
       toggle.addEventListener('change', async (e) => {
         const target = e.target as HTMLInputElement;

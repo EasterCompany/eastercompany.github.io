@@ -437,6 +437,11 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.monitor), { status: 200 });
     }
 
+    // 1b. System Options
+    if (endpoint.startsWith('/system/options')) {
+      return new Response(JSON.stringify(DASHBOARD_CACHE.options || {}), { status: 200 });
+    }
+
     // 2. Processes
     if (endpoint.startsWith('/processes')) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.processes), { status: 200 });
