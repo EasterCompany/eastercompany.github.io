@@ -199,6 +199,7 @@ export async function updateEventsTimeline(forceReRender = false) {
       const isExpandable =
         type === 'engagement.decision' ||
         type === 'messaging.bot.sent_message' ||
+        type === 'messaging.bot.voice_response' ||
         type === 'messaging.user.sent_message' ||
         type === 'moderation.explicit_content.deleted' ||
         type === 'analysis.link.completed' ||
@@ -313,6 +314,35 @@ export async function updateEventsTimeline(forceReRender = false) {
           const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
 
+          let embedHtml = '';
+          if (eventData.embed) {
+            const e = eventData.embed;
+            const title = e.title
+              ? `<div style="font-weight: bold; margin-bottom: 5px; color: #fff;">${escapeHtml(e.title)}</div>`
+              : '';
+            const desc = e.description
+              ? `<div style="font-size: 0.9em; color: #bbb; white-space: pre-wrap;">${renderMarkdown(e.description)}</div>`
+              : '';
+            const fields = (e.fields || [])
+              .map(
+                (f: any) => `
+              <div style="margin-top: 10px;">
+                <div style="font-size: 0.7em; text-transform: uppercase; color: #666; letter-spacing: 1px;">${escapeHtml(f.name)}</div>
+                <div style="font-size: 0.85em; color: #eee; white-space: pre-wrap;">${renderMarkdown(f.value)}</div>
+              </div>
+            `
+              )
+              .join('');
+
+            embedHtml = `
+              <div class="discord-embed" style="margin-top: 15px; padding: 12px; border-left: 4px solid ${e.color ? '#' + e.color.toString(16).padStart(6, '0') : '#bb86fc'}; background: rgba(255,255,255,0.02); border-radius: 0 4px 4px 0;">
+                ${title}
+                ${desc}
+                ${fields}
+              </div>
+            `;
+          }
+
           let metricsHtml = '';
           if (eventData.eval_count) {
             metricsHtml = `
@@ -380,6 +410,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <span class="detail-label">Response Model:</span>
                             <span class="detail-value">${eventData.response_model || 'N/A'}</span>
                         </div>
+                        ${embedHtml}
                         ${
                           historyHtml ||
                           `
@@ -393,6 +424,24 @@ export async function updateEventsTimeline(forceReRender = false) {
                             </div>
                         `
                         }
+                    `;
+        } else if (type === 'messaging.bot.voice_response') {
+          const stylisedHeader = (text: string) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+
+          detailsContent = `
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
+                            <span class="detail-label">Response Model:</span>
+                            <span class="detail-value">${eventData.response_model || 'N/A'}</span>
+                        </div>
+                        <div class="event-detail-block">
+                            ${stylisedHeader('Raw Input (Prompt)')}
+                            <pre class="detail-pre">${eventData.raw_input || 'None'}</pre>
+                        </div>
+                        <div class="event-detail-block">
+                            ${stylisedHeader('Raw Response Output')}
+                            <pre class="detail-pre">${eventData.response_raw || 'None'}</pre>
+                        </div>
                     `;
         } else if (type === 'analysis.user.message_signals') {
           const stylisedHeader = (text: string) =>
