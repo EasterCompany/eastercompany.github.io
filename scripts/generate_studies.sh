@@ -31,14 +31,18 @@ for md_file in $(ls "$STUDIES_DIR"/*.md | sort -r); do
     date_str=$(grep "**Date:**" "$md_file" | head -n 1 | sed 's/\*\*Date:\*\* //')
     if [ -z "$date_str" ]; then date_str="Jan 18, 2026"; fi
 
-    # Extract Description (Abstract or first long paragraph) for SEO
-    description=$(sed -n '/## Abstract/,/##/p' "$md_file" | grep -v "##" | tr '\n' ' ' | sed 's/  */ /g' | cut -c1-160)
+    # Extract Description (Abstract or first long paragraph)
+description=$(sed -n '/## Abstract/,/##/p' "$md_file" | grep -v "##" | tr '\n' ' ' | sed 's/  */ /g' | cut -c1-160)
     if [ -z "$description" ]; then
         description=$(grep -v "^#" "$md_file" | grep -v "^---" | grep -v "^**" | grep "[a-zA-Z]" | head -n 1 | cut -c1-160)
     fi
-    description=$(echo "$description" | sed 's/"/\\"/g' | sed 's/^[ \t]*//;s/[ \t]*$//')
+    # Clean whitespace
+    description=$(echo "$description" | sed 's/^[ 	]*//;s/[ 	]*$//')
 
-    # Extract Short Summary for the Card
+    # SEO Description (escape quotes for meta tags using standard HTML entity)
+    seo_description=$(echo "$description" | sed 's/"/\&quot;/g')
+
+    # Extract Short Summary for the Card (using unescaped description for UI)
     summary=$(echo "$description" | cut -c1-120)
     if [ ${#description} -gt 120 ]; then summary="$summary..."; fi
 
@@ -59,7 +63,7 @@ EOF
     
     # Inject temporary SEO metadata tags for build.sh to pick up
     sed -i "1i <meta name=\"dex-seo-title\" content=\"$title\">" "$target_dir/index.html"
-    sed -i "2i <meta name=\"dex-seo-description\" content=\"$description\">" "$target_dir/index.html"
+    sed -i "2i <meta name=\"dex-seo-description\" content=\"$seo_description\">" "$target_dir/index.html"
 
     # Add a data attribute to body to tell the JS to load this specific study instantly
     sed -i "s|<body class=\"dex-page\">|<body class=\"dex-page\" data-auto-load-study=\"$slug\">|g" "$target_dir/index.html"
