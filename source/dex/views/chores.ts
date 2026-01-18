@@ -165,6 +165,13 @@ export async function updateChoresTab() {
     }
 
     selectedRecipientsContainer.innerHTML = selectedRecipients
+      .sort((a, b) => {
+        const aIsChannel = a.startsWith('channel:');
+        const bIsChannel = b.startsWith('channel:');
+        if (aIsChannel && !bIsChannel) return -1;
+        if (!aIsChannel && bIsChannel) return 1;
+        return 0;
+      })
       .map((id) => {
         const name = recipientMap[id] || id;
         const isChannel = id.startsWith('channel:');
@@ -351,7 +358,15 @@ export async function updateChoresTab() {
         const memoryCount = chore.memory ? chore.memory.length : 0;
         const statusColor = chore.status === 'active' ? '#03dac6' : '#666';
 
-        const recipients = chore.recipients || (chore.owner_id ? [chore.owner_id] : []);
+        const recipients = (chore.recipients || (chore.owner_id ? [chore.owner_id] : [])).sort(
+          (a: string, b: string) => {
+            const aIsChannel = a.startsWith('channel:');
+            const bIsChannel = b.startsWith('channel:');
+            if (aIsChannel && !bIsChannel) return -1;
+            if (!aIsChannel && bIsChannel) return 1;
+            return 0;
+          }
+        );
         const recipientList = recipients
           .map((r: string) => {
             const name = recipientMap[r] || r.substring(0, 8);
