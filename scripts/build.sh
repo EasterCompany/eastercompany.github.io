@@ -150,6 +150,12 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         
         # Remove temporary SEO tags
         sed -i '/<meta name="dex-seo-/d' "$html_file"
+
+        # If this is docs/index.html, inject the studies grid
+        if [[ "$html_file" == *"/docs/index.html" ]] && [ -f "$TEMPLATES_DIR/studies_grid.html" ]; then
+            sed -i '/<!-- STUDIES_GRID_START -->/,/<!-- STUDIES_GRID_END -->/{ /<!-- STUDIES_GRID_START -->/!{ /<!-- STUDIES_GRID_END -->/!d; }; }' "$html_file"
+            sed -i "/<!-- STUDIES_GRID_START -->/r $TEMPLATES_DIR/studies_grid.html" "$html_file"
+        fi
         
         # Global replace for any other params in the body (scripts/links)
         sed -i -E "s/(last_updated|last_build)=[a-zA-Z0-9\-]*/last_build=$HASH/g" "$html_file"
