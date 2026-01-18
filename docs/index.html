@@ -27,7 +27,7 @@
 <meta property="og:type" content="website" />
 <meta
   property="og:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=b268b5d4"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=deb24c1c"
 />
 <meta property="fb:app_id" content="1541540286236316" />
 
@@ -40,7 +40,7 @@
 />
 <meta
   name="twitter:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=b268b5d4"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=deb24c1c"
 />
 <meta name="twitter:site" content="@eastercompany" />
 <meta name="twitter:creator" content="@eastercompany" />
@@ -49,17 +49,17 @@
 <link
   rel="icon"
   type="image/png"
-  href="/static/meta/favicon-96x96.png?last_build=b268b5d4"
+  href="/static/meta/favicon-96x96.png?last_build=deb24c1c"
   sizes="96x96"
 />
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=b268b5d4" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=b268b5d4" />
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=deb24c1c" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=deb24c1c" />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/meta/apple-touch-icon.png?last_build=b268b5d4"
+  href="/static/meta/apple-touch-icon.png?last_build=deb24c1c"
 />
-<link rel="manifest" href="/site.webmanifest?last_build=b268b5d4" />
+<link rel="manifest" href="/site.webmanifest?last_build=deb24c1c" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/docs">
@@ -275,7 +275,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
     </style>
-  <link rel="stylesheet" href="/dist/dex.b268b5d4.css"></head>
+  <link rel="stylesheet" href="/dist/dex.deb24c1c.css"></head>
   <body class="dex-page">
     <main id="main">
       <div class="docs-container">
@@ -318,6 +318,7 @@
     </main>
 
     <script>
+      // Simple Markdown Renderer
       function renderMarkdown(text) {
         if (!text) return '';
         let html = text
@@ -325,14 +326,23 @@
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;');
 
+        // Multiline Code
         html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+        // Inline Code
         html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+        // Bold
         html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        
+        // List items (Improved: handle both - and * with indentation support)
+        html = html.replace(/^[\s]*[\-\*][\s]+(.*$)/gm, '<li>$1</li>');
+
+        // Italic (Improved: non-greedy and avoid matching across multiple lines or list markers)
+        html = html.replace(/\*([^* \n][^*\n]*)\*/g, '<em>$1</em>');
+
+        // Headers
         html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
         html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
         html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-        html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
         
         const lines = html.split('\n\n');
         html = lines.map(p => {
@@ -375,5 +385,5 @@
       });
     </script>
     
-  <script src="/dist/dex.b268b5d4.js" defer></script></body>
+  <script src="/dist/dex.deb24c1c.js" defer></script></body>
 </html>
