@@ -44,6 +44,8 @@ export const EVENT_TEMPLATES: Record<string, string> = {
   'system.roadmap.updated': 'Roadmap item {id} changed to {state}',
   'system.process.registered': 'Process {id} started: {state}',
   'system.process.unregistered': 'Process {id} completed',
+  'system.cognitive.model_load': 'Model Loaded: {model} ({method})',
+  'system.cognitive.model_unload': 'Model Unloaded: {model} ({reason})',
 };
 
 export function formatEventSummary(type: string, data: any): string {
