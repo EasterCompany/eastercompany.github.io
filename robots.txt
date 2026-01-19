@@ -9,6 +9,7 @@ Allow: /chat-cognitive-loop/
 Allow: /deterministic-vram-harmony/
 Allow: /distributed-event-driven-intelligence/
 Allow: /dynamic-vram-orchestration/
+Allow: /empirical-validation-of-asynchronous-multi-modal-orchestration/
 Allow: /high-fidelity-audio-pipelines/
 Allow: /docs/
 Allow: /lazy-summarization/
