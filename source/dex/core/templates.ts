@@ -81,8 +81,19 @@ export function formatEventSummary(type: string, data: any): string {
   }
   if (!template) return type;
   let summary = template.replace(/\{(\w+)\}/g, (match: string, key: string) => {
-    return data[key] !== undefined && data[key] !== null ? data[key] : match;
+    if (data[key] !== undefined && data[key] !== null) {
+      return data[key];
+    }
+    // For optional fields in parentheses, return empty string to avoid "{reason}" etc.
+    if (key === 'reason' || key === 'method' || key === 'details' || key === 'args') {
+      return '';
+    }
+    return match;
   });
+
+  // Clean up empty parentheses like " ()" that might result from missing optional fields
+  summary = summary.replace(/\s\(\)\s*/g, ' ').trim();
+
   if (
     (type === 'messaging.user.transcribed' || type === 'voice_transcribed') &&
     data.detected_language &&
