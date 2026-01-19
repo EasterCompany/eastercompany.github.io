@@ -1,4 +1,4 @@
-import { ansiToHtml } from '../core/utils.ts';
+import { ansiToHtml, shouldLockScroll } from '../core/utils.ts';
 
 interface CliCommand {
   id: string;
@@ -646,7 +646,9 @@ function openTerminal(cmdInfo: CliCommand) {
 function closeTerminal() {
   const overlay = document.getElementById('cli-terminal-overlay');
   if (overlay) overlay.classList.remove('active');
-  document.body.style.overflow = '';
+  if (!shouldLockScroll()) {
+    document.body.style.overflow = '';
+  }
   terminalActive = false;
 }
 

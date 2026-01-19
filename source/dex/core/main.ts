@@ -29,7 +29,7 @@ import { getSettingsContent, attachSettingsListeners } from '../views/settings.t
 import { updateLogs } from '../views/logs.ts';
 import { getWebContent, updateWebTab } from '../views/web.ts';
 import { initCliDashboard } from '../views/cli.ts';
-import { updateGlobalBadgeCount, smartFetch, isPublicMode } from './utils.ts';
+import { updateGlobalBadgeCount, smartFetch, isPublicMode, shouldLockScroll } from './utils.ts';
 
 declare global {
   interface Window {
@@ -201,7 +201,9 @@ function onReady() {
         '1',
         'important'
       );
-      document.body.style.overflow = '';
+      if (!shouldLockScroll()) {
+        document.body.style.overflow = '';
+      }
 
       if (isRoot || isErrorPage) {
         footer?.classList.remove('hide');
@@ -472,13 +474,14 @@ function onReady() {
                 'important'
               );
               navEl?.classList.remove('window-open');
-              updateNavbarState(false);
+              if (!shouldLockScroll()) {
+                updateNavbarState(false);
+              }
             }
           }
         }
       };
     }
-
     if (settingsIcon) {
       settingsIcon.onclick = (e) => {
         e.stopPropagation();
@@ -533,7 +536,9 @@ function onReady() {
               'important'
             );
             document.querySelector('nav')?.classList.remove('window-open');
-            updateNavbarState(false);
+            if (!shouldLockScroll()) {
+              updateNavbarState(false);
+            }
           }
           return;
         }
@@ -574,7 +579,9 @@ function onReady() {
               'important'
             );
             document.querySelector('nav')?.classList.remove('window-open');
-            updateNavbarState(false);
+            if (!shouldLockScroll()) {
+              updateNavbarState(false);
+            }
           }
         }
       }

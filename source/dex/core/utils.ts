@@ -276,6 +276,23 @@ export function renderMarkdown(text: string): string | null | undefined {
   return html;
 }
 
+/**
+ * Checks if the body scroll should be locked based on active windows or overlays.
+ */
+export function shouldLockScroll(): boolean {
+  // Check for active windows in the container
+  const container = document.getElementById('windows-container');
+  const windowCount = container ? parseInt(container.getAttribute('data-count') || '0') : 0;
+
+  // Check for active profile overlays
+  const profileOverlay = document.querySelector('.profile-overlay.active');
+
+  // Check for active CLI terminal overlay
+  const cliOverlay = document.querySelector('#cli-terminal-overlay.active');
+
+  return windowCount > 0 || !!profileOverlay || !!cliOverlay;
+}
+
 const UPSTASH_URL = 'https://sterling-javelin-12539.upstash.io';
 const UPSTASH_TOKEN = 'AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw'; // Read Only
 

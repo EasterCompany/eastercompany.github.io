@@ -1,4 +1,4 @@
-import { escapeHtml, smartDiscordFetch } from '../core/utils.ts';
+import { escapeHtml, smartDiscordFetch, shouldLockScroll } from '../core/utils.ts';
 
 // --- CSS Styles for the Profile Modal ---
 const PROFILE_STYLES = `
@@ -461,7 +461,9 @@ export function showUserProfile(user: any) {
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.classList.remove('active');
-      document.body.style.overflow = '';
+      if (!shouldLockScroll()) {
+        document.body.style.overflow = '';
+      }
       setTimeout(() => overlay.remove(), 300);
     }
   });
@@ -791,7 +793,9 @@ function renderProfileContent(overlay: HTMLElement, user: any, data: any) {
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
       overlay.classList.remove('active');
-      document.body.style.overflow = '';
+      if (!shouldLockScroll()) {
+        document.body.style.overflow = '';
+      }
       setTimeout(() => overlay.remove(), 300);
     });
   }
