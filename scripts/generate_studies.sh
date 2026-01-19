@@ -110,7 +110,8 @@ while IFS='|' read -r timestamp filename; do
     if [ $((current_item % items_per_page)) -eq 0 ] || [ $current_item -eq $count ]; then
         
         # Generate Pagination Controls
-        pagination_html="<div class=\"pagination\" style=\"display: flex; justify-content: center; gap: 20px; margin-top: 40px;\">"
+        # We use grid-column: 1 / -1 to make it span the full width of the grid container
+        pagination_html="<div class=\"pagination\" style=\"grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 40px; width: 100%;\">"
         
         # Prev Link
         if [ $current_page -gt 1 ]; then
@@ -118,13 +119,20 @@ while IFS='|' read -r timestamp filename; do
             link="/docs/page/$prev_page/"
             if [ $prev_page -eq 1 ]; then link="/docs/"; fi
             pagination_html="${pagination_html}<a href=\"$link\" class=\"btn-pagination\">&larr; Newer</a>"
+        else
+            pagination_html="${pagination_html}<span class=\"btn-pagination disabled\" style=\"opacity: 0.5; cursor: not-allowed;\">&larr; Newer</span>"
         fi
+        
+        # Page Indicator
+        pagination_html="${pagination_html}<span class=\"page-indicator\" style=\"color: #888; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;\">Page $current_page of $total_pages</span>"
         
         # Next Link
         if [ $current_page -lt $total_pages ]; then
             next_page=$((current_page + 1))
             link="/docs/page/$next_page/"
             pagination_html="${pagination_html}<a href=\"$link\" class=\"btn-pagination\">Older &rarr;</a>"
+        else
+            pagination_html="${pagination_html}<span class=\"btn-pagination disabled\" style=\"opacity: 0.5; cursor: not-allowed;\">Older &rarr;</span>"
         fi
         
         pagination_html="${pagination_html}</div>"
