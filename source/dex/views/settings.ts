@@ -129,8 +129,13 @@ async function loadServiceConfig() {
     const response = await smartFetch('/system/options');
     const data = await response.json();
 
-    const services = data.services || {};
-    const ollama = data.ollama || {};
+    // In local mode, data is the raw options.json structure.
+    // In public mode (snapshot), data is the 'options' field from the snapshot.
+    // The snapshot logic GetSystemOptionsSnapshot() now returns { services: ..., ollama: ... }
+    // but legacy local API might return them flat or nested.
+    // We normalize here.
+    const services = data.services || data || {};
+    const ollama = data.ollama || data || {};
 
     // 1. Render Services
     let serviceHtml = '';
@@ -198,7 +203,7 @@ async function loadServiceConfig() {
     if (publicMode) {
       ollamaHtml += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Optimization is read-only in public mode.</div>`;
     } else {
-      ollamaHtml += `<div style="font-size: 0.7em; color: #ffa500; font-style: italic; margin-top: 10px; text-align: center;"><i class='bx bx-info-circle'></i> Changing these settings requires a 'dex build' to re-apply.</div>`;
+      ollamaHtml += `<div style="font-size: 0.7em; color: #ffa500; font-style: italic; margin-top: 10px; text-align: center;"><i class='bx bx-info-circle'></i> Changing these settings requires a 'dex restart' to re-apply.</div>`;
     }
 
     ollamaContainer.innerHTML = ollamaHtml;
