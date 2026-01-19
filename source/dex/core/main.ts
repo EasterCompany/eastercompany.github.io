@@ -545,6 +545,13 @@ function onReady() {
           const isRoot = path === '/' || path === '/index.html';
           if (!isRoot) {
             const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+
+            // Special handling for paginated docs pages to act as "one page"
+            if (cleanPath.includes('/docs/page/')) {
+              window.location.href = '/';
+              return;
+            }
+
             const parts = cleanPath.split('/');
             parts.pop();
             const parentPath = parts.join('/') || '/';
