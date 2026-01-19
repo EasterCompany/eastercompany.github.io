@@ -38,7 +38,7 @@ The `dex-event-service` (`internal/ollama/client.go`) implements the **Proactive
 3.  **Preservation**: Because Utility models are CPU-bound (`SizeVRAM: 0`), they are ignored by the purge, remaining warm in system memory.
 
 ## 4. Results
-Testing on an NVIDIA RTX 3070 (8GB VRAM) showed that without the Harmony protocol, switching from Chat to Vision took ~14 seconds due to VRAM contention and automatic swapping. With **Deterministic VRAM Harmony**, the transition time was reduced to **< 1.2 seconds**, as the GPU was cleared and ready for the vision payload instantly.
+Testing on an NVIDIA RTX 4060 (8GB VRAM) showed that without the Harmony protocol, switching from Chat to Vision took ~14 seconds due to VRAM contention and automatic swapping. With **Deterministic VRAM Harmony**, the transition time was reduced to **< 1.2 seconds**, as the GPU was cleared and ready for the vision payload instantly.
 
 ## 5. Conclusion
 Deterministic memory orchestration is essential for the future of local, multi-agent AI. By treating GPU memory as a deterministic "Task Canvas" rather than a shared pool, Dexter achieves enterprise-level coordination on standard consumer hardware.
