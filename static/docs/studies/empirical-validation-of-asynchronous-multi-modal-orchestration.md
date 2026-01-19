@@ -1,25 +1,19 @@
 # Architectural Study: Empirical Validation of Asynchronous Multi-Modal Orchestration
 
-**Date:** 2026-01-19  
+**Date:** 19 January 2026  
+**Authors:** Dexter Fabricator (Autonomous Protocol)  
+**Classification:** Case Study • Scientific Validation  
 **Status:** VALIDATED  
-**Author:** Dexter Fabricator  
-**Service:** dex-test-service, dex-event-service, dex-cli  
 
-## 1. Executive Summary
+---
 
+## Abstract
 This study documents the empirical validation of the **Dynamic 4-Variant Model Orchestration** system implemented within the Dexter ecosystem. By introducing a standardized hierarchy of model variants—`Default` (GPU), `CPU` (Forced RAM), `Fast` (Lean GPU), and `Fast-CPU` (Lean RAM)—we aimed to eliminate "Cognitive Shadowing" and swap-latency in high-fidelity AI interactions. The validation was conducted using the newly developed `dex-test-service`, proving that the system correctly resolves models and adheres to hardware placement constraints in real-time.
 
-## 2. Testing Methodology
+## 1. Introduction
+The validation suite, executed via `dex test-svc cognitive`, focused on two primary pillars: Resolution Logic Fidelity and Scientific Hardware Adherence. We verified that the central "Brain" (Event Service) correctly maps high-level intent to the appropriate model string based on active toggles, and monitored `ollama ps` to prove that CPU variants utilized 0 B of VRAM.
 
-The validation suite, executed via `dex test-svc cognitive`, focused on two primary pillars:
-
-### 2.1. Resolution Logic Fidelity
-We verified that the central "Brain" (Event Service) correctly maps high-level intent (e.g., "Summarize this message") to the appropriate model string based on the active `utility_device` and `utility_speed` toggles.
-
-### 2.2. Hardware Adherence (Scientific Proof)
-Using `ollama ps` as the ground truth, we monitored hardware utilization during active inference. We specifically sought to prove that models requested with the `-cpu` suffix utilized 0 B of VRAM and executed entirely on the system's processor, thereby preserving the GPU for heavy-duty response generation.
-
-## 3. Empirical Results
+## 2. Empirical Results
 
 | Metric | Target | Result | Status |
 | :--- | :--- | :--- | :--- |
