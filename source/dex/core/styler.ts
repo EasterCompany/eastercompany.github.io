@@ -5,11 +5,8 @@ export function applyBaseStyles(): void {
   if (!document.querySelector('.grid-overlay')) {
     const grid = document.createElement('div');
     grid.className = 'grid-overlay';
-    document.body.appendChild(grid);
+    document.body.prepend(grid); // Prepend to be behind content
   }
-  console.log(
-    'Applying base styles dynamically (e.g., for background animation or theme toggles).'
-  );
 }
 
 /**
