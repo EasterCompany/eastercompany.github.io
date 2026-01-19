@@ -434,121 +434,6 @@ const PROFILE_STYLES = `
     }
 `;
 
-// --- Mock Data Generator (Fallback) ---
-function getMockData(userId: string, username: string) {
-  const isMaster = userId === '313071000877137920';
-
-  const base = isMaster
-    ? {
-        techLevel: 11,
-        commStyle: 'Direct / Efficient',
-        patience: 'Infinite',
-        vibe: 'Architect',
-        facts: [
-          { k: 'Role', v: 'Creator' },
-          { k: 'Lang', v: 'Go' },
-          { k: 'OS', v: 'Linux' },
-          { k: 'Editor', v: 'Neovim' },
-        ],
-        badges: ['Creator', 'Admin', 'Architect'],
-        stats: { msgs: 14052, tokens: '45.2M', lastSeen: 'Now' },
-        topics: [
-          { name: 'System Architecture', val: 85 },
-          { name: 'Code Review', val: 60 },
-          { name: 'Music / Vibes', val: 30 },
-          { name: 'Debugging', val: 45 },
-        ],
-        traits: {
-          openness: 95,
-          conscientiousness: 90,
-          extraversion: 40,
-          agreeableness: 60,
-          neuroticism: 15,
-        },
-        dossier: {
-          identity: {
-            fullName: 'Owen Easter',
-            ageRange: '25-30',
-            gender: 'Male',
-            location: 'United Kingdom',
-            sexuality: 'Heterosexual',
-            relationship: 'Single',
-          },
-          career: {
-            jobTitle: 'Founder / Systems Architect',
-            company: 'Easter Company',
-            skills: ['Go', 'Distributed Systems', 'AI Integration'],
-          },
-          personal: {
-            hobbies: ['Synthwave Production', 'Coding', 'Gaming'],
-            habits: ['Late Night Coding', 'Coffee Consumption', 'System Optimization'],
-            vices: ['Perfectionism'],
-            virtues: ['Efficiency', 'Vision'],
-          },
-          social: [
-            { name: 'Dexter', relation: 'Creation / AI', trust: '100%' },
-            { name: 'Sarah', relation: 'Close Friend', trust: '95%' },
-            { name: 'Mike', relation: 'Developer Peer', trust: '88%' },
-          ],
-        },
-      }
-    : {
-        // Random generation for others
-        techLevel: [2, 4, 6, 8, 3, 5][Math.floor(Math.random() * 6)],
-        commStyle: ['Verbose', 'Casual', 'Formal', 'Chaotic', 'Inquisitive'][
-          Math.floor(Math.random() * 5)
-        ],
-        patience: Math.random() > 0.5 ? 'High' : 'Medium',
-        vibe: ['NPC', 'Guest', 'Lurker', 'Regular', 'Fan'][Math.floor(Math.random() * 5)],
-        facts: [
-          { k: 'Role', v: 'User' },
-          { k: 'Interest', v: Math.random() > 0.5 ? 'Coding' : 'Gaming' },
-        ],
-        badges: ['User'],
-        stats: {
-          msgs: Math.floor(Math.random() * 500),
-          tokens: Math.floor(Math.random() * 100) + 'K',
-          lastSeen: Math.floor(Math.random() * 24) + 'h ago',
-        },
-        topics: [
-          { name: 'General Chat', val: 80 },
-          { name: 'Troubleshooting', val: 40 },
-          { name: 'Off-Topic', val: 20 },
-        ],
-        traits: {
-          openness: Math.floor(Math.random() * 100),
-          conscientiousness: Math.floor(Math.random() * 100),
-          extraversion: Math.floor(Math.random() * 100),
-          agreeableness: Math.floor(Math.random() * 100),
-          neuroticism: Math.floor(Math.random() * 100),
-        },
-        dossier: {
-          identity: {
-            fullName: 'Unknown Subject',
-            ageRange: 'Unknown',
-            gender: 'Unknown',
-            location: 'Global',
-            sexuality: 'Unknown',
-            relationship: 'Unknown',
-          },
-          career: {
-            jobTitle: 'Unknown',
-            company: 'Unknown',
-            skills: ['General User'],
-          },
-          personal: {
-            hobbies: ['Lurking', 'Chatting'],
-            habits: ['Unknown'],
-            vices: ['None Observed'],
-            virtues: ['None Observed'],
-          },
-          social: [],
-        },
-      };
-
-  return { ...base, id: userId, username };
-}
-
 // --- Main Function ---
 export function showUserProfile(user: any) {
   // 1. Inject Styles if missing
@@ -585,6 +470,25 @@ export function showUserProfile(user: any) {
   requestAnimationFrame(() => overlay.classList.add('active'));
   document.body.style.overflow = 'hidden';
 
+  const showError = (msg: string) => {
+    overlay.innerHTML = `
+        <div class="profile-card" style="height: 200px; justify-content: center; align-items: center; color: #cf6679; border-color: #cf6679;">
+            <div style="text-align: center;">
+                <i class='bx bx-error' style="font-size: 3em; margin-bottom: 10px;"></i>
+                <div style="font-family: 'JetBrains Mono'; text-transform: uppercase;">${msg}</div>
+            </div>
+            <button class="close-profile-btn" style="color: #cf6679;" onclick="document.querySelector('.profile-overlay').click()"><i class='bx bx-x'></i></button>
+        </div>
+    `;
+    // Re-attach close logic for the button since we replaced innerHTML
+    const closeBtn = overlay.querySelector('.close-profile-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        overlay.click();
+      });
+    }
+  };
+
   // 3. Fetch Data
   smartDiscordFetch(`/profile/${user.id}`)
     .then(async (res) => {
@@ -592,16 +496,13 @@ export function showUserProfile(user: any) {
         const data = await res.json();
         renderProfileContent(overlay, user, data);
       } else {
-        // Fallback to mock if not found (404)
-        console.log('Profile not found or error, using mock data.');
-        const mock = getMockData(user.id, user.username);
-        renderProfileContent(overlay, user, mock);
+        console.log('Profile not found (404) or error.');
+        showError('Profile Data Unavailable');
       }
     })
     .catch((err) => {
       console.error('Profile fetch error:', err);
-      const mock = getMockData(user.id, user.username);
-      renderProfileContent(overlay, user, mock);
+      showError('Connection Failed');
     });
 }
 
@@ -805,23 +706,6 @@ function renderProfileContent(overlay: HTMLElement, user: any, data: any) {
             `
               )
               .join('')}
-        </div>
-        <div style="margin-top: 40px;">
-            <div class="profile-section-title"><i class='bx bx-message-square-detail'></i> Sentiment History</div>
-            <div style="height: 100px; border-bottom: 1px solid #333; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 5px;">
-                ${Array.from({ length: 40 })
-                  .map(() => {
-                    const h = Math.floor(Math.random() * 80) + 10;
-                    const c =
-                      Math.random() > 0.7 ? '#cf6679' : Math.random() > 0.5 ? '#03dac6' : '#444';
-                    return `<div style="flex: 1; background: ${c}; height: ${h}%; border-radius: 2px;"></div>`;
-                  })
-                  .join('')}
-            </div>
-            <div style="font-family: monospace; color: #666; font-size: 0.7em; margin-top: 5px; display: flex; justify-content: space-between;">
-                <span>30 Days Ago</span>
-                <span>Today</span>
-            </div>
         </div>
     `;
   };
