@@ -103,6 +103,38 @@ input:disabled + .toggle-slider {
   cursor: not-allowed;
 }
 
+.settings-control {
+  display: flex;
+  align-items: center;
+}
+
+.settings-select {
+  background: #1a1a1a;
+  color: #eee;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9em;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.settings-select:hover:not(:disabled) {
+  border-color: #bb86fc;
+}
+
+.settings-select:focus {
+  border-color: #bb86fc;
+  box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.2);
+}
+
+.settings-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Theme Preview Overrides */
 .theme-preview {
   background: #111;

@@ -165,19 +165,34 @@ async function loadServiceConfig() {
 
     // 2. Render Ollama Optimization
     let ollamaHtml = '';
-    const forceUtilityCPU = ollama.force_utility_cpu !== false;
+    const utilityDevice = ollama.utility_device || 'cpu';
+    const utilitySpeed = ollama.utility_speed || 'smart';
     const disabledAttr = publicMode ? 'disabled' : '';
 
     ollamaHtml += `
         <div class="settings-item">
             <div class="settings-item-info">
-                <span class="settings-item-label">Static Utility Placement</span>
-                <span class="settings-item-description">Force utility models (summary, engagement, router) to CPU to prevent GPU swapping.</span>
+                <span class="settings-item-label">Utility Hardware</span>
+                <span class="settings-item-description">Force utilities (summary, engagement, etc) to specific hardware.</span>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox" id="ollama-force-cpu-toggle" ${forceUtilityCPU ? 'checked' : ''} ${disabledAttr}>
-                <span class="toggle-slider"></span>
-            </label>
+            <div class="settings-control">
+                <select id="ollama-utility-device-select" class="settings-select" ${disabledAttr}>
+                    <option value="cpu" ${utilityDevice === 'cpu' ? 'selected' : ''}>CPU (RAM)</option>
+                    <option value="gpu" ${utilityDevice === 'gpu' ? 'selected' : ''}>GPU (VRAM)</option>
+                </select>
+            </div>
+        </div>
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <span class="settings-item-label">Utility Intelligence</span>
+                <span class="settings-item-description">Prioritize speed (smaller models) or intelligence (larger models) for utilities.</span>
+            </div>
+            <div class="settings-control">
+                <select id="ollama-utility-speed-select" class="settings-select" ${disabledAttr}>
+                    <option value="fast" ${utilitySpeed === 'fast' ? 'selected' : ''}>Fast (Efficiency)</option>
+                    <option value="smart" ${utilitySpeed === 'smart' ? 'selected' : ''}>Smart (Fidelity)</option>
+                </select>
+            </div>
         </div>`;
 
     if (publicMode) {
@@ -211,21 +226,42 @@ async function loadServiceConfig() {
       });
     });
 
-    // Attach listener for Ollama
-    const forceCpuToggle = document.getElementById('ollama-force-cpu-toggle') as HTMLInputElement;
-    if (forceCpuToggle) {
-      forceCpuToggle.addEventListener('change', async (e) => {
-        const target = e.target as HTMLInputElement;
-        const value = target.checked ? 'true' : 'false';
+    // Attach listener for Ollama Device
+    const deviceSelect = document.getElementById(
+      'ollama-utility-device-select'
+    ) as HTMLSelectElement;
+    if (deviceSelect) {
+      deviceSelect.addEventListener('change', async (e) => {
+        const target = e.target as HTMLSelectElement;
+        const value = target.value;
         target.disabled = true;
         try {
           await smartFetch('/system/options', {
             method: 'POST',
-            body: JSON.stringify({ service: 'ollama', key: 'force_utility_cpu', value }),
+            body: JSON.stringify({ service: 'ollama', key: 'utility_device', value }),
           });
         } catch (err) {
-          target.checked = !target.checked;
-          alert('Failed to update optimization settings.');
+          alert('Failed to update utility hardware setting.');
+        } finally {
+          target.disabled = false;
+        }
+      });
+    }
+
+    // Attach listener for Ollama Speed
+    const speedSelect = document.getElementById('ollama-utility-speed-select') as HTMLSelectElement;
+    if (speedSelect) {
+      speedSelect.addEventListener('change', async (e) => {
+        const target = e.target as HTMLSelectElement;
+        const value = target.value;
+        target.disabled = true;
+        try {
+          await smartFetch('/system/options', {
+            method: 'POST',
+            body: JSON.stringify({ service: 'ollama', key: 'utility_speed', value }),
+          });
+        } catch (err) {
+          alert('Failed to update utility intelligence setting.');
         } finally {
           target.disabled = false;
         }
