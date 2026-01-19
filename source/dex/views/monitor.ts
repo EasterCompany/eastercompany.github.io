@@ -1220,6 +1220,7 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
       'system-courier': 'Courier Agent',
       'system-imaginator': 'Imaginator Agent',
       'system-fabricator': 'Fabricator Agent',
+      'voice-mode': 'Voice Interaction',
     };
     if (idMap[displayName]) {
       displayName = idMap[displayName];
