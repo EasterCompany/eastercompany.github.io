@@ -161,7 +161,9 @@ find "$ROOT_DIR" -name "*.html" | while read html_file; do
         sed -i -E "s/(last_updated|last_build)=[a-zA-Z0-9\-]*/last_build=$HASH/g" "$html_file"
 
         # Inject CSS and JS tags
-        sed -i "s|</head>|$LINK_TAG</head>|" "$html_file"
+        # We replace the closing head marker with the CSS tag + the actual closing head tag
+        # This ensures we don't duplicate or miss it
+        sed -i "s|<!-- HEAD_END -->|$LINK_TAG\n<!-- HEAD_END -->|" "$html_file"
         sed -i "s|</body>|$SCRIPT_TAG</body>|" "$html_file"
         echo "  - Injected tags into $html_file (title: $full_title)"
     fi
