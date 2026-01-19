@@ -8,6 +8,7 @@ Allow: /dexter/
 Allow: /chat-cognitive-loop/
 Allow: /deterministic-vram-harmony/
 Allow: /distributed-event-driven-intelligence/
+Allow: /dynamic-vram-orchestration/
 Allow: /high-fidelity-audio-pipelines/
 Allow: /docs/
 Allow: /lazy-summarization/
