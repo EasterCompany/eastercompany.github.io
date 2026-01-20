@@ -39,6 +39,7 @@ export async function updateLogs() {
       'easter-company',
       'easter-company-production',
       'dex-test-service',
+      'easter-company-root',
     ];
     const filteredLogsData = logsData.filter(
       (logReport: any) => !hiddenServiceIDs.includes(logReport.id)

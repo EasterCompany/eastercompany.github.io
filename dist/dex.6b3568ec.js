@@ -1677,7 +1677,7 @@
 </svg>
 `,Jt=Us;function Wt(){return`
         <div id="logs-container" class="logs-container"></div>
-    `}var Fs=null;async function Ne(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await D("/logs");if(!e.ok)throw new Error("Logs offline");let o=await e.json();if(!o||o.length===0)return t.innerHTML=J("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let i=["local-ollama-0","local-cache-0","upstash-redis-rw","upstash-redis-ro","easter-company","easter-company-production","dex-test-service"],a=o.filter(r=>!i.includes(r.id));a.forEach(r=>{r.logs&&Array.isArray(r.logs)?r.logs.reverse():r.logs=[]}),a.reverse();let l=a.map(r=>{let f=r.logs.join(`
+    `}var Fs=null;async function Ne(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await D("/logs");if(!e.ok)throw new Error("Logs offline");let o=await e.json();if(!o||o.length===0)return t.innerHTML=J("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let i=["local-ollama-0","local-cache-0","upstash-redis-rw","upstash-redis-ro","easter-company","easter-company-production","dex-test-service","easter-company-root"],a=o.filter(r=>!i.includes(r.id));a.forEach(r=>{r.logs&&Array.isArray(r.logs)?r.logs.reverse():r.logs=[]}),a.reverse();let l=a.map(r=>{let f=r.logs.join(`
 `),c=[...r.logs];if(c.length<25){let E=25-c.length;for(let m=0;m<E;m++)c.push("")}else c.length>25&&(c=c.slice(-25));let h=c.map(E=>Ue(E)).join(`
 `);return`
                 <div class="log-report">
