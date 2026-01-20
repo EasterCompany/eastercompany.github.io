@@ -139,7 +139,7 @@ export async function updateEventsTimeline(forceReRender = false) {
 
   // Fetch MORE events if we are filtering, to ensure we have enough data
   const fetchCount = currentFilter === 'all' ? 100 : 250;
-  let url = `/events?ml=${fetchCount}&format=json`;
+  let url = `/events?ml=${fetchCount}&format=json&exclude_types=system.process.registered,system.process.unregistered`;
   if (currentFilter !== 'all') {
     url += `&category=${currentFilter}`;
   }
