@@ -557,7 +557,16 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
   }
 
   const primary = getEventServiceUrl();
-  const fallback = LOCAL_EVENT_SERVICE;
+  let fallback = LOCAL_EVENT_SERVICE;
+
+  // Dynamic Fallback: If accessed via LAN/Tailscale, point to that IP
+  if (
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1' &&
+    !isPublicMode()
+  ) {
+    fallback = `http://${window.location.hostname}:8100`;
+  }
 
   try {
     const response = await fetch(primary + endpoint, options);
@@ -633,7 +642,16 @@ export async function smartDiscordFetch(endpoint: string, options: RequestInit =
   }
 
   const primary = getDiscordServiceUrl();
-  const fallback = LOCAL_DISCORD_SERVICE;
+  let fallback = LOCAL_DISCORD_SERVICE;
+
+  // Dynamic Fallback: If accessed via LAN/Tailscale, point to that IP
+  if (
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1' &&
+    !isPublicMode()
+  ) {
+    fallback = `http://${window.location.hostname}:8300`;
+  }
 
   try {
     const response = await fetch(primary + endpoint, options);
