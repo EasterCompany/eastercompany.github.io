@@ -31,7 +31,15 @@ export async function updateLogs() {
       return false;
     }
 
-    const hiddenServiceIDs = ['local-ollama-0', 'local-cache-0'];
+    const hiddenServiceIDs = [
+      'local-ollama-0',
+      'local-cache-0',
+      'upstash-redis-rw',
+      'upstash-redis-ro',
+      'easter-company',
+      'easter-prod',
+      'test',
+    ];
     const filteredLogsData = logsData.filter(
       (logReport: any) => !hiddenServiceIDs.includes(logReport.id)
     );

@@ -675,8 +675,17 @@ export async function updateSystemMonitor() {
   }
 
   const processedServiceIds = new Set();
+  const hiddenServiceIDs = [
+    'upstash-redis-rw',
+    'upstash-redis-ro',
+    'easter-company',
+    'easter-prod',
+    'test',
+  ];
+
   services.forEach((service: any) => {
     if (processedServiceIds.has(service.id)) return;
+    if (hiddenServiceIDs.includes(service.id)) return;
     processedServiceIds.add(service.id);
 
     const newHtml = generateWidgetHtml(service);
