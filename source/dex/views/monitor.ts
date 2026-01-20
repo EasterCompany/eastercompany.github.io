@@ -679,8 +679,8 @@ export async function updateSystemMonitor() {
     'upstash-redis-rw',
     'upstash-redis-ro',
     'easter-company',
-    'easter-prod',
-    'test',
+    'easter-company-production',
+    'dex-test-service',
   ];
 
   services.forEach((service: any) => {

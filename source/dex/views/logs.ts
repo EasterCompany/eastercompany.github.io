@@ -37,8 +37,8 @@ export async function updateLogs() {
       'upstash-redis-rw',
       'upstash-redis-ro',
       'easter-company',
-      'easter-prod',
-      'test',
+      'easter-company-production',
+      'dex-test-service',
     ];
     const filteredLogsData = logsData.filter(
       (logReport: any) => !hiddenServiceIDs.includes(logReport.id)
