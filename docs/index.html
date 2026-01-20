@@ -7,7 +7,10 @@
   <title>Docs - Easter Company</title>
 
 <!-- SEO Meta Tags -->
-<meta name="description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products." />
+<meta
+  name="description"
+  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
+/>
 <meta name="revised" content="2026-01-20" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
@@ -16,30 +19,51 @@
 
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content="Docs - Easter Company" />
-<meta property="og:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products." />
+<meta
+  property="og:description"
+  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
+/>
   <meta property="og:url" content="https://easter.company/docs">
 <meta property="og:type" content="website" />
-<meta property="og:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=135d1661" />
+<meta
+  property="og:image"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=a6ec62fd"
+/>
 <meta property="fb:app_id" content="1541540286236316" />
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Docs - Easter Company" />
-<meta name="twitter:description" content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products." />
-<meta name="twitter:image" content="https://easter.company/static/meta/preview-banner.jpg?last_build=135d1661" />
+<meta
+  name="twitter:description"
+  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
+/>
+<meta
+  name="twitter:image"
+  content="https://easter.company/static/meta/preview-banner.jpg?last_build=a6ec62fd"
+/>
 <meta name="twitter:site" content="@eastercompany" />
 <meta name="twitter:creator" content="@eastercompany" />
 
 <!-- Favicons and Icons -->
-<link rel="icon" type="image/png" href="/static/meta/favicon-96x96.png?last_build=135d1661" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=135d1661" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=135d1661" />
-<link rel="apple-touch-icon" sizes="180x180" href="/static/meta/apple-touch-icon.png?last_build=135d1661" />
-<link rel="manifest" href="/site.webmanifest?last_build=135d1661" />
+<link
+  rel="icon"
+  type="image/png"
+  href="/static/meta/favicon-96x96.png?last_build=a6ec62fd"
+  sizes="96x96"
+/>
+<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=a6ec62fd" />
+<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=a6ec62fd" />
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/static/meta/apple-touch-icon.png?last_build=a6ec62fd"
+/>
+<link rel="manifest" href="/site.webmanifest?last_build=a6ec62fd" />
 
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company/docs">
-<link rel="stylesheet" href="/dist/dex.135d1661.css">
+<link rel="stylesheet" href="/dist/dex.a6ec62fd.css">
 <!-- HEAD_END -->
 
     <style>
@@ -179,7 +203,8 @@
         color: #eee;
         font-weight: 600;
       }
-      .markdown-body p, .markdown-body li {
+      .markdown-body p,
+      .markdown-body li {
         margin-bottom: 1.6rem;
         color: #bbb;
         letter-spacing: 0.01em;
@@ -236,7 +261,8 @@
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
-      .markdown-body th, .markdown-body td {
+      .markdown-body th,
+      .markdown-body td {
         padding: 15px 20px;
         text-align: left !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -275,8 +301,14 @@
       }
 
       @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
   </head>
@@ -373,24 +405,27 @@
     <script>
       function parseTable(lines) {
         let html = '<table><thead>';
-        const rows = lines.map(line => {
-          const cells = line.split('|');
-          let filtered = cells;
-          if (line.trim().startsWith('|')) filtered = filtered.slice(1);
-          if (line.trim().endsWith('|')) filtered = filtered.slice(0, -1);
-          return filtered.map(cell => cell.trim());
-        }).filter(row => {
-          if (row.length === 0) return false;
-          const isSeparator = row.every(cell => cell.match(/^[:\s\-]+$/));
-          return !isSeparator;
-        });
+        const rows = lines
+          .map((line) => {
+            const cells = line.split('|');
+            let filtered = cells;
+            if (line.trim().startsWith('|')) filtered = filtered.slice(1);
+            if (line.trim().endsWith('|')) filtered = filtered.slice(0, -1);
+            return filtered.map((cell) => cell.trim());
+          })
+          .filter((row) => {
+            if (row.length === 0) return false;
+            const isSeparator = row.every((cell) => cell.match(/^[:\s\-]+$/));
+            return !isSeparator;
+          });
 
         if (rows.length === 0) return '';
 
-        html += '<tr>' + rows[0].map(cell => `<th>${cell}</th>`).join('') + '</tr></thead><tbody>';
+        html +=
+          '<tr>' + rows[0].map((cell) => `<th>${cell}</th>`).join('') + '</tr></thead><tbody>';
 
         for (let i = 1; i < rows.length; i++) {
-          html += '<tr>' + rows[i].map(cell => `<td>${cell}</td>`).join('') + '</tr>';
+          html += '<tr>' + rows[i].map((cell) => `<td>${cell}</td>`).join('') + '</tr>';
         }
 
         html += '</tbody></table>';
@@ -401,19 +436,16 @@
         if (!text) return '';
 
         try {
-          let escaped = text
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-          
+          let escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
           let lines = escaped.split('\n');
           let processedLines = [];
           let tableBuffer = [];
 
           for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
-            const nextLine = (lines[i+1] || '').trim();
-            
+            const nextLine = (lines[i + 1] || '').trim();
+
             if (line.startsWith('|') || (line.includes('|') && nextLine.match(/^\|?[ :\s\-|]+$/))) {
               tableBuffer.push(lines[i]);
             } else {
@@ -442,31 +474,52 @@
           html = html.replace(/  \n/g, '<br/>\n');
 
           const outputLines = html.split('\n');
-          html = outputLines.map(p => {
+          html = outputLines
+            .map((p) => {
               const trimmed = p.trim();
-              if (trimmed.startsWith('<h') || trimmed.startsWith('<pre') || trimmed.startsWith('<li') || 
-                  trimmed.startsWith('<table') || trimmed.startsWith('</table') || trimmed.startsWith('<thead') || 
-                  trimmed.startsWith('</thead') || trimmed.startsWith('<tbody') || trimmed.startsWith('</tbody') || 
-                  trimmed.startsWith('<tr') || trimmed.startsWith('</tr') || trimmed.startsWith('<td') || 
-                  trimmed.startsWith('</td') || trimmed.startsWith('<th') || trimmed.startsWith('</th') || 
-                  trimmed.startsWith('<hr') || trimmed.startsWith('<div')) return p;
+              if (
+                trimmed.startsWith('<h') ||
+                trimmed.startsWith('<pre') ||
+                trimmed.startsWith('<li') ||
+                trimmed.startsWith('<table') ||
+                trimmed.startsWith('</table') ||
+                trimmed.startsWith('<thead') ||
+                trimmed.startsWith('</thead') ||
+                trimmed.startsWith('<tbody') ||
+                trimmed.startsWith('</tbody') ||
+                trimmed.startsWith('<tr') ||
+                trimmed.startsWith('</tr') ||
+                trimmed.startsWith('<td') ||
+                trimmed.startsWith('</td') ||
+                trimmed.startsWith('<th') ||
+                trimmed.startsWith('</th') ||
+                trimmed.startsWith('<hr') ||
+                trimmed.startsWith('<div')
+              )
+                return p;
               if (trimmed === '') return '';
-              
-              if (trimmed.startsWith('<strong>Date:</strong>') || 
-                  trimmed.startsWith('<strong>Authors:</strong>') || 
-                  trimmed.startsWith('<strong>Classification:</strong>') ||
-                  trimmed.startsWith('<strong>Status:</strong>') ||
-                  trimmed.startsWith('<strong>Service:</strong>')) {
-                  return '<div class="metadata-item">' + p + '</div>';
+
+              if (
+                trimmed.startsWith('<strong>Date:</strong>') ||
+                trimmed.startsWith('<strong>Authors:</strong>') ||
+                trimmed.startsWith('<strong>Classification:</strong>') ||
+                trimmed.startsWith('<strong>Status:</strong>') ||
+                trimmed.startsWith('<strong>Service:</strong>')
+              ) {
+                return '<div class="metadata-item">' + p + '</div>';
               }
 
               return '<p>' + p + '</p>';
-          }).join('\n');
+            })
+            .join('\n');
 
           return html;
         } catch (err) {
           console.error('Markdown rendering error:', err);
-          return '<div class="error"><h1>Rendering Error</h1><p>The document could not be processed.</p></div>' + text;
+          return (
+            '<div class="error"><h1>Rendering Error</h1><p>The document could not be processed.</p></div>' +
+            text
+          );
         }
       }
 
@@ -479,30 +532,38 @@
 
         list.style.display = 'none';
         viewer.style.display = 'block';
-        content.innerHTML = '<div style="text-align: center; padding: 100px; color: #666;"><i class="bx bx-loader-alt spin" style="font-size: 3rem;"></i><p style="margin-top: 20px; font-family: monospace;">ACCESSING CORE DATA...</p></div>';
+        content.innerHTML =
+          '<div style="text-align: center; padding: 100px; color: #666;"><i class="bx bx-loader-alt spin" style="font-size: 3rem;"></i><p style="margin-top: 20px; font-family: monospace;">ACCESSING CORE DATA...</p></div>';
 
         try {
           const response = await fetch('/static/docs/studies/' + name + '.md');
           if (!response.ok) throw new Error('Study not found');
           const text = await response.text();
           content.innerHTML = renderMarkdown(text);
-          document.title = name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' - Architectural Study';
+          document.title =
+            name
+              .split('-')
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ') + ' - Architectural Study';
           window.scrollTo(0, 0);
         } catch (e) {
-          content.innerHTML = '<h1>Error</h1><p>Failed to load the study. It may have been moved or archived.</p>';
+          content.innerHTML =
+            '<h1>Error</h1><p>Failed to load the study. It may have been moved or archived.</p>';
         }
       }
 
       document.addEventListener('DOMContentLoaded', () => {
         // Prioritize static attribute (SSG) then fallback to query params (Legacy)
-        const study = document.body.getAttribute('data-auto-load-study') || 
-                      new URLSearchParams(window.location.search).get('study');
-        
+        const study =
+          document.body.getAttribute('data-auto-load-study') ||
+          new URLSearchParams(window.location.search).get('study');
+
         if (study) {
           loadStudy(study);
         }
       });
     </script>
+
     
-  <script src="/dist/dex.135d1661.js" defer></script></body>
+  <script src="/dist/dex.a6ec62fd.js" defer></script></body>
 </html>
