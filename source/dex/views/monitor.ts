@@ -681,6 +681,7 @@ export async function updateSystemMonitor() {
     'easter-company',
     'easter-company-production',
     'dex-test-service',
+    'easter-company-root',
   ];
 
   services.forEach((service: any) => {
