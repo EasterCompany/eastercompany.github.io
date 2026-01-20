@@ -984,7 +984,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
       el: HTMLElement,
       statsEl: HTMLElement | null,
       protocolData: any,
-      protocolName: string
+      protocolName: string,
+      systemState?: string
     ) => {
       if (!el) return;
       const alias = aliases[protocolName] || protocolName.toUpperCase();
@@ -992,6 +993,12 @@ export async function updateProcessesTab(isSmoothMode = false) {
       // Update label if exists
       const labelEl = el.parentElement?.querySelector('span[style*="text-transform: uppercase"]');
       if (labelEl) labelEl.textContent = alias;
+
+      if (systemState === 'paused') {
+        el.textContent = 'PAUSED';
+        el.style.color = '#ff9800';
+        return;
+      }
 
       if (!protocolData) {
         el.textContent = 'Inactive';
@@ -1042,7 +1049,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
         sentryVal,
         document.getElementById('guardian-sentry-stats'),
         guardianData.protocols.sentry,
-        'sentry'
+        'sentry',
+        systemData.state
       );
 
     // Analyzer Protocols
@@ -1053,7 +1061,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
         synthesisVal,
         synthesisStats,
         analyzerData.protocols.synthesis,
-        'synthesis'
+        'synthesis',
+        systemData.state
       );
 
     // Imaginator Protocols
@@ -1064,7 +1073,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
         imaginatorVal,
         imaginatorStats,
         imaginatorData.protocols.alert_review,
-        'alert_review'
+        'alert_review',
+        systemData.state
       );
 
     // Fabricator Protocols
@@ -1075,7 +1085,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
         fabricatorVal,
         fabricatorStats,
         fabricatorData.protocols.construction,
-        'construction'
+        'construction',
+        systemData.state
       );
 
     // Courier Protocols
@@ -1086,7 +1097,8 @@ export async function updateProcessesTab(isSmoothMode = false) {
         researcherVal,
         researcherStats,
         courierData.protocols.researcher,
-        'researcher'
+        'researcher',
+        systemData.state
       );
 
     // System State
