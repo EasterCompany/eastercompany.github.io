@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "7.3.0.main.90870ba.2026-01-19.linux-amd64",
-    "dev": "7.3.0.main.90870ba.2026-01-19.linux-amd64"
+    "user": "7.4.0.main.6e2be3b.2026-01-20.linux-amd64",
+    "dev": "7.4.0.main.6e2be3b.2026-01-20.linux-amd64"
   },
   "releases": {
     "4.0.0": {
@@ -228,58 +228,58 @@
         }
       }
     },
-    "7.3.0": {
+    "7.4.0": {
       "type": "minor",
-      "date": "2026-01-19T17:15:52Z",
-      "commit": "f0b7240",
+      "date": "2026-01-20T15:39:10Z",
+      "commit": "76348a6",
       "binaries": {
         "cli": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex",
-            "size": 16777141,
-            "checksum": "4f92476a654b93996bde59f052bfa45d30fdb692a526f777170d99b6751b3b4d"
+            "path": "/bin/7.4.0/dex",
+            "size": 16820494,
+            "checksum": "99f8c65bc4913833d0e3f1a059d3f12751358a23aad250dc7cc6654434e03d2e"
           }
         },
         "discord": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex-discord-service",
-            "size": 13575344,
-            "checksum": "33b3b6bc0339056cbc2c2e79ea9c227ffd72c00e2a02788f23c876b6a6b96e64"
+            "path": "/bin/7.4.0/dex-discord-service",
+            "size": 13617376,
+            "checksum": "bf042ada60dcc9d97f2b249cf1d9ef165b4ffa13a261abbffc833397696652a1"
           }
         },
         "event": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex-event-service",
-            "size": 13300720,
-            "checksum": "c132d961aaa739d280487d06e24e48c484cb4dc51076013bf2ec330814457bc8"
+            "path": "/bin/7.4.0/dex-event-service",
+            "size": 13374446,
+            "checksum": "09cccfc0b52b8967800a2c2026aa696278870026254873e26d49670b06ac919c"
           }
         },
         "stt": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex-stt-service",
-            "size": 3422986,
-            "checksum": "0944134d4273ef142f4ec2c1f135e3c8bf7b65d6761eaa19e6f3bae0432adae8"
+            "path": "/bin/7.4.0/dex-stt-service",
+            "size": 3427082,
+            "checksum": "d1ee25c1df9b10066884903b6ebeabcec9f5b51a7b5efb6c6967d6b57b74b9c6"
           }
         },
         "test": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex-test-service",
-            "size": 9729235,
-            "checksum": "b3cbf13f16573c8e45fe82bcf6fc6386011d9d1b945c59dba353ccf72cff685a"
+            "path": "/bin/7.4.0/dex-test-service",
+            "size": 9729705,
+            "checksum": "fbd341d16156923a1f07b27cb05902a4e5db37fa1fcd5c30a39a1b7a866bbc98"
           }
         },
         "tts": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex-tts-service",
+            "path": "/bin/7.4.0/dex-tts-service",
             "size": 3426970,
-            "checksum": "122e1019fbc83eaaf7ab24c17cc32fddb6e428f8486b4c85910a574605a56aac"
+            "checksum": "fefd040b0b4563db556a4e262bfebde83bbacdd00d323598ad2dc3b17b18f7f6"
           }
         },
         "web": {
           "linux-amd64": {
-            "path": "/bin/7.3.0/dex-web-service",
+            "path": "/bin/7.4.0/dex-web-service",
             "size": 14010371,
-            "checksum": "d23fe5f528968dc9c732cd9705c9ba34cabbe4335936ed6c8447389252c41a43"
+            "checksum": "873d44080f24423ac23fccaaf7af34a55c20699d99f169b2ff92d0c1a423a084"
           }
         }
       }
@@ -287,38 +287,38 @@
   },
   "services": {
     "cli": {
-      "current": "7.3.0.main.90870ba.2026-01-19.linux-amd64",
-      "user": "7.3.0.main.90870ba.2026-01-19.linux-amd64",
+      "current": "7.4.0.main.6e2be3b.2026-01-20.linux-amd64",
+      "user": "7.4.0.main.6e2be3b.2026-01-20.linux-amd64",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "discord": {
-      "current": "7.3.0.main.a06fcb0.2026-01-19.amd64",
-      "user": "7.3.0.main.a06fcb0.2026-01-19.amd64",
+      "current": "7.4.0.main.e48dc45.2026-01-20.amd64",
+      "user": "7.4.0.main.e48dc45.2026-01-20.amd64",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "event": {
-      "current": "7.3.0.main.c1dfcd8.2026-01-19.amd64",
-      "user": "7.3.0.main.c1dfcd8.2026-01-19.amd64",
+      "current": "7.4.0.main.502c33e.2026-01-20.amd64",
+      "user": "7.4.0.main.502c33e.2026-01-20.amd64",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "stt": {
-      "current": "7.3.0",
-      "user": "7.3.0",
+      "current": "7.4.0",
+      "user": "7.4.0",
       "repository": "github.com/EasterCompany/dex-stt-service"
     },
     "test": {
-      "current": "7.3.0.main.c186bb6.2026-01-19.amd64",
-      "user": "7.3.0.main.c186bb6.2026-01-19.amd64",
+      "current": "7.4.0.main.a977e8d.2026-01-20.amd64",
+      "user": "7.4.0.main.a977e8d.2026-01-20.amd64",
       "repository": "github.com/EasterCompany/dex-test-service"
     },
     "tts": {
-      "current": "7.3.0",
-      "user": "7.3.0",
+      "current": "7.4.0",
+      "user": "7.4.0",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
-      "current": "7.3.0.main.cf1ebfc.2026-01-19.amd64",
-      "user": "7.3.0.main.cf1ebfc.2026-01-19.amd64",
+      "current": "7.4.0.main.cf1ebfc.2026-01-20.amd64",
+      "user": "7.4.0.main.cf1ebfc.2026-01-20.amd64",
       "repository": "github.com/EasterCompany/dex-web-service"
     }
   }
