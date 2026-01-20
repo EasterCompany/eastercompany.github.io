@@ -49,11 +49,50 @@ The move to neural microservices does not imply the total removal of general-pur
 
 This hybrid approach ensures that the system is always responsive while retaining the flexibility to use the latest large-scale research models.
 
-## 5. Roadmap: Toward v9
+## 5. Implementation: The Smart Dispatcher Pattern
+
+Migrating from a monolithic inference backend to a microservice architecture requires a clean, incremental strategy. We propose the **Smart Dispatcher Pattern**: a unified interface that identifies whether a task belongs to a dedicated microservice or the general Ollama pool.
+
+### 5.1 The Unified Interface
+
+Instead of handlers calling Ollama directly, they interact with a `Brain` interface. This allows us to swap underlying logic without modifying the high-level event handlers.
+
+```go
+type Brain interface {
+    Generate(ctx context.Context, model string, prompt string) (string, error)
+}
+
+type Dispatcher struct {
+    OllamaClient  *OllamaClient
+    Microservices map[string]string // model -> service_url
+}
+
+func (d *Dispatcher) Generate(ctx context.Context, model string, prompt string) (string, error) {
+    // Check if a dedicated microservice exists for this model/task
+    if url, exists := d.Microservices[model]; exists {
+        return d.callMicroservice(ctx, url, prompt)
+    }
+    
+    // Fallback to general-purpose Ollama
+    return d.OllamaClient.Generate(model, prompt)
+}
+```
+
+### 5.2 Incremental Migration
+
+By updating the `Microservices` map, we can migrate tasks one by one. For example, moving engagement only requires adding a single key to the dispatcher:
+
+```go
+dispatcher.Microservices["dex-engagement"] = "http://127.0.0.1:8500"
+```
+
+This ensures that high-level handlers (like `publicmessage`) remain agnostic to the infrastructure change, simplifying debugging and maintaining system stability during the v8 transition.
+
+## 6. Roadmap: Toward v9
 
 The V8 cycle will serve as the proving ground for this architecture, starting with engagement and potentially moving to moderation and transcription. If successful, the V9 ecosystem will explore a total replacement of interpreted inference gateways with a unified, compiled Neural Kernel, effectively turning Dexter into a native systems-level intelligence.
 
-## 6. Conclusion
+## 7. Conclusion
 
 The transition to Go-based Neural Microservices represents Dexter's evolution from "AI Scripting" to "Systems Engineering." By moving reflexes into a compiled, RAM-pinned environment, we eliminate latency jitter and provide a stable foundation for the next generation of autonomous recursive development.
 
