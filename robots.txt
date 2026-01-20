@@ -13,6 +13,7 @@ Allow: /empirical-validation-of-asynchronous-multi-modal-orchestration/
 Allow: /high-fidelity-audio-pipelines/
 Allow: /docs/
 Allow: /lazy-summarization/
+Allow: /python-repl-agent/
 Allow: /the-7-part-versioning-standard/
 Allow: /
 
