@@ -597,6 +597,13 @@ export async function updateEventsTimeline(forceReRender = false) {
             imageHtml = `<div class="event-detail-block"><img src="data:image/jpeg;base64,${eventData.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
           } else if (eventData.url) {
             imageHtml = `<div class="event-detail-block"><img src="${eventData.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`;
+          } else {
+            // Placeholder for public mode or missing images
+            imageHtml = `
+              <div class="event-detail-block" style="margin-top: 10px; height: 100px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444;">
+                <i class='bx bx-low-vision' style="font-size: 2rem; margin-bottom: 5px; opacity: 0.3;"></i>
+                <span style="font-size: 0.65em; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5;">Visual Data Restricted</span>
+              </div>`;
           }
 
           detailsContent = `
