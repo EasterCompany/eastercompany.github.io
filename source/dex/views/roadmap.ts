@@ -1,5 +1,11 @@
 // Roadmap Tab Logic
-import { createPlaceholderMessage, escapeHtml, smartFetch, isPublicMode } from '../core/utils.ts';
+import {
+  createPlaceholderMessage,
+  escapeHtml,
+  smartFetch,
+  isPublicMode,
+  renderMarkdown,
+} from '../core/utils.ts';
 
 export const getRoadmapActions = () => `
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
@@ -43,6 +49,9 @@ export async function updateRoadmapTab(forceReRender = false) {
       (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
     currentItems = issues;
+
+    // Fix: Clear container before rendering to prevent duplication
+    roadmapContainer.innerHTML = '';
 
     // Grouping
     const groupedIssues: Record<string, any[]> = {};
@@ -116,16 +125,16 @@ export async function updateRoadmapTab(forceReRender = false) {
           <div class="event-service">ISSUE #${issue.number}</div>
           <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${escapeHtml(issue.title)}</div>
           <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-            <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${escapeHtml(issue.body)}</div>
+            <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${renderMarkdown(issue.body)}</div>
             ${
               isPublicMode()
                 ? ''
                 : `
             <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 15px;">
-              <textarea class="settings-textarea comment-input" style="min-height: 60px; font-size: 0.8em;" placeholder="Add a comment..."></textarea>
-              <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button class="notif-action-btn comment-btn" style="padding: 4px 10px; font-size: 0.75em;"><i class='bx bx-comment'></i> Comment</button>
-                <button class="notif-action-btn close-btn danger" style="padding: 4px 10px; font-size: 0.75em; margin-left: auto;"><i class='bx bx-check'></i> Close Issue</button>
+              <textarea class="settings-textarea comment-input" style="min-height: 80px; font-size: 0.85em; margin-bottom: 10px;" placeholder="Add a technical comment..."></textarea>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="notif-action-btn comment-btn" style="padding: 6px 12px; font-size: 0.8em;"><i class='bx bx-comment'></i> Comment</button>
+                <button class="notif-action-btn close-btn danger" style="padding: 6px 12px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-check-circle'></i> Close Issue</button>
               </div>
             </div>
             `
