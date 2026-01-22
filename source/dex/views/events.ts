@@ -277,7 +277,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                         </div>
                         <div class="event-detail-block">
                             ${stylisedHeader('Input Decision')}
-                            <pre class="detail-pre">${eventData.input_decision || 'None'}</pre>
+                            <pre class="detail-pre">${eventData.input_prompt || 'None'}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${stylisedHeader('Context History')}

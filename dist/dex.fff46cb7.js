@@ -1251,7 +1251,7 @@
                         </div>
                         <div class="event-detail-block">
                             ${E("Input Decision")}
-                            <pre class="detail-pre">${n.input_decision||"None"}</pre>
+                            <pre class="detail-pre">${n.input_prompt||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
                             ${E("Context History")}
