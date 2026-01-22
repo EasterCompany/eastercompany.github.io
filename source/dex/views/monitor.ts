@@ -714,7 +714,7 @@ export async function updateSystemMonitor() {
 
     if (isManageable && !isPublicMode()) {
       controlsHtml = `
-            <div class="service-controls" style="display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;">
+            <div class="service-controls">
                 <button class="svc-btn svc-restart" title="Restart Service" data-action="restart" data-service="${service.id}"><i class='bx bx-refresh'></i></button>
                 <button class="svc-btn svc-stop" title="Stop Service" data-action="stop" data-service="${service.id}" ${!isOnline ? 'disabled' : ''}><i class='bx bx-stop'></i></button>
                 <button class="svc-btn svc-start" title="Start Service" data-action="start" data-service="${service.id}" ${isOnline ? 'disabled' : ''}><i class='bx bx-play'></i></button>
@@ -745,9 +745,9 @@ export async function updateSystemMonitor() {
                         <i class="bx bxs-chip" style="color: ${memIconColor};"></i>
                         <span style="color: ${memTextColor};">${memVal}</span>
                     </div>
-                </div>${controlsHtml}`;
+                </div>`;
     } else {
-      detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold;"><span>OFFLINE</span></div>${controlsHtml}`;
+      detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold; margin-top: auto;"><span>OFFLINE</span></div>`;
     }
 
     const displayAddress =
@@ -757,7 +757,7 @@ export async function updateSystemMonitor() {
             service.domain && service.port ? `${service.domain}:${service.port}` : ''
           );
 
-    return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${displayAddress}</span></div>${detailsHtml}</div></div>`;
+    return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${displayAddress}</span></div>${detailsHtml}</div>${controlsHtml}</div>`;
   }
 }
 
