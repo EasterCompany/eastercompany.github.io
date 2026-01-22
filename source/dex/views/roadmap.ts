@@ -148,6 +148,12 @@ export async function updateRoadmapTab(forceReRender = false) {
     issues.sort(
       (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
+
+    // Deep compare with currentItems to prevent flicker
+    if (!forceReRender && JSON.stringify(issues) === JSON.stringify(currentItems)) {
+      return;
+    }
+
     currentItems = issues;
 
     // --- Intelligent DOM Diffing to resolve flickering ---
