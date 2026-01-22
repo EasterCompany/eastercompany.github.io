@@ -9,12 +9,10 @@ import { getEventsContent, updateEventsTimeline } from '../views/events.ts';
 import {
   updateSystemTab,
   updateSystemMonitor,
-  updateModelsTab,
   updateProcessesTab,
   getGuardianContent,
   getProcessesContent,
   getServicesContent,
-  getModelsContent,
   getHardwareContent,
   getServiceLogsContent,
 } from '../views/monitor.ts';
@@ -286,13 +284,12 @@ function onReady() {
     id: 'monitor-window',
     icon: 'bx-pulse',
     tabs: [
-      { icon: 'bxs-server', title: 'Services', content: getServicesContent() },
       { icon: 'bxs-component', title: 'Processes', content: getProcessesContent() },
-      { icon: 'bxs-brain', title: 'Models', content: getModelsContent() },
-      { icon: 'bx-globe', title: 'Web', content: getWebContent() },
-      { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
-      { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
       { icon: 'bxs-zap', title: 'Agents', content: getGuardianContent() },
+      { icon: 'bx-globe', title: 'Web', content: getWebContent() },
+      { icon: 'bxs-server', title: 'Services', content: getServicesContent() },
+      { icon: 'bxs-terminal', title: 'Logs', content: getServiceLogsContent() },
+      { icon: 'bxs-hdd', title: 'Hardware', content: getHardwareContent() },
     ].filter((tab) => {
       if (isPublicMode()) {
         return tab.title !== 'Hardware' && tab.title !== 'Logs';
@@ -300,9 +297,8 @@ function onReady() {
       return true;
     }),
     onOpen: () => {
-      updateSystemMonitor();
       updateProcessesTab();
-      updateModelsTab();
+      updateSystemMonitor();
       updateWebTab();
       updateLogs();
     },
@@ -346,31 +342,30 @@ function onReady() {
   });
 
   // Global API for cross-linking
-  window.dexter = {
-    viewEvent: (id: string) => {
-      if (!eventsWindow.isOpen()) toggleWindow(eventsWindow);
-      setTimeout(() => {
-        const el = document.querySelector(`.event-item[data-event-id="${id}"]`) as HTMLElement;
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.classList.add('flash-highlight');
-          if (!el.classList.contains('expanded')) el.click();
-          setTimeout(() => el.classList.remove('flash-highlight'), 2000);
-        }
-      }, 500);
-    },
-    viewAlert: (id: string) => {
-      if (!alertsWindow.isOpen()) toggleWindow(alertsWindow);
-      setTimeout(() => {
-        const el = document.querySelector(`.event-item[data-alert-id="${id}"]`) as HTMLElement;
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.classList.add('flash-highlight');
-          if (!el.classList.contains('expanded')) el.click();
-          setTimeout(() => el.classList.remove('flash-highlight'), 2000);
-        }
-      }, 500);
-    },
+  if (!window.dexter) window.dexter = {};
+  window.dexter.viewEvent = (id: string) => {
+    if (!eventsWindow.isOpen()) toggleWindow(eventsWindow);
+    setTimeout(() => {
+      const el = document.querySelector(`.event-item[data-event-id="${id}"]`) as HTMLElement;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('flash-highlight');
+        if (!el.classList.contains('expanded')) el.click();
+        setTimeout(() => el.classList.remove('flash-highlight'), 2000);
+      }
+    }, 500);
+  };
+  window.dexter.viewAlert = (id: string) => {
+    if (!alertsWindow.isOpen()) toggleWindow(alertsWindow);
+    setTimeout(() => {
+      const el = document.querySelector(`.event-item[data-alert-id="${id}"]`) as HTMLElement;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('flash-highlight');
+        if (!el.classList.contains('expanded')) el.click();
+        setTimeout(() => el.classList.remove('flash-highlight'), 2000);
+      }
+    }, 500);
   };
 
   const closeDropdown = () => {

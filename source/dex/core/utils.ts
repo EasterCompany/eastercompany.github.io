@@ -73,20 +73,20 @@ export function updateTabBadgeCount(tabIndex: string | number, count: number): v
 }
 
 let lastUnreadAlerts = 0;
-let lastPendingBlueprints = 0;
+let lastOpenIssues = 0;
 
 export function setUnreadAlerts(count: number): void {
   lastUnreadAlerts = count;
   updateGlobalBadgeCount();
 }
 
-export function setPendingBlueprints(count: number): void {
-  lastPendingBlueprints = count;
+export function setOpenIssues(count: number): void {
+  lastOpenIssues = count;
   updateGlobalBadgeCount();
 }
 
 export function updateGlobalBadgeCount(): void {
-  const count = lastUnreadAlerts + lastPendingBlueprints;
+  const count = lastUnreadAlerts + lastOpenIssues;
   lastGlobalBadgeCount = count;
 
   // 1. Robot Icon Badge
@@ -118,8 +118,8 @@ export function updateGlobalBadgeCount(): void {
       badge.style.marginLeft = 'auto';
       workspaceDropdown.appendChild(badge);
     }
-    badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints.toString();
-    badge.style.display = lastPendingBlueprints > 0 ? 'flex' : 'none';
+    badge.textContent = lastOpenIssues > 9 ? '9+' : lastOpenIssues.toString();
+    badge.style.display = lastOpenIssues > 0 ? 'flex' : 'none';
   }
 
   // 3. Window Switcher Badges
@@ -145,8 +145,8 @@ export function updateGlobalBadgeCount(): void {
       badge.style.marginLeft = '8px';
       workspaceSwitcher.appendChild(badge);
     }
-    badge.textContent = lastPendingBlueprints > 9 ? '9+' : lastPendingBlueprints.toString();
-    badge.style.display = lastPendingBlueprints > 0 ? 'flex' : 'none';
+    badge.textContent = lastOpenIssues > 9 ? '9+' : lastOpenIssues.toString();
+    badge.style.display = lastOpenIssues > 0 ? 'flex' : 'none';
   }
 }
 
@@ -159,15 +159,15 @@ export function updateUnreadAlertCount(): void {
   updateGlobalBadgeCount();
 }
 
-export function updatePendingBlueprintCount(): void {
-  const blueprintsList = document.getElementById('blueprints-list');
-  if (!blueprintsList) return;
-
-  const pendingCount = blueprintsList.querySelectorAll(
-    '.event-item:not(.blueprint-approved)'
-  ).length;
-  lastPendingBlueprints = pendingCount;
-  updateGlobalBadgeCount();
+export async function updateOpenIssueCount(): Promise<void> {
+  try {
+    const response = await smartFetch('/roadmap/stats');
+    const data = await response.json();
+    lastOpenIssues = data.open_issues || 0;
+    updateGlobalBadgeCount();
+  } catch (e) {
+    console.error('Failed to update open issue count:', e);
+  }
 }
 
 /**
@@ -520,6 +520,13 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.agent_status || {}), { status: 200 });
     }
 
+    // 6b. Roadmap Stats
+    if (endpoint.startsWith('/roadmap/stats')) {
+      return new Response(JSON.stringify({ open_issues: DASHBOARD_CACHE.open_issue_count || 0 }), {
+        status: 200,
+      });
+    }
+
     // 7. User Profiles
     if (endpoint.startsWith('/profile/')) {
       const userID = endpoint.split('/')[2];
@@ -533,6 +540,11 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
     // 8. Web History
     if (endpoint.startsWith('/web/history')) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.web_history || []), { status: 200 });
+    }
+
+    // 8b. Roadmap (GitHub Issues)
+    if (endpoint.startsWith('/roadmap')) {
+      return new Response(JSON.stringify(DASHBOARD_CACHE.github_issues || []), { status: 200 });
     }
 
     // 9. Chores

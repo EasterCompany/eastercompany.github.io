@@ -16,6 +16,7 @@ export interface WindowOptions {
   tabs?: WindowTab[];
   onOpen?: () => void;
   onClose?: () => void;
+  className?: string;
 }
 
 export interface WindowInstance {
@@ -62,6 +63,9 @@ export function createWindow(options: WindowOptions): WindowInstance {
     windowEl = document.createElement('div');
     windowEl.id = options.id;
     windowEl.className = 'window';
+    if (options.className) {
+      windowEl.classList.add(options.className);
+    }
     if (options.tabs && options.tabs.length > 0) {
       windowEl.classList.add('has-tabs');
     }

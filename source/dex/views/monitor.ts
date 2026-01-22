@@ -1,5 +1,4 @@
 // System Monitor Logic (Services, Models, Processes)
-import imaginatorSVG from '../components/imaginatorSVG.ts';
 import {
   createPlaceholderMessage,
   updateTabTimestamp,
@@ -7,6 +6,7 @@ import {
   smartFetch,
   isPublicMode,
   syncState,
+  updateOpenIssueCount,
 } from '../core/utils.ts';
 import { getLogsContent, updateLogs } from './logs.ts';
 import { getProgressContent, updateProgressTab } from './progress.ts';
@@ -71,8 +71,13 @@ export const getGuardianContent = () => {
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Summary Protocol</span>
+                    <span id="analyzer-summary-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="analyzer-summary-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                </div>
+                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
                     <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Synthesis Protocol</span>
                     <span id="analyzer-synthesis-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="analyzer-synthesis-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
@@ -80,9 +85,9 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center;">
-            <i class='bx bx-cube-alt' style="color: #03dac6; font-size: 1.5em; margin-right: 10px;"></i>
-            <h2>Fabricator</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
+            <i class='bx bx-cube-alt' style="color: #03dac6; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Fabricator</h2>
             <div style="margin-left: auto; display: flex; gap: 8px;">
                 <button id="fabricator-progress-btn" class="notif-action-btn" title="View Live Progress"><i class='bx bx-loader-circle'></i></button>
                 <button id="fabricator-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
@@ -114,9 +119,9 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center;">
-            <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em; margin-right: 10px;"></i>
-            <h2>Courier</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
+            <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Courier</h2>
             <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
@@ -135,9 +140,9 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center;">
-            ${imaginatorSVG}
-            <h2>Architect</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
+            <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Architect</h2>
             <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
@@ -248,7 +253,7 @@ export async function updateSystemTab() {
   startAgentSmoothLoop();
 
   // Initial fetch for all system components
-  await Promise.all([updateProcessesTab(), updateSystemMonitor(), updateModelsTab()]);
+  await Promise.all([updateProcessesTab(), updateSystemMonitor(), updateOpenIssueCount()]);
 
   // Update logs separately
   await updateLogs();
@@ -274,7 +279,6 @@ function startAgentSmoothLoop() {
 }
 
 export let lastServicesUpdate: number | null = null;
-export let lastModelsUpdate: number | null = null;
 export let lastProcessesUpdate: number | null = null;
 
 async function fetchSystemData() {
@@ -534,41 +538,61 @@ export async function updateSystemMonitor() {
         'The event service may be offline.'
       );
     }
-    // If data fetch fails, specifically mark the upstash widget as offline
-    const upstashWidget = document.querySelector('[data-service-id="upstash-redis-ro"]');
-    if (upstashWidget) {
-      upstashWidget.className = 'service-widget service-widget-offline';
-      (upstashWidget.querySelector('.service-widget-status') as HTMLElement).textContent = 'ERROR';
-      const body = upstashWidget.querySelector('.service-widget-body');
-      if (body) {
-        body.innerHTML = `<div class="service-widget-footer offline"><span>CONNECTION FAILED</span></div>`;
-      }
-    }
     return;
   }
 
   lastServicesUpdate = isPublicMode() ? syncState.lastDashboard || Date.now() : Date.now();
-  updateTabTimestamp(0, lastServicesUpdate || 0);
+  updateTabTimestamp(3, lastServicesUpdate || 0); // TAB 3: Services
   const services = data.services || [];
 
-  // Start or update the countdown timer
-  if (!window.updateCountdownInterval) {
-    window.updateCountdownInterval = setInterval(() => {
-      const countdownEl = document.getElementById('upstash-countdown');
-      if (countdownEl) {
-        const now = new Date();
-        const seconds = now.getSeconds();
-        // Sync happens at :59
-        let secondsUntilUpdate = 59 - seconds;
-        if (secondsUntilUpdate <= 0) secondsUntilUpdate += 60;
-        countdownEl.textContent = `${secondsUntilUpdate}s`;
-      }
-    }, 1000);
-  }
+  // Categorize services
+  const categories: Record<string, any[]> = {
+    cli: [],
+    fe: [],
+    cs: [],
+    be: [],
+    th: [],
+    co: [],
+    md: [], // Models
+    prd: [],
+    os: [],
+  };
 
-  Array.from(widgetsContainer.children).forEach((child) => {
-    if (!child.classList.contains('service-widget')) child.remove();
+  const categoryLabels: Record<string, string> = {
+    cli: 'CLI',
+    fe: 'Front-end',
+    cs: 'Core',
+    be: 'Backend',
+    th: 'Third Party',
+    co: 'Cognitive',
+    md: 'Models',
+    prd: 'Production',
+    os: 'Other',
+  };
+
+  services.forEach((s: any) => {
+    if (categories[s.type]) categories[s.type].push(s);
+    else categories['os'].push(s);
   });
+
+  let finalHtml = '';
+
+  Object.entries(categories).forEach(([type, list]) => {
+    if (list.length === 0) return;
+
+    finalHtml += `
+            <div class="service-category-header" style="width: 100%; margin: 20px 0 15px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px;">
+                <span style="color: #888; font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">${categoryLabels[type] || type}</span>
+                <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></span>
+            </div>
+            <div class="service-category-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; width: 100%;">
+                ${list.map((s) => generateWidgetHtml(s)).join('')}
+            </div>`;
+  });
+
+  if (widgetsContainer.innerHTML !== finalHtml) {
+    widgetsContainer.innerHTML = finalHtml;
+  }
 
   function extractMajorMinorPatch(versionStr: string) {
     if (!versionStr || versionStr === 'N/A' || versionStr === 'unknown') {
@@ -642,7 +666,11 @@ export async function updateSystemMonitor() {
     let detailsHtml = '';
 
     // Determine if service is manageable (not OS, CLI, or Prod)
-    const isManageable = service.type !== 'os' && service.type !== 'cli' && service.type !== 'prd';
+    const isManageable =
+      service.type !== 'os' &&
+      service.type !== 'cli' &&
+      service.type !== 'prd' &&
+      service.type !== 'md';
     let controlsHtml = '';
 
     if (isManageable && !isPublicMode()) {
@@ -655,10 +683,15 @@ export async function updateSystemMonitor() {
     }
 
     if (isOnline) {
+      const versionLabel = service.type === 'md' ? 'Size:' : 'Version:';
+      const versionVal = service.type === 'md' ? service.memory : versionDisplay;
+      const memLabel = service.type === 'md' ? 'Type:' : 'RAM:';
+      const memVal = service.type === 'md' ? service.health_message || 'Model' : memDisplay;
+
       detailsHtml = `
                 <div class="service-widget-info">
-                    <span class="info-label">Version:</span>
-                    <span class="info-value metric-version-monospace">${versionDisplay}</span>
+                    <span class="info-label">${versionLabel}</span>
+                    <span class="info-value metric-version-monospace">${versionVal}</span>
                 </div>
                 <div class="service-widget-footer">
                     <div class="service-widget-item">
@@ -669,181 +702,23 @@ export async function updateSystemMonitor() {
                         <i class="bx bxs-microchip" style="color: ${cpuIconColor};"></i>
                         <span style="color: ${cpuTextColor};">${cpuDisplay}</span>
                     </div>
-                    <div class="service-widget-item">
+                    <div class="service-widget-item" title="${memLabel}">
                         <i class="bx bxs-chip" style="color: ${memIconColor};"></i>
-                        <span style="color: ${memTextColor};">${memDisplay}</span>
+                        <span style="color: ${memTextColor};">${memVal}</span>
                     </div>
                 </div>${controlsHtml}`;
     } else {
       detailsHtml = `<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold;"><span>OFFLINE</span></div>${controlsHtml}`;
     }
 
-    const displayAddress = isPublicMode()
-      ? 'easter.company'
-      : truncateAddress(service.domain && service.port ? `${service.domain}:${service.port}` : '');
+    const displayAddress =
+      isPublicMode() || service.type === 'md'
+        ? 'easter.company'
+        : truncateAddress(
+            service.domain && service.port ? `${service.domain}:${service.port}` : ''
+          );
 
     return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${displayAddress}</span></div>${detailsHtml}</div></div>`;
-  }
-
-  const existingWidgetsMap = new Map(
-    Array.from(widgetsContainer.querySelectorAll('.service-widget')).map((widget) => [
-      (widget as HTMLElement).dataset.serviceId,
-      widget,
-    ])
-  );
-  const incomingServiceIds = new Set(services.map((s: any) => s.id));
-
-  for (const [id, widget] of existingWidgetsMap) {
-    if (!incomingServiceIds.has(id)) {
-      widget.remove();
-    }
-  }
-
-  const processedServiceIds = new Set();
-  const hiddenServiceIDs = [
-    'upstash-redis-rw',
-    'upstash-redis-ro',
-    'easter-company',
-    'easter-company-production',
-    'dex-test-service',
-    'easter-company-root',
-  ];
-
-  services.forEach((service: any) => {
-    if (processedServiceIds.has(service.id)) return;
-    if (hiddenServiceIDs.includes(service.id)) return;
-    processedServiceIds.add(service.id);
-
-    const newHtml = generateWidgetHtml(service);
-    const existingWidget = existingWidgetsMap.get(service.id);
-    if (existingWidget && existingWidget.parentNode) {
-      if (service.id === 'upstash-redis-ro') {
-        // Only update the sync timestamp, leave the countdown element alone to avoid flickering
-        const syncTs = isPublicMode()
-          ? syncState.lastFrontend || syncState.lastDashboard || Date.now()
-          : Date.now();
-        const lastSynced = new Date(syncTs).toLocaleTimeString();
-        const syncLabel = existingWidget.querySelector('.sync-time-label');
-        if (syncLabel) syncLabel.textContent = `Last synced: ${lastSynced}`;
-      } else if (existingWidget.outerHTML !== newHtml) {
-        existingWidget.outerHTML = newHtml;
-      }
-    } else {
-      widgetsContainer.insertAdjacentHTML('beforeend', newHtml);
-    }
-  });
-}
-
-export async function updateModelsTab() {
-  const widgetsContainer = document.getElementById('models-widgets');
-  if (!widgetsContainer) return;
-
-  const data = await fetchSystemData();
-
-  if (!data) {
-    if (widgetsContainer.children.length === 0) {
-      widgetsContainer.innerHTML = createPlaceholderMessage(
-        'offline',
-        'Failed to load model status.',
-        'The event service may be offline.'
-      );
-    }
-    return;
-  }
-
-  lastModelsUpdate = Date.now();
-  updateTabTimestamp(2, lastModelsUpdate);
-
-  const models = data.models || [];
-  const whisperStatus = data.whisper;
-
-  Array.from(widgetsContainer.children).forEach((child) => {
-    if (!child.classList.contains('service-widget')) child.remove();
-  });
-
-  function generateWhisperWidgetHtml(whisper: any) {
-    const isReady = whisper.status === 'Ready';
-    const statusClass = isReady ? 'service-widget-online' : 'service-widget-offline';
-    const statusText = isReady ? 'READY' : 'NOT FOUND';
-    const icon = 'bxs-microphone-alt';
-
-    return `
-                <div class="service-widget ${statusClass}" data-whisper-widget>
-                    <div class="service-widget-header">
-                        <i class="bx ${icon}"></i>
-                        <h3>Whisper</h3>
-                        <span class="service-widget-status">${statusText}</span>
-                    </div>
-                    <div class="service-widget-body">
-                        <div class="service-widget-info">
-                            <span class="info-label">Status:</span>
-                            <span class="info-value">${whisper.status}</span>
-                        </div>
-                        <div class="service-widget-info">
-                            <span class="info-label">Model:</span>
-                            <span class="info-value">large-v3-turbo</span>
-                        </div>
-                    </div>
-                </div>`;
-  }
-
-  function generateXTTSWidgetHtml(xtts: any) {
-    const isReady = xtts.status === 'Ready';
-    const statusClass = isReady ? 'service-widget-online' : 'service-widget-offline';
-    const statusText = isReady ? 'READY' : 'NOT FOUND';
-    const icon = 'bx-volume-full';
-
-    return `
-                <div class="service-widget ${statusClass}" data-xtts-widget>
-                    <div class="service-widget-header">
-                        <i class="bx ${icon}"></i>
-                        <h3>XTTS-v2</h3>
-                        <span class="service-widget-status">${statusText}</span>
-                    </div>
-                    <div class="service-widget-body">
-                        <div class="service-widget-info">
-                            <span class="info-label">Status:</span>
-                            <span class="info-value">${xtts.status}</span>
-                        </div>
-                        <div class="service-widget-info">
-                            <span class="info-label">Model:</span>
-                            <span class="info-value">xtts</span>
-                        </div>
-                    </div>
-                </div>`;
-  }
-
-  function generateModelWidgetHtml(model: any) {
-    const isDownloaded = model.status === 'Downloaded';
-    const statusClass = isDownloaded ? 'service-widget-online' : 'service-widget-offline';
-    const statusText = isDownloaded ? 'OK' : 'MISSING';
-    const sizeDisplay =
-      isDownloaded && model.size > 0 ? `${(model.size / 1e9).toFixed(2)} GB` : '-';
-
-    let modelDisplayName = model.name;
-    if (model.type === 'custom' && modelDisplayName.endsWith(':latest')) {
-      modelDisplayName = modelDisplayName.replace(':latest', '');
-    }
-
-    return `<div class="service-widget ${statusClass}" data-model-name="${model.name}"><div class="service-widget-header"><i class="bx ${isDownloaded ? 'bx-check-circle' : 'bx-x-circle'}"></i><h3>${modelDisplayName}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Type:</span><span class="info-value">${model.type}</span></div><div class="service-widget-info"><span class="info-label">Size:</span><span class="info-value">${sizeDisplay}</span></div></div></div>`;
-  }
-
-  let finalHtml = '';
-  if (whisperStatus) {
-    finalHtml += generateWhisperWidgetHtml(whisperStatus);
-  }
-  if (data.xtts) {
-    finalHtml += generateXTTSWidgetHtml(data.xtts);
-  }
-  finalHtml += models.map(generateModelWidgetHtml).join('');
-
-  if (!finalHtml) {
-    widgetsContainer.innerHTML = createPlaceholderMessage('empty', 'No models found.');
-    return;
-  }
-
-  if (widgetsContainer.innerHTML !== finalHtml) {
-    widgetsContainer.innerHTML = finalHtml;
   }
 }
 
@@ -868,20 +743,30 @@ export async function updateProcessesTab(isSmoothMode = false) {
     fabricatorProgressBtn.onclick = () => {
       const progressWin = createWindow({
         id: 'fabricator-progress-window',
-        title: 'Fabricator Progress',
+        title: 'Mission Control',
         icon: 'bx-loader-circle',
+        className: 'full-screen-modal', // Custom class for full screen style
         content: `
-          <div class="ideas-container" style="padding: 20px;">
-            <div class="progress-section">
+          <div class="mission-control-overlay">
+            <div class="progress-section" style="height: 100%; display: flex; flex-direction: column;">
                 <div class="system-section-header" style="margin-bottom: 20px;">
                     <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
-                    <h2>Live Workflow</h2>
+                    <h2>Fabricator Live Stream</h2>
+                    <button class="notif-action-btn close-modal-btn" style="margin-left: auto;"><i class='bx bx-x'></i></button>
                 </div>
                 ${getProgressContent()}
             </div>
           </div>
         `,
-        onOpen: () => updateProgressTab(),
+        onOpen: () => {
+          const winEl = document.getElementById('fabricator-progress-window');
+          if (winEl) {
+            winEl
+              .querySelector('.close-modal-btn')
+              ?.addEventListener('click', () => progressWin.close());
+          }
+          updateProgressTab();
+        },
       });
       progressWin.open();
     };
@@ -1102,6 +987,17 @@ export async function updateProcessesTab(isSmoothMode = false) {
       );
 
     // Analyzer Protocols
+    const summaryVal = document.getElementById('analyzer-summary-val');
+    const summaryStats = document.getElementById('analyzer-summary-stats');
+    if (summaryVal)
+      updateProtocolWidget(
+        summaryVal,
+        summaryStats,
+        analyzerData.protocols.summary,
+        'summary',
+        systemData.state
+      );
+
     const synthesisVal = document.getElementById('analyzer-synthesis-val');
     const synthesisStats = document.getElementById('analyzer-synthesis-stats');
     if (synthesisVal)
