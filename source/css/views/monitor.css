@@ -5,7 +5,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 20px;
-  padding: 10px 0 48px 0;
+  padding: 10px 0 20px 0;
   width: 100%;
 }
 
@@ -113,9 +113,49 @@
   font-size: 1.1em;
 }
 
+/* Process Widgets - Overrides for full-width layout */
 .process-widget {
   border-top: 3px solid #4444ff;
-  padding: 15px !important; /* Keep padding for processes */
+  padding: 15px !important;
+  width: 100% !important; /* Full width for history items/list */
+  height: auto !important;
+  min-height: 100px;
+}
+
+#processes-widgets .process-widget,
+#processes-queue-widgets .process-widget {
+  width: 300px !important; /* Keep active/queue widgets small */
+  height: 200px !important;
+}
+
+.system-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px; /* Spacing between title row and content */
+  padding: 0 5px;
+  width: 100%;
+}
+
+.system-section-header i {
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.system-section-header h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  margin: 0;
+  text-align: left;
+}
+
+.guardian-status-section {
+  margin-bottom: 40px !important; /* Greater spacing between agents */
 }
 
 /* Service Controls - Bottom Full Width */
