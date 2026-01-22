@@ -48,9 +48,9 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header">
-            <i class='bx bx-shield' style="color: #bb86fc;"></i>
-            <h2>Guardian</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+            <i class='bx bx-shield' style="color: #bb86fc; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Guardian</h2>
             <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
@@ -64,9 +64,9 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header">
-            <i class='bx bx-search-alt' style="color: #03dac6;"></i>
-            <h2>Analyzer</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+            <i class='bx bx-search-alt' style="color: #03dac6; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Analyzer</h2>
             <button id="analyzer-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
@@ -85,7 +85,7 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
             <i class='bx bx-cube-alt' style="color: #03dac6; font-size: 1.5em;"></i>
             <h2 style="margin: 0;">Fabricator</h2>
             <div style="margin-left: auto; display: flex; gap: 8px;">
@@ -119,42 +119,79 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
-            <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
-            <h2 style="margin: 0;">Courier</h2>
-            <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
-        </div>
+                <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
 
-        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
-                    <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-                </div>
-                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor Protocol</span>
-                    <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-                </div>
-            </div>
-        </div>
+                    <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
 
-        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
-            <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
-            <h2 style="margin: 0;">Architect</h2>
-            <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
-        </div>
+                    <h2 style="margin: 0;">Courier</h2>
 
-        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-                <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
-                    <span id="imaginator-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                    <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+
                 </div>
-            </div>
-        </div>`;
+
+        
+
+                <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+
+                        <div class="guardian-indicator" style="text-align: center;">
+
+                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
+
+                            <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+
+                            <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+
+                        </div>
+
+                        <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+
+                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor Protocol</span>
+
+                            <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+
+                            <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+        
+
+                <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+
+                    <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
+
+                    <h2 style="margin: 0;">Architect</h2>
+
+                    <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+
+                </div>
+
+        
+
+                <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+
+                        <div class="guardian-indicator" style="text-align: center;">
+
+                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
+
+                            <span id="imaginator-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+
+                            <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+        `;
 };
 
 export const getProcessesContent = () => {
@@ -194,7 +231,7 @@ export const getServicesContent = () => {
                 <button id="global-start-btn" class="notif-action-btn" title="Start All Services"><i class='bx bx-play'></i></button>
             </div>
         </div>
-        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;
+        <div id="services-widgets" style="margin-bottom: 30px;"></div>`;
 };
 
 export const getModelsContent = () => {
@@ -585,7 +622,7 @@ export async function updateSystemMonitor() {
                 <span style="color: #888; font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">${categoryLabels[type] || type}</span>
                 <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></span>
             </div>
-            <div class="service-category-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; width: 100%;">
+            <div class="service-category-grid system-monitor-widgets" style="padding-bottom: 20px;">
                 ${list.map((s) => generateWidgetHtml(s)).join('')}
             </div>`;
   });

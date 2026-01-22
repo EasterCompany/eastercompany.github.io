@@ -1604,9 +1604,9 @@
             </div>
         </div>
 
-        <div class="system-section-header">
-            <i class='bx bx-shield' style="color: #bb86fc;"></i>
-            <h2>Guardian</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+            <i class='bx bx-shield' style="color: #bb86fc; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Guardian</h2>
             <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
@@ -1620,9 +1620,9 @@
             </div>
         </div>
 
-        <div class="system-section-header">
-            <i class='bx bx-search-alt' style="color: #03dac6;"></i>
-            <h2>Analyzer</h2>
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+            <i class='bx bx-search-alt' style="color: #03dac6; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Analyzer</h2>
             <button id="analyzer-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
@@ -1641,7 +1641,7 @@
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
             <i class='bx bx-cube-alt' style="color: #03dac6; font-size: 1.5em;"></i>
             <h2 style="margin: 0;">Fabricator</h2>
             <div style="margin-left: auto; display: flex; gap: 8px;">
@@ -1675,42 +1675,79 @@
             </div>
         </div>
 
-        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
-            <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
-            <h2 style="margin: 0;">Courier</h2>
-            <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
-        </div>
+                <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
 
-        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
-                    <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-                </div>
-                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor Protocol</span>
-                    <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-                </div>
-            </div>
-        </div>
+                    <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
 
-        <div class="system-section-header" style="display: flex; align-items: center; gap: 10px;">
-            <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
-            <h2 style="margin: 0;">Architect</h2>
-            <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
-        </div>
+                    <h2 style="margin: 0;">Courier</h2>
 
-        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-                <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
-                    <span id="imaginator-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                    <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+
                 </div>
-            </div>
-        </div>`},jt=()=>`
+
+        
+
+                <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+
+                        <div class="guardian-indicator" style="text-align: center;">
+
+                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
+
+                            <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+
+                            <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+
+                        </div>
+
+                        <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+
+                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor Protocol</span>
+
+                            <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+
+                            <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+        
+
+                <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+
+                    <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
+
+                    <h2 style="margin: 0;">Architect</h2>
+
+                    <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${t}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+
+                </div>
+
+        
+
+                <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+
+                        <div class="guardian-indicator" style="text-align: center;">
+
+                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
+
+                            <span id="imaginator-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+
+                            <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+        `},jt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #03dac6;"></i>
             <h2>Active Processes</h2>
@@ -1741,7 +1778,7 @@
                 <button id="global-start-btn" class="notif-action-btn" title="Start All Services"><i class='bx bx-play'></i></button>
             </div>
         </div>
-        <div id="services-widgets" class="system-monitor-widgets" style="margin-bottom: 30px;"></div>`;var Ut=()=>`
+        <div id="services-widgets" style="margin-bottom: 30px;"></div>`;var Ut=()=>`
         <div class="system-section-header">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
             <h2>Hardware</h2>
@@ -1817,7 +1854,7 @@
                 <span style="color: #888; font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">${L[d]||d}</span>
                 <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></span>
             </div>
-            <div class="service-category-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; width: 100%;">
+            <div class="service-category-grid system-monitor-widgets" style="padding-bottom: 20px;">
                 ${l.map($=>x($)).join("")}
             </div>`)}),t.innerHTML!==I&&(t.innerHTML=I);function v(d){if(!d||d==="N/A"||d==="unknown")return"-";let l=d.match(/^(\d+\.\d+\.\d+)/);return l?l[0]:d.split(".").slice(0,3).join(".")||"-"}function f(d){return!d||d.length<=28?d:d.substring(0,28)+"..."}function y(d){if(!d||d==="N/A"||d==="unknown")return"-";let l=d.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);if(!l)return"-";let $=parseInt(l[1])||0,E=parseInt(l[2])||0,m=parseInt(l[3])||0,h=parseFloat(l[4])||0,A=$*86400+E*3600+m*60+h,M=Math.floor(A/86400);if(M>0)return`${M}d`;let B=Math.floor(A/3600);if(B>0)return`${B}h`;let N=Math.floor(A/60);return N>0?`${N}m`:`${Math.floor(A)}s`}function x(d){if(d.id==="upstash-redis-ro"){let D=z()&&(be.lastFrontend||be.lastDashboard)||Date.now();return`
             <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
