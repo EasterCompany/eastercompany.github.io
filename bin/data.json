@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "7.5.0.main.33641e8.2026-01-21.linux-amd64",
-    "dev": "7.5.0.main.33641e8.2026-01-21.linux-amd64"
+    "user": "7.6.0.main.11035bf.2026-01-22.linux-amd64",
+    "dev": "7.6.0.main.11035bf.2026-01-22.linux-amd64"
   },
   "releases": {
     "4.0.0": {
@@ -228,86 +228,107 @@
         }
       }
     },
-    "7.5.0": {
+    "7.6.0": {
       "type": "minor",
-      "date": "2026-01-21T22:47:01Z",
-      "commit": "a8054a8",
+      "date": "2026-01-22T02:15:20Z",
+      "commit": "4857b9d",
       "binaries": {
         "cli": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex",
-            "size": 16813753,
-            "checksum": "ac5053eba211dce30e1b0a70deb573c5fb4f42f0f5dcaef7e9db3ffab1118638"
+            "path": "/bin/7.6.0/dex",
+            "size": 16830897,
+            "checksum": "64adaefa39956c0da01e0d6a0826d62fb3dbe6e48f7d4b548224b455d67f70f2"
+          }
+        },
+        "commit": {
+          "linux-amd64": {
+            "path": "/bin/7.6.0/dex-commit-model-service",
+            "size": 9636459,
+            "checksum": "b90c01c2574bfa46610725e1996b6b0acd894145414f94bd68188c7411859455"
           }
         },
         "discord": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-discord-service",
+            "path": "/bin/7.6.0/dex-discord-service",
             "size": 13643984,
-            "checksum": "6b9a5abe9569b9c0ef2d6056aa5f26b2fe59ed6c788ac601a5710e5ea548d04a"
+            "checksum": "5ff255a05960288c3a52b5cbcf043ea4e5e4c6d3c46c844af5b3a7d30130cdd8"
           }
         },
         "engagement": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-engagement-model-service",
-            "size": 9636807,
-            "checksum": "634b5ed1f6adf7aaeaf0d119550b5e3e8c3eddaeac8d634649d2540aa0746762"
+            "path": "/bin/7.6.0/dex-engagement-model-service",
+            "size": 9644549,
+            "checksum": "0213b7085a3418d0c8cd322460f7d7bc693809eb747be76a6035fe61be795ac0"
           }
         },
         "event": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-event-service",
-            "size": 13422349,
-            "checksum": "1c14a1aee9d65bd722c041f3eef96a03a03ea817fdbea89f74fe01d389302551"
+            "path": "/bin/7.6.0/dex-event-service",
+            "size": 13378779,
+            "checksum": "e4f649877f7189d9f4b291ace15bb4aba4aefb66d5a3b71fd9949a13fce7ffdc"
           }
         },
         "model": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-model-service",
-            "size": 9524328,
-            "checksum": "6ac03bbbc19ce6fc63a0c34a408552e90cf6cd6382835d075ac0555a33607b28"
+            "path": "/bin/7.6.0/dex-model-service",
+            "size": 9693208,
+            "checksum": "5cb5d24c99e95f6a5904ce254a256dd04f595c92b423421436d3a14b39e4b8b1"
+          }
+        },
+        "moderation": {
+          "linux-amd64": {
+            "path": "/bin/7.6.0/dex-moderation-model-service",
+            "size": 9650569,
+            "checksum": "59a4571b979ecb149a3aa0cdeff93e67b1cd5a995ce2ab08108507d8b8b9ba06"
           }
         },
         "router": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-router-model-service",
-            "size": 9631592,
-            "checksum": "5c6104b6b74fc6a9576982b694caabc58689ee8e69d8e0c7516244441fa24cd1"
+            "path": "/bin/7.6.0/dex-router-model-service",
+            "size": 9646474,
+            "checksum": "f6f4e5ff01b8c2bdc53c5bfb6d4f8067d52e3c2f901dab6f9a164051dd5ded2c"
+          }
+        },
+        "scraper": {
+          "linux-amd64": {
+            "path": "/bin/7.6.0/dex-scraper-model-service",
+            "size": 9650552,
+            "checksum": "fce750aed1b2a9cc3986c90fbc7d4d6b0f1c47732a335bbdf89584c9138c4dce"
           }
         },
         "stt": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-stt-service",
-            "size": 3427082,
-            "checksum": "6471ebaa5f81834d13cf70daa78b7a68237c8267e31dd069c659d843d488e9ae"
+            "path": "/bin/7.6.0/dex-stt-service",
+            "size": 3427129,
+            "checksum": "99c7138e484b2608d99ac7ad0320f3a002de99e78600350e4fd1f140b50e6ca8"
           }
         },
         "summary": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-summary-model-service",
-            "size": 9632034,
-            "checksum": "c3d06e9c56c76dfbb9552fa51463ee762ab15c21e6687e35abc6729c3e38fecb"
+            "path": "/bin/7.6.0/dex-summary-model-service",
+            "size": 9648871,
+            "checksum": "72e1974eabefd80be8035caa5ccec860a085cfbacb2d16efb60be139eb3bc8b8"
           }
         },
         "test": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-test-service",
-            "size": 9621518,
-            "checksum": "a1d4e65e305b66225b0730432b64baf625b609e1f143e8176a6b0bcdc1b195bf"
+            "path": "/bin/7.6.0/dex-test-service",
+            "size": 9683980,
+            "checksum": "325c30deea0839926a108fb561e58264565c2a17fc7f059f60775c8a151f3e75"
           }
         },
         "tts": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-tts-service",
+            "path": "/bin/7.6.0/dex-tts-service",
             "size": 3426978,
-            "checksum": "b7ee4e199502ad7194345476988503c74f1daa1a4628ea83c24421774e8f2b8d"
+            "checksum": "36f77f453e4b4e2eea61365ed206a65ebf31a0059597f48459ccf5f30c8f859d"
           }
         },
         "web": {
           "linux-amd64": {
-            "path": "/bin/7.5.0/dex-web-service",
-            "size": 14018303,
-            "checksum": "d41fca194d8d182d55932c6aee3403caa61d6227dbebefba7706c5a0290246a8"
+            "path": "/bin/7.6.0/dex-web-service",
+            "size": 14026234,
+            "checksum": "d3cdb811ecf753bb2fb984d950054c2e0b526867f2f3f20ea0954d237e984bc8"
           }
         }
       }
@@ -315,58 +336,73 @@
   },
   "services": {
     "cli": {
-      "current": "7.5.0.main.33641e8.2026-01-21.linux-amd64",
-      "user": "7.5.0.main.33641e8.2026-01-21.linux-amd64",
+      "current": "7.6.0.main.11035bf.2026-01-22.linux-amd64",
+      "user": "7.6.0.main.11035bf.2026-01-22.linux-amd64",
       "repository": "github.com/EasterCompany/dex-cli"
     },
+    "commit": {
+      "current": "7.6.0.main.e14cfcd.2026-01-22.2026.e14cfcd.amd64",
+      "user": "7.6.0.main.e14cfcd.2026-01-22.2026.e14cfcd.amd64",
+      "repository": "github.com/EasterCompany/dex-commit-model-service"
+    },
     "discord": {
-      "current": "7.5.0.main.422cdab.2026-01-21.amd64",
-      "user": "7.5.0.main.422cdab.2026-01-21.amd64",
+      "current": "7.6.0.main.422cdab.2026-01-22.amd64",
+      "user": "7.6.0.main.422cdab.2026-01-22.amd64",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "engagement": {
-      "current": "7.5.0.main.34f410d.2026-01-21.2026.34f410d.amd64",
-      "user": "7.5.0.main.34f410d.2026-01-21.2026.34f410d.amd64",
+      "current": "7.6.0.main.0988413.2026-01-22.2026.0988413.amd64",
+      "user": "7.6.0.main.0988413.2026-01-22.2026.0988413.amd64",
       "repository": "github.com/EasterCompany/dex-engagement-model-service"
     },
     "event": {
-      "current": "7.5.0.main.ac8703a.2026-01-21.amd64",
-      "user": "7.5.0.main.ac8703a.2026-01-21.amd64",
+      "current": "7.6.0.main.c3af561.2026-01-22.amd64",
+      "user": "7.6.0.main.c3af561.2026-01-22.amd64",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "model": {
-      "current": "7.5.0.main.c855bfe.2026-01-21.2026.c855bfe.amd64",
-      "user": "7.5.0.main.c855bfe.2026-01-21.2026.c855bfe.amd64",
+      "current": "7.6.0.main.8a18de1.2026-01-22.2026.8a18de1.amd64",
+      "user": "7.6.0.main.8a18de1.2026-01-22.2026.8a18de1.amd64",
       "repository": "github.com/EasterCompany/dex-model-service"
     },
+    "moderation": {
+      "current": "7.6.0.main.06a3f1d.2026-01-22.2026.06a3f1d.amd64",
+      "user": "7.6.0.main.06a3f1d.2026-01-22.2026.06a3f1d.amd64",
+      "repository": "github.com/EasterCompany/dex-moderation-model-service"
+    },
     "router": {
-      "current": "7.5.0.main.2ae9938.2026-01-21.2026.2ae9938.amd64",
-      "user": "7.5.0.main.2ae9938.2026-01-21.2026.2ae9938.amd64",
+      "current": "7.6.0.main.e7c0606.2026-01-22.2026.e7c0606.amd64",
+      "user": "7.6.0.main.e7c0606.2026-01-22.2026.e7c0606.amd64",
       "repository": "github.com/EasterCompany/dex-router-model-service"
     },
+    "scraper": {
+      "current": "7.6.0.main.6034350.2026-01-22.2026.6034350.amd64",
+      "user": "7.6.0.main.6034350.2026-01-22.2026.6034350.amd64",
+      "repository": "github.com/EasterCompany/dex-scraper-model-service"
+    },
     "stt": {
-      "current": "7.5.0",
-      "user": "7.5.0",
+      "current": "7.6.0.main.cc33bbf.2026-01-22.2026.cc33bbf.amd64",
+      "user": "7.6.0.main.cc33bbf.2026-01-22.2026.cc33bbf.amd64",
       "repository": "github.com/EasterCompany/dex-stt-service"
     },
     "summary": {
-      "current": "7.5.0.main.e7e3250.2026-01-21.2026.e7e3250.amd64",
-      "user": "7.5.0.main.e7e3250.2026-01-21.2026.e7e3250.amd64",
+      "current": "7.6.0.main.3ecfaff.2026-01-22.2026.3ecfaff.amd64",
+      "user": "7.6.0.main.3ecfaff.2026-01-22.2026.3ecfaff.amd64",
       "repository": "github.com/EasterCompany/dex-summary-model-service"
     },
     "test": {
-      "current": "7.5.0.main.28e9317.2026-01-21.amd64",
-      "user": "7.5.0.main.28e9317.2026-01-21.amd64",
+      "current": "7.6.0.main.24b5c67.2026-01-22.amd64",
+      "user": "7.6.0.main.24b5c67.2026-01-22.amd64",
       "repository": "github.com/EasterCompany/dex-test-service"
     },
     "tts": {
-      "current": "7.5.0",
-      "user": "7.5.0",
+      "current": "7.6.0",
+      "user": "7.6.0",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "web": {
-      "current": "7.5.0.main.0bc854d.2026-01-21.amd64",
-      "user": "7.5.0.main.0bc854d.2026-01-21.amd64",
+      "current": "7.6.0.main.33b19b4.2026-01-22.amd64",
+      "user": "7.6.0.main.33b19b4.2026-01-22.amd64",
       "repository": "github.com/EasterCompany/dex-web-service"
     }
   }
