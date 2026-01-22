@@ -101,11 +101,16 @@ export const getGuardianContent = () => {
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
                     <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
                     <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                </div>
+                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor Protocol</span>
+                    <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
         </div>
@@ -968,6 +973,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
       alert_review: 'Alert Review',
       construction: 'Construction',
       researcher: 'Researcher',
+      compressor: 'Compressor',
     };
 
     const formatDuration = (seconds: number) => {
@@ -1098,6 +1104,17 @@ export async function updateProcessesTab(isSmoothMode = false) {
         researcherStats,
         courierData.protocols.researcher,
         'researcher',
+        systemData.state
+      );
+
+    const compressorVal = document.getElementById('courier-compressor-val');
+    const compressorStats = document.getElementById('courier-compressor-stats');
+    if (compressorVal)
+      updateProtocolWidget(
+        compressorVal,
+        compressorStats,
+        courierData.protocols.compressor,
+        'compressor',
         systemData.state
       );
 
