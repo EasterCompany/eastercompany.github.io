@@ -72,7 +72,7 @@ export function getSettingsContent() {
 
             <div class="settings-section">
                 <h2 class="settings-section-title">Cognitive Optimization</h2>
-                <div id="ollama-config-list" class="settings-list">
+                <div id="cognitive-config-list" class="settings-list">
                     <div style="padding: 20px; text-align: center; color: #666;">
                         <i class='bx bx-loader-alt spin'></i> Loading optimization settings...
                     </div>
@@ -120,8 +120,8 @@ export function attachSettingsListeners(settingsWindowInstance: WindowInstance) 
 
 async function loadServiceConfig() {
   const serviceContainer = document.getElementById('service-config-list');
-  const ollamaContainer = document.getElementById('ollama-config-list');
-  if (!serviceContainer || !ollamaContainer) return;
+  const cognitiveContainer = document.getElementById('cognitive-config-list');
+  if (!serviceContainer || !cognitiveContainer) return;
 
   const publicMode = isPublicMode();
 
@@ -131,11 +131,11 @@ async function loadServiceConfig() {
 
     // In local mode, data is the raw options.json structure.
     // In public mode (snapshot), data is the 'options' field from the snapshot.
-    // The snapshot logic GetSystemOptionsSnapshot() now returns { services: ..., ollama: ... }
+    // The snapshot logic GetSystemOptionsSnapshot() now returns { services: ..., cognitive: ... }
     // but legacy local API might return them flat or nested.
     // We normalize here.
     const services = data.services || data || {};
-    const ollama = data.ollama || data || {};
+    const cognitive = data.cognitive || data || {};
 
     // 1. Render Services
     let serviceHtml = '';
@@ -168,20 +168,20 @@ async function loadServiceConfig() {
 
     serviceContainer.innerHTML = serviceHtml;
 
-    // 2. Render Ollama Optimization
-    let ollamaHtml = '';
-    const utilityDevice = ollama.utility_device || 'cpu';
-    const utilitySpeed = ollama.utility_speed || 'smart';
+    // 2. Render Cognitive Optimization
+    let cognitiveHtml = '';
+    const utilityDevice = cognitive.utility_device || 'cpu';
+    const utilitySpeed = cognitive.utility_speed || 'smart';
     const disabledAttr = publicMode ? 'disabled' : '';
 
-    ollamaHtml += `
+    cognitiveHtml += `
         <div class="settings-item">
             <div class="settings-item-info">
                 <span class="settings-item-label">Utility Hardware</span>
                 <span class="settings-item-description">Force utilities (summary, engagement, etc) to specific hardware.</span>
             </div>
             <div class="settings-control">
-                <select id="ollama-utility-device-select" class="settings-select" ${disabledAttr}>
+                <select id="cognitive-utility-device-select" class="settings-select" ${disabledAttr}>
                     <option value="cpu" ${utilityDevice === 'cpu' ? 'selected' : ''}>CPU (RAM)</option>
                     <option value="gpu" ${utilityDevice === 'gpu' ? 'selected' : ''}>GPU (VRAM)</option>
                 </select>
@@ -193,7 +193,7 @@ async function loadServiceConfig() {
                 <span class="settings-item-description">Prioritize speed (smaller models) or intelligence (larger models) for utilities.</span>
             </div>
             <div class="settings-control">
-                <select id="ollama-utility-speed-select" class="settings-select" ${disabledAttr}>
+                <select id="cognitive-utility-speed-select" class="settings-select" ${disabledAttr}>
                     <option value="fast" ${utilitySpeed === 'fast' ? 'selected' : ''}>Fast (Efficiency)</option>
                     <option value="smart" ${utilitySpeed === 'smart' ? 'selected' : ''}>Smart (Fidelity)</option>
                 </select>
@@ -201,12 +201,12 @@ async function loadServiceConfig() {
         </div>`;
 
     if (publicMode) {
-      ollamaHtml += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Optimization is read-only in public mode.</div>`;
+      cognitiveHtml += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Optimization is read-only in public mode.</div>`;
     } else {
-      ollamaHtml += `<div style="font-size: 0.7em; color: #ffa500; font-style: italic; margin-top: 10px; text-align: center;"><i class='bx bx-info-circle'></i> Changing these settings requires a 'dex restart' to re-apply.</div>`;
+      cognitiveHtml += `<div style="font-size: 0.7em; color: #ffa500; font-style: italic; margin-top: 10px; text-align: center;"><i class='bx bx-info-circle'></i> Changing these settings requires a 'dex restart' to re-apply.</div>`;
     }
 
-    ollamaContainer.innerHTML = ollamaHtml;
+    cognitiveContainer.innerHTML = cognitiveHtml;
 
     if (publicMode) return;
 
@@ -231,9 +231,9 @@ async function loadServiceConfig() {
       });
     });
 
-    // Attach listener for Ollama Device
+    // Attach listener for Cognitive Device
     const deviceSelect = document.getElementById(
-      'ollama-utility-device-select'
+      'cognitive-utility-device-select'
     ) as HTMLSelectElement;
     if (deviceSelect) {
       deviceSelect.addEventListener('change', async (e) => {
@@ -243,7 +243,7 @@ async function loadServiceConfig() {
         try {
           await smartFetch('/system/options', {
             method: 'POST',
-            body: JSON.stringify({ service: 'ollama', key: 'utility_device', value }),
+            body: JSON.stringify({ service: 'cognitive', key: 'utility_device', value }),
           });
         } catch (err) {
           alert('Failed to update utility hardware setting.');
@@ -253,8 +253,10 @@ async function loadServiceConfig() {
       });
     }
 
-    // Attach listener for Ollama Speed
-    const speedSelect = document.getElementById('ollama-utility-speed-select') as HTMLSelectElement;
+    // Attach listener for Cognitive Speed
+    const speedSelect = document.getElementById(
+      'cognitive-utility-speed-select'
+    ) as HTMLSelectElement;
     if (speedSelect) {
       speedSelect.addEventListener('change', async (e) => {
         const target = e.target as HTMLSelectElement;
@@ -263,7 +265,7 @@ async function loadServiceConfig() {
         try {
           await smartFetch('/system/options', {
             method: 'POST',
-            body: JSON.stringify({ service: 'ollama', key: 'utility_speed', value }),
+            body: JSON.stringify({ service: 'cognitive', key: 'utility_speed', value }),
           });
         } catch (err) {
           alert('Failed to update utility intelligence setting.');
@@ -274,6 +276,6 @@ async function loadServiceConfig() {
     }
   } catch (err) {
     serviceContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>`;
-    ollamaContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load optimization settings.</div>`;
+    cognitiveContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load optimization settings.</div>`;
   }
 }
