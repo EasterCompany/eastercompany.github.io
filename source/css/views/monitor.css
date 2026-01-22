@@ -90,6 +90,12 @@
 .service-widget-info .info-value {
   color: #ccc;
   font-family: 'JetBrains Mono', monospace;
+  text-align: right;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 10px;
 }
 
 .service-widget-footer {

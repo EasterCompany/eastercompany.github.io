@@ -642,8 +642,8 @@ export async function updateSystemMonitor() {
     return versionStr.split('.').slice(0, 3).join('.') || '-';
   }
   function truncateAddress(address: string) {
-    if (!address || address.length <= 28) return address;
-    return address.substring(0, 28) + '...';
+    if (!address || address.length <= 22) return address;
+    return address.substring(0, 22) + '...';
   }
 
   function formatUptime(uptimeStr: string) {
