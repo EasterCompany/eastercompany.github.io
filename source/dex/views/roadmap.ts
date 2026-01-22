@@ -32,6 +32,87 @@ export const getRoadmapContent = () => `
 let activeExpandedIds = new Set();
 let currentItems: any[] = [];
 
+const createItemElement = (issue: any) => {
+  const isExpanded = activeExpandedIds.has(issue.number);
+  const createdAt = new Date(issue.createdAt);
+  const dateStr = createdAt.toLocaleDateString(navigator.language, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const tempDiv = document.createElement('div');
+  tempDiv.className = `event-item notification-item event-border-blue cursor-pointer ${isExpanded ? 'expanded' : ''}`;
+  tempDiv.dataset.issueNumber = issue.number;
+  tempDiv.id = `roadmap-issue-${issue.number}`;
+
+  tempDiv.onclick = (e) => {
+    if (
+      (e.target as HTMLElement).closest('button') ||
+      (e.target as HTMLElement).closest('textarea')
+    )
+      return;
+    const wasExpanded = tempDiv.classList.contains('expanded');
+    if (wasExpanded) {
+      tempDiv.classList.remove('expanded');
+      const details = tempDiv.querySelector('.event-details') as HTMLElement;
+      if (details) details.style.display = 'none';
+      activeExpandedIds.delete(issue.number);
+    } else {
+      tempDiv.classList.add('expanded');
+      const details = tempDiv.querySelector('.event-details') as HTMLElement;
+      if (details) details.style.display = 'block';
+      activeExpandedIds.add(issue.number);
+    }
+  };
+
+  tempDiv.innerHTML = `
+    <div class="event-time">
+      <span class="event-time-main">${dateStr.split(',')[1]}</span>
+      <span class="event-date">${dateStr.split(',')[0]}</span>
+    </div>
+    <div class="event-content">
+      <div class="event-service">ISSUE #${issue.number}</div>
+      <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${escapeHtml(issue.title)}</div>
+      <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
+        <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${renderMarkdown(issue.body)}</div>
+        ${
+          isPublicMode()
+            ? ''
+            : `
+        <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 15px;">
+          <textarea class="settings-textarea comment-input" style="min-height: 80px; font-size: 0.85em; margin-bottom: 10px;" placeholder="Add a technical comment..."></textarea>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="notif-action-btn comment-btn" style="padding: 6px 12px; font-size: 0.8em;"><i class='bx bx-comment'></i> Comment</button>
+            <button class="notif-action-btn close-btn danger" style="padding: 6px 12px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-check-circle'></i> Close Issue</button>
+          </div>
+        </div>
+        `
+        }
+      </div>
+    </div>
+  `;
+
+  tempDiv.querySelector('.comment-btn')?.addEventListener('click', async () => {
+    const input = tempDiv.querySelector('.comment-input') as HTMLTextAreaElement;
+    const body = input.value.trim();
+    if (!body) return;
+    await addComment(issue.number, body);
+    input.value = '';
+    updateRoadmapTab(true);
+  });
+
+  tempDiv.querySelector('.close-btn')?.addEventListener('click', async () => {
+    if (confirm(`Close issue #${issue.number}?`)) {
+      await closeIssue(issue.number);
+      updateRoadmapTab(true);
+    }
+  });
+
+  return tempDiv;
+};
+
 export async function updateRoadmapTab(forceReRender = false) {
   const roadmapContainer = document.getElementById('roadmap-list');
   const timelineContainer = document.getElementById('roadmap-timeline-container');
@@ -50,8 +131,20 @@ export async function updateRoadmapTab(forceReRender = false) {
     );
     currentItems = issues;
 
-    // Fix: Clear container before rendering to prevent duplication
-    roadmapContainer.innerHTML = '';
+    // --- Intelligent DOM Diffing to resolve flickering ---
+    const existingItems = Array.from(roadmapContainer.children) as HTMLElement[];
+    const existingMap = new Map(
+      existingItems.filter((el) => el.dataset.issueNumber).map((el) => [el.dataset.issueNumber, el])
+    );
+
+    if (issues.length === 0) {
+      roadmapContainer.innerHTML = createPlaceholderMessage(
+        'empty',
+        'No open issues found.',
+        'Dexter is currently in a perfect state.'
+      );
+      return;
+    }
 
     // Grouping
     const groupedIssues: Record<string, any[]> = {};
@@ -61,6 +154,32 @@ export async function updateRoadmapTab(forceReRender = false) {
       if (match) category = match[1].toLowerCase();
       if (!groupedIssues[category]) groupedIssues[category] = [];
       groupedIssues[category].push(issue);
+    });
+
+    // Clear and rebuild headers and order
+    roadmapContainer.innerHTML = '';
+
+    Object.entries(groupedIssues).forEach(([category, list]) => {
+      const headerHtml = `<div class="service-category-header" style="margin: 20px 0 10px 0; color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px;">${category}</div>`;
+      roadmapContainer.insertAdjacentHTML('beforeend', headerHtml);
+
+      list.forEach((issue) => {
+        const issueKey = issue.number.toString();
+        let el = existingMap.get(issueKey);
+
+        if (el && !forceReRender) {
+          // Update content if needed (basic check)
+          const messageEl = el.querySelector('.event-message');
+          if (messageEl && messageEl.textContent !== issue.title) {
+            roadmapContainer.appendChild(createItemElement(issue));
+          } else {
+            // Re-use existing element to preserve state (expansion)
+            roadmapContainer.appendChild(el);
+          }
+        } else {
+          roadmapContainer.appendChild(createItemElement(issue));
+        }
+      });
     });
 
     // Render Timeline
@@ -79,108 +198,6 @@ export async function updateRoadmapTab(forceReRender = false) {
         </div>
       `;
       timelineContainer.innerHTML = timelineHtml;
-    }
-
-    const createItemElement = (issue: any) => {
-      const isExpanded = activeExpandedIds.has(issue.number);
-      const createdAt = new Date(issue.createdAt);
-      const dateStr = createdAt.toLocaleDateString(navigator.language, {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-
-      const tempDiv = document.createElement('div');
-      tempDiv.className = `event-item notification-item event-border-blue cursor-pointer ${isExpanded ? 'expanded' : ''}`;
-      tempDiv.dataset.issueNumber = issue.number;
-      tempDiv.id = `roadmap-issue-${issue.number}`;
-
-      tempDiv.onclick = (e) => {
-        if (
-          (e.target as HTMLElement).closest('button') ||
-          (e.target as HTMLElement).closest('textarea')
-        )
-          return;
-        const wasExpanded = tempDiv.classList.contains('expanded');
-        if (wasExpanded) {
-          tempDiv.classList.remove('expanded');
-          const details = tempDiv.querySelector('.event-details') as HTMLElement;
-          if (details) details.style.display = 'none';
-          activeExpandedIds.delete(issue.number);
-        } else {
-          tempDiv.classList.add('expanded');
-          const details = tempDiv.querySelector('.event-details') as HTMLElement;
-          if (details) details.style.display = 'block';
-          activeExpandedIds.add(issue.number);
-        }
-      };
-
-      tempDiv.innerHTML = `
-        <div class="event-time">
-          <span class="event-time-main">${dateStr.split(',')[1]}</span>
-          <span class="event-date">${dateStr.split(',')[0]}</span>
-        </div>
-        <div class="event-content">
-          <div class="event-service">ISSUE #${issue.number}</div>
-          <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${escapeHtml(issue.title)}</div>
-          <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-            <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${renderMarkdown(issue.body)}</div>
-            ${
-              isPublicMode()
-                ? ''
-                : `
-            <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 15px;">
-              <textarea class="settings-textarea comment-input" style="min-height: 80px; font-size: 0.85em; margin-bottom: 10px;" placeholder="Add a technical comment..."></textarea>
-              <div style="display: flex; gap: 10px; align-items: center;">
-                <button class="notif-action-btn comment-btn" style="padding: 6px 12px; font-size: 0.8em;"><i class='bx bx-comment'></i> Comment</button>
-                <button class="notif-action-btn close-btn danger" style="padding: 6px 12px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-check-circle'></i> Close Issue</button>
-              </div>
-            </div>
-            `
-            }
-          </div>
-        </div>
-      `;
-
-      tempDiv.querySelector('.comment-btn')?.addEventListener('click', async () => {
-        const input = tempDiv.querySelector('.comment-input') as HTMLTextAreaElement;
-        const body = input.value.trim();
-        if (!body) return;
-        await addComment(issue.number, body);
-        input.value = '';
-        updateRoadmapTab(true);
-      });
-
-      tempDiv.querySelector('.close-btn')?.addEventListener('click', async () => {
-        if (confirm(`Close issue #${issue.number}?`)) {
-          await closeIssue(issue.number);
-          updateRoadmapTab(true);
-        }
-      });
-
-      return tempDiv;
-    };
-
-    if (forceReRender) roadmapContainer.innerHTML = '';
-
-    // Simple categorized render
-    let html = '';
-    Object.entries(groupedIssues).forEach(([category, list]) => {
-      html += `<div class="service-category-header" style="margin: 20px 0 10px 0; color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px;">${category}</div>`;
-      roadmapContainer.insertAdjacentHTML('beforeend', html);
-      html = '';
-      list.forEach((issue) => {
-        roadmapContainer.appendChild(createItemElement(issue));
-      });
-    });
-
-    if (issues.length === 0) {
-      roadmapContainer.innerHTML = createPlaceholderMessage(
-        'empty',
-        'No open issues found.',
-        'Dexter is currently in a perfect state.'
-      );
     }
   } catch (e) {
     roadmapContainer.innerHTML = createPlaceholderMessage(

@@ -231,7 +231,9 @@ export const getServicesContent = () => {
                 <button id="global-start-btn" class="notif-action-btn" title="Start All Services"><i class='bx bx-play'></i></button>
             </div>
         </div>
-        <div id="services-widgets" style="margin-bottom: 30px;"></div>`;
+        <div id="services-widgets" style="margin-bottom: 30px;">
+            ${createPlaceholderMessage('config', 'Acquiring system metrics...', 'Searching for active nodes...')}
+        </div>`;
 };
 
 export const getModelsContent = () => {
