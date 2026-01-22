@@ -45,6 +45,7 @@ export const EVENT_TEMPLATES: Record<string, string> = {
   'system.process.registered': 'Process {id} started: {state}',
   'system.process.unregistered': 'Process {id} completed',
   'system.cognitive.model_load': 'Model Loaded: {model} ({method})',
+  'system.cognitive.model_inference': 'Model Inference: {model} ({method})',
   'system.cognitive.model_unload': 'Model Unloaded: {model} ({reason})',
 };
 

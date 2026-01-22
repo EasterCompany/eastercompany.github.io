@@ -85,6 +85,7 @@ const CATEGORIES: Record<string, string[]> = {
     'analysis.visual.completed',
     'analysis.router.decision',
     'analysis.user.message_signals',
+    'system.cognitive.model_inference',
   ],
   moderation: ['moderation.explicit_content.deleted'],
 };
@@ -117,6 +118,7 @@ const EVENT_ICONS: Record<string, string> = {
   'moderation.explicit_content.deleted': 'bx-shield-x',
   'system.status.change': 'bx-refresh',
   metric_recorded: 'bx-line-chart',
+  'system.cognitive.model_inference': 'bx-brain',
 };
 
 function getEventCategory(type: string) {
@@ -208,6 +210,7 @@ export async function updateEventsTimeline(forceReRender = false) {
         type === 'analysis.user.message_signals' ||
         type === 'system.cli.command' ||
         type === 'system.analysis.audit' ||
+        type === 'system.cognitive.model_inference' ||
         type === 'system.test.completed' ||
         type === 'error_occurred' ||
         type === 'system.cli.status' ||
@@ -276,7 +279,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <span class="detail-value">${eventData.engagement_model || 'N/A'}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${stylisedHeader('Input Decision')}
+                            ${stylisedHeader('Input Prompt')}
                             <pre class="detail-pre">${eventData.input_prompt || 'None'}</pre>
                         </div>
                         <div class="event-detail-block">
