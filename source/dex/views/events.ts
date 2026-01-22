@@ -291,6 +291,30 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${eventData.engagement_raw || 'None'}</pre>
                         </div>
                     `;
+        } else if (type === 'system.cognitive.model_inference') {
+          const stylisedHeader = (text: string) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Model:</span>
+                            <span class="detail-value">${eventData.model}</span>
+                        </div>
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
+                            <span class="detail-label">Method:</span>
+                            <span class="detail-value" style="text-transform: uppercase;">${eventData.method}</span>
+                        </div>
+                        ${stylisedHeader('Inference Metrics')}
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tokens (In/Out)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.prompt_eval_count || 0} / ${eventData.eval_count || 0}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${eventData.duration_ms || 0}ms</div>
+                            </div>
+                        </div>
+                    `;
         } else if (type === 'system.attention.expired') {
           const stylisedHeader = (text: string) =>
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
