@@ -66,17 +66,6 @@ export function getSettingsContent() {
                         <i class='bx bx-loader-alt spin'></i> Loading configuration...
                     </div>
                 </div>
-            </div>
-
-            <div class="settings-divider"></div>
-
-            <div class="settings-section">
-                <h2 class="settings-section-title">Cognitive Optimization</h2>
-                <div id="cognitive-config-list" class="settings-list">
-                    <div style="padding: 20px; text-align: center; color: #666;">
-                        <i class='bx bx-loader-alt spin'></i> Loading optimization settings...
-                    </div>
-                </div>
             </div>`;
 }
 
@@ -120,43 +109,63 @@ export function attachSettingsListeners(settingsWindowInstance: WindowInstance) 
 
 async function loadServiceConfig() {
   const serviceContainer = document.getElementById('service-config-list');
-  const cognitiveContainer = document.getElementById('cognitive-config-list');
-  if (!serviceContainer || !cognitiveContainer) return;
+
+  if (!serviceContainer) return;
 
   const publicMode = isPublicMode();
 
   try {
     const response = await smartFetch('/system/options');
+
     const data = await response.json();
 
     // In local mode, data is the raw options.json structure.
+
     // In public mode (snapshot), data is the 'options' field from the snapshot.
+
     // The snapshot logic GetSystemOptionsSnapshot() now returns { services: ..., cognitive: ... }
+
     // but legacy local API might return them flat or nested.
+
     // We normalize here.
+
     const services = data.services || data || {};
-    const cognitive = data.cognitive || data || {};
 
     // 1. Render Services
+
     let serviceHtml = '';
+
     const generateDeviceToggle = (label: string, serviceKey: string, currentDevice: string) => {
       const isCuda = currentDevice === 'cuda';
+
       const disabledAttr = publicMode ? 'disabled' : '';
+
       return `
+
         <div class="settings-item">
+
             <div class="settings-item-info">
+
                 <span class="settings-item-label">${label}</span>
+
                 <span class="settings-item-description">Enable GPU acceleration (CUDA)</span>
+
             </div>
+
             <label class="toggle-switch">
+
                 <input type="checkbox" class="service-device-toggle" data-service="${serviceKey}" ${isCuda ? 'checked' : ''} ${disabledAttr}>
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>`;
     };
 
     if (services.stt)
       serviceHtml += generateDeviceToggle('STT Service', 'stt', services.stt.device || 'cpu');
+
     if (services.tts)
       serviceHtml += generateDeviceToggle('TTS Service', 'tts', services.tts.device || 'cpu');
 
@@ -168,114 +177,36 @@ async function loadServiceConfig() {
 
     serviceContainer.innerHTML = serviceHtml;
 
-    // 2. Render Cognitive Optimization
-    let cognitiveHtml = '';
-    const utilityDevice = cognitive.utility_device || 'cpu';
-    const utilitySpeed = cognitive.utility_speed || 'smart';
-    const disabledAttr = publicMode ? 'disabled' : '';
-
-    cognitiveHtml += `
-        <div class="settings-item">
-            <div class="settings-item-info">
-                <span class="settings-item-label">Utility Hardware</span>
-                <span class="settings-item-description">Force utilities (summary, engagement, etc) to specific hardware.</span>
-            </div>
-            <div class="settings-control">
-                <select id="cognitive-utility-device-select" class="settings-select" ${disabledAttr}>
-                    <option value="cpu" ${utilityDevice === 'cpu' ? 'selected' : ''}>CPU (RAM)</option>
-                    <option value="gpu" ${utilityDevice === 'gpu' ? 'selected' : ''}>GPU (VRAM)</option>
-                </select>
-            </div>
-        </div>
-        <div class="settings-item">
-            <div class="settings-item-info">
-                <span class="settings-item-label">Utility Intelligence</span>
-                <span class="settings-item-description">Prioritize speed (smaller models) or intelligence (larger models) for utilities.</span>
-            </div>
-            <div class="settings-control">
-                <select id="cognitive-utility-speed-select" class="settings-select" ${disabledAttr}>
-                    <option value="fast" ${utilitySpeed === 'fast' ? 'selected' : ''}>Fast (Efficiency)</option>
-                    <option value="smart" ${utilitySpeed === 'smart' ? 'selected' : ''}>Smart (Fidelity)</option>
-                </select>
-            </div>
-        </div>`;
-
-    if (publicMode) {
-      cognitiveHtml += `<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Optimization is read-only in public mode.</div>`;
-    } else {
-      cognitiveHtml += `<div style="font-size: 0.7em; color: #ffa500; font-style: italic; margin-top: 10px; text-align: center;"><i class='bx bx-info-circle'></i> Changing these settings requires a 'dex restart' to re-apply.</div>`;
-    }
-
-    cognitiveContainer.innerHTML = cognitiveHtml;
-
     if (publicMode) return;
 
     // Attach listeners for services
+
     serviceContainer.querySelectorAll('.service-device-toggle').forEach((toggle) => {
       toggle.addEventListener('change', async (e) => {
         const target = e.target as HTMLInputElement;
+
         const service = target.dataset.service;
+
         const value = target.checked ? 'cuda' : 'cpu';
+
         target.disabled = true;
+
         try {
           await smartFetch('/system/options', {
             method: 'POST',
+
             body: JSON.stringify({ service, key: 'device', value }),
           });
         } catch (err) {
           target.checked = !target.checked;
+
           alert('Failed to update configuration.');
         } finally {
           target.disabled = false;
         }
       });
     });
-
-    // Attach listener for Cognitive Device
-    const deviceSelect = document.getElementById(
-      'cognitive-utility-device-select'
-    ) as HTMLSelectElement;
-    if (deviceSelect) {
-      deviceSelect.addEventListener('change', async (e) => {
-        const target = e.target as HTMLSelectElement;
-        const value = target.value;
-        target.disabled = true;
-        try {
-          await smartFetch('/system/options', {
-            method: 'POST',
-            body: JSON.stringify({ service: 'cognitive', key: 'utility_device', value }),
-          });
-        } catch (err) {
-          alert('Failed to update utility hardware setting.');
-        } finally {
-          target.disabled = false;
-        }
-      });
-    }
-
-    // Attach listener for Cognitive Speed
-    const speedSelect = document.getElementById(
-      'cognitive-utility-speed-select'
-    ) as HTMLSelectElement;
-    if (speedSelect) {
-      speedSelect.addEventListener('change', async (e) => {
-        const target = e.target as HTMLSelectElement;
-        const value = target.value;
-        target.disabled = true;
-        try {
-          await smartFetch('/system/options', {
-            method: 'POST',
-            body: JSON.stringify({ service: 'cognitive', key: 'utility_speed', value }),
-          });
-        } catch (err) {
-          alert('Failed to update utility intelligence setting.');
-        } finally {
-          target.disabled = false;
-        }
-      });
-    }
   } catch (err) {
     serviceContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>`;
-    cognitiveContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load optimization settings.</div>`;
   }
 }
