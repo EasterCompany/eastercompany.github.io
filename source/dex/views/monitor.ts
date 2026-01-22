@@ -9,6 +9,8 @@ import {
   syncState,
 } from '../core/utils.ts';
 import { getLogsContent, updateLogs } from './logs.ts';
+import { getProgressContent, updateProgressTab } from './progress.ts';
+import { createWindow } from '../core/Window.ts';
 
 declare global {
   interface Window {
@@ -81,15 +83,33 @@ export const getGuardianContent = () => {
         <div class="system-section-header" style="display: flex; align-items: center;">
             <i class='bx bx-cube-alt' style="color: #03dac6; font-size: 1.5em; margin-right: 10px;"></i>
             <h2>Fabricator</h2>
-            <button id="fabricator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+                <button id="fabricator-progress-btn" class="notif-action-btn" title="View Live Progress"><i class='bx bx-loader-circle'></i></button>
+                <button id="fabricator-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            </div>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Construction Protocol</span>
-                    <span id="fabricator-construction-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-                    <div id="fabricator-construction-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                    <span style="color: #666; font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Review</span>
+                    <span id="fabricator-review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.0em; margin-bottom: 5px;">-</span>
+                    <div id="fabricator-review-stats" style="font-size: 0.55em; color: #888; font-family: monospace;"></div>
+                </div>
+                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+                    <span style="color: #666; font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Issue</span>
+                    <span id="fabricator-issue-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.0em; margin-bottom: 5px;">-</span>
+                    <div id="fabricator-issue-stats" style="font-size: 0.55em; color: #888; font-family: monospace;"></div>
+                </div>
+                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+                    <span style="color: #666; font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Construct</span>
+                    <span id="fabricator-construct-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.0em; margin-bottom: 5px;">-</span>
+                    <div id="fabricator-construct-stats" style="font-size: 0.55em; color: #888; font-family: monospace;"></div>
+                </div>
+                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+                    <span style="color: #666; font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Reporter</span>
+                    <span id="fabricator-reporter-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.0em; margin-bottom: 5px;">-</span>
+                    <div id="fabricator-reporter-stats" style="font-size: 0.55em; color: #888; font-family: monospace;"></div>
                 </div>
             </div>
         </div>
@@ -117,14 +137,14 @@ export const getGuardianContent = () => {
 
         <div class="system-section-header" style="display: flex; align-items: center;">
             ${imaginatorSVG}
-            <h2>Imaginator</h2>
+            <h2>Architect</h2>
             <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Alert Review Protocol</span>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
                     <span id="imaginator-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
@@ -840,8 +860,33 @@ export async function updateProcessesTab(isSmoothMode = false) {
   const resetBtn = document.getElementById('guardian-reset-btn');
   const analyzerResetBtn = document.getElementById('analyzer-reset-btn');
   const fabricatorResetBtn = document.getElementById('fabricator-reset-btn');
+  const fabricatorProgressBtn = document.getElementById('fabricator-progress-btn');
   const courierResetBtn = document.getElementById('courier-reset-btn');
   const pauseBtn = document.getElementById('system-pause-toggle-btn');
+
+  if (fabricatorProgressBtn && !fabricatorProgressBtn.dataset.listenerAttached) {
+    fabricatorProgressBtn.onclick = () => {
+      const progressWin = createWindow({
+        id: 'fabricator-progress-window',
+        title: 'Fabricator Progress',
+        icon: 'bx-loader-circle',
+        content: `
+          <div class="ideas-container" style="padding: 20px;">
+            <div class="progress-section">
+                <div class="system-section-header" style="margin-bottom: 20px;">
+                    <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
+                    <h2>Live Workflow</h2>
+                </div>
+                ${getProgressContent()}
+            </div>
+          </div>
+        `,
+        onOpen: () => updateProgressTab(),
+      });
+      progressWin.open();
+    };
+    fabricatorProgressBtn.dataset.listenerAttached = 'true';
+  }
 
   if (pauseBtn && !pauseBtn.dataset.listenerAttached) {
     pauseBtn.onclick = async () => {
@@ -903,7 +948,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     fabricatorResetBtn.onclick = async () => {
       fabricatorResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/agent/reset?protocol=construction', { method: 'POST' });
+        await smartFetch('/agent/reset?protocol=review', { method: 'POST' });
         setTimeout(() => {
           fabricatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -937,31 +982,25 @@ export async function updateProcessesTab(isSmoothMode = false) {
     courierResetBtn.dataset.listenerAttached = 'true';
   }
 
-  const imaginatorResetBtn = document.getElementById('imaginator-reset-btn');
-  if (imaginatorResetBtn && !imaginatorResetBtn.dataset.listenerAttached) {
-    imaginatorResetBtn.onclick = async () => {
-      imaginatorResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
-      try {
-        await smartFetch('/agent/reset?protocol=alert_review', { method: 'POST' });
+  const architectResetBtn = document.getElementById('imaginator-reset-btn');
+  if (architectResetBtn && !architectResetBtn.dataset.listenerAttached) {
+    architectResetBtn.onclick = async () => {
+      architectResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+      setTimeout(() => {
+        architectResetBtn.innerHTML = "<i class='bx bx-check'></i>";
         setTimeout(() => {
-          imaginatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
-          setTimeout(() => {
-            imaginatorResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
-          }, 2000);
-        }, 500);
-        updateProcessesTab(); // refresh immediately
-      } catch (e) {
-        imaginatorResetBtn.innerHTML = "<i class='bx bx-error'></i>";
-      }
+          architectResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+        }, 2000);
+      }, 500);
     };
-    imaginatorResetBtn.dataset.listenerAttached = 'true';
+    architectResetBtn.dataset.listenerAttached = 'true';
   }
 
   const guardianStatus = await fetchGuardianStatus();
   if (guardianStatus && guardianStatus.agents) {
     const guardianData = guardianStatus.agents.guardian || { protocols: {} };
     const analyzerData = guardianStatus.agents.analyzer || { protocols: {} };
-    const imaginatorData = guardianStatus.agents.imaginator || { protocols: {} };
+    const architectData = guardianStatus.agents.architect || { protocols: {} };
     const fabricatorData = guardianStatus.agents.fabricator || { protocols: {} };
     const courierData = guardianStatus.agents.courier || { protocols: {} };
     const systemData = guardianStatus.system || {};
@@ -970,8 +1009,11 @@ export async function updateProcessesTab(isSmoothMode = false) {
     const aliases: Record<string, string> = {
       sentry: 'Sentry',
       synthesis: 'Synthesis',
-      alert_review: 'Alert Review',
-      construction: 'Construction',
+      architect: 'Architect',
+      review: 'Review',
+      issue: 'Issue',
+      construct: 'Construct',
+      reporter: 'Reporter',
       researcher: 'Researcher',
       compressor: 'Compressor',
     };
@@ -1071,27 +1113,60 @@ export async function updateProcessesTab(isSmoothMode = false) {
         systemData.state
       );
 
-    // Imaginator Protocols
+    // Architect Protocols
     const imaginatorVal = document.getElementById('imaginator-alert_review-val');
     const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
     if (imaginatorVal)
       updateProtocolWidget(
         imaginatorVal,
         imaginatorStats,
-        imaginatorData.protocols.alert_review,
-        'alert_review',
+        architectData.protocols.architect,
+        'architect',
         systemData.state
       );
 
     // Fabricator Protocols
-    const fabricatorVal = document.getElementById('fabricator-construction-val');
-    const fabricatorStats = document.getElementById('fabricator-construction-stats');
-    if (fabricatorVal)
+    const reviewVal = document.getElementById('fabricator-review-val');
+    const reviewStats = document.getElementById('fabricator-review-stats');
+    if (reviewVal)
       updateProtocolWidget(
-        fabricatorVal,
-        fabricatorStats,
-        fabricatorData.protocols.construction,
-        'construction',
+        reviewVal,
+        reviewStats,
+        fabricatorData.protocols.review,
+        'review',
+        systemData.state
+      );
+
+    const issueVal = document.getElementById('fabricator-issue-val');
+    const issueStats = document.getElementById('fabricator-issue-stats');
+    if (issueVal)
+      updateProtocolWidget(
+        issueVal,
+        issueStats,
+        fabricatorData.protocols.issue,
+        'issue',
+        systemData.state
+      );
+
+    const constructVal = document.getElementById('fabricator-construct-val');
+    const constructStats = document.getElementById('fabricator-construct-stats');
+    if (constructVal)
+      updateProtocolWidget(
+        constructVal,
+        constructStats,
+        fabricatorData.protocols.construct,
+        'construct',
+        systemData.state
+      );
+
+    const reporterVal = document.getElementById('fabricator-reporter-val');
+    const reporterStats = document.getElementById('fabricator-reporter-stats');
+    if (reporterVal)
+      updateProtocolWidget(
+        reporterVal,
+        reporterStats,
+        fabricatorData.protocols.reporter,
+        'reporter',
         systemData.state
       );
 
@@ -1257,7 +1332,7 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
       'system-cli-op': 'CLI Operation',
       'system-analyzer': 'Analyzer Agent',
       'system-courier': 'Courier Agent',
-      'system-imaginator': 'Imaginator Agent',
+      'system-architect': 'Architect Agent',
       'system-fabricator': 'Fabricator Agent',
       'system-test': 'System Validation',
       'voice-mode': 'Voice Interaction',

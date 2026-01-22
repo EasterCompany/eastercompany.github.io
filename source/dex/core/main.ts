@@ -3,14 +3,7 @@ import { injectNavbar, injectFooter, applyBaseStyles, updateNavbarState } from '
 import { createWindow } from './Window.ts';
 import { initTheme } from './theme.ts';
 import { updateAlertsTab, getAlertsContent, checkBackgroundAlerts } from '../views/alerts.ts';
-import {
-  updateIdeasTab,
-  getRoadmapTabContent,
-  getBlueprintsTabContent,
-  getProgressTabContent,
-  getChoresTabContent,
-} from '../views/ideas.ts';
-import { checkBackgroundBlueprints } from '../views/blueprints.ts';
+import { updateIdeasTab, getRoadmapTabContent, getChoresTabContent } from '../views/ideas.ts';
 import { getContactsContent, updateContactsTab } from '../views/contacts.ts';
 import { getEventsContent, updateEventsTimeline } from '../views/events.ts';
 import {
@@ -325,9 +318,7 @@ function onReady() {
     title: 'Workspace',
     icon: 'bx-brain',
     tabs: [
-      { icon: 'bx-loader-circle', title: 'Progress', content: getProgressTabContent() },
       { icon: 'bx-map-alt', title: 'Roadmap', content: getRoadmapTabContent() },
-      { icon: 'bx-paint', title: 'Blueprints', content: getBlueprintsTabContent() },
       { icon: 'bx-task', title: 'Tasks', content: getChoresTabContent() },
     ],
     onOpen: () => updateIdeasTab(),
@@ -625,8 +616,6 @@ function onReady() {
 
     if (workspaceWindow.isOpen()) {
       updateIdeasTab();
-    } else {
-      checkBackgroundBlueprints();
     }
 
     if (isPublicMode() && eventsWindow.isOpen()) {
