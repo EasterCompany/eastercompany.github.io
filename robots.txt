@@ -17,5 +17,6 @@ Allow: /python-repl-agent/
 Allow: /the-7-part-versioning-standard/
 Allow: /v8-neural-microservices/
 Allow: /
+Allow: /test/
 
 Sitemap: https://easter.company/sitemap.xml
