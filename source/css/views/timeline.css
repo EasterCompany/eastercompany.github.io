@@ -157,22 +157,23 @@
 }
 
 .notif-action-btn {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.4);
-  padding: 8px;
-  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 15px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  font-size: 0.85em;
+  font-weight: 500;
+  gap: 8px;
 }
 
 .notif-action-btn i {
-  font-size: 1.4em;
+  font-size: 1.2em;
 }
 
 .notif-action-btn:hover {
@@ -226,6 +227,7 @@
   margin: 15px 0 5px 0;
   color: #fff;
   font-weight: 600;
+  text-align: left;
 }
 
 h3.md-header {

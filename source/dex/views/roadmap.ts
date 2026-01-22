@@ -68,15 +68,34 @@ const createItemElement = (issue: any) => {
   };
 
   tempDiv.innerHTML = `
-    <div class="event-time">
-      <span class="event-time-main">${dateStr.split(',')[1]}</span>
-      <span class="event-date">${dateStr.split(',')[0]}</span>
-    </div>
-    <div class="event-content">
-      <div class="event-service">ISSUE #${issue.number}</div>
-      <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${escapeHtml(issue.title)}</div>
-      <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-        <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${renderMarkdown(issue.body)}</div>
+
+          <div class="event-time">
+
+            <span class="event-time-main">${dateStr.split(',')[1]}</span>
+
+            <span class="event-date">${dateStr.split(',')[0]}</span>
+
+          </div>
+
+          <div class="event-content">
+
+            <div class="event-service" style="display: flex; justify-content: space-between; align-items: center;">
+
+              <span>ISSUE #${issue.number}</span>
+
+              <span style="font-size: 0.85em; color: #666; font-family: 'JetBrains Mono', monospace;">${issue.repository || 'EasterCompany/EasterCompany'}</span>
+
+            </div>
+
+            <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${escapeHtml(issue.title)}</div>
+
+            <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
+
+              <div style="font-size: 0.75em; color: #bb86fc; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold;">Target Repository: ${issue.repository || 'EasterCompany/EasterCompany'}</div>
+
+              <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${renderMarkdown(issue.body)}</div>
+
+  
         ${
           isPublicMode()
             ? ''
@@ -182,19 +201,24 @@ export async function updateRoadmapTab(forceReRender = false) {
       });
     });
 
-    // Render Timeline
+    // Render Timeline: Show oldest 4 issues in order
     if (timelineContainer) {
+      const oldestFour = issues.slice(0, 4);
       const timelineHtml = `
-        <div class="roadmap-timeline" style="display: flex; gap: 5px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;">
-          ${issues
+        <div class="roadmap-timeline" style="display: flex; gap: 5px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; align-items: center;">
+          <span style="font-size: 0.6em; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-right: 10px;">Execution Queue:</span>
+          ${oldestFour
             .map(
-              (issue: any) => `
-            <div class="timeline-dot" title="#${issue.number}: ${issue.title}" style="width: 12px; height: 12px; border-radius: 50%; background: #03dac6; flex-shrink: 0; opacity: 0.6; cursor: pointer;" onclick="dexter.viewRoadmapIssue(${issue.number})"></div>
+              (issue: any, idx: number) => `
+            <div class="timeline-dot-wrap" style="display: flex; align-items: center; gap: 5px;">
+                <div class="timeline-dot" title="#${issue.number}: ${issue.title}" style="width: 12px; height: 12px; border-radius: 50%; background: #bb86fc; flex-shrink: 0; opacity: 0.8; cursor: pointer;" onclick="dexter.viewRoadmapIssue(${issue.number})"></div>
+                <span style="font-size: 0.7em; color: #aaa; white-space: nowrap;">#${issue.number}</span>
+                ${idx < oldestFour.length - 1 ? "<div style='width: 15px; height: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; margin: 0 5px;'></div>" : ''}
+            </div>
           `
             )
-            .join(
-              "<div style='width: 20px; height: 1px; background: rgba(255,255,255,0.1); margin-top: 6px; flex-shrink: 0;'></div>"
-            )}
+            .join('')}
+            ${issues.length > 4 ? `<span style="font-size: 0.7em; color: #444; margin-left: 10px;">+${issues.length - 4} more</span>` : ''}
         </div>
       `;
       timelineContainer.innerHTML = timelineHtml;
