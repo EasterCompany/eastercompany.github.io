@@ -356,7 +356,9 @@ export async function updateChoresTab() {
         const lastRun =
           chore.last_run === 0 ? 'Never' : new Date(chore.last_run * 1000).toLocaleString();
         const memoryCount = chore.memory ? chore.memory.length : 0;
-        const statusColor = chore.status === 'active' ? '#03dac6' : '#666';
+        const statusClass =
+          chore.status === 'active' ? 'service-widget-online' : 'service-widget-offline';
+        const statusText = chore.status === 'active' ? 'ACTIVE' : 'PAUSED';
 
         const recipients = (chore.recipients || (chore.owner_id ? [chore.owner_id] : [])).sort(
           (a: string, b: string) => {
@@ -372,46 +374,47 @@ export async function updateChoresTab() {
             const name = recipientMap[r] || r.substring(0, 8);
             const isChannel = r.startsWith('channel:');
             const icon = r === 'dexter' ? 'bx-terminal' : isChannel ? 'bx-hash' : 'bx-user';
-            return `<span title="${name}" style="display: flex; align-items: center; gap: 3px;"><i class='bx ${icon}'></i>${name}</span>`;
+            return `<span title="${name}" style="display: flex; align-items: center; gap: 3px; white-space: nowrap;"><i class='bx ${icon}'></i>${name}</span>`;
           })
-          .join("<span style='color: #444;'>, </span>");
+          .join("<span style='color: #444; margin: 0 5px;'>|</span>");
+
+        const scheduleStr = `${chore.schedule}${chore.run_at ? ' @ ' + chore.run_at + (chore.timezone ? ' (' + chore.timezone.split('/').pop()?.replace('_', ' ') + ')' : '') : ''}`;
 
         return `
-                <div class="service-widget wide-task-card" style="border-left: 4px solid ${statusColor}; width: 100%; display: flex; flex-direction: column; padding: 20px;">
-                    <div class="service-widget-header" style="display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; margin-bottom: 15px;">
-                        <div style="display: flex; gap: 15px; flex: 1;">
-                            <i class='bx bx-search-alt' style="color: ${statusColor}; font-size: 1.5em; margin-top: 2px;"></i>
-                            <div style="text-align: left;">
-                                <h3 style="font-size: 1.1em; white-space: normal; line-height: 1.4; font-weight: 600; margin: 0;">${chore.natural_instruction}</h3>
-                                <div style="margin-top: 8px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                                    <div style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace; display: flex; gap: 10px; align-items: center;">
-                                      <i class='bx bx-send' style="margin-right: -5px;"></i>
-                                      ${recipientList}
-                                    </div>
-                                    <span style="font-size: 0.7em; color: #666; font-family: 'JetBrains Mono', monospace;"><i class='bx bx-time' style="margin-right: 4px;"></i>${chore.schedule}${chore.run_at ? ' @ ' + chore.run_at + (chore.timezone ? ' (' + chore.timezone.split('/').pop()?.replace('_', ' ') + ')' : '') : ''}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <button class="icon-btn reset-chore-btn" data-id="${chore.id}" title="Reset Progress" style="background: none; border: none; color: #ff9800; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-refresh' style="font-size: 1.2em;"></i></button>
-                            <button class="icon-btn edit-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #bb86fc; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-edit-alt' style="font-size: 1.2em;"></i></button>
-                            <button class="icon-btn delete-chore-btn" data-id="${chore.id}" style="background: none; border: none; color: #cf6679; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;"><i class='bx bx-trash' style="font-size: 1.2em;"></i></button>
-                        </div>
+                <div class="service-widget task-widget ${statusClass}">
+                    <div class="service-widget-header">
+                        <i class='bx bx-search-alt'></i>
+                        <h3 title="${chore.natural_instruction}">${chore.natural_instruction}</h3>
+                        <span class="service-widget-status">${statusText}</span>
                     </div>
                     
-                    <div class="service-widget-body" style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
-                        <div style="display: flex; flex-direction: column; gap: 2px;">
-                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Last Run</span>
-                            <span style="font-size: 0.85em; color: #fff; font-family: 'JetBrains Mono';">${lastRun}</span>
+                    <div class="service-widget-body">
+                        <div class="service-widget-info">
+                            <span class="info-label">Schedule:</span>
+                            <span class="info-value"><i class='bx bx-time' style="margin-right: 4px;"></i>${scheduleStr}</span>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 2px;">
-                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Items Found</span>
-                            <span style="font-size: 0.85em; color: #03dac6; font-weight: bold;">${memoryCount}</span>
+                        <div class="service-widget-info">
+                            <span class="info-label">Last Run:</span>
+                            <span class="info-value">${lastRun}</span>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 200px;">
-                            <span style="font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 1px;">Target Focus</span>
-                            <span style="font-size: 0.8em; color: #888; font-family: 'JetBrains Mono'; word-break: break-all;">${chore.execution_plan.entry_url || 'Autonomous Detection'}</span>
+                        <div class="service-widget-info">
+                            <span class="info-label">Items Found:</span>
+                            <span class="info-value" style="color: #03dac6; font-weight: bold;">${memoryCount}</span>
                         </div>
+                        <div class="service-widget-info">
+                            <span class="info-label">Target:</span>
+                            <span class="info-value" title="${chore.execution_plan.entry_url || 'Autonomous'}">${chore.execution_plan.entry_url || 'Autonomous Detection'}</span>
+                        </div>
+                        <div class="service-widget-info" style="grid-column: 1 / -1; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                            <span class="info-label" style="margin-right: 10px;">Recipients:</span>
+                            <div class="info-value" style="display: flex; gap: 5px; overflow-x: auto; text-align: left;">${recipientList}</div>
+                        </div>
+                    </div>
+
+                    <div class="service-controls">
+                        <button class="svc-btn reset-chore-btn" data-id="${chore.id}" title="Reset Progress"><i class='bx bx-refresh'></i></button>
+                        <button class="svc-btn edit-chore-btn" data-id="${chore.id}" title="Edit Task"><i class='bx bx-edit-alt'></i></button>
+                        <button class="svc-btn delete-chore-btn" data-id="${chore.id}" title="Delete Task"><i class='bx bx-trash'></i></button>
                     </div>
                 </div>
             `;

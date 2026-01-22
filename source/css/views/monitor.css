@@ -134,6 +134,21 @@
   height: 200px !important;
 }
 
+/* Task Widgets - Full Width List */
+.task-widget {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 160px;
+  margin-bottom: 15px;
+}
+
+.task-widget .service-widget-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  align-items: start;
+}
+
 .system-section-header {
   display: flex;
   align-items: center;
