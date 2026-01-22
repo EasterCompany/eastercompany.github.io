@@ -1242,6 +1242,7 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
       'system-courier': 'Courier Agent',
       'system-imaginator': 'Imaginator Agent',
       'system-fabricator': 'Fabricator Agent',
+      'system-test': 'System Validation',
       'voice-mode': 'Voice Interaction',
     };
     if (idMap[displayName]) {
@@ -1265,13 +1266,15 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
         </div>`;
     }
 
-    const stateColor = '#fff';
-    const borderColor = '';
+    const isSystemTest = proc.channel_id === 'system-test';
+    const stateColor = isSystemTest ? '#03dac6' : '#fff';
+    const borderColor = isSystemTest ? 'border: 1px solid #03dac644;' : '';
+    const icon = isSystemTest ? 'bx-shield-quarter' : 'bx-cog';
 
     return `
                 <div class="service-widget process-widget" data-channel-id="${proc.channel_id}-${proc.start_time}" style="${borderColor}">
                     <div class="service-widget-header">
-                        <i class="bx bx-cog" style="color: ${stateColor}"></i>
+                        <i class="bx ${icon}" style="color: ${stateColor}"></i>
                         <h3 style="color: ${stateColor}">${displayName}</h3>
                         ${retryBadge}
                     </div>
