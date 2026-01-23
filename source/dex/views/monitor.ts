@@ -620,7 +620,7 @@ export async function updateSystemMonitor() {
     if (list.length === 0) return;
 
     finalHtml += `
-            <div class="service-category-header" style="width: 100%; margin: 20px 0 15px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px;">
+            <div class="service-category-header" style="width: 100%; margin: 20px 0 15px 0; display: flex; align-items: center; gap: 10px;">
                 <span style="color: #888; font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">${categoryLabels[type] || type}</span>
                 <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></span>
             </div>
