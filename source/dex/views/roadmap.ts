@@ -230,6 +230,7 @@ export async function updateRoadmapTab(forceReRender = false) {
       timelineContainer.innerHTML = timelineHtml;
     }
   } catch (e) {
+    if (roadmapContainer.querySelector('.placeholder-message.offline')) return;
     roadmapContainer.innerHTML = createPlaceholderMessage(
       'offline',
       'Failed to load roadmap.',
