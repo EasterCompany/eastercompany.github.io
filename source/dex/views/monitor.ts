@@ -806,7 +806,20 @@ export async function updateProcessesTab(isSmoothMode = false) {
           }
           updateProgressTab();
         },
+        onClose: () => {
+          window.removeEventListener('popstate', closeOnNav);
+          document.removeEventListener('visibilitychange', closeOnVisibilityChange);
+        },
       });
+
+      const closeOnNav = () => progressWin.close();
+      const closeOnVisibilityChange = () => {
+        if (document.hidden) progressWin.close();
+      };
+
+      window.addEventListener('popstate', closeOnNav);
+      document.addEventListener('visibilitychange', closeOnVisibilityChange);
+
       progressWin.open();
     };
     fabricatorProgressBtn.dataset.listenerAttached = 'true';
