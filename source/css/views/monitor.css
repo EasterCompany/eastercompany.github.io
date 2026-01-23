@@ -445,15 +445,18 @@
   padding: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow-y: auto !important;
+  overflow: hidden !important; /* Modal itself doesn't scroll */
 }
 
 /* TARGET THE PROGRESS VIEW ROOT SPECIFICALLY */
 #progress-view-root {
   width: 100% !important;
+  height: 100% !important; /* Fill parent */
   max-width: none !important;
   box-sizing: border-box !important;
   flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
+  overflow-y: auto !important; /* Content within modal scrolls */
+  padding: 0 !important; /* Fill modal edges */
 }

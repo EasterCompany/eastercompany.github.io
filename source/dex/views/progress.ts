@@ -21,7 +21,7 @@ let lastMissionSummary: {
  */
 export const getProgressContent = () => {
   return `
-    <div id="progress-view-root" class="progress-container" style="flex: 1; overflow-y: auto; padding: 20px;">
+    <div id="progress-view-root" class="progress-container" style="flex: 1; overflow-y: auto;">
         ${renderStateHTML()}
     </div>
   `;
