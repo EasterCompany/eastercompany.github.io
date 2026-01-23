@@ -1261,7 +1261,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     }
   }
 
-  updateTabBadgeCount(1, processes.length);
+  updateTabBadgeCount(0, processes.length);
 }
 
 function renderProcessList(container: HTMLElement, list: any[], isHistory: boolean) {
