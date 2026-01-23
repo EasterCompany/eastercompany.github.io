@@ -167,7 +167,7 @@ export const getGuardianContent = () => {
 
                     <h2 style="margin: 0;">Architect</h2>
 
-                    <button id="imaginator-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+                    <button id="architect-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
 
                 </div>
 
@@ -181,9 +181,9 @@ export const getGuardianContent = () => {
 
                             <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
 
-                            <span id="imaginator-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                            <span id="architect-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
 
-                            <div id="imaginator-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
+                            <div id="architect-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
 
                         </div>
 
@@ -923,7 +923,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     courierResetBtn.dataset.listenerAttached = 'true';
   }
 
-  const architectResetBtn = document.getElementById('imaginator-reset-btn');
+  const architectResetBtn = document.getElementById('architect-reset-btn');
   if (architectResetBtn && !architectResetBtn.dataset.listenerAttached) {
     architectResetBtn.onclick = async () => {
       architectResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
@@ -1066,12 +1066,12 @@ export async function updateProcessesTab(isSmoothMode = false) {
       );
 
     // Architect Protocols
-    const imaginatorVal = document.getElementById('imaginator-alert_review-val');
-    const imaginatorStats = document.getElementById('imaginator-alert_review-stats');
-    if (imaginatorVal)
+    const architectVal = document.getElementById('architect-alert_review-val');
+    const architectStats = document.getElementById('architect-alert_review-stats');
+    if (architectVal)
       updateProtocolWidget(
-        imaginatorVal,
-        imaginatorStats,
+        architectVal,
+        architectStats,
         architectData.protocols.architect,
         'architect',
         systemData.state
