@@ -187,6 +187,16 @@
   margin-bottom: 40px !important; /* Greater spacing between agents */
 }
 
+/* Responsive Grid for Agents Tab on Small Screens */
+@media (max-width: 880px) {
+  /* Summary Section Indicators */
+  .system-monitor-widgets .guardian-indicator,
+  div[style*='display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))'],
+  .guardian-status-section > div {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
 /* Service Controls - Bottom Full Width */
 .service-controls {
   display: flex;
