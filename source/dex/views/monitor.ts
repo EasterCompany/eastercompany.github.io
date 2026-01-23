@@ -790,17 +790,18 @@ export async function updateProcessesTab(isSmoothMode = false) {
         className: 'fabricator-progress-modal', // Custom class for unique styling
         appendToBody: true, // Bypass grid layout
         content: `
-              <div class="full-modal">
-                <div class="window-header">
-                    <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
-                    <div class="window-title">Fabricator Live Stream</div>
-                    <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
-                </div>
-                <div class="window-content" style="height: 100%; display: flex; flex-direction: column;">
-                    ${getProgressContent()}
-                </div>
-              </div>
-            `,
+                  <div class="full-modal">
+                    <div class="window-header">
+                        <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
+                        <div class="window-title">Fabricator Live Stream</div>
+                        <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
+                    </div>
+                    <div class="inner-modal-content" style="height: 100%; display: flex; flex-direction: column;">
+                        ${getProgressContent()}
+                    </div>
+                  </div>
+                `,
+
         onOpen: () => {
           const winEl = document.getElementById('fabricator-progress-window');
           if (winEl) {
