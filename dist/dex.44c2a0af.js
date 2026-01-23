@@ -1917,14 +1917,14 @@
                         <i class="bx bxs-chip" style="color: ${G};"></i>
                         <span style="color: ${Z};">${j}</span>
                     </div>
-                </div>`}else T='<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold; margin-top: auto;"><span>OFFLINE</span></div>';let N=z()||d.type==="md"?"easter.company":f(d.domain&&d.port?`${d.domain}:${d.port}`:"");return`<div class="service-widget ${S}" data-service-id="${d.id}"><div class="service-widget-header"><i class="bx ${E}"></i><h3>${d.short_name||d.id}</h3><span class="service-widget-status">${m}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${N}</span></div>${T}</div>${M}</div>`}}async function re(t=!1){let e=document.getElementById("processes-widgets");if(!e&&!t)return;let i=document.getElementById("guardian-sentry-val"),n=document.getElementById("guardian-idle-val"),s=document.getElementById("guardian-total-idle"),o=document.getElementById("guardian-total-active"),a=document.getElementById("guardian-total-waste"),p=document.getElementById("guardian-reset-btn"),c=document.getElementById("analyzer-reset-btn"),g=document.getElementById("fabricator-reset-btn"),$=document.getElementById("fabricator-progress-btn"),x=document.getElementById("courier-reset-btn"),h=document.getElementById("system-pause-toggle-btn");$&&!$.dataset.listenerAttached&&($.onclick=()=>{let d=le({id:"fabricator-progress-window",title:"Mission Control",icon:"bx-loader-circle",className:"full-screen-modal",content:`
-          <div class="mission-control-overlay">
-            <div class="progress-section" style="height: 100%; display: flex; flex-direction: column;">
-                <div class="system-section-header" style="margin-bottom: 20px;">
-                    <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
-                    <h2>Fabricator Live Stream</h2>
-                    <button class="notif-action-btn close-modal-btn" style="margin-left: auto;"><i class='bx bx-x'></i></button>
-                </div>
+                </div>`}else T='<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold; margin-top: auto;"><span>OFFLINE</span></div>';let N=z()||d.type==="md"?"easter.company":f(d.domain&&d.port?`${d.domain}:${d.port}`:"");return`<div class="service-widget ${S}" data-service-id="${d.id}"><div class="service-widget-header"><i class="bx ${E}"></i><h3>${d.short_name||d.id}</h3><span class="service-widget-status">${m}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${N}</span></div>${T}</div>${M}</div>`}}async function re(t=!1){let e=document.getElementById("processes-widgets");if(!e&&!t)return;let i=document.getElementById("guardian-sentry-val"),n=document.getElementById("guardian-idle-val"),s=document.getElementById("guardian-total-idle"),o=document.getElementById("guardian-total-active"),a=document.getElementById("guardian-total-waste"),p=document.getElementById("guardian-reset-btn"),c=document.getElementById("analyzer-reset-btn"),g=document.getElementById("fabricator-reset-btn"),$=document.getElementById("fabricator-progress-btn"),x=document.getElementById("courier-reset-btn"),h=document.getElementById("system-pause-toggle-btn");$&&!$.dataset.listenerAttached&&($.onclick=()=>{let d=le({id:"fabricator-progress-window",title:"Mission Control",icon:"bx-loader-circle",className:"modal-overlay",content:`
+          <div class="full-modal">
+            <div class="window-header">
+                <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
+                <div class="window-title">Fabricator Live Stream</div>
+                <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
+            </div>
+            <div class="window-content" style="height: 100%; display: flex; flex-direction: column;">
                 ${Dt()}
             </div>
           </div>

@@ -784,15 +784,15 @@ export async function updateProcessesTab(isSmoothMode = false) {
         id: 'fabricator-progress-window',
         title: 'Mission Control',
         icon: 'bx-loader-circle',
-        className: 'full-screen-modal', // Custom class for full screen style
+        className: 'modal-overlay', // Custom class for full screen overlay
         content: `
-          <div class="mission-control-overlay">
-            <div class="progress-section" style="height: 100%; display: flex; flex-direction: column;">
-                <div class="system-section-header" style="margin-bottom: 20px;">
-                    <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
-                    <h2>Fabricator Live Stream</h2>
-                    <button class="notif-action-btn close-modal-btn" style="margin-left: auto;"><i class='bx bx-x'></i></button>
-                </div>
+          <div class="full-modal">
+            <div class="window-header">
+                <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
+                <div class="window-title">Fabricator Live Stream</div>
+                <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
+            </div>
+            <div class="window-content" style="height: 100%; display: flex; flex-direction: column;">
                 ${getProgressContent()}
             </div>
           </div>
