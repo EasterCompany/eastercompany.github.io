@@ -335,12 +335,12 @@
             `}).join("");t.innerHTML=E,t.querySelectorAll(".edit-chore-btn").forEach(m=>{m.onclick=w=>{w.stopPropagation();let A=m.dataset.id,_=_e.find(B=>B.id===A);_&&f(_)}}),t.querySelectorAll(".reset-chore-btn").forEach(m=>{m.onclick=async w=>{w.stopPropagation();let A=m.dataset.id;confirm("Reset this task? It will be re-run immediately on the next cycle.")&&(m.innerHTML="<i class='bx bx-loader-alt spin'></i>",await H(`/chores/${A}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({last_run:0})}),He())}}),t.querySelectorAll(".delete-chore-btn").forEach(m=>{m.onclick=async w=>{w.stopPropagation();let A=m.dataset.id;confirm("Delete this task?")&&(await H(`/chores/${A}`,{method:"DELETE"}),He())}})}e&&!e.dataset.listenerAttached&&(e.onclick=()=>{i&&(i.style.display==="none"||he!==null?f(null):i.style.display="none")},e.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{i&&(i.style.display="none")},s.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{let l=document.getElementById("new-chore-instruction"),S=document.getElementById("new-chore-url"),E=document.getElementById("new-chore-schedule"),m=l?.value,w=E?.value||"every_24h",A=w==="daily"?y?.value:"",_=w==="daily"?h?.value:"";if(!m)return;if(ie.length===0){alert("Please add at least one recipient.");return}let B=n.innerHTML;n.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{let O=he?"PATCH":"POST",G=he?`/chores/${he}`:"/chores";await H(G,{method:O,headers:{"Content-Type":"application/json"},body:JSON.stringify({recipients:ie,natural_instruction:m,entry_url:S?.value,schedule:w,run_at:A,timezone:_})}),i&&(i.style.display="none"),l&&(l.value=""),S&&(S.value=""),he=null,ie=[],He()}catch(O){console.error(O),alert(he?"Failed to update research task":"Failed to create research task")}finally{n.innerHTML=B}},n.dataset.listenerAttached="true");try{let l=await H("/chores");if(!l.ok)throw new Error(`HTTP error! status: ${l.status}`);if(_e=await l.json()||[],p){let E=p.value,m=new Set;_e.forEach(w=>{w.owner_id&&m.add(w.owner_id),w.recipients&&w.recipients.forEach(A=>m.add(A))}),p.innerHTML='<option value="all">All Recipients</option>',m.forEach(w=>{let A=document.createElement("option");A.value=w;let _=w.startsWith("channel:"),B=Be[w]||`Recipient: ${w.substring(0,8)}`;A.textContent=(_&&!B.startsWith("#")?"#":"")+B,p.appendChild(A)}),p.value=E,p.selectedIndex===-1&&(p.value="all")}d()}catch(l){console.error("Failed to fetch chores",l)}}var Mt=()=>`
     <div class="ideas-container">
         <div class="roadmap-section" style="margin-bottom: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <div class="system-section-header" style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                    <i class='bx bx-map-alt' style="color: #bb86fc;"></i>
-                    <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Strategic Roadmap</h2>
+            <div class="system-section-header" style="margin-bottom: 15px;">
+                <i class='bx bx-map-alt' style="color: #bb86fc;"></i>
+                <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Strategic Roadmap</h2>
+                <div style="margin-left: auto;">
+                    ${St()}
                 </div>
-                ${St()}
             </div>
             ${kt()}
         </div>
@@ -348,12 +348,12 @@
 `,It=()=>`
     <div class="ideas-container">
         <div class="chores-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <div class="system-section-header" style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                    <i class='bx bx-task' style="color: #bb86fc;"></i>
-                    <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Research Tasks</h2>
+            <div class="system-section-header" style="margin-bottom: 15px;">
+                <i class='bx bx-task' style="color: #bb86fc;"></i>
+                <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Research Tasks</h2>
+                <div style="margin-left: auto;">
+                    ${Lt()}
                 </div>
-                ${Lt()}
             </div>
             ${Ct()}
         </div>
