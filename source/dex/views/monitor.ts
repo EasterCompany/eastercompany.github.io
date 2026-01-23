@@ -780,23 +780,27 @@ export async function updateProcessesTab(isSmoothMode = false) {
 
   if (fabricatorProgressBtn && !fabricatorProgressBtn.dataset.listenerAttached) {
     fabricatorProgressBtn.onclick = () => {
+      const nav = document.querySelector('nav');
+      if (nav) nav.style.display = 'none';
+
       const progressWin = createWindow({
         id: 'fabricator-progress-window',
         title: 'Mission Control',
         icon: 'bx-loader-circle',
         className: 'fabricator-progress-modal', // Custom class for unique styling
+        appendToBody: true, // Bypass grid layout
         content: `
-          <div class="full-modal">
-            <div class="window-header">
-                <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
-                <div class="window-title">Fabricator Live Stream</div>
-                <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
-            </div>
-            <div class="window-content" style="height: 100%; display: flex; flex-direction: column;">
-                ${getProgressContent()}
-            </div>
-          </div>
-        `,
+              <div class="full-modal">
+                <div class="window-header">
+                    <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
+                    <div class="window-title">Fabricator Live Stream</div>
+                    <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
+                </div>
+                <div class="window-content" style="height: 100%; display: flex; flex-direction: column;">
+                    ${getProgressContent()}
+                </div>
+              </div>
+            `,
         onOpen: () => {
           const winEl = document.getElementById('fabricator-progress-window');
           if (winEl) {
@@ -807,11 +811,11 @@ export async function updateProcessesTab(isSmoothMode = false) {
           updateProgressTab();
         },
         onClose: () => {
+          if (nav) nav.style.display = '';
           window.removeEventListener('popstate', closeOnNav);
           document.removeEventListener('visibilitychange', closeOnVisibilityChange);
         },
       });
-
       const closeOnNav = () => progressWin.close();
       const closeOnVisibilityChange = () => {
         if (document.hidden) progressWin.close();

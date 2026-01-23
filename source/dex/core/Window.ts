@@ -17,6 +17,7 @@ export interface WindowOptions {
   onOpen?: () => void;
   onClose?: () => void;
   className?: string;
+  appendToBody?: boolean;
 }
 
 export interface WindowInstance {
@@ -120,7 +121,12 @@ export function createWindow(options: WindowOptions): WindowInstance {
             </div>
             ${contentHTML}
         `;
-    container.appendChild(windowEl);
+
+    if (options.appendToBody) {
+      document.body.appendChild(windowEl);
+    } else {
+      container.appendChild(windowEl);
+    }
 
     windowEl.querySelector('.window-close')?.addEventListener('click', (e) => {
       e.stopPropagation();
