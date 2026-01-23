@@ -1293,6 +1293,9 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
     };
     if (idMap[displayName]) {
       displayName = idMap[displayName];
+    } else if (displayName.startsWith('system-context-summary-')) {
+      const channelId = displayName.replace('system-context-summary-', '');
+      displayName = `Context Compression: ${channelId}`;
     } else if (/^\d+$/.test(displayName)) {
       displayName = `Channel ${displayName}`;
     }
