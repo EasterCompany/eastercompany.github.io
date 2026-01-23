@@ -288,3 +288,66 @@
 .close-btn {
   border-radius: 6px !important;
 }
+
+/* Fabricator Progress Modal - Unique Override */
+.window.fabricator-progress-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  z-index: 10000 !important; /* Higher than everything */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(10px) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: auto !important; /* Force interaction */
+}
+
+.window.fabricator-progress-modal.open {
+  opacity: 1 !important;
+}
+
+.window.fabricator-progress-modal .full-modal {
+  width: 95vw !important;
+  height: 95vh !important;
+  max-width: 1800px !important;
+  max-height: 1200px !important;
+  background-color: rgba(20, 20, 20, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.window.fabricator-progress-modal.open .full-modal {
+  transform: scale(1);
+}
+
+.window.fabricator-progress-modal .window-header {
+  display: flex !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  flex-shrink: 0 !important;
+}
+
+.window.fabricator-progress-modal .window-content {
+  padding: 0 !important;
+  overflow-y: auto !important;
+  flex-grow: 1 !important;
+}
+
+.window.fabricator-progress-modal .window-close {
+  display: flex !important;
+}

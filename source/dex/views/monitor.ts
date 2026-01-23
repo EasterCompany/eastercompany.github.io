@@ -784,7 +784,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         id: 'fabricator-progress-window',
         title: 'Mission Control',
         icon: 'bx-loader-circle',
-        className: 'modal-overlay', // Custom class for full screen overlay
+        className: 'fabricator-progress-modal', // Custom class for unique styling
         content: `
           <div class="full-modal">
             <div class="window-header">
