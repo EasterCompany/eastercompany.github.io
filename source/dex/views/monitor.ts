@@ -1288,6 +1288,7 @@ function renderProcessList(container: HTMLElement, list: any[], isHistory: boole
       'system-fabricator': 'Fabricator Agent',
       'system-test': 'System Validation',
       'voice-mode': 'Voice Interaction',
+      'system-context-summary-test-channel-id': 'Context Summary Test',
     };
     if (idMap[displayName]) {
       displayName = idMap[displayName];

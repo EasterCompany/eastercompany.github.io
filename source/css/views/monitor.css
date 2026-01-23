@@ -122,7 +122,7 @@
 /* Process Widgets - Overrides for full-width layout */
 .process-widget {
   border-top: 3px solid #4444ff;
-  padding: 15px !important;
+  padding: 0 !important; /* Restore 0 padding so header hits edges */
   width: 100% !important; /* Full width for history items/list */
   height: auto !important;
   min-height: 100px;
@@ -132,6 +132,14 @@
 #processes-queue-widgets .process-widget {
   width: 300px !important; /* Keep active/queue widgets small */
   height: 200px !important;
+}
+
+/* History Container: Enforce vertical list and full width */
+#processes-history-widgets {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  align-items: stretch !important; /* Fix shrink-to-content issue */
 }
 
 /* Task Widgets - Full Width List */
