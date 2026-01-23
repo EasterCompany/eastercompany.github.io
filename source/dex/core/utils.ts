@@ -605,6 +605,10 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
       }
       throw new Error('Fallback failed');
     } catch (e2) {
+      // Exception: If roadmap stats fail locally (e.g. GH CLI error), return 0 to prevent UI crash
+      if (endpoint === '/roadmap/stats') {
+        return new Response(JSON.stringify({ open_issues: 0 }), { status: 200 });
+      }
       throw e2;
     }
   }
