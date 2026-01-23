@@ -143,10 +143,10 @@
 }
 
 .task-widget .service-widget-body {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 20px;
 }
 
 .system-section-header {

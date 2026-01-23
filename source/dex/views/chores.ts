@@ -405,9 +405,9 @@ export async function updateChoresTab() {
                             <span class="info-label">Target:</span>
                             <span class="info-value" title="${chore.execution_plan.entry_url || 'Autonomous'}">${chore.execution_plan.entry_url || 'Autonomous Detection'}</span>
                         </div>
-                        <div class="service-widget-info" style="grid-column: 1 / -1; margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                        <div class="service-widget-info" style="margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
                             <span class="info-label" style="margin-right: 10px;">Recipients:</span>
-                            <div class="info-value" style="display: flex; gap: 5px; overflow-x: auto; text-align: left;">${recipientList}</div>
+                            <div class="info-value" style="display: flex; gap: 5px; overflow-x: auto; justify-content: flex-end;">${recipientList}</div>
                         </div>
                     </div>
 
