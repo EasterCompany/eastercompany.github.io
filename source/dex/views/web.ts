@@ -1,17 +1,60 @@
 import { smartFetch, createPlaceholderMessage, escapeHtml } from '../core/utils.ts';
 
+declare global {
+  interface Window {
+    hasWebResizeListener?: boolean;
+  }
+}
+
 export const getWebContent = () => {
   return `
+        <style>
+            .web-view-container {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+                position: relative;
+            }
+            .web-sidebar {
+                width: 350px;
+                background: rgba(255,255,255,0.02);
+                border-left: 1px solid rgba(255,255,255,0.05);
+                display: flex;
+                flex-direction: column;
+                transition: all 0.3s ease;
+            }
+            #web-switch-btn {
+                display: none;
+            }
+
+            @media (max-width: 880px) {
+                .web-view-container {
+                    flex-direction: column;
+                }
+                .web-sidebar {
+                    width: 100% !important;
+                    border-left: none;
+                    position: absolute;
+                    inset: 0;
+                    z-index: 5;
+                    background: #050507;
+                }
+                #web-switch-btn {
+                    display: flex;
+                }
+            }
+        </style>
         <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
             <div class="system-section-header" style="flex-shrink: 0;">
                 <i class='bx bx-globe' style="color: #03dac6;"></i>
-                <h2>Web View</h2>
+                <h2 id="web-view-title">Web View</h2>
                 <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button id="web-switch-btn" class="notif-action-btn" title="Switch View"><i class='bx bx-transfer-alt'></i></button>
                     <button id="web-sidebar-toggle" class="notif-action-btn" title="Toggle Analysis Sidebar"><i class='bx bx-dock-right'></i></button>
                     <button id="web-refresh-btn" class="notif-action-btn" title="Refresh Data"><i class='bx bx-refresh'></i></button>
                 </div>
             </div>
-            <div style="flex: 1; display: flex; overflow: hidden; position: relative;">
+            <div class="web-view-container">
                 <!-- Main Iframe Area -->
                 <div id="web-frame-container" style="flex: 1; height: 100%; background: #000; position: relative;">
                     <div id="web-frame-placeholder" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: #050507; color: #444; text-align: center; padding: 20px;">
@@ -22,7 +65,7 @@ export const getWebContent = () => {
                 </div>
 
                 <!-- Analysis Sidebar -->
-                <div id="web-analysis-sidebar" class="web-sidebar" style="width: 350px; background: rgba(255,255,255,0.02); border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; transition: all 0.3s ease;">
+                <div id="web-analysis-sidebar" class="web-sidebar">
                     <div style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
                         <h3 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #888;">Active Analysis</h3>
                     </div>
@@ -41,7 +84,9 @@ export const getWebContent = () => {
 export async function updateWebTab() {
   const sidebar = document.getElementById('web-analysis-sidebar');
   const toggleBtn = document.getElementById('web-sidebar-toggle');
+  const switchBtn = document.getElementById('web-switch-btn');
   const refreshBtn = document.getElementById('web-refresh-btn');
+  const title = document.getElementById('web-view-title');
 
   if (toggleBtn && !toggleBtn.dataset.listenerAttached) {
     toggleBtn.onclick = () => {
@@ -53,6 +98,39 @@ export async function updateWebTab() {
     };
     toggleBtn.dataset.listenerAttached = 'true';
   }
+
+  if (switchBtn && !switchBtn.dataset.listenerAttached) {
+    switchBtn.onclick = () => {
+      if (sidebar) {
+        const showingSidebar = sidebar.style.display !== 'none';
+        sidebar.style.display = showingSidebar ? 'none' : 'flex';
+        if (title) title.textContent = showingSidebar ? 'Web View' : 'Web Analysis';
+      }
+    };
+    switchBtn.dataset.listenerAttached = 'true';
+  }
+
+  // Ensure default state for mobile vs desktop
+  const handleResize = () => {
+    const isMobile = window.innerWidth < 880;
+    if (sidebar && toggleBtn && switchBtn && title) {
+      if (isMobile) {
+        toggleBtn.style.display = 'none';
+        sidebar.style.display = 'none'; // Hide sidebar by default on mobile (show iframe)
+        title.textContent = 'Web View';
+      } else {
+        toggleBtn.style.display = 'flex';
+        sidebar.style.display = 'flex'; // Show sidebar by default on desktop
+        title.textContent = 'Web View';
+      }
+    }
+  };
+
+  if (!window.hasWebResizeListener) {
+    window.addEventListener('resize', handleResize);
+    window.hasWebResizeListener = true;
+  }
+  handleResize(); // Trigger once on load
 
   if (refreshBtn && !refreshBtn.dataset.listenerAttached) {
     refreshBtn.onclick = async () => {
