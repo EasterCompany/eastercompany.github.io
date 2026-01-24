@@ -537,7 +537,12 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
       return new Response(JSON.stringify({ error: 'Profile not found' }), { status: 404 });
     }
 
-    // 8. Web History
+    // 8. Web View
+    if (endpoint.startsWith('/web/view')) {
+      return new Response(JSON.stringify(DASHBOARD_CACHE.web_view || {}), { status: 200 });
+    }
+
+    // 8b. Web History (Legacy)
     if (endpoint.startsWith('/web/history')) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.web_history || []), { status: 200 });
     }

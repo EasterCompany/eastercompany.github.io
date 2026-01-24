@@ -1,30 +1,63 @@
-import { smartFetch, createPlaceholderMessage } from '../core/utils.ts';
+import { smartFetch, createPlaceholderMessage, escapeHtml } from '../core/utils.ts';
 
 export const getWebContent = () => {
   return `
-        <div style="display: flex; flex-direction: column; height: 100%;">
+        <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
             <div class="system-section-header" style="flex-shrink: 0;">
                 <i class='bx bx-globe' style="color: #03dac6;"></i>
-                <h2>Web History</h2>
-                <button id="web-refresh-btn" class="notif-action-btn" style="margin-left: auto;" title="Refresh Data"><i class='bx bx-refresh'></i></button>
+                <h2>Web View</h2>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button id="web-sidebar-toggle" class="notif-action-btn" title="Toggle Analysis Sidebar"><i class='bx bx-dock-right'></i></button>
+                    <button id="web-refresh-btn" class="notif-action-btn" title="Refresh Data"><i class='bx bx-refresh'></i></button>
+                </div>
             </div>
-            <div id="web-carousel-container" style="flex: 1; position: relative; min-height: 0; overflow: hidden;">
-                <div id="web-history-content" style="height: 100%;"></div>
+            <div style="flex: 1; display: flex; overflow: hidden; position: relative;">
+                <!-- Main Iframe Area -->
+                <div id="web-frame-container" style="flex: 1; height: 100%; background: #000; position: relative;">
+                    <div id="web-frame-placeholder" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: #050507; color: #444; text-align: center; padding: 20px;">
+                        <i class='bx bx-world' style="font-size: 4rem; margin-bottom: 15px; opacity: 0.2;"></i>
+                        <p style="max-width: 300px; font-size: 0.9em; line-height: 1.6;">Enter a URL or wait for Dexter to browse the web.</p>
+                    </div>
+                    <iframe id="web-main-frame" sandbox="allow-scripts allow-forms allow-same-origin" style="width: 100%; height: 100%; border: none; background: #fff; display: none;"></iframe>
+                </div>
+
+                <!-- Analysis Sidebar -->
+                <div id="web-analysis-sidebar" class="web-sidebar" style="width: 350px; background: rgba(255,255,255,0.02); border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; transition: all 0.3s ease;">
+                    <div style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
+                        <h3 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #888;">Active Analysis</h3>
+                    </div>
+                    <div id="web-analysis-content" style="flex: 1; overflow-y: auto; padding: 15px;">
+                        <div style="text-align: center; color: #444; padding-top: 50px;">
+                            <i class='bx bx-analyse' style="font-size: 2rem; opacity: 0.3;"></i>
+                            <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">No analysis data</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     `;
 };
 
 export async function updateWebTab() {
-  const container = document.getElementById('web-history-content');
-  if (!container) return;
-
-  // Attach refresh button listener
+  const sidebar = document.getElementById('web-analysis-sidebar');
+  const toggleBtn = document.getElementById('web-sidebar-toggle');
   const refreshBtn = document.getElementById('web-refresh-btn');
+
+  if (toggleBtn && !toggleBtn.dataset.listenerAttached) {
+    toggleBtn.onclick = () => {
+      if (sidebar) {
+        const isHidden = sidebar.style.display === 'none';
+        sidebar.style.display = isHidden ? 'flex' : 'none';
+        toggleBtn.style.color = isHidden ? '#03dac6' : '';
+      }
+    };
+    toggleBtn.dataset.listenerAttached = 'true';
+  }
+
   if (refreshBtn && !refreshBtn.dataset.listenerAttached) {
     refreshBtn.onclick = async () => {
       refreshBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
-      await renderWebHistory(container);
+      await renderWebView();
       refreshBtn.innerHTML = "<i class='bx bx-check'></i>";
       setTimeout(() => {
         refreshBtn.innerHTML = "<i class='bx bx-refresh'></i>";
@@ -33,85 +66,109 @@ export async function updateWebTab() {
     refreshBtn.dataset.listenerAttached = 'true';
   }
 
-  await renderWebHistory(container);
+  await renderWebView();
 }
 
-async function renderWebHistory(container: HTMLElement) {
-  try {
-    const response = await smartFetch('/web/history');
-    if (!response.ok) throw new Error('Failed to fetch history');
-    const history = await response.json();
+async function renderWebView() {
+  const analysisContainer = document.getElementById('web-analysis-content');
+  const iframe = document.getElementById('web-main-frame') as HTMLIFrameElement;
+  const placeholder = document.getElementById('web-frame-placeholder');
 
-    if (!history || history.length === 0) {
-      container.innerHTML = createPlaceholderMessage('empty', 'No web history found.');
+  if (!analysisContainer || !iframe || !placeholder) return;
+
+  try {
+    const response = await smartFetch('/web/view');
+    if (!response.ok) throw new Error('Failed to fetch web view state');
+    const state = await response.json();
+
+    if (!state || !state.url) {
+      placeholder.style.display = 'flex';
+      iframe.style.display = 'none';
+      analysisContainer.innerHTML = `
+                <div style="text-align: center; color: #444; padding-top: 50px;">
+                    <i class='bx bx-analyse' style="font-size: 2rem; opacity: 0.3;"></i>
+                    <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">No active analysis</p>
+                </div>`;
       return;
     }
 
-    // Build Carousel
-    let html = `
-            <div style="display: flex; flex-direction: column; height: 100%;">
-                <div class="web-carousel" style="flex: 1; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding-bottom: 5px; scroll-behavior: smooth; min-height: 0;">
-        `;
+    // Update Iframe
+    if (iframe.src !== state.url) {
+      placeholder.style.display = 'none';
+      iframe.style.display = 'block';
+      iframe.src = state.url;
+    }
 
-    history.forEach((item: any, index: number) => {
-      const date = new Date(item.timestamp * 1000).toLocaleString([], {
-        dateStyle: 'short',
-        timeStyle: 'short',
-      });
-      const screenshotHtml = item.screenshot
-        ? `<img src="data:image/png;base64,${item.screenshot}" style="width: 100%; max-height: 45%; object-fit: contain; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; flex-shrink: 0; background: #000;">`
-        : `<div style="width: 100%; height: 120px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; margin-bottom: 15px; border-radius: 8px; flex-shrink: 0;">
-            <i class='bx bx-image-alt' style="font-size: 2.5rem; margin-bottom: 8px; opacity: 0.3;"></i>
-            <span style="font-size: 0.7em; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5;">No Screenshot Available</span>
-           </div>`;
+    // Update Sidebar Analysis
+    let sidebarHtml = '';
 
-      html += `
-                <div class="web-card" style="flex: 0 0 100%; height: 100%; display: flex; flex-direction: column; scroll-snap-align: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; box-sizing: border-box; max-width: 100%; overflow: hidden;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; flex-shrink: 0;">
-                        <span style="color: #03dac6; font-weight: bold; font-family: monospace;">#${index + 1}</span>
-                        <span style="color: #888; font-size: 0.8em; font-family: monospace;">${date}</span>
+    // 1. Metadata Section
+    if (state.metadata) {
+      sidebarHtml += `
+                <div class="analysis-section" style="margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #03dac6;">
+                        <i class='bx bx-info-circle'></i>
+                        <span style="font-size: 0.7em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Metadata</span>
                     </div>
-                    <h3 style="margin-bottom: 5px; color: #fff; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; font-size: 1.1em;">${item.title || 'No Title'}</h3>
-                    <a href="${item.url}" target="_blank" style="color: #bb86fc; font-size: 0.8em; margin-bottom: 15px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; text-decoration: none;">${item.url}</a>
-                    
-                    ${screenshotHtml}
-
-                    <div style="flex: 1; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; color: #aaa; white-space: pre-wrap; border: 1px solid rgba(255,255,255,0.03);">${item.content ? item.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'No content available'}</div>
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <h4 style="margin: 0 0 8px 0; color: #fff; font-size: 0.9em; line-height: 1.4;">${state.metadata.title || 'Untitled'}</h4>
+                        <p style="margin: 0; color: #888; font-size: 0.75em; line-height: 1.5;">${state.metadata.description || 'No description extracted.'}</p>
+                    </div>
                 </div>
             `;
-    });
-
-    html += `
-                </div>
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0 0; flex-shrink: 0;">
-                    <button id="web-prev-btn" class="notif-action-btn" style="margin-right: auto;"><i class='bx bx-left-arrow-alt'></i> Prev</button>
-                    <span style="color: #555; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;">Swipe to navigate</span>
-                    <button id="web-next-btn" class="notif-action-btn" style="margin-left: auto;">Next <i class='bx bx-right-arrow-alt'></i></button>
-                </div>
-            </div>
-        `;
-
-    container.innerHTML = html;
-
-    const carousel = container.querySelector('.web-carousel') as HTMLElement;
-    const prevBtn = container.querySelector('#web-prev-btn') as HTMLElement;
-    const nextBtn = container.querySelector('#web-next-btn') as HTMLElement;
-
-    if (prevBtn) {
-      prevBtn.onclick = () => {
-        carousel.scrollBy({ left: -carousel.offsetWidth, behavior: 'smooth' });
-      };
     }
-    if (nextBtn) {
-      nextBtn.onclick = () => {
-        carousel.scrollBy({ left: carousel.offsetWidth, behavior: 'smooth' });
-      };
+
+    // 2. Scrape Section
+    if (state.scrape) {
+      sidebarHtml += `
+                <div class="analysis-section" style="margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #bb86fc;">
+                        <i class='bx bx-code-alt'></i>
+                        <span style="font-size: 0.7em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Scraped Content</span>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); max-height: 200px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.7em; color: #aaa; white-space: pre-wrap;">${escapeHtml(state.scrape.content) || 'No content.'}</div>
+                </div>
+            `;
     }
+
+    // 3. Visual Section
+    if (state.visual) {
+      const screenshot =
+        state.visual.screenshot || state.visual.screenshot_base64 || state.visual.base64;
+      const screenshotHtml = screenshot
+        ? `<img src="data:image/png;base64,${screenshot}" style="width: 100%; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-top: 10px; cursor: pointer;" onclick="window.open('data:image/png;base64,${screenshot}')">`
+        : '';
+
+      sidebarHtml += `
+                <div class="analysis-section" style="margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #ff9800;">
+                        <i class='bx bx-camera'></i>
+                        <span style="font-size: 0.7em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Visual Analysis</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <p style="margin: 0; color: #fff; font-size: 0.8em; line-height: 1.5;">${state.visual.description || 'Analyzing page layout...'}</p>
+                        ${screenshotHtml}
+                    </div>
+                </div>
+            `;
+    }
+
+    if (!sidebarHtml) {
+      sidebarHtml = `<div style="text-align: center; color: #444; padding-top: 50px;">
+            <i class='bx bx-loader-alt spin' style="font-size: 2rem; opacity: 0.3;"></i>
+            <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">Awaiting analysis data...</p>
+        </div>`;
+    }
+
+    analysisContainer.innerHTML = `
+        <div style="margin-bottom: 20px;">
+            <a href="${state.url}" target="_blank" style="color: #bb86fc; font-size: 0.7em; text-decoration: none; word-break: break-all; display: block; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px;">
+                <i class='bx bx-link-external'></i> ${state.url}
+            </a>
+        </div>
+        ${sidebarHtml}
+    `;
   } catch (e: any) {
-    container.innerHTML = createPlaceholderMessage(
-      'error',
-      'Failed to load web history.',
-      e.message
-    );
+    analysisContainer.innerHTML = createPlaceholderMessage('error', 'Web View failed.', e.message);
   }
 }
