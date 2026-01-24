@@ -211,12 +211,6 @@ async function renderWebView() {
 
     // 3. Visual Section
     if (state.visual) {
-      const screenshot =
-        state.visual.screenshot || state.visual.screenshot_base64 || state.visual.base64;
-      const screenshotHtml = screenshot
-        ? `<img src="data:image/png;base64,${screenshot}" style="width: 100%; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-top: 10px; cursor: pointer;" onclick="window.open('data:image/png;base64,${screenshot}')">`
-        : '';
-
       sidebarHtml += `
                 <div class="analysis-section" style="margin-bottom: 25px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #ff9800;">
@@ -225,7 +219,6 @@ async function renderWebView() {
                     </div>
                     <div style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.05);">
                         <p style="margin: 0; color: #fff; font-size: 0.8em; line-height: 1.5;">${state.visual.description || 'Analyzing page layout...'}</p>
-                        ${screenshotHtml}
                     </div>
                 </div>
             `;
