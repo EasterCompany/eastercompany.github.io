@@ -312,6 +312,22 @@ function startAgentSmoothLoop() {
       return;
     }
 
+    // Update Upstash Countdown (Aligns to :00 of every minute)
+    const countdownEl = document.getElementById('upstash-countdown');
+    if (countdownEl) {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const remaining = 60 - seconds;
+      countdownEl.textContent = `${remaining}s`;
+
+      // Visual feedback: pulse red when low
+      if (remaining < 10) {
+        countdownEl.style.color = '#cf6679';
+      } else {
+        countdownEl.style.color = '#fff';
+      }
+    }
+
     // Trigger UI updates for timers that should feel live
     updateProcessesTab(true); // true means 'smooth mode' - skip fetching, just update from cache
   }, 1000);
@@ -851,7 +867,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     resetBtn.onclick = async () => {
       resetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/agent/reset?protocol=all', { method: 'POST' });
+        await smartFetch('/agent/reset?agent=all', { method: 'POST' });
         setTimeout(() => {
           resetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -870,7 +886,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     analyzerResetBtn.onclick = async () => {
       analyzerResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/agent/reset?protocol=synthesis', { method: 'POST' });
+        await smartFetch('/agent/reset?agent=analyzer', { method: 'POST' });
         setTimeout(() => {
           analyzerResetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -889,7 +905,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     fabricatorResetBtn.onclick = async () => {
       fabricatorResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/agent/reset?protocol=review', { method: 'POST' });
+        await smartFetch('/agent/reset?agent=fabricator', { method: 'POST' });
         setTimeout(() => {
           fabricatorResetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -908,7 +924,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
     courierResetBtn.onclick = async () => {
       courierResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
       try {
-        await smartFetch('/agent/reset?protocol=researcher', { method: 'POST' });
+        await smartFetch('/agent/reset?agent=courier', { method: 'POST' });
         setTimeout(() => {
           courierResetBtn.innerHTML = "<i class='bx bx-check'></i>";
           setTimeout(() => {
@@ -927,12 +943,18 @@ export async function updateProcessesTab(isSmoothMode = false) {
   if (architectResetBtn && !architectResetBtn.dataset.listenerAttached) {
     architectResetBtn.onclick = async () => {
       architectResetBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
-      setTimeout(() => {
-        architectResetBtn.innerHTML = "<i class='bx bx-check'></i>";
+      try {
+        await smartFetch('/agent/reset?agent=architect', { method: 'POST' });
         setTimeout(() => {
-          architectResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
-        }, 2000);
-      }, 500);
+          architectResetBtn.innerHTML = "<i class='bx bx-check'></i>";
+          setTimeout(() => {
+            architectResetBtn.innerHTML = "<i class='bx bx-refresh'></i>";
+          }, 2000);
+        }, 500);
+        updateProcessesTab();
+      } catch (e) {
+        architectResetBtn.innerHTML = "<i class='bx bx-error'></i>";
+      }
     };
     architectResetBtn.dataset.listenerAttached = 'true';
   }
