@@ -8,7 +8,7 @@
 
 ## Abstract
 
-Voice interaction is the most intimate and technically demanding form of human-AI engagement. Achieving a "zero-latency" feel requires a complex synchronization of signal processing, voice activity detection (VAD), and distributed transcription. This paper explores the **Dexter Audio Pipeline**, which decodes 48kHz Opus streams into raw PCM buffers, manages VAD thresholds via Redis persistence, and utilizes a local Whisper implementation to achieve high-fidelity voice-to-voice interaction.
+Voice interaction is the most intimate and technically demanding form of human-AI engagement. Achieving a "zero-latency" feel requires a complex synchronization of signal processing, voice activity detection (VAD), and distributed transcription. This paper explores the **Dexter Audio Pipeline**, which decodes 48kHz Opus streams into raw PCM buffers, manages VAD thresholds via Redis persistence, and utilizes a local Neural STT implementation to achieve high-fidelity voice-to-voice interaction.
 
 ## 1. Introduction: The Latency Barrier
 
@@ -35,7 +35,7 @@ Dexter uses a time-weighted silence threshold:
 
 Once a "Stop" event is triggered, the PCM buffer is converted to WAV and written to Redis with a unique key: `discord-audio:<start>-<stop>-<user>-<channel>`.
 
-The service then calls the CLI: `dex whisper transcribe -k <redisKey>`. By using Redis as an intermediary, we decouple the audio capture (low CPU) from the Whisper transcription (high GPU/NPU), ensuring the audio stream remains smooth even during heavy inference.
+The service then calls the CLI: `dex stt -k <redisKey>`. By using Redis as an intermediary, we decouple the audio capture (low CPU) from the transcription inference (high GPU/NPU), ensuring the audio stream remains smooth even during heavy inference.
 
 ## 4. The Outbound Mixer
 
@@ -54,4 +54,5 @@ High-fidelity voice interaction is a game of milliseconds. By optimizing the tra
 
 - FFmpeg Signal Processing Library
 - OpenAI Whisper: Robust Speech Recognition via Large-Scale Weak Supervision
+- rhasspy/piper: A fast, local Neural TTS Engine
 - Discord API Voice Specification
