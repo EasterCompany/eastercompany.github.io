@@ -375,7 +375,7 @@ const CLI_COMMANDS: CliCommand[] = [
     docs: {
       overview: 'Proxy command for managing local LLMs and neural vision models via the Hub.',
       details: [
-        'Wraps the Model Hub (orchestrating Ollama and dedicated spokes).',
+        'Wraps the Model Hub (orchestrating dedicated neural spokes).',
         "Added 'pull' subcommand to sync all Dexter-required models.",
         'Synchronizes custom model templates automatically.',
         'Validates model weight checksums.',
