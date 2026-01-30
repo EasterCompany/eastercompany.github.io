@@ -1,53 +1,82 @@
 #!/bin/bash
-# dex-cli binary installer
+# Dexter Fabricator CLI - Modernized Installer
 set -e
-echo "Installing dex-cli..."
-echo ""
-DEX_BIN_DIR="$HOME/Dexter/bin"
-DEX_EXECUTABLE_PATH="$DEX_BIN_DIR/dex"
-TAGS_URL="https://easter.company/static/bin/dex-cli/latest.txt"
-DOWNLOAD_URL="https://easter.company/bin/latest/dex"
-# Ensure the Dexter bin directory exists
-mkdir -p "$DEX_BIN_DIR"
-# Download the pre-built binary
-echo "→ Downloading the latest dex-cli binary from $DOWNLOAD_URL..."
-if ! curl -fsSL -o "$DEX_EXECUTABLE_PATH" "$DOWNLOAD_URL"; then
-  echo "❌ Error: Failed to download the dex-cli binary."
+
+DEX_ROOT="$HOME/Dexter"
+DEX_BIN_DIR="$DEX_ROOT/bin"
+DEX_PATH_DIR="$DEX_ROOT/path"
+DEX_EXECUTABLE="$DEX_BIN_DIR/dex"
+
+echo "🚀 Downloading Dexter CLI..."
+
+# 1. Fetch latest version info from data.json
+DATA_URL="https://easter.company/bin/data.json"
+echo "→ Fetching latest release info..."
+
+# Try to parse version using python3 for reliability, fallback to grep/sed
+if command -v python3 >/dev/null 2>&1; then
+  LATEST_VERSION=$(curl -fsSL "$DATA_URL" | python3 -c "import sys, json; print(json.load(sys.stdin)['latest']['user'])")
+else
+  LATEST_VERSION=$(curl -fsSL "$DATA_URL" | grep '"user":' | head -n 1 | sed -E 's/.*"user": "([^"]+)".*/\1/')
+fi
+
+SHORT_VERSION=$(echo "$LATEST_VERSION" | cut -d'.' -f1-3)
+
+if [ -z "$SHORT_VERSION" ]; then
+  echo "❌ Error: Could not determine latest version."
   exit 1
 fi
-# Make the binary executable
-chmod +x "$DEX_EXECUTABLE_PATH"
-echo "→ Binary installed to $DEX_EXECUTABLE_PATH"
-# Add ~/Dexter/bin to PATH if not already present
-SHELL_RC=""
-if [ -n "$BASH_VERSION" ]; then
-  SHELL_RC="$HOME/.bashrc"
-elif [ -n "$ZSH_VERSION" ]; then
-  SHELL_RC="$HOME/.zshrc"
+
+DOWNLOAD_URL="https://easter.company/bin/$SHORT_VERSION/dex"
+echo "→ Latest version: $LATEST_VERSION"
+
+# 2. Install dex-cli
+mkdir -p "$DEX_BIN_DIR"
+echo "→ Downloading dex-cli binary..."
+if ! curl -fsSL -o "$DEX_EXECUTABLE" "$DOWNLOAD_URL"; then
+  echo "❌ Error: Failed to download dex-cli from $DOWNLOAD_URL"
+  exit 1
 fi
-if [ -n "$SHELL_RC" ]; then
-  if ! grep -q 'export PATH="$HOME/Dexter/bin:$PATH"' "$SHELL_RC" 2>/dev/null; then
-    echo '' >>"$SHELL_RC"
-    echo '# dex-cli' >>"$SHELL_RC"
-    echo 'export PATH="$HOME/Dexter/bin:$PATH"' >>"$SHELL_RC"
-    echo "→ Added $HOME/Dexter/bin to your PATH."
-    # Source the file to make the command available immediately in the current session
-    source "$SHELL_RC"
-  else
-    echo "→ $HOME/Dexter/bin is already in your PATH."
+chmod +x "$DEX_EXECUTABLE"
+
+# 3. Setup surgical PATH (Only dex, not the whole bin directory)
+# We create a dedicated directory containing only a symlink to dex
+mkdir -p "$DEX_PATH_DIR"
+ln -sf "$DEX_EXECUTABLE" "$DEX_PATH_DIR/dex"
+
+# Detect shell RC
+case "$SHELL" in
+*/zsh) SHELL_RC="$HOME/.zshrc" ;;
+*/bash) SHELL_RC="$HOME/.bashrc" ;;
+*) SHELL_RC="$HOME/.profile" ;;
+esac
+
+PATH_LINE="export PATH=\"\$HOME/Dexter/path:\$PATH\""
+
+if [ -f "$SHELL_RC" ]; then
+  # Remove old-style Dexter/bin path if present to avoid pollution
+  sed -i '/Dexter\/bin/d' "$SHELL_RC"
+
+  if ! grep -q "Dexter/path" "$SHELL_RC"; then
+    echo "" >>"$SHELL_RC"
+    echo "# Dexter Fabricator CLI" >>"$SHELL_RC"
+    echo "$PATH_LINE" >>"$SHELL_RC"
+    echo "→ Updated PATH in $SHELL_RC"
   fi
 fi
-echo "→ Initializing Dexter environment..."
-"$HOME/Dexter/bin/dex" system scan
-"$HOME/Dexter/bin/dex" system validate
-"$HOME/Dexter/bin/dex" system install
-"$HOME/Dexter/bin/dex" system upgrade
-"$HOME/Dexter/bin/dex" build
-"$HOME/Dexter/bin/dex" update
-clear
+
+# 4. Config Sync
+# This will pull service-map.json, options.json, and server-map.json from the network
+echo "→ Synchronizing configuration from network..."
+"$DEX_EXECUTABLE" config sync || echo "⚠️ Warning: Config sync failed. Ensure dex-event-service is reachable."
+
+# 5. System Update
+# This will automatically download/install binaries for any services this machine is responsible for
+echo "→ Running system update..."
+"$DEX_EXECUTABLE" update || echo "⚠️ Warning: System update failed."
+
 echo ""
-echo "✓ dex-cli installation and environment setup complete!"
+echo "✅ Dexter installation and environment setup complete!"
+echo "Run 'source $SHELL_RC' or restart your terminal to start using the 'dex' command."
 echo ""
-echo "To start using dex-cli, please run: source $SHELL_RC (or restart your terminal)"
-echo "Then run: dex help"
-echo ""
+
