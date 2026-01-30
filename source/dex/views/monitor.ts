@@ -334,7 +334,7 @@ function startAgentSmoothLoop() {
 }
 
 export let lastServicesUpdate: number | null = null;
-export let lastProcessesUpdate: number | null = null;
+export const lastProcessesUpdate: number | null = null;
 
 async function fetchSystemData() {
   try {
@@ -706,7 +706,7 @@ export async function updateSystemMonitor() {
     const statusClass = isOnline ? 'service-widget-online' : 'service-widget-offline';
     const statusIcon = isOnline ? 'bx-check-circle' : 'bx-x-circle';
     const statusText = isOnline ? 'OK' : 'BAD';
-    let versionDisplay = service.version ? extractMajorMinorPatch(service.version.str) : '-';
+    const versionDisplay = service.version ? extractMajorMinorPatch(service.version.str) : '-';
 
     const cpuDisplay = service.cpu && service.cpu !== 'N/A' ? service.cpu : '-';
     const memDisplay = service.memory && service.memory !== 'N/A' ? service.memory : '-';

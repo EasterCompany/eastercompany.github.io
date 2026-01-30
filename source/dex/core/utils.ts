@@ -61,7 +61,7 @@ export function updateTabBadgeCount(tabIndex: string | number, count: number): v
   const tabBtn = document.querySelector(`.tab[data-tab-index="${tabIndex}"]`);
   if (!tabBtn) return;
 
-  let badge = tabBtn.querySelector('.notification-badge') as HTMLElement;
+  const badge = tabBtn.querySelector('.notification-badge') as HTMLElement;
   if (!badge) return;
 
   if (count > 0) {

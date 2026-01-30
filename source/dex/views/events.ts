@@ -40,7 +40,7 @@ export const getEventsContent = () => `
 export let lastEventsUpdate: number | null = null;
 
 // Track expanded state globally within the module
-let activeExpandedIds = new Set<string>();
+const activeExpandedIds = new Set<string>();
 let currentFilteredEvents: any[] = [];
 let currentFilter = 'all';
 

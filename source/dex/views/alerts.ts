@@ -34,7 +34,7 @@ export const getAlertsContent = () => `
 export let lastAlertsUpdate: number | null = null;
 
 // Track expanded state globally within the module
-let activeExpandedIds = new Set();
+const activeExpandedIds = new Set();
 let currentFilteredAlerts: any[] = [];
 
 export async function updateAlertsTab(forceReRender = false) {

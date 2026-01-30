@@ -29,7 +29,7 @@ export const getRoadmapContent = () => `
   </div>
 `;
 
-let activeExpandedIds = new Set();
+const activeExpandedIds = new Set();
 let currentItems: any[] = [];
 
 const createItemElement = (issue: any) => {
@@ -190,7 +190,7 @@ export async function updateRoadmapTab(forceReRender = false) {
 
       list.forEach((issue) => {
         const issueKey = issue.number.toString();
-        let el = existingMap.get(issueKey);
+        const el = existingMap.get(issueKey);
 
         if (el && !forceReRender) {
           // Update content if needed (basic check)

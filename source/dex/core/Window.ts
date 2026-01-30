@@ -35,8 +35,8 @@ export interface WindowInstance {
  */
 export function createWindow(options: WindowOptions): WindowInstance {
   let windowEl: HTMLElement | null = null;
-  let closeCallback = options.onClose || null;
-  let openCallback = options.onOpen || null;
+  const closeCallback = options.onClose || null;
+  const openCallback = options.onOpen || null;
 
   function focus() {
     if (windowEl) {

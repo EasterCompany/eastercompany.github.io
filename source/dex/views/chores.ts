@@ -102,7 +102,7 @@ export const getChoresContent = () => {
 };
 
 let currentTasks: any[] = [];
-let recipientMap: Record<string, string> = {
+const recipientMap: Record<string, string> = {
   '313071000877137920': 'Owen',
   dexter: 'Dexter',
 };
