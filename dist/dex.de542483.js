@@ -1,4 +1,4 @@
-"use strict";(()=>{function ct(){if(!document.querySelector(".grid-overlay")){let t=document.createElement("div");t.className="grid-overlay",document.body.prepend(t)}}function dt(){let t=window.location.pathname,e=t==="/"||t==="/index.html",s=`
+"use strict";(()=>{function rt(){if(!document.querySelector(".grid-overlay")){let t=document.createElement("div");t.className="grid-overlay",document.body.prepend(t)}}function lt(){let t=window.location.pathname,e=t==="/"||t==="/index.html",s=`
         <div class="nav-left" id="nav-left-wrapper" style="gap: 0;">
             ${`
         <div id="nav-left-container" style="display: flex; align-items: center; transition: transform 0.2s ease; gap: 5px; cursor: ${e?"default":"pointer"};">
@@ -21,13 +21,13 @@
             <button id="close-all-windows" class="nav-btn" title="Close Window" style="color: #ff4444; margin-left: 10px; opacity: 0.6; display: none;"><i class='bx bx-x-circle'></i></button>
         </div>
     
-    `,a=document.createElement("nav");a.innerHTML=s,document.body.prepend(a);let o=document.createElement("div");o.id="dexter-dropdown",o.className="dexter-dropdown",o.innerHTML=`
+    `,a=document.createElement("nav");a.innerHTML=s,document.body.prepend(a);let r=document.createElement("div");r.id="dexter-dropdown",r.className="dexter-dropdown",r.innerHTML=`
         <div class="dropdown-item" id="alerts-menu-item"><i class='bx bx-bell'></i> Alerts</div>
         <div class="dropdown-item" id="events-menu-item"><i class='bx bx-calendar-event'></i> Events</div>
         <div class="dropdown-item" id="monitor-menu-item"><i class='bx bx-pulse'></i> Monitor</div>
         <div class="dropdown-item" id="contacts-menu-item"><i class='bx bx-book-content'></i> Contacts</div>
         <div class="dropdown-item" id="workspace-menu-item"><i class='bx bx-brain'></i> Workspace</div>
-    `,document.body.appendChild(o)}function Se(t){let e=window.location.pathname,i=e==="/"||e==="/index.html",n=document.getElementById("nav-chevron"),s=document.querySelector(".nav-left");!n||!s||(t||!i?(n.style.display="block",s.style.cursor="pointer",s.classList.add("recording"),s.onmouseenter=()=>{n.style.transform="translateX(-3px)"},s.onmouseleave=()=>{n.style.transform="translateX(0)"}):(n.style.display="none",s.style.cursor="default",s.classList.remove("recording"),s.onmouseenter=null,s.onmouseleave=null))}function pt(){if(document.querySelector("footer"))return;let t=`
+    `,document.body.appendChild(r)}function Te(t){let e=window.location.pathname,i=e==="/"||e==="/index.html",n=document.getElementById("nav-chevron"),s=document.querySelector(".nav-left");!n||!s||(t||!i?(n.style.display="block",s.style.cursor="pointer",s.classList.add("recording"),s.onmouseenter=()=>{n.style.transform="translateX(-3px)"},s.onmouseleave=()=>{n.style.transform="translateX(0)"}):(n.style.display="none",s.style.cursor="default",s.classList.remove("recording"),s.onmouseenter=null,s.onmouseleave=null))}function ct(){if(document.querySelector("footer"))return;let t=`
         <a href="/dexter" class="footer-brand-left">DEXTER M.XIV</a>
         <div class="socials-section">
             <a href="https://facebook.com/eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-facebook'></i></a>
@@ -38,22 +38,22 @@
             <a href="https://youtube.com/@eastercompany" target="_blank" rel="noopener noreferrer"><i class='bx bxl-youtube'></i></a>
         </div>
         <a href="/contribute" class="footer-brand-right">CONTRIBUTE</a>
-    `,e=document.createElement("footer");e.innerHTML=t,document.body.appendChild(e)}var mt=1e3;function le(t){let e=null,i=t.onClose||null,n=t.onOpen||null;function s(){e&&(e.style.zIndex=(++mt).toString())}function a(){if(e){e.classList.add("open"),s(),window.addEventListener("resize",o),n&&setTimeout(n,10);return}let y=document.getElementById("windows-container");y||(y=document.createElement("div"),y.id="windows-container",y.className="windows-container",document.body.appendChild(y)),e=document.createElement("div"),e.id=t.id,e.className="window",t.className&&e.classList.add(t.className),t.tabs&&t.tabs.length>0&&e.classList.add("has-tabs"),e.style.zIndex=(++mt).toString(),e.addEventListener("mousedown",s);let h=t.icon||"bx-window",r="",u="",L,I='<div class="window-bottom-spacer"></div>';t.tabs&&t.tabs.length>0?(r=`<div class="tab-bar">${t.tabs.map((v,x)=>{let d=v.icon?`<i class="bx ${v.icon}"></i>`:`<span class="tab-glyph">${v.title?.charAt(0).toUpperCase()||"?"}</span>`;return`
+    `,e=document.createElement("footer");e.innerHTML=t,document.body.appendChild(e)}var dt=1e3;function oe(t){let e=null,i=t.onClose||null,n=t.onOpen||null;function s(){e&&(e.style.zIndex=(++dt).toString())}function a(){if(e){e.classList.add("open"),s(),window.addEventListener("resize",r),n&&setTimeout(n,10);return}let y=document.getElementById("windows-container");y||(y=document.createElement("div"),y.id="windows-container",y.className="windows-container",document.body.appendChild(y)),e=document.createElement("div"),e.id=t.id,e.className="window",t.className&&e.classList.add(t.className),t.tabs&&t.tabs.length>0&&e.classList.add("has-tabs"),e.style.zIndex=(++dt).toString(),e.addEventListener("mousedown",s);let h=t.icon||"bx-window",o="",m="",L,I='<div class="window-bottom-spacer"></div>';t.tabs&&t.tabs.length>0?(o=`<div class="tab-bar">${t.tabs.map((v,x)=>{let c=v.icon?`<i class="bx ${v.icon}"></i>`:`<span class="tab-glyph">${v.title?.charAt(0).toUpperCase()||"?"}</span>`;return`
                     <div class="tab ${x===0?"active":""}" data-tab-index="${x}">
-                        ${d}
+                        ${c}
                         <span class="tab-title">${v.title}</span>
                         <span class="tab-subtitle" data-tab-subtitle="${x}">Last updated: never</span>
                         <span class="notification-badge" style="display: none;">0</span>
                     </div>
-                `}).join("")}</div>`,L=`<div class="window-content">${t.tabs.map((v,x)=>`<div class="tab-content ${x===0?"active":""}" data-tab-content="${x}">${v.content}${I}</div>`).join("")}</div>`):(t.title&&(u=`<div class="window-title">${t.title}</div>`),L=`<div class="window-content">${t.content||""}${I}</div>`),e.innerHTML=`
+                `}).join("")}</div>`,L=`<div class="window-content">${t.tabs.map((v,x)=>`<div class="tab-content ${x===0?"active":""}" data-tab-content="${x}">${v.content}${I}</div>`).join("")}</div>`):(t.title&&(m=`<div class="window-title">${t.title}</div>`),L=`<div class="window-content">${t.content||""}${I}</div>`),e.innerHTML=`
             <div class="window-header">
                 <i class="bx ${h}"></i>
-                ${r}
-                ${u}
+                ${o}
+                ${m}
                 <i class="bx bx-x window-close"></i>
             </div>
             ${L}
-        `,t.appendToBody?document.body.appendChild(e):y.appendChild(e),e.querySelector(".window-close")?.addEventListener("click",b=>{b.stopPropagation(),c()}),window.addEventListener("resize",o),t.tabs&&e.querySelectorAll(".tab").forEach(b=>{b.addEventListener("click",()=>{if(!e)return;let f=b.getAttribute("data-tab-index");e.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")),b.classList.add("active"),e.querySelectorAll(".tab-content").forEach(x=>x.classList.remove("active"));let v=e.querySelector(`.tab-content[data-tab-content="${f}"]`);v&&v.classList.add("active"),m(b,e)})}),setTimeout(()=>{e&&e.classList.add("open"),n&&n()},10)}function o(){if(!e||!e.classList.contains("open"))return;let y=e.querySelector(".tab.active");y&&m(y,e)}function m(y,h){setTimeout(()=>{let r=h.querySelector(".tab-bar");if(!r)return;let u=Array.from(r.querySelectorAll(".tab")),L=u.indexOf(y),I=r.clientWidth,b=u[Math.max(0,L-2)],f=u[Math.min(u.length-1,L+2)],v=r,x=b.offsetLeft-v.offsetLeft-25,l=f.offsetLeft+f.offsetWidth-v.offsetLeft+25-x,$=l<=I?x-(I-l)/2:y.offsetLeft-v.offsetLeft-I/2+y.offsetWidth/2;r.scrollTo({left:$,behavior:"smooth"})},350)}function c(y=!1){e&&(window.removeEventListener("resize",o),y?(e.remove(),e=null):(e.classList.remove("open"),i&&i(),setTimeout(()=>{e?.remove(),e=null},400)))}function g(y){t.content=y;let h=e?.querySelector(".window-content");h&&(h.innerHTML=y)}function S(){return!!(e&&e.classList.contains("open"))}return{open:a,close:c,setContent:g,isOpen:S,focus:s,id:t.id}}var ut="easter_theme",se={DARK:"dark",LIGHT:"light",LEGACY:"legacy"};function Ke(){return localStorage.getItem(ut)||se.DARK}function ft(t){if(!Object.values(se).includes(t))throw new Error("Invalid theme");localStorage.setItem(ut,t),gt(t)}function gt(t){let e=document.body;Object.values(se).forEach(a=>{e.classList.remove(`theme-${a}`)}),e.classList.add(`theme-${t}`);let i=document.querySelector('meta[name="theme-color"]');i||(i=document.createElement("meta"),i.name="theme-color",document.getElementsByTagName("head")[0].appendChild(i));let n={[se.DARK]:"#050507",[se.LIGHT]:"#FFFFFF",[se.LEGACY]:"#000000"},s=n[t]||n[se.DARK];if(i.setAttribute("content",s),!document.querySelector(".background")){let a=document.createElement("div");a.className="background",document.body.prepend(a)}e.classList.add("is-animated")}function bt(){let t=Ke();gt(t)}function W(t,e,i=null,n="default"){let a={config:"bx-cog",error:"bx-error-circle",empty:"bx-info-circle",offline:"bx-wifi-off"}[t]||"bx-info-circle",o=i?`<p class="placeholder-action">${i}</p>`:"";return`<div class="tab-placeholder" data-placeholder-id="${n}"><i class='bx ${a} placeholder-icon'></i><p class="placeholder-message">${e}</p>${o}</div>`}function N(t){return t&&t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function pe(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"] .tab-subtitle`);if(!i)return;if(!e){i.textContent="Last updated: never";return}let n=Date.now(),s=Math.floor((n-e)/1e3),a;s<60?a=`${s}s ago`:s<3600?a=`${Math.floor(s/60)}m ago`:a=`${Math.floor(s/3600)}h ago`,i.textContent=`Last updated: ${a}`}var ns=0;function yt(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"]`);if(!i)return;let n=i.querySelector(".notification-badge");n&&(e>0?(n.textContent=e>9?"9+":e.toString(),n.style.display="flex"):n.style.display="none")}var ce=0,de=0;function xt(t){ce=t,Ie()}function Ie(){let t=ce+de;ns=t;let e=document.getElementById("dexter-nav-badge");e&&(e.style.display=t>0?"flex":"none");let i=document.getElementById("alerts-menu-item");if(i){let o=i.querySelector(".notification-badge");o||(o=document.createElement("span"),o.className="notification-badge",o.style.marginLeft="auto",i.appendChild(o)),o.textContent=ce>9?"9+":ce.toString(),o.style.display=ce>0?"flex":"none"}let n=document.getElementById("workspace-menu-item");if(n){let o=n.querySelector(".notification-badge");o||(o=document.createElement("span"),o.className="notification-badge",o.style.marginLeft="auto",n.appendChild(o)),o.textContent=de>9?"9+":de.toString(),o.style.display=de>0?"flex":"none"}let s=document.getElementById("switch-alerts");if(s){let o=s.querySelector(".notification-badge");o||(o=document.createElement("span"),o.className="notification-badge",o.style.marginLeft="8px",s.appendChild(o)),o.textContent=ce>9?"9+":ce.toString(),o.style.display=ce>0?"flex":"none"}let a=document.getElementById("switch-workspace");if(a){let o=a.querySelector(".notification-badge");o||(o=document.createElement("span"),o.className="notification-badge",o.style.marginLeft="8px",a.appendChild(o)),o.textContent=de>9?"9+":de.toString(),o.style.display=de>0?"flex":"none"}}function Xe(){let t=document.getElementById("alerts-list");if(!t)return;ce=t.querySelectorAll(".alert-unread:not(.priority-low)").length,Ie()}async function ht(){try{de=(await(await H("/roadmap/stats")).json()).open_issues||0,Ie()}catch(t){console.error("Failed to update open issue count:",t)}}function is(){return"https://event.easter.company"}function as(){return"https://discord.easter.company"}var os="http://127.0.0.1:8100",rs="http://127.0.0.1:8300",ls={31:"ansi-red",91:"ansi-bright-red",32:"ansi-green",33:"ansi-yellow",34:"ansi-blue",35:"ansi-purple",36:"ansi-cyan",37:"ansi-white",90:"ansi-dark-gray"};function Ue(t){let e=N(t);if(!e)return e;e=e.replace(/\x1b\[0m/g,"</span>"),e=e.replace(/\x1b\[(\d+)m/g,(s,a)=>{let o=ls[a];return o?`<span class="${o}">`:""});let i=(e.match(/<span/g)||[]).length,n=(e.match(/<\/span/g)||[]).length;return i>n&&(e+="</span>".repeat(i-n)),e}function ne(t){if(!t)return"";let e=N(t);return e&&(e=e.replace(/```([\s\S]*?)```/g,'<pre class="md-code-block">$1</pre>'),e=e.replace(/`([^`]+)`/g,'<code class="md-inline-code">$1</code>'),e=e.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),e=e.replace(/\*([^*]+)\*/g,"<em>$1</em>"),e=e.replace(/^# (.*$)/gm,'<h3 class="md-header">$1</h3>'),e=e.replace(/^## (.*$)/gm,'<h4 class="md-header">$1</h4>'),e=e.replace(/^### (.*$)/gm,'<h5 class="md-header">$1</h5>'),e=e.replace(/^<strong>(.*)<\/strong>$/gm,'<h5 class="md-header">$1</h5>'),e=e.replace(/^\|(.+)\|$/gm,(i,n)=>{let s=n.split("|").map(a=>a.trim());return s.every(a=>a.match(/^:?-+:?$/))?"":`<div class="md-table-row">${s.map(a=>`<span class="md-table-cell">${a}</span>`).join("")}</div>`}),e=e.replace(/^- (.*$)/gm,'<div class="md-list-item"><span class="md-bullet">\u2022</span> $1</div>'),e=e.replace(/^(\d+)\. (.*$)/gm,'<div class="md-list-item"><span class="md-number">$1.</span> $2</div>'),e)}function re(){let t=document.getElementById("windows-container"),e=t?parseInt(t.getAttribute("data-count")||"0"):0,i=document.querySelector(".profile-overlay.active"),n=document.querySelector("#cli-terminal-overlay.active");return e>0||!!i||!!n}var cs="https://sterling-javelin-12539.upstash.io",ds="AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw";function z(){return window.location.hostname.includes("easter.company")}var R=null,be={lastDashboard:0,lastFrontend:0},Ye=!1,wt=0,Et="dex_dashboard_snapshot";function ps(){let t=localStorage.getItem(Et);if(t)try{let e=JSON.parse(t);R=e,be.lastDashboard=e.timestamp?e.timestamp*1e3:0}catch{R=null}}async function vt(){if(!(!z()||Ye)){Ye=!0,wt=Math.floor(Date.now()/1e3);try{let t=await fs("GET","state:dashboard:full");if(t)try{let e=JSON.parse(t);R=e,be.lastDashboard=e.timestamp?e.timestamp*1e3:Date.now(),be.lastFrontend=Date.now(),localStorage.setItem(Et,JSON.stringify(e))}catch(e){console.error("Failed to parse dashboard snapshot:",e)}}finally{Ye=!1}}}function ms(){if(!R||!R.agent_status)return;let t=R.agent_status;t.system&&typeof t.system.state_time=="number"&&(t.system.state_time+=1)}async function us(){if(!z())return;ps();let t=Math.floor(Date.now()/1e3),e=R?t-R.timestamp:1/0;(!R||e>120)&&await vt(),setInterval(()=>{let i=new Date,n=Math.floor(Date.now()/1e3),s=R?n-R.timestamp:1/0,a=n-wt,o=i.getSeconds()===59,m=s>300,c=a>60;(o&&c||m&&c)&&vt(),ms()},1e3)}z()&&us();async function fs(t,...e){try{let n=await(await fetch(cs,{method:"POST",headers:{Authorization:`Bearer ${ds}`},body:JSON.stringify([t,...e])})).json();if(n.error)throw new Error(n.error);return n.result}catch(i){return console.error("Upstash Error:",i),null}}var ke=null,Le=null,Pe=!1,je=!1;async function H(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t.startsWith("/system_monitor")||t.startsWith("/system/status"))return new Response(JSON.stringify(R.monitor),{status:200});if(t.startsWith("/system/options"))return new Response(JSON.stringify(R.options||{}),{status:200});if(t.startsWith("/processes"))return new Response(JSON.stringify(R.processes),{status:200});if(t.startsWith("/events")){let s=new URLSearchParams(t.split("?")[1]||""),a=s.get("type")||s.get("event.type"),o=s.get("category"),m=s.get("order")||"desc",c=[];return a==="system.notification.generated"?c=[...R.alerts||[]]:a==="system.blueprint.generated"||t.includes("event.type=system.blueprint.generated")?c=[...R.blueprints||[]]:o==="messaging"?c=[...R.messaging_events||[]]:o==="system"?c=[...R.system_events||[]]:o==="cognitive"?c=[...R.cognitive_events||[]]:o==="moderation"?c=[...R.moderation_events||[]]:c=[...R.events||[]],m==="asc"?c.sort((g,S)=>g.timestamp-S.timestamp):c.sort((g,S)=>S.timestamp-g.timestamp),new Response(JSON.stringify({events:c,count:c.length}),{status:200})}if(t.startsWith("/logs"))return new Response(JSON.stringify([]),{status:200});if(t.startsWith("/system/hardware"))return new Response(JSON.stringify({}),{status:200});if(t.startsWith("/agent/status")||t.startsWith("/guardian/status"))return new Response(JSON.stringify(R.agent_status||{}),{status:200});if(t.startsWith("/roadmap/stats"))return new Response(JSON.stringify({open_issues:R.open_issue_count||0}),{status:200});if(t.startsWith("/profile/")){let s=t.split("/")[2],a=R.profiles?R.profiles[s]:null;return a?new Response(JSON.stringify(a),{status:200}):new Response(JSON.stringify({error:"Profile not found"}),{status:404})}return t.startsWith("/web/view")?new Response(JSON.stringify(R.web_view||{}),{status:200}):t.startsWith("/web/history")?new Response(JSON.stringify(R.web_history||[]),{status:200}):t.startsWith("/roadmap")?new Response(JSON.stringify(R.github_issues||[]),{status:200}):t.startsWith("/chores")?new Response(JSON.stringify(R.chores||[]),{status:200}):new Response(JSON.stringify({error:"Not available in public demo"}),{status:404})}if(ke)try{let s=await fetch(ke+t,e);if(s.ok)return s;ke=null}catch{ke=null}let i=is(),n=os;window.location.hostname!=="localhost"&&window.location.hostname!=="127.0.0.1"&&!z()&&(n=`http://${window.location.hostname}:8100`);try{let s=await fetch(i+t,e);if(s.ok)return ke=i,Pe&&(console.log("\u2728 Production event service restored."),Pe=!1),s;throw new Error("Primary failed")}catch{Pe||(console.warn(`\u{1F310} Production service unreachable. Falling back to local: ${n}`),Pe=!0);try{let a=await fetch(n+t,e);if(a.ok)return ke=n,a;throw new Error("Fallback failed")}catch(a){if(t==="/roadmap/stats")return new Response(JSON.stringify({open_issues:0}),{status:200});throw a}}}async function ve(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t==="/contacts")return new Response(JSON.stringify(R.contacts||{members:[]}),{status:200});if(t.startsWith("/member/")){let s=t.split("/")[2],a=(R.contacts?.members||[]).find(o=>o.id===s);return a?new Response(JSON.stringify(a),{status:200}):new Response(JSON.stringify({error:"Member not found"}),{status:404})}return new Response(JSON.stringify({error:"Discord API not public"}),{status:404})}if(Le)try{let s=await fetch(Le+t,e);if(s.ok)return s;Le=null}catch{Le=null}let i=as(),n=rs;window.location.hostname!=="localhost"&&window.location.hostname!=="127.0.0.1"&&!z()&&(n=`http://${window.location.hostname}:8300`);try{let s=await fetch(i+t,e);if(s.ok)return Le=i,je&&(console.log("\u2728 Production discord service restored."),je=!1),s;throw new Error("Primary failed")}catch{je||(console.warn(`\u{1F310} Production discord service unreachable. Falling back to local: ${n}`),je=!0);try{let a=await fetch(n+t,e);if(a.ok)return Le=n,a;throw new Error("Fallback failed")}catch(a){throw a}}}var Tt=()=>`
+        `,t.appendToBody?document.body.appendChild(e):y.appendChild(e),e.querySelector(".window-close")?.addEventListener("click",g=>{g.stopPropagation(),d()}),window.addEventListener("resize",r),t.tabs&&e.querySelectorAll(".tab").forEach(g=>{g.addEventListener("click",()=>{if(!e)return;let u=g.getAttribute("data-tab-index");e.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")),g.classList.add("active"),e.querySelectorAll(".tab-content").forEach(x=>x.classList.remove("active"));let v=e.querySelector(`.tab-content[data-tab-content="${u}"]`);v&&v.classList.add("active"),f(g,e)})}),setTimeout(()=>{e&&e.classList.add("open"),n&&n()},10)}function r(){if(!e||!e.classList.contains("open"))return;let y=e.querySelector(".tab.active");y&&f(y,e)}function f(y,h){setTimeout(()=>{let o=h.querySelector(".tab-bar");if(!o)return;let m=Array.from(o.querySelectorAll(".tab")),L=m.indexOf(y),I=o.clientWidth,g=m[Math.max(0,L-2)],u=m[Math.min(m.length-1,L+2)],v=o,x=g.offsetLeft-v.offsetLeft-25,l=u.offsetLeft+u.offsetWidth-v.offsetLeft+25-x,T=l<=I?x-(I-l)/2:y.offsetLeft-v.offsetLeft-I/2+y.offsetWidth/2;o.scrollTo({left:T,behavior:"smooth"})},350)}function d(y=!1){e&&(window.removeEventListener("resize",r),y?(e.remove(),e=null):(e.classList.remove("open"),i&&i(),setTimeout(()=>{e?.remove(),e=null},400)))}function b(y){t.content=y;let h=e?.querySelector(".window-content");h&&(h.innerHTML=y)}function S(){return!!(e&&e.classList.contains("open"))}return{open:a,close:d,setContent:b,isOpen:S,focus:s,id:t.id}}var pt="easter_theme",te={DARK:"dark",LIGHT:"light",LEGACY:"legacy"};function Ge(){return localStorage.getItem(pt)||te.DARK}function mt(t){if(!Object.values(te).includes(t))throw new Error("Invalid theme");localStorage.setItem(pt,t),ut(t)}function ut(t){let e=document.body;Object.values(te).forEach(a=>{e.classList.remove(`theme-${a}`)}),e.classList.add(`theme-${t}`);let i=document.querySelector('meta[name="theme-color"]');i||(i=document.createElement("meta"),i.name="theme-color",document.getElementsByTagName("head")[0].appendChild(i));let n={[te.DARK]:"#050507",[te.LIGHT]:"#FFFFFF",[te.LEGACY]:"#000000"},s=n[t]||n[te.DARK];if(i.setAttribute("content",s),!document.querySelector(".background")){let a=document.createElement("div");a.className="background",document.body.prepend(a)}e.classList.add("is-animated")}function ft(){let t=Ge();ut(t)}function W(t,e,i=null,n="default"){let a={config:"bx-cog",error:"bx-error-circle",empty:"bx-info-circle",offline:"bx-wifi-off"}[t]||"bx-info-circle",r=i?`<p class="placeholder-action">${i}</p>`:"";return`<div class="tab-placeholder" data-placeholder-id="${n}"><i class='bx ${a} placeholder-icon'></i><p class="placeholder-message">${e}</p>${r}</div>`}function j(t){return t&&t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function ce(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"] .tab-subtitle`);if(!i)return;if(!e){i.textContent="Last updated: never";return}let n=Date.now(),s=Math.floor((n-e)/1e3),a;s<60?a=`${s}s ago`:s<3600?a=`${Math.floor(s/60)}m ago`:a=`${Math.floor(s/3600)}h ago`,i.textContent=`Last updated: ${a}`}var ts=0;function bt(t,e){let i=document.querySelector(`.tab[data-tab-index="${t}"]`);if(!i)return;let n=i.querySelector(".notification-badge");n&&(e>0?(n.textContent=e>9?"9+":e.toString(),n.style.display="flex"):n.style.display="none")}var re=0,le=0;function vt(t){re=t,Ie()}function Ie(){let t=re+le;ts=t;let e=document.getElementById("dexter-nav-badge");e&&(e.style.display=t>0?"flex":"none");let i=document.getElementById("alerts-menu-item");if(i){let r=i.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="auto",i.appendChild(r)),r.textContent=re>9?"9+":re.toString(),r.style.display=re>0?"flex":"none"}let n=document.getElementById("workspace-menu-item");if(n){let r=n.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="auto",n.appendChild(r)),r.textContent=le>9?"9+":le.toString(),r.style.display=le>0?"flex":"none"}let s=document.getElementById("switch-alerts");if(s){let r=s.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="8px",s.appendChild(r)),r.textContent=re>9?"9+":re.toString(),r.style.display=re>0?"flex":"none"}let a=document.getElementById("switch-workspace");if(a){let r=a.querySelector(".notification-badge");r||(r=document.createElement("span"),r.className="notification-badge",r.style.marginLeft="8px",a.appendChild(r)),r.textContent=le>9?"9+":le.toString(),r.style.display=le>0?"flex":"none"}}function Ye(){let t=document.getElementById("alerts-list");if(!t)return;re=t.querySelectorAll(".alert-unread:not(.priority-low)").length,Ie()}async function yt(){try{le=(await(await H("/roadmap/stats")).json()).open_issues||0,Ie()}catch(t){console.error("Failed to update open issue count:",t)}}function ss(){return"https://event.easter.company"}function ns(){return"https://discord.easter.company"}var is="http://127.0.0.1:8100",as="http://127.0.0.1:8300",os={31:"ansi-red",91:"ansi-bright-red",32:"ansi-green",33:"ansi-yellow",34:"ansi-blue",35:"ansi-purple",36:"ansi-cyan",37:"ansi-white",90:"ansi-dark-gray"};function Le(t){let e=j(t);if(!e)return e;e=e.replace(/\x1b\[0m/g,"</span>"),e=e.replace(/\x1b\[(\d+)m/g,(s,a)=>{let r=os[a];return r?`<span class="${r}">`:""});let i=(e.match(/<span/g)||[]).length,n=(e.match(/<\/span/g)||[]).length;return i>n&&(e+="</span>".repeat(i-n)),e}function se(t){if(!t)return"";let e=j(t);return e&&(e=e.replace(/```([\s\S]*?)```/g,'<pre class="md-code-block">$1</pre>'),e=e.replace(/`([^`]+)`/g,'<code class="md-inline-code">$1</code>'),e=e.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),e=e.replace(/\*([^*]+)\*/g,"<em>$1</em>"),e=e.replace(/^# (.*$)/gm,'<h3 class="md-header">$1</h3>'),e=e.replace(/^## (.*$)/gm,'<h4 class="md-header">$1</h4>'),e=e.replace(/^### (.*$)/gm,'<h5 class="md-header">$1</h5>'),e=e.replace(/^<strong>(.*)<\/strong>$/gm,'<h5 class="md-header">$1</h5>'),e=e.replace(/^\|(.+)\|$/gm,(i,n)=>{let s=n.split("|").map(a=>a.trim());return s.every(a=>a.match(/^:?-+:?$/))?"":`<div class="md-table-row">${s.map(a=>`<span class="md-table-cell">${a}</span>`).join("")}</div>`}),e=e.replace(/^- (.*$)/gm,'<div class="md-list-item"><span class="md-bullet">\u2022</span> $1</div>'),e=e.replace(/^(\d+)\. (.*$)/gm,'<div class="md-list-item"><span class="md-number">$1.</span> $2</div>'),e)}function ae(){let t=document.getElementById("windows-container"),e=t?parseInt(t.getAttribute("data-count")||"0"):0,i=document.querySelector(".profile-overlay.active"),n=document.querySelector("#cli-terminal-overlay.active");return e>0||!!i||!!n}var rs="https://sterling-javelin-12539.upstash.io",ls="AjD7AAIgcDLTsB2z5ZUJmdu6PPARA5_w2VGIiEdO34oEKjK3VKsuiw";function z(){return window.location.hostname.includes("easter.company")}var R=null,ge={lastDashboard:0,lastFrontend:0},Ke=!1,xt=0,ht="dex_dashboard_snapshot";function cs(){let t=localStorage.getItem(ht);if(t)try{let e=JSON.parse(t);R=e,ge.lastDashboard=e.timestamp?e.timestamp*1e3:0}catch{R=null}}async function gt(){if(!(!z()||Ke)){Ke=!0,xt=Math.floor(Date.now()/1e3);try{let t=await ms("GET","state:dashboard:full");if(t)try{let e=JSON.parse(t);R=e,ge.lastDashboard=e.timestamp?e.timestamp*1e3:Date.now(),ge.lastFrontend=Date.now(),localStorage.setItem(ht,JSON.stringify(e))}catch(e){console.error("Failed to parse dashboard snapshot:",e)}}finally{Ke=!1}}}function ds(){if(!R||!R.agent_status)return;let t=R.agent_status;t.system&&typeof t.system.state_time=="number"&&(t.system.state_time+=1)}async function ps(){if(!z())return;cs();let t=Math.floor(Date.now()/1e3),e=R?t-R.timestamp:1/0;(!R||e>120)&&await gt(),setInterval(()=>{let i=new Date,n=Math.floor(Date.now()/1e3),s=R?n-R.timestamp:1/0,a=n-xt,r=i.getSeconds()===59,f=s>300,d=a>60;(r&&d||f&&d)&&gt(),ds()},1e3)}z()&&ps();async function ms(t,...e){try{let n=await(await fetch(rs,{method:"POST",headers:{Authorization:`Bearer ${ls}`},body:JSON.stringify([t,...e])})).json();if(n.error)throw new Error(n.error);return n.result}catch(i){return console.error("Upstash Error:",i),null}}var Se=null,ke=null,Pe=!1,je=!1;async function H(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t.startsWith("/system_monitor")||t.startsWith("/system/status"))return new Response(JSON.stringify(R.monitor),{status:200});if(t.startsWith("/system/options"))return new Response(JSON.stringify(R.options||{}),{status:200});if(t.startsWith("/processes"))return new Response(JSON.stringify(R.processes),{status:200});if(t.startsWith("/events")){let s=new URLSearchParams(t.split("?")[1]||""),a=s.get("type")||s.get("event.type"),r=s.get("category"),f=s.get("order")||"desc",d=[];return a==="system.notification.generated"?d=[...R.alerts||[]]:a==="system.blueprint.generated"||t.includes("event.type=system.blueprint.generated")?d=[...R.blueprints||[]]:r==="messaging"?d=[...R.messaging_events||[]]:r==="system"?d=[...R.system_events||[]]:r==="cognitive"?d=[...R.cognitive_events||[]]:r==="moderation"?d=[...R.moderation_events||[]]:d=[...R.events||[]],f==="asc"?d.sort((b,S)=>b.timestamp-S.timestamp):d.sort((b,S)=>S.timestamp-b.timestamp),new Response(JSON.stringify({events:d,count:d.length}),{status:200})}if(t.startsWith("/logs"))return new Response(JSON.stringify([]),{status:200});if(t.startsWith("/system/hardware"))return new Response(JSON.stringify({}),{status:200});if(t.startsWith("/agent/status")||t.startsWith("/guardian/status"))return new Response(JSON.stringify(R.agent_status||{}),{status:200});if(t.startsWith("/roadmap/stats"))return new Response(JSON.stringify({open_issues:R.open_issue_count||0}),{status:200});if(t.startsWith("/profile/")){let s=t.split("/")[2],a=R.profiles?R.profiles[s]:null;return a?new Response(JSON.stringify(a),{status:200}):new Response(JSON.stringify({error:"Profile not found"}),{status:404})}return t.startsWith("/web/view")?new Response(JSON.stringify(R.web_view||{}),{status:200}):t.startsWith("/web/history")?new Response(JSON.stringify(R.web_history||[]),{status:200}):t.startsWith("/roadmap")?new Response(JSON.stringify(R.github_issues||[]),{status:200}):t.startsWith("/chores")?new Response(JSON.stringify(R.chores||[]),{status:200}):t.startsWith("/fabricator/live")?new Response(JSON.stringify({buffer:R.fabricator_live_buffer||[]}),{status:200}):new Response(JSON.stringify({error:"Not available in public demo"}),{status:404})}if(Se)try{let s=await fetch(Se+t,e);if(s.ok)return s;Se=null}catch{Se=null}let i=ss(),n=is;window.location.hostname!=="localhost"&&window.location.hostname!=="127.0.0.1"&&!z()&&(n=`http://${window.location.hostname}:8100`);try{let s=await fetch(i+t,e);if(s.ok)return Se=i,Pe&&(console.log("\u2728 Production event service restored."),Pe=!1),s;throw new Error("Primary failed")}catch{Pe||(console.warn(`\u{1F310} Production service unreachable. Falling back to local: ${n}`),Pe=!0);try{let a=await fetch(n+t,e);if(a.ok)return Se=n,a;throw new Error("Fallback failed")}catch(a){if(t==="/roadmap/stats")return new Response(JSON.stringify({open_issues:0}),{status:200});throw a}}}async function be(t,e={}){if(z()){if(!R)return new Response(JSON.stringify({error:"Initializing dashboard cache..."}),{status:503});if(t==="/contacts")return new Response(JSON.stringify(R.contacts||{members:[]}),{status:200});if(t.startsWith("/member/")){let s=t.split("/")[2],a=(R.contacts?.members||[]).find(r=>r.id===s);return a?new Response(JSON.stringify(a),{status:200}):new Response(JSON.stringify({error:"Member not found"}),{status:404})}return new Response(JSON.stringify({error:"Discord API not public"}),{status:404})}if(ke)try{let s=await fetch(ke+t,e);if(s.ok)return s;ke=null}catch{ke=null}let i=ns(),n=as;window.location.hostname!=="localhost"&&window.location.hostname!=="127.0.0.1"&&!z()&&(n=`http://${window.location.hostname}:8300`);try{let s=await fetch(i+t,e);if(s.ok)return ke=i,je&&(console.log("\u2728 Production discord service restored."),je=!1),s;throw new Error("Primary failed")}catch{je||(console.warn(`\u{1F310} Production discord service unreachable. Falling back to local: ${n}`),je=!0);try{let a=await fetch(n+t,e);if(a.ok)return ke=n,a;throw new Error("Fallback failed")}catch(a){throw a}}}var wt=()=>`
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-bell' style="color: #bb86fc;"></i>
         <h2>Alerts</h2>
@@ -72,13 +72,13 @@
             <p class="placeholder-message">Loading alerts...</p>
         </div>
     </div>
-`,qe=null,ye=new Set,Fe=[];async function me(t=!1){let e=document.getElementById("alerts-list");if(!e)return;gs(),t&&(e.innerHTML="<p>Updating...</p>");let i="/events?ml=1000&format=json&event.type=system.notification.generated";try{let n=await H(i);if(!n.ok)throw new Error("Service is offline or unreachable.");let a=(await n.json()).events||[];qe=Date.now(),pe(0,qe);let o=Date.now(),m=24*60*60*1e3,c=a.filter(f=>{let v=localStorage.getItem(`alert_read_ts_${f.id}`);if(!v)return!0;let x=parseInt(v);return o-x<m});c.sort((f,v)=>{let x=E=>{let p=E.event;if(typeof p=="string")try{p=JSON.parse(p)}catch{return"low"}return(p.priority||"low").toLowerCase()},d=E=>E==="critical"?4:E==="high"?3:E==="medium"?2:1,l=d(x(f)),$=d(x(v));return l!==$?$-l:v.timestamp-f.timestamp}),Fe=c;let g=f=>{let v=f.event;if(typeof v=="string")try{v=JSON.parse(v)}catch{return"low"}return(v.priority||"low").toLowerCase()},S=[];if(c.length===0)S.push({id:"placeholder-empty",type:"placeholder",message:"No alerts, all systems nominal"});else{let v=new Set(c.map(d=>g(d))).size>1,x=null;c.forEach(d=>{let l=g(d);v&&l!==x&&(S.push({id:`divider-${l}`,type:"divider",label:l.toUpperCase()}),x=l),S.push(d)})}t&&(e.innerHTML="");let y=f=>{let v=f.event;if(typeof v=="string")try{v=JSON.parse(v)}catch{return null}let x=(v.title||"Untitled Alert").trim(),d=(v.body||"No description provided.").trim(),l=v.summary||"",$=v.content||"",E=v.protocol||"",p=(v.priority||"low").toLowerCase(),w=!!v.alert,A=(v.category||"system").trim(),_=v.related_event_ids||[],B=v.audit_event_id,V=!!localStorage.getItem(`alert_read_ts_${f.id}`),Z=new Date(f.timestamp*1e3),M=Z.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),T=Z.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),k=V?"event-border-grey":"event-border-blue";!V&&w&&(k="event-border-red"),V&&(p==="high"||p==="critical")?k="event-border-red":V&&p==="medium"&&(k="event-border-orange");let C=V?"alert-read":"alert-unread",O=ye.has(f.id),D=O?"expanded":"",K=O?"display: block;":"display: none;",U="",j="";_.length>0&&(j=`
+`,qe=null,ve=new Set,Ue=[];async function de(t=!1){let e=document.getElementById("alerts-list");if(!e)return;us(),t&&(e.innerHTML="<p>Updating...</p>");let i="/events?ml=1000&format=json&event.type=system.notification.generated";try{let n=await H(i);if(!n.ok)throw new Error("Service is offline or unreachable.");let a=(await n.json()).events||[];qe=Date.now(),ce(0,qe);let r=Date.now(),f=24*60*60*1e3,d=a.filter(u=>{let v=localStorage.getItem(`alert_read_ts_${u.id}`);if(!v)return!0;let x=parseInt(v);return r-x<f});d.sort((u,v)=>{let x=E=>{let p=E.event;if(typeof p=="string")try{p=JSON.parse(p)}catch{return"low"}return(p.priority||"low").toLowerCase()},c=E=>E==="critical"?4:E==="high"?3:E==="medium"?2:1,l=c(x(u)),T=c(x(v));return l!==T?T-l:v.timestamp-u.timestamp}),Ue=d;let b=u=>{let v=u.event;if(typeof v=="string")try{v=JSON.parse(v)}catch{return"low"}return(v.priority||"low").toLowerCase()},S=[];if(d.length===0)S.push({id:"placeholder-empty",type:"placeholder",message:"No alerts, all systems nominal"});else{let v=new Set(d.map(c=>b(c))).size>1,x=null;d.forEach(c=>{let l=b(c);v&&l!==x&&(S.push({id:`divider-${l}`,type:"divider",label:l.toUpperCase()}),x=l),S.push(c)})}t&&(e.innerHTML="");let y=u=>{let v=u.event;if(typeof v=="string")try{v=JSON.parse(v)}catch{return null}let x=(v.title||"Untitled Alert").trim(),c=(v.body||"No description provided.").trim(),l=v.summary||"",T=v.content||"",E=v.protocol||"",p=(v.priority||"low").toLowerCase(),w=!!v.alert,A=(v.category||"system").trim(),_=v.related_event_ids||[],B=v.audit_event_id,V=!!localStorage.getItem(`alert_read_ts_${u.id}`),Z=new Date(u.timestamp*1e3),M=Z.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),$=Z.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),k=V?"event-border-grey":"event-border-blue";!V&&w&&(k="event-border-red"),V&&(p==="high"||p==="critical")?k="event-border-red":V&&p==="medium"&&(k="event-border-orange");let C=V?"alert-read":"alert-unread",N=ve.has(u.id),D=N?"expanded":"",K=N?"display: block;":"display: none;",q="",P="";_.length>0&&(P=`
             <div style="flex: 1; min-width: 150px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related Events</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
                     ${_.map(X=>`<a href="#" onclick="window.dexter.viewEvent('${X}'); return false;" style="color: #03dac6; text-decoration: none; margin-right: 5px;">${X.substring(0,8)}...</a>`).join(", ")}
                 </div>
-            </div>`);let q="";B&&(q=`
+            </div>`);let U="";B&&(U=`
             <div style="flex: 1; min-width: 120px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Audit</div>
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; display: inline-block;">
@@ -88,17 +88,17 @@
             <div style="flex: 1; min-width: 100px; text-align: center;">
                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${E}</div>
-            </div>`);let ee="";$?ee=`
+            </div>`);let ee="";T?ee=`
             <div class="event-detail-block" style="text-align: left;">
                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Technical Details</h5>
-                <div class="md-para" style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6; text-align: left;">${ne($)}</div>
+                <div class="md-para" style="color: #ddd; font-size: 0.85em; white-space: pre-wrap; line-height: 1.6; text-align: left;">${se(T)}</div>
             </div>
         `:ee=`
             <div class="event-detail-block" style="text-align: left;">
                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Insight</h5>
-                <div class="md-para" style="color: #fff; white-space: pre-wrap; line-height: 1.6; text-align: left;">${ne(d)}</div>
+                <div class="md-para" style="color: #fff; white-space: pre-wrap; line-height: 1.6; text-align: left;">${se(c)}</div>
             </div>
-        `,U=`
+        `,q=`
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                     <div style="flex: 1; min-width: 100px; text-align: center;">
                         <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Related</div>
@@ -109,33 +109,33 @@
                         <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${A}</div>
                     </div>
                     ${G}
-                    ${q}
-                    ${j}
+                    ${U}
+                    ${P}
                 </div>
 
                 ${ee}
-            `;let Y=document.createElement("div");Y.className=`event-item notification-item ${k} ${C} ${D} cursor-pointer priority-${p}`,Y.dataset.alertId=f.id,Y.onclick=function(X){let J=this;if(J.classList.contains("expanded")){J.classList.remove("expanded"),ye.delete(f.id);let ge=J.querySelector(".event-details");ge&&(ge.style.display="none")}else{J.classList.add("expanded"),ye.add(f.id);let ge=J.querySelector(".event-details");if(ge&&(ge.style.display="block"),!localStorage.getItem(`alert_read_ts_${f.id}`)){localStorage.setItem(`alert_read_ts_${f.id}`,Date.now().toString()),J.classList.add("alert-read"),J.classList.remove("alert-unread"),J.classList.remove("event-border-blue","event-border-red","event-border-purple");let Me="event-border-grey";p==="high"||p==="critical"?Me="event-border-red":p==="medium"&&(Me="event-border-orange"),J.classList.add(Me),Xe()}}};let Ce=`${E?E.toUpperCase():"GUARDIAN"} ALERT: ${l||x}`,Ge={system:"bx-cog",messaging:"bx-message-detail",cognitive:"bx-brain",moderation:"bx-shield-x",lifecycle:"bx-git-branch"}[A]||"bx-bell",Ne=p==="high"||p==="critical"?"#ff4d4d":p==="medium"?"#ffa500":"#888";Y.innerHTML=`
+            `;let Y=document.createElement("div");Y.className=`event-item notification-item ${k} ${C} ${D} cursor-pointer priority-${p}`,Y.dataset.alertId=u.id,Y.onclick=function(X){let J=this;if(J.classList.contains("expanded")){J.classList.remove("expanded"),ve.delete(u.id);let fe=J.querySelector(".event-details");fe&&(fe.style.display="none")}else{J.classList.add("expanded"),ve.add(u.id);let fe=J.querySelector(".event-details");if(fe&&(fe.style.display="block"),!localStorage.getItem(`alert_read_ts_${u.id}`)){localStorage.setItem(`alert_read_ts_${u.id}`,Date.now().toString()),J.classList.add("alert-read"),J.classList.remove("alert-unread"),J.classList.remove("event-border-blue","event-border-red","event-border-purple");let Me="event-border-grey";p==="high"||p==="critical"?Me="event-border-red":p==="medium"&&(Me="event-border-orange"),J.classList.add(Me),Ye()}}};let Ce=`${E?E.toUpperCase():"GUARDIAN"} ALERT: ${l||x}`,Ve={system:"bx-cog",messaging:"bx-message-detail",cognitive:"bx-brain",moderation:"bx-shield-x",lifecycle:"bx-git-branch"}[A]||"bx-bell",Ne=p==="high"||p==="critical"?"#ff4d4d":p==="medium"?"#ffa500":"#888";Y.innerHTML=`
                 <div class="event-time">
                     <span class="event-time-main">${M}</span>
-                    <span class="event-date">${T}</span>
+                    <span class="event-date">${$}</span>
                 </div>
-                <div class="event-icon"><i class='bx ${Ge}'></i></div>
+                <div class="event-icon"><i class='bx ${Ve}'></i></div>
                 <div class="event-content" style="text-align: left;">
                     <div class="event-service">
                         DEXTER <span class="alert-badge" style="color: ${Ne}; font-size: 0.8em; margin-left: 5px;">[${p.toUpperCase()}]</span>
                     </div>
-                    <div class="event-message">${ne(Ce)}</div>
+                    <div class="event-message">${se(Ce)}</div>
                     <div class="event-details" style="${K}">
-                        ${U}
+                        ${q}
                     </div>
                 </div>
-            `;let fe=Y.querySelector(".event-details");fe&&fe.addEventListener("click",X=>{X.stopPropagation()});let F=Y.querySelector(".close-details-btn");return F&&F.addEventListener("click",X=>{X.stopPropagation(),Y.classList.remove("expanded");let J=Y.querySelector(".event-details");J&&(J.style.display="none"),ye.delete(f.id)}),Y},h=f=>{let v=document.createElement("div");v.className="notification-divider",v.dataset.alertId=f.id;let x="#888888";return f.label==="CRITICAL"?x="#ff4d4d":f.label==="HIGH"?x="#ff8888":f.label==="MEDIUM"&&(x="#ffa500"),v.style.cssText=`display: flex; align-items: center; gap: 15px; color: ${x}; font-size: 0.7em; font-weight: 700; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8;`,v.innerHTML=`<span style="white-space: nowrap;">${f.label} PRIORITY</span><div style="height: 1px; background: linear-gradient(to right, ${x}44, transparent); flex-grow: 1;"></div>`,v},r=f=>{let v=document.createElement("div");v.innerHTML=W("empty",f.message,null,f.id);let x=v.firstElementChild;return x.dataset.alertId=f.id,x},u=Array.from(e.children),L=new Map(u.map(f=>[f.dataset.alertId,f])),I=new Set(S.map(f=>f.id));u.forEach(f=>{let v=f.dataset.alertId;(!v||!I.has(v))&&f.remove()});let b=null;S.forEach((f,v)=>{let x=L.get(f.id);if(!x||t){if(x&&x.remove(),f.type==="divider")x=h(f);else if(f.type==="placeholder")x=r(f);else{let d=y(f);if(!d)return;x=d}if(!x)return}v===0?e.firstElementChild!==x&&e.prepend(x):b&&b.nextElementSibling!==x&&b.after(x),b=x}),qe=Date.now(),pe(0,qe),Xe()}catch(n){console.error("Error fetching alerts:",n),e.children.length===0&&(e.innerHTML=W("offline","Failed to load alerts.","The event service may be offline."))}}function gs(){let t=document.getElementById("alerts-read-all"),e=document.getElementById("alerts-expand-all"),i=document.getElementById("alerts-close-all"),n=document.getElementById("alerts-clear");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{Fe.forEach(s=>{localStorage.getItem(`alert_read_ts_${s.id}`)||localStorage.setItem(`alert_read_ts_${s.id}`,Date.now().toString())}),me(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{Fe.forEach(s=>{ye.add(s.id),localStorage.getItem(`alert_read_ts_${s.id}`)||localStorage.setItem(`alert_read_ts_${s.id}`,Date.now().toString())}),me(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{ye.clear(),me(!0)},i.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{if(confirm("Are you sure you want to delete all alerts from the backend?")){n.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{await H("/events?type=system.notification.generated",{method:"DELETE"});let s=Date.now()-48*60*60*1e3;Fe.forEach(a=>{localStorage.setItem(`alert_read_ts_${a.id}`,s.toString())}),ye.clear(),me(!0)}catch(s){console.error("Failed to clear alerts:",s)}finally{n.innerHTML="<i class='bx bx-trash'></i> Clear"}}},n.dataset.listenerAttached="true")}async function Ze(){let t="/events?ml=1000&format=json&event.type=system.notification.generated";try{let e=await H(t);if(!e.ok)return;let n=(await e.json()).events||[],s=0;n.forEach(a=>{let o=a.event;if(typeof o=="string")try{o=JSON.parse(o)}catch{o={}}if((o.priority||"low").toLowerCase()==="low")return;localStorage.getItem(`alert_read_ts_${a.id}`)||s++}),xt(s)}catch{}}var St=()=>`
+            `;let ue=Y.querySelector(".event-details");ue&&ue.addEventListener("click",X=>{X.stopPropagation()});let F=Y.querySelector(".close-details-btn");return F&&F.addEventListener("click",X=>{X.stopPropagation(),Y.classList.remove("expanded");let J=Y.querySelector(".event-details");J&&(J.style.display="none"),ve.delete(u.id)}),Y},h=u=>{let v=document.createElement("div");v.className="notification-divider",v.dataset.alertId=u.id;let x="#888888";return u.label==="CRITICAL"?x="#ff4d4d":u.label==="HIGH"?x="#ff8888":u.label==="MEDIUM"&&(x="#ffa500"),v.style.cssText=`display: flex; align-items: center; gap: 15px; color: ${x}; font-size: 0.7em; font-weight: 700; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8;`,v.innerHTML=`<span style="white-space: nowrap;">${u.label} PRIORITY</span><div style="height: 1px; background: linear-gradient(to right, ${x}44, transparent); flex-grow: 1;"></div>`,v},o=u=>{let v=document.createElement("div");v.innerHTML=W("empty",u.message,null,u.id);let x=v.firstElementChild;return x.dataset.alertId=u.id,x},m=Array.from(e.children),L=new Map(m.map(u=>[u.dataset.alertId,u])),I=new Set(S.map(u=>u.id));m.forEach(u=>{let v=u.dataset.alertId;(!v||!I.has(v))&&u.remove()});let g=null;S.forEach((u,v)=>{let x=L.get(u.id);if(!x||t){if(x&&x.remove(),u.type==="divider")x=h(u);else if(u.type==="placeholder")x=o(u);else{let c=y(u);if(!c)return;x=c}if(!x)return}v===0?e.firstElementChild!==x&&e.prepend(x):g&&g.nextElementSibling!==x&&g.after(x),g=x}),qe=Date.now(),ce(0,qe),Ye()}catch(n){console.error("Error fetching alerts:",n),e.children.length===0&&(e.innerHTML=W("offline","Failed to load alerts.","The event service may be offline."))}}function us(){let t=document.getElementById("alerts-read-all"),e=document.getElementById("alerts-expand-all"),i=document.getElementById("alerts-close-all"),n=document.getElementById("alerts-clear");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{Ue.forEach(s=>{localStorage.getItem(`alert_read_ts_${s.id}`)||localStorage.setItem(`alert_read_ts_${s.id}`,Date.now().toString())}),de(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{Ue.forEach(s=>{ve.add(s.id),localStorage.getItem(`alert_read_ts_${s.id}`)||localStorage.setItem(`alert_read_ts_${s.id}`,Date.now().toString())}),de(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{ve.clear(),de(!0)},i.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{if(confirm("Are you sure you want to delete all alerts from the backend?")){n.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{await H("/events?type=system.notification.generated",{method:"DELETE"});let s=Date.now()-48*60*60*1e3;Ue.forEach(a=>{localStorage.setItem(`alert_read_ts_${a.id}`,s.toString())}),ve.clear(),de(!0)}catch(s){console.error("Failed to clear alerts:",s)}finally{n.innerHTML="<i class='bx bx-trash'></i> Clear"}}},n.dataset.listenerAttached="true")}async function Xe(){let t="/events?ml=1000&format=json&event.type=system.notification.generated";try{let e=await H(t);if(!e.ok)return;let n=(await e.json()).events||[],s=0;n.forEach(a=>{let r=a.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{r={}}if((r.priority||"low").toLowerCase()==="low")return;localStorage.getItem(`alert_read_ts_${a.id}`)||s++}),vt(s)}catch{}}var $t=()=>`
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px;">
     <button id="roadmap-new" class="notif-action-btn" style="${z()?"display: none;":""}" title="New Issue"><i class='bx bx-plus'></i></button>
     <button id="roadmap-expand-all" class="notif-action-btn" title="Expand All"><i class='bx bx-expand'></i></button>
     <button id="roadmap-close-all" class="notif-action-btn" title="Close All"><i class='bx bx-collapse'></i></button>
   </div>
-`,kt=()=>`
+`,Tt=()=>`
   <div id="roadmap-editor-container" style="display: none; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
     <input id="roadmap-editor-title" class="settings-input" style="margin-bottom: 10px; width: 100%;" placeholder="Issue Title (e.g. [event] Fix bug)">
     <textarea id="roadmap-editor-body" class="settings-textarea" style="min-height: 120px; margin-bottom: 10px;" placeholder="Describe the issue or feature in detail..."></textarea>
@@ -147,7 +147,7 @@
   <div id="roadmap-timeline-container" style="margin-bottom: 20px;"></div>
   <div id="roadmap-list" class="notifications-list events-timeline" style="display: flex; flex-direction: column; gap: 15px;">
   </div>
-`,Ae=new Set,Qe=[],$t=t=>{let e=Ae.has(t.number),n=new Date(t.createdAt).toLocaleDateString(navigator.language,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}),s=document.createElement("div");return s.className=`event-item notification-item event-border-blue cursor-pointer ${e?"expanded":""}`,s.dataset.issueNumber=t.number,s.id=`roadmap-issue-${t.number}`,s.onclick=a=>{if(a.target.closest("button")||a.target.closest("textarea"))return;if(s.classList.contains("expanded")){s.classList.remove("expanded");let m=s.querySelector(".event-details");m&&(m.style.display="none"),Ae.delete(t.number)}else{s.classList.add("expanded");let m=s.querySelector(".event-details");m&&(m.style.display="block"),Ae.add(t.number)}},s.innerHTML=`
+`,Ae=new Set,Ze=[],Et=t=>{let e=Ae.has(t.number),n=new Date(t.createdAt).toLocaleDateString(navigator.language,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}),s=document.createElement("div");return s.className=`event-item notification-item event-border-blue cursor-pointer ${e?"expanded":""}`,s.dataset.issueNumber=t.number,s.id=`roadmap-issue-${t.number}`,s.onclick=a=>{if(a.target.closest("button")||a.target.closest("textarea"))return;if(s.classList.contains("expanded")){s.classList.remove("expanded");let f=s.querySelector(".event-details");f&&(f.style.display="none"),Ae.delete(t.number)}else{s.classList.add("expanded");let f=s.querySelector(".event-details");f&&(f.style.display="block"),Ae.add(t.number)}},s.innerHTML=`
 
           <div class="event-time">
 
@@ -167,13 +167,13 @@
 
             </div>
 
-            <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${N(t.title)}</div>
+            <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${j(t.title)}</div>
 
             <div class="event-details" style="${e?"display: block;":"display: none;"} ">
 
               <div style="font-size: 0.75em; color: #bb86fc; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold;">Target Repository: ${t.repository||"EasterCompany/EasterCompany"}</div>
 
-              <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${ne(t.body)}</div>
+              <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${se(t.body)}</div>
 
   
         ${z()?"":`
@@ -187,26 +187,26 @@
         `}
       </div>
     </div>
-  `,s.querySelector(".comment-btn")?.addEventListener("click",async()=>{let a=s.querySelector(".comment-input"),o=a.value.trim();o&&(await vs(t.number,o),a.value="",xe(!0))}),s.querySelector(".close-btn")?.addEventListener("click",async()=>{confirm(`Close issue #${t.number}?`)&&(await ys(t.number),xe(!0))}),s};async function xe(t=!1){let e=document.getElementById("roadmap-list"),i=document.getElementById("roadmap-timeline-container");if(e){bs();try{let n=await H("/roadmap");if(!n.ok)throw new Error("Offline");let s=await n.json();if(s.sort((c,g)=>new Date(c.createdAt).getTime()-new Date(g.createdAt).getTime()),!t&&JSON.stringify(s)===JSON.stringify(Qe))return;Qe=s;let a=Array.from(e.children),o=new Map(a.filter(c=>c.dataset.issueNumber).map(c=>[c.dataset.issueNumber,c]));if(s.length===0){e.innerHTML=W("empty","No open issues found.","Dexter is currently in a perfect state.");return}let m={};if(s.forEach(c=>{let g="General",S=c.title.match(/^\[(.*?)\]/);S&&(g=S[1].toLowerCase()),m[g]||(m[g]=[]),m[g].push(c)}),e.innerHTML="",Object.entries(m).forEach(([c,g])=>{let S=`<div class="service-category-header" style="margin: 20px 0 10px 0; color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px;">${c}</div>`;e.insertAdjacentHTML("beforeend",S),g.forEach(y=>{let h=y.number.toString(),r=o.get(h);if(r&&!t){let u=r.querySelector(".event-message");u&&u.textContent!==y.title?e.appendChild($t(y)):e.appendChild(r)}else e.appendChild($t(y))})}),i){let c=s.slice(0,4),g=`
+  `,s.querySelector(".comment-btn")?.addEventListener("click",async()=>{let a=s.querySelector(".comment-input"),r=a.value.trim();r&&(await gs(t.number,r),a.value="",ye(!0))}),s.querySelector(".close-btn")?.addEventListener("click",async()=>{confirm(`Close issue #${t.number}?`)&&(await bs(t.number),ye(!0))}),s};async function ye(t=!1){let e=document.getElementById("roadmap-list"),i=document.getElementById("roadmap-timeline-container");if(e){fs();try{let n=await H("/roadmap");if(!n.ok)throw new Error("Offline");let s=await n.json();if(s.sort((d,b)=>new Date(d.createdAt).getTime()-new Date(b.createdAt).getTime()),!t&&JSON.stringify(s)===JSON.stringify(Ze))return;Ze=s;let a=Array.from(e.children),r=new Map(a.filter(d=>d.dataset.issueNumber).map(d=>[d.dataset.issueNumber,d]));if(s.length===0){e.innerHTML=W("empty","No open issues found.","Dexter is currently in a perfect state.");return}let f={};if(s.forEach(d=>{let b="General",S=d.title.match(/^\[(.*?)\]/);S&&(b=S[1].toLowerCase()),f[b]||(f[b]=[]),f[b].push(d)}),e.innerHTML="",Object.entries(f).forEach(([d,b])=>{let S=`<div class="service-category-header" style="margin: 20px 0 10px 0; color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px;">${d}</div>`;e.insertAdjacentHTML("beforeend",S),b.forEach(y=>{let h=y.number.toString(),o=r.get(h);if(o&&!t){let m=o.querySelector(".event-message");m&&m.textContent!==y.title?e.appendChild(Et(y)):e.appendChild(o)}else e.appendChild(Et(y))})}),i){let d=s.slice(0,4),b=`
         <div class="roadmap-timeline" style="display: flex; gap: 5px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; align-items: center;">
           <span style="font-size: 0.6em; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-right: 10px;">Execution Queue:</span>
-          ${c.map((S,y)=>`
+          ${d.map((S,y)=>`
             <div class="timeline-dot-wrap" style="display: flex; align-items: center; gap: 5px;">
                 <div class="timeline-dot" title="#${S.number}: ${S.title}" style="width: 12px; height: 12px; border-radius: 50%; background: #bb86fc; flex-shrink: 0; opacity: 0.8; cursor: pointer;" onclick="dexter.viewRoadmapIssue(${S.number})"></div>
                 <span style="font-size: 0.7em; color: #aaa; white-space: nowrap;">#${S.number}</span>
-                ${y<c.length-1?"<div style='width: 15px; height: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; margin: 0 5px;'></div>":""}
+                ${y<d.length-1?"<div style='width: 15px; height: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; margin: 0 5px;'></div>":""}
             </div>
           `).join("")}
             ${s.length>4?`<span style="font-size: 0.7em; color: #444; margin-left: 10px;">+${s.length-4} more</span>`:""}
         </div>
-      `;i.innerHTML=g}}catch{if(e.querySelector(".placeholder-message.offline"))return;e.innerHTML=W("offline","Failed to load roadmap.","Could not sync with GitHub.")}}}window.dexter||(window.dexter={});window.dexter.viewRoadmapIssue=t=>{let e=document.getElementById(`roadmap-issue-${t}`);e&&(e.scrollIntoView({behavior:"smooth",block:"center"}),e.classList.contains("expanded")||e.click())};function bs(){let t=document.getElementById("roadmap-new"),e=document.getElementById("roadmap-save"),i=document.getElementById("roadmap-cancel"),n=document.getElementById("roadmap-expand-all"),s=document.getElementById("roadmap-close-all");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{let a=document.getElementById("roadmap-editor-title"),o=document.getElementById("roadmap-editor-body");a&&(a.value=""),o&&(o.value="");let m=document.getElementById("roadmap-editor-container");m&&(m.style.display="block")},t.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{let a=document.getElementById("roadmap-editor-container");a&&(a.style.display="none")},i.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{let a=document.getElementById("roadmap-editor-title"),o=document.getElementById("roadmap-editor-body"),m=a?a.value.trim():"",c=o?o.value.trim():"";if(!m||!c){alert("Title and Body are required.");return}try{await H("/roadmap",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({title:m,body:c})});let g=document.getElementById("roadmap-editor-container");g&&(g.style.display="none"),xe(!0)}catch(g){console.error(g)}},e.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=()=>{Qe.forEach(a=>Ae.add(a.number)),xe(!0)},n.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{Ae.clear(),xe(!0)},s.dataset.listenerAttached="true")}async function vs(t,e){await H(`/roadmap/${t}/comment`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({body:e})})}async function ys(t){await H(`/roadmap/${t}`,{method:"DELETE"})}var Lt=()=>`
+      `;i.innerHTML=b}}catch{if(e.querySelector(".placeholder-message.offline"))return;e.innerHTML=W("offline","Failed to load roadmap.","Could not sync with GitHub.")}}}window.dexter||(window.dexter={});window.dexter.viewRoadmapIssue=t=>{let e=document.getElementById(`roadmap-issue-${t}`);e&&(e.scrollIntoView({behavior:"smooth",block:"center"}),e.classList.contains("expanded")||e.click())};function fs(){let t=document.getElementById("roadmap-new"),e=document.getElementById("roadmap-save"),i=document.getElementById("roadmap-cancel"),n=document.getElementById("roadmap-expand-all"),s=document.getElementById("roadmap-close-all");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{let a=document.getElementById("roadmap-editor-title"),r=document.getElementById("roadmap-editor-body");a&&(a.value=""),r&&(r.value="");let f=document.getElementById("roadmap-editor-container");f&&(f.style.display="block")},t.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{let a=document.getElementById("roadmap-editor-container");a&&(a.style.display="none")},i.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{let a=document.getElementById("roadmap-editor-title"),r=document.getElementById("roadmap-editor-body"),f=a?a.value.trim():"",d=r?r.value.trim():"";if(!f||!d){alert("Title and Body are required.");return}try{await H("/roadmap",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({title:f,body:d})});let b=document.getElementById("roadmap-editor-container");b&&(b.style.display="none"),ye(!0)}catch(b){console.error(b)}},e.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=()=>{Ze.forEach(a=>Ae.add(a.number)),ye(!0)},n.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{Ae.clear(),ye(!0)},s.dataset.listenerAttached="true")}async function gs(t,e){await H(`/roadmap/${t}/comment`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({body:e})})}async function bs(t){await H(`/roadmap/${t}`,{method:"DELETE"})}var St=()=>`
   <div class="alerts-actions" style="margin: 0; padding: 0; background: none; border: none; box-shadow: none; display: flex; gap: 10px; align-items: center;">
     <select id="task-filter-owner" class="task-form-select" style="padding: 4px 10px; font-size: 0.75em; height: 32px; border-color: rgba(255,255,255,0.05);">
         <option value="all">All Owners</option>
     </select>
     <button id="create-chore-btn" class="notif-action-btn" style="${z()?"display: none;":""}" title="New Task"><i class='bx bx-plus'></i></button>
   </div>
-`,Ct=()=>`
+`,kt=()=>`
         <!-- Create Task Form -->
         <div id="create-chore-form" class="new-task-form-container" style="display: none;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
@@ -289,13 +289,13 @@
         </div>
 
         <div id="chores-list" class="tasks-vertical-list" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px;"></div>
-    `,_e=[],Be={"313071000877137920":"Owen",dexter:"Dexter"},ie=[],he=null;async function He(){let t=document.getElementById("chores-list"),e=document.getElementById("create-chore-btn"),i=document.getElementById("create-chore-form"),n=document.getElementById("save-chore-btn"),s=document.getElementById("cancel-chore-btn"),a=document.getElementById("new-chore-owner"),o=document.getElementById("selected-recipients"),m=document.getElementById("task-filter-owner"),c=document.getElementById("new-chore-instruction"),g=document.getElementById("new-chore-url"),S=document.getElementById("new-chore-schedule"),y=document.getElementById("new-chore-time"),h=document.getElementById("new-chore-timezone"),r=document.getElementById("new-chore-time-group");if(h&&!h.dataset.initialValueAttached){let l=Intl.DateTimeFormat().resolvedOptions().timeZone,$=!1;for(let E=0;E<h.options.length;E++)if(h.options[E].value===l){$=!0;break}if(!$){let E=document.createElement("option");E.value=l,E.textContent=l.replace("_"," "),h.appendChild(E)}h.value=l,h.dataset.initialValueAttached="true"}S&&r&&!S.dataset.timeListenerAttached&&(S.addEventListener("change",()=>{r.style.display=S.value==="daily"?"block":"none"}),S.dataset.timeListenerAttached="true");let u=document.getElementById("form-title"),L=document.getElementById("form-icon");function I(){if(o){if(ie.length===0){o.innerHTML='<span style="color: #444; font-size: 0.8em; font-style: italic; padding: 4px;">No recipients selected</span>';return}o.innerHTML=ie.sort((l,$)=>{let E=l.startsWith("channel:"),p=$.startsWith("channel:");return E&&!p?-1:!E&&p?1:0}).map(l=>{let $=Be[l]||l,E=l.startsWith("channel:");return`
+    `,_e=[],Be={"313071000877137920":"Owen",dexter:"Dexter"},ne=[],xe=null;async function He(){let t=document.getElementById("chores-list"),e=document.getElementById("create-chore-btn"),i=document.getElementById("create-chore-form"),n=document.getElementById("save-chore-btn"),s=document.getElementById("cancel-chore-btn"),a=document.getElementById("new-chore-owner"),r=document.getElementById("selected-recipients"),f=document.getElementById("task-filter-owner"),d=document.getElementById("new-chore-instruction"),b=document.getElementById("new-chore-url"),S=document.getElementById("new-chore-schedule"),y=document.getElementById("new-chore-time"),h=document.getElementById("new-chore-timezone"),o=document.getElementById("new-chore-time-group");if(h&&!h.dataset.initialValueAttached){let l=Intl.DateTimeFormat().resolvedOptions().timeZone,T=!1;for(let E=0;E<h.options.length;E++)if(h.options[E].value===l){T=!0;break}if(!T){let E=document.createElement("option");E.value=l,E.textContent=l.replace("_"," "),h.appendChild(E)}h.value=l,h.dataset.initialValueAttached="true"}S&&o&&!S.dataset.timeListenerAttached&&(S.addEventListener("change",()=>{o.style.display=S.value==="daily"?"block":"none"}),S.dataset.timeListenerAttached="true");let m=document.getElementById("form-title"),L=document.getElementById("form-icon");function I(){if(r){if(ne.length===0){r.innerHTML='<span style="color: #444; font-size: 0.8em; font-style: italic; padding: 4px;">No recipients selected</span>';return}r.innerHTML=ne.sort((l,T)=>{let E=l.startsWith("channel:"),p=T.startsWith("channel:");return E&&!p?-1:!E&&p?1:0}).map(l=>{let T=Be[l]||l,E=l.startsWith("channel:");return`
         <div class="recipient-badge" style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.75em; color: ${l==="dexter"?"#bb86fc":E?"#03dac6":"#fff"};">
           <i class='bx ${l==="dexter"?"bx-terminal":E?"bx-hash":"bx-user"}'></i>
-          <span>${$}</span>
+          <span>${T}</span>
           <i class='bx bx-x remove-recipient' data-id="${l}" style="cursor: pointer; margin-left: 4px; opacity: 0.6;"></i>
         </div>
-      `}).join(""),o.querySelectorAll(".remove-recipient").forEach(l=>{l.onclick=()=>{let $=l.dataset.id;ie=ie.filter(E=>E!==$),I()}})}}function b(l){l&&!ie.includes(l)&&(ie.push(l),I()),a&&(a.value="")}function f(l=null){if(i){if(he=l?l.id:null,l){if(u&&(u.textContent="Update Research Task"),L&&(L.className="bx bx-edit-alt",L.style.color="#03dac6"),n&&(n.innerHTML="<i class='bx bx-check'></i> Update Task"),c&&(c.value=l.natural_instruction),g&&(g.value=l.execution_plan?.entry_url||""),S&&(S.value=l.schedule,r&&(r.style.display=l.schedule==="daily"?"block":"none")),y&&l.run_at&&(y.value=l.run_at),h&&l.timezone){let $=!1;for(let E=0;E<h.options.length;E++)if(h.options[E].value===l.timezone){$=!0;break}if(!$){let E=document.createElement("option");E.value=l.timezone,E.textContent=l.timezone.replace("_"," "),h.appendChild(E)}h.value=l.timezone}ie=l.recipients||(l.owner_id?[l.owner_id]:[]),I()}else u&&(u.textContent="Initialize Research Task"),L&&(L.className="bx bx-plus-circle",L.style.color="#bb86fc"),n&&(n.innerHTML="<i class='bx bx-zap'></i> Deploy Task"),c&&(c.value=""),g&&(g.value=""),S&&(S.value="every_24h"),ie=[],I();i.style.display="block",i.scrollIntoView({behavior:"smooth",block:"start"})}}let v=document.getElementById("contacts-group"),x=document.getElementById("channels-group");if(v&&!v.dataset.populated&&!z())try{ve("/contacts").then(async l=>{l.ok&&(((await l.json()).members||[]).forEach(p=>{if(Be[p.id]=p.nickname||p.username,p.id==="313071000877137920")return;let w=document.createElement("option");w.value=p.id;let A=p.nickname||p.username;w.textContent=`${A} (${p.username})`,v.appendChild(w)}),v.dataset.populated="true")})}catch{console.warn("Failed to fetch contacts for dropdown")}if(x&&!x.dataset.populated&&!z())try{ve("/channels").then(async l=>{l.ok&&((await l.json()).forEach(E=>{let p=`channel:${E.id}`;Be[p]=E.name;let w=document.createElement("option");w.value=p,w.textContent=`#${E.name} (${E.guild})`,x.appendChild(w)}),x.dataset.populated="true")})}catch{console.warn("Failed to fetch channels for dropdown")}a&&!a.dataset.listenerAttached&&(a.onchange=()=>{b(a.value)},a.dataset.listenerAttached="true"),m&&!m.dataset.listenerAttached&&(m.onchange=()=>d(),m.dataset.listenerAttached="true");function d(){if(!t)return;let l=m?.value||"all",$=l==="all"?_e:_e.filter(p=>(p.recipients||(p.owner_id?[p.owner_id]:[])).includes(l));if($.length===0){t.innerHTML=W("empty",l==="all"?"No active tasks.":"No tasks found for this owner.",z()?"Dexter is not currently performing research.":"Click the plus icon to create a research task.");return}let E=$.map(p=>{let w=p.last_run===0?"Never":new Date(p.last_run*1e3).toLocaleString(),A=p.memory?p.memory.length:0,_=p.status==="active"?"service-widget-online":"service-widget-offline",B=p.status==="active"?"ACTIVE":"PAUSED",V=(p.recipients||(p.owner_id?[p.owner_id]:[])).sort((M,T)=>{let k=M.startsWith("channel:"),C=T.startsWith("channel:");return k&&!C?-1:!k&&C?1:0}).map(M=>{let T=Be[M]||M.substring(0,8),k=M.startsWith("channel:");return`<span title="${T}" style="display: flex; align-items: center; gap: 3px; white-space: nowrap;"><i class='bx ${M==="dexter"?"bx-terminal":k?"bx-hash":"bx-user"}'></i>${T}</span>`}).join("<span style='color: #444; margin: 0 5px;'>|</span>"),Z=`${p.schedule}${p.run_at?" @ "+p.run_at+(p.timezone?" ("+p.timezone.split("/").pop()?.replace("_"," ")+")":""):""}`;return`
+      `}).join(""),r.querySelectorAll(".remove-recipient").forEach(l=>{l.onclick=()=>{let T=l.dataset.id;ne=ne.filter(E=>E!==T),I()}})}}function g(l){l&&!ne.includes(l)&&(ne.push(l),I()),a&&(a.value="")}function u(l=null){if(i){if(xe=l?l.id:null,l){if(m&&(m.textContent="Update Research Task"),L&&(L.className="bx bx-edit-alt",L.style.color="#03dac6"),n&&(n.innerHTML="<i class='bx bx-check'></i> Update Task"),d&&(d.value=l.natural_instruction),b&&(b.value=l.execution_plan?.entry_url||""),S&&(S.value=l.schedule,o&&(o.style.display=l.schedule==="daily"?"block":"none")),y&&l.run_at&&(y.value=l.run_at),h&&l.timezone){let T=!1;for(let E=0;E<h.options.length;E++)if(h.options[E].value===l.timezone){T=!0;break}if(!T){let E=document.createElement("option");E.value=l.timezone,E.textContent=l.timezone.replace("_"," "),h.appendChild(E)}h.value=l.timezone}ne=l.recipients||(l.owner_id?[l.owner_id]:[]),I()}else m&&(m.textContent="Initialize Research Task"),L&&(L.className="bx bx-plus-circle",L.style.color="#bb86fc"),n&&(n.innerHTML="<i class='bx bx-zap'></i> Deploy Task"),d&&(d.value=""),b&&(b.value=""),S&&(S.value="every_24h"),ne=[],I();i.style.display="block",i.scrollIntoView({behavior:"smooth",block:"start"})}}let v=document.getElementById("contacts-group"),x=document.getElementById("channels-group");if(v&&!v.dataset.populated&&!z())try{be("/contacts").then(async l=>{l.ok&&(((await l.json()).members||[]).forEach(p=>{if(Be[p.id]=p.nickname||p.username,p.id==="313071000877137920")return;let w=document.createElement("option");w.value=p.id;let A=p.nickname||p.username;w.textContent=`${A} (${p.username})`,v.appendChild(w)}),v.dataset.populated="true")})}catch{console.warn("Failed to fetch contacts for dropdown")}if(x&&!x.dataset.populated&&!z())try{be("/channels").then(async l=>{l.ok&&((await l.json()).forEach(E=>{let p=`channel:${E.id}`;Be[p]=E.name;let w=document.createElement("option");w.value=p,w.textContent=`#${E.name} (${E.guild})`,x.appendChild(w)}),x.dataset.populated="true")})}catch{console.warn("Failed to fetch channels for dropdown")}a&&!a.dataset.listenerAttached&&(a.onchange=()=>{g(a.value)},a.dataset.listenerAttached="true"),f&&!f.dataset.listenerAttached&&(f.onchange=()=>c(),f.dataset.listenerAttached="true");function c(){if(!t)return;let l=f?.value||"all",T=l==="all"?_e:_e.filter(p=>(p.recipients||(p.owner_id?[p.owner_id]:[])).includes(l));if(T.length===0){t.innerHTML=W("empty",l==="all"?"No active tasks.":"No tasks found for this owner.",z()?"Dexter is not currently performing research.":"Click the plus icon to create a research task.");return}let E=T.map(p=>{let w=p.last_run===0?"Never":new Date(p.last_run*1e3).toLocaleString(),A=p.memory?p.memory.length:0,_=p.status==="active"?"service-widget-online":"service-widget-offline",B=p.status==="active"?"ACTIVE":"PAUSED",V=(p.recipients||(p.owner_id?[p.owner_id]:[])).sort((M,$)=>{let k=M.startsWith("channel:"),C=$.startsWith("channel:");return k&&!C?-1:!k&&C?1:0}).map(M=>{let $=Be[M]||M.substring(0,8),k=M.startsWith("channel:");return`<span title="${$}" style="display: flex; align-items: center; gap: 3px; white-space: nowrap;"><i class='bx ${M==="dexter"?"bx-terminal":k?"bx-hash":"bx-user"}'></i>${$}</span>`}).join("<span style='color: #444; margin: 0 5px;'>|</span>"),Z=`${p.schedule}${p.run_at?" @ "+p.run_at+(p.timezone?" ("+p.timezone.split("/").pop()?.replace("_"," ")+")":""):""}`;return`
                 <div class="service-widget task-widget ${_}">
                     <div class="service-widget-header">
                         <i class='bx bx-search-alt'></i>
@@ -332,12 +332,25 @@
                         <button class="svc-btn delete-chore-btn" data-id="${p.id}" title="Delete Task"><i class='bx bx-trash'></i></button>
                     </div>
                 </div>
-            `}).join("");t.innerHTML=E,t.querySelectorAll(".edit-chore-btn").forEach(p=>{p.onclick=w=>{w.stopPropagation();let A=p.dataset.id,_=_e.find(B=>B.id===A);_&&f(_)}}),t.querySelectorAll(".reset-chore-btn").forEach(p=>{p.onclick=async w=>{w.stopPropagation();let A=p.dataset.id;confirm("Reset this task? It will be re-run immediately on the next cycle.")&&(p.innerHTML="<i class='bx bx-loader-alt spin'></i>",await H(`/chores/${A}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({last_run:0})}),He())}}),t.querySelectorAll(".delete-chore-btn").forEach(p=>{p.onclick=async w=>{w.stopPropagation();let A=p.dataset.id;confirm("Delete this task?")&&(await H(`/chores/${A}`,{method:"DELETE"}),He())}})}e&&!e.dataset.listenerAttached&&(e.onclick=()=>{i&&(i.style.display==="none"||he!==null?f(null):i.style.display="none")},e.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{i&&(i.style.display="none")},s.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{let l=document.getElementById("new-chore-instruction"),$=document.getElementById("new-chore-url"),E=document.getElementById("new-chore-schedule"),p=l?.value,w=E?.value||"every_24h",A=w==="daily"?y?.value:"",_=w==="daily"?h?.value:"";if(!p)return;if(ie.length===0){alert("Please add at least one recipient.");return}let B=n.innerHTML;n.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{let P=he?"PATCH":"POST",V=he?`/chores/${he}`:"/chores";await H(V,{method:P,headers:{"Content-Type":"application/json"},body:JSON.stringify({recipients:ie,natural_instruction:p,entry_url:$?.value,schedule:w,run_at:A,timezone:_})}),i&&(i.style.display="none"),l&&(l.value=""),$&&($.value=""),he=null,ie=[],He()}catch(P){console.error(P),alert(he?"Failed to update research task":"Failed to create research task")}finally{n.innerHTML=B}},n.dataset.listenerAttached="true");try{let l=await H("/chores");if(!l.ok)throw new Error(`HTTP error! status: ${l.status}`);if(_e=await l.json()||[],m){let E=m.value,p=new Set;_e.forEach(w=>{w.owner_id&&p.add(w.owner_id),w.recipients&&w.recipients.forEach(A=>p.add(A))}),m.innerHTML='<option value="all">All Recipients</option>',p.forEach(w=>{let A=document.createElement("option");A.value=w;let _=w.startsWith("channel:"),B=Be[w]||`Recipient: ${w.substring(0,8)}`;A.textContent=(_&&!B.startsWith("#")?"#":"")+B,m.appendChild(A)}),m.value=E,m.selectedIndex===-1&&(m.value="all")}d()}catch(l){console.error("Failed to fetch chores",l)}}var Mt=()=>`
+            `}).join("");t.innerHTML=E,t.querySelectorAll(".edit-chore-btn").forEach(p=>{p.onclick=w=>{w.stopPropagation();let A=p.dataset.id,_=_e.find(B=>B.id===A);_&&u(_)}}),t.querySelectorAll(".reset-chore-btn").forEach(p=>{p.onclick=async w=>{w.stopPropagation();let A=p.dataset.id;confirm("Reset this task? It will be re-run immediately on the next cycle.")&&(p.innerHTML="<i class='bx bx-loader-alt spin'></i>",await H(`/chores/${A}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({last_run:0})}),He())}}),t.querySelectorAll(".delete-chore-btn").forEach(p=>{p.onclick=async w=>{w.stopPropagation();let A=p.dataset.id;confirm("Delete this task?")&&(await H(`/chores/${A}`,{method:"DELETE"}),He())}})}e&&!e.dataset.listenerAttached&&(e.onclick=()=>{i&&(i.style.display==="none"||xe!==null?u(null):i.style.display="none")},e.dataset.listenerAttached="true"),s&&!s.dataset.listenerAttached&&(s.onclick=()=>{i&&(i.style.display="none")},s.dataset.listenerAttached="true"),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{let l=document.getElementById("new-chore-instruction"),T=document.getElementById("new-chore-url"),E=document.getElementById("new-chore-schedule"),p=l?.value,w=E?.value||"every_24h",A=w==="daily"?y?.value:"",_=w==="daily"?h?.value:"";if(!p)return;if(ne.length===0){alert("Please add at least one recipient.");return}let B=n.innerHTML;n.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{let O=xe?"PATCH":"POST",V=xe?`/chores/${xe}`:"/chores";await H(V,{method:O,headers:{"Content-Type":"application/json"},body:JSON.stringify({recipients:ne,natural_instruction:p,entry_url:T?.value,schedule:w,run_at:A,timezone:_})}),i&&(i.style.display="none"),l&&(l.value=""),T&&(T.value=""),xe=null,ne=[],He()}catch(O){console.error(O),alert(xe?"Failed to update research task":"Failed to create research task")}finally{n.innerHTML=B}},n.dataset.listenerAttached="true");try{let l=await H("/chores");if(!l.ok)throw new Error(`HTTP error! status: ${l.status}`);if(_e=await l.json()||[],f){let E=f.value,p=new Set;_e.forEach(w=>{w.owner_id&&p.add(w.owner_id),w.recipients&&w.recipients.forEach(A=>p.add(A))}),f.innerHTML='<option value="all">All Recipients</option>',p.forEach(w=>{let A=document.createElement("option");A.value=w;let _=w.startsWith("channel:"),B=Be[w]||`Recipient: ${w.substring(0,8)}`;A.textContent=(_&&!B.startsWith("#")?"#":"")+B,f.appendChild(A)}),f.value=E,f.selectedIndex===-1&&(f.value="all")}c()}catch(l){console.error("Failed to fetch chores",l)}}var Lt=()=>`
     <div class="ideas-container">
         <div class="roadmap-section" style="margin-bottom: 30px;">
             <div class="system-section-header" style="margin-bottom: 15px;">
                 <i class='bx bx-map-alt' style="color: #bb86fc;"></i>
                 <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Strategic Roadmap</h2>
+                <div style="margin-left: auto;">
+                    ${$t()}
+                </div>
+            </div>
+            ${Tt()}
+        </div>
+    </div>
+`,Ct=()=>`
+    <div class="ideas-container">
+        <div class="chores-section">
+            <div class="system-section-header" style="margin-bottom: 15px;">
+                <i class='bx bx-task' style="color: #bb86fc;"></i>
+                <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Research Tasks</h2>
                 <div style="margin-left: auto;">
                     ${St()}
                 </div>
@@ -345,20 +358,7 @@
             ${kt()}
         </div>
     </div>
-`,It=()=>`
-    <div class="ideas-container">
-        <div class="chores-section">
-            <div class="system-section-header" style="margin-bottom: 15px;">
-                <i class='bx bx-task' style="color: #bb86fc;"></i>
-                <h2 style="font-size: 1.1em; margin: 0; text-align: left;">Research Tasks</h2>
-                <div style="margin-left: auto;">
-                    ${Lt()}
-                </div>
-            </div>
-            ${Ct()}
-        </div>
-    </div>
-`;async function et(){await Promise.all([xe(),He()])}var xs=`
+`;async function Qe(){await Promise.all([ye(),He()])}var vs=`
     .profile-overlay {
         position: fixed;
         top: 0;
@@ -789,14 +789,14 @@
         margin-bottom: 10px;
         border: 1px solid rgba(255,255,255,0.05);
     }
-`;function At(t){if(!document.getElementById("dex-profile-styles")){let n=document.createElement("style");n.id="dex-profile-styles",n.textContent=xs,document.head.appendChild(n)}let e=document.createElement("div");e.className="profile-overlay",e.innerHTML=`
+`;function Mt(t){if(!document.getElementById("dex-profile-styles")){let n=document.createElement("style");n.id="dex-profile-styles",n.textContent=vs,document.head.appendChild(n)}let e=document.createElement("div");e.className="profile-overlay",e.innerHTML=`
         <div class="profile-card" style="height: 400px; justify-content: center; align-items: center;">
             <div style="text-align: center;">
                 <div style="font-size: 3em; color: #bb86fc;"><i class='bx bx-loader-alt spin'></i></div>
                 <div style="margin-top: 20px; font-family: 'JetBrains Mono'; color: #666;">ACCESSING SECURE ARCHIVE...</div>
             </div>
         </div>
-    `,e.addEventListener("click",n=>{n.target===e&&(e.classList.remove("active"),re()||(document.body.style.overflow=""),setTimeout(()=>e.remove(),300))}),document.body.appendChild(e),requestAnimationFrame(()=>e.classList.add("active")),document.body.style.overflow="hidden";let i=n=>{e.innerHTML=`
+    `,e.addEventListener("click",n=>{n.target===e&&(e.classList.remove("active"),ae()||(document.body.style.overflow=""),setTimeout(()=>e.remove(),300))}),document.body.appendChild(e),requestAnimationFrame(()=>e.classList.add("active")),document.body.style.overflow="hidden";let i=n=>{e.innerHTML=`
         <div class="profile-card" style="height: 200px; justify-content: center; align-items: center; color: #cf6679; border-color: #cf6679;">
             <div style="text-align: center;">
                 <i class='bx bx-error' style="font-size: 3em; margin-bottom: 10px;"></i>
@@ -804,12 +804,12 @@
             </div>
             <button class="close-profile-btn" style="color: #cf6679;" onclick="document.querySelector('.profile-overlay').click()"><i class='bx bx-x'></i></button>
         </div>
-    `;let s=e.querySelector(".close-profile-btn");s&&s.addEventListener("click",()=>{e.click()})};ve(`/profile/${t.id}`).then(async n=>{if(n.ok){let s=await n.json();hs(e,t,s)}else console.log("Profile not found (404) or error."),i("Profile Data Unavailable")}).catch(n=>{console.error("Profile fetch error:",n),i("Connection Failed")})}function hs(t,e,i){let n=e.status==="online"?"#03dac6":e.status==="idle"?"#ffb74d":"#cf6679",s=()=>{let L=(i.attributes||i.facts||[]).map(d=>{let l=d.key||d.k,$=d.value||d.v;return`
+    `;let s=e.querySelector(".close-profile-btn");s&&s.addEventListener("click",()=>{e.click()})};be(`/profile/${t.id}`).then(async n=>{if(n.ok){let s=await n.json();ys(e,t,s)}else console.log("Profile not found (404) or error."),i("Profile Data Unavailable")}).catch(n=>{console.error("Profile fetch error:",n),i("Connection Failed")})}function ys(t,e,i){let n=e.status==="online"?"#03dac6":e.status==="idle"?"#ffb74d":"#cf6679",s=()=>{let L=(i.attributes||i.facts||[]).map(c=>{let l=c.key||c.k,T=c.value||c.v;return`
             <div class="fact-chip">
                 <span class="fact-key">${l}:</span>
-                <span class="fact-val">${$}</span>
+                <span class="fact-val">${T}</span>
             </div>
-        `}).join(""),I=i.cognitive_model||i,b=I.technical_level||I.techLevel||0,f=I.communication_style||I.commStyle||"Unknown",v=I.patience_level||I.patience||"Unknown",x=I.vibe||"Unknown";return`
+        `}).join(""),I=i.cognitive_model||i,g=I.technical_level||I.techLevel||0,u=I.communication_style||I.commStyle||"Unknown",v=I.patience_level||I.patience||"Unknown",x=I.vibe||"Unknown";return`
             <div class="overview-grid">
                 <div class="profile-section">
                     <div class="profile-section-title"><i class='bx bx-brain'></i> Cognitive Model</div>
@@ -817,17 +817,17 @@
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Technical Level</span>
-                            <span>${b}/10</span>
+                            <span>${g}/10</span>
                         </div>
                         <div class="cog-bar-bg">
-                            <div class="cog-bar-fill" style="width: ${Math.min(b*10,100)}%;"></div>
+                            <div class="cog-bar-fill" style="width: ${Math.min(g*10,100)}%;"></div>
                         </div>
                     </div>
 
                     <div class="cog-metric">
                         <div class="cog-label">
                             <span>Communication Style</span>
-                            <span style="color: #03dac6;">${f}</span>
+                            <span style="color: #03dac6;">${u}</span>
                         </div>
                     </div>
 
@@ -857,7 +857,7 @@
                     </div>
                 </div>
             </div>
-        `},a=()=>{let L=i.dossier||{},I=L.identity||{},b=L.career||{},f=L.personal||{},v=L.social||[];return`
+        `},a=()=>{let L=i.dossier||{},I=L.identity||{},g=L.career||{},u=L.personal||{},v=L.social||[];return`
             <div class="dossier-grid">
                 <!-- Identity Column -->
                 <div class="dossier-column">
@@ -890,12 +890,12 @@
                     <div class="profile-section-title" style="margin-top: 30px;"><i class='bx bx-briefcase'></i> Career</div>
                     <div class="dossier-item">
                         <div class="dossier-label">Current Role</div>
-                        <div class="dossier-value">${b.jobTitle||"Unknown"}</div>
-                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${b.company||"Unknown"}</div>
+                        <div class="dossier-value">${g.jobTitle||"Unknown"}</div>
+                        <div style="font-size: 0.8em; color: #888; margin-top: 2px;">@ ${g.company||"Unknown"}</div>
                         <div style="height: 15px;"></div>
                          <div class="dossier-label">Key Skills</div>
                          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
-                            ${(b.skills||[]).map(x=>`<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${x}</span>`).join("")}
+                            ${(g.skills||[]).map(x=>`<span style="font-size: 0.75em; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">${x}</span>`).join("")}
                          </div>
                     </div>
                 </div>
@@ -907,21 +907,21 @@
                     <div class="dossier-item">
                         <div class="dossier-label"><i class='bx bx-joystick'></i> Hobbies</div>
                         <div style="margin-top: 10px;">
-                            ${(f.hobbies||[]).map(x=>`<div class="dossier-list-item">${x}</div>`).join("")}
+                            ${(u.hobbies||[]).map(x=>`<div class="dossier-list-item">${x}</div>`).join("")}
                         </div>
                     </div>
 
                     <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-sync'></i> Habits</div>
                         <div style="margin-top: 10px;">
-                            ${(f.habits||[]).map(x=>`<div class="dossier-list-item">${x}</div>`).join("")}
+                            ${(u.habits||[]).map(x=>`<div class="dossier-list-item">${x}</div>`).join("")}
                         </div>
                     </div>
 
                      <div class="dossier-item" style="margin-top: 20px;">
                         <div class="dossier-label"><i class='bx bx-error-circle'></i> Known Vices</div>
                         <div style="margin-top: 10px;">
-                            ${(f.vices||[]).map(x=>`<div class="dossier-list-item" style="color: #cf6679;">${x}</div>`).join("")}
+                            ${(u.vices||[]).map(x=>`<div class="dossier-list-item" style="color: #cf6679;">${x}</div>`).join("")}
                         </div>
                     </div>
                 </div>
@@ -943,20 +943,20 @@
                     </div>
                 </div>
             </div>
-        `},o=()=>{let L=i.traits||{};return`
+        `},r=()=>{let L=i.traits||{};return`
         <div class="profile-section-title"><i class='bx bx-radar'></i> Personality Matrix (OCEAN)</div>
         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
-            ${Object.entries(L).map(([I,b])=>`
+            ${Object.entries(L).map(([I,g])=>`
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                     <div style="width: 10px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 5px; position: relative; overflow: hidden;">
-                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${b}%; background: ${Number(b)>50?"#03dac6":"#cf6679"}; transition: height 1s;"></div>
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${g}%; background: ${Number(g)>50?"#03dac6":"#cf6679"}; transition: height 1s;"></div>
                     </div>
                     <div style="font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #aaa;">${I.substring(0,4)}</div>
-                    <div style="font-family: monospace;">${b}%</div>
+                    <div style="font-family: monospace;">${g}%</div>
                 </div>
             `).join("")}
         </div>
-    `},m=()=>`
+    `},f=()=>`
         <div class="profile-section-title"><i class='bx bx-map-alt'></i> Conversation Topics</div>
         <div style="margin-top: 20px;">
             ${(i.topics||[]).map(L=>`
@@ -971,10 +971,10 @@
                 </div>
             `).join("")}
         </div>
-    `,c=()=>`
+    `,d=()=>`
         <div class="profile-section-title"><i class='bx bx-code-alt'></i> Raw Profile JSON</div>
         <div class="raw-json">${JSON.stringify(i,null,2)}</div>
-    `,g=`
+    `,b=`
         <div class="profile-card">
             <button class="close-profile-btn" onclick="document.querySelector('.profile-overlay').click()"><i class='bx bx-x'></i></button>
             
@@ -984,7 +984,7 @@
                     <div class="profile-status-dot" style="background: ${n}"></div>
                 </div>
                 <div class="profile-identity">
-                    <h2>${N(e.username)}</h2>
+                    <h2>${j(e.username)}</h2>
                     <div class="profile-badges">${(i.badges||[]).map(L=>`<span class="profile-badge ${L==="Creator"?"master":""}">${L}</span>`).join("")}</div>
                 </div>
             </div>
@@ -1000,9 +1000,9 @@
             <div class="profile-body">
                 <div id="tab-overview" class="tab-content active">${s()}</div>
                 <div id="tab-dossier" class="tab-content">${a()}</div>
-                <div id="tab-psychometrics" class="tab-content">${o()}</div>
-                <div id="tab-topics" class="tab-content">${m()}</div>
-                <div id="tab-raw" class="tab-content">${c()}</div>
+                <div id="tab-psychometrics" class="tab-content">${r()}</div>
+                <div id="tab-topics" class="tab-content">${f()}</div>
+                <div id="tab-raw" class="tab-content">${d()}</div>
             </div>
 
             <div class="profile-footer">
@@ -1014,7 +1014,7 @@
                 <button id="profile-expand-toggle" class="expand-btn"><i class='bx bx-expand-alt'></i> Detailed Analysis</button>
             </div>
         </div>
-    `;t.innerHTML=g;let S=t.querySelector(".profile-card"),y=t.querySelector("#profile-expand-toggle"),h=t.querySelectorAll(".profile-tab-btn"),r=t.querySelectorAll(".tab-content"),u=t.querySelector(".close-profile-btn");u&&u.addEventListener("click",()=>{t.classList.remove("active"),re()||(document.body.style.overflow=""),setTimeout(()=>t.remove(),300)}),h.forEach(L=>{L.addEventListener("click",()=>{h.forEach(f=>f.classList.remove("active")),r.forEach(f=>f.classList.remove("active")),L.classList.add("active");let I=L.dataset.tab,b=t.querySelector(`#tab-${I}`);b&&b.classList.add("active")})}),y&&y.addEventListener("click",()=>{S.classList.toggle("expanded");let L=S.classList.contains("expanded");y.innerHTML=L?"<i class='bx bx-collapse-alt'></i> Collapse View":"<i class='bx bx-expand-alt'></i> Detailed Analysis"})}var _t=()=>`
+    `;t.innerHTML=b;let S=t.querySelector(".profile-card"),y=t.querySelector("#profile-expand-toggle"),h=t.querySelectorAll(".profile-tab-btn"),o=t.querySelectorAll(".tab-content"),m=t.querySelector(".close-profile-btn");m&&m.addEventListener("click",()=>{t.classList.remove("active"),ae()||(document.body.style.overflow=""),setTimeout(()=>t.remove(),300)}),h.forEach(L=>{L.addEventListener("click",()=>{h.forEach(u=>u.classList.remove("active")),o.forEach(u=>u.classList.remove("active")),L.classList.add("active");let I=L.dataset.tab,g=t.querySelector(`#tab-${I}`);g&&g.classList.add("active")})}),y&&y.addEventListener("click",()=>{S.classList.toggle("expanded");let L=S.classList.contains("expanded");y.innerHTML=L?"<i class='bx bx-collapse-alt'></i> Collapse View":"<i class='bx bx-expand-alt'></i> Detailed Analysis"})}var It=()=>`
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-book-content' style="color: #03dac6;"></i>
         <h2>Contacts</h2>
@@ -1022,25 +1022,25 @@
     </div>
     <div id="contacts-list" class="contacts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 10px 0;">
     </div>
-`,ws=null;async function tt(){let t=document.getElementById("contacts-list");if(!t)return;let e=document.getElementById("contacts-refresh");e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>",await tt(),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},e.dataset.listenerAttached="true"),t.dataset.listenerAttached||(t.onclick=i=>{let s=i.target.closest(".user-profile-card");if(s&&s.dataset.user)try{let a=JSON.parse(s.dataset.user);At(a)}catch(a){console.error("Failed to parse user data",a)}},t.dataset.listenerAttached="true");try{let i=await ve("/contacts");if(!i.ok)throw new Error("Service unreachable");let s=(await i.json()).members||[];if(ws=Date.now(),s.length===0){t.innerHTML=W("empty","No contacts found.","Check your Discord connection.");return}let a={Me:0,Master:1,Admin:2,Moderator:3,Contributor:4,User:5};s.sort((o,m)=>{let c=a[o.level]??10,g=a[m.level]??10;return c!==g?c-g:o.username.localeCompare(m.username)}),t.innerHTML=s.map(o=>{let m=o.color&&o.color!==0,c=m?"#"+o.color.toString(16).padStart(6,"0"):"rgba(255,255,255,0.1)",g=o.status==="online"?"#5eff5e":o.status==="idle"?"#ffa500":o.status==="dnd"?"#ff4d4d":"#666",S="#888";o.level==="Me"||o.level==="Master"?S="#bb86fc":o.level==="Admin"?S="#cf6679":o.level==="Moderator"?S="#03dac6":o.level==="Contributor"&&(S="#ffa500");let y=o.level==="Me",h=y?"rgba(187, 134, 252, 0.08)":m?`${c}11`:"rgba(255,255,255,0.03)",r=y?"2px solid #bb86fc":m?`1px solid ${c}66`:"1px solid rgba(255,255,255,0.1)";return`
+`,xs=null;async function et(){let t=document.getElementById("contacts-list");if(!t)return;let e=document.getElementById("contacts-refresh");e&&!e.dataset.listenerAttached&&(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>",await et(),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},e.dataset.listenerAttached="true"),t.dataset.listenerAttached||(t.onclick=i=>{let s=i.target.closest(".user-profile-card");if(s&&s.dataset.user)try{let a=JSON.parse(s.dataset.user);Mt(a)}catch(a){console.error("Failed to parse user data",a)}},t.dataset.listenerAttached="true");try{let i=await be("/contacts");if(!i.ok)throw new Error("Service unreachable");let s=(await i.json()).members||[];if(xs=Date.now(),s.length===0){t.innerHTML=W("empty","No contacts found.","Check your Discord connection.");return}let a={Me:0,Master:1,Admin:2,Moderator:3,Contributor:4,User:5};s.sort((r,f)=>{let d=a[r.level]??10,b=a[f.level]??10;return d!==b?d-b:r.username.localeCompare(f.username)}),t.innerHTML=s.map(r=>{let f=r.color&&r.color!==0,d=f?"#"+r.color.toString(16).padStart(6,"0"):"rgba(255,255,255,0.1)",b=r.status==="online"?"#5eff5e":r.status==="idle"?"#ffa500":r.status==="dnd"?"#ff4d4d":"#666",S="#888";r.level==="Me"||r.level==="Master"?S="#bb86fc":r.level==="Admin"?S="#cf6679":r.level==="Moderator"?S="#03dac6":r.level==="Contributor"&&(S="#ffa500");let y=r.level==="Me",h=y?"rgba(187, 134, 252, 0.08)":f?`${d}11`:"rgba(255,255,255,0.03)",o=y?"2px solid #bb86fc":f?`1px solid ${d}66`:"1px solid rgba(255,255,255,0.1)";return`
                 <div class="user-profile-card" 
-                     data-user="${JSON.stringify(o).replace(/"/g,"&quot;")}"
-                     style="background: ${h}; padding: 15px; border-radius: 8px; border: ${r}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.2s, background 0.2s, box-shadow 0.2s;">
-                    <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${y?"#bb86fc":m?c:"transparent"}33, transparent 70%); pointer-events: none;"></div>
+                     data-user="${JSON.stringify(r).replace(/"/g,"&quot;")}"
+                     style="background: ${h}; padding: 15px; border-radius: 8px; border: ${o}; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.2s, background 0.2s, box-shadow 0.2s;">
+                    <div class="card-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 0%, ${y?"#bb86fc":f?d:"transparent"}33, transparent 70%); pointer-events: none;"></div>
                     <div style="position: relative;">
-                        <img src="${o.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${y?"2px solid #bb86fc":m?`2px solid ${c}`:"none"};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                        <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${g}; border: 2px solid #1a1a1a; border-radius: 50%;"></div>
+                        <img src="${r.avatar_url}" style="width: 45px; height: 45px; border-radius: 50%; background: #222; border: ${y?"2px solid #bb86fc":f?`2px solid ${d}`:"none"};" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                        <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${b}; border: 2px solid #1a1a1a; border-radius: 50%;"></div>
                     </div>
                     <div class="user-info" style="text-align: left; flex: 1; min-width: 0;">
-                        <h3 style="margin: 0; font-size: 0.95em; color: ${m?c:"#fff"}; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${o.nickname||o.username}</h3>
+                        <h3 style="margin: 0; font-size: 0.95em; color: ${f?d:"#fff"}; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${r.nickname||r.username}</h3>
                         <div style="display: flex; align-items: center; gap: 5px; margin-top: 2px;">
-                            <span style="font-size: 0.75em; color: ${S}; font-weight: 600; text-transform: uppercase;">${y?"DEXTER (ME)":o.level}</span>
-                            <span style="font-size: 0.7em; color: #666; font-family: monospace;">(${o.username})</span>
+                            <span style="font-size: 0.75em; color: ${S}; font-weight: 600; text-transform: uppercase;">${y?"DEXTER (ME)":r.level}</span>
+                            <span style="font-size: 0.7em; color: #666; font-family: monospace;">(${r.username})</span>
                         </div>
-                        <p style="margin: 4px 0 0 0; font-family: monospace; font-size: 0.65em; opacity: 0.4; text-align: left;">${o.id}</p>
+                        <p style="margin: 4px 0 0 0; font-family: monospace; font-size: 0.65em; opacity: 0.4; text-align: left;">${r.id}</p>
                     </div>
                 </div>
-            `}).join("")}catch{t.children.length===0&&(t.innerHTML=W("offline","Failed to fetch contacts.","The Discord service may be offline."))}}var Es={message_received:"{user} posted in {channel}: {message}",action_performed:"{actor} {action} {target}",log_entry:"[{level}] {message}",error_occurred:"ERROR: {error}",status_change:"{entity} changed status to {new_status}",metric_recorded:"{metric_name}: {value}{unit}","messaging.user.joined_voice":"{user_name} joined voice channel {channel_name}","messaging.user.left_voice":"{user_name} left voice channel {channel_name}","messaging.user.sent_message":"{user_name} in {channel_name}: {content}","messaging.bot.sent_message":"Dexter sent in {channel_name}: {content}","messaging.bot.joined_voice":"Dexter joined voice channel {channel_name}","messaging.bot.voice_response":"Dexter said: {content}","messaging.bot.status_update":"Dexter status changed to {status}: {details}","messaging.user.speaking.started":"{user_name} started speaking","messaging.user.speaking.stopped":"{user_name} stopped speaking","messaging.user.transcribed":"{user_name} said: {transcription}","messaging.user.joined_server":"{user_name} joined {server_name}","messaging.webhook.message":"{user_name} (Webhook): {content}","webhook.processed":"Webhook processed: {status}",voice_speaking_started:"User {user_id} started speaking in voice channel {channel_id}",voice_speaking_stopped:"User {user_id} stopped speaking in voice channel {channel_id}",voice_transcribed:"{user_name} said: {transcription}","engagement.decision":"Engagement Decision: {decision} ({reason})",bot_response:"Bot Responded: {response}","moderation.explicit_content.deleted":"Explicit content deleted in {channel_name} from {user_name}: {reason}","analysis.link.completed":"Analyzed link: {url}","analysis.visual.completed":"Analyzed image: {filename}","analysis.router.decision":"Router Decision: {decision} for {url}","analysis.user.message_signals":"Analyzed Signals for User {user_id}","system.status.change":"{entity} changed status to {new_status}","system.test.completed":"Tests completed for {service_name} ({duration})","system.build.completed":"Build completed for {service_name}: {status}","system.analysis.audit":"{agent_name} Audit: {tier}","system.blueprint.generated":"Blueprint Generated: {title}","system.cli.command":"CLI Command: {command} {args} ({status})","system.cli.status":"CLI Status: {message}","system.notification.generated":"Notification ({priority}): {title}","system.attention.expired":"Attention Expired: {tier}","system.roadmap.created":"Roadmap item created: {content}","system.roadmap.updated":"Roadmap item {id} changed to {state}","system.process.registered":"Process {process_id} started: {state}","system.process.unregistered":"Process {process_id} completed","system.cognitive.model_load":"Model Loaded: {model} ({method})","system.cognitive.model_inference":"Model Inference: {model} ({method})","system.cognitive.model_unload":"Model Unloaded: {model} ({reason})"};function Bt(t,e){let i=Es[t];if(t==="voice_transcribed"&&!e.user_name&&e.user_id&&(i="User {user_id} said in voice channel {channel_id}: {transcription}"),t==="system.notification.generated"&&(i=`Notification (${e.priority?e.priority.charAt(0).toUpperCase()+e.priority.slice(1):"Low"}): ${e.title}`),t==="system.analysis.audit"){let s=e.tier?e.tier.toUpperCase():"UNKNOWN";i=`${e.agent_name||"System"} Audit: ${s}`}if(t==="system.attention.expired")return`System Attention Expired: ${e.tier?e.tier.charAt(0).toUpperCase()+e.tier.slice(1):"Unknown"}`;if(t==="system.test.completed")return`Tests ${e.test?.status==="OK"&&e.lint?.status==="OK"&&e.format?.status==="OK"?"PASSED":"FAILED"} for ${e.service_name} (${e.duration})`;if(!i)return t;let n=i.replace(/\{(\w+)\}/g,(s,a)=>e[a]!==void 0&&e[a]!==null?e[a]:a==="reason"||a==="method"||a==="details"||a==="args"?"":s);return n=n.replace(/\s\(\)\s*/g," ").trim(),(t==="messaging.user.transcribed"||t==="voice_transcribed")&&e.detected_language&&e.detected_language!=="en"&&e.english_translation&&(n+=` (Translation: ${e.english_translation})`),n}var st=()=>`
+            `}).join("")}catch{t.children.length===0&&(t.innerHTML=W("offline","Failed to fetch contacts.","The Discord service may be offline."))}}var hs={message_received:"{user} posted in {channel}: {message}",action_performed:"{actor} {action} {target}",log_entry:"[{level}] {message}",error_occurred:"ERROR: {error}",status_change:"{entity} changed status to {new_status}",metric_recorded:"{metric_name}: {value}{unit}","messaging.user.joined_voice":"{user_name} joined voice channel {channel_name}","messaging.user.left_voice":"{user_name} left voice channel {channel_name}","messaging.user.sent_message":"{user_name} in {channel_name}: {content}","messaging.bot.sent_message":"Dexter sent in {channel_name}: {content}","messaging.bot.joined_voice":"Dexter joined voice channel {channel_name}","messaging.bot.voice_response":"Dexter said: {content}","messaging.bot.status_update":"Dexter status changed to {status}: {details}","messaging.user.speaking.started":"{user_name} started speaking","messaging.user.speaking.stopped":"{user_name} stopped speaking","messaging.user.transcribed":"{user_name} said: {transcription}","messaging.user.joined_server":"{user_name} joined {server_name}","messaging.webhook.message":"{user_name} (Webhook): {content}","webhook.processed":"Webhook processed: {status}",voice_speaking_started:"User {user_id} started speaking in voice channel {channel_id}",voice_speaking_stopped:"User {user_id} stopped speaking in voice channel {channel_id}",voice_transcribed:"{user_name} said: {transcription}","engagement.decision":"Engagement Decision: {decision} ({reason})",bot_response:"Bot Responded: {response}","moderation.explicit_content.deleted":"Explicit content deleted in {channel_name} from {user_name}: {reason}","analysis.link.completed":"Analyzed link: {url}","analysis.visual.completed":"Analyzed image: {filename}","analysis.router.decision":"Router Decision: {decision} for {url}","analysis.user.message_signals":"Analyzed Signals for User {user_id}","system.status.change":"{entity} changed status to {new_status}","system.test.completed":"Tests completed for {service_name} ({duration})","system.build.completed":"Build completed for {service_name}: {status}","system.analysis.audit":"{agent_name} Audit: {tier}","system.blueprint.generated":"Blueprint Generated: {title}","system.cli.command":"CLI Command: {command} {args} ({status})","system.cli.status":"CLI Status: {message}","system.notification.generated":"Notification ({priority}): {title}","system.attention.expired":"Attention Expired: {tier}","system.roadmap.created":"Roadmap item created: {content}","system.roadmap.updated":"Roadmap item {id} changed to {state}","system.process.registered":"Process {process_id} started: {state}","system.process.unregistered":"Process {process_id} completed","system.cognitive.model_load":"Model Loaded: {model} ({method})","system.cognitive.model_inference":"Model Inference: {model} ({method})","system.cognitive.model_unload":"Model Unloaded: {model} ({reason})"};function At(t,e){let i=hs[t];if(t==="voice_transcribed"&&!e.user_name&&e.user_id&&(i="User {user_id} said in voice channel {channel_id}: {transcription}"),t==="system.notification.generated"&&(i=`Notification (${e.priority?e.priority.charAt(0).toUpperCase()+e.priority.slice(1):"Low"}): ${e.title}`),t==="system.analysis.audit"){let s=e.tier?e.tier.toUpperCase():"UNKNOWN";i=`${e.agent_name||"System"} Audit: ${s}`}if(t==="system.attention.expired")return`System Attention Expired: ${e.tier?e.tier.charAt(0).toUpperCase()+e.tier.slice(1):"Unknown"}`;if(t==="system.test.completed")return`Tests ${e.test?.status==="OK"&&e.lint?.status==="OK"&&e.format?.status==="OK"?"PASSED":"FAILED"} for ${e.service_name} (${e.duration})`;if(!i)return t;let n=i.replace(/\{(\w+)\}/g,(s,a)=>e[a]!==void 0&&e[a]!==null?e[a]:a==="reason"||a==="method"||a==="details"||a==="args"?"":s);return n=n.replace(/\s\(\)\s*/g," ").trim(),(t==="messaging.user.transcribed"||t==="voice_transcribed")&&e.detected_language&&e.detected_language!=="en"&&e.english_translation&&(n+=` (Translation: ${e.english_translation})`),n}var tt=()=>`
     <div class="system-section-header" style="margin-bottom: 20px;">
         <i class='bx bx-calendar-event' style="color: #03dac6;"></i>
         <h2>Events</h2>
@@ -1066,101 +1066,101 @@
             </div>
         </div>
     </div>
-`,Je=null,we=new Set,ze=[],Q="all",Ts={messaging:["message_received","messaging.user.sent_message","messaging.bot.sent_message","messaging.user.transcribed","voice_transcribed","bot_response","messaging.user.joined_voice","messaging.user.left_voice","messaging.bot.joined_voice","messaging.bot.voice_response","messaging.user.speaking.started","messaging.user.speaking.stopped","messaging.webhook.message"],system:["system.cli.command","system.cli.status","system.status.change","metric_recorded","log_entry","error_occurred","webhook.processed","messaging.bot.status_update","messaging.user.joined_server","system.test.completed","system.build.completed","system.roadmap.created","system.roadmap.updated","system.process.registered","system.process.unregistered"],cognitive:["engagement.decision","system.analysis.audit","system.blueprint.generated","analysis.link.completed","analysis.visual.completed","analysis.router.decision","analysis.user.message_signals","system.cognitive.model_inference"],moderation:["moderation.explicit_content.deleted"]},$s={message_received:"bx-message-detail","messaging.user.sent_message":"bx-message-rounded-dots","messaging.bot.sent_message":"bx-bot","messaging.user.transcribed":"bx-microphone",voice_transcribed:"bx-microphone","messaging.user.joined_voice":"bx-phone-incoming","messaging.user.left_voice":"bx-phone-outgoing","messaging.webhook.message":"bx-cloud-lightning","system.cli.command":"bx-terminal","system.cli.status":"bx-info-circle","system.test.completed":"bx-check-shield","system.build.completed":"bx-package","system.roadmap.created":"bx-map-pin","system.roadmap.updated":"bx-map-alt","system.process.registered":"bx-play-circle","system.process.unregistered":"bx-stop-circle",error_occurred:"bx-error-alt","engagement.decision":"bx-brain","system.analysis.audit":"bx-search-alt","system.blueprint.generated":"bx-paint","analysis.link.completed":"bx-link","analysis.visual.completed":"bx-image","analysis.router.decision":"bx-git-branch","analysis.user.message_signals":"bx-pulse","moderation.explicit_content.deleted":"bx-shield-x","system.status.change":"bx-refresh",metric_recorded:"bx-line-chart","system.cognitive.model_inference":"bx-brain"};function Ss(t){for(let[e,i]of Object.entries(Ts))if(i.includes(t))return e;return"system"}function ks(t){return $s[t]||"bx-square-rounded"}async function ue(t=!1){let e=document.getElementById("events-timeline");if(!e)return;Ls();let n=`/events?ml=${Q==="all"?100:250}&format=json&exclude_types=system.process.registered,system.process.unregistered`;Q!=="all"&&(n+=`&category=${Q}`);try{let s=await H(n);if(!s.ok)throw new Error("Service unreachable");if(ze=((await s.json()).events||[]).filter(h=>{let r=h.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{return!0}let u=r.type;return!(u==="system.blueprint.generated"||u==="system.notification.generated")}),Je=Date.now(),pe(1,Je),ze.length===0){e.innerHTML=W("empty","No events found for this filter.");return}t&&(e.innerHTML="");let m=h=>{let r=h.event;if(typeof r=="string")try{r=JSON.parse(r)}catch{return null}let u=r.type,L=Ss(u),I=ks(u),b=u==="engagement.decision"||u==="messaging.bot.sent_message"||u==="messaging.bot.voice_response"||u==="messaging.user.sent_message"||u==="moderation.explicit_content.deleted"||u==="analysis.link.completed"||u==="analysis.visual.completed"||u==="analysis.router.decision"||u==="analysis.user.message_signals"||u==="system.cli.command"||u==="system.analysis.audit"||u==="system.cognitive.model_inference"||u==="system.test.completed"||u==="error_occurred"||u==="system.cli.status"||u==="system.attention.expired"||u.startsWith("system.roadmap")||u.startsWith("system.process"),f="event-border-grey";b&&(u==="moderation.explicit_content.deleted"||u==="error_occurred"?f="event-border-red":u==="analysis.link.completed"||u==="analysis.visual.completed"||u==="analysis.router.decision"||u==="system.analysis.audit"||u==="analysis.user.message_signals"||u==="engagement.decision"?f="event-border-purple":u==="system.attention.expired"||u==="system.cli.command"||u==="system.cli.status"?f="event-border-orange":u==="system.test.completed"?f=r.test?.status==="OK"&&r.lint?.status==="OK"&&r.format?.status==="OK"?"event-border-blue":"event-border-red":f="event-border-blue");let v=b?"cursor-pointer":"",x=we.has(h.id),d=x?"expanded":"",l=x?"display: block;":"display: none;",$=new Date(h.timestamp*1e3),E=$.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),p=$.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),w=Bt(u,r),A=r.user_level?`<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${r.user_level})</span>`:"",_="";if(b){let M="";if(u==="engagement.decision"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+`,Fe=null,he=new Set,ze=[],Q="all",ws={messaging:["message_received","messaging.user.sent_message","messaging.bot.sent_message","messaging.user.transcribed","voice_transcribed","bot_response","messaging.user.joined_voice","messaging.user.left_voice","messaging.bot.joined_voice","messaging.bot.voice_response","messaging.user.speaking.started","messaging.user.speaking.stopped","messaging.webhook.message"],system:["system.cli.command","system.cli.status","system.status.change","metric_recorded","log_entry","error_occurred","webhook.processed","messaging.bot.status_update","messaging.user.joined_server","system.test.completed","system.build.completed","system.roadmap.created","system.roadmap.updated","system.process.registered","system.process.unregistered"],cognitive:["engagement.decision","system.analysis.audit","system.blueprint.generated","analysis.link.completed","analysis.visual.completed","analysis.router.decision","analysis.user.message_signals","system.cognitive.model_inference"],moderation:["moderation.explicit_content.deleted"]},Es={message_received:"bx-message-detail","messaging.user.sent_message":"bx-message-rounded-dots","messaging.bot.sent_message":"bx-bot","messaging.user.transcribed":"bx-microphone",voice_transcribed:"bx-microphone","messaging.user.joined_voice":"bx-phone-incoming","messaging.user.left_voice":"bx-phone-outgoing","messaging.webhook.message":"bx-cloud-lightning","system.cli.command":"bx-terminal","system.cli.status":"bx-info-circle","system.test.completed":"bx-check-shield","system.build.completed":"bx-package","system.roadmap.created":"bx-map-pin","system.roadmap.updated":"bx-map-alt","system.process.registered":"bx-play-circle","system.process.unregistered":"bx-stop-circle",error_occurred:"bx-error-alt","engagement.decision":"bx-brain","system.analysis.audit":"bx-search-alt","system.blueprint.generated":"bx-paint","analysis.link.completed":"bx-link","analysis.visual.completed":"bx-image","analysis.router.decision":"bx-git-branch","analysis.user.message_signals":"bx-pulse","moderation.explicit_content.deleted":"bx-shield-x","system.status.change":"bx-refresh",metric_recorded:"bx-line-chart","system.cognitive.model_inference":"bx-brain"};function $s(t){for(let[e,i]of Object.entries(ws))if(i.includes(t))return e;return"system"}function Ts(t){return Es[t]||"bx-square-rounded"}async function pe(t=!1){let e=document.getElementById("events-timeline");if(!e)return;Ss();let n=`/events?ml=${Q==="all"?100:250}&format=json&exclude_types=system.process.registered,system.process.unregistered`;Q!=="all"&&(n+=`&category=${Q}`);try{let s=await H(n);if(!s.ok)throw new Error("Service unreachable");if(ze=((await s.json()).events||[]).filter(h=>{let o=h.event;if(typeof o=="string")try{o=JSON.parse(o)}catch{return!0}let m=o.type;return!(m==="system.blueprint.generated"||m==="system.notification.generated")}),Fe=Date.now(),ce(1,Fe),ze.length===0){e.innerHTML=W("empty","No events found for this filter.");return}t&&(e.innerHTML="");let f=h=>{let o=h.event;if(typeof o=="string")try{o=JSON.parse(o)}catch{return null}let m=o.type,L=$s(m),I=Ts(m),g=m==="engagement.decision"||m==="messaging.bot.sent_message"||m==="messaging.bot.voice_response"||m==="messaging.user.sent_message"||m==="moderation.explicit_content.deleted"||m==="analysis.link.completed"||m==="analysis.visual.completed"||m==="analysis.router.decision"||m==="analysis.user.message_signals"||m==="system.cli.command"||m==="system.analysis.audit"||m==="system.cognitive.model_inference"||m==="system.test.completed"||m==="error_occurred"||m==="system.cli.status"||m==="system.attention.expired"||m.startsWith("system.roadmap")||m.startsWith("system.process"),u="event-border-grey";g&&(m==="moderation.explicit_content.deleted"||m==="error_occurred"?u="event-border-red":m==="analysis.link.completed"||m==="analysis.visual.completed"||m==="analysis.router.decision"||m==="system.analysis.audit"||m==="analysis.user.message_signals"||m==="engagement.decision"?u="event-border-purple":m==="system.attention.expired"||m==="system.cli.command"||m==="system.cli.status"?u="event-border-orange":m==="system.test.completed"?u=o.test?.status==="OK"&&o.lint?.status==="OK"&&o.format?.status==="OK"?"event-border-blue":"event-border-red":u="event-border-blue");let v=g?"cursor-pointer":"",x=he.has(h.id),c=x?"expanded":"",l=x?"display: block;":"display: none;",T=new Date(h.timestamp*1e3),E=T.toLocaleTimeString(navigator.language,{hour:"2-digit",minute:"2-digit",second:"2-digit"}),p=T.toLocaleDateString(navigator.language,{month:"short",day:"numeric"}),w=At(m,o),A=o.user_level?`<span style="font-size: 0.8em; opacity: 0.6; margin-left: 5px;">(${o.user_level})</span>`:"",_="";if(g){let M="";if(m==="engagement.decision"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Engagement Model:</span>
-                            <span class="detail-value">${r.engagement_model||"N/A"}</span>
+                            <span class="detail-value">${o.engagement_model||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Input Prompt")}
-                            <pre class="detail-pre">${r.input_prompt||"None"}</pre>
+                            ${$("Input Prompt")}
+                            <pre class="detail-pre">${o.input_prompt||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Context History")}
-                            <pre class="detail-pre">${r.context_history||"None"}</pre>
+                            ${$("Context History")}
+                            <pre class="detail-pre">${o.context_history||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Raw Engagement Output")}
-                            <pre class="detail-pre">${r.engagement_raw||"None"}</pre>
+                            ${$("Raw Engagement Output")}
+                            <pre class="detail-pre">${o.engagement_raw||"None"}</pre>
                         </div>
-                    `}else if(u==="system.cognitive.model_inference"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="system.cognitive.model_inference"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row">
                             <span class="detail-label">Model:</span>
-                            <span class="detail-value">${r.model}</span>
+                            <span class="detail-value">${o.model}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Method:</span>
-                            <span class="detail-value" style="text-transform: uppercase;">${r.method}</span>
+                            <span class="detail-value" style="text-transform: uppercase;">${o.method}</span>
                         </div>
-                        ${T("Inference Metrics")}
+                        ${$("Inference Metrics")}
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tokens (In/Out)</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.prompt_eval_count||0} / ${r.eval_count||0}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.prompt_eval_count||0} / ${o.eval_count||0}</div>
                             </div>
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${r.duration_ms||0}ms</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${o.duration_ms||0}ms</div>
                             </div>
                         </div>
-                    `}else if(u==="system.attention.expired"){let T=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,k=r.timestamp-r.last_active,C=Math.floor(k/60);M=`
+                    `}else if(m==="system.attention.expired"){let $=N=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${N}</h5>`,k=o.timestamp-o.last_active,C=Math.floor(k/60);M=`
                         <div class="event-detail-row">
                             <span class="detail-label">Protocol:</span>
-                            <span class="detail-value" style="color: #bb86fc;">${r.tier}</span>
+                            <span class="detail-value" style="color: #bb86fc;">${o.tier}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Idle Time:</span>
                             <span class="detail-value">${C} minutes</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Context (Last Input)")}
-                            <div class="detail-pre">${ne(r.last_input||"None")}</div>
+                            ${$("Context (Last Input)")}
+                            <div class="detail-pre">${se(o.last_input||"None")}</div>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Thought Process (Last Output)")}
-                            <div class="detail-pre">${ne(r.last_output||"None")}</div>
+                            ${$("Thought Process (Last Output)")}
+                            <div class="detail-pre">${se(o.last_output||"None")}</div>
                         </div>
-                    `}else if(u==="messaging.bot.sent_message"){let T=D=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${D}</h5>`,k="";if(r.embed){let D=r.embed,K=D.title?`<div style="font-weight: bold; margin-bottom: 5px; color: #fff;">${N(D.title)}</div>`:"",U=D.description?`<div style="font-size: 0.9em; color: #bbb; white-space: pre-wrap;">${ne(D.description)}</div>`:"",j=(D.fields||[]).map(q=>`
+                    `}else if(m==="messaging.bot.sent_message"){let $=D=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${D}</h5>`,k="";if(o.embed){let D=o.embed,K=D.title?`<div style="font-weight: bold; margin-bottom: 5px; color: #fff;">${j(D.title)}</div>`:"",q=D.description?`<div style="font-size: 0.9em; color: #bbb; white-space: pre-wrap;">${se(D.description)}</div>`:"",P=(D.fields||[]).map(U=>`
               <div style="margin-top: 10px;">
-                <div style="font-size: 0.7em; text-transform: uppercase; color: #666; letter-spacing: 1px;">${N(q.name)}</div>
-                <div style="font-size: 0.85em; color: #eee; white-space: pre-wrap;">${ne(q.value)}</div>
+                <div style="font-size: 0.7em; text-transform: uppercase; color: #666; letter-spacing: 1px;">${j(U.name)}</div>
+                <div style="font-size: 0.85em; color: #eee; white-space: pre-wrap;">${se(U.value)}</div>
               </div>
             `).join("");k=`
               <div class="discord-embed" style="margin-top: 15px; padding: 12px; border-left: 4px solid ${D.color?"#"+D.color.toString(16).padStart(6,"0"):"#bb86fc"}; background: rgba(255,255,255,0.02); border-radius: 0 4px 4px 0;">
                 ${K}
-                ${U}
-                ${j}
+                ${q}
+                ${P}
               </div>
-            `}let C="";r.eval_count&&(C=`
+            `}let C="";o.eval_count&&(C=`
                             <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Tokens (In/Out)</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.prompt_count} / ${r.eval_count}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.prompt_count} / ${o.eval_count}</div>
                                 </div>
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Total Time</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${r.duration_ms}ms</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${o.duration_ms}ms</div>
                                 </div>
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Load Time</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.load_duration_ms}ms</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.load_duration_ms}ms</div>
                                 </div>
                                 <div style="flex: 1; min-width: 100px; text-align: center;">
                                     <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Processing</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.prompt_duration_ms}ms / ${r.eval_duration_ms}ms</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.prompt_duration_ms}ms / ${o.eval_duration_ms}ms</div>
                                 </div>
                             </div>
-                        `);let O="";if(r.chat_history&&r.chat_history.length>0){let D=r.chat_history.length,K=r.chat_history.map((U,j)=>{let q=U.name?U.name.toUpperCase():U.role.toUpperCase();!U.name&&q==="ASSISTANT"&&(q="DEXTER");let G=U.role==="user"?"#03dac6":U.role==="system"?"#ffb74d":"#bb86fc",ee=j===D-1?"block":"none";return`
-                                <div class="history-slide" data-index="${j}" style="display: ${ee};">
+                        `);let N="";if(o.chat_history&&o.chat_history.length>0){let D=o.chat_history.length,K=o.chat_history.map((q,P)=>{let U=q.name?q.name.toUpperCase():q.role.toUpperCase();!q.name&&U==="ASSISTANT"&&(U="DEXTER");let G=q.role==="user"?"#03dac6":q.role==="system"?"#ffb74d":"#bb86fc",ee=P===D-1?"block":"none";return`
+                                <div class="history-slide" data-index="${P}" style="display: ${ee};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="font-size: 0.7em; color: ${G}; letter-spacing: 1px; font-weight: bold;">${q}</span>
-                                        <span style="font-size: 0.7em; color: #666;">Turn ${j+1} of ${D}</span>
+                                        <span style="font-size: 0.7em; color: ${G}; letter-spacing: 1px; font-weight: bold;">${U}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${P+1} of ${D}</span>
                                     </div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${N(U.content)}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${j(q.content)}</div>
                                 </div>
-                            `}).join("");O=`
+                            `}).join("");N=`
                             <div class="event-detail-block">
-                                ${T("Turn-by-Turn History")}
+                                ${$("Turn-by-Turn History")}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
                                     ${K}
                                     <div style="display: flex; justify-content: space-between; margin-top: 10px;">
@@ -1173,30 +1173,30 @@
                         ${C}
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
-                            <span class="detail-value">${r.response_model||"N/A"}</span>
+                            <span class="detail-value">${o.response_model||"N/A"}</span>
                         </div>
                         ${k}
-                        ${O||`
+                        ${N||`
                             <div class="event-detail-block">
-                                ${T("Raw Input (Prompt)")}
-                                <pre class="detail-pre">${r.raw_input||"None"}</pre>
+                                ${$("Raw Input (Prompt)")}
+                                <pre class="detail-pre">${o.raw_input||"None"}</pre>
                             </div>
                             <div class="event-detail-block">
-                                ${T("Raw Response Output")}
-                                <pre class="detail-pre">${r.response_raw||"None"}</pre>
+                                ${$("Raw Response Output")}
+                                <pre class="detail-pre">${o.response_raw||"None"}</pre>
                             </div>
                         `}
-                    `}else if(u==="messaging.bot.voice_response"){let T=D=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${D}</h5>`,k="",C=[],O=r.raw_input||"";if(O.startsWith("[{")&&O.endsWith("}]")){let D=O.match(/{.*?}/g);D&&(C=D.map(K=>{let U=K.substring(1,K.length-1),j=U.indexOf(" "),q=U.substring(0,j),G=U.substring(j+1);return G=G.replace(/\[\]$/,"").trim(),{role:q,content:G}}))}if(C.length>0&&r.response_raw&&C.push({role:"assistant",content:r.response_raw}),C.length>0){let D=C.length,K=C.map((U,j)=>{let q=U.role.toUpperCase();q==="ASSISTANT"&&(q="DEXTER");let G=U.role==="user"?"#03dac6":U.role==="system"?"#ffb74d":"#bb86fc",ee=j===D-1?"block":"none";return`
-                                <div class="history-slide" data-index="${j}" style="display: ${ee};">
+                    `}else if(m==="messaging.bot.voice_response"){let $=D=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${D}</h5>`,k="",C=[],N=o.raw_input||"";if(N.startsWith("[{")&&N.endsWith("}]")){let D=N.match(/{.*?}/g);D&&(C=D.map(K=>{let q=K.substring(1,K.length-1),P=q.indexOf(" "),U=q.substring(0,P),G=q.substring(P+1);return G=G.replace(/\[\]$/,"").trim(),{role:U,content:G}}))}if(C.length>0&&o.response_raw&&C.push({role:"assistant",content:o.response_raw}),C.length>0){let D=C.length,K=C.map((q,P)=>{let U=q.role.toUpperCase();U==="ASSISTANT"&&(U="DEXTER");let G=q.role==="user"?"#03dac6":q.role==="system"?"#ffb74d":"#bb86fc",ee=P===D-1?"block":"none";return`
+                                <div class="history-slide" data-index="${P}" style="display: ${ee};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="font-size: 0.7em; color: ${G}; letter-spacing: 1px; font-weight: bold;">${q}</span>
-                                        <span style="font-size: 0.7em; color: #666;">Turn ${j+1} of ${D}</span>
+                                        <span style="font-size: 0.7em; color: ${G}; letter-spacing: 1px; font-weight: bold;">${U}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${P+1} of ${D}</span>
                                     </div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${N(U.content)}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${j(q.content)}</div>
                                 </div>
                             `}).join("");k=`
                             <div class="event-detail-block">
-                                ${T("Turn-by-Turn History")}
+                                ${$("Turn-by-Turn History")}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
                                     ${K}
                                     <div style="display: flex; justify-content: space-between; margin-top: 10px;">
@@ -1208,18 +1208,18 @@
                         `}M=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Response Model:</span>
-                            <span class="detail-value">${r.response_model||"N/A"}</span>
+                            <span class="detail-value">${o.response_model||"N/A"}</span>
                         </div>
                         ${k}
                         <div class="event-detail-block">
-                            ${T("Raw Input (Prompt)")}
-                            <pre class="detail-pre">${r.raw_input||"None"}</pre>
+                            ${$("Raw Input (Prompt)")}
+                            <pre class="detail-pre">${o.raw_input||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Raw Response Output")}
-                            <pre class="detail-pre">${r.response_raw||"None"}</pre>
+                            ${$("Raw Response Output")}
+                            <pre class="detail-pre">${o.response_raw||"None"}</pre>
                         </div>
-                    `}else if(u==="analysis.user.message_signals"){let T=O=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${O}</h5>`,k=r.signals||{};M=`
+                    `}else if(m==="analysis.user.message_signals"){let $=N=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${N}</h5>`,k=o.signals||{};M=`
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Sentiment</div>
@@ -1239,225 +1239,225 @@
                             </div>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Extracted Topics")}
+                            ${$("Extracted Topics")}
                             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                ${(k.topics||[]).map(O=>`<span class="profile-badge">${O}</span>`).join("")||'<span style="color: #666;">No topics mapped.</span>'}
+                                ${(k.topics||[]).map(N=>`<span class="profile-badge">${N}</span>`).join("")||'<span style="color: #666;">No topics mapped.</span>'}
                             </div>
                         </div>
                         <div class="event-detail-block" style="margin-top: 15px;">
-                            ${T("Raw Model Output")}
-                            <pre class="detail-pre">${N(r.raw_output)||"None"}</pre>
+                            ${$("Raw Model Output")}
+                            <pre class="detail-pre">${j(o.raw_output)||"None"}</pre>
                         </div>
-                    `}else if(u==="moderation.explicit_content.deleted"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="moderation.explicit_content.deleted"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row">
                             <span class="detail-label">Message ID:</span>
-                            <span class="detail-value">${r.message_id||"N/A"}</span>
+                            <span class="detail-value">${o.message_id||"N/A"}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Reason:</span>
-                            <span class="detail-value">${r.reason||"N/A"}</span>
+                            <span class="detail-value">${o.reason||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Raw Model Output")}
-                            <pre class="detail-pre">${N(r.raw_output)||"None"}</pre>
+                            ${$("Raw Model Output")}
+                            <pre class="detail-pre">${j(o.raw_output)||"None"}</pre>
                         </div>
-                    `}else if(u==="analysis.link.completed"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="analysis.link.completed"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row">
                             <span class="detail-label">URL:</span>
-                            <span class="detail-value"><a href="${r.url}" target="_blank" class="attachment-link">${r.url}</a></span>
+                            <span class="detail-value"><a href="${o.url}" target="_blank" class="attachment-link">${o.url}</a></span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Title:</span>
-                            <span class="detail-value">${N(r.title)||"N/A"}</span>
+                            <span class="detail-value">${j(o.title)||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Description")}
-                            <pre class="detail-pre">${N(r.description)||"None"}</pre>
+                            ${$("Description")}
+                            <pre class="detail-pre">${j(o.description)||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Content Summary")}
-                            <pre class="detail-pre">${N(r.summary)||"None"}</pre>
+                            ${$("Content Summary")}
+                            <pre class="detail-pre">${j(o.summary)||"None"}</pre>
                         </div>
-                    `}else if(u==="analysis.visual.completed"){let T=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`,k="";r.base64_preview?k=`<div class="event-detail-block"><img src="data:image/jpeg;base64,${r.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`:r.url?k=`<div class="event-detail-block"><img src="${r.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`:k=`
+                    `}else if(m==="analysis.visual.completed"){let $=C=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${C}</h5>`,k="";o.base64_preview?k=`<div class="event-detail-block"><img src="data:image/jpeg;base64,${o.base64_preview}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`:o.url?k=`<div class="event-detail-block"><img src="${o.url}" class="event-image-preview" style="max-width: 100%; border-radius: 4px; margin-top: 10px;"></div>`:k=`
               <div class="event-detail-block" style="margin-top: 10px; height: 100px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444;">
                 <i class='bx bx-low-vision' style="font-size: 2rem; margin-bottom: 5px; opacity: 0.3;"></i>
                 <span style="font-size: 0.65em; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5;">Visual Data Restricted</span>
               </div>`,M=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Filename:</span>
-                            <span class="detail-value">${r.filename}</span>
+                            <span class="detail-value">${o.filename}</span>
                         </div>
                         ${k}
                         <div class="event-detail-block">
-                            ${T("Visual Description")}
-                            <pre class="detail-pre">${N(r.description)||"None"}</pre>
+                            ${$("Visual Description")}
+                            <pre class="detail-pre">${j(o.description)||"None"}</pre>
                         </div>
-                    `}else if(u==="analysis.router.decision"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="analysis.router.decision"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row">
                             <span class="detail-label">Decision:</span>
-                            <span class="detail-value" style="color: #bb86fc; font-weight: bold;">${r.decision}</span>
+                            <span class="detail-value" style="color: #bb86fc; font-weight: bold;">${o.decision}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Model:</span>
-                            <span class="detail-value">${r.model}</span>
+                            <span class="detail-value">${o.model}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">URL:</span>
-                            <span class="detail-value"><a href="${r.url}" target="_blank" class="attachment-link">${r.url}</a></span>
+                            <span class="detail-value"><a href="${o.url}" target="_blank" class="attachment-link">${o.url}</a></span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Raw Model Output")}
-                            <pre class="detail-pre">${N(r.raw_output)||"None"}</pre>
+                            ${$("Raw Model Output")}
+                            <pre class="detail-pre">${j(o.raw_output)||"None"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Input Context")}
-                            <pre class="detail-pre">${N(r.raw_input)||"None"}</pre>
+                            ${$("Input Context")}
+                            <pre class="detail-pre">${j(o.raw_input)||"None"}</pre>
                         </div>
-                    `}else if(u==="system.cli.command"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="system.cli.command"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row">
                             <span class="detail-label">Command:</span>
-                            <span class="detail-value">dex ${r.command||"unknown"}</span>
+                            <span class="detail-value">dex ${o.command||"unknown"}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Arguments:</span>
-                            <span class="detail-value">${r.args||"None"}</span>
+                            <span class="detail-value">${o.args||"None"}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Status:</span>
-                            <span class="detail-value">${r.status||"unknown"}</span>
+                            <span class="detail-value">${o.status||"unknown"}</span>
                         </div>
                         <div class="event-detail-row">
                             <span class="detail-label">Duration:</span>
-                            <span class="detail-value">${r.duration||"N/A"}</span>
+                            <span class="detail-value">${o.duration||"N/A"}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Exit Code:</span>
-                            <span class="detail-value">${r.exit_code!==void 0?r.exit_code:"N/A"}</span>
+                            <span class="detail-value">${o.exit_code!==void 0?o.exit_code:"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Output")}
-                            <pre class="detail-pre">${N(r.output)||"No output recorded."}</pre>
+                            ${$("Output")}
+                            <pre class="detail-pre">${j(o.output)||"No output recorded."}</pre>
                         </div>
-                    `}else if(u==="system.analysis.audit"){let T=r.success?"#03dac6":"#ff4d4d",k=r.success?"SUCCESS":"FAILED",C=j=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${j}</h5>`,O="";r.error&&(O=`
+                    `}else if(m==="system.analysis.audit"){let $=o.success?"#03dac6":"#ff4d4d",k=o.success?"SUCCESS":"FAILED",C=P=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${P}</h5>`,N="";o.error&&(N=`
                             <div class="event-detail-block">
                                 ${C("Error")}
-                                <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${N(r.error)}</pre>
+                                <pre class="detail-pre" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">${j(o.error)}</pre>
                             </div>
-                        `);let D="";if(r.chat_history&&r.chat_history.length>0){let j=r.chat_history.length,q=r.chat_history.map((G,ee)=>{let Y=G.name?G.name.toUpperCase():G.role.toUpperCase();!G.name&&Y==="USER"&&(Y="SYSTEM"),!G.name&&Y==="ASSISTANT"&&(Y="AGENT");let Ce=G.role==="user"?"#03dac6":G.role==="system"?"#ffb74d":"#bb86fc";return`
+                        `);let D="";if(o.chat_history&&o.chat_history.length>0){let P=o.chat_history.length,U=o.chat_history.map((G,ee)=>{let Y=G.name?G.name.toUpperCase():G.role.toUpperCase();!G.name&&Y==="USER"&&(Y="SYSTEM"),!G.name&&Y==="ASSISTANT"&&(Y="AGENT");let Ce=G.role==="user"?"#03dac6":G.role==="system"?"#ffb74d":"#bb86fc";return`
                                 <div class="history-slide" data-index="${ee}" style="display: ${ee===0?"block":"none"};">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                         <span style="font-size: 0.7em; text-transform: uppercase; color: ${Ce}; letter-spacing: 1px; font-weight: bold;">${Y}</span>
-                                        <span style="font-size: 0.7em; color: #666;">Turn ${ee+1} of ${j}</span>
+                                        <span style="font-size: 0.7em; color: #666;">Turn ${ee+1} of ${P}</span>
                                     </div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${N(G.content)}</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee; white-space: pre-wrap; overflow-x: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; max-height: 300px; overflow-y: auto;">${j(G.content)}</div>
                                 </div>
                             `}).join("");D=`
                             <div class="event-detail-block">
                                 ${C("Turn-by-Turn History")}
                                 <div class="history-carousel" style="position: relative; background: rgba(255,255,255,0.03); border-radius: 4px; padding: 15px;">
-                                    ${q}
+                                    ${U}
                                     <div style="display: flex; justify-content: space-between; margin-top: 10px;">
                                         <button class="carousel-btn prev-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" disabled><i class='bx bx-chevron-left'></i> Prev</button>
-                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" ${j<=1?"disabled":""}>Next <i class='bx bx-chevron-right'></i></button>
+                                        <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" ${P<=1?"disabled":""}>Next <i class='bx bx-chevron-right'></i></button>
                                     </div>
                                 </div>
                             </div>
-                        `}let K="";if(r.corrections&&r.corrections.length>0){let j=r.corrections.map((q,G)=>`
+                        `}let K="";if(o.corrections&&o.corrections.length>0){let P=o.corrections.map((U,G)=>`
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(255, 77, 77, 0.1); border-left: 2px solid #ff4d4d; font-size: 0.85em;">
-                                <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${q.type}] ${q.guidance}</div>
-                                ${q.snippet?`<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${N(q.snippet)}</div>`:""}
+                                <div style="color: #ff4d4d; font-weight: bold; margin-bottom: 4px;">[${U.type}] ${U.guidance}</div>
+                                ${U.snippet?`<div style="font-family: monospace; color: #aaa; background: rgba(0,0,0,0.3); padding: 4px;">${j(U.snippet)}</div>`:""}
                             </div>
                         `).join("");K=`
                             <div class="event-detail-block">
-                                ${C(`Corrections (${r.corrections.length})`)}
-                                ${j}
+                                ${C(`Corrections (${o.corrections.length})`)}
+                                ${P}
                             </div>
-                        `}let U="";if(r.parsed_results&&r.parsed_results.length>0){let j=r.parsed_results.map(q=>`
+                        `}let q="";if(o.parsed_results&&o.parsed_results.length>0){let P=o.parsed_results.map(U=>`
                             <div style="margin-bottom: 8px; padding: 8px; background: rgba(3, 218, 198, 0.1); border-left: 2px solid #03dac6; font-size: 0.85em;">
-                                <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${N(q.title)}</div>
-                                <div style="color: #ddd;">${N(q.summary)}</div>
+                                <div style="color: #03dac6; font-weight: bold; margin-bottom: 4px;">${j(U.title)}</div>
+                                <div style="color: #ddd;">${j(U.summary)}</div>
                             </div>
-                        `).join("");U=`
+                        `).join("");q=`
                             <div class="event-detail-block">
                                 ${C("Parsed Results")}
-                                ${j}
+                                ${P}
                             </div>
                         `}M=`
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
                             <div style="flex: 1; min-width: 120px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
-                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.agent_name||"Guardian"}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.agent_name||"Guardian"}</div>
                             </div>
                             <div style="flex: 1; min-width: 80px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
-                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${r.tier}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${o.tier}</div>
                             </div>
                             <div style="flex: 1; min-width: 150px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Status</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${T}; font-weight: bold;">${k} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${r.attempts} att)</span></div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${$}; font-weight: bold;">${k} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${o.attempts} att)</span></div>
                             </div>
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.duration}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.duration}</div>
                             </div>
                             <div style="flex: 1; min-width: 150px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Model</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${r.model}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${o.model}</div>
                             </div>
                         </div>
-                        ${O}
-                        ${U}
+                        ${N}
+                        ${q}
                         ${K}
                         ${D}
-                    `}else if(u==="system.test.completed"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="system.test.completed"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row">
                             <span class="detail-label">Service:</span>
-                            <span class="detail-value">${r.service_name}</span>
+                            <span class="detail-value">${o.service_name}</span>
                         </div>
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Duration:</span>
-                            <span class="detail-value">${r.duration}</span>
+                            <span class="detail-value">${o.duration}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Format")}
-                            <pre class="detail-pre">${r.format?.status||"N/A"}: ${r.format?.message||"OK"}</pre>
+                            ${$("Format")}
+                            <pre class="detail-pre">${o.format?.status||"N/A"}: ${o.format?.message||"OK"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Lint")}
-                            <pre class="detail-pre">${r.lint?.status||"N/A"}: ${r.lint?.message||"OK"}</pre>
+                            ${$("Lint")}
+                            <pre class="detail-pre">${o.lint?.status||"N/A"}: ${o.lint?.message||"OK"}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Tests")}
-                            <pre class="detail-pre">${r.test?.status||"N/A"}: ${r.test?.details||r.test?.message||"OK"}</pre>
+                            ${$("Tests")}
+                            <pre class="detail-pre">${o.test?.status||"N/A"}: ${o.test?.details||o.test?.message||"OK"}</pre>
                         </div>
-                    `}else if(u==="error_occurred"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="error_occurred"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Severity:</span>
-                            <span class="detail-value" style="color: #ff4d4d;">${r.severity||"high"}</span>
+                            <span class="detail-value" style="color: #ff4d4d;">${o.severity||"high"}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Error Message")}
-                            <pre class="detail-pre" style="color: #ff4d4d;">${N(r.error)}</pre>
+                            ${$("Error Message")}
+                            <pre class="detail-pre" style="color: #ff4d4d;">${j(o.error)}</pre>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Context")}
-                            <pre class="detail-pre">${JSON.stringify(r.context||{},null,2)}</pre>
+                            ${$("Context")}
+                            <pre class="detail-pre">${JSON.stringify(o.context||{},null,2)}</pre>
                         </div>
-                    `}else if(u==="system.cli.status"){let T=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
+                    `}else if(m==="system.cli.status"){let $=k=>`<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${k}</h5>`;M=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Status:</span>
-                            <span class="detail-value">${r.status}</span>
+                            <span class="detail-value">${o.status}</span>
                         </div>
                         <div class="event-detail-block">
-                            ${T("Message")}
-                            <pre class="detail-pre">${N(r.message)}</pre>
+                            ${$("Message")}
+                            <pre class="detail-pre">${j(o.message)}</pre>
                         </div>
-                    `}else if(u==="messaging.user.sent_message"){let T="";r.attachments&&r.attachments.length>0&&(T=`
+                    `}else if(m==="messaging.user.sent_message"){let $="";o.attachments&&o.attachments.length>0&&($=`
                             <div class="event-detail-block">
                                 <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Attachments</h5>
-                                <div class="attachments-grid">${r.attachments.map(C=>{let O=C.content_type&&C.content_type.startsWith("image/"),D=(C.size/1024).toFixed(1)+" KB";return`
+                                <div class="attachments-grid">${o.attachments.map(C=>{let N=C.content_type&&C.content_type.startsWith("image/"),D=(C.size/1024).toFixed(1)+" KB";return`
                                 <div class="attachment-item">
-                                    ${O?`<div class="attachment-thumb-container"><img src="${C.url}" alt="${C.filename}" class="attachment-thumb"></div>`:`<div class="attachment-icon-container"><i class='bx bx-file attachment-icon'></i></div>`}
+                                    ${N?`<div class="attachment-thumb-container"><img src="${C.url}" alt="${C.filename}" class="attachment-thumb"></div>`:`<div class="attachment-icon-container"><i class='bx bx-file attachment-icon'></i></div>`}
                                     <div class="attachment-info">
                                         <a href="${C.url}" target="_blank" class="attachment-link">${C.filename}</a>
                                         <span class="attachment-meta">${C.content_type} \u2022 ${D}</span>
@@ -1466,18 +1466,18 @@
                             </div>`),M=`
                         <div class="event-detail-row" style="margin-bottom: 15px;">
                             <span class="detail-label">Message ID:</span>
-                            <span class="detail-value">${r.message_id||"N/A"}</span>
+                            <span class="detail-value">${o.message_id||"N/A"}</span>
                         </div>
                         <div class="event-detail-block">
                             <h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Raw Content</h5>
-                            <pre class="detail-pre" style="color: #fff;">${r.content||"(empty)"}</pre>
+                            <pre class="detail-pre" style="color: #fff;">${o.content||"(empty)"}</pre>
                         </div>
-                        ${T}
+                        ${$}
                     `}_=`
                     <div class="event-details" style="${l}">
                         ${M}
                     </div>
-                `}let B=document.createElement("div");B.className=`event-item ${f} ${v} ${d}`,B.dataset.eventId=h.id,B.onclick=function(M){if(!b)return;let T=this;if(T.classList.contains("expanded")){T.classList.remove("expanded"),we.delete(h.id);let C=T.querySelector(".event-details");C&&(C.style.display="none")}else{T.classList.add("expanded"),we.add(h.id);let C=T.querySelector(".event-details");C&&(C.style.display="block")}},B.innerHTML=`
+                `}let B=document.createElement("div");B.className=`event-item ${u} ${v} ${c}`,B.dataset.eventId=h.id,B.onclick=function(M){if(!g)return;let $=this;if($.classList.contains("expanded")){$.classList.remove("expanded"),he.delete(h.id);let C=$.querySelector(".event-details");C&&(C.style.display="none")}else{$.classList.add("expanded"),he.add(h.id);let C=$.querySelector(".event-details");C&&(C.style.display="block")}},B.innerHTML=`
                 <div class="event-time">
                     <span class="event-time-main">${E}</span>
                     <span class="event-date">${p}</span>
@@ -1491,119 +1491,56 @@
                     <div class="event-message">${w}</div>
                     ${_}
                 </div>
-            `;let P=B.querySelector(".event-details");if(P&&P.addEventListener("click",M=>{M.stopPropagation()}),b){let M=B.querySelector(".close-details-btn");M&&M.addEventListener("click",T=>{T.stopPropagation();let k=T.target.closest(".event-item");if(k){k.classList.remove("expanded"),we.delete(h.id);let C=k.querySelector(".event-details");C&&(C.style.display="none")}})}let V=B.querySelector(".prev-btn"),Z=B.querySelector(".next-btn");if(V&&Z){let M=0,T=Array.from(B.querySelectorAll(".history-slide")),k=T.length,C=()=>{T.forEach((O,D)=>{O.style.display=D===M?"block":"none"}),V.disabled=M===0,Z.disabled=M===k-1,V.style.opacity=M===0?"0.5":"1",Z.style.opacity=M===k-1?"0.5":"1"};V.addEventListener("click",O=>{O.stopPropagation(),M>0&&(M--,C())}),Z.addEventListener("click",O=>{O.stopPropagation(),M<k-1&&(M++,C())}),C()}return B},c=Array.from(e.children),g=new Map(c.map(h=>[h.dataset.eventId,h])),S=new Set(ze.map(h=>h.id));c.forEach(h=>{let r=h.dataset.eventId;(!r||!S.has(r))&&h.remove()});let y=null;ze.forEach((h,r)=>{let u=g.get(h.id);(!u||t)&&(u&&u.remove(),u=m(h),!u)||(r===0?e.firstElementChild!==u&&e.prepend(u):y&&y.nextElementSibling!==u&&y.after(u),y=u)}),Je=Date.now(),pe(1,Je)}catch(s){console.error("Error fetching events:",s),e.children.length===0&&(e.innerHTML=W("offline","Failed to load events.","The event service may be offline."))}}function Ls(){let t=document.getElementById("events-expand-all"),e=document.getElementById("events-close-all"),i=document.getElementById("event-filters");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{ze.forEach(s=>we.add(s.id)),ue(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{we.clear(),ue(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.querySelectorAll(".filter-btn").forEach(s=>{s.onclick=()=>{i.querySelectorAll(".filter-btn").forEach(a=>a.classList.remove("active")),s.classList.add("active"),Q=s.dataset.filter||"all",ue(!0)}}),i.dataset.listenerAttached="true"),i&&i.querySelectorAll(".filter-btn").forEach(s=>{s.dataset.filter===Q?s.classList.add("active"):s.classList.remove("active")});let n=document.getElementById("events-clear");n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{let s=Q==="all"?"ALL":Q.toUpperCase();if(confirm(`Are you sure you want to delete ${s} events from the backend? This cannot be undone.`)){n.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{let a="/events";if(Q!=="all"?a+=`?category=${Q}`:a+="?exclude_types=system.blueprint.generated,system.notification.generated",!(await H(a,{method:"DELETE"})).ok)throw new Error("Failed to delete events");we.clear(),ue(!0)}catch(a){console.error("Failed to clear events:",a),alert("Failed to clear events. Check console.")}finally{n.innerHTML="<i class='bx bx-trash'></i> Clear"}}},n.dataset.listenerAttached="true")}function Ht(){return`
+            `;let O=B.querySelector(".event-details");if(O&&O.addEventListener("click",M=>{M.stopPropagation()}),g){let M=B.querySelector(".close-details-btn");M&&M.addEventListener("click",$=>{$.stopPropagation();let k=$.target.closest(".event-item");if(k){k.classList.remove("expanded"),he.delete(h.id);let C=k.querySelector(".event-details");C&&(C.style.display="none")}})}let V=B.querySelector(".prev-btn"),Z=B.querySelector(".next-btn");if(V&&Z){let M=0,$=Array.from(B.querySelectorAll(".history-slide")),k=$.length,C=()=>{$.forEach((N,D)=>{N.style.display=D===M?"block":"none"}),V.disabled=M===0,Z.disabled=M===k-1,V.style.opacity=M===0?"0.5":"1",Z.style.opacity=M===k-1?"0.5":"1"};V.addEventListener("click",N=>{N.stopPropagation(),M>0&&(M--,C())}),Z.addEventListener("click",N=>{N.stopPropagation(),M<k-1&&(M++,C())}),C()}return B},d=Array.from(e.children),b=new Map(d.map(h=>[h.dataset.eventId,h])),S=new Set(ze.map(h=>h.id));d.forEach(h=>{let o=h.dataset.eventId;(!o||!S.has(o))&&h.remove()});let y=null;ze.forEach((h,o)=>{let m=b.get(h.id);(!m||t)&&(m&&m.remove(),m=f(h),!m)||(o===0?e.firstElementChild!==m&&e.prepend(m):y&&y.nextElementSibling!==m&&y.after(m),y=m)}),Fe=Date.now(),ce(1,Fe)}catch(s){console.error("Error fetching events:",s),e.children.length===0&&(e.innerHTML=W("offline","Failed to load events.","The event service may be offline."))}}function Ss(){let t=document.getElementById("events-expand-all"),e=document.getElementById("events-close-all"),i=document.getElementById("event-filters");t&&!t.dataset.listenerAttached&&(t.onclick=()=>{ze.forEach(s=>he.add(s.id)),pe(!0)},t.dataset.listenerAttached="true"),e&&!e.dataset.listenerAttached&&(e.onclick=()=>{he.clear(),pe(!0)},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.querySelectorAll(".filter-btn").forEach(s=>{s.onclick=()=>{i.querySelectorAll(".filter-btn").forEach(a=>a.classList.remove("active")),s.classList.add("active"),Q=s.dataset.filter||"all",pe(!0)}}),i.dataset.listenerAttached="true"),i&&i.querySelectorAll(".filter-btn").forEach(s=>{s.dataset.filter===Q?s.classList.add("active"):s.classList.remove("active")});let n=document.getElementById("events-clear");n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{let s=Q==="all"?"ALL":Q.toUpperCase();if(confirm(`Are you sure you want to delete ${s} events from the backend? This cannot be undone.`)){n.innerHTML="<i class='bx bx-loader-alt spin'></i> Clearing...";try{let a="/events";if(Q!=="all"?a+=`?category=${Q}`:a+="?exclude_types=system.blueprint.generated,system.notification.generated",!(await H(a,{method:"DELETE"})).ok)throw new Error("Failed to delete events");he.clear(),pe(!0)}catch(a){console.error("Failed to clear events:",a),alert("Failed to clear events. Check console.")}finally{n.innerHTML="<i class='bx bx-trash'></i> Clear"}}},n.dataset.listenerAttached="true")}function _t(){return`
         <div id="logs-container" class="logs-container"></div>
-    `}var Cs=null;async function De(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await H("/logs");if(!e.ok)throw new Error("Logs offline");let i=await e.json();if(!i||i.length===0)return t.innerHTML=W("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let n=["local-model-0","local-cache-0","upstash-redis-rw","upstash-redis-ro","easter-company","easter-company-production","dex-test-service","easter-company-root"],s=i.filter(o=>!n.includes(o.id));s.forEach(o=>{o.logs&&Array.isArray(o.logs)?o.logs.reverse():o.logs=[]}),s.reverse();let a=s.map(o=>{let m=o.logs.join(`
-`),c=[...o.logs];if(c.length<25){let S=25-c.length;for(let y=0;y<S;y++)c.push("")}else c.length>25&&(c=c.slice(-25));let g=c.map(S=>Ue(S)).join(`
+    `}var ks=null;async function De(){let t=document.getElementById("logs-container");if(!t)return!1;t.classList.remove("placeholder-active");try{let e=await H("/logs");if(!e.ok)throw new Error("Logs offline");let i=await e.json();if(!i||i.length===0)return t.innerHTML=W("empty","No logs found.","Services are quiet."),t.classList.add("placeholder-active"),!1;let n=["local-model-0","local-cache-0","upstash-redis-rw","upstash-redis-ro","easter-company","easter-company-production","dex-test-service","easter-company-root"],s=i.filter(r=>!n.includes(r.id));s.forEach(r=>{r.logs&&Array.isArray(r.logs)?r.logs.reverse():r.logs=[]}),s.reverse();let a=s.map(r=>{let f=r.logs.join(`
+`),d=[...r.logs];if(d.length<25){let S=25-d.length;for(let y=0;y<S;y++)d.push("")}else d.length>25&&(d=d.slice(-25));let b=d.map(S=>Le(S)).join(`
 `);return`
                 <div class="log-report">
                     <div class="log-report-header">
-                        <h3>${o.id}</h3>
+                        <h3>${r.id}</h3>
                         <div style="display: flex; gap: 5px;">
-                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(m)}" title="Copy Logs">
+                            <button class="log-action-btn copy-logs-btn" data-logs="${escape(f)}" title="Copy Logs">
                                 <i class="bx bx-copy"></i>
                             </button>
-                            <button class="log-action-btn delete clear-logs-btn" data-service-id="${o.id}" title="Clear Logs" style="${z()?"display: none;":""}">
+                            <button class="log-action-btn delete clear-logs-btn" data-service-id="${r.id}" title="Clear Logs" style="${z()?"display: none;":""}">
                                 <i class="bx bx-trash"></i>
                             </button>
                         </div>
                     </div>
-                    <pre class="log-content">${g}</pre>
+                    <pre class="log-content">${b}</pre>
                 </div>
-            `}).join("");return t.innerHTML=a,document.querySelectorAll(".copy-logs-btn").forEach(o=>{o.addEventListener("click",()=>{let m=o,c=unescape(m.dataset.logs||"");navigator.clipboard.writeText(c).then(()=>{let g=m.querySelector("i");g&&(g.classList.remove("bx-copy"),g.classList.add("bx-check"),setTimeout(()=>{g.classList.remove("bx-check"),g.classList.add("bx-copy")},2e3))})})}),document.querySelectorAll(".clear-logs-btn").forEach(o=>{o.addEventListener("click",async()=>{let c=o.dataset.serviceId;if(confirm(`Are you sure you want to clear logs for ${c}?`))try{(await H(`/logs?service_id=${c}`,{method:"DELETE"})).ok&&De()}catch(g){console.error("Error clearing logs:",g)}})}),Cs=Date.now(),!0}catch(e){return console.error("Error fetching logs:",e),t.children.length===0&&(t.innerHTML=W("offline","Failed to load logs.","The event service may be offline."),t.classList.add("placeholder-active")),!1}}var Ee="STANDBY",zt=null,ae=[],te=null,nt=null,Dt=()=>`
-    <div id="progress-view-root" class="progress-container" style="flex: 1; overflow-y: auto;">
-        ${Rt()}
-    </div>
-  `;function Rt(){switch(Ee){case"ACTIVE":return Is();case"COMPLETED":return As();case"STANDBY":default:return Ms()}}function Ms(){return`
-    <div class="progress-standby">
-        <div class="radar-container">
-            <div class="orbit-ring orbit-ring-1"></div>
-            <div class="orbit-ring orbit-ring-2"></div>
-            <div class="radar-brain"><i class='bx bx-brain'></i></div>
-        </div>
-        <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
-        <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5; margin: 0 auto;">
-            Dexter is currently monitoring system health. <br>
-            No active missions in progress.
-        </p>
-    </div>
-  `}function Is(){let t=ae.map(e=>`
-    <div class="terminal-line">
-        <span class="line-time">${e.time}</span>
-        <span class="line-prefix">></span>
-        <span class="line-msg">${N(e.msg)}</span>
-    </div>
-  `).join("");return`
-    <div class="active-task-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-                <h4 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 2px; color: #bb86fc; text-align: left;">Active Mission</h4>
-                <h2 id="active-task-title" style="margin: 5px 0 0 0; font-size: 1.2em; text-align: left;">${te?.title||"Processing..."}</h2>
+            `}).join("");return t.innerHTML=a,document.querySelectorAll(".copy-logs-btn").forEach(r=>{r.addEventListener("click",()=>{let f=r,d=unescape(f.dataset.logs||"");navigator.clipboard.writeText(d).then(()=>{let b=f.querySelector("i");b&&(b.classList.remove("bx-copy"),b.classList.add("bx-check"),setTimeout(()=>{b.classList.remove("bx-check"),b.classList.add("bx-copy")},2e3))})})}),document.querySelectorAll(".clear-logs-btn").forEach(r=>{r.addEventListener("click",async()=>{let d=r.dataset.serviceId;if(confirm(`Are you sure you want to clear logs for ${d}?`))try{(await H(`/logs?service_id=${d}`,{method:"DELETE"})).ok&&De()}catch(b){console.error("Error clearing logs:",b)}})}),ks=Date.now(),!0}catch(e){return console.error("Error fetching logs:",e),t.children.length===0&&(t.innerHTML=W("offline","Failed to load logs.","The event service may be offline."),t.classList.add("placeholder-active")),!1}}var we=[],Ls=200,me=null,Bt=()=>`
+    <div id="fabricator-live-root" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #000;">
+        <div id="fabricator-standby" class="progress-standby" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="radar-container">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="radar-brain"><i class='bx bx-brain'></i></div>
             </div>
-            <div class="pulse-indicator" style="background: #bb86fc; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px #bb86fc;"></div>
-        </div>
-        <div class="task-progress-bar">
-            <div id="active-task-progress-fill" class="task-progress-fill" style="width: ${te?.progress||0}%"></div>
-        </div>
-        <div style="margin-top: 8px; display: flex; justify-content: space-between; font-size: 0.75em; font-family: 'JetBrains Mono'; color: #666;">
-            <span id="active-task-phase">PHASE: ${te?.phase||"IMPLEMENTATION"}</span>
-            <span id="active-task-progress-text">${te?.progress||0}% COMPLETE</span>
-        </div>
-    </div>
-
-    <div class="thinking-stream-container">
-        <div class="terminal-header">
-            <div class="terminal-controls">
-                <div class="terminal-dot" style="background: #ff5f56;"></div>
-                <div class="terminal-dot" style="background: #ffbd2e;"></div>
-                <div class="terminal-dot" style="background: #27c93f;"></div>
-            </div>
-            <div style="font-family: 'JetBrains Mono'; font-size: 0.7em; color: rgba(255, 255, 255, 0.3); text-transform: uppercase;">dexter_fabricator_v3.sh</div>
-        </div>
-        <div id="terminal-output" class="terminal-content">
-            ${t}
-        </div>
-    </div>
-  `}function As(){return`
-    <div class="mission-summary-card">
-        <div class="success-icon-wrap">
-            <div class="success-pulse-ring"></div>
-            <i class='bx bx-check-double'></i>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h4 style="margin: 0; color: #03dac6; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">Mission Accomplished</h4>
-            <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #888;">The objective was successfully fulfilled by the Fabricator.</p>
+            <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
+            <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5; margin: 0 auto; text-align: center;">
+                Dexter is currently monitoring system health. <br>
+                Fabricator CLI self-instance is idle.
+            </p>
         </div>
 
-        <div class="summary-stat-grid">
-            <div class="summary-stat">
-                <span class="summary-stat-value">${nt?.duration||"-"}</span>
-                <span class="summary-stat-label">Duration</span>
+        <div id="fabricator-terminal" class="thinking-stream-container" style="flex: 1; display: none; flex-direction: column; margin: 0; border-radius: 0; border: none;">
+            <div class="terminal-header" style="background: #1a1a1a; padding: 8px 15px;">
+                <div class="terminal-controls">
+                    <div class="terminal-dot" style="background: #ff5f56;"></div>
+                    <div class="terminal-dot" style="background: #ffbd2e;"></div>
+                    <div class="terminal-dot" style="background: #27c93f;"></div>
+                </div>
+                <div style="font-family: 'JetBrains Mono'; font-size: 0.7em; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; letter-spacing: 1px;">fabricator_cli_self.sh</div>
             </div>
-            <div class="summary-stat">
-                <span class="summary-stat-value">Real-time</span>
-                <span class="summary-stat-label">Execution</span>
-            </div>
-            <div class="summary-stat">
-                <span class="summary-stat-value">100%</span>
-                <span class="summary-stat-label">Accuracy</span>
-            </div>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 30px;">
-            <h5 style="margin: 0 0 10px 0; font-size: 0.7em; color: #666; text-transform: uppercase; letter-spacing: 1px;">Final Result</h5>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-family: 'JetBrains Mono'; font-size: 0.9em; color: #bb86fc;">${nt?.result||"Task Finalized"}</span>
-                <i class='bx bx-chevron-right' style="color: #444;"></i>
+            <div id="fabricator-terminal-output" class="terminal-content" style="flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; line-height: 1.4; color: #e0e0e0; background: #000;">
+                <!-- Live logs will be injected here -->
             </div>
         </div>
     </div>
-  `}async function Nt(){try{let e=await(await H("/processes")).json(),i=e.active||[],n=e.history||[],s=i.find(o=>o.channel_id==="system-fabricator");if(s){Ee="ACTIVE";let m=Math.floor(Date.now()/1e3)-s.start_time,c=10,g="REVIEW";m>30&&(c=30,g="INVESTIGATION"),m>120&&(c=60,g="CONSTRUCTION"),m>300&&(c=90,g="REPORTING"),te={title:s.state||"Fabricating system improvements...",progress:c,phase:g};let S=new Date(s.updated_at*1e3).toLocaleTimeString();(ae.length===0||ae[ae.length-1].msg!==s.state)&&(ae.push({time:S,msg:s.state}),ae.length>50&&ae.shift())}else{let o=n.find(m=>m.channel_id==="system-fabricator");if(o&&Date.now()/1e3-o.end_time<60){Ee="COMPLETED";let m=o.end_time-o.start_time;nt={duration:`${Math.floor(m/60)}m ${m%60}s`,steps:0,result:o.state,timestamp:o.end_time}}else Ee="STANDBY",ae=[]}let a=document.getElementById("progress-view-root");a&&(Ee!==zt&&(a.innerHTML=Rt(),zt=Ee),Ee==="ACTIVE"&&_s())}catch(t){console.error("Failed to update progress:",t)}}function _s(){let t=document.getElementById("active-task-title"),e=document.getElementById("active-task-progress-fill"),i=document.getElementById("active-task-progress-text"),n=document.getElementById("active-task-phase"),s=document.getElementById("terminal-output");if(t&&te&&(t.innerText=te.title),e&&te&&(e.style.width=`${te.progress}%`),i&&te&&(i.innerText=`${te.progress}% COMPLETE`),n&&te&&(n.innerText=`PHASE: ${te.phase}`),s){let a=s.children.length;if(ae.length>a){for(let o=a;o<ae.length;o++){let m=ae[o],c=document.createElement("div");c.className="terminal-line",c.innerHTML=`
-            <span class="line-time">${m.time}</span>
-            <span class="line-prefix">></span>
-            <span class="line-msg">${N(m.msg)}</span>
-        `,s.appendChild(c)}s.scrollTop=s.scrollHeight}}}var jt=()=>{let t=z()?"display: none;":"";return`
+  `;function Ht(){if(!document.getElementById("fabricator-live-root"))return;we=[];let e=document.getElementById("fabricator-terminal-output");e&&(e.innerHTML=""),z()?Cs():zt()}async function Cs(){let t=async()=>{try{let i=await H("/fabricator/live");if(!i.ok)return;let n=await i.json();n&&n.buffer&&(we=n.buffer,Dt())}catch(i){console.error("Failed to sync fabricator live from cache:",i)}};await t();let e=setInterval(()=>{if(!document.getElementById("fabricator-live-root")){clearInterval(e);return}t()},5e3)}function zt(){me&&me.close(),me=new EventSource("http://127.0.0.1:8100/fabricator/live"),me.onmessage=e=>{let i=e.data.replace(/\\n/g,`
+`);we.push(i),we.length>Ls&&we.shift(),Dt()},me.onerror=e=>{console.error("Fabricator SSE Error:",e),me?.close(),setTimeout(()=>{document.getElementById("fabricator-live-root")&&zt()},5e3)};let t=setInterval(()=>{document.getElementById("fabricator-live-root")||(me?.close(),me=null,clearInterval(t))},1e3)}function Dt(){let t=document.getElementById("fabricator-terminal"),e=document.getElementById("fabricator-standby"),i=document.getElementById("fabricator-terminal-output");if(!(!t||!e||!i))if(we.length>0){t.style.display="flex",e.style.display="none";let n=we.join("");i.innerHTML=Le(n)||"",i.scrollTop=i.scrollHeight}else t.style.display="none",e.style.display="flex"}var Ot=()=>{let t=z()?"display: none;":"";return`
         <div class="system-section-header">
             <i class='bx bxs-pie-chart-alt-2' style="color: #03dac6;"></i>
             <h2>Summary ${z()?'<span style="color: #666; font-size: 0.6em; margin-left: 10px; font-weight: normal; font-style: italic;">* Public data is approximated</span>':""}</h2>
@@ -1771,7 +1708,7 @@
 
                 </div>
 
-        `},Ut=()=>`
+        `},Pt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-zap' style="color: #03dac6;"></i>
             <h2>Active Processes</h2>
@@ -1792,7 +1729,7 @@
             <i class='bx bx-history' style="color: #888;"></i>
             <h2>Process History</h2>
         </div>
-        <div id="processes-history-widgets" class="system-monitor-widgets" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; opacity: 0.8;"></div>`,qt=()=>`
+        <div id="processes-history-widgets" class="system-monitor-widgets" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; opacity: 0.8;"></div>`,jt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-server' style="color: #03dac6;"></i>
             <h2>Services</h2>
@@ -1804,7 +1741,7 @@
         </div>
         <div id="services-widgets" style="margin-bottom: 30px;">
             ${W("config","Acquiring system metrics...","Searching for active nodes...")}
-        </div>`;var Ft=()=>`
+        </div>`;var qt=()=>`
         <div class="system-section-header">
             <i class='bx bxs-hdd' style="color: #03dac6;"></i>
             <h2>Hardware</h2>
@@ -1831,35 +1768,35 @@
                 <h3 style="color: #888; margin-bottom: 10px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; text-align: left;"><i class='bx bxs-hdd'></i> Storage</h3>
                 <div class="hw-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
             </div>
-        </div>`,Jt=()=>`
+        </div>`,Ut=()=>`
         <div class="system-section-header">
             <i class='bx bxs-terminal' style="color: #03dac6;"></i>
             <h2>Service Logs</h2>
         </div>
         <div id="logs-container-wrapper" style="margin-bottom: 20px;">
-            ${Ht()}
-        </div>`;async function Wt(){Bs(),await Promise.all([oe(),Te(),ht()]),await De()}var We=null;function Bs(){We||(We=setInterval(()=>{if(!document.getElementById("guardian-sentry-val")){clearInterval(We),We=null;return}let e=document.getElementById("upstash-countdown");if(e){let s=60-new Date().getSeconds();e.textContent=`${s}s`,s<10?e.style.color="#cf6679":e.style.color="#fff"}oe(!0)},1e3))}var Ot=null;async function Hs(){try{return await(await H("/system_monitor")).json()}catch{return null}}async function Pt(){try{return await(await H("/system/hardware")).json()}catch{return null}}async function zs(){try{return await(await H("/processes")).json()}catch{return null}}async function Ds(){try{return await(await H("/agent/status")).json()}catch{return null}}async function Te(){let t=document.getElementById("services-widgets"),e=document.getElementById("hardware-refresh-btn"),i=document.getElementById("global-restart-btn"),n=document.getElementById("global-stop-btn"),s=document.getElementById("global-start-btn"),a=(d,l)=>{d&&!d.dataset.listenerAttached&&(d.onclick=async()=>{let $=d.innerHTML;d.innerHTML="<i class='bx bx-loader-alt spin'></i>",d.disabled=!0;try{await H(`/system/service/${l}`,{method:"POST",body:JSON.stringify({service:"all"})}),setTimeout(()=>Te(),2e3),setTimeout(()=>Te(),5e3),setTimeout(()=>{d.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{d.innerHTML=$,d.disabled=!1},1e3)},1e3)}catch(E){console.error(E),d.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{d.innerHTML=$,d.disabled=!1},2e3)}},d.dataset.listenerAttached="true")};a(i,"restart"),a(n,"stop"),a(s,"start");let o=document.querySelector("#hw-os .hw-content"),m=document.querySelector("#hw-cpu .hw-content"),c=document.querySelector("#hw-ram .hw-content"),g=document.querySelector("#hw-gpu .hw-content"),S=document.querySelector("#hw-storage .hw-content"),y=d=>{if(d){if(o&&(o.innerHTML=`
+            ${_t()}
+        </div>`;async function Ft(){Ms(),await Promise.all([ie(),Ee(),yt()]),await De()}var Je=null;function Ms(){Je||(Je=setInterval(()=>{if(!document.getElementById("guardian-sentry-val")){clearInterval(Je),Je=null;return}let e=document.getElementById("upstash-countdown");if(e){let s=60-new Date().getSeconds();e.textContent=`${s}s`,s<10?e.style.color="#cf6679":e.style.color="#fff"}ie(!0)},1e3))}var Rt=null;async function Is(){try{return await(await H("/system_monitor")).json()}catch{return null}}async function Nt(){try{return await(await H("/system/hardware")).json()}catch{return null}}async function As(){try{return await(await H("/processes")).json()}catch{return null}}async function _s(){try{return await(await H("/agent/status")).json()}catch{return null}}async function Ee(){let t=document.getElementById("services-widgets"),e=document.getElementById("hardware-refresh-btn"),i=document.getElementById("global-restart-btn"),n=document.getElementById("global-stop-btn"),s=document.getElementById("global-start-btn"),a=(c,l)=>{c&&!c.dataset.listenerAttached&&(c.onclick=async()=>{let T=c.innerHTML;c.innerHTML="<i class='bx bx-loader-alt spin'></i>",c.disabled=!0;try{await H(`/system/service/${l}`,{method:"POST",body:JSON.stringify({service:"all"})}),setTimeout(()=>Ee(),2e3),setTimeout(()=>Ee(),5e3),setTimeout(()=>{c.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{c.innerHTML=T,c.disabled=!1},1e3)},1e3)}catch(E){console.error(E),c.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{c.innerHTML=T,c.disabled=!1},2e3)}},c.dataset.listenerAttached="true")};a(i,"restart"),a(n,"stop"),a(s,"start");let r=document.querySelector("#hw-os .hw-content"),f=document.querySelector("#hw-cpu .hw-content"),d=document.querySelector("#hw-ram .hw-content"),b=document.querySelector("#hw-gpu .hw-content"),S=document.querySelector("#hw-storage .hw-content"),y=c=>{if(c){if(r&&(r.innerHTML=`
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-                    <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${d.OS||"Unknown"}</span>
+                    <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${c.OS||"Unknown"}</span>
                     <div style="display: flex; gap: 30px;">
-                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${d.ARCHITECTURE||"unknown"}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Architecture</span></div>
+                        <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${c.ARCHITECTURE||"unknown"}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Architecture</span></div>
                     </div>
-                </div>`),c){let l=(d.MEMORY_BYTES/1073741824).toFixed(1);c.innerHTML=`
+                </div>`),d){let l=(c.MEMORY_BYTES/1073741824).toFixed(1);d.innerHTML=`
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 0.9em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">Total System Memory</span>
                     <span style="font-size: 1.8em; font-weight: bold; color: #fff;">${l} <span style="font-size: 0.5em; color: #888; font-weight: normal; margin-left: 2px;">GB</span></span>
-                </div>`}if(m&&d.CPU&&d.CPU.length>0){let l=d.CPU[0];m.innerHTML=`
+                </div>`}if(f&&c.CPU&&c.CPU.length>0){let l=c.CPU[0];f.innerHTML=`
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
                     <span style="font-size: 1.1em; color: #fff; font-weight: 400; letter-spacing: 0.5px;">${l.LABEL}</span>
                     <div style="display: flex; gap: 30px;">
                         <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #03dac6; line-height: 1;">${l.COUNT}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Cores</span></div>
                         <div style="text-align: right;"><span style="display: block; font-size: 1.3em; font-weight: bold; color: #bb86fc; line-height: 1;">${l.THREADS}</span><span style="font-size: 0.65em; color: #666; text-transform: uppercase; font-weight: 700;">Threads</span></div>
                     </div>
-                </div>`}g&&(d.GPU&&d.GPU.length>0?g.innerHTML=d.GPU.map(l=>{let $=(l.VRAM/1073741824).toFixed(1);return`
+                </div>`}b&&(c.GPU&&c.GPU.length>0?b.innerHTML=c.GPU.map(l=>{let T=(l.VRAM/1073741824).toFixed(1);return`
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                             <span style="font-size: 1.1em; color: #fff; font-weight: 400;">${l.LABEL}</span>
-                            <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${$} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
-                        </div>`}).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>'):g.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>'),S&&d.STORAGE&&d.STORAGE.length>0?S.innerHTML=d.STORAGE.map(l=>{let $=(l.USED/1073741824).toFixed(1),E=(l.SIZE/(1024*1024*1024)).toFixed(1),p=l.SIZE>0?(l.USED/l.SIZE*100).toFixed(0):0,w=l.MOUNT_POINT||"Unmounted";return`
+                            <span style="font-size: 1.2em; font-weight: bold; color: #fff;">${T} <span style="font-size: 0.6em; color: #888; font-weight: normal;">GB VRAM</span></span>
+                        </div>`}).join('<div style="height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0;"></div>'):b.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No GPU detected</p>'),S&&c.STORAGE&&c.STORAGE.length>0?S.innerHTML=c.STORAGE.map(l=>{let T=(l.USED/1073741824).toFixed(1),E=(l.SIZE/(1024*1024*1024)).toFixed(1),p=l.SIZE>0?(l.USED/l.SIZE*100).toFixed(0):0,w=l.MOUNT_POINT||"Unmounted";return`
                     <div style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -1869,20 +1806,20 @@
                             <span style="font-size: 0.75em; color: #666; font-family: monospace; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">${w}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #888; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">
-                            <span>${$} GB Used</span>
+                            <span>${T} GB Used</span>
                             <span>${E} GB Total</span>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden;">
                              <div style="background: ${Number(p)>90?"#cf6679":"#03dac6"}; width: ${p}%; height: 100%; box-shadow: 0 0 10px ${Number(p)>90?"#cf667944":"#03dac644"};"></div>
                         </div>
-                    </div>`}).join(""):S&&(S.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No storage devices found</p>')}};if(e&&(e.dataset.listenerAttached||(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>";let d=await Pt();d?(y(d),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)):(e.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3))},e.dataset.listenerAttached="true"),m&&!m.hasChildNodes())){let d=await Pt();y(d)}if(!t)return;t.dataset.controlsAttached||(t.addEventListener("click",async d=>{let l=d.target.closest(".svc-btn");if(!l)return;let $=l,E=$.dataset.action,p=$.dataset.service;if(!E||!p)return;let w=$.innerHTML;$.innerHTML="<i class='bx bx-loader-alt spin'></i>",$.classList.add("loading"),$.disabled=!0;try{await H(`/system/service/${E}`,{method:"POST",body:JSON.stringify({service:p})}),setTimeout(()=>Te(),1e3),setTimeout(()=>Te(),3e3)}catch(A){console.error(A),alert(`Failed to ${E} ${p}`),$.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{$.innerHTML=w,$.classList.remove("loading"),$.disabled=!1},2e3)}}),t.dataset.controlsAttached="true");let h=await Hs();if(!h||!h.services){t.children.length===0&&(t.innerHTML=W("offline","Failed to load system metrics.","The event service may be offline."));return}Ot=z()&&be.lastDashboard||Date.now(),pe(3,Ot||0);let r=h.services||[],u={cli:[],fe:[],cs:[],be:[],th:[],co:[],md:[],prd:[],os:[]},L={cli:"CLI",fe:"Front-end",cs:"Core",be:"Backend",th:"Third Party",co:"Cognitive",md:"Models",prd:"Production",os:"Other"};r.forEach(d=>{u[d.type]?u[d.type].push(d):u.os.push(d)});let I="";Object.entries(u).forEach(([d,l])=>{l.length!==0&&(I+=`
+                    </div>`}).join(""):S&&(S.innerHTML='<p style="text-align: center; color: #666; margin: 0;">No storage devices found</p>')}};if(e&&(e.dataset.listenerAttached||(e.onclick=async()=>{e.innerHTML="<i class='bx bx-loader-alt spin'></i>";let c=await Nt();c?(y(c),e.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3)):(e.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{e.innerHTML="<i class='bx bx-refresh'></i>"},2e3))},e.dataset.listenerAttached="true"),f&&!f.hasChildNodes())){let c=await Nt();y(c)}if(!t)return;t.dataset.controlsAttached||(t.addEventListener("click",async c=>{let l=c.target.closest(".svc-btn");if(!l)return;let T=l,E=T.dataset.action,p=T.dataset.service;if(!E||!p)return;let w=T.innerHTML;T.innerHTML="<i class='bx bx-loader-alt spin'></i>",T.classList.add("loading"),T.disabled=!0;try{await H(`/system/service/${E}`,{method:"POST",body:JSON.stringify({service:p})}),setTimeout(()=>Ee(),1e3),setTimeout(()=>Ee(),3e3)}catch(A){console.error(A),alert(`Failed to ${E} ${p}`),T.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>{T.innerHTML=w,T.classList.remove("loading"),T.disabled=!1},2e3)}}),t.dataset.controlsAttached="true");let h=await Is();if(!h||!h.services){t.children.length===0&&(t.innerHTML=W("offline","Failed to load system metrics.","The event service may be offline."));return}Rt=z()&&ge.lastDashboard||Date.now(),ce(3,Rt||0);let o=h.services||[],m={cli:[],fe:[],cs:[],be:[],th:[],co:[],md:[],prd:[],os:[]},L={cli:"CLI",fe:"Front-end",cs:"Core",be:"Backend",th:"Third Party",co:"Cognitive",md:"Models",prd:"Production",os:"Other"};o.forEach(c=>{m[c.type]?m[c.type].push(c):m.os.push(c)});let I="";Object.entries(m).forEach(([c,l])=>{l.length!==0&&(I+=`
             <div class="service-category-header" style="width: 100%; margin: 20px 0 15px 0; display: flex; align-items: center; gap: 10px;">
-                <span style="color: #888; font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">${L[d]||d}</span>
+                <span style="color: #888; font-size: 0.75em; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">${L[c]||c}</span>
                 <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.02);"></span>
             </div>
             <div class="service-category-grid system-monitor-widgets" style="padding-bottom: 20px;">
-                ${l.map($=>x($)).join("")}
-            </div>`)}),t.innerHTML!==I&&(t.innerHTML=I);function b(d){if(!d||d==="N/A"||d==="unknown")return"-";let l=d.match(/^(\d+\.\d+\.\d+)/);return l?l[0]:d.split(".").slice(0,3).join(".")||"-"}function f(d){return!d||d.length<=22?d:d.substring(0,22)+"..."}function v(d){if(!d||d==="N/A"||d==="unknown")return"-";let l=d.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);if(!l)return"-";let $=parseInt(l[1])||0,E=parseInt(l[2])||0,p=parseInt(l[3])||0,w=parseFloat(l[4])||0,A=$*86400+E*3600+p*60+w,_=Math.floor(A/86400);if(_>0)return`${_}d`;let B=Math.floor(A/3600);if(B>0)return`${B}h`;let P=Math.floor(A/60);return P>0?`${P}m`:`${Math.floor(A)}s`}function x(d){if(d.id==="upstash-redis-ro"){let D=z()&&(be.lastFrontend||be.lastDashboard)||Date.now();return`
+                ${l.map(T=>x(T)).join("")}
+            </div>`)}),t.innerHTML!==I&&(t.innerHTML=I);function g(c){if(!c||c==="N/A"||c==="unknown")return"-";let l=c.match(/^(\d+\.\d+\.\d+)/);return l?l[0]:c.split(".").slice(0,3).join(".")||"-"}function u(c){return!c||c.length<=22?c:c.substring(0,22)+"..."}function v(c){if(!c||c==="N/A"||c==="unknown")return"-";let l=c.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/);if(!l)return"-";let T=parseInt(l[1])||0,E=parseInt(l[2])||0,p=parseInt(l[3])||0,w=parseFloat(l[4])||0,A=T*86400+E*3600+p*60+w,_=Math.floor(A/86400);if(_>0)return`${_}d`;let B=Math.floor(A/3600);if(B>0)return`${B}h`;let O=Math.floor(A/60);return O>0?`${O}m`:`${Math.floor(A)}s`}function x(c){if(c.id==="upstash-redis-ro"){let D=z()&&(ge.lastFrontend||ge.lastDashboard)||Date.now();return`
             <div class="service-widget service-widget-online" data-service-id="upstash-redis-ro">
                 <div class="service-widget-header">
                     <i class="bx bx-check-circle"></i>
@@ -1894,12 +1831,12 @@
                     <div id="upstash-countdown" style="font-size: 2em; font-weight: bold; color: #fff; font-family: monospace;">--</div>
                     <div class="sync-time-label" style="font-size: 0.6em; color: #444; margin-top: 10px;">Last synced: ${new Date(D).toLocaleTimeString()}</div>
                 </div>
-            </div>`}let l=d.status==="online",$=l?"service-widget-online":"service-widget-offline",E=l?"bx-check-circle":"bx-x-circle",p=l?"OK":"BAD",w=d.version?b(d.version.str):"-",A=d.cpu&&d.cpu!=="N/A"?d.cpu:"-",_=d.memory&&d.memory!=="N/A"?d.memory:"-",B=A!=="-"?"#00ff00":"#666",P=A!=="-"?"#fff":"#666",V=_!=="-"?"#00ff00":"#666",Z=_!=="-"?"#fff":"#666",M=v(d.uptime),T="",k=d.type!=="os"&&d.type!=="cli"&&d.type!=="prd"&&d.type!=="md",C="";if(k&&!z()&&(C=`
+            </div>`}let l=c.status==="online",T=l?"service-widget-online":"service-widget-offline",E=l?"bx-check-circle":"bx-x-circle",p=l?"OK":"BAD",w=c.version?g(c.version.str):"-",A=c.cpu&&c.cpu!=="N/A"?c.cpu:"-",_=c.memory&&c.memory!=="N/A"?c.memory:"-",B=A!=="-"?"#00ff00":"#666",O=A!=="-"?"#fff":"#666",V=_!=="-"?"#00ff00":"#666",Z=_!=="-"?"#fff":"#666",M=v(c.uptime),$="",k=c.type!=="os"&&c.type!=="cli"&&c.type!=="prd"&&c.type!=="md",C="";if(k&&!z()&&(C=`
             <div class="service-controls">
-                <button class="svc-btn svc-restart" title="Restart Service" data-action="restart" data-service="${d.id}"><i class='bx bx-refresh'></i></button>
-                <button class="svc-btn svc-stop" title="Stop Service" data-action="stop" data-service="${d.id}" ${l?"":"disabled"}><i class='bx bx-stop'></i></button>
-                <button class="svc-btn svc-start" title="Start Service" data-action="start" data-service="${d.id}" ${l?"disabled":""}><i class='bx bx-play'></i></button>
-            </div>`),l){let D=d.type==="md"?"Size:":"Version:",K=d.type==="md"?d.memory:w,U=d.type==="md"?"Type:":"RAM:",j=d.type==="md"?d.health_message||"Model":_;T=`
+                <button class="svc-btn svc-restart" title="Restart Service" data-action="restart" data-service="${c.id}"><i class='bx bx-refresh'></i></button>
+                <button class="svc-btn svc-stop" title="Stop Service" data-action="stop" data-service="${c.id}" ${l?"":"disabled"}><i class='bx bx-stop'></i></button>
+                <button class="svc-btn svc-start" title="Start Service" data-action="start" data-service="${c.id}" ${l?"disabled":""}><i class='bx bx-play'></i></button>
+            </div>`),l){let D=c.type==="md"?"Size:":"Version:",K=c.type==="md"?c.memory:w,q=c.type==="md"?"Type:":"RAM:",P=c.type==="md"?c.health_message||"Model":_;$=`
                 <div class="service-widget-info">
                     <span class="info-label">${D}</span>
                     <span class="info-value metric-version-monospace">${K}</span>
@@ -1911,13 +1848,13 @@
                     </div>
                     <div class="service-widget-item">
                         <i class="bx bxs-microchip" style="color: ${B};"></i>
-                        <span style="color: ${P};">${A}</span>
+                        <span style="color: ${O};">${A}</span>
                     </div>
-                    <div class="service-widget-item" title="${U}">
+                    <div class="service-widget-item" title="${q}">
                         <i class="bx bxs-chip" style="color: ${V};"></i>
-                        <span style="color: ${Z};">${j}</span>
+                        <span style="color: ${Z};">${P}</span>
                     </div>
-                </div>`}else T='<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold; margin-top: auto;"><span>OFFLINE</span></div>';let O=z()||d.type==="md"?"easter.company":f(d.domain&&d.port?`${d.domain}:${d.port}`:"");return`<div class="service-widget ${$}" data-service-id="${d.id}"><div class="service-widget-header"><i class="bx ${E}"></i><h3>${d.short_name||d.id}</h3><span class="service-widget-status">${p}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${O}</span></div>${T}</div>${C}</div>`}}async function oe(t=!1){let e=document.getElementById("processes-widgets");if(!e&&!t)return;let i=document.getElementById("guardian-sentry-val"),n=document.getElementById("guardian-idle-val"),s=document.getElementById("guardian-total-idle"),a=document.getElementById("guardian-total-active"),o=document.getElementById("guardian-total-waste"),m=document.getElementById("guardian-reset-btn"),c=document.getElementById("analyzer-reset-btn"),g=document.getElementById("fabricator-reset-btn"),S=document.getElementById("fabricator-progress-btn"),y=document.getElementById("courier-reset-btn"),h=document.getElementById("system-pause-toggle-btn");S&&!S.dataset.listenerAttached&&(S.onclick=()=>{let d=document.querySelector("nav");d&&(d.style.display="none");let l=le({id:"fabricator-progress-window",title:"Mission Control",icon:"bx-loader-circle",className:"fabricator-progress-modal",appendToBody:!0,content:`
+                </div>`}else $='<div class="service-widget-footer offline" style="justify-content: center; opacity: 0.5; letter-spacing: 2px; font-weight: bold; margin-top: auto;"><span>OFFLINE</span></div>';let N=z()||c.type==="md"?"easter.company":u(c.domain&&c.port?`${c.domain}:${c.port}`:"");return`<div class="service-widget ${T}" data-service-id="${c.id}"><div class="service-widget-header"><i class="bx ${E}"></i><h3>${c.short_name||c.id}</h3><span class="service-widget-status">${p}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${N}</span></div>${$}</div>${C}</div>`}}async function ie(t=!1){let e=document.getElementById("processes-widgets");if(!e&&!t)return;let i=document.getElementById("guardian-sentry-val"),n=document.getElementById("guardian-idle-val"),s=document.getElementById("guardian-total-idle"),a=document.getElementById("guardian-total-active"),r=document.getElementById("guardian-total-waste"),f=document.getElementById("guardian-reset-btn"),d=document.getElementById("analyzer-reset-btn"),b=document.getElementById("fabricator-reset-btn"),S=document.getElementById("fabricator-progress-btn"),y=document.getElementById("courier-reset-btn"),h=document.getElementById("system-pause-toggle-btn");S&&!S.dataset.listenerAttached&&(S.onclick=()=>{let c=document.querySelector("nav");c&&(c.style.display="none");let l=oe({id:"fabricator-progress-window",title:"Mission Control",icon:"bx-loader-circle",className:"fabricator-progress-modal",appendToBody:!0,content:`
                           <div class="full-modal">
                             <div class="window-header">
                                 <i class='bx bx-loader-circle spin' style="color: #03dac6;"></i>
@@ -1925,55 +1862,55 @@
                                 <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
                             </div>
                             <div class="inner-modal-content" style="height: 100%; display: flex; flex-direction: column;">
-                                ${Dt()}
+                                ${Bt()}
                             </div>
                           </div>
-                        `,onOpen:()=>{let p=document.getElementById("fabricator-progress-window");p&&p.querySelector(".close-modal-btn")?.addEventListener("click",()=>l.close()),Nt()},onClose:()=>{d&&(d.style.display=""),window.removeEventListener("popstate",$),document.removeEventListener("visibilitychange",E)}}),$=()=>l.close(),E=()=>{document.hidden&&l.close()};window.addEventListener("popstate",$),document.addEventListener("visibilitychange",E),l.open()},S.dataset.listenerAttached="true"),h&&!h.dataset.listenerAttached&&(h.onclick=async()=>{let l=h.querySelector(".bx-play")?"/agent/resume":"/agent/pause";h.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H(l,{method:"POST"}),await oe()}catch{h.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>oe(),2e3)}},h.dataset.listenerAttached="true"),m&&!m.dataset.listenerAttached&&(m.onclick=async()=>{m.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=all",{method:"POST"}),setTimeout(()=>{m.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{m.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),oe()}catch{m.innerHTML="<i class='bx bx-error'></i>"}},m.dataset.listenerAttached="true"),c&&!c.dataset.listenerAttached&&(c.onclick=async()=>{c.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=analyzer",{method:"POST"}),setTimeout(()=>{c.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{c.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),oe()}catch{c.innerHTML="<i class='bx bx-error'></i>"}},c.dataset.listenerAttached="true"),g&&!g.dataset.listenerAttached&&(g.onclick=async()=>{g.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=fabricator",{method:"POST"}),setTimeout(()=>{g.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{g.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),oe()}catch{g.innerHTML="<i class='bx bx-error'></i>"}},g.dataset.listenerAttached="true"),y&&!y.dataset.listenerAttached&&(y.onclick=async()=>{y.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=courier",{method:"POST"}),setTimeout(()=>{y.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{y.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),oe()}catch{y.innerHTML="<i class='bx bx-error'></i>"}},y.dataset.listenerAttached="true");let r=document.getElementById("architect-reset-btn");r&&!r.dataset.listenerAttached&&(r.onclick=async()=>{r.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=architect",{method:"POST"}),setTimeout(()=>{r.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{r.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),oe()}catch{r.innerHTML="<i class='bx bx-error'></i>"}},r.dataset.listenerAttached="true");let u=await Ds();if(u&&u.agents){let d=u.agents.guardian||{protocols:{}},l=u.agents.analyzer||{protocols:{}},$=u.agents.architect||{protocols:{}},E=u.agents.fabricator||{protocols:{}},p=u.agents.courier||{protocols:{}},w=u.system||{},A=Math.floor(Date.now()/1e3),_={sentry:"Sentry",synthesis:"Synthesis",architect:"Architect",review:"Review",issue:"Issue",construct:"Construct",reporter:"Reporter",researcher:"Researcher",compressor:"Compressor"},B=F=>{F<0&&(F=0);let X=Math.floor(F/3600),J=Math.floor(F%3600/60),$e=F%60;return X>0?`${X}h ${J}m`:J>0?`${J}m ${$e}s`:`${$e}s`},P=(F,X,J,$e,ge)=>{if(!F)return;let Me=_[$e]||$e.toUpperCase(),rt=F.parentElement?.querySelector('span[style*="text-transform: uppercase"]');if(rt&&(rt.textContent=Me),ge==="paused"){F.textContent="PAUSED",F.style.color="#ff9800";return}if(!J){F.textContent="Inactive",F.style.color="#666";return}let lt=J.status;if(lt==="Working")F.textContent="Working",F.style.color="#bb86fc";else if(lt==="Ready")F.textContent="Ready",F.style.color="#5eff5e";else{let Oe=J.cooldown;if(z()&&(Oe=J.next_run-A),Oe<=0)F.textContent="Ready",F.style.color="#5eff5e";else{let ts=Math.floor(Oe/60),ss=Oe%60;F.textContent=`${ts}m ${ss}s`,F.style.color="#fff"}}X&&J.stats&&(X.innerHTML=`
+                        `,onOpen:()=>{let p=document.getElementById("fabricator-progress-window");p&&p.querySelector(".close-modal-btn")?.addEventListener("click",()=>l.close()),Ht()},onClose:()=>{c&&(c.style.display=""),window.removeEventListener("popstate",T),document.removeEventListener("visibilitychange",E)}}),T=()=>l.close(),E=()=>{document.hidden&&l.close()};window.addEventListener("popstate",T),document.addEventListener("visibilitychange",E),l.open()},S.dataset.listenerAttached="true"),h&&!h.dataset.listenerAttached&&(h.onclick=async()=>{let l=h.querySelector(".bx-play")?"/agent/resume":"/agent/pause";h.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H(l,{method:"POST"}),await ie()}catch{h.innerHTML="<i class='bx bx-error'></i>",setTimeout(()=>ie(),2e3)}},h.dataset.listenerAttached="true"),f&&!f.dataset.listenerAttached&&(f.onclick=async()=>{f.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=all",{method:"POST"}),setTimeout(()=>{f.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{f.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),ie()}catch{f.innerHTML="<i class='bx bx-error'></i>"}},f.dataset.listenerAttached="true"),d&&!d.dataset.listenerAttached&&(d.onclick=async()=>{d.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=analyzer",{method:"POST"}),setTimeout(()=>{d.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{d.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),ie()}catch{d.innerHTML="<i class='bx bx-error'></i>"}},d.dataset.listenerAttached="true"),b&&!b.dataset.listenerAttached&&(b.onclick=async()=>{b.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=fabricator",{method:"POST"}),setTimeout(()=>{b.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{b.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),ie()}catch{b.innerHTML="<i class='bx bx-error'></i>"}},b.dataset.listenerAttached="true"),y&&!y.dataset.listenerAttached&&(y.onclick=async()=>{y.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=courier",{method:"POST"}),setTimeout(()=>{y.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{y.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),ie()}catch{y.innerHTML="<i class='bx bx-error'></i>"}},y.dataset.listenerAttached="true");let o=document.getElementById("architect-reset-btn");o&&!o.dataset.listenerAttached&&(o.onclick=async()=>{o.innerHTML="<i class='bx bx-loader-alt spin'></i>";try{await H("/agent/reset?agent=architect",{method:"POST"}),setTimeout(()=>{o.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{o.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},500),ie()}catch{o.innerHTML="<i class='bx bx-error'></i>"}},o.dataset.listenerAttached="true");let m=await _s();if(m&&m.agents){let c=m.agents.guardian||{protocols:{}},l=m.agents.analyzer||{protocols:{}},T=m.agents.architect||{protocols:{}},E=m.agents.fabricator||{protocols:{}},p=m.agents.courier||{protocols:{}},w=m.system||{},A=Math.floor(Date.now()/1e3),_={sentry:"Sentry",synthesis:"Synthesis",architect:"Architect",review:"Review",issue:"Issue",construct:"Construct",reporter:"Reporter",researcher:"Researcher",compressor:"Compressor"},B=F=>{F<0&&(F=0);let X=Math.floor(F/3600),J=Math.floor(F%3600/60),$e=F%60;return X>0?`${X}h ${J}m`:J>0?`${J}m ${$e}s`:`${$e}s`},O=(F,X,J,$e,fe)=>{if(!F)return;let Me=_[$e]||$e.toUpperCase(),at=F.parentElement?.querySelector('span[style*="text-transform: uppercase"]');if(at&&(at.textContent=Me),fe==="paused"){F.textContent="PAUSED",F.style.color="#ff9800";return}if(!J){F.textContent="Inactive",F.style.color="#666";return}let ot=J.status;if(ot==="Working")F.textContent="Working",F.style.color="#bb86fc";else if(ot==="Ready")F.textContent="Ready",F.style.color="#5eff5e";else{let Oe=J.cooldown;if(z()&&(Oe=J.next_run-A),Oe<=0)F.textContent="Ready",F.style.color="#5eff5e";else{let Qt=Math.floor(Oe/60),es=Oe%60;F.textContent=`${Qt}m ${es}s`,F.style.color="#fff"}}X&&J.stats&&(X.innerHTML=`
             <div style="display: flex; flex-direction: column; gap: 2px;">
               <span>Runs: ${J.stats.runs||0}</span>
               <span style="color: ${J.stats.failures>0?"#ffa500":"#666"}">Fails: ${J.stats.failures||0}</span>
               <span style="color: ${J.stats.aborted>0?"#ff4d4d":"#666"}">Aborted: ${J.stats.aborted||0}</span>
             </div>
-          `)};i&&P(i,document.getElementById("guardian-sentry-stats"),d.protocols.sentry,"sentry",w.state);let V=document.getElementById("analyzer-summary-val"),Z=document.getElementById("analyzer-summary-stats");V&&P(V,Z,l.protocols.summary,"summary",w.state);let M=document.getElementById("analyzer-synthesis-val"),T=document.getElementById("analyzer-synthesis-stats");M&&P(M,T,l.protocols.synthesis,"synthesis",w.state);let k=document.getElementById("architect-alert_review-val"),C=document.getElementById("architect-alert_review-stats");k&&P(k,C,$.protocols.architect,"architect",w.state);let O=document.getElementById("fabricator-review-val"),D=document.getElementById("fabricator-review-stats");O&&P(O,D,E.protocols.review,"review",w.state);let K=document.getElementById("fabricator-issue-val"),U=document.getElementById("fabricator-issue-stats");K&&P(K,U,E.protocols.issue,"issue",w.state);let j=document.getElementById("fabricator-construct-val"),q=document.getElementById("fabricator-construct-stats");j&&P(j,q,E.protocols.construct,"construct",w.state);let G=document.getElementById("fabricator-reporter-val"),ee=document.getElementById("fabricator-reporter-stats");G&&P(G,ee,E.protocols.reporter,"reporter",w.state);let Y=document.getElementById("courier-researcher-val"),Ce=document.getElementById("courier-researcher-stats");Y&&P(Y,Ce,p.protocols.researcher,"researcher",w.state);let Re=document.getElementById("courier-compressor-val"),Ge=document.getElementById("courier-compressor-stats");Re&&P(Re,Ge,p.protocols.compressor,"compressor",w.state);let Ne=document.getElementById("system-state-label"),fe=document.getElementById("system-state-val");if(fe&&w.state){let F=w.state,X=B(w.state_time||0);Ne&&(Ne.textContent=`State: ${F.toUpperCase()}`),fe.textContent=X,F==="idle"?fe.style.color=w.state_time>300?"#5eff5e":"#fff":fe.style.color="#bb86fc",h&&(F==="paused"?(h.innerHTML="<i class='bx bx-play'></i>",h.title="Resume System",h.style.color="#ff9800"):(h.innerHTML="<i class='bx bx-pause'></i>",h.title="Pause System",h.style.color=""))}s&&(s.textContent=B(w.metrics?.total_idle_time||0)),a&&(a.textContent=B(w.metrics?.total_active_time||0)),o&&(o.textContent=B(w.metrics?.total_waste_time||0))}else[i,n,s,a,o].forEach(l=>{l&&(l.textContent="-",l.style.color="#666")});if(t)return;let L=await zs(),I=[],b=[],f=[];L&&(Array.isArray(L)?I=L:(I=L.active||[],b=L.queue||[],f=L.history||[],f.sort((d,l)=>(l.end_time||0)-(d.end_time||0)))),e&&(I.length===0?e.querySelector(".tab-placeholder")||(e.innerHTML=W("empty","No active processes.")):((e.querySelector(".tab-placeholder")||e.querySelector("p"))&&(e.innerHTML=""),it(e,I,!1)));let v=document.getElementById("processes-queue-widgets");v&&(b.length===0?!v.querySelector(".tab-placeholder")&&!v.querySelector('div[style*="font-style: italic"]')&&(v.innerHTML='<div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">Queue is empty</div>'):(v.innerHTML="",it(v,b,!1)));let x=document.getElementById("processes-history-widgets");x&&(f.length===0?x.querySelector(".tab-placeholder")||(x.innerHTML=W("empty","No recent history.")):(x.querySelector(".tab-placeholder")&&(x.innerHTML=""),it(x,f,!0))),yt(0,I.length)}function it(t,e,i){function n(c){let g="";c.end_time?g=`${c.end_time-c.start_time}s`:g=`${Math.floor(Date.now()/1e3-c.start_time)}s`;let S=c.retries>0?`<span class="process-retry-badge">Retry ${c.retries}</span>`:"",y=c.channel_id,h={"system-guardian":"Guardian Agent","system-cli-op":"CLI Operation","system-analyzer":"Analyzer Agent","system-courier":"Courier Agent","system-architect":"Architect Agent","system-fabricator":"Fabricator Agent","system-test":"System Validation","voice-mode":"Voice Interaction","system-context-summary-test-channel-id":"Context Summary Test"};if(h[y]?y=h[y]:y.startsWith("system-context-summary-")?y=`Context Compression: ${y.replace("system-context-summary-","")}`:/^\d+$/.test(y)&&(y=`Channel ${y}`),i)return`
-        <div class="process-history-item" data-channel-id="${c.channel_id}-${c.start_time}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
+          `)};i&&O(i,document.getElementById("guardian-sentry-stats"),c.protocols.sentry,"sentry",w.state);let V=document.getElementById("analyzer-summary-val"),Z=document.getElementById("analyzer-summary-stats");V&&O(V,Z,l.protocols.summary,"summary",w.state);let M=document.getElementById("analyzer-synthesis-val"),$=document.getElementById("analyzer-synthesis-stats");M&&O(M,$,l.protocols.synthesis,"synthesis",w.state);let k=document.getElementById("architect-alert_review-val"),C=document.getElementById("architect-alert_review-stats");k&&O(k,C,T.protocols.architect,"architect",w.state);let N=document.getElementById("fabricator-review-val"),D=document.getElementById("fabricator-review-stats");N&&O(N,D,E.protocols.review,"review",w.state);let K=document.getElementById("fabricator-issue-val"),q=document.getElementById("fabricator-issue-stats");K&&O(K,q,E.protocols.issue,"issue",w.state);let P=document.getElementById("fabricator-construct-val"),U=document.getElementById("fabricator-construct-stats");P&&O(P,U,E.protocols.construct,"construct",w.state);let G=document.getElementById("fabricator-reporter-val"),ee=document.getElementById("fabricator-reporter-stats");G&&O(G,ee,E.protocols.reporter,"reporter",w.state);let Y=document.getElementById("courier-researcher-val"),Ce=document.getElementById("courier-researcher-stats");Y&&O(Y,Ce,p.protocols.researcher,"researcher",w.state);let Re=document.getElementById("courier-compressor-val"),Ve=document.getElementById("courier-compressor-stats");Re&&O(Re,Ve,p.protocols.compressor,"compressor",w.state);let Ne=document.getElementById("system-state-label"),ue=document.getElementById("system-state-val");if(ue&&w.state){let F=w.state,X=B(w.state_time||0);Ne&&(Ne.textContent=`State: ${F.toUpperCase()}`),ue.textContent=X,F==="idle"?ue.style.color=w.state_time>300?"#5eff5e":"#fff":ue.style.color="#bb86fc",h&&(F==="paused"?(h.innerHTML="<i class='bx bx-play'></i>",h.title="Resume System",h.style.color="#ff9800"):(h.innerHTML="<i class='bx bx-pause'></i>",h.title="Pause System",h.style.color=""))}s&&(s.textContent=B(w.metrics?.total_idle_time||0)),a&&(a.textContent=B(w.metrics?.total_active_time||0)),r&&(r.textContent=B(w.metrics?.total_waste_time||0))}else[i,n,s,a,r].forEach(l=>{l&&(l.textContent="-",l.style.color="#666")});if(t)return;let L=await As(),I=[],g=[],u=[];L&&(Array.isArray(L)?I=L:(I=L.active||[],g=L.queue||[],u=L.history||[],u.sort((c,l)=>(l.end_time||0)-(c.end_time||0)))),e&&(I.length===0?e.querySelector(".tab-placeholder")||(e.innerHTML=W("empty","No active processes.")):((e.querySelector(".tab-placeholder")||e.querySelector("p"))&&(e.innerHTML=""),st(e,I,!1)));let v=document.getElementById("processes-queue-widgets");v&&(g.length===0?!v.querySelector(".tab-placeholder")&&!v.querySelector('div[style*="font-style: italic"]')&&(v.innerHTML='<div style="width: 100%; text-align: center; padding: 20px; color: #666; font-style: italic; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.05);">Queue is empty</div>'):(v.innerHTML="",st(v,g,!1)));let x=document.getElementById("processes-history-widgets");x&&(u.length===0?x.querySelector(".tab-placeholder")||(x.innerHTML=W("empty","No recent history.")):(x.querySelector(".tab-placeholder")&&(x.innerHTML=""),st(x,u,!0))),bt(0,I.length)}function st(t,e,i){function n(d){let b="";d.end_time?b=`${d.end_time-d.start_time}s`:b=`${Math.floor(Date.now()/1e3-d.start_time)}s`;let S=d.retries>0?`<span class="process-retry-badge">Retry ${d.retries}</span>`:"",y=d.channel_id,h={"system-guardian":"Guardian Agent","system-cli-op":"CLI Operation","system-analyzer":"Analyzer Agent","system-courier":"Courier Agent","system-architect":"Architect Agent","system-fabricator":"Fabricator Agent","system-test":"System Validation","voice-mode":"Voice Interaction","system-context-summary-test-channel-id":"Context Summary Test"};if(h[y]?y=h[y]:y.startsWith("system-context-summary-")?y=`Context Compression: ${y.replace("system-context-summary-","")}`:/^\d+$/.test(y)&&(y=`Channel ${y}`),i)return`
+        <div class="process-history-item" data-channel-id="${d.channel_id}-${d.start_time}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 0.85em;">
             <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
                 <i class='bx bx-check-circle' style="color: #03dac6; font-size: 1.1em;"></i>
                 <span style="color: #fff; font-weight: 600;">${y}</span>
-                <span style="color: #666; font-size: 0.9em; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;">${c.state}</span>
+                <span style="color: #666; font-size: 0.9em; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px;">${d.state}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 20px; color: #888;">
-                <span>PID: ${c.pid}</span>
-                <span style="color: #03dac6; min-width: 40px; text-align: right;">${g}</span>
+                <span>PID: ${d.pid}</span>
+                <span style="color: #03dac6; min-width: 40px; text-align: right;">${b}</span>
             </div>
-        </div>`;let r=c.channel_id==="system-test",u=r?"#03dac6":"#fff",L=r?"border: 1px solid #03dac644;":"",I=r?"bx-shield-quarter":"bx-cog";return`
-                <div class="service-widget process-widget" data-channel-id="${c.channel_id}-${c.start_time}" style="${L}">
+        </div>`;let o=d.channel_id==="system-test",m=o?"#03dac6":"#fff",L=o?"border: 1px solid #03dac644;":"",I=o?"bx-shield-quarter":"bx-cog";return`
+                <div class="service-widget process-widget" data-channel-id="${d.channel_id}-${d.start_time}" style="${L}">
                     <div class="service-widget-header">
-                        <i class="bx ${I}" style="color: ${u}"></i>
-                        <h3 style="color: ${u}">${y}</h3>
+                        <i class="bx ${I}" style="color: ${m}"></i>
+                        <h3 style="color: ${m}">${y}</h3>
                         ${S}
                     </div>
                     <div class="service-widget-body">
                         <div class="service-widget-info">
                             <span class="info-label">State:</span>
-                            <span class="info-value" style="color: ${u}">${c.state}</span>
+                            <span class="info-value" style="color: ${m}">${d.state}</span>
                         </div>
                         <div class="service-widget-info">
                             <span class="info-label">Duration:</span>
-                            <span class="info-value" style="color: ${u}">${g}</span>
+                            <span class="info-value" style="color: ${m}">${b}</span>
                         </div>
                          <div class="service-widget-info">
                             <span class="info-label">PID:</span>
-                            <span class="info-value" style="color: ${u}">${c.pid}</span>
+                            <span class="info-value" style="color: ${m}">${d.pid}</span>
                         </div>
                     </div>
-                </div>`}let s=i?".process-history-item":".process-widget",a=new Map(Array.from(t.querySelectorAll(s)).map(c=>[c.dataset.channelId,c])),o=new Set(e.map(c=>`${c.channel_id}-${c.start_time}`));for(let[c,g]of a)c&&!o.has(c)&&g.remove();let m=new Set;e.forEach(c=>{let g=`${c.channel_id}-${c.start_time}`;if(m.has(g))return;m.add(g);let S=n(c),y=a.get(g);if(y&&y.parentNode){y.outerHTML!==S&&(y.outerHTML=S);let h=t.querySelector(`[data-channel-id="${g}"]`);h&&t.appendChild(h)}else t.insertAdjacentHTML("beforeend",S)})}function Ve(){let t=Ke(),e="Notification"in window,i={enabled:e&&Notification.permission==="granted",supported:e};return`
+                </div>`}let s=i?".process-history-item":".process-widget",a=new Map(Array.from(t.querySelectorAll(s)).map(d=>[d.dataset.channelId,d])),r=new Set(e.map(d=>`${d.channel_id}-${d.start_time}`));for(let[d,b]of a)d&&!r.has(d)&&b.remove();let f=new Set;e.forEach(d=>{let b=`${d.channel_id}-${d.start_time}`;if(f.has(b))return;f.add(b);let S=n(d),y=a.get(b);if(y&&y.parentNode){y.outerHTML!==S&&(y.outerHTML=S);let h=t.querySelector(`[data-channel-id="${b}"]`);h&&t.appendChild(h)}else t.insertAdjacentHTML("beforeend",S)})}function We(){let t=Ge(),e="Notification"in window,i={enabled:e&&Notification.permission==="granted",supported:e};return`
             <div class="theme-selector">
-                ${Object.values(se).map(n=>`
+                ${Object.values(te).map(n=>`
                     <div class="theme-card ${t===n?"active":""}" data-theme="${n}">
                         <div class="theme-preview theme-preview-${n.toLowerCase()}"></div>
                         <div class="theme-info">
                             <h3>${n.charAt(0).toUpperCase()+n.slice(1)}</h3>
-                            <p>${n===se.DARK?"Simple, clean, dark.":n===se.LIGHT?"Heavenly, bright, and glowy.":"The original animated style."}</p>
+                            <p>${n===te.DARK?"Simple, clean, dark.":n===te.LIGHT?"Heavenly, bright, and glowy.":"The original animated style."}</p>
                             <span class="theme-badge">${t===n?"Active":"Select"}</span>
                         </div>
                     </div>
@@ -2017,13 +1954,13 @@
                         <i class='bx bx-loader-alt spin'></i> Loading configuration...
                     </div>
                 </div>
-            </div>`}function at(t){let e=document.querySelector("#settings-window .window-content");if(!e)return;e.querySelectorAll(".theme-card").forEach(n=>{n.addEventListener("click",function(){let s=this.dataset.theme;s&&(ft(s),t.setContent(Ve()),at(t))})});let i=document.getElementById("notifications-toggle");i&&"Notification"in window?i.onclick=async n=>{let s=n.target;if(s.checked)try{await Notification.requestPermission()!=="granted"&&(s.checked=!1)}catch{s.checked=!1}else Notification.permission==="granted"&&(alert("To disable notifications, please use your browser settings."),s.checked=!0)}:i&&(i.disabled=!0),Rs()}async function Rs(){let t=document.getElementById("service-config-list");if(!t)return;let e=z();try{let n=await(await H("/system/options")).json(),s=n.services||n||{},a="",o=(m,c,g)=>`
+            </div>`}function nt(t){let e=document.querySelector("#settings-window .window-content");if(!e)return;e.querySelectorAll(".theme-card").forEach(n=>{n.addEventListener("click",function(){let s=this.dataset.theme;s&&(mt(s),t.setContent(We()),nt(t))})});let i=document.getElementById("notifications-toggle");i&&"Notification"in window?i.onclick=async n=>{let s=n.target;if(s.checked)try{await Notification.requestPermission()!=="granted"&&(s.checked=!1)}catch{s.checked=!1}else Notification.permission==="granted"&&(alert("To disable notifications, please use your browser settings."),s.checked=!0)}:i&&(i.disabled=!0),Bs()}async function Bs(){let t=document.getElementById("service-config-list");if(!t)return;let e=z();try{let n=await(await H("/system/options")).json(),s=n.services||n||{},a="",r=(f,d,b)=>`
 
         <div class="settings-item">
 
             <div class="settings-item-info">
 
-                <span class="settings-item-label">${m}</span>
+                <span class="settings-item-label">${f}</span>
 
                 <span class="settings-item-description">Enable GPU acceleration (CUDA)</span>
 
@@ -2031,13 +1968,13 @@
 
             <label class="toggle-switch">
 
-                <input type="checkbox" class="service-device-toggle" data-service="${c}" ${g==="cuda"?"checked":""} ${e?"disabled":""}>
+                <input type="checkbox" class="service-device-toggle" data-service="${d}" ${b==="cuda"?"checked":""} ${e?"disabled":""}>
 
                 <span class="toggle-slider"></span>
 
             </label>
 
-        </div>`;if(s.stt&&(a+=o("STT Service","stt",s.stt.device||"cpu")),s.tts&&(a+=o("TTS Service","tts",s.tts.device||"cpu")),a?e&&(a+='<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Service configuration is read-only in public mode.</div>'):a='<div style="padding: 20px; text-align: center; color: #666;">No configurable services found.</div>',t.innerHTML=a,e)return;t.querySelectorAll(".service-device-toggle").forEach(m=>{m.addEventListener("change",async c=>{let g=c.target,S=g.dataset.service,y=g.checked?"cuda":"cpu";g.disabled=!0;try{await H("/system/options",{method:"POST",body:JSON.stringify({service:S,key:"device",value:y})})}catch{g.checked=!g.checked,alert("Failed to update configuration.")}finally{g.disabled=!1}})})}catch{t.innerHTML='<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>'}}var Gt=()=>`
+        </div>`;if(s.stt&&(a+=r("STT Service","stt",s.stt.device||"cpu")),s.tts&&(a+=r("TTS Service","tts",s.tts.device||"cpu")),a?e&&(a+='<div style="font-size: 0.7em; color: #666; font-style: italic; margin-top: 15px; text-align: center;">* Service configuration is read-only in public mode.</div>'):a='<div style="padding: 20px; text-align: center; color: #666;">No configurable services found.</div>',t.innerHTML=a,e)return;t.querySelectorAll(".service-device-toggle").forEach(f=>{f.addEventListener("change",async d=>{let b=d.target,S=b.dataset.service,y=b.checked?"cuda":"cpu";b.disabled=!0;try{await H("/system/options",{method:"POST",body:JSON.stringify({service:S,key:"device",value:y})})}catch{b.checked=!b.checked,alert("Failed to update configuration.")}finally{b.disabled=!1}})})}catch{t.innerHTML='<div style="padding: 20px; text-align: center; color: #cf6679;">Failed to load configuration.</div>'}}var Wt=()=>`
         <style>
             .web-view-container {
                 display: flex;
@@ -2108,7 +2045,7 @@
                 </div>
             </div>
         </div>
-    `;async function Kt(){let t=document.getElementById("web-analysis-sidebar"),e=document.getElementById("web-sidebar-toggle"),i=document.getElementById("web-switch-btn"),n=document.getElementById("web-refresh-btn"),s=document.getElementById("web-view-title");e&&!e.dataset.listenerAttached&&(e.onclick=()=>{if(t){let o=t.style.display==="none";t.style.display=o?"flex":"none",e.style.color=o?"#03dac6":""}},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{if(t){let o=t.style.display!=="none";t.style.display=o?"none":"flex",s&&(s.textContent=o?"Web View":"Web Analysis")}},i.dataset.listenerAttached="true");let a=()=>{let o=window.innerWidth<880;t&&e&&i&&s&&(o?(e.style.display="none",t.style.display="none",s.textContent="Web View"):(e.style.display="flex",t.style.display="flex",s.textContent="Web View"))};window.hasWebResizeListener||(window.addEventListener("resize",a),window.hasWebResizeListener=!0),a(),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{n.innerHTML="<i class='bx bx-loader-alt spin'></i>",await Vt(),n.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{n.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},n.dataset.listenerAttached="true"),await Vt()}async function Vt(){let t=document.getElementById("web-analysis-content"),e=document.getElementById("web-main-frame"),i=document.getElementById("web-frame-placeholder");if(!(!t||!e||!i))try{let n=await H("/web/view");if(!n.ok)throw new Error("Failed to fetch web view state");let s=await n.json();if(!s||!s.url){i.style.display="flex",e.style.display="none",t.innerHTML=`
+    `;async function Vt(){let t=document.getElementById("web-analysis-sidebar"),e=document.getElementById("web-sidebar-toggle"),i=document.getElementById("web-switch-btn"),n=document.getElementById("web-refresh-btn"),s=document.getElementById("web-view-title");e&&!e.dataset.listenerAttached&&(e.onclick=()=>{if(t){let r=t.style.display==="none";t.style.display=r?"flex":"none",e.style.color=r?"#03dac6":""}},e.dataset.listenerAttached="true"),i&&!i.dataset.listenerAttached&&(i.onclick=()=>{if(t){let r=t.style.display!=="none";t.style.display=r?"none":"flex",s&&(s.textContent=r?"Web View":"Web Analysis")}},i.dataset.listenerAttached="true");let a=()=>{let r=window.innerWidth<880;t&&e&&i&&s&&(r?(e.style.display="none",t.style.display="none",s.textContent="Web View"):(e.style.display="flex",t.style.display="flex",s.textContent="Web View"))};window.hasWebResizeListener||(window.addEventListener("resize",a),window.hasWebResizeListener=!0),a(),n&&!n.dataset.listenerAttached&&(n.onclick=async()=>{n.innerHTML="<i class='bx bx-loader-alt spin'></i>",await Jt(),n.innerHTML="<i class='bx bx-check'></i>",setTimeout(()=>{n.innerHTML="<i class='bx bx-refresh'></i>"},2e3)},n.dataset.listenerAttached="true"),await Jt()}async function Jt(){let t=document.getElementById("web-analysis-content"),e=document.getElementById("web-main-frame"),i=document.getElementById("web-frame-placeholder");if(!(!t||!e||!i))try{let n=await H("/web/view");if(!n.ok)throw new Error("Failed to fetch web view state");let s=await n.json();if(!s||!s.url){i.style.display="flex",e.style.display="none",t.innerHTML=`
                 <div style="text-align: center; color: #444; padding-top: 50px;">
                     <i class='bx bx-analyse' style="font-size: 2rem; opacity: 0.3;"></i>
                     <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">No active analysis</p>
@@ -2129,7 +2066,7 @@
                         <i class='bx bx-code-alt'></i>
                         <span style="font-size: 0.7em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Scraped Content</span>
                     </div>
-                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); max-height: 200px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.7em; color: #aaa; white-space: pre-wrap;">${N(s.scrape.content)||"No content."}</div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.03); max-height: 200px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.7em; color: #aaa; white-space: pre-wrap;">${j(s.scrape.content)||"No content."}</div>
                 </div>
             `),s.visual&&(a+=`
                 <div class="analysis-section" style="margin-bottom: 25px;">
@@ -2151,7 +2088,7 @@
             </a>
         </div>
         ${a}
-    `}catch(n){t.innerHTML=W("error","Web View failed.",n.message)}}var Zt=[{id:"chat",title:"Chat",icon:"bx-message-rounded-dots",description:"Direct natural language interaction with Dexter's cognitive core.",usage:"dex chat",category:"cognitive",dummy:!0,docs:{overview:"The Cognitive Chat interface (Alpha) allows direct interaction with Dexter's strategic layer using natural language.",details:["Context-aware reasoning based on system-wide events.","Multi-modal input support (text, voice, images).","Deep integration with the Roadmap and Blueprint systems.","Real-time access to logs and service status."],extended_usage:"dex chat [--voice] [--vision]"},demo_output:["\x1B[35m[DEXTER]\x1B[0m Initializing neural uplink...","\x1B[32m\u2713\x1B[0m Context window loaded (128k tokens)","\x1B[34m[SYSTEM]\x1B[0m Attaching to live event stream...","",`Owen: "Dexter, what's the status of the new event service build?"`,'Dexter: "The build completed 5 minutes ago (v2.8.198). All 42 tests passed.',"        I've noticed a slight increase in latency on the Redis cache,",'        should I run a diagnostic?"']},{id:"guardian",title:"Guardian",icon:"bx-shield-quarter",description:"Run the Guardian Technical Sentry system (Tier 1).",usage:"dex guardian [tier]",category:"cognitive",docs:{overview:"Guardian is the cognitive sentry of the ecosystem. It maintains system health and architectural integrity.",details:["Tier 1 (Technical Sentry): High-fidelity anomaly detection across logs, events, and metrics.","Automated Trigger: Activates after 5 minutes of system idle time.","CLI Proxy: Heavy lifting is proxied to the event service to preserve local resources.","Outcome Tracking: Records scientific buckets for Active, Idle, and Waste time."],extended_usage:`dex guardian [0|1] [--force]
+    `}catch(n){t.innerHTML=W("error","Web View failed.",n.message)}}var Yt=[{id:"chat",title:"Chat",icon:"bx-message-rounded-dots",description:"Direct natural language interaction with Dexter's cognitive core.",usage:"dex chat",category:"cognitive",dummy:!0,docs:{overview:"The Cognitive Chat interface (Alpha) allows direct interaction with Dexter's strategic layer using natural language.",details:["Context-aware reasoning based on system-wide events.","Multi-modal input support (text, voice, images).","Deep integration with the Roadmap and Blueprint systems.","Real-time access to logs and service status."],extended_usage:"dex chat [--voice] [--vision]"},demo_output:["\x1B[35m[DEXTER]\x1B[0m Initializing neural uplink...","\x1B[32m\u2713\x1B[0m Context window loaded (128k tokens)","\x1B[34m[SYSTEM]\x1B[0m Attaching to live event stream...","",`Owen: "Dexter, what's the status of the new event service build?"`,'Dexter: "The build completed 5 minutes ago (v2.8.198). All 42 tests passed.',"        I've noticed a slight increase in latency on the Redis cache,",'        should I run a diagnostic?"']},{id:"guardian",title:"Guardian",icon:"bx-shield-quarter",description:"Run the Guardian Technical Sentry system (Tier 1).",usage:"dex guardian [tier]",category:"cognitive",docs:{overview:"Guardian is the cognitive sentry of the ecosystem. It maintains system health and architectural integrity.",details:["Tier 1 (Technical Sentry): High-fidelity anomaly detection across logs, events, and metrics.","Automated Trigger: Activates after 5 minutes of system idle time.","CLI Proxy: Heavy lifting is proxied to the event service to preserve local resources.","Outcome Tracking: Records scientific buckets for Active, Idle, and Waste time."],extended_usage:`dex guardian [0|1] [--force]
 0 = Full Analysis (Default)
 1 = Tier 1 Only (Reports)`},demo_output:["\u2588 \x1B[1mGUARDIAN TECHNICAL SENTRY\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","\x1B[90m[INFO] Verifying system state...\x1B[0m"," \x1B[32m\u2713\x1B[0m No ongoing processes detected."," \x1B[32m\u2713\x1B[0m System idle time requirement met (312s).","","\x1B[1mInitializing Sentry Analysis...\x1B[0m","\x1B[94m\u2192 Executing Tier 1: Technical Sentry...\x1B[0m"," \x1B[90m\u2699\uFE0F  Auditing 50 system events...\x1B[0m"," \x1B[90m\u2699\uFE0F  Analyzing recent service logs...\x1B[0m"," \x1B[90m\u2699\uFE0F  Executing pre-analysis test suite...\x1B[0m","","# [SYSTEM] Service Connectivity Alert","**Priority**: high","**Body**: dex-tts-service reported 3 consecutive timeouts.","","\x1B[32m\u2713 Guardian run completed successfully.\x1B[0m","\x1B[90m  Duration: 14.2s | Waste: 0s | Reliability: 100%\x1B[0m"]},{id:"test",title:"Test",icon:"bx-check-shield",description:"Run service tests (Format, Lint, Unit).",usage:"dex test [service]",category:"lifecycle",docs:{overview:"Ensures code quality by running the full system test suite.",details:["Runs go test for all backend services.","Executes static analysis via golangci-lint.","Runs Python unit tests for TTS logic.","Validates configuration schemas."],extended_usage:"dex test [service] [--models]"},demo_output:["\u2588 \x1B[1mTESTING ALL SERVICES\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","","\x1B[36mTesting cli\x1B[0m","Checking formatting...","Linting...","Running tests...","\x1B[32m\u2713 Format (all files formatted) [12ms]\x1B[0m","\x1B[32m\u2713 Lint (no issues) [842ms]\x1B[0m","\x1B[32m\u2713 Test (12 passed) [42ms]\x1B[0m","\x1B[90m  Total Duration: 896ms\x1B[0m","","\x1B[36mTesting event\x1B[0m","Checking formatting...","Linting...","Running tests...","\x1B[32m\u2713 Format (all files formatted) [15ms]\x1B[0m","\x1B[32m\u2713 Lint (no issues) [1.2s]\x1B[0m","\x1B[32m\u2713 Test (48 passed, 72.4% coverage) [156ms]\x1B[0m","\x1B[90m  Total Duration: 1.37s\x1B[0m","","\u2588 \x1B[1mTEST SUMMARY\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","SERVICE         FORMAT       LINT         TEST         DURATION  ","cli             \x1B[32m\u2713 PASS\x1B[0m       \x1B[32m\u2713 PASS\x1B[0m       \x1B[32m\u2713 PASS\x1B[0m       896.2ms   ","event           \x1B[32m\u2713 PASS\x1B[0m       \x1B[32m\u2713 PASS\x1B[0m       \x1B[32m\u2713 PASS\x1B[0m       1.37s     ","","\x1B[32m\u2713 All tests passed!\x1B[0m"]},{id:"build",title:"Build",icon:"bx-package",description:"Build and install CLI and services from source.",usage:"dex build [major|minor|patch]",category:"lifecycle",docs:{overview:"The primary entry point for ecosystem evolution. Handles versioning and deployment.",details:["Increments semantic versioning automatically.","Bundles JS/CSS assets with content hashing.","Builds Go binaries and Python environments.","Creates Git tags and pushes to remotes.","Handles post-build service restarts."],extended_usage:"dex build [patch|minor|major] [--force]"},demo_output:["\u2588 \x1B[1mBUILDING ALL SERVICES FROM LOCAL SOURCE\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","Building cli with patch increment","Capturing current versions...","","\u2588 \x1B[1mBUILD PHASE\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","\x1B[36m# Building cli\x1B[0m","Incrementing version: 2.8.142 -> 2.8.143 (patch)","Cleaning old build files...","Compiling binary...","\x1B[32m\u2713 Successfully built cli!\x1B[0m","","\u2588 \x1B[1mINSTALL PHASE\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","\x1B[32m\u2713 Successfully installed cli!\x1B[0m","","\u2588 \x1B[1mGIT PHASE\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","[cli] Adding, committing, and pushing changes...","[cli] Creating tag 2.8.143...","\x1B[32m\u2713 [cli] Tag 2.8.143 created and pushed\x1B[0m","","\u2588 \x1B[1mSUMMARY\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","Service  Version Change        Size Change  Note                                   ","\u2500\u2500\u2500\u2500\u2500\u2500\u2500  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","cli      2.8.142 -> 2.8.143    +12 KB       release: publish patch version 2.8.143 ","","\x1B[32m\u2713 Build complete.\x1B[0m"]},{id:"update",title:"Update",icon:"bx-cloud-download",description:"Update CLI and services from source or pre-built binaries.",usage:"dex update",category:"lifecycle",docs:{overview:"Synchronizes your environment with the latest releases.",details:["In DEV mode: Clones fresh source and rebuilds everything.","In USER mode: Downloads latest binaries from easter.company.","Verifies checksums for all downloads.","Automatically updates environment paths."],extended_usage:"dex update"},demo_output:["\u2588 \x1B[1mDEVELOPER UPDATE - NUCLEAR FRESH INSTALL\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","\x1B[33m! Cloning fresh source and rebuilding everything from scratch...\x1B[0m","Fetching latest dev version from easter.company...","Latest dev version: 2.8.143","Updating 6 services from source...","Updating cli...","  Cloning dex-cli...","  Building cli via Makefile...","\x1B[32m  \u2713 cli updated (all binaries installed)\x1B[0m","\x1B[32m\u2713 Update complete!\x1B[0m","Run 'dex version' to verify"]},{id:"restart",title:"Restart",icon:"bx-refresh",description:"Restart all manageable services.",usage:"dex restart",category:"lifecycle",docs:{overview:"Direct control over the background processes that power the Dexter ecosystem.",details:["Interfaces with systemd units.","Supports starting, stopping, and restarting.","Displays detailed uptime and PID info.","Monitors resource consumption per service."],extended_usage:`dex start
 dex stop
@@ -2162,7 +2099,7 @@ dex discord quiet [on|off]`},demo_output:["\u2588 \x1B[1mDISCORD CONTACTS\x1B[0m
 dex model run gemma-2-2b`},demo_output:["\x1B[34m[HUB]\x1B[0m Synchronizing custom Dexter models...","Pulling base models...","Pulling gemma-2-2b... \x1B[32m[100%]\x1B[0m","\x1B[32m\u2713 Successfully pulled model: gemma-2-2b\x1B[0m","Creating custom Dexter models...","  Rebuilding dex-commit from gemma-2-2b...","\x1B[32m\u2713   Created dex-commit\x1B[0m","\x1B[32m\u2713 Models are up-to-date.\x1B[0m"]},{id:"system",title:"System Info",icon:"bx-info-square",description:"Show system info and manage packages.",usage:"dex system [info|scan|validate|install]",category:"system",docs:{overview:"Performance observability tool focused on AI resource availability.",details:["Scans and reports CPU, GPU, RAM, and Storage vitals.","Validates presence of required system packages.","Handles automatic installation of missing dependencies.","Exports telemetry data in JSON format."],extended_usage:`dex system scan
 dex system validate
 dex system install <package>`},demo_output:["\u2588 \x1B[1mSYSTEM CONFIGURATION\x1B[0m \u2588","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500","Category        Value","\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500        \u2500\u2500\u2500\u2500\u2500","CPU (Generic)   Cores: 16, Threads: 32","                Avg Clock: 4.20 GHz","GPU 0           NVIDIA GeForce RTX 4090, VRAM: 24.0 GB, CUDA: 1204","Memory          64.0 GB","Storage         2.0 TB (1 devices)","                /dev/nvme0n1p3: 450.2 GB / 1862.4 GB (/)","Packages        ","                \x1B[32m\u2713 12 checks passed\x1B[0m"]},{id:"config",title:"Config",icon:"bx-slider-alt",description:"Show service config or a specific field.",usage:"dex config <service> [field...]",category:"system",docs:{overview:"Manages the central registry that defines service interaction.",details:["View service definitions (domains, ports, IDs).","Modify environment-specific parameters.","Update authentication secrets and API endpoints.","Supports JSON path traversal for deep fields."],extended_usage:`dex config <service> [field]
-dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": "event",','  "type": "be",','  "port": 8100,','  "domain": "127.0.0.1",','  "log_path": "~/Dexter/logs/event-service.log"',"}"]}],Ns=()=>{let t={cognitive:{title:"Cognitive Core",icon:"bx-brain",color:"#bb86fc"},lifecycle:{title:"Development Lifecycle",icon:"bx-git-branch",color:"#03dac6"},system:{title:"System Management",icon:"bx-cog",color:"#aaa"}},e=`
+dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": "event",','  "type": "be",','  "port": 8100,','  "domain": "127.0.0.1",','  "log_path": "~/Dexter/logs/event-service.log"',"}"]}],Hs=()=>{let t={cognitive:{title:"Cognitive Core",icon:"bx-brain",color:"#bb86fc"},lifecycle:{title:"Development Lifecycle",icon:"bx-git-branch",color:"#03dac6"},system:{title:"System Management",icon:"bx-cog",color:"#aaa"}},e=`
         <div class="cli-dashboard">
             <div class="cli-hero" style="text-align: center; padding: 40px 20px; margin-bottom: 20px;">
                 <h1 style="font-size: 2.5em; margin-bottom: 10px; color: #fff;">DEXTER</h1>
@@ -2186,7 +2123,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                 <span>Interactive Demos</span>
                 <i class='bx bx-chevron-down'></i>
             </div>
-    `;for(let[i,n]of Object.entries(t)){let s=Zt.filter(a=>a.category===i);s.length!==0&&(e+=`
+    `;for(let[i,n]of Object.entries(t)){let s=Yt.filter(a=>a.category===i);s.length!==0&&(e+=`
             <div class="cli-category-section">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 20px;">
                     <i class='bx ${n.icon}' style="color: ${n.color}; font-size: 1.5em;"></i>
@@ -2229,7 +2166,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                 <a href="https://discord.gg/eastercompany" target="_blank" class="action-btn">JOIN DISCORD</a>
             </div>
         </div>
-    </div>`,e},ot=!1;function Os(t){let e=document.getElementById("cli-terminal-overlay");if(!e){e=document.createElement("div"),e.id="cli-terminal-overlay",e.className="cli-execution-overlay",e.innerHTML=`
+    </div>`,e},it=!1;function zs(t){let e=document.getElementById("cli-terminal-overlay");if(!e){e=document.createElement("div"),e.id="cli-terminal-overlay",e.className="cli-execution-overlay",e.innerHTML=`
             <div class="cli-terminal-window">
                 <div class="cli-terminal-header">
                     <div class="terminal-title">
@@ -2251,7 +2188,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
                     <button id="terminal-action-btn" class="notif-action-btn" style="display: none;">Done</button>
                 </div>
             </div>
-        `,document.body.appendChild(e);let c=document.getElementById("close-terminal-btn");c&&(c.onclick=()=>Yt());let g=document.getElementById("terminal-action-btn");g&&(g.onclick=()=>Yt())}let i=document.getElementById("cli-terminal-body"),n=document.getElementById("cli-docs-pane");i&&(i.innerHTML="");let s=t.docs||{overview:t.description,details:[],extended_usage:t.usage};n&&(n.innerHTML=`
+        `,document.body.appendChild(e);let d=document.getElementById("close-terminal-btn");d&&(d.onclick=()=>Gt());let b=document.getElementById("terminal-action-btn");b&&(b.onclick=()=>Gt())}let i=document.getElementById("cli-terminal-body"),n=document.getElementById("cli-docs-pane");i&&(i.innerHTML="");let s=t.docs||{overview:t.description,details:[],extended_usage:t.usage};n&&(n.innerHTML=`
         <div class="cli-docs-section">
             <h4>Command Overview</h4>
             <h2>${t.title}</h2>
@@ -2261,7 +2198,7 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
             <div class="cli-docs-section">
                 <h4>Core Features</h4>
                 <ul class="cli-docs-list">
-                    ${s.details.map(c=>`<li>${c}</li>`).join("")}
+                    ${s.details.map(d=>`<li>${d}</li>`).join("")}
                 </ul>
             </div>
         `:""}
@@ -2269,10 +2206,10 @@ dex config reset`},demo_output:["{",'  "id": "event-service",','  "short_name": 
             <h4>Detailed Usage</h4>
             <pre class="cli-docs-usage">${s.extended_usage}</pre>
         </div>
-    `);let a=document.getElementById("terminal-cmd-name");a&&(a.textContent=`dex ${t.id}`);let o=document.getElementById("terminal-status-badge");o&&(o.className="terminal-status status-running",o.textContent="Running");let m=document.getElementById("terminal-action-btn");return m&&(m.style.display="none"),e.classList.add("active"),document.body.style.overflow="hidden",ot=!0,i}function Yt(){let t=document.getElementById("cli-terminal-overlay");t&&t.classList.remove("active"),re()||(document.body.style.overflow=""),ot=!1}function Xt(t,e,i="output"){if(!ot||!t)return;let n=document.createElement("div");if(n.className=`terminal-line terminal-${i}`,i==="prompt")n.innerHTML=`<span class="terminal-prompt">$</span> ${e}`;else{let s=Ue(e);n.innerHTML=s||e}t.appendChild(n),t.scrollTop=t.scrollHeight}async function Ps(t){let e=Zt.find(o=>o.id===t);if(!e)return;let i=Os(e);i&&Xt(i,`dex ${t}`,"prompt");let n=e.demo_output||["Executing command...","\u2713 Done."];for(let o of n){await new Promise(c=>setTimeout(c,400+Math.random()*600));let m="output";o.includes("[ERROR]")?m="error":o.includes("[SUCCESS]")||o.includes("\u2713")?m="success":o.includes("!")&&(m="warning"),i&&Xt(i,o,m)}let s=document.getElementById("terminal-status-badge");s&&(s.className="terminal-status status-success",s.textContent="Completed (Demo)");let a=document.getElementById("terminal-action-btn");a&&(a.style.display="block")}function Qt(){let t=document.getElementById("cli-interface-container");if(!t)return;t.innerHTML=Ns();let e=document.getElementById("install-command-copy");e&&e.addEventListener("click",()=>{let i=e.querySelector("code"),n=i?i.textContent:"";n&&navigator.clipboard.writeText(n).then(()=>{let s=e.querySelector("i");s&&(s.className="bx bx-check",s.style.color="#5eff5e",setTimeout(()=>{s.className="bx bx-copy",s.style.color="#bb86fc"},2e3))})}),t.querySelectorAll(".cli-command-card").forEach(i=>{let n=i;i.addEventListener("mouseenter",()=>{n.style.transform="translateY(-5px)",n.style.borderColor="rgba(255,255,255,0.15)",n.style.backgroundColor="rgba(255,255,255,0.05)"}),i.addEventListener("mouseleave",()=>{n.style.transform="translateY(0)",n.style.borderColor="rgba(255,255,255,0.05)",n.style.backgroundColor="rgba(255,255,255,0.03)"}),i.addEventListener("click",()=>{let s=n.dataset.cmd;s&&Ps(s)})})}async function js(){if(!z())try{if(!(await H("/system/status",{method:"GET"})).ok)throw new Error("Service unhealthy")}catch(t){console.error("Service health check failed:",t)}}function es(){if(window.location.protocol==="http:"&&window.location.hostname==="easter.company"){window.location.replace("https://"+window.location.hostname+window.location.pathname+window.location.search);return}dt(),pt(),js(),bt(),ct();let t=window.location.pathname;(t==="/dexter"||t==="/dexter/")&&Qt();let e=[],i=document.getElementById("windows-container");i&&i.setAttribute("data-count","0");let n=b=>{localStorage.setItem("dex_last_window",b)};function s(){for(;e.length>1;)e.shift().close(!0);let b=document.getElementById("windows-container"),f=document.querySelector("nav"),v=document.querySelector("footer"),x=window.location.pathname==="/"||window.location.pathname==="/index.html",d=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");b&&b.setAttribute("data-count",e.length.toString()),e.forEach(_=>{let B=document.getElementById(_.id);B&&B.classList.remove("hide-close")});let l=document.getElementById("dexter-menu-container"),$=document.getElementById("nav-window-switcher"),E=document.getElementById("settings-icon"),p=document.getElementById("docs-icon"),w=document.getElementById("close-all-windows"),A=window.innerWidth<880;if(!A){let _=document.getElementById("dexter-dropdown"),B=document.getElementById("dexter-menu-btn");_&&_.classList.remove("active"),B&&B.classList.remove("active"),b&&b.classList.remove("menu-open")}if(Se(e.length>0),e.length>0)if(v?.classList.add("hide"),w&&(w.style.display=A?"none":"block"),document.querySelector("main")?.style.setProperty("opacity","0","important"),document.body.style.overflow="hidden",f?.classList.add("window-open"),b&&(b.style.paddingTop="60px"),l&&(l.style.display=A?"flex":"none"),p&&(p.style.display=A?"block":"none"),E&&(E.style.display=A?"block":"none"),!A&&$){let _=e[0].id;["alerts-window","events-window","monitor-window","contacts-window","workspace-window"].includes(_)?($.innerHTML=`
+    `);let a=document.getElementById("terminal-cmd-name");a&&(a.textContent=`dex ${t.id}`);let r=document.getElementById("terminal-status-badge");r&&(r.className="terminal-status status-running",r.textContent="Running");let f=document.getElementById("terminal-action-btn");return f&&(f.style.display="none"),e.classList.add("active"),document.body.style.overflow="hidden",it=!0,i}function Gt(){let t=document.getElementById("cli-terminal-overlay");t&&t.classList.remove("active"),ae()||(document.body.style.overflow=""),it=!1}function Kt(t,e,i="output"){if(!it||!t)return;let n=document.createElement("div");if(n.className=`terminal-line terminal-${i}`,i==="prompt")n.innerHTML=`<span class="terminal-prompt">$</span> ${e}`;else{let s=Le(e);n.innerHTML=s||e}t.appendChild(n),t.scrollTop=t.scrollHeight}async function Ds(t){let e=Yt.find(r=>r.id===t);if(!e)return;let i=zs(e);i&&Kt(i,`dex ${t}`,"prompt");let n=e.demo_output||["Executing command...","\u2713 Done."];for(let r of n){await new Promise(d=>setTimeout(d,400+Math.random()*600));let f="output";r.includes("[ERROR]")?f="error":r.includes("[SUCCESS]")||r.includes("\u2713")?f="success":r.includes("!")&&(f="warning"),i&&Kt(i,r,f)}let s=document.getElementById("terminal-status-badge");s&&(s.className="terminal-status status-success",s.textContent="Completed (Demo)");let a=document.getElementById("terminal-action-btn");a&&(a.style.display="block")}function Xt(){let t=document.getElementById("cli-interface-container");if(!t)return;t.innerHTML=Hs();let e=document.getElementById("install-command-copy");e&&e.addEventListener("click",()=>{let i=e.querySelector("code"),n=i?i.textContent:"";n&&navigator.clipboard.writeText(n).then(()=>{let s=e.querySelector("i");s&&(s.className="bx bx-check",s.style.color="#5eff5e",setTimeout(()=>{s.className="bx bx-copy",s.style.color="#bb86fc"},2e3))})}),t.querySelectorAll(".cli-command-card").forEach(i=>{let n=i;i.addEventListener("mouseenter",()=>{n.style.transform="translateY(-5px)",n.style.borderColor="rgba(255,255,255,0.15)",n.style.backgroundColor="rgba(255,255,255,0.05)"}),i.addEventListener("mouseleave",()=>{n.style.transform="translateY(0)",n.style.borderColor="rgba(255,255,255,0.05)",n.style.backgroundColor="rgba(255,255,255,0.03)"}),i.addEventListener("click",()=>{let s=n.dataset.cmd;s&&Ds(s)})})}async function Rs(){if(!z())try{if(!(await H("/system/status",{method:"GET"})).ok)throw new Error("Service unhealthy")}catch(t){console.error("Service health check failed:",t)}}function Zt(){if(window.location.protocol==="http:"&&window.location.hostname==="easter.company"){window.location.replace("https://"+window.location.hostname+window.location.pathname+window.location.search);return}lt(),ct(),Rs(),ft(),rt();let t=window.location.pathname;(t==="/dexter"||t==="/dexter/")&&Xt();let e=[],i=document.getElementById("windows-container");i&&i.setAttribute("data-count","0");let n=g=>{localStorage.setItem("dex_last_window",g)};function s(){for(;e.length>1;)e.shift().close(!0);let g=document.getElementById("windows-container"),u=document.querySelector("nav"),v=document.querySelector("footer"),x=window.location.pathname==="/"||window.location.pathname==="/index.html",c=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");g&&g.setAttribute("data-count",e.length.toString()),e.forEach(_=>{let B=document.getElementById(_.id);B&&B.classList.remove("hide-close")});let l=document.getElementById("dexter-menu-container"),T=document.getElementById("nav-window-switcher"),E=document.getElementById("settings-icon"),p=document.getElementById("docs-icon"),w=document.getElementById("close-all-windows"),A=window.innerWidth<880;if(!A){let _=document.getElementById("dexter-dropdown"),B=document.getElementById("dexter-menu-btn");_&&_.classList.remove("active"),B&&B.classList.remove("active"),g&&g.classList.remove("menu-open")}if(Te(e.length>0),e.length>0)if(v?.classList.add("hide"),w&&(w.style.display=A?"none":"block"),document.querySelector("main")?.style.setProperty("opacity","0","important"),document.body.style.overflow="hidden",u?.classList.add("window-open"),g&&(g.style.paddingTop="60px"),l&&(l.style.display=A?"flex":"none"),p&&(p.style.display=A?"block":"none"),E&&(E.style.display=A?"block":"none"),!A&&T){let _=e[0].id;["alerts-window","events-window","monitor-window","contacts-window","workspace-window"].includes(_)?(T.innerHTML=`
                       <div class="nav-switch-btn ${_==="alerts-window"?"active":""}" id="switch-alerts"><i class='bx bx-bell'></i> Alerts</div>
                       <div class="nav-switch-btn ${_==="events-window"?"active":""}" id="switch-events"><i class='bx bx-calendar-event'></i> Events</div>
                       <div class="nav-switch-btn ${_==="monitor-window"?"active":""}" id="switch-monitor"><i class='bx bx-pulse'></i> Monitor</div>
                       <div class="nav-switch-btn ${_==="contacts-window"?"active":""}" id="switch-contacts"><i class='bx bx-book-content'></i> Contacts</div>
                       <div class="nav-switch-btn ${_==="workspace-window"?"active":""}" id="switch-workspace"><i class='bx bx-brain'></i> Workspace</div>
-                  `,document.getElementById("switch-alerts")?.addEventListener("click",()=>{n("alerts-window"),a(m)}),document.getElementById("switch-events")?.addEventListener("click",()=>{n("events-window"),a(c)}),document.getElementById("switch-monitor")?.addEventListener("click",()=>{n("monitor-window"),a(S)}),document.getElementById("switch-contacts")?.addEventListener("click",()=>{n("contacts-window"),a(g)}),document.getElementById("switch-workspace")?.addEventListener("click",()=>{n("workspace-window"),a(y)})):$.innerHTML=""}else $&&($.innerHTML="");else f?.classList.remove("window-open"),w&&(w.style.display="none"),b&&(b.style.paddingTop="100px"),document.querySelector("main")?.style.setProperty("opacity","1","important"),re()||(document.body.style.overflow=""),x||d?v?.classList.remove("hide"):v?.classList.add("hide"),l&&(l.style.display="flex"),p&&(p.style.display="block"),E&&(E.style.display="block"),$&&($.innerHTML="");Ie()}function a(b){if(b.isOpen()){b.close();return}for(;e.length>0;)e.pop().close(!0);e.push(b),b.open(),s()}function o(){[...e].forEach(f=>f.close()),e=[]}window.addEventListener("resize",s);let m=le({id:"alerts-window",title:"Alerts",icon:"bx-bell",content:Tt(),onOpen:()=>me(),onClose:()=>{let b=e.indexOf(m);b>-1&&e.splice(b,1),s()}}),c=le({id:"events-window",title:"Events",icon:"bx-calendar-event",content:st(),onOpen:()=>{c.setContent(st()),ue()},onClose:()=>{let b=e.indexOf(c);b>-1&&e.splice(b,1),s()}}),g=le({id:"contacts-window",title:"Contacts",icon:"bx-book-content",content:_t(),onOpen:()=>tt(),onClose:()=>{let b=e.indexOf(g);b>-1&&e.splice(b,1),s()}}),S=le({id:"monitor-window",icon:"bx-pulse",tabs:[{icon:"bxs-component",title:"Processes",content:Ut()},{icon:"bxs-zap",title:"Agents",content:jt()},{icon:"bx-globe",title:"Web",content:Gt()},{icon:"bxs-server",title:"Services",content:qt()},{icon:"bxs-terminal",title:"Logs",content:Jt()},{icon:"bxs-hdd",title:"Hardware",content:Ft()}].filter(b=>z()?b.title!=="Hardware"&&b.title!=="Logs":!0),onOpen:()=>{oe(),Te(),Kt(),De()},onClose:()=>{let b=e.indexOf(S);b>-1&&e.splice(b,1),s()}}),y=le({id:"workspace-window",title:"Workspace",icon:"bx-brain",tabs:[{icon:"bx-map-alt",title:"Roadmap",content:Mt()},{icon:"bx-task",title:"Tasks",content:It()}],onOpen:()=>et(),onClose:()=>{let b=e.indexOf(y);b>-1&&e.splice(b,1),s()}}),h=le({id:"settings-window",title:"Settings",icon:"bx-cog",content:Ve(),onOpen:()=>{h.setContent(Ve()),at(h)},onClose:()=>{let b=e.indexOf(h);b>-1&&e.splice(b,1),s()}});window.dexter||(window.dexter={}),window.dexter.viewEvent=b=>{c.isOpen()||a(c),setTimeout(()=>{let f=document.querySelector(`.event-item[data-event-id="${b}"]`);f&&(f.scrollIntoView({behavior:"smooth",block:"center"}),f.classList.add("flash-highlight"),f.classList.contains("expanded")||f.click(),setTimeout(()=>f.classList.remove("flash-highlight"),2e3))},500)},window.dexter.viewAlert=b=>{m.isOpen()||a(m),setTimeout(()=>{let f=document.querySelector(`.event-item[data-alert-id="${b}"]`);f&&(f.scrollIntoView({behavior:"smooth",block:"center"}),f.classList.add("flash-highlight"),f.classList.contains("expanded")||f.click(),setTimeout(()=>f.classList.remove("flash-highlight"),2e3))},500)};let r=()=>{let b=document.getElementById("dexter-dropdown"),f=document.getElementById("dexter-menu-btn");b&&f&&(b.classList.remove("active"),f.classList.remove("active"),window.innerWidth<880&&document.getElementById("windows-container")?.classList.remove("menu-open"))};(()=>{let b=document.getElementById("dexter-menu-btn"),f=document.getElementById("settings-icon"),v=document.getElementById("docs-icon"),x=document.getElementById("close-all-windows"),d=document.getElementById("nav-left-container"),l=document.getElementById("dexter-dropdown"),$=document.getElementById("windows-container");b&&l&&(b.onclick=p=>{p.stopPropagation();let w=window.innerWidth<880;if(w)l.style.top="",l.style.left="",l.style.right="",l.style.transform="";else{let _=b.getBoundingClientRect(),P=document.querySelector("nav").getBoundingClientRect(),V=220,Z=10,T=_.left+_.width/2-V/2,k=P.right-10;T+V>k&&(T=k-V),T<10&&(T=10),l.style.top=P.bottom+Z+"px",l.style.left=T+"px",l.style.right="auto",l.style.transform="none"}l.classList.toggle("active"),b.classList.toggle("active");let A=l.classList.contains("active");if(w){let _=document.querySelector("nav");A?(document.querySelector("footer")?.classList.add("hide"),document.querySelector("main")?.style.setProperty("opacity","0","important"),_?.classList.add("window-open"),$?.classList.add("menu-open"),Se(!0)):($?.classList.remove("menu-open"),e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),_?.classList.remove("window-open"),re()||Se(!1)))}}),f&&(f.onclick=p=>{p.stopPropagation(),a(h)}),v&&(v.onclick=p=>{p.stopPropagation(),window.location.href="/docs"}),x&&(x.onclick=p=>{p.stopPropagation(),o()});let E=(p,w,A)=>{let _=document.getElementById(p);_&&(_.onclick=B=>{B.stopPropagation(),r(),A&&n(A),a(w)})};E("alerts-menu-item",m,"alerts-window"),E("events-menu-item",c,"events-window"),E("monitor-menu-item",S,"monitor-window"),E("contacts-menu-item",g,"contacts-window"),E("workspace-menu-item",y,"workspace-window"),d&&(d.onclick=p=>{if(p.stopPropagation(),l&&l.classList.contains("active")){r(),window.innerWidth<880&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),re()||Se(!1));return}if(e.length>0)o();else{let w=window.location.pathname;if(!(w==="/"||w==="/index.html")){let _=w.endsWith("/")&&w.length>1?w.slice(0,-1):w;if(_.includes("/docs/page/")){window.location.href="/";return}let B=_.split("/");B.pop();let P=B.join("/")||"/";window.location.href=P}}}),document.addEventListener("click",()=>{let p=window.innerWidth<880;l&&l.classList.contains("active")&&(r(),p&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),re()||Se(!1)))}),l&&(l.onclick=p=>p.stopPropagation())})();let L=window.location.pathname==="/"||window.location.pathname==="/index.html",I=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");!L&&!I&&document.querySelector("footer")?.classList.add("hide"),z()||setInterval(()=>{c.isOpen()&&ue(),m.isOpen()?me():Ze()},1e3),setInterval(()=>{z()&&(m.isOpen()?me():Ze()),y.isOpen()&&et(),z()&&c.isOpen()&&ue(),S.isOpen()&&Wt()},5e3)}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",es):es();})();
+                  `,document.getElementById("switch-alerts")?.addEventListener("click",()=>{n("alerts-window"),a(f)}),document.getElementById("switch-events")?.addEventListener("click",()=>{n("events-window"),a(d)}),document.getElementById("switch-monitor")?.addEventListener("click",()=>{n("monitor-window"),a(S)}),document.getElementById("switch-contacts")?.addEventListener("click",()=>{n("contacts-window"),a(b)}),document.getElementById("switch-workspace")?.addEventListener("click",()=>{n("workspace-window"),a(y)})):T.innerHTML=""}else T&&(T.innerHTML="");else u?.classList.remove("window-open"),w&&(w.style.display="none"),g&&(g.style.paddingTop="100px"),document.querySelector("main")?.style.setProperty("opacity","1","important"),ae()||(document.body.style.overflow=""),x||c?v?.classList.remove("hide"):v?.classList.add("hide"),l&&(l.style.display="flex"),p&&(p.style.display="block"),E&&(E.style.display="block"),T&&(T.innerHTML="");Ie()}function a(g){if(g.isOpen()){g.close();return}for(;e.length>0;)e.pop().close(!0);e.push(g),g.open(),s()}function r(){[...e].forEach(u=>u.close()),e=[]}window.addEventListener("resize",s);let f=oe({id:"alerts-window",title:"Alerts",icon:"bx-bell",content:wt(),onOpen:()=>de(),onClose:()=>{let g=e.indexOf(f);g>-1&&e.splice(g,1),s()}}),d=oe({id:"events-window",title:"Events",icon:"bx-calendar-event",content:tt(),onOpen:()=>{d.setContent(tt()),pe()},onClose:()=>{let g=e.indexOf(d);g>-1&&e.splice(g,1),s()}}),b=oe({id:"contacts-window",title:"Contacts",icon:"bx-book-content",content:It(),onOpen:()=>et(),onClose:()=>{let g=e.indexOf(b);g>-1&&e.splice(g,1),s()}}),S=oe({id:"monitor-window",icon:"bx-pulse",tabs:[{icon:"bxs-component",title:"Processes",content:Pt()},{icon:"bxs-zap",title:"Agents",content:Ot()},{icon:"bx-globe",title:"Web",content:Wt()},{icon:"bxs-server",title:"Services",content:jt()},{icon:"bxs-terminal",title:"Logs",content:Ut()},{icon:"bxs-hdd",title:"Hardware",content:qt()}].filter(g=>z()?g.title!=="Hardware"&&g.title!=="Logs":!0),onOpen:()=>{ie(),Ee(),Vt(),De()},onClose:()=>{let g=e.indexOf(S);g>-1&&e.splice(g,1),s()}}),y=oe({id:"workspace-window",title:"Workspace",icon:"bx-brain",tabs:[{icon:"bx-map-alt",title:"Roadmap",content:Lt()},{icon:"bx-task",title:"Tasks",content:Ct()}],onOpen:()=>Qe(),onClose:()=>{let g=e.indexOf(y);g>-1&&e.splice(g,1),s()}}),h=oe({id:"settings-window",title:"Settings",icon:"bx-cog",content:We(),onOpen:()=>{h.setContent(We()),nt(h)},onClose:()=>{let g=e.indexOf(h);g>-1&&e.splice(g,1),s()}});window.dexter||(window.dexter={}),window.dexter.viewEvent=g=>{d.isOpen()||a(d),setTimeout(()=>{let u=document.querySelector(`.event-item[data-event-id="${g}"]`);u&&(u.scrollIntoView({behavior:"smooth",block:"center"}),u.classList.add("flash-highlight"),u.classList.contains("expanded")||u.click(),setTimeout(()=>u.classList.remove("flash-highlight"),2e3))},500)},window.dexter.viewAlert=g=>{f.isOpen()||a(f),setTimeout(()=>{let u=document.querySelector(`.event-item[data-alert-id="${g}"]`);u&&(u.scrollIntoView({behavior:"smooth",block:"center"}),u.classList.add("flash-highlight"),u.classList.contains("expanded")||u.click(),setTimeout(()=>u.classList.remove("flash-highlight"),2e3))},500)};let o=()=>{let g=document.getElementById("dexter-dropdown"),u=document.getElementById("dexter-menu-btn");g&&u&&(g.classList.remove("active"),u.classList.remove("active"),window.innerWidth<880&&document.getElementById("windows-container")?.classList.remove("menu-open"))};(()=>{let g=document.getElementById("dexter-menu-btn"),u=document.getElementById("settings-icon"),v=document.getElementById("docs-icon"),x=document.getElementById("close-all-windows"),c=document.getElementById("nav-left-container"),l=document.getElementById("dexter-dropdown"),T=document.getElementById("windows-container");g&&l&&(g.onclick=p=>{p.stopPropagation();let w=window.innerWidth<880;if(w)l.style.top="",l.style.left="",l.style.right="",l.style.transform="";else{let _=g.getBoundingClientRect(),O=document.querySelector("nav").getBoundingClientRect(),V=220,Z=10,$=_.left+_.width/2-V/2,k=O.right-10;$+V>k&&($=k-V),$<10&&($=10),l.style.top=O.bottom+Z+"px",l.style.left=$+"px",l.style.right="auto",l.style.transform="none"}l.classList.toggle("active"),g.classList.toggle("active");let A=l.classList.contains("active");if(w){let _=document.querySelector("nav");A?(document.querySelector("footer")?.classList.add("hide"),document.querySelector("main")?.style.setProperty("opacity","0","important"),_?.classList.add("window-open"),T?.classList.add("menu-open"),Te(!0)):(T?.classList.remove("menu-open"),e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),_?.classList.remove("window-open"),ae()||Te(!1)))}}),u&&(u.onclick=p=>{p.stopPropagation(),a(h)}),v&&(v.onclick=p=>{p.stopPropagation(),window.location.href="/docs"}),x&&(x.onclick=p=>{p.stopPropagation(),r()});let E=(p,w,A)=>{let _=document.getElementById(p);_&&(_.onclick=B=>{B.stopPropagation(),o(),A&&n(A),a(w)})};E("alerts-menu-item",f,"alerts-window"),E("events-menu-item",d,"events-window"),E("monitor-menu-item",S,"monitor-window"),E("contacts-menu-item",b,"contacts-window"),E("workspace-menu-item",y,"workspace-window"),c&&(c.onclick=p=>{if(p.stopPropagation(),l&&l.classList.contains("active")){o(),window.innerWidth<880&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),ae()||Te(!1));return}if(e.length>0)r();else{let w=window.location.pathname;if(!(w==="/"||w==="/index.html")){let _=w.endsWith("/")&&w.length>1?w.slice(0,-1):w;if(_.includes("/docs/page/")){window.location.href="/";return}let B=_.split("/");B.pop();let O=B.join("/")||"/";window.location.href=O}}}),document.addEventListener("click",()=>{let p=window.innerWidth<880;l&&l.classList.contains("active")&&(o(),p&&e.length===0&&(document.querySelector("footer")?.classList.remove("hide"),document.querySelector("main")?.style.setProperty("opacity","1","important"),document.querySelector("nav")?.classList.remove("window-open"),ae()||Te(!1)))}),l&&(l.onclick=p=>p.stopPropagation())})();let L=window.location.pathname==="/"||window.location.pathname==="/index.html",I=window.location.pathname.includes("404")||!!document.getElementById("error-main-view");!L&&!I&&document.querySelector("footer")?.classList.add("hide"),z()||setInterval(()=>{d.isOpen()&&pe(),f.isOpen()?de():Xe()},1e3),setInterval(()=>{z()&&(f.isOpen()?de():Xe()),y.isOpen()&&Qe(),z()&&d.isOpen()&&pe(),S.isOpen()&&Ft()},5e3)}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",Zt):Zt();})();

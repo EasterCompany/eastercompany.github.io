@@ -557,6 +557,14 @@ export async function smartFetch(endpoint: string, options: RequestInit = {}) {
       return new Response(JSON.stringify(DASHBOARD_CACHE.chores || []), { status: 200 });
     }
 
+    // 10. Fabricator Live Buffer
+    if (endpoint.startsWith('/fabricator/live')) {
+      return new Response(
+        JSON.stringify({ buffer: DASHBOARD_CACHE.fabricator_live_buffer || [] }),
+        { status: 200 }
+      );
+    }
+
     // Default: Return 404 for unsupported public endpoints
     return new Response(JSON.stringify({ error: 'Not available in public demo' }), { status: 404 });
   }

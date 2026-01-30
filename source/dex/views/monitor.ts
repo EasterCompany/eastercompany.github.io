@@ -9,7 +9,7 @@ import {
   updateOpenIssueCount,
 } from '../core/utils.ts';
 import { getLogsContent, updateLogs } from './logs.ts';
-import { getProgressContent, updateProgressTab } from './progress.ts';
+import { getFabricatorLiveContent, startFabricatorLiveStream } from './progress.ts';
 import { createWindow } from '../core/Window.ts';
 
 declare global {
@@ -813,7 +813,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
                                 <div class="window-close close-modal-btn"><i class='bx bx-x'></i></div>
                             </div>
                             <div class="inner-modal-content" style="height: 100%; display: flex; flex-direction: column;">
-                                ${getProgressContent()}
+                                ${getFabricatorLiveContent()}
                             </div>
                           </div>
                         `,
@@ -824,7 +824,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
               .querySelector('.close-modal-btn')
               ?.addEventListener('click', () => progressWin.close());
           }
-          updateProgressTab();
+          startFabricatorLiveStream();
         },
         onClose: () => {
           if (nav) nav.style.display = '';

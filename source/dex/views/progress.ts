@@ -1,249 +1,175 @@
 // Progress View - Mission Control for Dexter's Cognition
-import { escapeHtml, smartFetch } from '../core/utils.ts';
-
-type ProgressState = 'STANDBY' | 'ACTIVE' | 'COMPLETED';
-
-let currentState: ProgressState = 'STANDBY';
-let lastRenderedState: ProgressState | null = null;
-
-let liveLogs: { time: string; msg: string }[] = [];
-let activeTask: { title: string; progress: number; phase: string } | null = null;
-let lastMissionSummary: {
-  duration: string;
-  steps: number;
-  result: string;
-  timestamp: number;
-} | null = null;
+import { smartFetch, isPublicMode, ansiToHtml } from '../core/utils.ts';
 
 /**
- * Main entry point for the Progress Tab content.
- * Returns a persistent root container.
+ * FABRICATOR LIVE STREAMING SYSTEM
  */
-export const getProgressContent = () => {
+
+let fabLiveLogs: string[] = [];
+const MAX_FAB_LOGS = 200;
+let eventSource: EventSource | null = null;
+
+export const getFabricatorLiveContent = () => {
   return `
-    <div id="progress-view-root" class="progress-container" style="flex: 1; overflow-y: auto;">
-        ${renderStateHTML()}
+    <div id="fabricator-live-root" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #000;">
+        <div id="fabricator-standby" class="progress-standby" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="radar-container">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="radar-brain"><i class='bx bx-brain'></i></div>
+            </div>
+            <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
+            <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5; margin: 0 auto; text-align: center;">
+                Dexter is currently monitoring system health. <br>
+                Fabricator CLI self-instance is idle.
+            </p>
+        </div>
+
+        <div id="fabricator-terminal" class="thinking-stream-container" style="flex: 1; display: none; flex-direction: column; margin: 0; border-radius: 0; border: none;">
+            <div class="terminal-header" style="background: #1a1a1a; padding: 8px 15px;">
+                <div class="terminal-controls">
+                    <div class="terminal-dot" style="background: #ff5f56;"></div>
+                    <div class="terminal-dot" style="background: #ffbd2e;"></div>
+                    <div class="terminal-dot" style="background: #27c93f;"></div>
+                </div>
+                <div style="font-family: 'JetBrains Mono'; font-size: 0.7em; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; letter-spacing: 1px;">fabricator_cli_self.sh</div>
+            </div>
+            <div id="fabricator-terminal-output" class="terminal-content" style="flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; line-height: 1.4; color: #e0e0e0; background: #000;">
+                <!-- Live logs will be injected here -->
+            </div>
+        </div>
     </div>
   `;
 };
 
-function renderStateHTML() {
-  switch (currentState) {
-    case 'ACTIVE':
-      return renderActiveState();
-    case 'COMPLETED':
-      return renderCompletedState();
-    case 'STANDBY':
-    default:
-      return renderStandbyState();
+export function startFabricatorLiveStream() {
+  const root = document.getElementById('fabricator-live-root');
+  if (!root) return;
+
+  // Clear previous logs
+  fabLiveLogs = [];
+  const terminalOutput = document.getElementById('fabricator-terminal-output');
+  if (terminalOutput) terminalOutput.innerHTML = '';
+
+  if (isPublicMode()) {
+    // PUBLIC MODE: Use Cloud Pulse / Sync Data
+    startPublicSync();
+  } else {
+    // LOCAL MODE: Use SSE from Event Service
+    startLocalSSE();
   }
 }
 
-function renderStandbyState() {
-  return `
-    <div class="progress-standby">
-        <div class="radar-container">
-            <div class="orbit-ring orbit-ring-1"></div>
-            <div class="orbit-ring orbit-ring-2"></div>
-            <div class="radar-brain"><i class='bx bx-brain'></i></div>
-        </div>
-        <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
-        <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5; margin: 0 auto;">
-            Dexter is currently monitoring system health. <br>
-            No active missions in progress.
-        </p>
-    </div>
-  `;
+async function startPublicSync() {
+  // In public mode, we poll the /fabricator/live endpoint which smartFetch redirects to the cache
+  const updateFromCache = async () => {
+    try {
+      const response = await smartFetch('/fabricator/live');
+      if (!response.ok) return;
+
+      const data = await response.json();
+      if (data && data.buffer) {
+        fabLiveLogs = data.buffer;
+        renderFabLogs();
+      }
+    } catch (e) {
+      console.error('Failed to sync fabricator live from cache:', e);
+    }
+  };
+
+  // Initial fetch
+  await updateFromCache();
+
+  // Update every 5 seconds in public mode (since dashboard snapshot updates every 60s,
+  // but we want to be responsive to cache changes)
+  const interval = setInterval(() => {
+    if (!document.getElementById('fabricator-live-root')) {
+      clearInterval(interval);
+      return;
+    }
+    updateFromCache();
+  }, 5000);
 }
 
-function renderActiveState() {
-  const logLines = liveLogs
-    .map(
-      (log) => `
-    <div class="terminal-line">
-        <span class="line-time">${log.time}</span>
-        <span class="line-prefix">></span>
-        <span class="line-msg">${escapeHtml(log.msg)}</span>
-    </div>
-  `
-    )
-    .join('');
+function startLocalSSE() {
+  if (eventSource) eventSource.close();
 
+  // Use the event service URL directly for SSE
+  eventSource = new EventSource('http://127.0.0.1:8100/fabricator/live');
+
+  eventSource.onmessage = (event) => {
+    // SSE data is already escaped newlines, we need to unescape if we want to treat as raw chunks
+    // but ansiToHtml handles escaping for display.
+    const chunk = event.data.replace(/\\n/g, '\n');
+    fabLiveLogs.push(chunk);
+    if (fabLiveLogs.length > MAX_FAB_LOGS) fabLiveLogs.shift();
+
+    renderFabLogs();
+  };
+
+  eventSource.onerror = (err) => {
+    console.error('Fabricator SSE Error:', err);
+    eventSource?.close();
+    // Retry after 5s
+    setTimeout(() => {
+      if (document.getElementById('fabricator-live-root')) startLocalSSE();
+    }, 5000);
+  };
+
+  // Close SSE when modal is closed (detected by root element removal)
+  const checkRemoval = setInterval(() => {
+    if (!document.getElementById('fabricator-live-root')) {
+      eventSource?.close();
+      eventSource = null;
+      clearInterval(checkRemoval);
+    }
+  }, 1000);
+}
+
+function renderFabLogs() {
+  const terminal = document.getElementById('fabricator-terminal');
+  const standby = document.getElementById('fabricator-standby');
+  const output = document.getElementById('fabricator-terminal-output');
+
+  if (!terminal || !standby || !output) return;
+
+  if (fabLiveLogs.length > 0) {
+    terminal.style.display = 'flex';
+    standby.style.display = 'none';
+
+    // We combine all logs and convert ANSI to HTML
+    const fullText = fabLiveLogs.join('');
+    output.innerHTML = ansiToHtml(fullText) || '';
+    output.scrollTop = output.scrollHeight;
+  } else {
+    terminal.style.display = 'none';
+    standby.style.display = 'flex';
+  }
+}
+
+/**
+ * MISSION CONTROL TAB SYSTEM (LEGACY/MODIFIED)
+ */
+
+export const getProgressContent = () => {
   return `
-    <div class="active-task-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-                <h4 style="margin: 0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 2px; color: #bb86fc; text-align: left;">Active Mission</h4>
-                <h2 id="active-task-title" style="margin: 5px 0 0 0; font-size: 1.2em; text-align: left;">${activeTask?.title || 'Processing...'}</h2>
+    <div id="progress-view-root" class="progress-container" style="flex: 1; overflow-y: auto;">
+        <div class="progress-standby">
+            <div class="radar-container">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="radar-brain"><i class='bx bx-brain'></i></div>
             </div>
-            <div class="pulse-indicator" style="background: #bb86fc; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px #bb86fc;"></div>
-        </div>
-        <div class="task-progress-bar">
-            <div id="active-task-progress-fill" class="task-progress-fill" style="width: ${activeTask?.progress || 0}%"></div>
-        </div>
-        <div style="margin-top: 8px; display: flex; justify-content: space-between; font-size: 0.75em; font-family: 'JetBrains Mono'; color: #666;">
-            <span id="active-task-phase">PHASE: ${activeTask?.phase || 'IMPLEMENTATION'}</span>
-            <span id="active-task-progress-text">${activeTask?.progress || 0}% COMPLETE</span>
-        </div>
-    </div>
-
-    <div class="thinking-stream-container">
-        <div class="terminal-header">
-            <div class="terminal-controls">
-                <div class="terminal-dot" style="background: #ff5f56;"></div>
-                <div class="terminal-dot" style="background: #ffbd2e;"></div>
-                <div class="terminal-dot" style="background: #27c93f;"></div>
-            </div>
-            <div style="font-family: 'JetBrains Mono'; font-size: 0.7em; color: rgba(255, 255, 255, 0.3); text-transform: uppercase;">dexter_fabricator_v3.sh</div>
-        </div>
-        <div id="terminal-output" class="terminal-content">
-            ${logLines}
+            <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Mission Control</h3>
+            <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5; margin: 0 auto; text-align: center;">
+                Monitoring system processes and active fabrication missions.
+            </p>
         </div>
     </div>
   `;
-}
-
-function renderCompletedState() {
-  return `
-    <div class="mission-summary-card">
-        <div class="success-icon-wrap">
-            <div class="success-pulse-ring"></div>
-            <i class='bx bx-check-double'></i>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h4 style="margin: 0; color: #03dac6; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">Mission Accomplished</h4>
-            <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #888;">The objective was successfully fulfilled by the Fabricator.</p>
-        </div>
-
-        <div class="summary-stat-grid">
-            <div class="summary-stat">
-                <span class="summary-stat-value">${lastMissionSummary?.duration || '-'}</span>
-                <span class="summary-stat-label">Duration</span>
-            </div>
-            <div class="summary-stat">
-                <span class="summary-stat-value">Real-time</span>
-                <span class="summary-stat-label">Execution</span>
-            </div>
-            <div class="summary-stat">
-                <span class="summary-stat-value">100%</span>
-                <span class="summary-stat-label">Accuracy</span>
-            </div>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 30px;">
-            <h5 style="margin: 0 0 10px 0; font-size: 0.7em; color: #666; text-transform: uppercase; letter-spacing: 1px;">Final Result</h5>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-family: 'JetBrains Mono'; font-size: 0.9em; color: #bb86fc;">${lastMissionSummary?.result || 'Task Finalized'}</span>
-                <i class='bx bx-chevron-right' style="color: #444;"></i>
-            </div>
-        </div>
-    </div>
-  `;
-}
+};
 
 export async function updateProgressTab() {
-  try {
-    const response = await smartFetch('/processes');
-    const data = await response.json();
-    const active = data.active || [];
-    const history = data.history || [];
-
-    const fabricatorProc = active.find((p: any) => p.channel_id === 'system-fabricator');
-
-    if (fabricatorProc) {
-      currentState = 'ACTIVE';
-      const now = Math.floor(Date.now() / 1000);
-      const duration = now - fabricatorProc.start_time;
-
-      // Progress calculation heuristic
-      let progress = 10;
-      let phase = 'REVIEW';
-      if (duration > 30) {
-        progress = 30;
-        phase = 'INVESTIGATION';
-      }
-      if (duration > 120) {
-        progress = 60;
-        phase = 'CONSTRUCTION';
-      }
-      if (duration > 300) {
-        progress = 90;
-        phase = 'REPORTING';
-      }
-
-      activeTask = {
-        title: fabricatorProc.state || 'Fabricating system improvements...',
-        progress: progress,
-        phase: phase,
-      };
-
-      // Simple log generation based on state
-      const timeStr = new Date(fabricatorProc.updated_at * 1000).toLocaleTimeString();
-      if (liveLogs.length === 0 || liveLogs[liveLogs.length - 1].msg !== fabricatorProc.state) {
-        liveLogs.push({ time: timeStr, msg: fabricatorProc.state });
-        if (liveLogs.length > 50) liveLogs.shift();
-      }
-    } else {
-      // Check history for recent fabricator completion
-      const recentFab = history.find((p: any) => p.channel_id === 'system-fabricator');
-      if (recentFab && Date.now() / 1000 - recentFab.end_time < 60) {
-        currentState = 'COMPLETED';
-        const dur = recentFab.end_time - recentFab.start_time;
-        lastMissionSummary = {
-          duration: `${Math.floor(dur / 60)}m ${dur % 60}s`,
-          steps: 0,
-          result: recentFab.state,
-          timestamp: recentFab.end_time,
-        };
-      } else {
-        currentState = 'STANDBY';
-        liveLogs = [];
-      }
-    }
-
-    const root = document.getElementById('progress-view-root');
-    if (root) {
-      if (currentState !== lastRenderedState) {
-        root.innerHTML = renderStateHTML();
-        lastRenderedState = currentState;
-      }
-      if (currentState === 'ACTIVE') {
-        updateActiveUI();
-      }
-    }
-  } catch (e) {
-    console.error('Failed to update progress:', e);
-  }
-}
-
-function updateActiveUI() {
-  const titleEl = document.getElementById('active-task-title');
-  const barEl = document.getElementById('active-task-progress-fill');
-  const textEl = document.getElementById('active-task-progress-text');
-  const phaseEl = document.getElementById('active-task-phase');
-  const terminalEl = document.getElementById('terminal-output');
-
-  if (titleEl && activeTask) titleEl.innerText = activeTask.title;
-  if (barEl && activeTask) barEl.style.width = `${activeTask.progress}%`;
-  if (textEl && activeTask) textEl.innerText = `${activeTask.progress}% COMPLETE`;
-  if (phaseEl && activeTask) phaseEl.innerText = `PHASE: ${activeTask.phase}`;
-
-  if (terminalEl) {
-    const currentLines = terminalEl.children.length;
-    if (liveLogs.length > currentLines) {
-      for (let i = currentLines; i < liveLogs.length; i++) {
-        const log = liveLogs[i];
-        const line = document.createElement('div');
-        line.className = 'terminal-line';
-        line.innerHTML = `
-            <span class="line-time">${log.time}</span>
-            <span class="line-prefix">></span>
-            <span class="line-msg">${escapeHtml(log.msg)}</span>
-        `;
-        terminalEl.appendChild(line);
-      }
-      terminalEl.scrollTop = terminalEl.scrollHeight;
-    }
-  }
+  // This is for the "Processes" or "Mission Control" tab, not the Live view.
+  // We keep it simple or just leave it as standby since Live view is the priority.
 }
