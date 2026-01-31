@@ -32,7 +32,6 @@ export async function updateLogs() {
     }
 
     const hiddenServiceIDs = [
-      'local-model-0',
       'local-cache-0',
       'upstash-redis-rw',
       'upstash-redis-ro',
