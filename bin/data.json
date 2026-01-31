@@ -1,7 +1,7 @@
 {
   "latest": {
-    "user": "7.45.0.main.f903dce.2026-01-31.linux-amd64",
-    "dev": "7.45.0.main.f903dce.2026-01-31.linux-amd64"
+    "user": "7.46.0.main.9748c58.2026-01-31.linux-amd64",
+    "dev": "7.46.0.main.9748c58.2026-01-31.linux-amd64"
   },
   "releases": {
     "6.0.0": {
@@ -102,177 +102,177 @@
         }
       }
     },
-    "7.45.0": {
+    "7.46.0": {
       "type": "minor",
-      "date": "2026-01-31T23:36:14Z",
-      "commit": "010424b1",
+      "date": "2026-01-31T23:51:48Z",
+      "commit": "3cd3ca29",
       "binaries": {
         "dex-analyzer-synthesis-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-analyzer-synthesis-model-service",
-            "size": 9708035,
-            "checksum": "d86d9da160b26099fbbb00dcf045f1fb8925d8c7c092032f1296979202750b3c"
+            "path": "/bin/7.46.0/dex-analyzer-synthesis-model-service",
+            "size": 9708051,
+            "checksum": "4c2986001947b4947e3c696be41357ef48cd00920146819784789f15c8cb46ab"
           }
         },
         "dex-architect-imaginator-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-architect-imaginator-model-service",
-            "size": 9708201,
-            "checksum": "24a6c00934b59f9896c4be9189cb6970ffc7ea0d05067a452ee4177851598e3c"
+            "path": "/bin/7.46.0/dex-architect-imaginator-model-service",
+            "size": 9708225,
+            "checksum": "9beac6f3dcc22f024ffbc5d2cdd47de2bbd70b3b6a7c435c08981e48b301081f"
           }
         },
         "dex-cli": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex",
-            "size": 16945246,
-            "checksum": "4c0d9fd69784ef31488f00ecb7b2c6bc0e4e729ed9444f98c7678814ced4229d"
+            "path": "/bin/7.46.0/dex",
+            "size": 16944744,
+            "checksum": "37b1a800ba336fb66e230acb575453d52d70ffae9c2ff73a81b64f0297269d1b"
           }
         },
         "dex-code-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-code-model-service",
-            "size": 9643986,
-            "checksum": "df03641b8b9859a5d4431f964ee9ea40b3fcaed797ae2e0dbe9e44c6d0ab64da"
+            "path": "/bin/7.46.0/dex-code-model-service",
+            "size": 9643946,
+            "checksum": "4c23f73bfffd15e58cfab9c1b984cca3546c8f64af08e3ee1bf204ceb1c8c3d5"
           }
         },
         "dex-courier-researcher-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-courier-researcher-model-service",
-            "size": 9708027,
-            "checksum": "b93302111c6e6df945f29f61a48f9268da61b8671d961ff01799f474da515dea"
+            "path": "/bin/7.46.0/dex-courier-researcher-model-service",
+            "size": 9708051,
+            "checksum": "b63498d0762b6fd7f2650c7649b90c50d98c9955ee6a503fd8e74b9814710ba1"
           }
         },
         "dex-discord-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-discord-service",
-            "size": 13633048,
-            "checksum": "e5969e3c122d503073284f214e92233c8ad28de6ee3ff9e6d3a0e4149aa35f67"
+            "path": "/bin/7.46.0/dex-discord-service",
+            "size": 13632904,
+            "checksum": "a19941323d13e2b30e7728d0800aeea88a2d3460ea983a9e96f136b1dd0e9028"
           }
         },
         "dex-engagement-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-engagement-model-service",
-            "size": 9646666,
-            "checksum": "6886732dff84cf80a0ba97a26c39419f99d5f19158b996adecd1200ce936d618"
+            "path": "/bin/7.46.0/dex-engagement-model-service",
+            "size": 9646690,
+            "checksum": "6318e32d7153a51c46b423c0c7b92e5561b5bac9593deed97eac642f6ded1428"
           }
         },
         "dex-event-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-event-service",
-            "size": 13935405,
-            "checksum": "39f42146b73bfc3faa4d800215ddcc8112bc69d7e327b5c2dbd5e2d7928f4aea"
+            "path": "/bin/7.46.0/dex-event-service",
+            "size": 13935322,
+            "checksum": "1d1ab2763035cefed5bc967ac0ba2a40853e9a5471e5c7f8bb99e2eb5590bce0"
           }
         },
         "dex-fabricator-cli": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-fabricator-cli",
+            "path": "/bin/7.46.0/dex-fabricator-cli",
             "size": 11180269,
-            "checksum": "c6d99427b7b47c698ff9203e86f763920bd841f10b1f6254598bc4b5b327b53a"
+            "checksum": "3f4cd70649a87d8f8844fdd9db67b3fd57558c42c8072ea4875291995897ae08"
           }
         },
         "dex-fabricator-construct-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-fabricator-construct-model-service",
-            "size": 8891099,
-            "checksum": "fd4a1f626661cbdf6091da62e1de84ae0b453c868ec9fb38d1e30878f007bd67"
+            "path": "/bin/7.46.0/dex-fabricator-construct-model-service",
+            "size": 8891083,
+            "checksum": "e87f177362bb6e394cde36b4f6a0301bfb3c8abf410f777c0786890458f9a04b"
           }
         },
         "dex-fabricator-issue-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-fabricator-issue-model-service",
-            "size": 9704426,
-            "checksum": "b9a30806802abe277d7b4cc0a621f3687fd5afc187787bb232b9ca34ad49ba5a"
+            "path": "/bin/7.46.0/dex-fabricator-issue-model-service",
+            "size": 9704418,
+            "checksum": "e9ce40f1554abc4cc09f3ed5aa4c7434a3d6fd4178bca152fdc0a10cc4e23d6e"
           }
         },
         "dex-fabricator-reporter-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-fabricator-reporter-model-service",
+            "path": "/bin/7.46.0/dex-fabricator-reporter-model-service",
             "size": 9630250,
-            "checksum": "5a8b1a4859275d34d1d581e5545aae6dd7d6eec2cf0be577972a82c3f38d2fa5"
+            "checksum": "68fce049ad39336e01d36b1d629feed7d2c987b2d0cd8dbfecb444b1f9667646"
           }
         },
         "dex-fabricator-review-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-fabricator-review-model-service",
+            "path": "/bin/7.46.0/dex-fabricator-review-model-service",
             "size": 9630360,
-            "checksum": "98ed24a3a178e8828c2cd222acba5a26f59803b089556ded1b0c08b652cc3d91"
+            "checksum": "d99522052e8100ac3954918d24a335c8d5c13ee50507381429243bcea2495a74"
           }
         },
         "dex-guardian-sentry-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-guardian-sentry-model-service",
-            "size": 9707794,
-            "checksum": "246cc3d1b6a3a508a4d2fce7992dc9d84a769104d70c39223f4bb975fc8db6dd"
+            "path": "/bin/7.46.0/dex-guardian-sentry-model-service",
+            "size": 9707810,
+            "checksum": "0f2968fe8b2fbfd3b55335b8489733dfbce28fbcc5f464cf62aaa7081d429f3a"
           }
         },
         "dex-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-model-service",
-            "size": 9738601,
-            "checksum": "11ae1199e4f3cd9032e16fbb1145f7c20d3ee88ac18304ad1722e3fa8dfdbc84"
+            "path": "/bin/7.46.0/dex-model-service",
+            "size": 9738593,
+            "checksum": "768615753a18e7bf97f02f75448af4f1285160e4e665265d30a2bf5726d616f3"
           }
         },
         "dex-moderation-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-moderation-model-service",
-            "size": 9650997,
-            "checksum": "e2b0cba5aeded7563ca6d52653fab6fb3b9541c5ac7e26d7ba3838c5cde564d3"
+            "path": "/bin/7.46.0/dex-moderation-model-service",
+            "size": 9651013,
+            "checksum": "a26d08b3f61b5834aca1197341ebca90010699e579ef9ee3460fae264b663592"
           }
         },
         "dex-response-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-response-model-service",
-            "size": 9718433,
-            "checksum": "c662d62f4eb53fda3d4cdba81230298c7e61ebd277b292d2bcd8b76d55164cd3"
+            "path": "/bin/7.46.0/dex-response-model-service",
+            "size": 9718401,
+            "checksum": "eba8689062ed4360092dfcfb6b9a88c8902057297c69d7723f33648560502e68"
           }
         },
         "dex-router-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-router-model-service",
-            "size": 9646814,
-            "checksum": "77a5cb94322e14abdc8b259dff8b0362b0079b9964807540d170cb4e69c27b42"
+            "path": "/bin/7.46.0/dex-router-model-service",
+            "size": 9646798,
+            "checksum": "673eba0b1e05c0c9d0976562c96a28f0a571404f6b701a910796f1041dcae23b"
           }
         },
         "dex-scraper-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-scraper-model-service",
-            "size": 9650606,
-            "checksum": "f1dd157a2bd55936a0f367342d272f533f27fd266ecceba53eb4522f09dc32a9"
+            "path": "/bin/7.46.0/dex-scraper-model-service",
+            "size": 9650590,
+            "checksum": "be35bf191a4eb701594e3b28b1a2dc2b5a4101490c31ac870a14890e592691b3"
           }
         },
         "dex-stt-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-stt-service",
-            "size": 8897126,
-            "checksum": "cdc1e919b6415e66cbcc9ef5b8e267541b9daead716b398f79088fa43c5adede"
+            "path": "/bin/7.46.0/dex-stt-service",
+            "size": 8897166,
+            "checksum": "21f68d1691454552f842c28327d7ed758faa9db030191d40c511180da0f5db22"
           }
         },
         "dex-summary-model-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-summary-model-service",
-            "size": 9631167,
-            "checksum": "5e124aecf5e1bf55fc0c3b43ad000e019f88cc0c9fd4e2300bb15cd4224b7e38"
+            "path": "/bin/7.46.0/dex-summary-model-service",
+            "size": 9631175,
+            "checksum": "0a7046ad108592f4eac47e4ba15f75edf90c8fcb2784aabc868b237368658daf"
           }
         },
         "dex-test-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-test-service",
-            "size": 10963785,
-            "checksum": "25867a551cbf9db23ce8530d4e24753c6839046c441c37e635ab797c47c3e02c"
+            "path": "/bin/7.46.0/dex-test-service",
+            "size": 10963774,
+            "checksum": "4940cdc113eea29c6d325d7af3c14325602f9dfdc7533253dc0f1a47d0cd542a"
           }
         },
         "dex-tts-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-tts-service",
-            "size": 8944131,
-            "checksum": "441447127c42b1fbe05d1c6e41b70bc045867845a637c7b136dfe861de246ba4"
+            "path": "/bin/7.46.0/dex-tts-service",
+            "size": 8944107,
+            "checksum": "104cc328f840032566e5cc83972b05fe71e13c0c2ae795a059659f002a98345c"
           }
         },
         "dex-web-service": {
           "linux-amd64": {
-            "path": "/bin/7.45.0/dex-web-service",
-            "size": 15347028,
-            "checksum": "11d2fd71b0e871324279d21a3857e2e7aeddcce3f8ba24f66d99063d6ce6c2c6"
+            "path": "/bin/7.46.0/dex-web-service",
+            "size": 15346958,
+            "checksum": "99624f9bff3a2c4429dd81716a82007fbe3f9c5106ea72658b5bdce7e97141d7"
           }
         }
       }
@@ -305,123 +305,123 @@
       "repository": "github.com/EasterCompany/dex-fabricator-construct-model-service"
     },
     "dex-analyzer-synthesis-model-service": {
-      "current": "7.45.0.main.ff1fce6.2026-01-31.amd64",
-      "user": "7.45.0.main.ff1fce6.2026-01-31.amd64",
+      "current": "7.46.0.main.ff1fce6.2026-01-31.amd64",
+      "user": "7.46.0.main.ff1fce6.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-analyzer-synthesis-model-service"
     },
     "dex-architect-imaginator-model-service": {
-      "current": "7.45.0.main.ffc6423.2026-01-31.amd64",
-      "user": "7.45.0.main.ffc6423.2026-01-31.amd64",
+      "current": "7.46.0.main.ffc6423.2026-01-31.amd64",
+      "user": "7.46.0.main.ffc6423.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-architect-imaginator-model-service"
     },
     "dex-cli": {
-      "current": "7.45.0.main.f903dce.2026-01-31.linux-amd64",
-      "user": "7.45.0.main.f903dce.2026-01-31.linux-amd64",
+      "current": "7.46.0.main.9748c58.2026-01-31.linux-amd64",
+      "user": "7.46.0.main.9748c58.2026-01-31.linux-amd64",
       "repository": "github.com/EasterCompany/dex-cli"
     },
     "dex-code-model-service": {
-      "current": "7.45.0.main.ade0d6b.2026-01-31.amd64",
-      "user": "7.45.0.main.ade0d6b.2026-01-31.amd64",
+      "current": "7.46.0.main.e227258.2026-01-31.amd64",
+      "user": "7.46.0.main.e227258.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-code-model-service"
     },
     "dex-courier-researcher-model-service": {
-      "current": "7.45.0.main.529dcae.2026-01-31.amd64",
-      "user": "7.45.0.main.529dcae.2026-01-31.amd64",
+      "current": "7.46.0.main.529dcae.2026-01-31.amd64",
+      "user": "7.46.0.main.529dcae.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-courier-researcher-model-service"
     },
     "dex-discord-service": {
-      "current": "7.45.0.main.2fbfc01.2026-01-31.amd64",
-      "user": "7.45.0.main.2fbfc01.2026-01-31.amd64",
+      "current": "7.46.0.main.2fbfc01.2026-01-31.amd64",
+      "user": "7.46.0.main.2fbfc01.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-discord-service"
     },
     "dex-engagement-model-service": {
-      "current": "7.45.0.main.8da7534.2026-01-31.amd64",
-      "user": "7.45.0.main.8da7534.2026-01-31.amd64",
+      "current": "7.46.0.main.412c4d2.2026-01-31.amd64",
+      "user": "7.46.0.main.412c4d2.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-engagement-model-service"
     },
     "dex-event-service": {
-      "current": "7.45.0.main.65f6333.2026-01-31.amd64",
-      "user": "7.45.0.main.65f6333.2026-01-31.amd64",
+      "current": "7.46.0.main.65f6333.2026-01-31.amd64",
+      "user": "7.46.0.main.65f6333.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-event-service"
     },
     "dex-fabricator-cli": {
-      "current": "7.45.0.main.3f3a9a4.2026-01-31.amd64",
-      "user": "7.45.0.main.3f3a9a4.2026-01-31.amd64",
+      "current": "7.46.0.main.3f3a9a4.2026-01-31.amd64",
+      "user": "7.46.0.main.3f3a9a4.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-fabricator-cli"
     },
     "dex-fabricator-construct-model-service": {
-      "current": "7.45.0.main.8b6cd62.2026-01-31.amd64",
-      "user": "7.45.0.main.8b6cd62.2026-01-31.amd64",
+      "current": "7.46.0.main.8b6cd62.2026-01-31.amd64",
+      "user": "7.46.0.main.8b6cd62.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-fabricator-construct-model-service"
     },
     "dex-fabricator-issue-model-service": {
-      "current": "7.45.0.main.f8712af.2026-01-31.amd64",
-      "user": "7.45.0.main.f8712af.2026-01-31.amd64",
+      "current": "7.46.0.main.f8712af.2026-01-31.amd64",
+      "user": "7.46.0.main.f8712af.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-fabricator-issue-model-service"
     },
     "dex-fabricator-reporter-model-service": {
-      "current": "7.45.0.main.4f7e8c4.2026-01-31.amd64",
-      "user": "7.45.0.main.4f7e8c4.2026-01-31.amd64",
+      "current": "7.46.0.main.4f7e8c4.2026-01-31.amd64",
+      "user": "7.46.0.main.4f7e8c4.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-fabricator-reporter-model-service"
     },
     "dex-fabricator-review-model-service": {
-      "current": "7.45.0.main.75b2ba6.2026-01-31.amd64",
-      "user": "7.45.0.main.75b2ba6.2026-01-31.amd64",
+      "current": "7.46.0.main.75b2ba6.2026-01-31.amd64",
+      "user": "7.46.0.main.75b2ba6.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-fabricator-review-model-service"
     },
     "dex-guardian-sentry-model-service": {
-      "current": "7.45.0.main.4a94765.2026-01-31.amd64",
-      "user": "7.45.0.main.4a94765.2026-01-31.amd64",
+      "current": "7.46.0.main.4a94765.2026-01-31.amd64",
+      "user": "7.46.0.main.4a94765.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-guardian-sentry-model-service"
     },
     "dex-model-service": {
-      "current": "7.45.0.main.1c6be62.2026-01-31.amd64",
-      "user": "7.45.0.main.1c6be62.2026-01-31.amd64",
+      "current": "7.46.0.main.7ea949e.2026-01-31.amd64",
+      "user": "7.46.0.main.7ea949e.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-model-service"
     },
     "dex-moderation-model-service": {
-      "current": "7.45.0.main.747ed60.2026-01-31.amd64",
-      "user": "7.45.0.main.747ed60.2026-01-31.amd64",
+      "current": "7.46.0.main.3f510a9.2026-01-31.amd64",
+      "user": "7.46.0.main.3f510a9.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-moderation-model-service"
     },
     "dex-response-model-service": {
-      "current": "7.45.0.main.94948c2.2026-01-31.amd64",
-      "user": "7.45.0.main.94948c2.2026-01-31.amd64",
+      "current": "7.46.0.main.4b54150.2026-01-31.amd64",
+      "user": "7.46.0.main.4b54150.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-response-model-service"
     },
     "dex-router-model-service": {
-      "current": "7.45.0.main.e957ecc.2026-01-31.amd64",
-      "user": "7.45.0.main.e957ecc.2026-01-31.amd64",
+      "current": "7.46.0.main.d7067b7.2026-01-31.amd64",
+      "user": "7.46.0.main.d7067b7.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-router-model-service"
     },
     "dex-scraper-model-service": {
-      "current": "7.45.0.main.a58de41.2026-01-31.amd64",
-      "user": "7.45.0.main.a58de41.2026-01-31.amd64",
+      "current": "7.46.0.main.62371fa.2026-01-31.amd64",
+      "user": "7.46.0.main.62371fa.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-scraper-model-service"
     },
     "dex-stt-service": {
-      "current": "7.45.0.main.fb0c631.2026-01-31.amd64",
-      "user": "7.45.0.main.fb0c631.2026-01-31.amd64",
+      "current": "7.46.0.main.fb0c631.2026-01-31.amd64",
+      "user": "7.46.0.main.fb0c631.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-stt-service"
     },
     "dex-summary-model-service": {
-      "current": "7.45.0.main.68c413b.2026-01-31.amd64",
-      "user": "7.45.0.main.68c413b.2026-01-31.amd64",
+      "current": "7.46.0.main.295d68e.2026-01-31.amd64",
+      "user": "7.46.0.main.295d68e.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-summary-model-service"
     },
     "dex-test-service": {
-      "current": "7.45.0.main.80838d7.2026-01-31.amd64",
-      "user": "7.45.0.main.80838d7.2026-01-31.amd64",
+      "current": "7.46.0.main.80838d7.2026-01-31.amd64",
+      "user": "7.46.0.main.80838d7.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-test-service"
     },
     "dex-tts-service": {
-      "current": "7.45.0.main.238eddf.2026-01-31.amd64",
-      "user": "7.45.0.main.238eddf.2026-01-31.amd64",
+      "current": "7.46.0.main.238eddf.2026-01-31.amd64",
+      "user": "7.46.0.main.238eddf.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-tts-service"
     },
     "dex-web-service": {
-      "current": "7.45.0.main.7959533.2026-01-31.amd64",
-      "user": "7.45.0.main.7959533.2026-01-31.amd64",
+      "current": "7.46.0.main.7959533.2026-01-31.amd64",
+      "user": "7.46.0.main.7959533.2026-01-31.amd64",
       "repository": "github.com/EasterCompany/dex-web-service"
     },
     "discord": {
