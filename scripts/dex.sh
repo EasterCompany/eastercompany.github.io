@@ -7,7 +7,7 @@ DEX_BIN_DIR="$DEX_ROOT/bin"
 DEX_PATH_DIR="$DEX_ROOT/path"
 DEX_EXECUTABLE="$DEX_BIN_DIR/dex"
 
-echo "🚀 Modernizing Dexter environment..."
+echo "🚀 Downloading & Installing Dexter CLI..."
 
 # 1. Fetch latest version info from data.json
 DATA_URL="https://easter.company/bin/data.json"
