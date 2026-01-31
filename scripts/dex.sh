@@ -6,6 +6,7 @@ DEX_ROOT="$HOME/Dexter"
 DEX_BIN_DIR="$DEX_ROOT/bin"
 DEX_PATH_DIR="$DEX_ROOT/path"
 DEX_EXECUTABLE="$DEX_BIN_DIR/dex"
+DEX_FAB_EXECUTABLE="$DEX_BIN_DIR/dex-fabricator-cli"
 
 echo "🚀 Downloading & Installing Dexter CLI..."
 
@@ -28,6 +29,7 @@ if [ -z "$SHORT_VERSION" ]; then
 fi
 
 DOWNLOAD_URL="https://easter.company/bin/$SHORT_VERSION/dex"
+DOWNLOAD_FAB_URL="https://easter.company/bin/$SHORT_VERSION/dex-fabricator-cli"
 echo "→ Latest version: $LATEST_VERSION"
 
 # 2. Install dex-cli
@@ -39,10 +41,21 @@ if ! curl -fsSL -o "$DEX_EXECUTABLE" "$DOWNLOAD_URL"; then
 fi
 chmod +x "$DEX_EXECUTABLE"
 
-# 3. Setup surgical PATH (Only dex, not the whole bin directory)
+# 3. Install dex-fabricator-cli
+echo "→ Downloading dex-fabricator-cli binary..."
+if ! curl -fsSL -o "$DEX_FAB_EXECUTABLE" "$DOWNLOAD_FAB_URL"; then
+    echo "⚠️ Warning: Failed to download dex-fabricator-cli from $DOWNLOAD_FAB_URL"
+else
+    chmod +x "$DEX_FAB_EXECUTABLE"
+fi
+
+# 4. Setup surgical PATH (Only dex, not the whole bin directory)
 # We create a dedicated directory containing only a symlink to dex
 mkdir -p "$DEX_PATH_DIR"
 ln -sf "$DEX_EXECUTABLE" "$DEX_PATH_DIR/dex"
+if [ -f "$DEX_FAB_EXECUTABLE" ]; then
+    ln -sf "$DEX_FAB_EXECUTABLE" "$DEX_PATH_DIR/dex-fabricator-cli"
+fi
 
 # Detect shell RC
 case "$SHELL" in
@@ -65,28 +78,28 @@ if [ -f "$SHELL_RC" ]; then
     fi
 fi
 
-# 4. Config Sync
+# 5. Config Sync
 # This will pull service-map.json, options.json, and server-map.json from the network
 # Crucial for step 6 to know what requirements to install
 echo "→ Synchronizing configuration from network..."
 "$DEX_EXECUTABLE" config sync || echo "⚠️ Warning: Config sync failed. Ensure dex-event-service is reachable."
 
-# 5. System Introspection
+# 6. System Introspection
 # Scans hardware and initializes system.json
 echo "→ Scanning system..."
 "$DEX_EXECUTABLE" system scan
 
-# 6. Install System Requirements
+# 7. Install System Requirements
 # Installs OS packages (git, redis, cuda, etc.) based on the services assigned to this machine
 echo "→ Installing required system packages (may require sudo)..."
 "$DEX_EXECUTABLE" system install || echo "⚠️ Warning: System install failed. Run 'dex system install' manually if needed."
 
-# 7. Initialize System Settings
+# 8. Initialize System Settings
 # Configures system components like Redis binding for the network
 echo "→ Initializing system settings..."
 "$DEX_EXECUTABLE" system init || echo "⚠️ Warning: System init failed."
 
-# 8. Service Binary Update
+# 9. Service Binary Update
 # This will automatically download/install binaries for any services this machine is responsible for
 echo "→ Downloading service binaries..."
 "$DEX_EXECUTABLE" update || echo "⚠️ Warning: Service update failed."
