@@ -81,7 +81,12 @@ echo "→ Scanning system..."
 echo "→ Installing required system packages (may require sudo)..."
 "$DEX_EXECUTABLE" system install || echo "⚠️ Warning: System install failed. Run 'dex system install' manually if needed."
 
-# 7. Service Binary Update
+# 7. Initialize System Settings
+# Configures system components like Redis binding for the network
+echo "→ Initializing system settings..."
+"$DEX_EXECUTABLE" system init || echo "⚠️ Warning: System init failed."
+
+# 8. Service Binary Update
 # This will automatically download/install binaries for any services this machine is responsible for
 echo "→ Downloading service binaries..."
 "$DEX_EXECUTABLE" update || echo "⚠️ Warning: Service update failed."
