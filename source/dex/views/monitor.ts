@@ -51,13 +51,16 @@ export const getGuardianContent = () => {
         <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
             <i class='bx bx-shield' style="color: #bb86fc; font-size: 1.5em;"></i>
             <h2 style="margin: 0;">Guardian</h2>
-            <button id="guardian-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+                <button id="guardian-pause-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Pause Agent"><i class='bx bx-pause'></i></button>
+                <button id="guardian-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            </div>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Sentry Protocol</span>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Sentry</span>
                     <span id="guardian-sentry-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="guardian-sentry-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
@@ -67,18 +70,21 @@ export const getGuardianContent = () => {
         <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
             <i class='bx bx-search-alt' style="color: #03dac6; font-size: 1.5em;"></i>
             <h2 style="margin: 0;">Analyzer</h2>
-            <button id="analyzer-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+                <button id="analyzer-pause-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Pause Agent"><i class='bx bx-pause'></i></button>
+                <button id="analyzer-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            </div>
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Summary Protocol</span>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Summary</span>
                     <span id="analyzer-summary-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="analyzer-summary-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
                 <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
-                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Synthesis Protocol</span>
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Synthesis</span>
                     <span id="analyzer-synthesis-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
                     <div id="analyzer-synthesis-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
@@ -89,7 +95,8 @@ export const getGuardianContent = () => {
             <i class='bx bx-cube-alt' style="color: #03dac6; font-size: 1.5em;"></i>
             <h2 style="margin: 0;">Fabricator</h2>
             <div style="margin-left: auto; display: flex; gap: 8px;">
-                <button id="fabricator-progress-btn" class="notif-action-btn" title="View Live Progress"><i class='bx bx-loader-circle'></i></button>
+                <button id="fabricator-progress-btn" class="notif-action-btn" style="${resetBtnStyle}" title="View Live Progress"><i class='bx bx-loader-circle'></i></button>
+                <button id="fabricator-pause-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Pause Agent"><i class='bx bx-pause'></i></button>
                 <button id="fabricator-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
             </div>
         </div>
@@ -114,77 +121,48 @@ export const getGuardianContent = () => {
             </div>
         </div>
 
-                <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+            <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Courier</h2>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+                <button id="courier-pause-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Pause Agent"><i class='bx bx-pause'></i></button>
+                <button id="courier-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            </div>
+        </div>
 
-                    <i class='bx bx-paper-plane' style="color: #03dac6; font-size: 1.5em;"></i>
-
-                    <h2 style="margin: 0;">Courier</h2>
-
-                    <button id="courier-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
-
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher</span>
+                    <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
-
-        
-
-                <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-
-                        <div class="guardian-indicator" style="text-align: center;">
-
-                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Researcher Protocol</span>
-
-                            <span id="courier-researcher-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-
-                            <div id="courier-researcher-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-
-                        </div>
-
-                        <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
-
-                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor Protocol</span>
-
-                            <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-
-                            <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-
-                        </div>
-
-                    </div>
-
+                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Compressor</span>
+                    <span id="courier-compressor-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="courier-compressor-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
+            </div>
+        </div>
 
-        
+        <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
+            <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
+            <h2 style="margin: 0;">Architect</h2>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+                <button id="architect-pause-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Pause Agent"><i class='bx bx-pause'></i></button>
+                <button id="architect-reset-btn" class="notif-action-btn" style="${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
+            </div>
+        </div>
 
-                <div class="system-section-header" style="display: flex; align-items: center; gap: 12px;">
-
-                    <i class='bx bx-layer' style="color: #bb86fc; font-size: 1.5em;"></i>
-
-                    <h2 style="margin: 0;">Architect</h2>
-
-                    <button id="architect-reset-btn" class="notif-action-btn" style="margin-left: auto; ${resetBtnStyle}" title="Reset Cooldowns"><i class='bx bx-refresh'></i></button>
-
+        <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                <div class="guardian-indicator" style="text-align: center;">
+                    <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect</span>
+                    <span id="architect-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
+                    <div id="architect-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
                 </div>
-
-        
-
-                <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-
-                    <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-
-                        <div class="guardian-indicator" style="text-align: center;">
-
-                            <span style="color: #666; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Architect Agent</span>
-
-                            <span id="architect-alert_review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.1em; margin-bottom: 5px;">-</span>
-
-                            <div id="architect-alert_review-stats" style="font-size: 0.65em; color: #888; font-family: monospace;"></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
+            </div>
+        </div>
 
         `;
 };
@@ -595,18 +573,18 @@ export async function updateSystemMonitor() {
   updateTabTimestamp(3, lastServicesUpdate || 0); // TAB 3: Services
   const services = data.services || [];
 
-  // Categorize services
-  const categories: Record<string, any[]> = {
-    cli: [],
-    fe: [],
-    cs: [],
-    be: [],
-    th: [],
-    co: [],
-    md: [], // Models
-    prd: [],
-    os: [],
-  };
+  // Group services by type while preserving the order from the API
+  const categoryOrder: string[] = [];
+  const categories: Record<string, any[]> = {};
+
+  services.forEach((s: any) => {
+    const type = s.type || 'os';
+    if (!categories[type]) {
+      categories[type] = [];
+      categoryOrder.push(type);
+    }
+    categories[type].push(s);
+  });
 
   const categoryLabels: Record<string, string> = {
     cli: 'CLI',
@@ -620,14 +598,10 @@ export async function updateSystemMonitor() {
     os: 'Other',
   };
 
-  services.forEach((s: any) => {
-    if (categories[s.type]) categories[s.type].push(s);
-    else categories['os'].push(s);
-  });
-
   let finalHtml = '';
 
-  Object.entries(categories).forEach(([type, list]) => {
+  categoryOrder.forEach((type) => {
+    const list = categories[type];
     if (list.length === 0) return;
 
     finalHtml += `
@@ -762,10 +736,14 @@ export async function updateSystemMonitor() {
     }
 
     const displayAddress =
-      isPublicMode() || service.type === 'md'
+      (isPublicMode() && service.type !== 'prd') || service.type === 'md'
         ? 'easter.company'
         : truncateAddress(
-            service.domain && service.port ? `${service.domain}:${service.port}` : ''
+            service.domain && service.port
+              ? service.port === '443' || service.port === '80'
+                ? service.domain
+                : `${service.domain}:${service.port}`
+              : service.domain || ''
           );
 
     return `<div class="service-widget ${statusClass}" data-service-id="${service.id}"><div class="service-widget-header"><i class="bx ${statusIcon}"></i><h3>${service.short_name || service.id}</h3><span class="service-widget-status">${statusText}</span></div><div class="service-widget-body"><div class="service-widget-info"><span class="info-label">Address:</span><span class="info-value">${displayAddress}</span></div>${detailsHtml}</div>${controlsHtml}</div>`;
@@ -838,24 +816,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
       progressWin.open();
     };
     fabricatorProgressBtn.dataset.listenerAttached = 'true';
-  }
-
-  if (pauseBtn && !pauseBtn.dataset.listenerAttached) {
-    pauseBtn.onclick = async () => {
-      // If we see a play icon, it means we are paused and want to resume
-      const isPaused = pauseBtn.querySelector('.bx-play');
-      const endpoint = isPaused ? '/agent/resume' : '/agent/pause';
-
-      pauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
-      try {
-        await smartFetch(endpoint, { method: 'POST' });
-        await updateProcessesTab(); // Refresh immediately after success
-      } catch (e) {
-        pauseBtn.innerHTML = "<i class='bx bx-error'></i>";
-        setTimeout(() => updateProcessesTab(), 2000); // Revert error after 2s
-      }
-    };
-    pauseBtn.dataset.listenerAttached = 'true';
   }
 
   if (resetBtn && !resetBtn.dataset.listenerAttached) {
@@ -968,11 +928,13 @@ export async function updateProcessesTab(isSmoothMode = false) {
       sentry: 'Sentry',
       synthesis: 'Synthesis',
       architect: 'Architect',
+      alert_review: 'Architect',
       issue: 'Issue',
       construct: 'Construct',
       reporter: 'Reporter',
       researcher: 'Researcher',
       compressor: 'Compressor',
+      summary: 'Summary',
     };
 
     const formatDuration = (seconds: number) => {
@@ -990,6 +952,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
       statsEl: HTMLElement | null,
       protocolData: any,
       protocolName: string,
+      agentPaused?: boolean,
       systemState?: string
     ) => {
       if (!el) return;
@@ -999,54 +962,96 @@ export async function updateProcessesTab(isSmoothMode = false) {
       const labelEl = el.parentElement?.querySelector('span[style*="text-transform: uppercase"]');
       if (labelEl) labelEl.textContent = alias;
 
-      if (systemState === 'paused') {
+      if (systemState === 'paused' || agentPaused) {
         el.textContent = 'PAUSED';
         el.style.color = '#ff9800';
-        return;
-      }
-
-      if (!protocolData) {
+      } else if (!protocolData) {
         el.textContent = 'Inactive';
         el.style.color = '#666';
-        return;
-      }
-
-      const status = protocolData.status; // "Ready", "Working", "Cooldown"
-
-      if (status === 'Working') {
-        el.textContent = 'Working';
-        el.style.color = '#bb86fc';
-      } else if (status === 'Ready') {
-        el.textContent = 'Ready';
-        el.style.color = '#5eff5e';
       } else {
-        // Cooldown
-        // Use backend provided cooldown or calculate locally if public mode drift
-        let remaining = protocolData.cooldown;
-        if (isPublicMode()) {
-          remaining = protocolData.next_run - now;
-        }
-        if (remaining <= 0) {
+        const status = protocolData.status; // "Ready", "Working", "Cooldown"
+
+        if (status === 'Working') {
+          el.textContent = 'Working';
+          el.style.color = '#bb86fc';
+        } else if (status === 'Ready') {
           el.textContent = 'Ready';
           el.style.color = '#5eff5e';
         } else {
-          const mins = Math.floor(remaining / 60);
-          const secs = remaining % 60;
-          el.textContent = `${mins}m ${secs}s`;
-          el.style.color = '#fff';
+          // Cooldown
+          let remaining = protocolData.cooldown;
+          if (isPublicMode()) {
+            remaining = protocolData.next_run - now;
+          }
+          if (remaining <= 0) {
+            el.textContent = 'Ready';
+            el.style.color = '#5eff5e';
+          } else {
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            el.textContent = `${mins}m ${secs}s`;
+            el.style.color = '#fff';
+          }
         }
       }
 
-      if (statsEl && protocolData.stats) {
+      if (statsEl && protocolData && protocolData.stats) {
+        const runs = protocolData.stats.runs || 0;
+        const fails = protocolData.stats.failures || 0;
+        const aborts = protocolData.stats.aborted || 0;
         statsEl.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 2px;">
-              <span>Runs: ${protocolData.stats.runs || 0}</span>
-              <span style="color: ${protocolData.stats.failures > 0 ? '#ffa500' : '#666'}">Fails: ${protocolData.stats.failures || 0}</span>
-              <span style="color: ${protocolData.stats.aborted > 0 ? '#ff4d4d' : '#666'}">Aborted: ${protocolData.stats.aborted || 0}</span>
+            <div style="display: flex; gap: 2px; justify-content: center; align-items: center; font-size: 0.85em; opacity: 0.8; font-weight: bold; font-family: monospace;">
+              <span style="color: #666;">(</span>
+              <span style="color: #5eff5e;" title="Runs">${runs}</span>
+              <span style="color: #444;">/</span>
+              <span style="color: ${fails > 0 ? '#ffa500' : '#444'};" title="Failures">${fails}</span>
+              <span style="color: #444;">/</span>
+              <span style="color: ${aborts > 0 ? '#ff4d4d' : '#444'};" title="Aborted">${aborts}</span>
+              <span style="color: #666;">)</span>
             </div>
           `;
       }
     };
+
+    const updateAgentControls = (agentName: string, isPaused: boolean) => {
+      const agentPauseBtn = document.getElementById(`${agentName}-pause-btn`) as HTMLButtonElement;
+      if (!agentPauseBtn) return;
+
+      if (isPaused) {
+        agentPauseBtn.innerHTML = "<i class='bx bx-play'></i>";
+        agentPauseBtn.title = 'Resume Agent';
+        agentPauseBtn.style.color = '#ff9800';
+      } else {
+        agentPauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
+        agentPauseBtn.title = 'Pause Agent';
+        agentPauseBtn.style.color = '';
+      }
+
+      if (!agentPauseBtn.dataset.listenerAttached) {
+        agentPauseBtn.onclick = async (e) => {
+          e.stopPropagation();
+          const currentState = agentPauseBtn.innerHTML.includes('play');
+          const action = currentState ? 'resume' : 'pause';
+          const originalIcon = agentPauseBtn.innerHTML;
+          agentPauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+          try {
+            await smartFetch(`/agent/${agentName}/${action}`, { method: 'POST' });
+            setTimeout(updateProcessesTab, 500);
+          } catch (e) {
+            agentPauseBtn.innerHTML = "<i class='bx bx-error'></i>";
+            setTimeout(() => { agentPauseBtn.innerHTML = originalIcon; }, 2000);
+          }
+        };
+        agentPauseBtn.dataset.listenerAttached = 'true';
+      }
+    };
+
+    // Update individual agent controls
+    updateAgentControls('guardian', guardianData.is_paused);
+    updateAgentControls('analyzer', analyzerData.is_paused);
+    updateAgentControls('architect', architectData.is_paused);
+    updateAgentControls('fabricator', fabricatorData.is_paused);
+    updateAgentControls('courier', courierData.is_paused);
 
     // Guardian Protocols
     if (sentryVal)
@@ -1055,6 +1060,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         document.getElementById('guardian-sentry-stats'),
         guardianData.protocols.sentry,
         'sentry',
+        guardianData.is_paused,
         systemData.state
       );
 
@@ -1067,6 +1073,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         summaryStats,
         analyzerData.protocols.summary,
         'summary',
+        analyzerData.is_paused,
         systemData.state
       );
 
@@ -1078,6 +1085,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         synthesisStats,
         analyzerData.protocols.synthesis,
         'synthesis',
+        analyzerData.is_paused,
         systemData.state
       );
 
@@ -1090,6 +1098,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         architectStats,
         architectData.protocols.architect,
         'architect',
+        architectData.is_paused,
         systemData.state
       );
 
@@ -1102,6 +1111,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         issueStats,
         fabricatorData.protocols.issue,
         'issue',
+        fabricatorData.is_paused,
         systemData.state
       );
 
@@ -1113,6 +1123,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         constructStats,
         fabricatorData.protocols.construct,
         'construct',
+        fabricatorData.is_paused,
         systemData.state
       );
 
@@ -1124,6 +1135,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         reporterStats,
         fabricatorData.protocols.reporter,
         'reporter',
+        fabricatorData.is_paused,
         systemData.state
       );
 
@@ -1136,6 +1148,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         researcherStats,
         courierData.protocols.researcher,
         'researcher',
+        courierData.is_paused,
         systemData.state
       );
 
@@ -1147,6 +1160,7 @@ export async function updateProcessesTab(isSmoothMode = false) {
         compressorStats,
         courierData.protocols.compressor,
         'compressor',
+        courierData.is_paused,
         systemData.state
       );
 
@@ -1168,14 +1182,46 @@ export async function updateProcessesTab(isSmoothMode = false) {
       }
 
       if (pauseBtn) {
-        if (state === 'paused') {
+        const anyAgentPaused =
+          guardianData.is_paused ||
+          analyzerData.is_paused ||
+          architectData.is_paused ||
+          fabricatorData.is_paused ||
+          courierData.is_paused;
+
+        if (state === 'paused' || anyAgentPaused) {
           pauseBtn.innerHTML = "<i class='bx bx-play'></i>";
-          pauseBtn.title = 'Resume System';
+          pauseBtn.title = anyAgentPaused ? 'Resume All Agents' : 'Resume System';
           pauseBtn.style.color = '#ff9800';
+          pauseBtn.onclick = async () => {
+            pauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+            try {
+              if (state === 'paused') {
+                await smartFetch('/agent/resume', { method: 'POST' });
+              }
+              // Resume all individual agents too
+              const agents = ['guardian', 'analyzer', 'architect', 'fabricator', 'courier'];
+              await Promise.all(
+                agents.map((a) => smartFetch(`/agent/${a}/resume`, { method: 'POST' }))
+              );
+              updateSystemMonitor();
+            } catch (e) {
+              pauseBtn.innerHTML = "<i class='bx bx-error'></i>";
+            }
+          };
         } else {
           pauseBtn.innerHTML = "<i class='bx bx-pause'></i>";
           pauseBtn.title = 'Pause System';
           pauseBtn.style.color = '';
+          pauseBtn.onclick = async () => {
+            pauseBtn.innerHTML = "<i class='bx bx-loader-alt spin'></i>";
+            try {
+              await smartFetch('/agent/pause', { method: 'POST' });
+              updateSystemMonitor();
+            } catch (e) {
+              pauseBtn.innerHTML = "<i class='bx bx-error'></i>";
+            }
+          };
         }
       }
     }

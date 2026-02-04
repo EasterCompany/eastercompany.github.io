@@ -32,6 +32,9 @@
 .event-border-red {
   border-left: 4px solid #cf6679 !important;
 }
+.event-border-grey {
+  border-left: 4px solid #666 !important;
+}
 
 /* Approved Blueprint Effects */
 .blueprint-approved {
@@ -298,6 +301,25 @@ h5.md-header {
 
 .flash-highlight {
   animation: flashHighlight 1.5s ease-out;
+}
+
+@keyframes slowFlash {
+  0% {
+    opacity: 1;
+    background-color: rgba(187, 134, 252, 0.1);
+  }
+  50% {
+    opacity: 0.7;
+    background-color: rgba(187, 134, 252, 0.2);
+  }
+  100% {
+    opacity: 1;
+    background-color: rgba(187, 134, 252, 0.1);
+  }
+}
+
+.slow-flash {
+  animation: slowFlash 3s ease-in-out infinite;
 }
 
 .event-detail-row {

@@ -1,13 +1,12 @@
 // Progress View - Mission Control for Dexter's Cognition
-import { smartFetch, isPublicMode, ansiToHtml } from '../core/utils.ts';
+import { smartFetch, isPublicMode, renderMarkdown } from '../core/utils.ts';
 
 /**
- * FABRICATOR LIVE STREAMING SYSTEM
+ * FABRICATOR LIVE SNAPSHOT SYSTEM
  */
 
-let fabLiveLogs: string[] = [];
-const MAX_FAB_LOGS = 200;
-let eventSource: EventSource | null = null;
+let fabLiveHistory: any[] = [];
+let livePollInterval: any = null;
 
 export const getFabricatorLiveContent = () => {
   return `
@@ -18,24 +17,19 @@ export const getFabricatorLiveContent = () => {
                 <div class="orbit-ring orbit-ring-2"></div>
                 <div class="radar-brain"><i class='bx bx-brain'></i></div>
             </div>
-            <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Cognitive Standby</h3>
+            <h3 style="margin-bottom: 10px; color: #bb86fc; letter-spacing: 2px; text-transform: uppercase; font-size: 1em;">Mission Control</h3>
             <p style="color: #888; max-width: 400px; font-size: 0.9em; line-height: 1.5; margin: 0 auto; text-align: center;">
-                Dexter is currently monitoring system health. <br>
-                Fabricator CLI self-instance is idle.
+                Fabricator CLI self-instance is currently idle. <br>
+                Waiting for automated construction mission...
             </p>
         </div>
 
-        <div id="fabricator-terminal" class="thinking-stream-container" style="flex: 1; display: none; flex-direction: column; margin: 0; border-radius: 0; border: none;">
-            <div class="terminal-header" style="background: #1a1a1a; padding: 8px 15px;">
-                <div class="terminal-controls">
-                    <div class="terminal-dot" style="background: #ff5f56;"></div>
-                    <div class="terminal-dot" style="background: #ffbd2e;"></div>
-                    <div class="terminal-dot" style="background: #27c93f;"></div>
-                </div>
-                <div style="font-family: 'JetBrains Mono'; font-size: 0.7em; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; letter-spacing: 1px;">fabricator_cli_self.sh</div>
+        <div id="fabricator-chat-view" class="thinking-stream-container" style="flex: 1; display: none; flex-direction: column; margin: 0; border-radius: 0; border: none; background: #0a0a0a;">
+            <div class="terminal-header" style="background: #1a1a1a; padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="font-family: 'JetBrains Mono'; font-size: 0.75em; color: #03dac6; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold;">[LIVE] fabricator-self-instance</div>
             </div>
-            <div id="fabricator-terminal-output" class="terminal-content" style="flex: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; line-height: 1.4; color: #e0e0e0; background: #000;">
-                <!-- Live logs will be injected here -->
+            <div id="fabricator-chat-messages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px;">
+                <!-- Chat messages will be injected here -->
             </div>
         </div>
     </div>
@@ -44,105 +38,81 @@ export const getFabricatorLiveContent = () => {
 
 export function startFabricatorLiveStream() {
   const root = document.getElementById('fabricator-live-root');
-  if (!root) return;
+  if (!root || isPublicMode()) return;
 
-  // Clear previous logs
-  fabLiveLogs = [];
-  const terminalOutput = document.getElementById('fabricator-terminal-output');
-  if (terminalOutput) terminalOutput.innerHTML = '';
+  // Clear previous history
+  fabLiveHistory = [];
+  const messagesContainer = document.getElementById('fabricator-chat-messages');
+  if (messagesContainer) messagesContainer.innerHTML = '';
 
-  if (isPublicMode()) {
-    // PUBLIC MODE: Use Cloud Pulse / Sync Data
-    startPublicSync();
-  } else {
-    // LOCAL MODE: Use SSE from Event Service
-    startLocalSSE();
-  }
-}
+  // LOCAL MODE ONLY: Poll every 3 seconds
+  if (livePollInterval) clearInterval(livePollInterval);
 
-async function startPublicSync() {
-  // In public mode, we poll the /fabricator/live endpoint which smartFetch redirects to the cache
-  const updateFromCache = async () => {
+  const fetchSnapshot = async () => {
     try {
       const response = await smartFetch('/fabricator/live');
       if (!response.ok) return;
 
       const data = await response.json();
-      if (data && data.buffer) {
-        fabLiveLogs = data.buffer;
-        renderFabLogs();
+      if (data && data.messages) {
+        // Only re-render if history changed
+        if (JSON.stringify(data.messages) !== JSON.stringify(fabLiveHistory)) {
+          fabLiveHistory = data.messages;
+          renderFabHistory();
+        }
       }
     } catch (e) {
-      console.error('Failed to sync fabricator live from cache:', e);
+      console.error('Failed to fetch fabricator live snapshot:', e);
     }
   };
 
   // Initial fetch
-  await updateFromCache();
+  fetchSnapshot();
 
-  // Update every 5 seconds in public mode (since dashboard snapshot updates every 60s,
-  // but we want to be responsive to cache changes)
-  const interval = setInterval(() => {
+  livePollInterval = setInterval(() => {
     if (!document.getElementById('fabricator-live-root')) {
-      clearInterval(interval);
+      clearInterval(livePollInterval);
+      livePollInterval = null;
       return;
     }
-    updateFromCache();
-  }, 5000);
+    fetchSnapshot();
+  }, 3000);
 }
 
-function startLocalSSE() {
-  if (eventSource) eventSource.close();
-
-  // Use the event service URL directly for SSE
-  eventSource = new EventSource('http://127.0.0.1:8100/fabricator/live');
-
-  eventSource.onmessage = (event) => {
-    // SSE data is already escaped newlines, we need to unescape if we want to treat as raw chunks
-    // but ansiToHtml handles escaping for display.
-    const chunk = event.data.replace(/\\n/g, '\n');
-    fabLiveLogs.push(chunk);
-    if (fabLiveLogs.length > MAX_FAB_LOGS) fabLiveLogs.shift();
-
-    renderFabLogs();
-  };
-
-  eventSource.onerror = (err) => {
-    console.error('Fabricator SSE Error:', err);
-    eventSource?.close();
-    // Retry after 5s
-    setTimeout(() => {
-      if (document.getElementById('fabricator-live-root')) startLocalSSE();
-    }, 5000);
-  };
-
-  // Close SSE when modal is closed (detected by root element removal)
-  const checkRemoval = setInterval(() => {
-    if (!document.getElementById('fabricator-live-root')) {
-      eventSource?.close();
-      eventSource = null;
-      clearInterval(checkRemoval);
-    }
-  }, 1000);
-}
-
-function renderFabLogs() {
-  const terminal = document.getElementById('fabricator-terminal');
+function renderFabHistory() {
+  const chatView = document.getElementById('fabricator-chat-view');
   const standby = document.getElementById('fabricator-standby');
-  const output = document.getElementById('fabricator-terminal-output');
+  const messagesContainer = document.getElementById('fabricator-chat-messages');
 
-  if (!terminal || !standby || !output) return;
+  if (!chatView || !standby || !messagesContainer) return;
 
-  if (fabLiveLogs.length > 0) {
-    terminal.style.display = 'flex';
+  // Filter out system messages for a cleaner live view
+  const visibleMessages = fabLiveHistory.filter(m => m.role !== 'system');
+
+  if (visibleMessages.length > 0) {
+    chatView.style.display = 'flex';
     standby.style.display = 'none';
 
-    // We combine all logs and convert ANSI to HTML
-    const fullText = fabLiveLogs.join('');
-    output.innerHTML = ansiToHtml(fullText) || '';
-    output.scrollTop = output.scrollHeight;
+    messagesContainer.innerHTML = visibleMessages.map(m => {
+      const isUser = m.role === 'user';
+      const roleName = isUser ? 'USER' : 'FABRICATOR';
+      const roleColor = isUser ? '#03dac6' : '#bb86fc';
+      const bgColor = isUser ? 'rgba(3, 218, 198, 0.05)' : 'rgba(187, 134, 252, 0.05)';
+      const borderColor = isUser ? 'rgba(3, 218, 198, 0.1)' : 'rgba(187, 134, 252, 0.1)';
+
+      return `
+        <div style="display: flex; flex-direction: column; gap: 8px; padding: 15px; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: ${roleColor}; font-size: 0.7em; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">${roleName}</span>
+            </div>
+            <div class="message-content" style="color: #eee; font-size: 0.9em; line-height: 1.6; font-family: 'JetBrains Mono', monospace; white-space: pre-wrap;">${renderMarkdown(m.content)}</div>
+        </div>
+      `;
+    }).join('');
+
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
   } else {
-    terminal.style.display = 'none';
+    chatView.style.display = 'none';
     standby.style.display = 'flex';
   }
 }

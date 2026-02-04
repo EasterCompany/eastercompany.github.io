@@ -35,6 +35,7 @@ export const EVENT_TEMPLATES: Record<string, string> = {
   'system.test.completed': 'Tests completed for {service_name} ({duration})',
   'system.build.completed': 'Build completed for {service_name}: {status}',
   'system.analysis.audit': '{agent_name} Audit: {tier}',
+  'system.audit.fabricator': 'Fabricator Audit: {message}{tier}',
   'system.blueprint.generated': 'Blueprint Generated: {title}',
   'system.cli.command': 'CLI Command: {command} {args} ({status})',
   'system.cli.status': 'CLI Status: {message}',
@@ -44,6 +45,7 @@ export const EVENT_TEMPLATES: Record<string, string> = {
   'system.roadmap.updated': 'Roadmap item {id} changed to {state}',
   'system.process.registered': 'Process {process_id} started: {state}',
   'system.process.unregistered': 'Process {process_id} completed',
+  'system.process.reaped': 'Zombie Reaper: Process {process_id} reaped ({reason})',
   'system.cognitive.model_load': 'Model Loaded: {model} ({method})',
   'system.cognitive.model_inference': 'Model Inference: {model} ({method})',
   'system.cognitive.model_unload': 'Model Unloaded: {model} ({reason})',
@@ -62,10 +64,16 @@ export function formatEventSummary(type: string, data: any): string {
     template = `Notification (${priority}): ${data.title}`;
   }
   // Specific formatting for system.analysis.audit
-  if (type === 'system.analysis.audit') {
-    const tier = data.tier ? data.tier.toUpperCase() : 'UNKNOWN';
-    const agent = data.agent_name || 'System';
-    template = `${agent} Audit: ${tier}`;
+  if (type === 'system.analysis.audit' || type === 'system.audit.fabricator') {
+    const tier = data.tier ? data.tier.toUpperCase() : '';
+    const message = data.message || '';
+    const agent = type === 'system.audit.fabricator' ? 'Fabricator' : (data.agent_name || 'System');
+    
+    let detail = tier;
+    if (message) detail = message;
+    if (tier && message) detail = `${message} (${tier})`;
+    
+    template = `${agent} Audit: ${detail || 'Details Ready'}`;
   }
   // Specific formatting for system.attention.expired
   if (type === 'system.attention.expired') {
@@ -79,6 +87,16 @@ export function formatEventSummary(type: string, data: any): string {
         ? 'PASSED'
         : 'FAILED';
     return `Tests ${status} for ${data.service_name} (${data.duration})`;
+  }
+  // Specific formatting for system.process.*
+  if (type === 'system.process.reaped') {
+    return `Zombie Reaper: Process ${data.process_id} reaped (${data.reason || 'PID deceased'})`;
+  }
+  if (type === 'system.process.registered') {
+    return `Process Started: ${data.process_id} (${data.state})`;
+  }
+  if (type === 'system.process.unregistered') {
+    return `Process Completed: ${data.process_id}`;
   }
   if (!template) return type;
   let summary = template.replace(/\{(\w+)\}/g, (match: string, key: string) => {

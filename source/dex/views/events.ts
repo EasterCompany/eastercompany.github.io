@@ -80,6 +80,7 @@ const CATEGORIES: Record<string, string[]> = {
   cognitive: [
     'engagement.decision',
     'system.analysis.audit',
+    'system.audit.fabricator',
     'system.blueprint.generated',
     'analysis.link.completed',
     'analysis.visual.completed',
@@ -110,6 +111,7 @@ const EVENT_ICONS: Record<string, string> = {
   error_occurred: 'bx-error-alt',
   'engagement.decision': 'bx-brain',
   'system.analysis.audit': 'bx-search-alt',
+  'system.audit.fabricator': 'bx-wrench',
   'system.blueprint.generated': 'bx-paint',
   'analysis.link.completed': 'bx-link',
   'analysis.visual.completed': 'bx-image',
@@ -210,6 +212,7 @@ export async function updateEventsTimeline(forceReRender = false) {
         type === 'analysis.user.message_signals' ||
         type === 'system.cli.command' ||
         type === 'system.analysis.audit' ||
+        type === 'system.audit.fabricator' ||
         type === 'system.cognitive.model_inference' ||
         type === 'system.test.completed' ||
         type === 'error_occurred' ||
@@ -226,6 +229,7 @@ export async function updateEventsTimeline(forceReRender = false) {
           type === 'analysis.visual.completed' ||
           type === 'analysis.router.decision' ||
           type === 'system.analysis.audit' ||
+          type === 'system.audit.fabricator' ||
           type === 'analysis.user.message_signals'
         ) {
           borderClass = 'event-border-purple';
@@ -698,7 +702,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                             <pre class="detail-pre">${escapeHtml(eventData.output) || 'No output recorded.'}</pre>
                         </div>
                     `;
-        } else if (type === 'system.analysis.audit') {
+        } else if (type === 'system.analysis.audit' || type === 'system.audit.fabricator') {
           const statusColor = eventData.success ? '#03dac6' : '#ff4d4d';
           const statusText = eventData.success ? 'SUCCESS' : 'FAILED';
           const stylisedHeader = (text: string) =>
@@ -748,6 +752,26 @@ export async function updateEventsTimeline(forceReRender = false) {
                                         <button class="carousel-btn next-btn" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.2s;" ${totalTurns <= 1 ? 'disabled' : ''}>Next <i class='bx bx-chevron-right'></i></button>
                                     </div>
                                 </div>
+                            </div>
+                        `;
+          }
+
+          let contextHtml = '';
+          if (eventData.input_context) {
+            contextHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Input Context')}
+                                <pre class="detail-pre">${escapeHtml(eventData.input_context)}</pre>
+                            </div>
+                        `;
+          }
+
+          let outputHtml = '';
+          if (eventData.raw_output) {
+            outputHtml = `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Raw Model Output')}
+                                <pre class="detail-pre">${escapeHtml(eventData.raw_output)}</pre>
                             </div>
                         `;
           }
@@ -802,7 +826,7 @@ export async function updateEventsTimeline(forceReRender = false) {
                             </div>
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
-                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier || 'N/A'}</div>
                             </div>
                             <div style="flex: 1; min-width: 80px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Turns</div>
@@ -818,13 +842,25 @@ export async function updateEventsTimeline(forceReRender = false) {
                             </div>
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${eventData.duration}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${eventData.duration || 'N/A'}</div>
                             </div>
                         </div>
                         ${errorHtml}
+                        ${contextHtml}
+                        ${outputHtml}
                         ${resultsHtml}
                         ${correctionsHtml}
                         ${historyHtml}
+                        ${
+                          !historyHtml && !contextHtml && !outputHtml
+                            ? `
+                            <div class="event-detail-block">
+                                ${stylisedHeader('Full Context')}
+                                <pre class="detail-pre">${JSON.stringify(eventData, null, 2)}</pre>
+                            </div>
+                        `
+                            : ''
+                        }
                     `;
         } else if (type === 'system.test.completed') {
           const stylisedHeader = (text: string) =>
@@ -873,12 +909,44 @@ export async function updateEventsTimeline(forceReRender = false) {
             `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
           detailsContent = `
                         <div class="event-detail-row" style="margin-bottom: 15px;">
-                            <span class="detail-label">Status:</span>
-                            <span class="detail-value">${eventData.status}</span>
+                            <span class="detail-label">Message:</span>
+                            <span class="detail-value">${escapeHtml(eventData.message)}</span>
                         </div>
+                    `;
+        }
+        else if (type.startsWith('system.process')) {
+          const stylisedHeader = (text: string) =>
+            `<h5 style="margin-bottom: 8px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">${text}</h5>`;
+          detailsContent = `
+                        <div class="event-detail-row">
+                            <span class="detail-label">Process ID:</span>
+                            <span class="detail-value" style="color: #03dac6; font-weight: bold;">${eventData.process_id}</span>
+                        </div>
+                        <div class="event-detail-row">
+                            <span class="detail-label">Event:</span>
+                            <span class="detail-value">${type}</span>
+                        </div>
+                        ${
+                          eventData.reason
+                            ? `
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
+                            <span class="detail-label">Reason:</span>
+                            <span class="detail-value" style="color: #cf6679;">${eventData.reason}</span>
+                        </div>`
+                            : ''
+                        }
+                        ${
+                          eventData.state
+                            ? `
+                        <div class="event-detail-row" style="margin-bottom: 15px;">
+                            <span class="detail-label">State:</span>
+                            <span class="detail-value">${eventData.state}</span>
+                        </div>`
+                            : ''
+                        }
                         <div class="event-detail-block">
-                            ${stylisedHeader('Message')}
-                            <pre class="detail-pre">${escapeHtml(eventData.message)}</pre>
+                            ${stylisedHeader('Full Context')}
+                            <pre class="detail-pre">${JSON.stringify(eventData, null, 2)}</pre>
                         </div>
                     `;
         } else if (type === 'messaging.user.sent_message') {

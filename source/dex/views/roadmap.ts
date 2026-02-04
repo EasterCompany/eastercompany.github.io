@@ -67,34 +67,22 @@ const createItemElement = (issue: any) => {
     }
   };
 
+  const isClosed = issue.state === 'closed';
+
   tempDiv.innerHTML = `
-
           <div class="event-time">
-
             <span class="event-time-main">${dateStr.split(',')[1]}</span>
-
             <span class="event-date">${dateStr.split(',')[0]}</span>
-
           </div>
-
           <div class="event-content">
-
             <div class="event-service" style="display: flex; justify-content: space-between; align-items: center;">
-
-              <span>ISSUE #${issue.number}</span>
-
+              <span style="${isClosed ? 'color: #5eff5e;' : ''}">${isClosed ? "<i class='bx bx-check-circle'></i> " : ''}ISSUE #${issue.number}</span>
               <span style="font-size: 0.85em; color: #666; font-family: 'JetBrains Mono', monospace;">${issue.repository || 'EasterCompany/EasterCompany'}</span>
-
             </div>
-
-            <div class="event-message" style="font-weight: bold; margin-bottom: 5px;">${escapeHtml(issue.title)}</div>
-
+            <div class="event-message" style="font-weight: bold; margin-bottom: 5px; ${isClosed ? 'text-decoration: line-through; opacity: 0.7;' : ''}">${escapeHtml(issue.title)}</div>
             <div class="event-details" style="${isExpanded ? 'display: block;' : 'display: none;'} ">
-
               <div style="font-size: 0.75em; color: #bb86fc; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold;">Target Repository: ${issue.repository || 'EasterCompany/EasterCompany'}</div>
-
               <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px; white-space: pre-wrap;">${renderMarkdown(issue.body)}</div>
-
   
         ${
           isPublicMode()
@@ -104,7 +92,7 @@ const createItemElement = (issue: any) => {
           <textarea class="settings-textarea comment-input" style="min-height: 80px; font-size: 0.85em; margin-bottom: 10px;" placeholder="Add a technical comment..."></textarea>
           <div style="display: flex; gap: 10px; align-items: center;">
             <button class="notif-action-btn comment-btn" style="padding: 6px 12px; font-size: 0.8em;"><i class='bx bx-comment'></i> Comment</button>
-            <button class="notif-action-btn close-btn danger" style="padding: 6px 12px; font-size: 0.8em; margin-left: auto;"><i class='bx bx-check-circle'></i> Close Issue</button>
+            ${!isClosed ? "<button class='notif-action-btn close-btn danger' style='padding: 6px 12px; font-size: 0.8em; margin-left: auto;'><i class='bx bx-check-circle'></i> Close Issue</button>" : ''}
           </div>
         </div>
         `
@@ -143,88 +131,114 @@ export async function updateRoadmapTab(forceReRender = false) {
     const response = await smartFetch('/roadmap');
     if (!response.ok) throw new Error('Offline');
 
-    const issues = await response.json();
-    // Sort oldest to newest for roadmap
-    issues.sort(
-      (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
+    const allIssues = await response.json();
+
+    // 1. Partition into Open and Closed
+    const openIssues = allIssues
+      .filter((i: any) => i.state === 'open')
+      .sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    const closedIssues = allIssues
+      .filter((i: any) => i.state === 'closed')
+      .sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+
+    // 2. Select relevant issues: Latest 3 closed, Oldest 7 open
+    const selectedClosed = closedIssues.slice(0, 3);
+    const selectedOpen = openIssues.slice(0, 7);
+
+    // Timeline order: Closed first (oldest to newest of the latest 3), then Open (oldest to newest)
+    const displayIssues = [
+      ...selectedClosed.sort(
+        (a: any, b: any) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+      ),
+      ...selectedOpen,
+    ];
 
     // Deep compare with currentItems to prevent flicker
-    if (!forceReRender && JSON.stringify(issues) === JSON.stringify(currentItems)) {
+    if (!forceReRender && JSON.stringify(displayIssues) === JSON.stringify(currentItems)) {
       return;
     }
 
-    currentItems = issues;
+    currentItems = displayIssues;
 
-    // --- Intelligent DOM Diffing to resolve flickering ---
+    // --- Intelligent DOM Diffing ---
     const existingItems = Array.from(roadmapContainer.children) as HTMLElement[];
     const existingMap = new Map(
       existingItems.filter((el) => el.dataset.issueNumber).map((el) => [el.dataset.issueNumber, el])
     );
 
-    if (issues.length === 0) {
+    if (displayIssues.length === 0) {
       roadmapContainer.innerHTML = createPlaceholderMessage(
         'empty',
-        'No open issues found.',
+        'No issues found.',
         'Dexter is currently in a perfect state.'
       );
       return;
     }
 
-    // Grouping
-    const groupedIssues: Record<string, any[]> = {};
-    issues.forEach((issue: any) => {
-      let category = 'General';
-      const match = issue.title.match(/^\[(.*?)\]/);
-      if (match) category = match[1].toLowerCase();
-      if (!groupedIssues[category]) groupedIssues[category] = [];
-      groupedIssues[category].push(issue);
-    });
-
-    // Clear and rebuild headers and order
+    // Clear and rebuild
     roadmapContainer.innerHTML = '';
 
-    Object.entries(groupedIssues).forEach(([category, list]) => {
-      const headerHtml = `<div class="service-category-header" style="margin: 20px 0 10px 0; color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px;">${category}</div>`;
-      roadmapContainer.insertAdjacentHTML('beforeend', headerHtml);
+    displayIssues.forEach((issue, index) => {
+      const isClosed = issue.state === 'closed';
+      const isNext = !isClosed && index === selectedClosed.length; // First open issue
 
-      list.forEach((issue) => {
-        const issueKey = issue.number.toString();
-        const el = existingMap.get(issueKey);
+      const issueKey = issue.number.toString();
+      let el = existingMap.get(issueKey);
 
-        if (el && !forceReRender) {
-          // Update content if needed (basic check)
-          const messageEl = el.querySelector('.event-message');
-          if (messageEl && messageEl.textContent !== issue.title) {
-            roadmapContainer.appendChild(createItemElement(issue));
-          } else {
-            // Re-use existing element to preserve state (expansion)
-            roadmapContainer.appendChild(el);
-          }
-        } else {
-          roadmapContainer.appendChild(createItemElement(issue));
-        }
-      });
+      if (el && !forceReRender) {
+        // Update styling for state
+        el.style.opacity = isClosed ? '0.5' : '1';
+        el.classList.toggle('event-border-blue', !isClosed && !isNext);
+        el.classList.toggle('event-border-purple', isNext);
+        el.classList.toggle('event-border-grey', isClosed);
+
+        roadmapContainer.appendChild(el);
+      } else {
+        const newEl = createItemElement(issue);
+        newEl.style.opacity = isClosed ? '0.5' : '1';
+        newEl.classList.toggle('event-border-blue', !isClosed && !isNext);
+        newEl.classList.toggle('event-border-purple', isNext);
+        newEl.classList.toggle('event-border-grey', isClosed);
+        roadmapContainer.appendChild(newEl);
+      }
     });
 
-    // Render Timeline: Show oldest 4 issues in order
+    // Render Timeline
     if (timelineContainer) {
-      const oldestFour = issues.slice(0, 4);
       const timelineHtml = `
         <div class="roadmap-timeline" style="display: flex; gap: 5px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; align-items: center;">
           <span style="font-size: 0.6em; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-right: 10px;">Execution Queue:</span>
-          ${oldestFour
-            .map(
-              (issue: any, idx: number) => `
+          ${displayIssues
+            .map((issue: any, idx: number) => {
+              const isClosed = issue.state === 'closed';
+              const isNext = !isClosed && idx === selectedClosed.length;
+
+              let dotStyle = 'background: #bb86fc;'; // Default open
+              let dotClass = '';
+              let dotIcon = '';
+
+              if (isClosed) {
+                dotStyle = 'background: #5eff5e;';
+                dotIcon = "<i class='bx bx-check' style='font-size: 8px; color: #000;'></i>";
+              } else if (isNext) {
+                dotStyle = 'background: #03dac6; box-shadow: 0 0 10px #03dac6;';
+                dotClass = 'slow-flash';
+              }
+
+              return `
             <div class="timeline-dot-wrap" style="display: flex; align-items: center; gap: 5px;">
-                <div class="timeline-dot" title="#${issue.number}: ${issue.title}" style="width: 12px; height: 12px; border-radius: 50%; background: #bb86fc; flex-shrink: 0; opacity: 0.8; cursor: pointer;" onclick="dexter.viewRoadmapIssue(${issue.number})"></div>
-                <span style="font-size: 0.7em; color: #aaa; white-space: nowrap;">#${issue.number}</span>
-                ${idx < oldestFour.length - 1 ? "<div style='width: 15px; height: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; margin: 0 5px;'></div>" : ''}
+                <div class="timeline-dot ${dotClass}" title="#${issue.number}: ${issue.title} (${issue.state})" 
+                     style="width: 14px; height: 14px; border-radius: 50%; ${dotStyle} flex-shrink: 0; opacity: 0.9; cursor: pointer; display: flex; align-items: center; justify-content: center;" 
+                     onclick="dexter.viewRoadmapIssue(${issue.number})">
+                     ${dotIcon}
+                </div>
+                <span style="font-size: 0.7em; color: ${isClosed ? '#666' : isNext ? '#03dac6' : '#aaa'}; white-space: nowrap; font-weight: ${isNext ? 'bold' : 'normal'};">#${issue.number}</span>
+                ${idx < displayIssues.length - 1 ? "<div style='width: 15px; height: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; margin: 0 5px;'></div>" : ''}
             </div>
-          `
-            )
+          `;
+            })
             .join('')}
-            ${issues.length > 4 ? `<span style="font-size: 0.7em; color: #444; margin-left: 10px;">+${issues.length - 4} more</span>` : ''}
         </div>
       `;
       timelineContainer.innerHTML = timelineHtml;

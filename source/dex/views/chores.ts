@@ -76,7 +76,7 @@ export const getChoresContent = () => {
                     <select id="new-chore-owner" class="task-form-select">
                         <option value="" disabled selected>Add recipient...</option>
                         <optgroup label="System">
-                            <option value="dexter">Dexter (Event Timeline)</option>
+                            <option value="dexter">Build (Event Timeline)</option>
                         </optgroup>
                         <optgroup label="Creators">
                             <option value="313071000877137920">Owen (Creator)</option>
@@ -104,7 +104,7 @@ export const getChoresContent = () => {
 let currentTasks: any[] = [];
 const recipientMap: Record<string, string> = {
   '313071000877137920': 'Owen',
-  dexter: 'Dexter',
+  dexter: 'Build',
 };
 let selectedRecipients: string[] = [];
 let editingChoreId: string | null = null;
