@@ -95,13 +95,8 @@ export const getGuardianContent = () => {
         </div>
 
         <div class="guardian-status-section" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                 <div class="guardian-indicator" style="text-align: center;">
-                    <span style="color: #666; font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Review</span>
-                    <span id="fabricator-review-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.0em; margin-bottom: 5px;">-</span>
-                    <div id="fabricator-review-stats" style="font-size: 0.55em; color: #888; font-family: monospace;"></div>
-                </div>
-                <div class="guardian-indicator" style="text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
                     <span style="color: #666; font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Issue</span>
                     <span id="fabricator-issue-val" style="color: #fff; font-family: monospace; display: block; font-size: 1.0em; margin-bottom: 5px;">-</span>
                     <div id="fabricator-issue-stats" style="font-size: 0.55em; color: #888; font-family: monospace;"></div>
@@ -973,7 +968,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
       sentry: 'Sentry',
       synthesis: 'Synthesis',
       architect: 'Architect',
-      review: 'Review',
       issue: 'Issue',
       construct: 'Construct',
       reporter: 'Reporter',
@@ -1100,17 +1094,6 @@ export async function updateProcessesTab(isSmoothMode = false) {
       );
 
     // Fabricator Protocols
-    const reviewVal = document.getElementById('fabricator-review-val');
-    const reviewStats = document.getElementById('fabricator-review-stats');
-    if (reviewVal)
-      updateProtocolWidget(
-        reviewVal,
-        reviewStats,
-        fabricatorData.protocols.review,
-        'review',
-        systemData.state
-      );
-
     const issueVal = document.getElementById('fabricator-issue-val');
     const issueStats = document.getElementById('fabricator-issue-stats');
     if (issueVal)

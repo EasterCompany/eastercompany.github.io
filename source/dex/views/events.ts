@@ -719,9 +719,9 @@ export async function updateEventsTimeline(forceReRender = false) {
             const totalTurns = eventData.chat_history.length;
             const slides = eventData.chat_history
               .map((m: any, index: number) => {
-                let roleName = m.name ? m.name.toUpperCase() : m.role.toUpperCase();
-                if (!m.name && roleName === 'USER') roleName = 'SYSTEM';
-                if (!m.name && roleName === 'ASSISTANT') roleName = 'AGENT';
+                let roleName = m.role.toUpperCase();
+                if (roleName === 'ASSISTANT') roleName = 'AGENT';
+                if (m.name) roleName = m.name.toUpperCase();
 
                 const roleColor =
                   m.role === 'user' ? '#03dac6' : m.role === 'system' ? '#ffb74d' : '#bb86fc';
@@ -796,25 +796,29 @@ export async function updateEventsTimeline(forceReRender = false) {
 
           detailsContent = `
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); justify-content: space-between; align-items: center;">
-                            <div style="flex: 1; min-width: 120px; text-align: center;">
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Agent</div>
-                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.agent_name || 'Guardian'}</div>
+                                <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc; font-weight: bold;">${eventData.agent_name || 'Guardian'}</div>
                             </div>
-                            <div style="flex: 1; min-width: 80px; text-align: center;">
+                            <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Protocol</div>
                                 <div class="metadata-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #bb86fc;">${eventData.tier}</div>
                             </div>
-                            <div style="flex: 1; min-width: 150px; text-align: center;">
+                            <div style="flex: 1; min-width: 80px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Turns</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.turn_count || 0}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 80px; text-align: center;">
+                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Shell</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.shell_commands || 0}</div>
+                            </div>
+                            <div style="flex: 1; min-width: 120px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Status</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${statusColor}; font-weight: bold;">${statusText} <span style="font-weight: normal; opacity: 0.6; font-size: 0.9em;">(${eventData.attempts} att)</span></div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: ${statusColor}; font-weight: bold;">${statusText}</div>
                             </div>
                             <div style="flex: 1; min-width: 100px; text-align: center;">
                                 <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Duration</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.duration}</div>
-                            </div>
-                            <div style="flex: 1; min-width: 150px; text-align: center;">
-                                <div style="font-size: 0.65em; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 4px;">Model</div>
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #eee;">${eventData.model}</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #03dac6; font-weight: bold;">${eventData.duration}</div>
                             </div>
                         </div>
                         ${errorHtml}
