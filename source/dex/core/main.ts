@@ -20,7 +20,13 @@ import { getSettingsContent, attachSettingsListeners } from '../views/settings.t
 import { updateLogs } from '../views/logs.ts';
 import { getWebContent, updateWebTab } from '../views/web.ts';
 import { initCliDashboard } from '../views/cli.ts';
-import { updateGlobalBadgeCount, smartFetch, isPublicMode, shouldLockScroll } from './utils.ts';
+import {
+  updateGlobalBadgeCount,
+  smartFetch,
+  isPublicMode,
+  shouldLockScroll,
+  initDashboardWebSocket,
+} from './utils.ts';
 
 declare global {
   interface Window {
@@ -41,6 +47,22 @@ async function checkServiceHealth() {
 }
 
 function onReady() {
+  // Initialize real-time dashboard stream
+  initDashboardWebSocket();
+
+  // Handle Initial Loading Dimmer
+  const hideLoader = () => {
+    const loader = document.getElementById('initial-loader');
+    if (loader && !loader.classList.contains('fade-out')) {
+      loader.classList.add('fade-out');
+      console.log('✨ Dexter Dashboard Synchronized');
+    }
+  };
+
+  // Hide loader when first data arrives or after timeout (safety)
+  window.addEventListener('dex_dashboard_update', hideLoader, { once: true });
+  setTimeout(hideLoader, 3000); // 3s fallback
+
   // Enforce HTTPS on production domain
   if (window.location.protocol === 'http:' && window.location.hostname === 'easter.company') {
     window.location.replace(

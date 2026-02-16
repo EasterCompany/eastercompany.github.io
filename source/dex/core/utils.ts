@@ -303,6 +303,8 @@ export function isPublicMode(): boolean {
 // --- CENTRALIZED DASHBOARD CACHE ---
 // TODO: Define strict Dashboard interface
 let DASHBOARD_CACHE: any = null;
+let DASHBOARD_WS: WebSocket | null = null;
+
 export const syncState = {
   lastDashboard: 0,
   lastFrontend: 0,
@@ -310,6 +312,51 @@ export const syncState = {
 let isRefreshing = false;
 let lastSyncAttempt = 0;
 const CACHE_KEY = 'dex_dashboard_snapshot';
+
+/**
+ * Initializes the real-time WebSocket stream for the dashboard.
+ */
+export function initDashboardWebSocket() {
+  if (DASHBOARD_WS) return;
+
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const host = isPublicMode() ? 'dashboard.easter.company' : `${window.location.hostname}:8103`;
+  const url = `${protocol}//${host}/ws`;
+
+  console.log(`🔌 Connecting to Dashboard Stream: ${url}`);
+  DASHBOARD_WS = new WebSocket(url);
+
+  DASHBOARD_WS.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      if (data.status === 'error') return;
+
+      // Deep compare to avoid redundant UI renders
+      if (JSON.stringify(data) === JSON.stringify(DASHBOARD_CACHE)) return;
+
+      DASHBOARD_CACHE = data;
+      syncState.lastDashboard = data.timestamp * 1000;
+      syncState.lastFrontend = Date.now();
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+
+      // Trigger global event for components to re-render
+      window.dispatchEvent(new CustomEvent('dex_dashboard_update', { detail: data }));
+    } catch (e) {
+      console.error('Failed to parse WS data:', e);
+    }
+  };
+
+  DASHBOARD_WS.onclose = () => {
+    DASHBOARD_WS = null;
+    console.warn('🔌 Dashboard Stream closed. Reconnecting in 5s...');
+    setTimeout(initDashboardWebSocket, 5000);
+  };
+
+  DASHBOARD_WS.onerror = (err) => {
+    console.error('🔌 Dashboard Stream error:', err);
+    DASHBOARD_WS?.close();
+  };
+}
 
 /**
  * Loads the dashboard cache from localStorage on script boot.

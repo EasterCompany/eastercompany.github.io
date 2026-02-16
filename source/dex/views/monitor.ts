@@ -264,11 +264,43 @@ export async function updateSystemTab() {
   // Start the smooth UI loop if not already running
   startAgentSmoothLoop();
 
-  // Initial fetch for all system components
-  await Promise.all([updateProcessesTab(), updateSystemMonitor(), updateOpenIssueCount()]);
+  // Listen for real-time updates from WebSocket
+  if (!window.dataset_listener_attached) {
+    window.addEventListener('dex_dashboard_update', (e: any) => {
+      const data = e.detail;
+      renderDashboardFromData(data);
+    });
+    window.dataset_listener_attached = true;
+  }
+
+  // Initial fetch for components that might not be in the WebSocket snapshot yet
+  // (e.g. detailed hardware or logs)
+  await Promise.all([updateSystemMonitor(), updateOpenIssueCount()]);
 
   // Update logs separately
   await updateLogs();
+}
+
+function renderDashboardFromData(data: any) {
+  // 1. Update Processes
+  const processesContainer = document.getElementById('processes-widgets');
+  if (processesContainer && data.processes) {
+    renderProcessList(processesContainer, data.processes, false);
+    updateTabBadgeCount(0, data.processes.length);
+  }
+
+  // 2. Update System State
+  const stateVal = document.getElementById('system-state-val');
+  if (stateVal && data.system) {
+    stateVal.textContent = data.system.state.toUpperCase() + ' (' + data.system.state_time + 's)';
+    stateVal.style.color = data.system.state === 'idle' ? '#5eff5e' : '#bb86fc';
+  }
+
+  // 3. Update Vitals/Metrics if present
+  if (data.metrics) {
+    const totalIdleVal = document.getElementById('guardian-total-idle');
+    if (totalIdleVal) totalIdleVal.textContent = data.metrics.total_idle_seconds + 's';
+  }
 }
 
 let agentSmoothInterval: any = null;
