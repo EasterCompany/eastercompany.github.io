@@ -3,7 +3,7 @@
 set -e
 echo "Releasing Dexter..."
 # Current Dexter Build Info
-DEX_BIN_DIR="$HOME/Dexter/bin"
+DEX_BIN_DIR="$HOME/.local/bin"
 
 DEX_EXECUTABLE="$DEX_BIN_DIR/dex"
 DEX_VERSION_OUT=$(

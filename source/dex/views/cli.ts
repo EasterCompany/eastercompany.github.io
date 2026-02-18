@@ -449,7 +449,7 @@ const CLI_COMMANDS: CliCommand[] = [
       '  "type": "be",',
       '  "port": 8100,',
       '  "domain": "127.0.0.1",',
-      '  "log_path": "~/Dexter/logs/event-service.log"',
+      '  "log_path": "~/.logs/dexter/event-service.log"',
       '}',
     ],
   },

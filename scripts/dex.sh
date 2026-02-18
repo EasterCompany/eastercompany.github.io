@@ -64,13 +64,13 @@ case "$SHELL" in
     *)      SHELL_RC="$HOME/.profile" ;;
 esac
 
-PATH_LINE="export PATH=\"\$HOME/Dexter/path:\$PATH\""
+PATH_LINE="export PATH=\"\$HOME/.config/dexter/path:\$PATH\""
 
 if [ -f "$SHELL_RC" ]; then
     # Remove old-style Dexter/bin path if present to avoid pollution
     sed -i '/Dexter\/bin/d' "$SHELL_RC"
     
-    if ! grep -q "Dexter/path" "$SHELL_RC"; then
+    if ! grep -q ".config/dexter/path" "$SHELL_RC"; then
         echo "" >> "$SHELL_RC"
         echo "# Dexter Fabricator CLI" >> "$SHELL_RC"
         echo "$PATH_LINE" >> "$SHELL_RC"
