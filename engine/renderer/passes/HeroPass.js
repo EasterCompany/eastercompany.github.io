@@ -88,8 +88,8 @@ export class HeroPass {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
-          // Apply dynamic opacity for smooth entry/exit
-          let glow = exp(-d * (6.0 / s.size)) * 0.3 * s.opacity;
+          // EVEN LARGER AND DIMMER
+          let glow = exp(-d * (4.0 / s.size)) * 0.2 * s.opacity;
           color += s.color * glow;
         }
         
@@ -184,11 +184,11 @@ export class HeroPass {
       if (!s.active) continue;
       const x = s.x * width;
       const y = (1.0 - s.y) * height;
-      const size = s.size * 800; // MUCH BIGGER
+      const size = s.size * 1200; // EVEN BIGGER
       
       const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
       const c = s.color;
-      const alpha = 0.15 * (s.opacity || 0); // Apply dynamic opacity
+      const alpha = 0.1 * (s.opacity || 0); // DIMMER FOR SIZE
       sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, ${alpha})`); 
       sGrad.addColorStop(1, "rgba(0,0,0,0)");
       
@@ -216,38 +216,57 @@ export class HeroPass {
       else { startX = -0.5; startY = Math.random(); vx = 0.2; vy = (Math.random() - 0.5) * 0.15; }
 
       this.shapes[index] = {
-        x: startX, y: startY, vx: vx, vy: vy,
+        x: startX, y: startY, vx: vx * 0.5, vy: vy * 0.5, // SLOWER
         color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-        size: 0.6 + Math.random() * 0.8, // LARGER ON AVERAGE
-        opacity: 0, // Start invisible
+        size: 0.8 + Math.random() * 1.2, // MUCH BIGGER
+        opacity: 0,
         active: true
       };
     }
 
-    for (let s of this.shapes) {
-      if (s && s.active) {
-        // Ensure opacity is initialized if it's missing
-        if (s.opacity === undefined) s.opacity = 1.0;
+    for (let i = 0; i < this.shapes.length; i++) {
+      const s = this.shapes[i];
+      if (!s || !s.active) continue;
 
-        const dx = mouse[0] - s.x;
-        const dy = mouse[1] - s.y;
-        s.vx += dx * 0.03 * registry.dt;
-        s.vy += dy * 0.03 * registry.dt;
-        s.x += s.vx * registry.dt;
-        s.y += s.vy * registry.dt;
-        
-        // Smooth opacity transition with MUCH LARGER buffer for large sizes
-        const buffer = s.size * 2.0;
-        if (s.x > -buffer && s.x < 1.0 + buffer && s.y > -buffer && s.y < 1.0 + buffer) {
-          s.opacity = Math.min(1.0, s.opacity + registry.dt * 0.5);
-        } else {
-          s.opacity = Math.max(0.0, s.opacity - registry.dt * 0.5);
-        }
+      if (s.opacity === undefined) s.opacity = 1.0;
 
-        // Only deactivate when truly far away and fully faded
-        if (s.opacity <= 0 && (s.x < -2 || s.x > 3 || s.y < -2 || s.y > 3)) {
-          s.active = false;
-        }
+      // 1. Gravity Logic (Pull smaller to larger)
+      for (let j = 0; j < this.shapes.length; j++) {
+        if (i === j) continue;
+        const other = this.shapes[j];
+        if (!other || !other.active) continue;
+
+        const dx = other.x - s.x;
+        const dy = other.y - s.y;
+        const distSq = dx * dx + dy * dy + 0.1; // Avoid singularity
+        const force = (other.size / s.size) * 0.02 / distSq;
+
+        s.vx += dx * force * registry.dt;
+        s.vy += dy * force * registry.dt;
+      }
+
+      // 2. Mouse Drift (Subtle)
+      const mdx = mouse[0] - s.x;
+      const mdy = mouse[1] - s.y;
+      s.vx += mdx * 0.01 * registry.dt;
+      s.vy += mdy * 0.01 * registry.dt;
+
+      // 3. Friction/Damping (Prevent infinite acceleration)
+      s.vx *= 0.98;
+      s.vy *= 0.98;
+
+      s.x += s.vx * registry.dt;
+      s.y += s.vy * registry.dt;
+      
+      const buffer = s.size * 2.0;
+      if (s.x > -buffer && s.x < 1.0 + buffer && s.y > -buffer && s.y < 1.0 + buffer) {
+        s.opacity = Math.min(1.0, s.opacity + registry.dt * 0.5);
+      } else {
+        s.opacity = Math.max(0.0, s.opacity - registry.dt * 0.5);
+      }
+
+      if (s.opacity <= 0 && (s.x < -2 || s.x > 3 || s.y < -2 || s.y > 3)) {
+        s.active = false;
       }
     }
   }
