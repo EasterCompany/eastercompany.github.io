@@ -35,7 +35,7 @@ export class TerminalSystem {
             children: {
               "info": {
                 type: "file",
-                content: ["01010111 01100101 00100000 01101100 01101001 01101011 01100101 00100000 01110000 01100101 01101111 01110000 01101100 01100101 00100000 01101100 01101001 01101011 01100101 00100000 01111001 01101111 01110101 00101100 00100000 01101001 01100110 00100000 01111001 01101111 01110101 00100111 01110010 01100101 00100000 01101100 01101111 01101111 01101011 01101001 01101110 01100111 00100000 01100110 01101111 01110010 00100000 01110111 01101111 01110010 01101011 00100000 01110100 01101000 01100101 01101110 00100000 01111001 01101111 01110101 00100000 01110011 01101000 01101111 01110101 01101100 01100100 00100000 01100101 01101101 01100001 01101001 01101100 00100000 01110101 01110011 00111010 00100000 01100011 01101111 01101110 01110100 01100001 01100011 01110100 01000000 01100101 01100001 01110011 01110100 01100101 01110010 00101110 01100011 01101111 01101101 01110000 01100001 01101110 01111001"]
+                content: ["01010111 01100101 00100000 01101100 01101001 01101011 01100101 00100000 01110000 01100101 01101111 01110000 01101100 01100101 00100000 01101100 01101001 01101011 01100101 00100000 01111001 01101111 01110101 00101100 00100000 01101001 01100110 00100000 01111001 01101111 01110101 00100111 01110010 01100101 00100000 01101100 01101111 01101111 01101011 01101001 01101110 01100111 00100000 01100110 01101111 01110010 00100000 01110111 01101111 01110010 01101011 00100000 01110100 01101000 01100101 01101110 00100000 01111001 01101111 01110101 00100000 01110011 01101000 01101111 01110101 01101100 01100100 00100000 01100101 01101101 01100001 01101001 01101100 00100000 01110101 01110011 00111010 00100000 01100011 01101111 01101110 01110100 01100001 01100011 01110100 01000000 01100101 01100001 01110011 01110100 01100101 01110010 00101110 01100011 01101111 01101110 01110100 01100001 01100011 01110100"]
               }
             }
           }
@@ -59,8 +59,6 @@ export class TerminalSystem {
   }
 
   handleKey(e) {
-    // Only intercept if user is not in an overlay and scrolled to terminal area or similar?
-    // For simplicity, we assume terminal focus or proximity.
     const isOverlay = document.getElementById('game-overlay').classList.contains('active');
     if (isOverlay) return;
 
@@ -102,13 +100,14 @@ export class TerminalSystem {
       case "clear":
         if (this.container) this.container.innerHTML = "";
         break;
-      case "/bin2txt":
       case "bin2txt":
+      case "/bin2txt":
+      case "./bin2txt":
         this.runBin2Txt(args);
         break;
-      case "./about_dexter.sh":
-      case "/about_dexter.sh":
       case "about_dexter.sh":
+      case "/about_dexter.sh":
+      case "./about_dexter.sh":
         this.cat("about_dexter.sh");
         break;
       case "":
@@ -119,36 +118,29 @@ export class TerminalSystem {
     this.updatePrompt();
   }
 
-  runBin2Txt(args) {
-    const target = args[1];
-    const isHelp = !target || target === "help" || target === "-help" || target === "--help";
-    
-    if (isHelp) {
-      this.cat("/bin2txt");
-      return;
-    }
-
-    const item = this.resolvePath(target);
-    if (item && item.type === "file") {
-      try {
-        const binary = item.content.join(" ");
-        const text = binary.split(" ").map(bin => String.fromCharCode(parseInt(bin, 2))).join("");
-        this.writeLine(`<span style="color: var(--neon-blue)">[DECODED]:</span> ${text}`);
-      } catch (e) {
-        this.writeLine("bin2txt: error: file content is not valid binary stream");
-      }
-    } else {
-      this.writeLine(`bin2txt: error: cannot access '${target}': No such file`);
-    }
-  }
-
   resolvePath(path) {
     if (!path) return this.getCurrentDir();
     if (path === "/") return this.vfs["/"];
-    if (path === "dex" || path === "/dex") return this.vfs["/"].children["dex"];
-    if (this.cwd === "/dex" && path === "..") return this.vfs["/"];
     
-    // Direct children
+    // Absolute path resolution
+    if (path.startsWith("/")) {
+      const parts = path.split("/").filter(p => p.length > 0);
+      let current = this.vfs["/"];
+      for (const part of parts) {
+        if (current.children && current.children[part]) {
+          current = current.children[part];
+        } else {
+          return null;
+        }
+      }
+      return current;
+    }
+
+    // Relative path resolution
+    if (path === "..") {
+      return this.cwd === "/dex" ? this.vfs["/"] : this.vfs["/"];
+    }
+
     const current = this.getCurrentDir();
     if (current.children && current.children[path]) return current.children[path];
     
@@ -175,7 +167,7 @@ export class TerminalSystem {
       this.cwd = "/";
     } else if (path === "dex" && this.cwd === "/") {
       this.cwd = "/dex";
-    } else if (path === ".." && this.cwd === "/dex") {
+    } else if ((path === ".." || path === "/") && this.cwd === "/dex") {
       this.cwd = "/";
     } else {
       this.writeLine(`bash: cd: ${path}: No such directory`);
@@ -206,13 +198,22 @@ export class TerminalSystem {
   }
 
   rm(path, recursive) {
-    const current = this.getCurrentDir();
-    if (current.children && current.children[path]) {
-      const item = current.children[path];
+    if (!path) {
+      this.writeLine("rm: missing operand");
+      return;
+    }
+    
+    const parts = path.split("/");
+    const fileName = parts.pop();
+    const dirPath = parts.join("/") || this.cwd;
+    const dir = this.resolvePath(dirPath);
+
+    if (dir && dir.children && dir.children[fileName]) {
+      const item = dir.children[fileName];
       if (item.type === "dir" && !recursive) {
         this.writeLine(`rm: cannot remove '${path}': Is a directory`);
       } else {
-        delete current.children[path];
+        delete dir.children[fileName];
         this.writeLine(`Removed '${path}'`);
       }
     } else {
@@ -225,9 +226,31 @@ export class TerminalSystem {
     const p = document.createElement('p');
     p.innerHTML = text;
     this.container.appendChild(p);
-    // Scroll to bottom
     const body = this.container.closest('.terminal-body');
     if (body) body.scrollTop = body.scrollHeight;
+  }
+
+  runBin2Txt(args) {
+    const target = args[1];
+    const isHelp = !target || target === "help" || target === "-help" || target === "--help";
+    
+    if (isHelp) {
+      this.cat("bin2txt");
+      return;
+    }
+
+    const item = this.resolvePath(target);
+    if (item && item.type === "file") {
+      try {
+        const binary = item.content.join(" ");
+        const text = binary.split(" ").map(bin => String.fromCharCode(parseInt(bin, 2))).join("");
+        this.writeLine(`<span style="color: var(--neon-blue)">[DECODED]:</span> ${text}`);
+      } catch (e) {
+        this.writeLine("bin2txt: error: file content is not valid binary stream");
+      }
+    } else {
+      this.writeLine(`bin2txt: error: cannot access '${target}': No such file`);
+    }
   }
 
   update(registry) {}
