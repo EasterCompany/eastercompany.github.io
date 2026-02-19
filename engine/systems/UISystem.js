@@ -57,7 +57,12 @@ export class UISystem {
         break;
 
       case 'PAUSE':
-        if (dt > this.pauseTime) {
+        let currentPause = this.pauseTime;
+        if (this.phrases[this.phraseIndex] === "Click here to chat!") {
+          currentPause *= 2.0;
+        }
+        
+        if (dt > currentPause) {
           this.state = 'DELETING';
           this.lastUpdate = now;
         }
