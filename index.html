@@ -146,10 +146,89 @@
         letter-spacing: 0.3em;
         text-transform: uppercase;
         margin-top: -1.5rem;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem; /* Reduced to fit the bar */
         z-index: 2;
         user-select: none;
         pointer-events: none;
+      }
+
+      /* Liquid Input Hybrid */
+      .liquid-input-container {
+        display: flex;
+        align-items: center;
+        gap: 1px; /* The "uncanny" joint */
+        z-index: 10;
+        margin-bottom: 4rem;
+        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.15));
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .liquid-input-container:hover {
+        transform: scale(1.02);
+      }
+
+      .liquid-input-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px 4px 4px 12px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .liquid-input-icon:hover {
+        background: rgba(0, 243, 255, 0.1);
+        color: var(--neon-blue);
+      }
+
+      .liquid-input-bar {
+        height: 50px;
+        width: 280px;
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 4px 12px 12px 4px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        pointer-events: none;
+        position: relative;
+        overflow: hidden;
+      }
+      .liquid-input-bar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.05),
+          transparent
+        );
+        animation: liquidShine 4s infinite linear;
+      }
+      @keyframes liquidShine {
+        to { left: 200%; }
+      }
+
+      .liquid-cursor {
+        margin-left: 4px;
+        color: var(--neon-blue);
+        animation: blink 1s step-end infinite;
       }
 
       body {
@@ -699,6 +778,17 @@
         </svg>
 
         <div class="est-text">EST. 2016</div>
+
+        <!-- Liquid Input Hybrid -->
+        <div class="liquid-input-container">
+          <button class="liquid-input-icon" id="dexter-chat-trigger">
+            <i class="bx bx-message-square-detail"></i>
+          </button>
+          <div class="liquid-input-bar">
+            <span id="liquid-typewriter">Chat with Dexter...</span>
+            <span class="liquid-cursor">|</span>
+          </div>
+        </div>
 
         <div class="scroll-indicator" id="scroll-indicator">
           <span>Scroll Down</span>
