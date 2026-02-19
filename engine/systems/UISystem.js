@@ -25,17 +25,18 @@ export class UISystem {
   async init(registry) {
     this.element = document.getElementById('liquid-typewriter');
     this.scrollIndicator = document.getElementById('scroll-indicator');
+    this.settingsTrigger = document.getElementById('settings-trigger');
     this.startTime = registry.time;
     console.log("Easter Engine: UI System Online");
   }
 
   update(registry) {
     const now = registry.time;
+    const isAtTop = window.scrollY === 0;
     
     // 1. Scroll Indicator Logic
     if (this.scrollIndicator) {
       const elapsed = now - this.startTime;
-      const isAtTop = window.scrollY === 0;
       
       // Fade in after 6s if at top
       if (elapsed > 6.0 && isAtTop) {
@@ -44,6 +45,19 @@ export class UISystem {
       } else {
         this.scrollIndicator.style.opacity = "0";
         this.scrollIndicator.style.pointerEvents = "none";
+      }
+    }
+
+    // 2. Settings Trigger Logic
+    if (this.settingsTrigger) {
+      if (isAtTop) {
+        this.settingsTrigger.style.opacity = "1";
+        this.settingsTrigger.style.pointerEvents = "auto";
+        this.settingsTrigger.style.transform = "translateX(0)";
+      } else {
+        this.settingsTrigger.style.opacity = "0";
+        this.settingsTrigger.style.pointerEvents = "none";
+        this.settingsTrigger.style.transform = "translateX(20px)"; // Slide out effect
       }
     }
 

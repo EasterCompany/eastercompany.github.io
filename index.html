@@ -227,6 +227,36 @@
         animation: blink 1s step-end infinite;
       }
 
+      /* Game UI Elements */
+      .game-ui-icon {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        width: 46px;
+        height: 46px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 1; /* Initial state */
+      }
+      .game-ui-icon:hover {
+        background: rgba(0, 243, 255, 0.1);
+        color: var(--neon-blue);
+        border-color: rgba(0, 243, 255, 0.3);
+        transform: scale(1.1) rotate(45deg);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -720,6 +750,12 @@
       </div>
       <p style="color: #666; font-family: 'JetBrains Mono', monospace; font-size: 0.7em; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase;">Synchronizing Dexter Network...</p>
     </div>
+
+    <!-- Game UI: Settings Trigger -->
+    <div id="settings-trigger" class="game-ui-icon">
+      <i class="bx bx-cog"></i>
+    </div>
+
     <main id="main">
       <!-- WebGPU Site Background -->
       <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;"></canvas>
