@@ -244,11 +244,14 @@
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .game-ui-icon.left { 
+      .game-ui-left-group {
         position: fixed;
         top: 30px;
         left: 30px; 
+        display: flex;
+        gap: 10px;
         z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .game-ui-right-group {
         position: fixed;
@@ -269,7 +272,8 @@
       }
       #settings-trigger:hover { transform: scale(1.1) rotate(45deg); }
       #user-trigger:hover { transform: scale(1.1) translateY(-2px); }
-      .game-ui-icon.left:hover { transform: scale(1.1) rotate(-10deg); }
+      #spartan-trigger:hover { transform: scale(1.1) rotate(-10deg); }
+      #market-trigger:hover { transform: scale(1.1) translateY(-2px); }
 
       body {
         margin: 0;
@@ -766,8 +770,13 @@
     </div>
 
     <!-- Game UI Elements -->
-    <div id="spartan-trigger" class="game-ui-icon left">
-      <img src="/static/assets/logo/dexter-icon.svg" alt="Spartan" style="width: 24px; height: 24px; opacity: 0.7;" />
+    <div class="game-ui-left-group">
+      <div id="spartan-trigger" class="game-ui-icon">
+        <img src="/static/assets/logo/dexter-icon.svg" alt="Spartan" style="width: 24px; height: 24px; opacity: 0.7;" />
+      </div>
+      <div id="market-trigger" class="game-ui-icon">
+        <i class="bx bx-shopping-bag"></i>
+      </div>
     </div>
 
     <div class="game-ui-right-group">
