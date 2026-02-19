@@ -68,6 +68,31 @@
 <!-- HEAD_END -->
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      /* Liquid Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+        transition: background 0.3s ease;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 243, 255, 0.3);
+        background-clip: content-box;
+      }
+      /* Firefox support */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.05) transparent;
+      }
+
       html {
         -webkit-text-size-adjust: 100%; /* Prevent font inflation on iOS */
         text-size-adjust: 100%;
