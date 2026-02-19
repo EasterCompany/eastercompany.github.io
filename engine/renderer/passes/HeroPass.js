@@ -221,7 +221,9 @@ export class HeroPass {
           s.opacity = Math.max(0.0, s.opacity - registry.dt * 0.5);
         }
 
-        if (s.opacity <= 0 && (s.x < -2 || s.x > 3 || s.y < -2 || s.y > 3)) {
+        // Only deactivate when truly far away and fully faded
+        const deactivationBuffer = 2.0;
+        if (s.opacity <= 0 && (s.x < -deactivationBuffer || s.x > 1.0 + deactivationBuffer || s.y < -deactivationBuffer || s.y > 1.0 + deactivationBuffer)) {
           s.active = false;
         }
       }
