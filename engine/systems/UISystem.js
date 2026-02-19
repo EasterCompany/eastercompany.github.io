@@ -25,7 +25,7 @@ export class UISystem {
   async init(registry) {
     this.element = document.getElementById('liquid-typewriter');
     this.scrollIndicator = document.getElementById('scroll-indicator');
-    this.settingsTrigger = document.getElementById('settings-trigger');
+    this.rightGroup = document.querySelector('.game-ui-right-group');
     this.spartanTrigger = document.getElementById('spartan-trigger');
     this.startTime = registry.time;
     console.log("Easter Engine: UI System Online");
@@ -50,15 +50,15 @@ export class UISystem {
     }
 
     // 2. Game UI Triggers Logic (Symmetric)
-    if (this.settingsTrigger) {
+    if (this.rightGroup) {
       if (isAtTop) {
-        this.settingsTrigger.style.opacity = "1";
-        this.settingsTrigger.style.pointerEvents = "auto";
-        this.settingsTrigger.style.transform = "translateX(0)";
+        this.rightGroup.style.opacity = "1";
+        this.rightGroup.style.pointerEvents = "auto";
+        this.rightGroup.style.transform = "translateX(0)";
       } else {
-        this.settingsTrigger.style.opacity = "0";
-        this.settingsTrigger.style.pointerEvents = "none";
-        this.settingsTrigger.style.transform = "translateX(20px)";
+        this.rightGroup.style.opacity = "0";
+        this.rightGroup.style.pointerEvents = "none";
+        this.rightGroup.style.transform = "translateX(20px)";
       }
     }
 
