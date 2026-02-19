@@ -5,12 +5,9 @@ export class HeroPass {
     this.uniformBuffer = null;
     this.bindGroup = null;
     
-    this.shapes = [
-      { x: 0.2, y: 0.2, vx: 0.05, vy: 0.05, size: 0.4, color: [0.8, 0.7, 0.9], opacity: 1.0, active: true },
-      { x: 0.8, y: 0.8, vx: -0.05, vy: -0.05, size: 0.3, color: [0.7, 0.9, 0.8], opacity: 1.0, active: true },
-      { x: 0.5, y: 0.5, vx: 0.02, vy: -0.08, size: 0.5, color: [0.9, 0.8, 0.7], opacity: 1.0, active: true },
-      { x: 0.1, y: 0.9, vx: 0.08, vy: -0.02, size: 0.2, color: [0.7, 0.8, 0.9], opacity: 1.0, active: true }
-    ];
+    // Start empty and let the update loop populate them
+    this.shapes = [];
+    this.maxShapes = 8;
   }
 
   async init(device, format, registry) {
@@ -32,7 +29,7 @@ export class HeroPass {
         shape_count: f32,
         mouse: vec2<f32>,
         padding: vec2<f32>,
-        shapes: array<Shape, 4>,
+        shapes: array<Shape, 8>,
       };
       
       @group(0) @binding(0) var<uniform> uniforms: Uniforms;
@@ -82,7 +79,7 @@ export class HeroPass {
         
         var color = vec3<f32>(0.01, 0.01, 0.02);
         
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
@@ -111,8 +108,9 @@ export class HeroPass {
       primitive: { topology: "triangle-strip" },
     });
 
+    // Uniform Buffer Size: 16 (header) + 16 (mouse) + 8 * 32 (shapes) = 288
     this.uniformBuffer = this.device.createBuffer({
-      size: 160, 
+      size: 288, 
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
 
@@ -130,17 +128,17 @@ export class HeroPass {
     if (!this.device || !this.pipeline) return;
     this.updateShapes(registry);
 
-    const data = new Float32Array(160 / 4);
+    const data = new Float32Array(288 / 4);
     data[0] = registry.time;
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
-    data[3] = 4.0;
+    data[3] = 8.0;
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 8; i++) {
       const offset = 8 + (i * 8);
-      const s = this.shapes[i];
+      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], size: 0.1 };
       data[offset] = s.x;
       data[offset + 1] = s.y;
       data[offset + 2] = s.opacity || 0;
@@ -188,25 +186,28 @@ export class HeroPass {
     const mouse = registry.input.mouse;
     
     if (!this.lastTrigger || t - this.lastTrigger > 3.0) {
-      this.lastTrigger = t;
-      const index = Math.floor(Math.random() * 4);
-      const side = Math.floor(Math.random() * 4);
-      let startX, startY, vx, vy;
-      const pastelColors = [[0.8, 0.7, 0.9], [0.7, 0.9, 0.8], [0.9, 0.8, 0.7], [0.7, 0.8, 0.9]];
+      if (this.shapes.length < this.maxShapes) {
+        this.lastTrigger = t;
+        const side = Math.floor(Math.random() * 4);
+        let startX, startY, vx, vy;
+        const pastelColors = [[0.8, 0.7, 0.9], [0.7, 0.9, 0.8], [0.9, 0.8, 0.7], [0.7, 0.8, 0.9]];
 
-      if (side === 0) { startX = Math.random(); startY = -0.5; vx = (Math.random() - 0.5) * 0.15; vy = 0.2; }
-      else if (side === 1) { startX = 1.5; startY = Math.random(); vx = -0.2; vy = (Math.random() - 0.5) * 0.15; }
-      else if (side === 2) { startX = Math.random(); startY = 1.5; vx = (Math.random() - 0.5) * 0.15; vy = -0.2; }
-      else { startX = -0.5; startY = Math.random(); vx = 0.2; vy = (Math.random() - 0.5) * 0.15; }
+        if (side === 0) { startX = Math.random(); startY = -0.5; vx = (Math.random() - 0.5) * 0.15; vy = 0.2; }
+        else if (side === 1) { startX = 1.5; startY = Math.random(); vx = -0.2; vy = (Math.random() - 0.5) * 0.15; }
+        else if (side === 2) { startX = Math.random(); startY = 1.5; vx = (Math.random() - 0.5) * 0.15; vy = -0.2; }
+        else { startX = -0.5; startY = Math.random(); vx = 0.2; vy = (Math.random() - 0.5) * 0.15; }
 
-      this.shapes[index] = {
-        x: startX, y: startY, vx: vx, vy: vy,
-        color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-        size: 0.6 + Math.random() * 0.8,
-        opacity: 0,
-        active: true
-      };
+        this.shapes.push({
+          x: startX, y: startY, vx: vx, vy: vy,
+          color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
+          size: 0.6 + Math.random() * 0.8,
+          opacity: 0,
+          active: true
+        });
+      }
     }
+
+    this.shapes = this.shapes.filter(s => s.active);
 
     for (let s of this.shapes) {
       if (s && s.active) {
