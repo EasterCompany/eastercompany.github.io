@@ -5,9 +5,54 @@ export class HeroPass {
     this.uniformBuffer = null;
     this.bindGroup = null;
     
-    // Start empty and let the update loop populate them
     this.shapes = [];
     this.maxShapes = 8;
+
+    // --- Curated "Highland" Scripts ---
+    this.scripts = [
+      {
+        name: "The Great Highland",
+        size: 1.8,
+        color: [0.8, 0.7, 0.9], // Purple
+        duration: 25, // Very slow
+        path: { x1: -0.8, y1: 0.8, x2: 1.8, y2: 0.7 }
+      },
+      {
+        name: "The Event Pulse",
+        size: 0.9,
+        color: [0.0, 0.9, 1.0], // Neon Blue
+        duration: 12,
+        path: { x1: 1.2, y1: 0.2, x2: -0.2, y2: 0.8 }
+      },
+      {
+        name: "The Distant Dawn",
+        size: 2.5,
+        color: [0.9, 0.8, 0.6], // Orange/Amber
+        duration: 40,
+        path: { x1: 0.5, y1: 1.5, x2: 0.6, y2: -0.5 }
+      },
+      {
+        name: "Neural Drift",
+        size: 0.7,
+        color: [0.7, 1.0, 0.8], // Green
+        duration: 15,
+        path: { x1: -0.3, y1: -0.2, x2: 1.3, y2: 1.2 }
+      },
+      {
+        name: "The Obsidian Sweep",
+        size: 1.2,
+        color: [0.6, 0.7, 1.0], // Steel Blue
+        duration: 20,
+        path: { x1: -0.5, y1: 0.3, x2: 1.5, y2: 0.3 }
+      },
+      {
+        name: "Shadow Glimmer",
+        size: 0.5,
+        color: [1.0, 0.8, 1.0], // Soft Pink
+        duration: 8,
+        path: { x1: 0.8, y1: 1.2, x2: 0.2, y2: -0.2 }
+      }
+    ];
   }
 
   async init(device, format, registry) {
@@ -70,25 +115,28 @@ export class HeroPass {
         let uv = in.uv;
         let t = uniforms.time;
         let aspect = uniforms.width / uniforms.height;
-        let mouse = uniforms.mouse;
         
-        // Fog Layer
+        // 1. Fog Layer
         var fog = 0.0;
         fog += noise(uv * 3.0 + t * 0.05) * 0.6;
         fog += noise(uv * 6.0 - t * 0.02) * 0.3;
         
+        // 2. Base Darkness
         var color = vec3<f32>(0.01, 0.01, 0.02);
         
+        // 3. Gliding Scripted Shapes
         for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
-          let glow = exp(-d * (6.0 / s.size)) * 0.3 * s.opacity;
+          // Very soft light scattering
+          let glow = exp(-d * (4.5 / s.size)) * 0.25 * s.opacity;
           color += s.color * glow;
         }
         
         color = mix(color, color * 0.3, fog);
         
+        // Final Vignette
         let edge_dist = distance(uv, vec2<f32>(0.5));
         color *= (1.0 - edge_dist * 0.7);
 
@@ -108,7 +156,6 @@ export class HeroPass {
       primitive: { topology: "triangle-strip" },
     });
 
-    // Uniform Buffer Size: 16 (header) + 16 (mouse) + 8 * 32 (shapes) = 288
     this.uniformBuffer = this.device.createBuffer({
       size: 288, 
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
@@ -118,10 +165,6 @@ export class HeroPass {
       layout: this.pipeline.getBindGroupLayout(0),
       entries: [{ binding: 0, resource: { buffer: this.uniformBuffer } }],
     });
-  }
-
-  init2D(ctx, registry) {
-    console.log("HeroPass: 2D Path Initialized");
   }
 
   execute(passEncoder, registry) {
@@ -163,14 +206,13 @@ export class HeroPass {
 
     ctx.globalCompositeOperation = "screen";
     for (let s of this.shapes) {
-      if (!s.active) continue;
       const x = s.x * width;
       const y = (1.0 - s.y) * height;
-      const size = s.size * 800;
+      const size = s.size * 1000;
       
       const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
       const c = s.color;
-      const alpha = 0.15 * (s.opacity || 0);
+      const alpha = 0.12 * (s.opacity || 0);
       sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, ${alpha})`); 
       sGrad.addColorStop(1, "rgba(0,0,0,0)");
       
@@ -183,26 +225,22 @@ export class HeroPass {
 
   updateShapes(registry) {
     const t = registry.time;
-    const mouse = registry.input.mouse;
     
-    if (!this.lastTrigger || t - this.lastTrigger > 3.0) {
+    // Spawn every 4-6 seconds
+    if (!this.lastTrigger || t - this.lastTrigger > (4.0 + Math.random() * 2.0)) {
       if (this.shapes.length < this.maxShapes) {
         this.lastTrigger = t;
-        const side = Math.floor(Math.random() * 4);
-        let startX, startY, vx, vy;
-        const pastelColors = [[0.8, 0.7, 0.9], [0.7, 0.9, 0.8], [0.9, 0.8, 0.7], [0.7, 0.8, 0.9]];
-
-        if (side === 0) { startX = Math.random(); startY = -0.5; vx = (Math.random() - 0.5) * 0.15; vy = 0.2; }
-        else if (side === 1) { startX = 1.5; startY = Math.random(); vx = -0.2; vy = (Math.random() - 0.5) * 0.15; }
-        else if (side === 2) { startX = Math.random(); startY = 1.5; vx = (Math.random() - 0.5) * 0.15; vy = -0.2; }
-        else { startX = -0.5; startY = Math.random(); vx = 0.2; vy = (Math.random() - 0.5) * 0.15; }
-
+        
+        // Select random script
+        const script = this.scripts[Math.floor(Math.random() * this.scripts.length)];
+        
         this.shapes.push({
-          x: startX, y: startY, vx: vx, vy: vy,
-          color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-          size: 0.6 + Math.random() * 0.8,
+          ...script,
+          startTime: t,
           opacity: 0,
-          active: true
+          active: true,
+          x: script.path.x1,
+          y: script.path.y1
         });
       }
     }
@@ -210,23 +248,23 @@ export class HeroPass {
     this.shapes = this.shapes.filter(s => s.active);
 
     for (let s of this.shapes) {
-      if (s && s.active) {
-        if (s.opacity === undefined) s.opacity = 1.0;
-        s.x += s.vx * registry.dt;
-        s.y += s.vy * registry.dt;
-        
-        const buffer = s.size * 2.0;
-        if (s.x > -buffer && s.x < 1.0 + buffer && s.y > -buffer && s.y < 1.0 + buffer) {
-          s.opacity = Math.min(1.0, s.opacity + registry.dt * 0.5);
-        } else {
-          s.opacity = Math.max(0.0, s.opacity - registry.dt * 0.5);
-        }
+      const progress = (t - s.startTime) / s.duration;
+      
+      // Interpolate Position
+      s.x = s.path.x1 + (s.path.x2 - s.path.x1) * progress;
+      s.y = s.path.y1 + (s.path.y2 - s.path.y1) * progress;
+      
+      // Fine-tuned Opacity Curve: Fade in first 20%, stay full, fade out last 20%
+      if (progress < 0.2) {
+        s.opacity = progress / 0.2;
+      } else if (progress > 0.8) {
+        s.opacity = 1.0 - (progress - 0.8) / 0.2;
+      } else {
+        s.opacity = 1.0;
+      }
 
-        // Only deactivate when truly far away and fully faded
-        const deactivationBuffer = 2.0;
-        if (s.opacity <= 0 && (s.x < -deactivationBuffer || s.x > 1.0 + deactivationBuffer || s.y < -deactivationBuffer || s.y > 1.0 + deactivationBuffer)) {
-          s.active = false;
-        }
+      if (progress >= 1.0) {
+        s.active = false;
       }
     }
   }
