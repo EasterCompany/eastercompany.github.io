@@ -6,10 +6,10 @@ export class HeroPass {
     this.bindGroup = null;
     
     this.shapes = [
-      { x: -0.5, y: 0.5, size: 0.4, color: [0.8, 0.7, 0.9], active: 0 },
-      { x: 1.5, y: 0.2, size: 0.3, color: [0.7, 0.9, 0.8], active: 0 },
-      { x: 0.5, y: 1.5, size: 0.5, color: [0.9, 0.8, 0.7], active: 0 },
-      { x: 0.5, y: -0.5, size: 0.2, color: [0.7, 0.8, 0.9], active: 0 }
+      { x: 0.2, y: 0.2, vx: 0.05, vy: 0.05, size: 0.4, color: [0.8, 0.7, 0.9], active: true },
+      { x: 0.8, y: 0.8, vx: -0.05, vy: -0.05, size: 0.3, color: [0.7, 0.9, 0.8], active: true },
+      { x: 0.5, y: 0.5, vx: 0.02, vy: -0.08, size: 0.5, color: [0.9, 0.8, 0.7], active: true },
+      { x: 0.1, y: 0.9, vx: 0.08, vy: -0.02, size: 0.2, color: [0.7, 0.8, 0.9], active: true }
     ];
   }
 
@@ -19,6 +19,7 @@ export class HeroPass {
     const shaderCode = `
       struct Shape {
         pos: vec2<f32>,
+        padding: vec2<f32>,
         color: vec3<f32>,
         size: f32,
       };
@@ -73,49 +74,35 @@ export class HeroPass {
         let aspect = uniforms.width / uniforms.height;
         let mouse = uniforms.mouse;
         
-        // 1. Mouse Disturbance (Clarity in the fog)
         let mouse_dist = distance(uv * vec2<f32>(aspect, 1.0), mouse * vec2<f32>(aspect, 1.0));
-        let clarity = exp(-mouse_dist * 4.0); // Focus area around mouse
+        let clarity = exp(-mouse_dist * 5.0);
         
-        // 2. Fog Layer
         var fog = 0.0;
-        fog += noise(uv * 4.0 + t * 0.05) * 0.6;
-        fog += noise(uv * 8.0 - t * 0.02) * 0.3;
+        fog += noise(uv * 3.0 + t * 0.05) * 0.6;
+        fog += noise(uv * 6.0 - t * 0.02) * 0.3;
+        fog *= (1.0 - clarity * 0.9);
         
-        // Wiping effect: Reduce fog where mouse is
-        fog *= (1.0 - clarity * 0.8);
+        var color = vec3<f32>(0.01, 0.01, 0.02);
         
-        // 3. Base Darkness
-        var color = vec3<f32>(0.005, 0.005, 0.01);
-        
-        // 4. Gliding Pastel Shapes
         for (var i = 0; i < 4; i++) {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
-          
-          // Light scattering: brighter near mouse or in clarity
-          let glow_strength = 12.0 / s.size;
-          let glow = exp(-d * glow_strength) * 0.7;
+          let glow = exp(-d * (12.0 / s.size)) * 0.8;
           color += s.color * glow;
         }
         
-        // 5. Neural Glow at Mouse
-        let mouse_glow = exp(-mouse_dist * 10.0) * vec3<f32>(0.0, 0.5, 0.6);
+        let mouse_glow = exp(-mouse_dist * 12.0) * vec3<f32>(0.0, 0.6, 0.8);
         color += mouse_glow;
+        color = mix(color, color * 0.3, fog);
         
-        // Apply Fog Influence
-        color = mix(color, color * 0.4, fog);
-        
-        // Vignette
         let edge_dist = distance(uv, vec2<f32>(0.5));
-        color *= (1.0 - edge_dist * 0.9);
+        color *= (1.0 - edge_dist * 0.7);
 
         return vec4<f32>(color, 1.0);
       }
     `;
 
     const shaderModule = this.device.createShaderModule({ code: shaderCode });
-
     this.pipeline = this.device.createRenderPipeline({
       layout: "auto",
       vertex: { module: shaderModule, entryPoint: "vs_main" },
@@ -127,7 +114,6 @@ export class HeroPass {
       primitive: { topology: "triangle-strip" },
     });
 
-    // Uniform Buffer Size: 16 (time,w,h,count) + 16 (mouse, pad) + 4 * 32 (shapes) = 160
     this.uniformBuffer = this.device.createBuffer({
       size: 160, 
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
@@ -139,9 +125,12 @@ export class HeroPass {
     });
   }
 
+  init2D(ctx, registry) {
+    console.log("HeroPass: 2D Path Initialized");
+  }
+
   execute(passEncoder, registry) {
     if (!this.device || !this.pipeline) return;
-
     this.updateShapes(registry);
 
     const data = new Float32Array(160 / 4);
@@ -149,27 +138,68 @@ export class HeroPass {
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
     data[3] = 4.0;
-    
-    // Mouse
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
-    // 6, 7 are padding
 
     for (let i = 0; i < 4; i++) {
-      const offset = 8 + (i * 8);
+      const offset = 8 + (i * 8); // Start after first 8 floats
       const s = this.shapes[i];
       data[offset] = s.x;
       data[offset + 1] = s.y;
-      data[offset + 2] = s.color[0];
-      data[offset + 3] = s.color[1];
-      data[offset + 4] = s.color[2];
-      data[offset + 5] = s.size;
+      // data[offset + 2, 3] = padding
+      data[offset + 4] = s.color[0];
+      data[offset + 5] = s.color[1];
+      data[offset + 6] = s.color[2];
+      data[offset + 7] = s.size;
     }
 
     this.device.queue.writeBuffer(this.uniformBuffer, 0, data);
     passEncoder.setPipeline(this.pipeline);
     passEncoder.setBindGroup(0, this.bindGroup);
     passEncoder.draw(4);
+  }
+
+  execute2D(ctx, registry) {
+    this.updateShapes(registry);
+    const { width, height } = registry.screen;
+    const mouse = [registry.input.mouse[0] * width, (1.0 - registry.input.mouse[1]) * height];
+
+    // Background
+    ctx.fillStyle = "#050507";
+    ctx.fillRect(0, 0, width, height);
+
+    // Vignette
+    const grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
+    grad.addColorStop(0, "rgba(0,0,0,0)");
+    grad.addColorStop(1, "rgba(0,0,0,0.8)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, width, height);
+
+    // Shapes
+    ctx.globalCompositeOperation = "screen";
+    for (let s of this.shapes) {
+      if (!s.active) continue;
+      const x = s.x * width;
+      const y = (1.0 - s.y) * height;
+      const size = s.size * 300;
+      
+      const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
+      const c = s.color;
+      sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, 0.4)`);
+      sGrad.addColorStop(1, "rgba(0,0,0,0)");
+      
+      ctx.fillStyle = sGrad;
+      ctx.fillRect(x - size, y - size, size * 2, size * 2);
+    }
+
+    // Mouse Glow
+    const mGrad = ctx.createRadialGradient(mouse[0], mouse[1], 0, mouse[0], mouse[1], 150);
+    mGrad.addColorStop(0, "rgba(0, 150, 200, 0.3)");
+    mGrad.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = mGrad;
+    ctx.fillRect(mouse[0] - 150, mouse[1] - 150, 300, 300);
+    
+    ctx.globalCompositeOperation = "source-over";
   }
 
   updateShapes(registry) {
@@ -181,7 +211,6 @@ export class HeroPass {
       const index = Math.floor(Math.random() * 4);
       const side = Math.floor(Math.random() * 4);
       let startX, startY, vx, vy;
-      
       const pastelColors = [[0.8, 0.7, 0.9], [0.7, 0.9, 0.8], [0.9, 0.8, 0.7], [0.7, 0.8, 0.9]];
 
       if (side === 0) { startX = Math.random(); startY = -0.2; vx = (Math.random() - 0.5) * 0.2; vy = 0.3; }
@@ -199,15 +228,12 @@ export class HeroPass {
 
     for (let s of this.shapes) {
       if (s && s.active) {
-        // Subtle attraction to mouse
         const dx = mouse[0] - s.x;
         const dy = mouse[1] - s.y;
         s.vx += dx * 0.05 * registry.dt;
         s.vy += dy * 0.05 * registry.dt;
-
         s.x += s.vx * registry.dt;
         s.y += s.vy * registry.dt;
-        
         if (s.x < -1 || s.x > 2 || s.y < -1 || s.y > 2) s.active = false;
       }
     }
