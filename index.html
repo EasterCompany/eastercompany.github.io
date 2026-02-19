@@ -501,18 +501,12 @@
 
       /* About Us Section */
       .about-grid {
-        display: grid;
-        grid-template-columns: 3fr 2fr;
-        gap: 30px;
+        display: flex;
+        justify-content: center;
         width: 100%;
         max-width: 1200px;
         margin: 50px auto 100px auto;
         padding: 0 20px;
-      }
-      @media (max-width: 900px) {
-        .about-grid {
-          grid-template-columns: 1fr;
-        }
       }
 
       .terminal-window {
@@ -522,18 +516,14 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        width: 100%;
+        max-width: 800px;
+        height: auto;
         min-height: 300px;
         text-align: left;
         overflow: hidden;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-      }
-      @media (max-width: 900px) {
-        .terminal-window {
-          height: auto;
-          min-height: auto;
-        }
       }
       .terminal-header {
         background: rgba(255, 255, 255, 0.03);
@@ -592,85 +582,6 @@
         50% {
           opacity: 0;
         }
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-rows: repeat(3, 1fr);
-        gap: 20px;
-      }
-      @media (max-width: 900px) {
-        .stats-grid {
-          grid-template-rows: auto;
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-      @media (max-width: 600px) {
-        .stats-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .stat-card {
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        padding: 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-      }
-      .stat-card:hover {
-        transform: translateX(-5px);
-        border-color: var(--neon-blue);
-        box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
-      }
-      .stat-number {
-        font-family: 'Poppins', sans-serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 5px;
-        line-height: 1;
-      }
-      .stat-label {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.8rem;
-        color: #666;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-      }
-
-      .about-bio {
-        grid-column: 1 / -1;
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        padding: 40px;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-      }
-      .about-bio:hover {
-        border-color: var(--neon-blue);
-      }
-      .about-bio h3 {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        font-size: 1.5rem;
-        color: #fff;
-        margin-top: 0;
-        margin-bottom: 20px;
-      }
-      .about-bio p {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.9rem;
-        color: #888;
-        line-height: 1.8;
-        margin: 0;
       }
     </style>
     <style>
@@ -959,37 +870,6 @@
             <br />
             <p><span class="cmd">root@easter:~$</span> <span class="cursor">_</span></p>
           </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number">2016</div>
-            <div class="stat-label">Founded</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">10+</div>
-            <div class="stat-label">Years R&D</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Independent</div>
-          </div>
-        </div>
-
-        <div class="about-bio">
-          <h3>Our Story</h3>
-          <p>
-            Easter Company is a specialized engineering firm dedicated to the pursuit of recursive
-            intelligence and high-fidelity digital implementation. Founded in 2016 as a research
-            initiative, we have evolved into a strategic partner for global industry leaders across
-            AI, Finance, and Luxury Retail sectors.
-            <br /><br />
-            Our core mission is to eliminate the friction between abstract vision and concrete
-            reality. We believe that modern software systems should be as dynamic as the people who
-            use them—evolving, learning, and self-correcting. Operating from our bases in the
-            Highlands of Scotland and New York, we act as a distributed nerve center for
-            cutting-edge innovation, delivering products that define their respective niches.
-          </p>
         </div>
       </div>
 
