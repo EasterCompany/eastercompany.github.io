@@ -1,0 +1,200 @@
+export class TerminalSystem {
+  constructor() {
+    this.cwd = "/";
+    this.history = [];
+    this.inputBuffer = "";
+    
+    // Virtual File System
+    this.vfs = {
+      "/": {
+        type: "dir",
+        children: {
+          "about_dexter.sh": {
+            type: "file",
+            executable: true,
+            content: [
+              "> [SUCCESS] Dexter is the world's first self-evolving, decentralized, distributed AI compute network.",
+              "",
+              "# E++ Subscription Protocol",
+              "As a subscriber to E++, you receive Easter Company hosted, encrypted, and completely unrestricted access to your own dedicated servers...",
+              "",
+              "# Freedom & Responsibility",
+              "The total freedom this provides means you have full control...",
+              "",
+              "# Personal Deployment License",
+              "By purchasing a one-time license for $195, you legally obtain the right to self-host..."
+            ]
+          },
+          "dex": {
+            type: "dir",
+            children: {
+              "info": {
+                type: "file",
+                content: ["01010111 01100101 00100000 01101100 01101001 01101011 01100101 00100000 01110000 01100101 01101111 01110000 01101100 01100101 00100000 01101100 01101001 01101011 01100101 00100000 01111001 01101111 01110101 00101100 00100000 01101001 01100110 00100000 01111001 01101111 01110101 00100111 01110010 01100101 00100000 01101100 01101111 01101111 01101011 01101001 01101110 01100111 00100000 01100110 01101111 01110010 00100000 01110111 01101111 01110010 01101011 00100000 01110100 01101000 01100101 01101110 00100000 01111001 01101111 01110101 00100000 01110011 01101000 01101111 01110101 01101100 01100100 00100000 01100101 01101101 01100001 01101001 01101100 00100000 01110101 01110011 00111010 00100000 01100011 01101111 01101110 01110100 01100001 01100011 01110100 01000000 01100101 01100001 01110011 01110100 01100101 01110010 00101110 01100011 01101111 01101101 01110000 01100001 01101110 01111001"]
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+
+  async init(registry) {
+    this.container = document.getElementById('terminal-output');
+    this.promptEl = document.getElementById('terminal-prompt-path');
+    this.inputLine = document.getElementById('terminal-input-line');
+    
+    window.addEventListener('keydown', (e) => this.handleKey(e));
+    this.updatePrompt();
+    console.log("Easter Engine: Terminal System Online");
+  }
+
+  updatePrompt() {
+    if (this.promptEl) this.promptEl.textContent = `root@easter:${this.cwd}$`;
+  }
+
+  handleKey(e) {
+    // Only intercept if user is not in an overlay and scrolled to terminal area or similar?
+    // For simplicity, we assume terminal focus or proximity.
+    const isOverlay = document.getElementById('game-overlay').classList.contains('active');
+    if (isOverlay) return;
+
+    if (e.key === "Enter") {
+      this.execute(this.inputBuffer);
+      this.inputBuffer = "";
+    } else if (e.key === "Backspace") {
+      this.inputBuffer = this.inputBuffer.slice(0, -1);
+    } else if (e.key.length === 1) {
+      this.inputBuffer += e.key;
+    }
+    
+    if (this.inputLine) this.inputLine.textContent = this.inputBuffer;
+  }
+
+  execute(cmdStr) {
+    const args = cmdStr.trim().split(/\s+/);
+    const cmd = args[0];
+    const target = args[1];
+
+    this.writeLine(`<span class="cmd">root@easter:${this.cwd}$</span> ${cmdStr}`);
+
+    switch (cmd) {
+      case "ls":
+        this.ls();
+        break;
+      case "cd":
+        this.cd(target);
+        break;
+      case "cat":
+        this.cat(target);
+        break;
+      case "stat":
+        this.stat(target);
+        break;
+      case "rm":
+        this.rm(target, cmdStr.includes("-rf"));
+        break;
+      case "clear":
+        if (this.container) this.container.innerHTML = "";
+        break;
+      case "./about_dexter.sh":
+        this.cat("about_dexter.sh");
+        break;
+      case "":
+        break;
+      default:
+        this.writeLine(`bash: command not found: ${cmd}`);
+    }
+    this.updatePrompt();
+  }
+
+  resolvePath(path) {
+    if (!path) return this.getCurrentDir();
+    if (path === "/") return this.vfs["/"];
+    if (path === "dex" || path === "/dex") return this.vfs["/"].children["dex"];
+    if (this.cwd === "/dex" && path === "..") return this.vfs["/"];
+    
+    // Direct children
+    const current = this.getCurrentDir();
+    if (current.children && current.children[path]) return current.children[path];
+    
+    return null;
+  }
+
+  getCurrentDir() {
+    if (this.cwd === "/") return this.vfs["/"];
+    if (this.cwd === "/dex") return this.vfs["/"].children["dex"];
+    return null;
+  }
+
+  ls() {
+    const dir = this.getCurrentDir();
+    const names = Object.keys(dir.children).map(name => {
+      const item = dir.children[name];
+      return item.type === "dir" ? `<span style="color: var(--neon-blue)">${name}/</span>` : name;
+    });
+    this.writeLine(names.join("  "));
+  }
+
+  cd(path) {
+    if (!path || path === "/" || path === "~") {
+      this.cwd = "/";
+    } else if (path === "dex" && this.cwd === "/") {
+      this.cwd = "/dex";
+    } else if (path === ".." && this.cwd === "/dex") {
+      this.cwd = "/";
+    } else {
+      this.writeLine(`bash: cd: ${path}: No such directory`);
+    }
+  }
+
+  cat(path) {
+    const item = this.resolvePath(path);
+    if (item && item.type === "file") {
+      item.content.forEach(line => this.writeLine(line));
+    } else if (item && item.type === "dir") {
+      this.writeLine(`cat: ${path}: Is a directory`);
+    } else {
+      this.writeLine(`cat: ${path}: No such file or directory`);
+    }
+  }
+
+  stat(path) {
+    const item = this.resolvePath(path || ".");
+    if (item) {
+      this.writeLine(`File: ${path || "."}`);
+      this.writeLine(`Type: ${item.type}`);
+      this.writeLine(`Size: ${JSON.stringify(item).length} bytes`);
+      this.writeLine(`Access: (0755/-rwxr-xr-x)`);
+    } else {
+      this.writeLine(`stat: cannot stat '${path}': No such file or directory`);
+    }
+  }
+
+  rm(path, recursive) {
+    const current = this.getCurrentDir();
+    if (current.children && current.children[path]) {
+      const item = current.children[path];
+      if (item.type === "dir" && !recursive) {
+        this.writeLine(`rm: cannot remove '${path}': Is a directory`);
+      } else {
+        delete current.children[path];
+        this.writeLine(`Removed '${path}'`);
+      }
+    } else {
+      this.writeLine(`rm: cannot remove '${path}': No such file or directory`);
+    }
+  }
+
+  writeLine(text) {
+    if (!this.container) return;
+    const p = document.createElement('p');
+    p.innerHTML = text;
+    this.container.appendChild(p);
+    // Scroll to bottom
+    const body = this.container.closest('.terminal-body');
+    if (body) body.scrollTop = body.scrollHeight;
+  }
+
+  update(registry) {}
+}
