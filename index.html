@@ -275,6 +275,60 @@
       #spartan-trigger:hover { transform: scale(1.1) rotate(-10deg); }
       #market-trigger:hover { transform: scale(1.1) translateY(-2px); }
 
+      /* Game UI Overlay */
+      .game-ui-overlay {
+        position: fixed;
+        top: 100px; /* Space for buttons */
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        z-index: 900;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(20px);
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+      }
+      .game-ui-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      .overlay-content {
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+      }
+      .overlay-view {
+        display: none;
+        height: 100%;
+        width: 100%;
+      }
+      .overlay-view.active {
+        display: block;
+        animation: viewFadeIn 0.4s ease forwards;
+      }
+      @keyframes viewFadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .overlay-view h2 {
+        font-size: 2rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+        color: var(--neon-blue);
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -770,6 +824,27 @@
     </div>
 
     <!-- Game UI Elements -->
+    <div id="game-overlay" class="game-ui-overlay">
+      <div class="overlay-content">
+        <div id="overlay-view-spartan" class="overlay-view">
+          <h2>DEXTER NETWORK</h2>
+          <p>System Status: Operational</p>
+        </div>
+        <div id="overlay-view-market" class="overlay-view">
+          <h2>INSIDERS MARKET</h2>
+          <p>Loading catalog...</p>
+        </div>
+        <div id="overlay-view-user" class="overlay-view">
+          <h2>USER PROFILE</h2>
+          <p>Synchronizing identity...</p>
+        </div>
+        <div id="overlay-view-settings" class="overlay-view">
+          <h2>SYSTEM SETTINGS</h2>
+          <p>Adjusting kernel parameters...</p>
+        </div>
+      </div>
+    </div>
+
     <div class="game-ui-left-group">
       <div id="spartan-trigger" class="game-ui-icon">
         <img src="/static/assets/logo/dexter-icon.svg" alt="Spartan" style="width: 24px; height: 24px; opacity: 0.7;" />

@@ -27,20 +27,69 @@ export class UISystem {
     this.scrollIndicator = document.getElementById('scroll-indicator');
     this.rightGroup = document.querySelector('.game-ui-right-group');
     this.leftGroup = document.querySelector('.game-ui-left-group');
+    this.overlay = document.getElementById('game-overlay');
+    this.mainContent = document.getElementById('main');
+    this.footer = document.querySelector('.site-footer');
     this.startTime = registry.time;
+    
+    // HUD Triggers
+    this.triggers = {
+      spartan: document.getElementById('spartan-trigger'),
+      market: document.getElementById('market-trigger'),
+      user: document.getElementById('user-trigger'),
+      settings: document.getElementById('settings-trigger')
+    };
+
+    this.activeView = null;
+    this.setupListeners();
+    
     console.log("Easter Engine: UI System Online");
+  }
+
+  setupListeners() {
+    Object.entries(this.triggers).forEach(([key, el]) => {
+      if (!el) return;
+      el.addEventListener('click', () => this.toggleOverlay(key));
+    });
+  }
+
+  toggleOverlay(viewKey) {
+    const isSameView = this.activeView === viewKey;
+    
+    // Reset views
+    document.querySelectorAll('.overlay-view').forEach(v => v.classList.remove('active'));
+    
+    if (isSameView) {
+      // Close Overlay
+      this.activeView = null;
+      this.overlay.classList.remove('active');
+      this.mainContent.style.opacity = "1";
+      this.footer.style.opacity = "1";
+      this.mainContent.style.pointerEvents = "auto";
+    } else {
+      // Switch/Open Overlay
+      this.activeView = viewKey;
+      const targetView = document.getElementById(`overlay-view-${viewKey}`);
+      if (targetView) targetView.classList.add('active');
+      
+      this.overlay.classList.add('active');
+      this.mainContent.style.opacity = "0";
+      this.footer.style.opacity = "0";
+      this.mainContent.style.pointerEvents = "none";
+    }
   }
 
   update(registry) {
     const now = registry.time;
     const isAtTop = window.scrollY === 0;
+    const isOverlayActive = this.overlay && this.overlay.classList.contains('active');
     
     // 1. Scroll Indicator Logic
     if (this.scrollIndicator) {
       const elapsed = now - this.startTime;
       
-      // Fade in after 6s if at top
-      if (elapsed > 6.0 && isAtTop) {
+      // Hide if overlay is active OR not at top OR delay not met
+      if (elapsed > 6.0 && isAtTop && !isOverlayActive) {
         this.scrollIndicator.style.opacity = "1";
         this.scrollIndicator.style.pointerEvents = "auto";
       } else {
@@ -50,8 +99,9 @@ export class UISystem {
     }
 
     // 2. Game UI Triggers Logic (Symmetric Groups)
+    // Always visible if overlay is active, otherwise follow scroll logic
     if (this.rightGroup) {
-      if (isAtTop) {
+      if (isAtTop || isOverlayActive) {
         this.rightGroup.style.opacity = "1";
         this.rightGroup.style.pointerEvents = "auto";
         this.rightGroup.style.transform = "translateX(0)";
@@ -63,7 +113,7 @@ export class UISystem {
     }
 
     if (this.leftGroup) {
-      if (isAtTop) {
+      if (isAtTop || isOverlayActive) {
         this.leftGroup.style.opacity = "1";
         this.leftGroup.style.pointerEvents = "auto";
         this.leftGroup.style.transform = "translateX(0)";
