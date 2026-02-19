@@ -64,20 +64,6 @@
 <!-- Canonical URL -->
   <link rel="canonical" href="https://easter.company">
 
-<!-- Onesignal Service Worker -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "82683ebb-f21e-4361-9f61-36e8b0ddf5f7",
-      safari_web_id: "web.onesignal.auto.5abdae74-1423-41c2-a45a-5cf3c8870ffd",
-      notifyButton: {
-        enable: true,
-      },
-    });
-  });
-</script>
 <link rel="stylesheet" href="/dist/dex.ae3fe9bd.css">
 <!-- HEAD_END -->
     <style>
@@ -206,7 +192,7 @@
       .scroll-indicator {
         margin-top: auto;
         margin-bottom: 140px;
-        display: flex;
+        display: none; /* Hidden by default */
         flex-direction: column;
         align-items: center;
         gap: 5px;
@@ -220,6 +206,11 @@
         z-index: 2;
         pointer-events: none;
         text-transform: uppercase;
+      }
+      @media (min-width: 1055px) {
+        .scroll-indicator {
+          display: flex;
+        }
       }
       .scroll-indicator i {
         font-size: 1.5rem;
@@ -644,11 +635,13 @@
         justify-content: center;
         align-items: center;
         z-index: 9999;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
+        animation: loaderFadeOut 0.5s ease forwards;
+        animation-delay: 2s;
+        pointer-events: none;
       }
-      #initial-loader.fade-out {
-        opacity: 0;
-        visibility: hidden;
+      @keyframes loaderFadeOut {
+        from { opacity: 1; visibility: visible; }
+        to { opacity: 0; visibility: hidden; }
       }
       .loader-logo {
         width: 120px;
@@ -1108,36 +1101,5 @@
       <div style="height: 150px; width: 100%"></div>
     </main>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const dexBtn = document.getElementById('open-dex-btn');
-        const contributeBtn = document.getElementById('open-contribute-btn');
-        const scrollIndicator = document.getElementById('scroll-indicator');
-
-        if (dexBtn) {
-          dexBtn.addEventListener('click', () => {
-            window.location.href = '/dexter';
-          });
-        }
-        if (contributeBtn) {
-          contributeBtn.addEventListener('click', () => {
-            window.location.href = '/contribute';
-          });
-        }
-
-        window.addEventListener('scroll', () => {
-          const scrollY = window.scrollY;
-          if (scrollY > 50) {
-            scrollIndicator.style.opacity = '0';
-            scrollIndicator.style.transform = 'translateY(20px)';
-          } else {
-            scrollIndicator.style.opacity = '1';
-            scrollIndicator.style.transform = 'translateY(0)';
-          }
-        });
-      });
-    </script>
-
-    
-  <script src="/dist/dex.ae3fe9bd.js" defer></script></body>
+  </body>
 </html>
