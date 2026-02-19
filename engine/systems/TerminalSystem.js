@@ -9,6 +9,11 @@ export class TerminalSystem {
       "/": {
         type: "dir",
         children: {
+          "bin2txt": {
+            type: "file",
+            executable: true,
+            content: ["Usage: /bin2txt [ABSOLUTE_PATH]", "Converts binary-encoded stream files into plain text.", "", "Example: /bin2txt /path/to/binary"]
+          },
           "about_dexter.sh": {
             type: "file",
             executable: true,
@@ -97,7 +102,13 @@ export class TerminalSystem {
       case "clear":
         if (this.container) this.container.innerHTML = "";
         break;
+      case "/bin2txt":
+      case "bin2txt":
+        this.runBin2Txt(args);
+        break;
       case "./about_dexter.sh":
+      case "/about_dexter.sh":
+      case "about_dexter.sh":
         this.cat("about_dexter.sh");
         break;
       case "":
@@ -106,6 +117,29 @@ export class TerminalSystem {
         this.writeLine(`bash: command not found: ${cmd}`);
     }
     this.updatePrompt();
+  }
+
+  runBin2Txt(args) {
+    const target = args[1];
+    const isHelp = !target || target === "help" || target === "-help" || target === "--help";
+    
+    if (isHelp) {
+      this.cat("/bin2txt");
+      return;
+    }
+
+    const item = this.resolvePath(target);
+    if (item && item.type === "file") {
+      try {
+        const binary = item.content.join(" ");
+        const text = binary.split(" ").map(bin => String.fromCharCode(parseInt(bin, 2))).join("");
+        this.writeLine(`<span style="color: var(--neon-blue)">[DECODED]:</span> ${text}`);
+      } catch (e) {
+        this.writeLine("bin2txt: error: file content is not valid binary stream");
+      }
+    } else {
+      this.writeLine(`bin2txt: error: cannot access '${target}': No such file`);
+    }
   }
 
   resolvePath(path) {
