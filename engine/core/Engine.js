@@ -18,8 +18,16 @@ export class Engine {
     window.addEventListener('resize', () => this._resize());
     
     // Input listeners
-    window.addEventListener('mousemove', (e) => {
-      this.registry.input.mouse = [e.clientX, e.clientY];
+    const updateInput = (x, y) => {
+      this.registry.input.mouse = [
+        (x * this.registry.screen.dpr) / this.canvas.width,
+        1.0 - (y * this.registry.screen.dpr) / this.canvas.height
+      ];
+    };
+
+    window.addEventListener('mousemove', (e) => updateInput(e.clientX, e.clientY));
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) updateInput(e.touches[0].clientX, e.touches[0].clientY);
     });
   }
 
