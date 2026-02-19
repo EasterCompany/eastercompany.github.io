@@ -63,9 +63,12 @@ export class UISystem {
       // Close Overlay
       this.activeView = null;
       this.overlay.classList.remove('active');
+      document.body.classList.remove('no-scroll'); // Unlock scroll
+      
       this.mainContent.style.opacity = "1";
+      this.mainContent.style.visibility = "visible";
       this.footer.style.opacity = "1";
-      this.mainContent.style.pointerEvents = "auto";
+      this.footer.style.visibility = "visible";
     } else {
       // Switch/Open Overlay
       this.activeView = viewKey;
@@ -73,9 +76,12 @@ export class UISystem {
       if (targetView) targetView.classList.add('active');
       
       this.overlay.classList.add('active');
+      document.body.classList.add('no-scroll'); // Lock scroll
+      
       this.mainContent.style.opacity = "0";
+      this.mainContent.style.visibility = "hidden";
       this.footer.style.opacity = "0";
-      this.mainContent.style.pointerEvents = "none";
+      this.footer.style.visibility = "hidden";
     }
   }
 
