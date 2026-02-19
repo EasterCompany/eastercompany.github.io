@@ -75,16 +75,15 @@ export class HeroPass {
         let aspect = uniforms.width / uniforms.height;
         let mouse = uniforms.mouse;
         
-        let mouse_dist = distance(uv * vec2<f32>(aspect, 1.0), mouse * vec2<f32>(aspect, 1.0));
-        let clarity = exp(-mouse_dist * 5.0);
-        
+        // 1. Fog Layer
         var fog = 0.0;
         fog += noise(uv * 3.0 + t * 0.05) * 0.6;
         fog += noise(uv * 6.0 - t * 0.02) * 0.3;
-        fog *= (1.0 - clarity * 0.9);
         
+        // 2. Base Darkness
         var color = vec3<f32>(0.01, 0.01, 0.02);
         
+        // 3. Gliding Pastel Shapes
         for (var i = 0; i < 4; i++) {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
@@ -94,10 +93,10 @@ export class HeroPass {
           color += s.color * glow;
         }
         
-        let mouse_glow = exp(-mouse_dist * 12.0) * vec3<f32>(0.0, 0.6, 0.8) * 0.5;
-        color += mouse_glow;
+        // 4. Apply Fog
         color = mix(color, color * 0.3, fog);
         
+        // 5. Vignette
         let edge_dist = distance(uv, vec2<f32>(0.5));
         color *= (1.0 - edge_dist * 0.7);
 
@@ -196,13 +195,6 @@ export class HeroPass {
       ctx.fillStyle = sGrad;
       ctx.fillRect(x - size, y - size, size * 2, size * 2);
     }
-
-    // Mouse Glow
-    const mGrad = ctx.createRadialGradient(mouse[0], mouse[1], 0, mouse[0], mouse[1], 300);
-    mGrad.addColorStop(0, "rgba(0, 150, 200, 0.15)");
-    mGrad.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = mGrad;
-    ctx.fillRect(mouse[0] - 300, mouse[1] - 300, 600, 600);
     
     ctx.globalCompositeOperation = "source-over";
   }
