@@ -6,10 +6,10 @@ export class HeroPass {
     this.bindGroup = null;
     
     this.shapes = [
-      { x: 0.2, y: 0.2, vx: 0.05, vy: 0.05, size: 0.4, color: [0.8, 0.7, 0.9], active: true },
-      { x: 0.8, y: 0.8, vx: -0.05, vy: -0.05, size: 0.3, color: [0.7, 0.9, 0.8], active: true },
-      { x: 0.5, y: 0.5, vx: 0.02, vy: -0.08, size: 0.5, color: [0.9, 0.8, 0.7], active: true },
-      { x: 0.1, y: 0.9, vx: 0.08, vy: -0.02, size: 0.2, color: [0.7, 0.8, 0.9], active: true }
+      { x: 0.2, y: 0.2, vx: 0.05, vy: 0.05, size: 0.4, color: [0.8, 0.7, 0.9], opacity: 1.0, active: true },
+      { x: 0.8, y: 0.8, vx: -0.05, vy: -0.05, size: 0.3, color: [0.7, 0.9, 0.8], opacity: 1.0, active: true },
+      { x: 0.5, y: 0.5, vx: 0.02, vy: -0.08, size: 0.5, color: [0.9, 0.8, 0.7], opacity: 1.0, active: true },
+      { x: 0.1, y: 0.9, vx: 0.08, vy: -0.02, size: 0.2, color: [0.7, 0.8, 0.9], opacity: 1.0, active: true }
     ];
   }
 
@@ -226,6 +226,9 @@ export class HeroPass {
 
     for (let s of this.shapes) {
       if (s && s.active) {
+        // Ensure opacity is initialized if it's missing
+        if (s.opacity === undefined) s.opacity = 1.0;
+
         const dx = mouse[0] - s.x;
         const dy = mouse[1] - s.y;
         s.vx += dx * 0.03 * registry.dt;
@@ -233,8 +236,8 @@ export class HeroPass {
         s.x += s.vx * registry.dt;
         s.y += s.vy * registry.dt;
         
-        // Smooth opacity transition with buffer for large sizes
-        const buffer = s.size;
+        // Smooth opacity transition with MUCH LARGER buffer for large sizes
+        const buffer = s.size * 2.0;
         if (s.x > -buffer && s.x < 1.0 + buffer && s.y > -buffer && s.y < 1.0 + buffer) {
           s.opacity = Math.min(1.0, s.opacity + registry.dt * 0.5);
         } else {
