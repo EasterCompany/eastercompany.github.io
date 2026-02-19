@@ -1,71 +1,16 @@
-<!doctype html>
-<html lang="en-GB">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-<!-- HEAD_START -->
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Home - Easter Company</title>
-
-<!-- SEO Meta Tags -->
-<meta
-  name="description"
-  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
-/>
-<meta name="revised" content="2026-02-01" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="Easter" />
-<meta name="theme-color" content="#050507" />
-
-<!-- Open Graph Meta Tags -->
-<meta property="og:title" content="Home - Easter Company" />
-<meta
-  property="og:description"
-  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
-/>
-  <meta property="og:url" content="https://easter.company">
-<meta property="og:type" content="website" />
-<meta
-  property="og:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=ae3fe9bd"
-/>
-<meta property="fb:app_id" content="1541540286236316" />
-
-<!-- Twitter Card Meta Tags -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Home - Easter Company" />
-<meta
-  name="twitter:description"
-  content="Artificial Intelligence &amp; Developer Tooling focused Software Company specialising in Engineering, Education, Entertainment, and Enterprise sectors. Based in the Highlands of Scotland, and best known for their Dexter &amp; Bashful products."
-/>
-<meta
-  name="twitter:image"
-  content="https://easter.company/static/meta/preview-banner.jpg?last_build=ae3fe9bd"
-/>
-<meta name="twitter:site" content="@eastercompany" />
-<meta name="twitter:creator" content="@eastercompany" />
-
-<!-- Favicons and Icons -->
-<link
-  rel="icon"
-  type="image/png"
-  href="/static/meta/favicon-96x96.png?last_build=ae3fe9bd"
-  sizes="96x96"
-/>
-<link rel="icon" type="image/svg+xml" href="/static/meta/favicon.svg?last_build=ae3fe9bd" />
-<link rel="shortcut icon" href="/static/meta/favicon.ico?last_build=ae3fe9bd" />
-<link
-  rel="apple-touch-icon"
-  sizes="180x180"
-  href="/static/meta/apple-touch-icon.png?last_build=ae3fe9bd"
-/>
-<link rel="manifest" href="/site.webmanifest?last_build=ae3fe9bd" />
-
-<!-- Canonical URL -->
-  <link rel="canonical" href="https://easter.company">
-
-<link rel="stylesheet" href="/dist/dex.ae3fe9bd.css">
-<!-- HEAD_END -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easter Company</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       
@@ -94,9 +39,40 @@
       }
 
       html {
-        -webkit-text-size-adjust: 100%; /* Prevent font inflation on iOS */
+        -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
       }
+      
+      body.no-scroll {
+        overflow: hidden;
+      }
+      
+      main, .site-footer {
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #050507;
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      main {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --neon-blue: #00f3ff;
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
+      }
+
       .hero-section {
         display: flex;
         flex-direction: column;
@@ -177,7 +153,7 @@
       .liquid-input-container {
         display: flex;
         align-items: center;
-        gap: 1px; /* The "uncanny" joint */
+        gap: 1px;
         z-index: 10;
         margin: 0;
         filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.15));
@@ -303,7 +279,7 @@
       /* Game UI Overlay */
       .game-ui-overlay {
         position: fixed;
-        top: 100px; /* Space for buttons */
+        top: 100px;
         left: 20px;
         right: 20px;
         bottom: 20px;
@@ -354,30 +330,6 @@
         color: var(--neon-blue);
       }
 
-      body.no-scroll {
-        overflow: hidden;
-      }
-      
-      main, .site-footer {
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-      }
-
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #050507;
-        font-family: 'Inter', sans-serif;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* CENTER EVERYTHING GLOBALLY */
-      }
-      main {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
       /* Scroll Indicator */
       .scroll-indicator {
         margin: 0;
@@ -391,8 +343,8 @@
         letter-spacing: 0.2em;
         z-index: 2;
         text-transform: uppercase;
-        opacity: 0; /* START INVISIBLE */
-        transition: opacity 1s ease; /* SMOOTH FADE */
+        opacity: 0;
+        transition: opacity 1s ease;
         pointer-events: none;
       }
       @media (min-width: 1055px) {
@@ -405,19 +357,9 @@
         animation: bounce 2s infinite;
       }
       @keyframes bounce {
-        0%,
-        20%,
-        50%,
-        80%,
-        100% {
-          transform: translateY(0);
-        }
-        40% {
-          transform: translateY(-10px);
-        }
-        60% {
-          transform: translateY(-5px);
-        }
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
       }
 
       /* Content Section */
@@ -432,100 +374,6 @@
         position: relative;
         z-index: 1;
       }
-      .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      @media (max-width: 768px) {
-        .products-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-      .widget {
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        backdrop-filter: blur(10px);
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-      }
-      .widget.full-width {
-        grid-column: span 2;
-      }
-      @media (max-width: 768px) {
-        .widget.full-width {
-          grid-column: span 1;
-        }
-      }
-      .widget:hover {
-        transform: translateY(-10px);
-        border-color: var(--neon-blue);
-        box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
-        text-decoration: none;
-      }
-      .widget:hover h3,
-      .widget:hover p {
-        text-decoration: none;
-      }
-      .widget-image {
-        width: 100%;
-        height: 200px;
-        background: rgba(255, 255, 255, 0.02);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        color: #fff;
-        border-bottom: 1px solid var(--glass-border);
-      }
-      .widget-image i,
-      .widget-image img {
-        max-width: 50%;
-        max-height: 40%;
-        opacity: 0.7;
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
-      }
-      .widget-content {
-        padding: 25px;
-      }
-      .widget-content h3 {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        font-size: 1.2rem;
-        color: #fff;
-        margin-bottom: 12px;
-        text-align: left;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .widget-content h3 img,
-      .widget-text-content h3 img {
-        height: 20px;
-        width: auto;
-        opacity: 0.7;
-      }
-      .widget-text-content h3 {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        font-size: 1.2rem;
-        color: #fff;
-        margin-bottom: 12px;
-        text-align: left;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .widget-content p {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem;
-        color: #888;
-        line-height: 1.6;
-        text-align: left;
-        margin: 0;
-      }
 
       /* Clients Marquee */
       .clients-marquee {
@@ -539,108 +387,25 @@
         position: relative;
         z-index: 1;
         overflow: hidden;
-        /* Mask for fade effect */
         mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        -webkit-mask-image: linear-gradient(
-          to right,
-          transparent,
-          black 10%,
-          black 90%,
-          transparent
-        );
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
       }
-
-      .marquee-row {
-        display: flex;
-        width: 100%;
-        overflow: hidden;
-        user-select: none;
-      }
-
+      .marquee-row { display: flex; width: 100%; overflow: hidden; user-select: none; }
       .marquee-content {
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        gap: 60px;
-        padding: 0 30px;
-        min-width: 100%;
-        will-change: transform;
-        transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+        display: flex; flex-shrink: 0; align-items: center; gap: 60px; padding: 0 30px; min-width: 100%;
+        will-change: transform; transform: translate3d(0, 0, 0);
       }
-
-      .scroll-left .marquee-content {
-        animation: scrollLeft 75s linear infinite;
-      }
-
-      .scroll-right .marquee-content {
-        animation: scrollRight 75s linear infinite;
-      }
-
-      /* Pause on hover */
-      .marquee-row:hover .marquee-content {
-        animation-play-state: paused;
-      }
-
-      @keyframes scrollLeft {
-        from {
-          transform: translateX(0);
-        }
-        to {
-          transform: translateX(-100%);
-        }
-      }
-
-      @keyframes scrollRight {
-        from {
-          transform: translateX(-100%);
-        }
-        to {
-          transform: translateX(0);
-        }
-      }
-
+      .scroll-left .marquee-content { animation: scrollLeft 75s linear infinite; }
+      .scroll-right .marquee-content { animation: scrollRight 75s linear infinite; }
+      .marquee-row:hover .marquee-content { animation-play-state: paused; }
+      @keyframes scrollLeft { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+      @keyframes scrollRight { from { transform: translateX(-100%); } to { transform: translateX(0); } }
       .clients-marquee img {
-        display: block;
-        height: 28px; /* Standardized height */
-        width: auto;
-        opacity: 0.4;
-        transition:
-          opacity 0.3s ease,
-          transform 0.3s ease,
-          filter 0.3s ease;
-        /* filter: grayscale(100%); - Removed to show colors but dim */
+        display: block; height: 28px; width: auto; opacity: 0.4;
+        transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
         will-change: transform, opacity, filter;
       }
-
-      .clients-marquee img:hover {
-        opacity: 1;
-        filter: none;
-        transform: scale(1.05);
-      }
-
-      .section-header {
-        width: 100%;
-        max-width: 1200px;
-        margin: 120px auto 0 auto;
-        padding: 0 20px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.7rem;
-        color: var(--neon-blue);
-        text-transform: uppercase;
-        letter-spacing: 0.4em;
-        opacity: 0.5;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        z-index: 1;
-        position: relative;
-      }
-      .section-header::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
-      }
+      .clients-marquee img:hover { opacity: 1; transform: scale(1.05); }
 
       /* About Us Section */
       .about-grid {
@@ -649,7 +414,7 @@
         width: 100%;
         max-width: 1200px;
         margin: 0 auto; 
-        padding: 100px 20px; /* MATCHES CONTENT-SECTION */
+        padding: 100px 20px;
       }
 
       .terminal-window {
@@ -676,56 +441,18 @@
         align-items: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       }
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        opacity: 0.6;
-      }
-      .dot.red {
-        background: #ff5f56;
-      }
-      .dot.yellow {
-        background: #ffbd2e;
-      }
-      .dot.green {
-        background: #27c93f;
-      }
+      .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.6; }
+      .dot.red { background: #ff5f56; }
+      .dot.yellow { background: #ffbd2e; }
+      .dot.green { background: #27c93f; }
 
-      .terminal-body {
-        padding: 30px;
-        text-align: left;
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .terminal-body p {
-        margin: 8px 0;
-        line-height: 1.6;
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.7);
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        text-align: left;
-      }
-      .cmd {
-        color: var(--neon-blue);
-        opacity: 0.9;
-      }
-      .string {
-        color: #ce9178;
-      }
-      .comment {
-        color: rgba(255, 255, 255, 0.3);
-        font-style: normal;
-      }
-      .cursor {
-        animation: blink 1s step-end infinite;
-        color: var(--neon-blue);
-      }
-      @keyframes blink {
-        50% {
-          opacity: 0;
-        }
-      }
+      .terminal-body { padding: 30px; text-align: left; font-family: 'JetBrains Mono', monospace; }
+      .terminal-body p { margin: 8px 0; line-height: 1.6; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); overflow-wrap: break-word; text-align: left; }
+      .cmd { color: var(--neon-blue); opacity: 0.9; }
+      .string { color: #ce9178; }
+      .comment { color: rgba(255, 255, 255, 0.3); font-style: normal; }
+      .cursor { animation: blink 1s step-end infinite; color: var(--neon-blue); }
+      @keyframes blink { 50% { opacity: 0; } }
 
       /* Footer */
       .site-footer {
@@ -739,112 +466,39 @@
         z-index: 2;
         box-sizing: border-box;
         margin-top: 80px; 
-        margin-left: auto;   /* Center fix */
-        margin-right: auto;  /* Center fix */
+        margin-left: auto;
+        margin-right: auto;
       }
       @media (min-width: 1201px) {
         .site-footer {
-          width: 95%; /* Small side gutter */
+          width: 95%;
           border: 1px solid rgba(255, 255, 255, 0.05);
           border-radius: 24px;
-          margin: 40px auto 40px 0; /* Restored top margin */
+          margin: 0 auto 40px 0;
           background: rgba(255, 255, 255, 0.01);
           backdrop-filter: blur(10px);
         }
       }
-      .footer-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-      }
-      .footer-socials {
-        display: flex;
-        gap: 25px;
-      }
-      .footer-socials a {
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 1.5rem;
-        transition: all 0.3s ease;
-      }
-      .footer-socials a:hover {
-        color: var(--neon-blue);
-        transform: translateY(-3px);
-      }
-      .footer-legal {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.2);
-      }
-      .footer-legal a {
-        color: rgba(255, 255, 255, 0.3);
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-      .footer-legal a:hover {
-        color: var(--neon-blue);
-      }
+      .footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+      .footer-socials { display: flex; gap: 25px; }
+      .footer-socials a { color: rgba(255, 255, 255, 0.4); font-size: 1.5rem; transition: all 0.3s ease; }
+      .footer-socials a:hover { color: var(--neon-blue); transform: translateY(-3px); }
+      .footer-legal { display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(255, 255, 255, 0.2); }
+      .footer-legal a { color: rgba(255, 255, 255, 0.3); text-decoration: none; transition: color 0.3s ease; }
+      .footer-legal a:hover { color: var(--neon-blue); }
     </style>
     <style>
       #initial-loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #050507;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        animation: loaderFadeOut 0.5s ease forwards;
-        animation-delay: 2s;
-        pointer-events: none;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050507;
+        display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+        animation: loaderFadeOut 0.5s ease forwards; animation-delay: 2s; pointer-events: none;
       }
-      @keyframes loaderFadeOut {
-        from { opacity: 1; visibility: visible; }
-        to { opacity: 0; visibility: hidden; }
-      }
-      .loader-logo {
-        width: 120px;
-        height: auto;
-        margin-bottom: 30px;
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0% { transform: scale(1); opacity: 0.8; }
-        50% { transform: scale(1.05); opacity: 1; }
-        100% { transform: scale(1); opacity: 0.8; }
-      }
-      .loader-bar {
-        width: 200px;
-        height: 2px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 1px;
-        overflow: hidden;
-        position: relative;
-      }
-      .loader-progress {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        background: #03dac6;
-        width: 30%;
-        animation: progress 2s infinite ease-in-out;
-      }
-      @keyframes progress {
-        0% { left: -30%; width: 30%; }
-        50% { left: 20%; width: 60%; }
-        100% { left: 100%; width: 30%; }
-      }
+      @keyframes loaderFadeOut { from { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; } }
+      .loader-logo { width: 120px; height: auto; margin-bottom: 30px; animation: pulse 2s infinite; }
+      @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+      .loader-bar { width: 200px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; overflow: hidden; position: relative; }
+      .loader-progress { position: absolute; top: 0; left: 0; height: 100%; background: #03dac6; width: 30%; animation: progress 2s infinite ease-in-out; }
+      @keyframes progress { 0% { left: -30%; width: 30%; } 50% { left: 20%; width: 60%; } 100% { left: 100%; width: 30%; } }
     </style>
   </head>
   <body>
@@ -855,6 +509,9 @@
       </div>
       <p style="color: #666; font-family: 'JetBrains Mono', monospace; font-size: 0.7em; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase;">Synchronizing Dexter Network...</p>
     </div>
+
+    <!-- WebGPU Site Background -->
+    <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;"></canvas>
 
     <!-- Game UI Elements -->
     <div id="game-overlay" class="game-ui-overlay">
@@ -896,48 +553,13 @@
       </div>
     </div>
 
-    <!-- WebGPU Site Background -->
-    <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;"></canvas>
-
-    <!-- Game UI Elements -->
-    <div id="game-overlay" class="game-ui-overlay">
-      
+    <main id="main">
       <section class="hero-section">
         <!-- Section 1: Logo & Year -->
         <div class="hero-top-group">
           <svg viewBox="0 0 1600 450" class="easter-hero-subtitle">
-            <text
-              x="50%"
-              y="85%"
-              text-anchor="middle"
-              style="
-                font-family: 'Poppins', sans-serif;
-                font-size: 280px;
-                font-weight: 700;
-                fill: transparent;
-                stroke: rgba(255, 255, 255, 0.3);
-                stroke-width: 4px;
-                letter-spacing: 10px;
-              "
-            >
-              COMPANY
-            </text>
-            <text
-              x="50%"
-              y="60%"
-              text-anchor="middle"
-              style="
-                font-family: 'Poppins', sans-serif;
-                font-size: 280px;
-                font-weight: 700;
-                fill: transparent;
-                stroke: rgba(255, 255, 255, 0.9);
-                stroke-width: 4px;
-                letter-spacing: 10px;
-              "
-            >
-              EASTER
-            </text>
+            <text x="50%" y="85%" text-anchor="middle" style="font-family: 'Poppins', sans-serif; font-size: 280px; font-weight: 700; fill: transparent; stroke: rgba(255, 255, 255, 0.3); stroke-width: 4px; letter-spacing: 10px;">COMPANY</text>
+            <text x="50%" y="60%" text-anchor="middle" style="font-family: 'Poppins', sans-serif; font-size: 280px; font-weight: 700; fill: transparent; stroke: rgba(255, 255, 255, 0.9); stroke-width: 4px; letter-spacing: 10px;">EASTER</text>
           </svg>
           <div class="est-text">EST. 2016</div>
         </div>
@@ -961,77 +583,20 @@
       </section>
 
       <div class="clients-marquee">
-        <!-- Row 1: Left Scroll -->
         <div class="marquee-row scroll-left">
           <div class="marquee-content">
-            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-            <img src="/static/assets/clients/dior.svg" alt="Dior" />
-            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-            <img src="/static/assets/clients/boss.svg" alt="Boss" />
-            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/european-union.svg" alt="European Union" />
           </div>
-          <!-- Duplicate for loop -->
           <div class="marquee-content">
-            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-            <img src="/static/assets/clients/dior.svg" alt="Dior" />
-            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-            <img src="/static/assets/clients/boss.svg" alt="Boss" />
-            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
+            <img src="/static/assets/clients/emperia.svg" alt="Emperia" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/european-union.svg" alt="European Union" />
           </div>
         </div>
-
-        <!-- Row 2: Right Scroll (Reverse Order) -->
         <div class="marquee-row scroll-right">
           <div class="marquee-content">
-            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
-            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-            <img src="/static/assets/clients/boss.svg" alt="Boss" />
-            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-            <img src="/static/assets/clients/dior.svg" alt="Dior" />
-            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/emperia.svg" alt="Emperia" />
           </div>
-          <!-- Duplicate for loop -->
           <div class="marquee-content">
-            <img src="/static/assets/clients/european-union.svg" alt="European Union" />
-            <img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" />
-            <img src="/static/assets/clients/nespresso.svg" alt="Nespresso" />
-            <img src="/static/assets/clients/burberry.svg" alt="Burberry" />
-            <img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" />
-            <img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" />
-            <img src="/static/assets/clients/walmart.svg" alt="Walmart" />
-            <img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" />
-            <img src="/static/assets/clients/lacoste.svg" alt="Lacoste" />
-            <img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" />
-            <img src="/static/assets/clients/boss.svg" alt="Boss" />
-            <img src="/static/assets/clients/pinko.svg" alt="Pinko" />
-            <img src="/static/assets/clients/dior.svg" alt="Dior" />
-            <img src="/static/assets/clients/emperia.svg" alt="Emperia" />
+            <img src="/static/assets/clients/european-union.svg" alt="European Union" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/emperia.svg" alt="Emperia" />
           </div>
         </div>
       </div>
@@ -1039,36 +604,19 @@
       <div class="about-grid">
         <div class="terminal-window">
           <div class="terminal-header">
-            <div style="display: flex; gap: 8px">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-            </div>
-            <div
-              style="
-                font-family: 'JetBrains Mono', monospace;
-                font-size: 0.7em;
-                color: rgba(255, 255, 255, 0.3);
-                text-transform: uppercase;
-              "
-            >
-              about_dexter.sh
-            </div>
+            <div style="display: flex; gap: 8px"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7em; color: rgba(255, 255, 255, 0.3); text-transform: uppercase;">about_dexter.sh</div>
           </div>
           <div class="terminal-body">
             <p><span class="cmd">root@easter:~$</span> ./about_dexter.sh</p>
             <p>&gt; [SUCCESS] Dexter is the world's first self-evolving, decentralized, distributed AI compute network. This means intelligence is no longer locked in a central silo; it lives across a global mesh of nodes, learning and adapting recursively based on real-time environmental interactions.</p>
-            <br />
-            <p class="comment"># E++ Subscription Protocol</p>
+            <br /><p class="comment"># E++ Subscription Protocol</p>
             <p>As a subscriber to E++, you receive Easter Company hosted, encrypted, and completely unrestricted access to your own dedicated servers. These servers host a self-evolving AI that is unique to you—it grows, dreams, and learns specifically from your data and workflows without caps or filters.</p>
-            <br />
-            <p class="comment"># Freedom & Responsibility</p>
+            <br /><p class="comment"># Freedom & Responsibility</p>
             <p>The total freedom this provides means you have full control, even if it results in system-level instability. However, you are never alone—you have 24/7 access to Easter Company support channels, where real humans are available via text or voice to help you stabilize or scale your unique intelligence.</p>
-            <br />
-            <p class="comment"># Personal Deployment License</p>
+            <br /><p class="comment"># Personal Deployment License</p>
             <p>By purchasing a one-time license for $195, you legally obtain the right to self-host and run Easter Company AI models and source code on your own virtual and physical hardware for personal use. This license grants you exclusive access to the Insiders Market, where you can download alternative AI models and preview prototype or beta features for FREE before they reach the main product line.</p>
-            <br />
-            <p><span class="cmd">root@easter:~$</span> <span class="cursor">_</span></p>
+            <br /><p><span class="cmd">root@easter:~$</span> <span class="cursor">_</span></p>
           </div>
         </div>
       </div>
