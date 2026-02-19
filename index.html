@@ -233,9 +233,12 @@
         background-color: #050507;
         font-family: 'Inter', sans-serif;
         overflow-x: hidden;
-        text-align: center; /* Helper for auto margin centering */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* CENTER EVERYTHING GLOBALLY */
       }
       main {
+        width: 100%;
         margin: 0;
         padding: 0;
       }
@@ -594,7 +597,6 @@
       .site-footer {
         width: 100%;
         max-width: 1200px;
-        margin: 0 auto;
         padding: 60px 20px;
         background: transparent;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -602,12 +604,14 @@
         position: relative;
         z-index: 2;
         box-sizing: border-box;
+        margin-top: auto; /* Push to bottom of flex container */
       }
       @media (min-width: 1201px) {
         .site-footer {
+          width: 95%; /* Small side gutter */
           border: 1px solid rgba(255, 255, 255, 0.05);
           border-radius: 24px;
-          margin-bottom: 40px; /* Floating look when centered */
+          margin-bottom: 40px; 
           background: rgba(255, 255, 255, 0.01);
           backdrop-filter: blur(10px);
         }
