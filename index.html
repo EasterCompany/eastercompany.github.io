@@ -447,8 +447,18 @@
       .dot.green { background: #27c93f; }
 
       .terminal-body { padding: 30px; text-align: left; font-family: 'JetBrains Mono', monospace; }
-      .terminal-body p { margin: 8px 0; line-height: 1.6; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); overflow-wrap: break-word; text-align: left; }
-      .cmd { color: var(--neon-blue); opacity: 0.9; }
+            .terminal-body p {
+              margin: 8px 0;
+              line-height: 1.6;
+              font-size: 0.85rem;
+              color: rgba(255, 255, 255, 0.7);
+              overflow-wrap: break-word;
+              text-align: left;
+            }
+            .terminal-input-row {
+              font-size: 0.85rem; /* MATCHES BODY TEXT */
+            }
+            .cmd { color: var(--neon-blue); opacity: 0.9; }
       #terminal-input-line {
         color: #fff;
         opacity: 1;
