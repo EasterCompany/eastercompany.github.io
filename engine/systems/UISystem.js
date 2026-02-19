@@ -24,13 +24,30 @@ export class UISystem {
 
   async init(registry) {
     this.element = document.getElementById('liquid-typewriter');
+    this.scrollIndicator = document.getElementById('scroll-indicator');
+    this.startTime = registry.time;
     console.log("Easter Engine: UI System Online");
   }
 
   update(registry) {
-    if (!this.element) return;
-
     const now = registry.time;
+    
+    // 1. Scroll Indicator Logic
+    if (this.scrollIndicator) {
+      const elapsed = now - this.startTime;
+      const isAtTop = window.scrollY === 0;
+      
+      // Fade in after 8s if at top
+      if (elapsed > 8.0 && isAtTop) {
+        this.scrollIndicator.style.opacity = "1";
+        this.scrollIndicator.style.pointerEvents = "auto";
+      } else {
+        this.scrollIndicator.style.opacity = "0";
+        this.scrollIndicator.style.pointerEvents = "none";
+      }
+    }
+
+    if (!this.element) return;
     const dt = now - this.lastUpdate;
 
     switch (this.state) {

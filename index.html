@@ -246,7 +246,7 @@
       /* Scroll Indicator */
       .scroll-indicator {
         margin: 0;
-        display: none; /* Hidden by default */
+        display: none; 
         flex-direction: column;
         align-items: center;
         gap: 5px;
@@ -254,12 +254,11 @@
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.7rem;
         letter-spacing: 0.2em;
-        transition:
-          opacity 0.5s ease,
-          transform 0.5s ease;
         z-index: 2;
-        pointer-events: none;
         text-transform: uppercase;
+        opacity: 0; /* START INVISIBLE */
+        transition: opacity 1s ease; /* SMOOTH FADE */
+        pointer-events: none;
       }
       @media (min-width: 1055px) {
         .scroll-indicator {
