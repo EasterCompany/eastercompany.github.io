@@ -87,11 +87,13 @@ export class HeroPass {
         for (var i = 0; i < 4; i++) {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
-          let glow = exp(-d * (12.0 / s.size)) * 0.8;
+          
+          // LARGER AND DIMMER: Decreased decay rate, decreased multiplier
+          let glow = exp(-d * (6.0 / s.size)) * 0.3;
           color += s.color * glow;
         }
         
-        let mouse_glow = exp(-mouse_dist * 12.0) * vec3<f32>(0.0, 0.6, 0.8);
+        let mouse_glow = exp(-mouse_dist * 12.0) * vec3<f32>(0.0, 0.6, 0.8) * 0.5;
         color += mouse_glow;
         color = mix(color, color * 0.3, fog);
         
@@ -181,11 +183,11 @@ export class HeroPass {
       if (!s.active) continue;
       const x = s.x * width;
       const y = (1.0 - s.y) * height;
-      const size = s.size * 300;
+      const size = s.size * 800; // MUCH BIGGER
       
       const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
       const c = s.color;
-      sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, 0.4)`);
+      sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, 0.15)`); // MUCH DIMMER
       sGrad.addColorStop(1, "rgba(0,0,0,0)");
       
       ctx.fillStyle = sGrad;
@@ -193,11 +195,11 @@ export class HeroPass {
     }
 
     // Mouse Glow
-    const mGrad = ctx.createRadialGradient(mouse[0], mouse[1], 0, mouse[0], mouse[1], 150);
-    mGrad.addColorStop(0, "rgba(0, 150, 200, 0.3)");
+    const mGrad = ctx.createRadialGradient(mouse[0], mouse[1], 0, mouse[0], mouse[1], 300);
+    mGrad.addColorStop(0, "rgba(0, 150, 200, 0.15)");
     mGrad.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = mGrad;
-    ctx.fillRect(mouse[0] - 150, mouse[1] - 150, 300, 300);
+    ctx.fillRect(mouse[0] - 300, mouse[1] - 300, 600, 600);
     
     ctx.globalCompositeOperation = "source-over";
   }
@@ -221,7 +223,7 @@ export class HeroPass {
       this.shapes[index] = {
         x: startX, y: startY, vx: vx, vy: vy,
         color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-        size: 0.2 + Math.random() * 0.4,
+        size: 0.4 + Math.random() * 0.8, // BIGGER SIZES
         active: true
       };
     }
