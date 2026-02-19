@@ -19,7 +19,8 @@ export class HeroPass {
     const shaderCode = `
       struct Shape {
         pos: vec2<f32>,
-        padding: vec2<f32>,
+        opacity: f32,
+        pad: f32,
         color: vec3<f32>,
         size: f32,
       };
@@ -88,8 +89,8 @@ export class HeroPass {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
-          // LARGER AND DIMMER: Decreased decay rate, decreased multiplier
-          let glow = exp(-d * (6.0 / s.size)) * 0.3;
+          // Apply dynamic opacity for smooth entry/exit
+          let glow = exp(-d * (6.0 / s.size)) * 0.3 * s.opacity;
           color += s.color * glow;
         }
         
@@ -148,7 +149,8 @@ export class HeroPass {
       const s = this.shapes[i];
       data[offset] = s.x;
       data[offset + 1] = s.y;
-      // data[offset + 2, 3] = padding
+      data[offset + 2] = s.opacity || 0; // Use first padding slot for opacity
+      // data[offset + 3] = unused padding
       data[offset + 4] = s.color[0];
       data[offset + 5] = s.color[1];
       data[offset + 6] = s.color[2];
@@ -187,7 +189,8 @@ export class HeroPass {
       
       const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
       const c = s.color;
-      sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, 0.15)`); // MUCH DIMMER
+      const alpha = 0.15 * (s.opacity || 0); // Apply dynamic opacity
+      sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, ${alpha})`); 
       sGrad.addColorStop(1, "rgba(0,0,0,0)");
       
       ctx.fillStyle = sGrad;
@@ -215,15 +218,16 @@ export class HeroPass {
       let startX, startY, vx, vy;
       const pastelColors = [[0.8, 0.7, 0.9], [0.7, 0.9, 0.8], [0.9, 0.8, 0.7], [0.7, 0.8, 0.9]];
 
-      if (side === 0) { startX = Math.random(); startY = -0.2; vx = (Math.random() - 0.5) * 0.2; vy = 0.3; }
-      else if (side === 1) { startX = 1.2; startY = Math.random(); vx = -0.3; vy = (Math.random() - 0.5) * 0.2; }
-      else if (side === 2) { startX = Math.random(); startY = 1.2; vx = (Math.random() - 0.5) * 0.2; vy = -0.3; }
-      else { startX = -0.2; startY = Math.random(); vx = 0.3; vy = (Math.random() - 0.5) * 0.2; }
+      if (side === 0) { startX = Math.random(); startY = -0.5; vx = (Math.random() - 0.5) * 0.15; vy = 0.2; }
+      else if (side === 1) { startX = 1.5; startY = Math.random(); vx = -0.2; vy = (Math.random() - 0.5) * 0.15; }
+      else if (side === 2) { startX = Math.random(); startY = 1.5; vx = (Math.random() - 0.5) * 0.15; vy = -0.2; }
+      else { startX = -0.5; startY = Math.random(); vx = 0.2; vy = (Math.random() - 0.5) * 0.15; }
 
       this.shapes[index] = {
         x: startX, y: startY, vx: vx, vy: vy,
         color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-        size: 0.4 + Math.random() * 0.8, // BIGGER SIZES
+        size: 0.6 + Math.random() * 0.8, // LARGER ON AVERAGE
+        opacity: 0, // Start invisible
         active: true
       };
     }
@@ -232,10 +236,18 @@ export class HeroPass {
       if (s && s.active) {
         const dx = mouse[0] - s.x;
         const dy = mouse[1] - s.y;
-        s.vx += dx * 0.05 * registry.dt;
-        s.vy += dy * 0.05 * registry.dt;
+        s.vx += dx * 0.03 * registry.dt;
+        s.vy += dy * 0.03 * registry.dt;
         s.x += s.vx * registry.dt;
         s.y += s.vy * registry.dt;
+        
+        // Smooth opacity transition
+        if (s.x > 0 && s.x < 1 && s.y > 0 && s.y < 1) {
+          s.opacity = Math.min(1.0, s.opacity + registry.dt * 0.5);
+        } else {
+          s.opacity = Math.max(0.0, s.opacity - registry.dt * 0.5);
+        }
+
         if (s.x < -1 || s.x > 2 || s.y < -1 || s.y > 2) s.active = false;
       }
     }
