@@ -26,6 +26,7 @@ export class UISystem {
     this.element = document.getElementById('liquid-typewriter');
     this.scrollIndicator = document.getElementById('scroll-indicator');
     this.settingsTrigger = document.getElementById('settings-trigger');
+    this.spartanTrigger = document.getElementById('spartan-trigger');
     this.startTime = registry.time;
     console.log("Easter Engine: UI System Online");
   }
@@ -48,7 +49,7 @@ export class UISystem {
       }
     }
 
-    // 2. Settings Trigger Logic
+    // 2. Game UI Triggers Logic (Symmetric)
     if (this.settingsTrigger) {
       if (isAtTop) {
         this.settingsTrigger.style.opacity = "1";
@@ -57,7 +58,19 @@ export class UISystem {
       } else {
         this.settingsTrigger.style.opacity = "0";
         this.settingsTrigger.style.pointerEvents = "none";
-        this.settingsTrigger.style.transform = "translateX(20px)"; // Slide out effect
+        this.settingsTrigger.style.transform = "translateX(20px)";
+      }
+    }
+
+    if (this.spartanTrigger) {
+      if (isAtTop) {
+        this.spartanTrigger.style.opacity = "1";
+        this.spartanTrigger.style.pointerEvents = "auto";
+        this.spartanTrigger.style.transform = "translateX(0)";
+      } else {
+        this.spartanTrigger.style.opacity = "0";
+        this.spartanTrigger.style.pointerEvents = "none";
+        this.spartanTrigger.style.transform = "translateX(-20px)"; // Symmetrical slide-left
       }
     }
 

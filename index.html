@@ -231,7 +231,6 @@
       .game-ui-icon {
         position: fixed;
         top: 30px;
-        right: 30px;
         width: 46px;
         height: 46px;
         background: rgba(255, 255, 255, 0.03);
@@ -247,15 +246,20 @@
         cursor: pointer;
         z-index: 1000;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 1; /* Initial state */
+        opacity: 1;
       }
+      .game-ui-icon.left { left: 30px; }
+      .game-ui-icon.right { right: 30px; }
+
       .game-ui-icon:hover {
         background: rgba(0, 243, 255, 0.1);
         color: var(--neon-blue);
         border-color: rgba(0, 243, 255, 0.3);
-        transform: scale(1.1) rotate(45deg);
+        transform: scale(1.1);
         box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
       }
+      .game-ui-icon.right:hover { transform: scale(1.1) rotate(45deg); }
+      .game-ui-icon.left:hover { transform: scale(1.1) rotate(-10deg); }
 
       body {
         margin: 0;
@@ -751,8 +755,12 @@
       <p style="color: #666; font-family: 'JetBrains Mono', monospace; font-size: 0.7em; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase;">Synchronizing Dexter Network...</p>
     </div>
 
-    <!-- Game UI: Settings Trigger -->
-    <div id="settings-trigger" class="game-ui-icon">
+    <!-- Game UI Elements -->
+    <div id="spartan-trigger" class="game-ui-icon left">
+      <img src="/static/assets/logo/dexter-icon.svg" alt="Spartan" style="width: 24px; height: 24px; opacity: 0.7;" />
+    </div>
+
+    <div id="settings-trigger" class="game-ui-icon right">
       <i class="bx bx-cog"></i>
     </div>
 
