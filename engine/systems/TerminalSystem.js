@@ -62,6 +62,12 @@ export class TerminalSystem {
     const isOverlay = document.getElementById('game-overlay').classList.contains('active');
     if (isOverlay) return;
 
+    // Auto-focus scroll to terminal on typing
+    if (e.key.length === 1 || e.key === "Backspace" || e.key === "Enter") {
+      const terminal = document.querySelector('.terminal-window');
+      if (terminal) terminal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (e.key === "Enter") {
       this.execute(this.inputBuffer);
       this.inputBuffer = "";
@@ -72,6 +78,10 @@ export class TerminalSystem {
     }
     
     if (this.inputLine) this.inputLine.textContent = this.inputBuffer;
+    
+    // Snap internal terminal scroll to bottom
+    const body = this.container ? this.container.closest('.terminal-body') : null;
+    if (body) body.scrollTop = body.scrollHeight;
   }
 
   execute(cmdStr) {
