@@ -37,8 +37,8 @@ export class UISystem {
       const elapsed = now - this.startTime;
       const isAtTop = window.scrollY === 0;
       
-      // Fade in after 8s if at top
-      if (elapsed > 8.0 && isAtTop) {
+      // Fade in after 6s if at top
+      if (elapsed > 6.0 && isAtTop) {
         this.scrollIndicator.style.opacity = "1";
         this.scrollIndicator.style.pointerEvents = "auto";
       } else {
