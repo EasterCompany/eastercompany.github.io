@@ -37,7 +37,6 @@ export class Renderer {
       console.log("Easter Engine: Canvas2D Online");
     }
 
-    // Initialize all render passes
     for (const pass of this.passes) {
       if (!this.use2D && pass.init) {
         await pass.init(this.device, this.format, registry);
@@ -69,29 +68,39 @@ export class Renderer {
   _renderGPU(registry) {
     if (!this.device) return;
     const commandEncoder = this.device.createCommandEncoder();
+
+    // 1. Compute Phase
+    const computePass = commandEncoder.beginComputePass();
+    for (const pass of this.passes) {
+      if (pass.compute) pass.compute(computePass, registry);
+    }
+    computePass.end();
+
+    // 2. Render Phase
     const textureView = this.context.getCurrentTexture().createView();
     let loadOp = "clear";
 
     for (const pass of this.passes) {
-      const renderPassDescriptor = {
-        colorAttachments: [{
-          view: textureView,
-          clearValue: { r: 0, g: 0, b: 0, a: 1 },
-          loadOp: loadOp,
-          storeOp: "store",
-        }],
-      };
-      const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-      pass.execute(passEncoder, registry);
-      passEncoder.end();
-      loadOp = "load";
+      if (pass.execute) {
+        const renderPassDescriptor = {
+          colorAttachments: [{
+            view: textureView,
+            clearValue: { r: 0, g: 0, b: 0, a: 1 },
+            loadOp: loadOp,
+            storeOp: "store",
+          }],
+        };
+        const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+        pass.execute(passEncoder, registry);
+        passEncoder.end();
+        loadOp = "load";
+      }
     }
     this.device.queue.submit([commandEncoder.finish()]);
   }
 
   _render2D(registry) {
     if (!this.ctx2d) return;
-    // Clear screen
     this.ctx2d.fillStyle = "#050507";
     this.ctx2d.fillRect(0, 0, this.ctx2d.canvas.width, this.ctx2d.canvas.height);
 
