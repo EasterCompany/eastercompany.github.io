@@ -18,16 +18,16 @@ export class TerminalSystem {
             type: "file",
             executable: true,
             content: [
-              "> [SUCCESS] Dexter is the world's first self-evolving, decentralized, distributed AI compute network.",
+              "> [SUCCESS] Dexter is the world's first self-evolving, decentralized, distributed AI compute network. This means intelligence is no longer locked in a central silo; it lives across a global mesh of nodes, learning and adapting recursively based on real-time environmental interactions.",
               "",
               "# E++ Subscription Protocol",
-              "As a subscriber to E++, you receive Easter Company hosted, encrypted, and completely unrestricted access to your own dedicated servers...",
+              "As a subscriber to E++, you receive Easter Company hosted, encrypted, and completely unrestricted access to your own dedicated servers. These servers host a self-evolving AI that is unique to you—it grows, dreams, and learns specifically from your data and workflows without caps or filters.",
               "",
               "# Freedom & Responsibility",
-              "The total freedom this provides means you have full control...",
+              "The total freedom this provides means you have full control, even if it results in system-level instability. However, you are never alone—you have 24/7 access to Easter Company support channels, where real humans are available via text or voice to help you stabilize or scale your unique intelligence.",
               "",
               "# Personal Deployment License",
-              "By purchasing a one-time license for $195, you legally obtain the right to self-host..."
+              "By purchasing a one-time license for $195, you legally obtain the right to self-host and run Easter Company AI models and source code on your own virtual and physical hardware for personal use. This license grants you exclusive access to the Insiders Market, where you can download alternative AI models and preview prototype or beta features for FREE before they reach the main product line."
             ]
           },
           "dex": {
