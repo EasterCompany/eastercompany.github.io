@@ -233,14 +233,18 @@ export class HeroPass {
         s.x += s.vx * registry.dt;
         s.y += s.vy * registry.dt;
         
-        // Smooth opacity transition
-        if (s.x > 0 && s.x < 1 && s.y > 0 && s.y < 1) {
+        // Smooth opacity transition with buffer for large sizes
+        const buffer = s.size;
+        if (s.x > -buffer && s.x < 1.0 + buffer && s.y > -buffer && s.y < 1.0 + buffer) {
           s.opacity = Math.min(1.0, s.opacity + registry.dt * 0.5);
         } else {
           s.opacity = Math.max(0.0, s.opacity - registry.dt * 0.5);
         }
 
-        if (s.x < -1 || s.x > 2 || s.y < -1 || s.y > 2) s.active = false;
+        // Only deactivate when truly far away and fully faded
+        if (s.opacity <= 0 && (s.x < -2 || s.x > 3 || s.y < -2 || s.y > 3)) {
+          s.active = false;
+        }
       }
     }
   }
