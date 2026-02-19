@@ -595,12 +595,11 @@
       .site-footer {
         width: 100%;
         padding: 60px 20px;
-        background: rgba(5, 5, 7, 0.8);
+        background: transparent; /* TRANSPARENT */
         border-top: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 0; /* NO ROUNDED EDGES */
+        border-radius: 0;
         position: relative;
         z-index: 2;
-        backdrop-filter: blur(10px);
       }
       .footer-content {
         max-width: 1200px;
@@ -876,6 +875,9 @@
           </div>
         </div>
       </div>
+      
+      <!-- Significant space before footer -->
+      <div style="height: 300px; width: 100%"></div>
     </main>
 
     <footer class="site-footer">
