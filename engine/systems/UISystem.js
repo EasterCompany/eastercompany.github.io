@@ -1,14 +1,15 @@
 export class UISystem {
   constructor() {
     this.phrases = [
-      "Click here to chat!",
+      "Chat with Dexter...",
       "Turn off the lights...",
+      "Click here to chat!",
       "Check system status...",
-      "Click here to chat!",
       "Launch build pipeline...",
-      "Summarize current context...",
       "Click here to chat!",
+      "Summarize current context...",
       "Initialize neural kernel...",
+      "Click here to chat!",
       "Optimize memory preloading..."
     ];
     this.phraseIndex = 0;
