@@ -152,34 +152,6 @@
         pointer-events: none;
       }
 
-      .hero-icons {
-        display: flex;
-        gap: 50px;
-        margin-bottom: 0;
-        z-index: 2;
-        align-items: center;
-      }
-
-      .hero-icon {
-        height: 32px;
-        width: auto;
-        opacity: 0.5;
-        transition: all 0.3s ease;
-        filter: grayscale(100%);
-        user-select: none;
-      }
-      .hero-icon:hover {
-        opacity: 1;
-        filter: grayscale(0%) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-        transform: translateY(-3px);
-      }
-
-      @media (max-width: 879px) {
-        .hero-icons {
-          display: none;
-        }
-      }
-
       body {
         margin: 0;
         padding: 0;
@@ -727,18 +699,6 @@
         </svg>
 
         <div class="est-text">EST. 2016</div>
-
-        <div class="hero-icons">
-          <a href="/dexter" title="Dexter AI">
-            <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter" class="hero-icon" />
-          </a>
-          <a href="https://bashful-sh.github.io" target="_blank" title="Bashful CLI">
-            <img src="/static/assets/bashful-icon.svg" alt="Bashful" class="hero-icon" />
-          </a>
-          <a href="#" title="Overlord Framework">
-            <img src="/static/assets/logo/overlord_logo.svg" alt="Overlord" class="hero-icon" />
-          </a>
-        </div>
 
         <div class="scroll-indicator" id="scroll-indicator">
           <span>Scroll Down</span>
