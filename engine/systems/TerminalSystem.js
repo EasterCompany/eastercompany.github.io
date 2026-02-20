@@ -9,6 +9,15 @@ export class TerminalSystem {
       "/": {
         type: "dir",
         children: {
+          "intro.txt": {
+            type: "file",
+            content: [
+              "> [SUCCESS] Dexter is the world's first self-evolving, decentralized, distributed AI compute network. This means intelligence is no longer locked in a central silo; it lives across a global mesh of nodes, learning and adapting recursively based on real-time environmental interactions.",
+              "",
+              "# E++ Subscription Protocol",
+              "As a subscriber to E++, you receive Easter Company hosted, encrypted, and completely unrestricted access to your own dedicated servers. These servers host a self-evolving AI that is unique to you—it grows, dreams, and learns specifically from your data and workflows without caps or filters."
+            ]
+          },
           "bin2txt": {
             type: "file",
             executable: true,
