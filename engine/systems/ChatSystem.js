@@ -422,7 +422,22 @@ export class ChatSystem {
 
     } catch (err) {
       console.error("ChatSystem: Failed to delete chat:", err);
-      alert("Failed to delete chat instance. Please try again.");
+      const uiSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'UISystem');
+      let errMsg = "Failed to delete chat instance. Please try again.";
+      if (this.history.length === 0 && !this.isProcessing) {
+         errMsg = "The chat instance could not be deleted because it appears to be empty or already non-existent. A new instance has been provisioned.";
+         
+         // Force clear local state anyway just in case
+         this.sessionId = 'web-' + Math.random().toString(36).substring(2, 15);
+         localStorage.setItem('dex_session_id', this.sessionId);
+         this.addPlaceholderMessages();
+      }
+      
+      if (uiSystem) {
+        await uiSystem.alert("Deletion Failed", errMsg, true);
+      } else {
+        alert(errMsg);
+      }
     }
   }
 

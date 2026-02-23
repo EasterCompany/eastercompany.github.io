@@ -132,6 +132,46 @@ export class UISystem {
     });
   }
 
+  alert(title, message, isError = false) {
+    return new Promise((resolve) => {
+      const modal = document.getElementById('alert-modal');
+      const dialog = document.getElementById('alert-dialog');
+      const titleEl = document.getElementById('alert-title');
+      const msgEl = document.getElementById('alert-message');
+      const okBtn = document.getElementById('alert-ok');
+
+      if (!modal) {
+        // Fallback to native if not found
+        window.alert(`${title}\n\n${message}`);
+        resolve();
+        return;
+      }
+
+      titleEl.textContent = title;
+      msgEl.textContent = message;
+
+      if (isError) {
+        dialog.classList.add('error');
+      } else {
+        dialog.classList.remove('error');
+      }
+
+      const cleanup = () => {
+        modal.classList.remove('active');
+        okBtn.removeEventListener('click', onOk);
+      };
+
+      const onOk = () => {
+        cleanup();
+        resolve();
+      };
+
+      okBtn.addEventListener('click', onOk);
+
+      modal.classList.add('active');
+    });
+  }
+
   update(registry) {
     const now = registry.time;
     const isAtTop = window.scrollY === 0;

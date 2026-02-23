@@ -969,6 +969,80 @@
         gap: 15px;
         justify-content: center;
       }
+
+      /* Alert Modal */
+      .alert-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(5, 5, 7, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .alert-overlay.active {
+        display: flex;
+        opacity: 1;
+      }
+      .alert-dialog {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        transform: translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .alert-overlay.active .alert-dialog {
+        transform: translateY(0);
+      }
+      .alert-dialog.error {
+        border-color: rgba(255, 95, 86, 0.5);
+        box-shadow: 0 20px 40px rgba(255, 95, 86, 0.2);
+      }
+      .alert-dialog h3 {
+        margin: 0 0 15px 0;
+        font-size: 1.2rem;
+        color: #fff;
+        font-weight: 600;
+      }
+      .alert-dialog.error h3 {
+        color: #ff5f56;
+      }
+      .alert-dialog p {
+        margin: 0 0 25px 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.5;
+      }
+      .alert-actions {
+        display: flex;
+        justify-content: center;
+      }
+      .btn-primary {
+        padding: 10px 20px;
+        background: rgba(0, 243, 255, 0.1);
+        border: 1px solid rgba(0, 243, 255, 0.3);
+        color: var(--neon-blue);
+        border-radius: 12px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background: var(--neon-blue);
+        color: #000;
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+      }
     </style>
   </head>
   <body>
@@ -1100,7 +1174,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771888998"></script>
+    <script type="module" src="/engine/main.js?h=1771888999"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
@@ -1109,6 +1183,16 @@
         <div class="confirm-actions">
           <button id="confirm-cancel" class="btn-secondary">Cancel</button>
           <button id="confirm-ok" class="btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="alert-overlay">
+      <div id="alert-dialog" class="alert-dialog">
+        <h3 id="alert-title">Alert</h3>
+        <p id="alert-message">This is an alert message.</p>
+        <div class="alert-actions">
+          <button id="alert-ok" class="btn-primary">OK</button>
         </div>
       </div>
     </div>
