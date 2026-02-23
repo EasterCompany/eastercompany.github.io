@@ -115,8 +115,13 @@ export class ChatSystem {
     });
 
     // Initialize
+    console.log(`ChatSystem: Initializing session ${this.sessionId}`);
     await this.fetchHistory();
     await this.syncProcessState();
+    
+    if (this.history.length === 0) {
+      this.addPlaceholderMessages();
+    }
     
     console.log("Easter Engine: Chat System Online");
   }
@@ -125,8 +130,13 @@ export class ChatSystem {
     if (!this.historyEl) return;
     
     try {
-      const response = await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}&category=messaging&order=desc&format=json&ml=50`);
-      if (!response.ok) return;
+      const url = `${this.eventServiceUrl}/events?channel=${this.sessionId}&category=messaging&order=desc&format=json&ml=50`;
+      console.log(`ChatSystem: Fetching history from ${url}`);
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error(`ChatSystem: History fetch failed with status ${response.status}`);
+        return;
+      }
       
       const data = await response.json();
       if (data && data.events && data.events.length > 0) {
@@ -154,6 +164,8 @@ export class ChatSystem {
             this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false);
           }
         });
+      } else {
+        console.log("ChatSystem: No history found for this session.");
       }
     } catch (err) {
       console.error("Failed to fetch history:", err);
@@ -162,18 +174,24 @@ export class ChatSystem {
 
   async syncProcessState() {
     try {
-      const response = await fetch(`${this.eventServiceUrl}/processes`);
+      const url = `${this.eventServiceUrl}/processes`;
+      console.log(`ChatSystem: Syncing process state from ${url}`);
+      const response = await fetch(url);
       if (!response.ok) return;
       
       const data = await response.json();
       const active = data.active || [];
       const queue = data.queue || [];
+      console.log(`ChatSystem: Processes - Active: ${active.length}, Queue: ${queue.length}`);
+      
       const ourProcess = [...active, ...queue].find(p => p.channel_id === this.sessionId);
       
       if (ourProcess) {
-        console.log("Active process found for session, re-attaching...");
+        console.log(`ChatSystem: Active process found for our session (${this.sessionId}), re-attaching...`, ourProcess);
         this.setProcessing(true);
         this.updateProcessStatus(ourProcess.state);
+      } else {
+        console.log(`ChatSystem: No active process found for session ${this.sessionId}`);
       }
     } catch (err) {
       console.error("Failed to sync process state:", err);
