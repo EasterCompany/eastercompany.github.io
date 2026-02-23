@@ -159,7 +159,9 @@ export class ChatSystem {
       if (!response.ok) return;
       
       const data = await response.json();
-      const ourProcess = [...data.active, ...data.queued].find(p => p.channel_id === this.sessionId);
+      const active = data.active || [];
+      const queue = data.queue || [];
+      const ourProcess = [...active, ...queue].find(p => p.channel_id === this.sessionId);
       
       if (ourProcess) {
         console.log("Active process found for session, re-attaching...");
