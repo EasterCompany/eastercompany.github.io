@@ -85,6 +85,12 @@ export class TerminalSystem {
   handleKey(e) {
     if (!this.isFocused) return;
 
+    if (e.key === 'Escape') {
+      this.isFocused = false;
+      if (this.window) this.window.classList.remove('focused');
+      return;
+    }
+
     const isOverlay = document.getElementById('game-overlay').classList.contains('active');
     if (isOverlay) return;
 

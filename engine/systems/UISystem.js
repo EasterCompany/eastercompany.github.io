@@ -42,6 +42,12 @@ export class UISystem {
 
     this.activeView = null;
     this.setupListeners();
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.activeView) {
+        this.toggleOverlay(this.activeView);
+      }
+    });
     
     console.log("Easter Engine: UI System Online");
   }
