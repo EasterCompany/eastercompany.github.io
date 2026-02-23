@@ -764,6 +764,109 @@
         box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
       }
 
+      /* Locked & Loading State */
+      #chat-container.locked .chat-history {
+        pointer-events: none;
+        filter: grayscale(0.5) blur(2px);
+        opacity: 0.7;
+      }
+      #chat-container.locked .liquid-chat-bar {
+        background: rgba(0, 243, 255, 0.05);
+        border-color: var(--neon-blue);
+        pointer-events: none;
+      }
+      #chat-container.locked .liquid-chat-bar::before {
+        animation: liquidShine 1.5s infinite linear;
+        background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+      }
+      #chat-container.locked .liquid-chat-bar input {
+        opacity: 0.5;
+      }
+
+      .chat-cancel-btn {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: rgba(255, 95, 86, 0.1);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 95, 86, 0.2);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: #ff5f56;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #chat-container.locked .chat-submit-btn { display: none; }
+      #chat-container.locked .chat-cancel-btn { display: flex; }
+      .chat-cancel-btn:hover {
+        background: #ff5f56;
+        color: #fff;
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 95, 86, 0.4);
+      }
+
+      /* Settings Menu Styling */
+      .settings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 30px;
+      }
+      .settings-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+      }
+      .settings-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      .settings-info h4 {
+        font-size: 1rem;
+        margin-bottom: 4px;
+        color: #fff;
+      }
+      .settings-info p {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* Toggle Switch */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+      }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: .4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px; width: 18px;
+        left: 4px; bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider { background-color: var(--neon-blue); }
+      input:checked + .slider:before { transform: translateX(24px); }
+
       /* Chat Close Button */
       .chat-close-btn {
         position: fixed;
@@ -837,6 +940,9 @@
         <button class="chat-submit-btn" id="chat-submit">
           <i class='bx bx-send'></i>
         </button>
+        <button class="chat-cancel-btn" id="chat-cancel" title="Cancel Process (Esc)">
+          <i class='bx bx-stop-circle'></i>
+        </button>
       </div>
     </div>
 
@@ -860,7 +966,18 @@
         </div>
         <div id="overlay-view-settings" class="overlay-view">
           <h2>SYSTEM SETTINGS</h2>
-          <p>Adjusting kernel parameters...</p>
+          <div class="settings-list">
+            <div class="settings-item">
+              <div class="settings-info">
+                <h4>Debug Mode</h4>
+                <p>Show all unrelated system events in the live chat stream.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-debug-mode">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>

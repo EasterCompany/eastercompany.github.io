@@ -7,6 +7,9 @@ export class ChatSystem {
     this.eventServiceUrl = "";
     this.ws = null;
     this.sessionId = this.getOrCreateSessionId();
+    this.isProcessing = false;
+    this.debugMode = localStorage.getItem('dex_debug_mode') === 'true';
+    this.version = "12.1.0"; // Derived from build report
   }
 
   getOrCreateSessionId() {
@@ -24,9 +27,17 @@ export class ChatSystem {
     this.historyEl = document.getElementById('chat-history');
     this.input = document.getElementById('chat-input');
     this.submitBtn = document.getElementById('chat-submit');
+    this.cancelBtn = document.getElementById('chat-cancel');
     this.trigger = document.getElementById('dexter-chat-trigger');
     this.closeBtn = document.getElementById('chat-close');
     
+    // Settings
+    this.debugToggle = document.getElementById('setting-debug-mode');
+    if (this.debugToggle) {
+      this.debugToggle.checked = this.debugMode;
+      this.debugToggle.addEventListener('change', (e) => this.setDebugMode(e.target.checked));
+    }
+
     // Elements to fade out
     this.mainContent = document.getElementById('main');
     this.footer = document.querySelector('.site-footer');
@@ -43,6 +54,10 @@ export class ChatSystem {
       this.submitBtn.addEventListener('click', () => this.sendMessage());
     }
 
+    if (this.cancelBtn) {
+      this.cancelBtn.addEventListener('click', () => this.cancelProcess());
+    }
+
     if (this.closeBtn) {
       this.closeBtn.addEventListener('click', () => this.exitChatMode());
     }
@@ -55,7 +70,11 @@ export class ChatSystem {
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        this.toggleChatMode();
+        if (this.isProcessing) {
+          this.cancelProcess();
+        } else if (this.isActive) {
+          this.toggleChatMode();
+        }
       }
     });
 
@@ -65,6 +84,15 @@ export class ChatSystem {
     console.log("Easter Engine: Chat System Online");
     console.log(`Easter Engine: API URL: ${this.apiUrl}`);
     console.log(`Easter Engine: Session ID: ${this.sessionId}`);
+  }
+
+  setDebugMode(enabled) {
+    this.debugMode = enabled;
+    localStorage.setItem('dex_debug_mode', enabled);
+    console.log(`Easter Engine: Debug Mode ${enabled ? 'Enabled' : 'Disabled'}`);
+    
+    // Re-render history? For now just affects new messages
+    // Optional: could hide/show existing event bubbles
   }
 
   resolveUrls() {
@@ -135,7 +163,7 @@ export class ChatSystem {
     if (this.container) {
       this.container.classList.add('active');
       setTimeout(() => {
-        if (this.isActive && this.input) this.input.focus();
+        if (this.isActive && this.input && !this.isProcessing) this.input.focus();
       }, 800);
     }
 
@@ -210,7 +238,6 @@ export class ChatSystem {
 
   handleLiveEvent(rawEvent) {
     if (!rawEvent || !rawEvent.event) {
-      // console.warn("Received malformed event via WS:", rawEvent);
       return;
     }
 
@@ -222,28 +249,37 @@ export class ChatSystem {
 
     if (isOurSession) {
       if (type === 'messaging.user.sent_message') {
-        // Skip: already added optimistically in sendMessage
-        return;
+        return; // Already added optimistically
       } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
-        this.addMessage('assistant', 'Dexter', eventData.content || eventData.text);
+        this.addMessage('assistant', 'Dexter', eventData.content || eventData.response || eventData.text);
+        this.setProcessing(false);
+      } else if (type === 'system.process.unregistered' || type === 'system.process.error' || type === 'system.process.cancelled') {
+        // Unlock if our processing finishes or fails
+        this.setProcessing(false);
       } else {
-        // Other session events as log entries
-        this.addMessage('event', 'Session Event', rawEvent);
+        // Only show log events in UI if debug mode is on
+        if (this.debugMode) {
+          this.addMessage('event', 'Session Event', rawEvent);
+        }
       }
     } else {
-      // General system events
-      this.addMessage('event', 'System Event', rawEvent);
+      // General system events - only show if debug mode is on
+      if (this.debugMode) {
+        this.addMessage('event', 'System Event', rawEvent);
+      }
     }
   }
 
   async sendMessage() {
+    if (this.isProcessing) return;
     if (!this.input || !this.input.value.trim()) return;
     
     const text = this.input.value.trim();
     this.input.value = '';
 
-    // Optimistic UI update: add message immediately
+    // Optimistic UI update
     this.addMessage('user', 'You', text);
+    this.setProcessing(true);
 
     const payload = {
       service: "dex-web-frontend",
@@ -271,9 +307,60 @@ export class ChatSystem {
       
       if (!response.ok) {
         console.error("Failed to send message:", await response.text());
+        this.setProcessing(false);
       }
     } catch (err) {
       console.error("Error sending message:", err);
+      this.setProcessing(false);
+    }
+  }
+
+  async cancelProcess() {
+    if (!this.isProcessing) return;
+    
+    console.log("Cancelling process...");
+    // Update label to show cancellation in progress
+    if (this.input) this.input.placeholder = "Cancelling...";
+
+    const payload = {
+      service: "dex-web-frontend",
+      event: {
+        type: "system.process.cancel_request",
+        source: "web",
+        channel_id: this.sessionId,
+        timestamp: new Date().toISOString()
+      }
+    };
+
+    try {
+      await fetch(`${this.eventServiceUrl}/post`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      // We don't unlock yet - we wait for the backend to send 'system.process.cancelled' or similar via WS
+    } catch (err) {
+      console.error("Error sending cancel request:", err);
+      this.setProcessing(false); // Fallback unlock on network error
+    }
+  }
+
+  setProcessing(processing) {
+    this.isProcessing = processing;
+    if (this.container) {
+      if (processing) {
+        this.container.classList.add('locked');
+        if (this.input) {
+          this.input.placeholder = "Dexter is thinking...";
+          this.input.blur();
+        }
+      } else {
+        this.container.classList.remove('locked');
+        if (this.input) {
+          this.input.placeholder = "Enter command or message...";
+          setTimeout(() => { if (this.isActive) this.input.focus(); }, 100);
+        }
+      }
     }
   }
 
@@ -281,7 +368,6 @@ export class ChatSystem {
     if (crypto && typeof crypto.randomUUID === 'function') {
       return crypto.randomUUID();
     }
-    // Fallback for non-secure contexts
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
@@ -326,15 +412,13 @@ export class ChatSystem {
       msgEl.appendChild(label);
       msgEl.appendChild(bubble);
       this.historyEl.appendChild(msgEl);
-
-      // Scroll to bottom
       this.historyEl.scrollTop = this.historyEl.scrollHeight;
     }
   }
 
   addPlaceholderMessages() {
-    this.addMessage('system', 'System', 'Neural link established. Dexter Core v12.0.75 online.');
-    this.addMessage('assistant', 'Dexter', 'Interactive session initialized. Live system events are now streaming.');
+    this.addMessage('system', 'System', 'Start of Chat.');
+    this.addMessage('assistant', 'Dexter', `Hello. I am Dexter Mark 14 Version ${this.version}, how are you doing today?`);
   }
 
   update(registry) {}
