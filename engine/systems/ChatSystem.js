@@ -250,6 +250,10 @@ export class ChatSystem {
         user_id: "anonymous",
         user_name: "Web User",
         channel_id: this.sessionId,
+        channel_name: "Private Web Chat",
+        server_id: window.location.hostname,
+        server_name: "Easter Company Web",
+        message_id: crypto.randomUUID(),
         timestamp: new Date().toISOString()
       }
     };
