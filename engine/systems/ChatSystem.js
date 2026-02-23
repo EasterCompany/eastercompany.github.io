@@ -125,22 +125,29 @@ export class ChatSystem {
     if (!this.historyEl) return;
     
     try {
-      const response = await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}&order=asc&format=json&ml=50`);
+      const response = await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}&order=desc&format=json&ml=50`);
       if (!response.ok) return;
       
       const data = await response.json();
       if (data && data.events && data.events.length > 0) {
+        console.log(`ChatSystem: Fetched ${data.events.length} events for session ${this.sessionId}`);
+        
         // Clear initial placeholders if we have real history
         this.historyEl.innerHTML = '';
         this.history = [];
         
-        data.events.forEach(e => {
+        // Reverse because we fetched newest first (desc) but want to display chronological (asc)
+        const sortedEvents = data.events.reverse();
+        
+        sortedEvents.forEach(e => {
           let eventData;
           try {
             eventData = JSON.parse(e.event);
           } catch(err) { return; }
           
           const type = eventData.type;
+          console.log(`ChatSystem: Processing event type: ${type}`);
+          
           if (type === 'messaging.user.sent_message') {
             this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false);
           } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
