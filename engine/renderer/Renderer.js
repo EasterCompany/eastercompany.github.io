@@ -10,7 +10,11 @@ export class Renderer {
 
   async init(registry, canvas) {
     if (!navigator.gpu) {
-      console.warn("WebGPU not supported, falling back to Canvas2D");
+      if (!window.isSecureContext) {
+        console.warn("WebGPU requires a Secure Context (HTTPS or localhost). current origin is insecure.");
+      } else {
+        console.warn("WebGPU not supported by this browser, falling back to Canvas2D");
+      }
       this.use2D = true;
     } else {
       try {
