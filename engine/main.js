@@ -19,6 +19,7 @@ engine.addSystem(new TerminalSystem());
 engine.addSystem(new ChatSystem());
 
 // Start
+window.easterEngine = engine;
 engine.init().catch(err => {
   console.error("Easter Engine Verification Failed:", err);
 });

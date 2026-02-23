@@ -336,8 +336,17 @@ export class ChatSystem {
   }
 
   async deleteChat() {
-    if (!confirm("Are you sure you want to delete this chat instance? This will clear all history and kill any active processes for this session.")) {
-      return;
+    const uiSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'UISystem');
+    if (uiSystem) {
+      const confirmed = await uiSystem.confirm(
+        "Delete Chat", 
+        "Are you sure you want to delete this chat instance? This will clear all history and kill any active processes for this session."
+      );
+      if (!confirmed) return;
+    } else {
+      if (!confirm("Are you sure you want to delete this chat instance? This will clear all history and kill any active processes for this session.")) {
+        return;
+      }
     }
 
     console.log(`ChatSystem: Deleting chat instance ${this.sessionId}`);

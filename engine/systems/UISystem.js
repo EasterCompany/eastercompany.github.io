@@ -92,6 +92,46 @@ export class UISystem {
     }
   }
 
+  confirm(title, message) {
+    return new Promise((resolve) => {
+      const modal = document.getElementById('confirm-modal');
+      const titleEl = document.getElementById('confirm-title');
+      const msgEl = document.getElementById('confirm-message');
+      const cancelBtn = document.getElementById('confirm-cancel');
+      const okBtn = document.getElementById('confirm-ok');
+
+      if (!modal) {
+        // Fallback to native if not found
+        resolve(window.confirm(`${title}\n\n${message}`));
+        return;
+      }
+
+      titleEl.textContent = title;
+      msgEl.textContent = message;
+
+      const cleanup = () => {
+        modal.classList.remove('active');
+        cancelBtn.removeEventListener('click', onCancel);
+        okBtn.removeEventListener('click', onOk);
+      };
+
+      const onCancel = () => {
+        cleanup();
+        resolve(false);
+      };
+
+      const onOk = () => {
+        cleanup();
+        resolve(true);
+      };
+
+      cancelBtn.addEventListener('click', onCancel);
+      okBtn.addEventListener('click', onOk);
+
+      modal.classList.add('active');
+    });
+  }
+
   update(registry) {
     const now = registry.time;
     const isAtTop = window.scrollY === 0;

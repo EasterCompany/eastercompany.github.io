@@ -1065,6 +1065,73 @@
       .loader-bar { width: 200px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; overflow: hidden; position: relative; }
       .loader-progress { position: absolute; top: 0; left: 0; height: 100%; background: #03dac6; width: 30%; animation: progress 2s infinite ease-in-out; }
       @keyframes progress { 0% { left: -30%; width: 30%; } 50% { left: 20%; width: 60%; } 100% { left: 100%; width: 30%; } }
+      .btn-secondary {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 12px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Confirm Modal */
+      .confirm-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(5, 5, 7, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .confirm-overlay.active {
+        display: flex;
+        opacity: 1;
+      }
+      .confirm-dialog {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        transform: translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .confirm-overlay.active .confirm-dialog {
+        transform: translateY(0);
+      }
+      .confirm-dialog h3 {
+        margin: 0 0 15px 0;
+        font-size: 1.2rem;
+        color: #fff;
+        font-weight: 600;
+      }
+      .confirm-dialog p {
+        margin: 0 0 25px 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.5;
+      }
+      .confirm-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+      }
     </style>
   </head>
   <body>
@@ -1256,5 +1323,16 @@
     </footer>
 
     <script type="module" src="/engine/main.js?h=1771885450"></script>
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="confirm-overlay">
+      <div class="confirm-dialog">
+        <h3 id="confirm-title">Confirmation</h3>
+        <p id="confirm-message">Are you sure you want to proceed?</p>
+        <div class="confirm-actions">
+          <button id="confirm-cancel" class="btn-secondary">Cancel</button>
+          <button id="confirm-ok" class="btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
