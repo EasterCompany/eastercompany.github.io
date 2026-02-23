@@ -253,7 +253,7 @@ export class ChatSystem {
         channel_name: "Private Web Chat",
         server_id: window.location.hostname,
         server_name: "Easter Company Web",
-        message_id: crypto.randomUUID(),
+        message_id: this.generateUUID(),
         timestamp: new Date().toISOString()
       }
     };
@@ -271,6 +271,17 @@ export class ChatSystem {
     } catch (err) {
       console.error("Error sending message:", err);
     }
+  }
+
+  generateUUID() {
+    if (crypto && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    // Fallback for non-secure contexts
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 
   addMessage(type, sender, content) {
