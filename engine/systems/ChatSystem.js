@@ -4,8 +4,18 @@ export class ChatSystem {
     this.history = [];
     this.apiUrl = "";
     this.wsUrl = "";
-    this.lastEventId = "";
-    this.eventPollInterval = null;
+    this.eventServiceUrl = "";
+    this.ws = null;
+    this.sessionId = this.getOrCreateSessionId();
+  }
+
+  getOrCreateSessionId() {
+    let id = localStorage.getItem('dex_session_id');
+    if (!id) {
+      id = 'web-' + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('dex_session_id', id);
+    }
+    return id;
   }
 
   async init(registry) {
@@ -33,10 +43,6 @@ export class ChatSystem {
       this.submitBtn.addEventListener('click', () => this.sendMessage());
     }
 
-    if (this.closeBtn) {
-      this.closeBtn.addEventListener('click', () => this.exitChatMode());
-    }
-
     if (this.input) {
       this.input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') this.sendMessage();
@@ -54,6 +60,7 @@ export class ChatSystem {
     
     console.log("Easter Engine: Chat System Online");
     console.log(`Easter Engine: API URL: ${this.apiUrl}`);
+    console.log(`Easter Engine: Session ID: ${this.sessionId}`);
   }
 
   resolveUrls() {
@@ -63,16 +70,16 @@ export class ChatSystem {
     if (host === 'easter.company' || host === 'www.easter.company') {
       this.apiUrl = 'https://dashboard.easter.company';
       this.wsUrl = 'wss://dashboard.easter.company/ws';
-      this.eventServiceUrl = 'https://dashboard.easter.company/events'; // Proxy through dashboard? Assuming for now.
+      this.eventServiceUrl = 'https://dashboard.easter.company'; // Post to dashboard proxy
     } else if (host === '100.100.1.0') {
       this.apiUrl = 'http://100.100.1.3:8200';
       this.wsUrl = 'ws://100.100.1.3:8200/ws';
-      this.eventServiceUrl = 'http://100.100.1.0:8100';
+      this.eventServiceUrl = 'http://100.100.1.3:8200'; // Dashboard port
     } else {
       // Development/Fallback
       this.apiUrl = `${protocol}//${host}:8200`;
       this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
-      this.eventServiceUrl = `${protocol}//${host}:8100`;
+      this.eventServiceUrl = `${protocol}//${host}:8200`;
     }
   }
 
@@ -82,7 +89,7 @@ export class ChatSystem {
 
     // 1. Fade out everything
     if (this.mainContent) {
-      this.mainContent.style.visibility = "visible"; // Ensure it's not hidden initially
+      this.mainContent.style.visibility = "visible";
       this.mainContent.style.transition = "opacity 0.8s ease, visibility 0.8s ease";
       this.mainContent.style.opacity = "0";
       setTimeout(() => { if (this.isActive) this.mainContent.style.visibility = "hidden"; }, 800);
@@ -115,16 +122,19 @@ export class ChatSystem {
       }, 800);
     }
 
-    // 4. Start polling for events
-    this.startEventPolling();
+    // 4. Connect WebSocket
+    this.connectWebSocket();
   }
 
   exitChatMode() {
     if (!this.isActive) return;
     this.isActive = false;
 
-    // Stop polling
-    this.stopEventPolling();
+    // Disconnect WebSocket
+    if (this.ws) {
+      this.ws.close();
+      this.ws = null;
+    }
 
     // 1. Fade in everything
     if (this.mainContent) {
@@ -154,37 +164,86 @@ export class ChatSystem {
     }
   }
 
-  startEventPolling() {
-    this.fetchEvents();
-    this.eventPollInterval = setInterval(() => this.fetchEvents(), 3000);
+  connectWebSocket() {
+    if (this.ws) this.ws.close();
+    
+    console.log(`Connecting to WebSocket: ${this.wsUrl}`);
+    this.ws = new WebSocket(this.wsUrl);
+    
+    this.ws.onmessage = (event) => {
+      try {
+        const rawEvent = JSON.parse(event.data);
+        this.handleLiveEvent(rawEvent);
+      } catch (err) {
+        console.error("Failed to parse WS message:", err);
+      }
+    };
+
+    this.ws.onclose = () => {
+      console.log("WebSocket disconnected");
+      if (this.isActive) {
+        setTimeout(() => this.connectWebSocket(), 3000);
+      }
+    };
+
+    this.ws.onerror = (err) => {
+      console.error("WebSocket error:", err);
+    };
   }
 
-  stopEventPolling() {
-    if (this.eventPollInterval) {
-      clearInterval(this.eventPollInterval);
-      this.eventPollInterval = null;
+  handleLiveEvent(rawEvent) {
+    const eventData = rawEvent.event;
+    const type = eventData.type;
+    
+    // Check if this event belongs to our session
+    const isOurSession = eventData.channel_id === this.sessionId;
+
+    if (isOurSession) {
+      if (type === 'messaging.user.sent_message') {
+        this.addMessage('user', 'You', eventData.content);
+      } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
+        this.addMessage('assistant', 'Dexter', eventData.content || eventData.text);
+      } else {
+        // Other session events as log entries
+        this.addMessage('event', 'Session Event', rawEvent);
+      }
+    } else {
+      // General system events
+      this.addMessage('event', 'System Event', rawEvent);
     }
   }
 
-  async fetchEvents() {
-    try {
-      const response = await fetch(`${this.eventServiceUrl}/timeline?limit=10`);
-      if (!response.ok) return;
-      
-      const data = await response.json();
-      if (!data.events || !Array.isArray(data.events)) return;
+  async sendMessage() {
+    if (!this.input || !this.input.value.trim()) return;
+    
+    const text = this.input.value.trim();
+    this.input.value = '';
 
-      // Reverse to process oldest first
-      const newEvents = data.events.reverse();
+    const payload = {
+      service: "dex-web-frontend",
+      event: {
+        type: "messaging.user.sent_message",
+        source: "web",
+        content: text,
+        user_id: "anonymous",
+        user_name: "Web User",
+        channel_id: this.sessionId,
+        timestamp: new Date().toISOString()
+      }
+    };
+
+    try {
+      const response = await fetch(`${this.eventServiceUrl}/post`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
       
-      for (const event of newEvents) {
-        if (this.lastEventId && event.id <= this.lastEventId) continue;
-        
-        this.addMessage('event', 'System Event', event);
-        this.lastEventId = event.id;
+      if (!response.ok) {
+        console.error("Failed to send message:", await response.text());
       }
     } catch (err) {
-      console.error("Failed to fetch events:", err);
+      console.error("Error sending message:", err);
     }
   }
 
@@ -234,25 +293,9 @@ export class ChatSystem {
 
   addPlaceholderMessages() {
     this.addMessage('system', 'System', 'Neural link established. Dexter Core v12.0.75 online.');
-    this.addMessage('other', 'Operator', 'Status check on the new recursive learning module?');
-    this.addMessage('assistant', 'Dexter', 'Optimization complete. Recursive feedback loops are now stable at 400ms latency across the global mesh.');
-    this.addMessage('user', 'You', 'Initiate kernel diagnostic for local node easter-server.');
-    this.addMessage('pty', 'PTY Output', `root@easter-server:~$ dex diag --kernel
-[RUNNING] Kernel integrity check...
-[SUCCESS] Neural path weights validated
-[SUCCESS] Memory preloading optimized (32GB free)
-[INFO] All systems nominal.`);
-    
-    // Placeholder event
-    this.addMessage('event', 'System Event', {
-      id: "placeholder-1",
-      service: "dex-event-service",
-      event: {
-        type: "system.test.placeholder",
-        details: "This is a demo event message. Click to expand."
-      }
-    });
+    this.addMessage('assistant', 'Dexter', 'Interactive session initialized. Live system events are now streaming.');
   }
+}
 
   sendMessage() {
     if (!this.input || !this.input.value.trim()) return;
