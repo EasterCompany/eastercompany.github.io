@@ -433,7 +433,7 @@ export class ChatSystem {
         const alreadyHasSleepMsg = this.historyEl.lastElementChild && 
                                    this.historyEl.lastElementChild.textContent.includes('Chat Instance Deactivated');
         if (!alreadyHasSleepMsg) {
-          this.addMessage('system', 'System', 'Chat Instance Deactivated (Asleep). Send a message to reactivate.', null, true);
+          this.addMessage('system', 'System', 'Chat Instance Deactivated.\nSend a message to reactivate.', null, true);
         }
       }
     }
@@ -546,12 +546,12 @@ export class ChatSystem {
         this.setProcessing(false);
       } else {
         if (this.debugMode) {
-          this.addMessage('event', 'Session Event', rawEvent);
+          this.addMessage('event', 'Event', rawEvent);
         }
       }
     } else {
       if (this.debugMode) {
-        this.addMessage('event', 'System Event', rawEvent);
+        this.addMessage('event', 'Event', rawEvent);
       }
     }
   }
