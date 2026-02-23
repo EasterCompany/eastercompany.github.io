@@ -648,6 +648,7 @@ export class ChatSystem {
       } else if (type === 'system.process.registered') {
         this.updateProcessStatus(eventData.state || "Processing...");
       } else if (type === 'system.process.unregistered' || type === 'system.process.error' || type === 'system.process.cancelled') {
+        console.log(`ChatSystem: Process ${type} for session ${this.sessionId}`);
         this.setProcessing(false);
       } else {
         if (this.debugMode) {
