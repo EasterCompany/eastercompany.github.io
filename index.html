@@ -499,7 +499,7 @@
       .footer-socials { display: flex; gap: 25px; }
       .footer-socials a { color: rgba(255, 255, 255, 0.4); font-size: 1.5rem; transition: all 0.3s ease; }
       .footer-socials a:hover { color: var(--neon-blue); transform: translateY(-3px); }
-    <style>
+
       .footer-legal { display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(255, 255, 255, 0.2); }
       .footer-legal a { color: rgba(255, 255, 255, 0.3); text-decoration: none; transition: color 0.3s ease; }
       .footer-legal a:hover { color: var(--neon-blue); }
@@ -715,7 +715,7 @@
 
       /* Chat Close Button */
       .chat-close-btn {
-        position: absolute;
+        position: fixed;
         top: 30px;
         right: 30px;
         width: 46px;
@@ -732,7 +732,13 @@
         font-size: 1.8rem;
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 2001;
+        z-index: 3000;
+        opacity: 0;
+        visibility: hidden;
+      }
+      #chat-container.active .chat-close-btn {
+        opacity: 1;
+        visibility: visible;
       }
       .chat-close-btn:hover {
         background: rgba(255, 95, 86, 0.15);
@@ -767,6 +773,9 @@
 
     <!-- Chat Mode UI -->
     <div id="chat-container">
+      <button id="chat-close" class="chat-close-btn" title="Exit Chat (Esc)">
+        <i class='bx bx-x'></i>
+      </button>
       <div class="chat-history" id="chat-history">
         <!-- Messages will be injected here -->
       </div>
