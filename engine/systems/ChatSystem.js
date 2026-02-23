@@ -2,9 +2,14 @@ export class ChatSystem {
   constructor() {
     this.isActive = false;
     this.history = [];
+    this.apiUrl = "";
+    this.wsUrl = "";
+    this.lastEventId = "";
+    this.eventPollInterval = null;
   }
 
   async init(registry) {
+    this.resolveUrls();
     this.container = document.getElementById('chat-container');
     this.historyEl = document.getElementById('chat-history');
     this.input = document.getElementById('chat-input');
@@ -48,6 +53,27 @@ export class ChatSystem {
     this.addPlaceholderMessages();
     
     console.log("Easter Engine: Chat System Online");
+    console.log(`Easter Engine: API URL: ${this.apiUrl}`);
+  }
+
+  resolveUrls() {
+    const host = window.location.hostname;
+    const protocol = window.location.protocol;
+    
+    if (host === 'easter.company' || host === 'www.easter.company') {
+      this.apiUrl = 'https://dashboard.easter.company';
+      this.wsUrl = 'wss://dashboard.easter.company/ws';
+      this.eventServiceUrl = 'https://dashboard.easter.company/events'; // Proxy through dashboard? Assuming for now.
+    } else if (host === '100.100.1.0') {
+      this.apiUrl = 'http://100.100.1.3:8200';
+      this.wsUrl = 'ws://100.100.1.3:8200/ws';
+      this.eventServiceUrl = 'http://100.100.1.0:8100';
+    } else {
+      // Development/Fallback
+      this.apiUrl = `${protocol}//${host}:8200`;
+      this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
+      this.eventServiceUrl = `${protocol}//${host}:8100`;
+    }
   }
 
   enterChatMode() {
@@ -88,11 +114,17 @@ export class ChatSystem {
         if (this.isActive && this.input) this.input.focus();
       }, 800);
     }
+
+    // 4. Start polling for events
+    this.startEventPolling();
   }
 
   exitChatMode() {
     if (!this.isActive) return;
     this.isActive = false;
+
+    // Stop polling
+    this.stopEventPolling();
 
     // 1. Fade in everything
     if (this.mainContent) {
@@ -122,6 +154,40 @@ export class ChatSystem {
     }
   }
 
+  startEventPolling() {
+    this.fetchEvents();
+    this.eventPollInterval = setInterval(() => this.fetchEvents(), 3000);
+  }
+
+  stopEventPolling() {
+    if (this.eventPollInterval) {
+      clearInterval(this.eventPollInterval);
+      this.eventPollInterval = null;
+    }
+  }
+
+  async fetchEvents() {
+    try {
+      const response = await fetch(`${this.eventServiceUrl}/timeline?limit=10`);
+      if (!response.ok) return;
+      
+      const data = await response.json();
+      if (!data.events || !Array.isArray(data.events)) return;
+
+      // Reverse to process oldest first
+      const newEvents = data.events.reverse();
+      
+      for (const event of newEvents) {
+        if (this.lastEventId && event.id <= this.lastEventId) continue;
+        
+        this.addMessage('event', 'System Event', event);
+        this.lastEventId = event.id;
+      }
+    } catch (err) {
+      console.error("Failed to fetch events:", err);
+    }
+  }
+
   addMessage(type, sender, content) {
     const msg = { type, sender, content, timestamp: new Date() };
     this.history.push(msg);
@@ -136,7 +202,26 @@ export class ChatSystem {
       
       const bubble = document.createElement('div');
       bubble.className = 'message-bubble';
-      bubble.textContent = content;
+
+      if (type === 'event') {
+        const eventData = content;
+        const summary = document.createElement('span');
+        summary.className = 'event-summary';
+        summary.textContent = `[EVENT] ${eventData.service}: ${eventData.event.type || 'unknown'}`;
+        
+        const details = document.createElement('div');
+        details.className = 'event-details';
+        details.textContent = JSON.stringify(eventData.event, null, 2);
+        
+        bubble.appendChild(summary);
+        bubble.appendChild(details);
+        
+        msgEl.addEventListener('click', () => {
+          msgEl.classList.toggle('expanded');
+        });
+      } else {
+        bubble.textContent = content;
+      }
 
       msgEl.appendChild(label);
       msgEl.appendChild(bubble);
@@ -157,6 +242,16 @@ export class ChatSystem {
 [SUCCESS] Neural path weights validated
 [SUCCESS] Memory preloading optimized (32GB free)
 [INFO] All systems nominal.`);
+    
+    // Placeholder event
+    this.addMessage('event', 'System Event', {
+      id: "placeholder-1",
+      service: "dex-event-service",
+      event: {
+        type: "system.test.placeholder",
+        details: "This is a demo event message. Click to expand."
+      }
+    });
   }
 
   sendMessage() {

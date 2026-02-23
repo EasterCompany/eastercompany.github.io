@@ -632,6 +632,57 @@
         white-space: pre-wrap;
       }
 
+      /* Event Message (Timeline) */
+      .message-event {
+        align-self: center;
+        max-width: 95%;
+        width: 100%;
+        opacity: 0.5;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .message-event:hover {
+        opacity: 0.9;
+      }
+      .message-event.expanded {
+        opacity: 1;
+      }
+      .message-event .message-label {
+        align-self: center;
+        font-size: 0.6rem;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .message-event .message-bubble {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        padding: 8px 16px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        text-align: center;
+        border-radius: 8px;
+      }
+      .message-event.expanded .message-bubble {
+        text-align: left;
+        background: rgba(5, 5, 7, 0.8);
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .event-summary {
+        display: block;
+      }
+      .event-details {
+        display: none;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        white-space: pre-wrap;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.7rem;
+      }
+      .message-event.expanded .event-details {
+        display: block;
+      }
+
       /* Liquid Chat Input Bar */
       .chat-input-wrapper {
         width: 100%;
