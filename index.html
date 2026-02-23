@@ -798,6 +798,25 @@
         opacity: 0.5;
       }
 
+      /* Spinner */
+      .loading-spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(0, 243, 255, 0.1);
+        border-top: 2px solid var(--neon-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      #chat-container.locked .loading-spinner {
+        display: block;
+      }
+
       .chat-cancel-btn {
         width: 56px;
         height: 56px;
@@ -1054,6 +1073,7 @@
       </div>
       <div class="chat-input-wrapper">
         <div class="liquid-chat-bar">
+          <div class="loading-spinner"></div>
           <input type="text" id="chat-input" placeholder="Enter command or message..." />
           <div id="chat-emoji-btn" class="chat-emoji-btn" title="Choose Emoji">
             <i class='bx bx-smile'></i>
@@ -1206,6 +1226,6 @@
       </div>
     </footer>
 
-    <script type="module" src="/engine/main.js?v=6"></script>
+    <script type="module" src="/engine/main.js?v=7"></script>
   </body>
 </html>

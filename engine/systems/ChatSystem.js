@@ -382,6 +382,8 @@ export class ChatSystem {
       } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
         this.addMessage('assistant', 'Dexter', eventData.content || eventData.response || eventData.text, eventData.message_id);
         this.setProcessing(false);
+      } else if (type === 'system.process.registered') {
+        this.updateProcessStatus(eventData.state || "Processing...");
       } else if (type === 'system.process.unregistered' || type === 'system.process.error' || type === 'system.process.cancelled') {
         this.setProcessing(false);
       } else {
@@ -464,6 +466,12 @@ export class ChatSystem {
     } catch (err) {
       console.error("Error sending cancel request:", err);
       this.setProcessing(false); 
+    }
+  }
+
+  updateProcessStatus(status) {
+    if (this.input && this.isProcessing) {
+      this.input.placeholder = `[Dexter] ${status}`;
     }
   }
 
