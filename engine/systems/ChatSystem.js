@@ -793,6 +793,22 @@ export class ChatSystem {
       } else {
         bubble.textContent = content;
         
+        let isSingleEmoji = false;
+        try {
+          const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+          const segments = Array.from(segmenter.segment(content.trim()));
+          if (segments.length === 1 && /\p{Extended_Pictographic}/u.test(segments[0].segment)) {
+            isSingleEmoji = true;
+          }
+        } catch (e) {
+          const text = content.trim();
+          isSingleEmoji = text.length > 0 && text.length <= 10 && /\p{Extended_Pictographic}/u.test(text) && !/[a-zA-Z0-9]/.test(text);
+        }
+        
+        if (isSingleEmoji) {
+          bubble.classList.add('emoji-only');
+        }
+        
         // Add Reaction Button
         const reactBtn = document.createElement('div');
         reactBtn.className = 'message-action-btn';
