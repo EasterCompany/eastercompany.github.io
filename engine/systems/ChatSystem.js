@@ -107,11 +107,11 @@ export class ChatSystem {
     this.addMessage('other', 'Operator', 'Status check on the new recursive learning module?');
     this.addMessage('assistant', 'Dexter', 'Optimization complete. Recursive feedback loops are now stable at 400ms latency across the global mesh.');
     this.addMessage('user', 'You', 'Initiate kernel diagnostic for local node easter-server.');
-    this.addMessage('pty', 'PTY Output', 'root@easter-server:~$ dex diag --kernel
+    this.addMessage('pty', 'PTY Output', `root@easter-server:~$ dex diag --kernel
 [RUNNING] Kernel integrity check...
 [SUCCESS] Neural path weights validated
 [SUCCESS] Memory preloading optimized (32GB free)
-[INFO] All systems nominal.');
+[INFO] All systems nominal.`);
   }
 
   sendMessage() {
