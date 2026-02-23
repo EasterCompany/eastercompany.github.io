@@ -57,13 +57,16 @@
         padding: 0;
         background-color: #050507;
         font-family: 'Inter', sans-serif;
-        overflow-x: hidden;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100vw;
+        height: 100vh;
       }
       main {
         width: 100%;
+        height: 100%;
         margin: 0;
         padding: 0;
       }
@@ -79,8 +82,9 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-evenly;
-        min-height: 100vh;
-        padding: 8vh 0;
+        height: 100vh;
+        width: 100vw;
+        padding: 0;
         margin: 0;
         position: relative;
         z-index: 1;
@@ -330,180 +334,6 @@
         margin-bottom: 20px;
         color: var(--neon-blue);
       }
-
-      /* Scroll Indicator */
-      .scroll-indicator {
-        margin: 0;
-        display: none; 
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-        color: rgba(255, 255, 255, 0.3);
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.7rem;
-        letter-spacing: 0.2em;
-        z-index: 2;
-        text-transform: uppercase;
-        opacity: 0;
-        transition: opacity 1s ease;
-        pointer-events: none;
-      }
-      @media (min-width: 1055px) {
-        .scroll-indicator {
-          display: flex;
-        }
-      }
-      .scroll-indicator i {
-        font-size: 1.5rem;
-        animation: bounce 2s infinite;
-      }
-      @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-10px); }
-        60% { transform: translateY(-5px); }
-      }
-
-      /* Content Section */
-      .content-section {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 100px 20px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 30px;
-        position: relative;
-        z-index: 1;
-      }
-
-      /* Clients Marquee */
-      .clients-marquee {
-        width: 100%;
-        max-width: 1200px;
-        margin: 50px auto 0 auto;
-        padding: 0 20px 100px 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-      }
-      .marquee-row { display: flex; width: 100%; overflow: hidden; user-select: none; }
-      .marquee-content {
-        display: flex; flex-shrink: 0; align-items: center; gap: 60px; padding: 0 30px; min-width: 100%;
-        will-change: transform; transform: translate3d(0, 0, 0);
-      }
-      .scroll-left .marquee-content { animation: scrollLeft 75s linear infinite; }
-      .scroll-right .marquee-content { animation: scrollRight 75s linear infinite; }
-      .marquee-row:hover .marquee-content { animation-play-state: paused; }
-      @keyframes scrollLeft { from { transform: translateX(0); } to { transform: translateX(-100%); } }
-      @keyframes scrollRight { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-      .clients-marquee img {
-        display: block; height: 28px; width: auto; opacity: 0.4;
-        transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
-        will-change: transform, opacity, filter;
-      }
-      .clients-marquee img:hover { opacity: 1; transform: scale(1.05); }
-
-      /* About Us Section */
-      .about-grid {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto; 
-        padding: 100px 20px;
-      }
-
-      .terminal-window {
-        background: rgba(5, 5, 7, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        max-width: 800px;
-        height: auto;
-        min-height: 300px;
-        text-align: left;
-        overflow: hidden;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-      }
-      .terminal-header {
-        background: rgba(255, 255, 255, 0.03);
-        padding: 12px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.6; }
-      .dot.red { background: #ff5f56; }
-      .dot.yellow { background: #ffbd2e; }
-      .dot.green { background: #27c93f; }
-
-      .terminal-body { padding: 30px; text-align: left; font-family: 'JetBrains Mono', monospace; }
-            .terminal-body p {
-              margin: 8px 0;
-              line-height: 1.6;
-              font-size: 0.85rem;
-              color: rgba(255, 255, 255, 0.7);
-              overflow-wrap: break-word;
-              text-align: left;
-            }
-            .terminal-input-row {
-              font-size: 0.85rem; /* MATCHES BODY TEXT */
-            }
-            .cmd { color: var(--neon-blue); opacity: 0.9; }
-      #terminal-input-line {
-        color: #fff;
-        opacity: 1;
-        text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-      }
-      .string { color: #ce9178; }
-      .comment { color: rgba(255, 255, 255, 0.3); font-style: normal; }
-      .cursor { color: var(--neon-blue); opacity: 1; }
-      .terminal-window.focused .cursor { animation: blink 1s step-end infinite; }
-      @keyframes blink { 50% { opacity: 0; } }
-
-      /* Footer */
-      .site-footer {
-        width: 100%;
-        max-width: 1200px;
-        padding: 60px 20px;
-        background: transparent;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 0;
-        position: relative;
-        z-index: 2;
-        box-sizing: border-box;
-        margin-top: 80px; 
-        margin-left: auto;
-        margin-right: auto;
-      }
-      @media (min-width: 1201px) {
-        .site-footer {
-          width: 95%;
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
-          margin: 0 auto 40px auto;
-          background: rgba(255, 255, 255, 0.01);
-          backdrop-filter: blur(10px);
-        }
-      }
-      .footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
-      .footer-socials { display: flex; gap: 25px; }
-      .footer-socials a { color: rgba(255, 255, 255, 0.4); font-size: 1.5rem; transition: all 0.3s ease; }
-      .footer-socials a:hover { color: var(--neon-blue); transform: translateY(-3px); }
-
-      .footer-legal { display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(255, 255, 255, 0.2); }
-      .footer-legal a { color: rgba(255, 255, 255, 0.3); text-decoration: none; transition: color 0.3s ease; }
-      .footer-legal a:hover { color: var(--neon-blue); }
 
       /* Chat Mode & Liquid Display */
       #chat-container {
@@ -1260,67 +1090,8 @@
           </div>
         </div>
 
-        <!-- Section 3: Scroll Indicator -->
-        <div class="scroll-indicator" id="scroll-indicator">
-          <span>Scroll Down</span>
-          <i class="bx bx-chevron-down"></i>
-        </div>
       </section>
-
-      <div class="clients-marquee">
-        <div class="marquee-row scroll-left">
-          <div class="marquee-content">
-            <img src="/static/assets/clients/emperia.svg" alt="Emperia" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/european-union.svg" alt="European Union" />
-          </div>
-          <div class="marquee-content">
-            <img src="/static/assets/clients/emperia.svg" alt="Emperia" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/european-union.svg" alt="European Union" />
-          </div>
-        </div>
-        <div class="marquee-row scroll-right">
-          <div class="marquee-content">
-            <img src="/static/assets/clients/european-union.svg" alt="European Union" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-          </div>
-          <div class="marquee-content">
-            <img src="/static/assets/clients/european-union.svg" alt="European Union" /><img src="/static/assets/clients/pardoewray.svg" alt="Pardoe Wray" /><img src="/static/assets/clients/nespresso.svg" alt="Nespresso" /><img src="/static/assets/clients/burberry.svg" alt="Burberry" /><img src="/static/assets/clients/dr-barbara-sturm.svg" alt="Dr Barbara Sturm" /><img src="/static/assets/clients/tommy-hillfiger.svg" alt="Tommy Hilfiger" /><img src="/static/assets/clients/walmart.svg" alt="Walmart" /><img src="/static/assets/clients/bloomingdales.svg" alt="Bloomingdales" /><img src="/static/assets/clients/lacoste.svg" alt="Lacoste" /><img src="/static/assets/clients/loccitane.svg" alt="L'Occitane" /><img src="/static/assets/clients/boss.svg" alt="Boss" /><img src="/static/assets/clients/pinko.svg" alt="Pinko" /><img src="/static/assets/clients/dior.svg" alt="Dior" /><img src="/static/assets/clients/emperia.svg" alt="Emperia" />
-          </div>
-        </div>
-      </div>
-
-      <div class="about-grid">
-        <div class="terminal-window">
-          <div class="terminal-header">
-            <div style="display: flex; gap: 8px"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7em; color: rgba(255, 255, 255, 0.3); text-transform: uppercase;">about_dexter.sh</div>
-          </div>
-                              <div class="terminal-body" style="max-height: 400px; overflow-y: auto;">
-                                <div id="terminal-output">
-                                  <p><span class="cmd">root@easter:/$</span> cat intro.txt</p>
-                                  <p>&gt; [SUCCESS] Dexter is the world's first self-evolving, decentralized, distributed AI compute network. This means intelligence is no longer locked in a central silo; it lives across a global mesh of nodes, learning and adapting recursively based on real-time environmental interactions.</p>
-                                  <br />
-                                  <p class="comment"># E++ Subscription Protocol</p>
-                                  <p>As a subscriber to E++, you receive Easter Company hosted, encrypted, and completely unrestricted access to your own dedicated servers. These servers host a self-evolving AI that is unique to you—it grows, dreams, and learns specifically from your data and workflows without caps or filters.</p>
-                                  <br />
-                                </div>                      <div class="terminal-input-row" style="display: flex; gap: 8px;">
-                        <span id="terminal-prompt-path" class="cmd">root@easter:/$</span>
-                        <span id="terminal-input-line"></span><span class="cursor">_</span>
-                      </div>
-                    </div>
-        </div>
-      </div>
     </main>
-
-    <footer class="site-footer">
-      <div class="footer-content">
-        <div class="footer-socials">
-          <a href="https://x.com/eastercompany" target="_blank" title="Follow on X"><i class="bx bxl-twitter"></i></a>
-          <a href="https://github.com/EasterCompany" target="_blank" title="GitHub"><i class="bx bxl-github"></i></a>
-        </div>
-        <div class="footer-legal">
-          <span>&copy; 2016-2026 Easter Company. All rights reserved.</span>
-          <a href="/privacy">Privacy Policy</a>
-        </div>
-      </div>
-    </footer>
 
     <script type="module" src="/engine/main.js?h=1771885450"></script>
     <!-- Confirmation Modal -->
