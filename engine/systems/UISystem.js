@@ -89,13 +89,14 @@ export class UISystem {
     const now = registry.time;
     const isAtTop = window.scrollY === 0;
     const isOverlayActive = this.overlay && this.overlay.classList.contains('active');
+    const isChatActive = document.getElementById('chat-container')?.classList.contains('active');
     
     // 1. Scroll Indicator Logic
     if (this.scrollIndicator) {
       const elapsed = now - this.startTime;
       
-      // Hide if overlay is active OR not at top OR delay not met
-      if (elapsed > 6.0 && isAtTop && !isOverlayActive) {
+      // Hide if overlay/chat is active OR not at top OR delay not met
+      if (elapsed > 6.0 && isAtTop && !isOverlayActive && !isChatActive) {
         this.scrollIndicator.style.opacity = "1";
         this.scrollIndicator.style.pointerEvents = "auto";
       } else {
@@ -106,8 +107,9 @@ export class UISystem {
 
     // 2. Game UI Triggers Logic (Symmetric Groups)
     // Always visible if overlay is active, otherwise follow scroll logic
+    // Hide if Chat is active
     if (this.rightGroup) {
-      if (isAtTop || isOverlayActive) {
+      if ((isAtTop || isOverlayActive) && !isChatActive) {
         this.rightGroup.style.opacity = "1";
         this.rightGroup.style.pointerEvents = "auto";
         this.rightGroup.style.transform = "translateX(0)";
@@ -119,7 +121,7 @@ export class UISystem {
     }
 
     if (this.leftGroup) {
-      if (isAtTop || isOverlayActive) {
+      if ((isAtTop || isOverlayActive) && !isChatActive) {
         this.leftGroup.style.opacity = "1";
         this.leftGroup.style.pointerEvents = "auto";
         this.leftGroup.style.transform = "translateX(0)";

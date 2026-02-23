@@ -7,6 +7,7 @@ import { Engine } from './core/Engine.js';
 import { RenderSystem } from './systems/RenderSystem.js';
 import { UISystem } from './systems/UISystem.js';
 import { TerminalSystem } from './systems/TerminalSystem.js';
+import { ChatSystem } from './systems/ChatSystem.js';
 
 // Initialize the Engine
 const engine = new Engine('hero-canvas');
@@ -15,6 +16,7 @@ const engine = new Engine('hero-canvas');
 engine.addSystem(new RenderSystem());
 engine.addSystem(new UISystem());
 engine.addSystem(new TerminalSystem());
+engine.addSystem(new ChatSystem());
 
 // Start
 engine.init().catch(err => {
