@@ -140,7 +140,8 @@ export class ChatSystem {
     if (!this.historyEl) return;
     
     try {
-      const url = `${this.eventServiceUrl}/events?channel=${this.sessionId}&category=messaging&order=desc&format=json&ml=50`;
+      const categoryParam = this.debugMode ? '' : '&category=messaging';
+      const url = `${this.eventServiceUrl}/events?channel=${this.sessionId}${categoryParam}&order=desc&format=json&ml=50`;
       console.log(`ChatSystem: Fetching history from ${url}`);
       const response = await fetch(url);
       if (!response.ok) {
@@ -156,6 +157,7 @@ export class ChatSystem {
         const validEvents = data.events.filter(e => {
           try {
             const ed = typeof e.event === 'string' ? JSON.parse(e.event) : e.event;
+            if (this.debugMode) return true; // Accept all in debug mode
             return ed.type === 'messaging.user.sent_message' || 
                    ed.type === 'messaging.bot.sent_message' || 
                    ed.type === 'bot_response' ||
@@ -181,6 +183,12 @@ export class ChatSystem {
               this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false, new Date(e.timestamp * 1000));
             } else if (type === 'messaging.user.reaction_added' || type === 'messaging.bot.reaction_added') {
               this.addOrUpdateReaction(eventData.message_id, eventData.emoji, eventData.user_name || 'Dexter');
+            } else if (this.debugMode) {
+              const formattedEvent = {
+                service: e.service || 'system',
+                event: eventData
+              };
+              this.addMessage('event', 'Event', formattedEvent, null, false, new Date(e.timestamp * 1000));
             }
           });
           
@@ -348,7 +356,35 @@ export class ChatSystem {
         return;
       }
     }
+    await this._performChatDeletion();
+  }
 
+  async setDebugMode(enabled) {
+    const uiSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'UISystem');
+    let confirmed = false;
+    if (uiSystem) {
+      confirmed = await uiSystem.confirm(
+        "Toggle Debug Mode", 
+        "Enabling or disabling debug mode requires deleting the current chat instance. Are you sure you want to proceed?"
+      );
+    } else {
+      confirmed = confirm("Enabling or disabling debug mode requires deleting the current chat instance. Are you sure you want to proceed?");
+    }
+
+    if (!confirmed) {
+      if (this.debugToggle) {
+        this.debugToggle.checked = !enabled;
+      }
+      return;
+    }
+
+    this.debugMode = enabled;
+    localStorage.setItem('dex_debug_mode', enabled);
+    console.log(`Easter Engine: Debug Mode ${enabled ? 'Enabled' : 'Disabled'}`);
+    await this._performChatDeletion();
+  }
+
+  async _performChatDeletion() {
     console.log(`ChatSystem: Deleting chat instance ${this.sessionId}`);
 
     try {
@@ -388,12 +424,6 @@ export class ChatSystem {
       console.error("ChatSystem: Failed to delete chat:", err);
       alert("Failed to delete chat instance. Please try again.");
     }
-  }
-
-  setDebugMode(enabled) {
-    this.debugMode = enabled;
-    localStorage.setItem('dex_debug_mode', enabled);
-    console.log(`Easter Engine: Debug Mode ${enabled ? 'Enabled' : 'Disabled'}`);
   }
 
   resolveUrls() {
