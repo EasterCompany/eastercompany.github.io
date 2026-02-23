@@ -147,18 +147,20 @@ export class ChatSystem {
       if (data && data.events && data.events.length > 0) {
         console.log(`ChatSystem: Fetched ${data.events.length} raw events`);
         
-        // Filter events first to see if we have actual messages
+        // Filter events first to see if we have actual messages or reactions
         const validEvents = data.events.filter(e => {
           try {
             const ed = typeof e.event === 'string' ? JSON.parse(e.event) : e.event;
             return ed.type === 'messaging.user.sent_message' || 
                    ed.type === 'messaging.bot.sent_message' || 
-                   ed.type === 'bot_response';
+                   ed.type === 'bot_response' ||
+                   ed.type === 'messaging.user.reaction_added' ||
+                   ed.type === 'messaging.bot.reaction_added';
           } catch(err) { return false; }
         });
 
         if (validEvents.length > 0) {
-          console.log(`ChatSystem: Found ${validEvents.length} valid messages in history.`);
+          console.log(`ChatSystem: Found ${validEvents.length} valid items in history.`);
           // Clear placeholders/previous content
           this.historyEl.innerHTML = '';
           this.history = [];
@@ -172,6 +174,8 @@ export class ChatSystem {
               this.addMessage('user', 'You', eventData.content, eventData.message_id, false, new Date(e.timestamp * 1000));
             } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
               this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false, new Date(e.timestamp * 1000));
+            } else if (type === 'messaging.user.reaction_added' || type === 'messaging.bot.reaction_added') {
+              this.addOrUpdateReaction(eventData.message_id, eventData.emoji, eventData.user_name || 'Dexter');
             }
           });
           
@@ -304,14 +308,23 @@ export class ChatSystem {
 
     let badge = reactionsContainer.querySelector(`[data-emoji="${emoji}"]`);
     if (badge) {
-      const countEl = badge.querySelector('.reaction-count');
-      const count = parseInt(countEl.textContent) + 1;
-      countEl.textContent = count;
-      badge.classList.add('active');
+      const usersStr = badge.dataset.users || "";
+      const users = usersStr.split(',').filter(u => u.length > 0);
+      
+      if (!users.includes(userName)) {
+        users.push(userName);
+        badge.dataset.users = users.join(',');
+        const countEl = badge.querySelector('.reaction-count');
+        countEl.textContent = users.length;
+        badge.title = users.join(', ');
+        badge.classList.add('active');
+      }
     } else {
       badge = document.createElement('div');
       badge.className = 'reaction-badge active';
       badge.dataset.emoji = emoji;
+      badge.dataset.users = userName;
+      badge.title = userName;
       badge.innerHTML = `<span>${emoji}</span><span class="reaction-count">1</span>`;
       reactionsContainer.appendChild(badge);
     }
