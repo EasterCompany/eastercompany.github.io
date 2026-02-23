@@ -43,6 +43,10 @@ export class ChatSystem {
       this.submitBtn.addEventListener('click', () => this.sendMessage());
     }
 
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', () => this.exitChatMode());
+    }
+
     if (this.input) {
       this.input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') this.sendMessage();
@@ -50,8 +54,8 @@ export class ChatSystem {
     }
 
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isActive) {
-        this.exitChatMode();
+      if (e.key === 'Escape') {
+        this.toggleChatMode();
       }
     });
 
@@ -80,6 +84,19 @@ export class ChatSystem {
       this.apiUrl = `${protocol}//${host}:8200`;
       this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
       this.eventServiceUrl = `${protocol}//${host}:8200`;
+    }
+  }
+
+  toggleChatMode() {
+    if (this.isActive) {
+      this.exitChatMode();
+    } else {
+      // Only open if no other overlays are open
+      const overlay = document.getElementById('game-overlay');
+      const isOverlayActive = overlay && overlay.classList.contains('active');
+      if (!isOverlayActive) {
+        this.enterChatMode();
+      }
     }
   }
 
@@ -295,27 +312,6 @@ export class ChatSystem {
     this.addMessage('system', 'System', 'Neural link established. Dexter Core v12.0.75 online.');
     this.addMessage('assistant', 'Dexter', 'Interactive session initialized. Live system events are now streaming.');
   }
-}
 
-  sendMessage() {
-    if (!this.input || !this.input.value.trim()) return;
-    
-    const text = this.input.value.trim();
-    this.addMessage('user', 'You', text);
-    this.input.value = '';
-
-    // Simulate response
-    setTimeout(() => {
-      if (text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
-        this.addMessage('assistant', 'Dexter', 'Greetings. How can I assist with your deployment today?');
-      }
-    }, 1000);
-  }
-
-  update(registry) {
-    // Esc to exit chat mode (optional helper)
-    if (this.isActive && registry.input.keys && registry.input.keys['Escape']) {
-      // Logic to exit could go here
-    }
-  }
+  update(registry) {}
 }
