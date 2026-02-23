@@ -3,11 +3,11 @@
  * Part of the Easter Wasm Framework Project
  */
 
-import { Engine } from './core/Engine.js';
-import { RenderSystem } from './systems/RenderSystem.js';
-import { UISystem } from './systems/UISystem.js';
-import { TerminalSystem } from './systems/TerminalSystem.js';
-import { ChatSystem } from './systems/ChatSystem.js';
+import { Engine } from './core/Engine.js?v=17';
+import { RenderSystem } from './systems/RenderSystem.js?v=17';
+import { UISystem } from './systems/UISystem.js?v=17';
+import { TerminalSystem } from './systems/TerminalSystem.js?v=17';
+import { ChatSystem } from './systems/ChatSystem.js?v=17';
 
 // Initialize the Engine
 const engine = new Engine('hero-canvas');

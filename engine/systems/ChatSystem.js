@@ -8,6 +8,7 @@ export class ChatSystem {
     this.ws = null;
     this.sessionId = this.getOrCreateSessionId();
     this.isProcessing = false;
+    this.isSleeping = false;
     this.debugMode = localStorage.getItem('dex_debug_mode') === 'true';
     this.version = "12.1.0";
     
@@ -116,16 +117,6 @@ export class ChatSystem {
 
     // Initialize
     console.log(`ChatSystem: Initializing session ${this.sessionId}`);
-    await this.fetchHistory();
-    await this.syncProcessState();
-    
-    // Add placeholders ONLY if no real history was loaded
-    if (this.history.length === 0) {
-      console.log("ChatSystem: History empty, adding placeholders.");
-      this.addPlaceholderMessages();
-    } else {
-      console.log(`ChatSystem: History resumed with ${this.history.length} messages.`);
-    }
     
     console.log("Easter Engine: Chat System Online");
   }
@@ -168,9 +159,9 @@ export class ChatSystem {
             const type = eventData.type;
             
             if (type === 'messaging.user.sent_message') {
-              this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false);
+              this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false, new Date(e.timestamp * 1000));
             } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
-              this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false);
+              this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false, new Date(e.timestamp * 1000));
             }
           });
           
@@ -353,9 +344,16 @@ export class ChatSystem {
     }
   }
 
-  enterChatMode() {
+  async enterChatMode() {
     if (this.isActive) return;
     this.isActive = true;
+
+    // Show loading screen
+    const loadingScreen = document.getElementById('chat-loading-screen');
+    if (loadingScreen) {
+      loadingScreen.style.display = 'flex';
+      loadingScreen.style.opacity = '1';
+    }
 
     if (this.mainContent) {
       this.mainContent.style.visibility = "visible";
@@ -384,12 +382,47 @@ export class ChatSystem {
 
     if (this.container) {
       this.container.classList.add('active');
-      setTimeout(() => {
-        if (this.isActive && this.input && !this.isProcessing) this.input.focus();
-      }, 800);
     }
 
+    // Connect WS early
     this.connectWebSocket();
+
+    // Fetch and Sync
+    await this.fetchHistory();
+    await this.syncProcessState();
+    
+    // Check Inactivity
+    if (this.history.length === 0) {
+      console.log("ChatSystem: History empty, adding placeholders.");
+      this.addPlaceholderMessages();
+    } else {
+      console.log(`ChatSystem: History resumed with ${this.history.length} messages.`);
+      
+      const lastMessage = this.history[this.history.length - 1];
+      const timeSinceLastMessage = Date.now() - lastMessage.timestamp.getTime();
+      const tenMinutes = 10 * 60 * 1000;
+      
+      if (timeSinceLastMessage > tenMinutes && !this.isProcessing) {
+        this.isSleeping = true;
+        console.log("ChatSystem: Instance has been inactive for over 10 minutes. Putting to sleep.");
+        
+        // Only add sleeping indicator if it's not already there
+        const alreadyHasSleepMsg = this.historyEl.lastElementChild && 
+                                   this.historyEl.lastElementChild.textContent.includes('Chat Instance Deactivated');
+        if (!alreadyHasSleepMsg) {
+          this.addMessage('system', 'System', 'Chat Instance Deactivated (Asleep). Send a message to reactivate.', null, true);
+        }
+      }
+    }
+
+    // Hide loading screen
+    if (loadingScreen) {
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+        if (this.isActive && this.input && !this.isProcessing) this.input.focus();
+      }, 500);
+    }
   }
 
   exitChatMode() {
@@ -458,6 +491,10 @@ export class ChatSystem {
   handleLiveEvent(rawEvent) {
     if (!rawEvent || !rawEvent.event) return;
 
+    if (this.isSleeping && !this.debugMode) {
+      return; // Ignore events while sleeping unless debugging
+    }
+
     const eventData = rawEvent.event;
     const type = eventData.type;
     const isOurSession = eventData.channel_id === this.sessionId;
@@ -500,6 +537,21 @@ export class ChatSystem {
     if (this.isProcessing) return;
     if (!this.input || !this.input.value.trim()) return;
     
+    // Reactivate if sleeping
+    if (this.isSleeping) {
+      this.isSleeping = false;
+      console.log("ChatSystem: Reactivating from sleep mode.");
+      
+      // Remove the "Asleep" system message
+      const messages = this.historyEl.querySelectorAll('.message-system');
+      messages.forEach(msg => {
+        if (msg.textContent.includes('Chat Instance Deactivated')) {
+          msg.remove();
+        }
+      });
+      this.history = this.history.filter(m => !(m.type === 'system' && m.content.includes('Chat Instance Deactivated')));
+    }
+
     const text = this.input.value.trim();
     this.input.value = '';
     const messageId = this.generateUUID();
@@ -602,7 +654,7 @@ export class ChatSystem {
     });
   }
 
-  addMessage(type, sender, content, messageId = null, scrollToBottom = true) {
+  addMessage(type, sender, content, messageId = null, scrollToBottom = true, timestamp = null) {
     const id = messageId || this.generateUUID();
     
     // 1. Check if message already exists (Update mode)
@@ -624,7 +676,7 @@ export class ChatSystem {
       return;
     }
 
-    const msg = { type, sender, content, id, timestamp: new Date() };
+    const msg = { type, sender, content, id, timestamp: timestamp || new Date() };
     this.history.push(msg);
 
     if (this.historyEl) {
