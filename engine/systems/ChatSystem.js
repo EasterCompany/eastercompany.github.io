@@ -10,6 +10,7 @@ export class ChatSystem {
     this.input = document.getElementById('chat-input');
     this.submitBtn = document.getElementById('chat-submit');
     this.trigger = document.getElementById('dexter-chat-trigger');
+    this.closeBtn = document.getElementById('chat-close');
     
     // Elements to fade out
     this.mainContent = document.getElementById('main');
@@ -27,11 +28,21 @@ export class ChatSystem {
       this.submitBtn.addEventListener('click', () => this.sendMessage());
     }
 
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', () => this.exitChatMode());
+    }
+
     if (this.input) {
       this.input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') this.sendMessage();
       });
     }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isActive) {
+        this.exitChatMode();
+      }
+    });
 
     // Initialize with placeholders
     this.addPlaceholderMessages();
@@ -45,15 +56,17 @@ export class ChatSystem {
 
     // 1. Fade out everything
     if (this.mainContent) {
+      this.mainContent.style.visibility = "visible"; // Ensure it's not hidden initially
       this.mainContent.style.transition = "opacity 0.8s ease, visibility 0.8s ease";
       this.mainContent.style.opacity = "0";
-      setTimeout(() => this.mainContent.style.visibility = "hidden", 800);
+      setTimeout(() => { if (this.isActive) this.mainContent.style.visibility = "hidden"; }, 800);
     }
     
     if (this.footer) {
+      this.footer.style.visibility = "visible";
       this.footer.style.transition = "opacity 0.8s ease, visibility 0.8s ease";
       this.footer.style.opacity = "0";
-      setTimeout(() => this.footer.style.visibility = "hidden", 800);
+      setTimeout(() => { if (this.isActive) this.footer.style.visibility = "hidden"; }, 800);
     }
 
     this.uiGroups.forEach(group => {
@@ -72,8 +85,40 @@ export class ChatSystem {
     if (this.container) {
       this.container.classList.add('active');
       setTimeout(() => {
-        if (this.input) this.input.focus();
+        if (this.isActive && this.input) this.input.focus();
       }, 800);
+    }
+  }
+
+  exitChatMode() {
+    if (!this.isActive) return;
+    this.isActive = false;
+
+    // 1. Fade in everything
+    if (this.mainContent) {
+      this.mainContent.style.visibility = "visible";
+      this.mainContent.style.opacity = "1";
+    }
+    
+    if (this.footer) {
+      this.footer.style.visibility = "visible";
+      this.footer.style.opacity = "1";
+    }
+
+    this.uiGroups.forEach(group => {
+      if (group) {
+        group.style.opacity = "1";
+        group.style.pointerEvents = "auto";
+        group.style.transform = "translateX(0)";
+      }
+    });
+
+    // 2. Unlock scroll
+    document.body.classList.remove('no-scroll');
+
+    // 3. Hide Chat Container
+    if (this.container) {
+      this.container.classList.remove('active');
     }
   }
 
