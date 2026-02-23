@@ -150,7 +150,7 @@ export class ChatSystem {
         // Filter events first to see if we have actual messages
         const validEvents = data.events.filter(e => {
           try {
-            const ed = JSON.parse(e.event);
+            const ed = typeof e.event === 'string' ? JSON.parse(e.event) : e.event;
             return ed.type === 'messaging.user.sent_message' || 
                    ed.type === 'messaging.bot.sent_message' || 
                    ed.type === 'bot_response';
@@ -165,7 +165,7 @@ export class ChatSystem {
           
           // Reverse because we fetched newest first (desc) but want to display chronological (asc)
           validEvents.reverse().forEach(e => {
-            const eventData = JSON.parse(e.event);
+            const eventData = typeof e.event === 'string' ? JSON.parse(e.event) : e.event;
             const type = eventData.type;
             
             if (type === 'messaging.user.sent_message') {
