@@ -114,10 +114,61 @@ export class ChatSystem {
       }
     });
 
-    // Initialize with placeholders
-    this.addPlaceholderMessages();
+    // Initialize
+    await this.fetchHistory();
+    await this.syncProcessState();
     
     console.log("Easter Engine: Chat System Online");
+  }
+
+  async fetchHistory() {
+    if (!this.historyEl) return;
+    
+    try {
+      const response = await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}&order=asc&format=json&ml=50`);
+      if (!response.ok) return;
+      
+      const data = await response.json();
+      if (data && data.events && data.events.length > 0) {
+        // Clear initial placeholders if we have real history
+        this.historyEl.innerHTML = '';
+        this.history = [];
+        
+        data.events.forEach(e => {
+          let eventData;
+          try {
+            eventData = JSON.parse(e.event);
+          } catch(err) { return; }
+          
+          const type = eventData.type;
+          if (type === 'messaging.user.sent_message') {
+            this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false);
+          } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
+            this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false);
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch history:", err);
+    }
+  }
+
+  async syncProcessState() {
+    try {
+      const response = await fetch(`${this.eventServiceUrl}/processes`);
+      if (!response.ok) return;
+      
+      const data = await response.json();
+      const ourProcess = [...data.active, ...data.queued].find(p => p.channel_id === this.sessionId);
+      
+      if (ourProcess) {
+        console.log("Active process found for session, re-attaching...");
+        this.setProcessing(true);
+        this.updateProcessStatus(ourProcess.state);
+      }
+    } catch (err) {
+      console.error("Failed to sync process state:", err);
+    }
   }
 
   toggleEmojiPicker(target = null) {
@@ -379,7 +430,12 @@ export class ChatSystem {
     if (isOurSession) {
       if (type === 'messaging.user.sent_message') {
         return; 
-      } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
+      } else if (type === 'messaging.bot.sent_message') {
+        // Handle streaming updates
+        if (eventData.is_debug && !this.debugMode) return;
+        this.addMessage('assistant', 'Dexter', eventData.content, eventData.message_id);
+        this.setProcessing(true); // Still processing if it's just a chunk
+      } else if (type === 'bot_response') {
         this.addMessage('assistant', 'Dexter', eventData.content || eventData.response || eventData.text, eventData.message_id);
         this.setProcessing(false);
       } else if (type === 'system.process.registered') {
@@ -504,8 +560,28 @@ export class ChatSystem {
     });
   }
 
-  addMessage(type, sender, content, messageId = null) {
+  addMessage(type, sender, content, messageId = null, scrollToBottom = true) {
     const id = messageId || this.generateUUID();
+    
+    // 1. Check if message already exists (Update mode)
+    const existingMsgEl = document.querySelector(`[data-message-id="${id}"]`);
+    if (existingMsgEl) {
+      const bubble = existingMsgEl.querySelector('.message-bubble');
+      if (bubble) {
+        // If it's a regular message (not event), just update text
+        if (type !== 'event') {
+          // Preserve reaction button and reactions if they exist
+          const reactBtn = bubble.querySelector('.message-action-btn');
+          const reactions = bubble.querySelector('.message-reactions');
+          
+          bubble.textContent = content;
+          if (reactBtn) bubble.appendChild(reactBtn);
+          if (reactions) bubble.appendChild(reactions);
+        }
+      }
+      return;
+    }
+
     const msg = { type, sender, content, id, timestamp: new Date() };
     this.history.push(msg);
 
@@ -555,13 +631,17 @@ export class ChatSystem {
       msgEl.appendChild(label);
       msgEl.appendChild(bubble);
       this.historyEl.appendChild(msgEl);
-      this.historyEl.scrollTop = this.historyEl.scrollHeight;
+      if (scrollToBottom) {
+        this.historyEl.scrollTop = this.historyEl.scrollHeight;
+      }
     }
   }
 
   addPlaceholderMessages() {
-    this.addMessage('system', 'System', 'Start of Chat.');
-    this.addMessage('assistant', 'Dexter', `Hello. I am Dexter Mark 14 Version ${this.version}, how are you doing today?`);
+    if (this.history.length === 0) {
+      this.addMessage('system', 'System', 'Start of Chat.');
+      this.addMessage('assistant', 'Dexter', `Hello. I am Dexter Mark 14 Version ${this.version}, how are you doing today?`);
+    }
   }
 
   update(registry) {}
