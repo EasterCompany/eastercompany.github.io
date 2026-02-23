@@ -3,6 +3,7 @@ export class TerminalSystem {
     this.cwd = "/";
     this.history = [];
     this.inputBuffer = "";
+    this.isFocused = false;
     
     // Virtual File System
     this.vfs = {
@@ -57,7 +58,21 @@ export class TerminalSystem {
     this.container = document.getElementById('terminal-output');
     this.promptEl = document.getElementById('terminal-prompt-path');
     this.inputLine = document.getElementById('terminal-input-line');
+    this.window = document.querySelector('.terminal-window');
     
+    if (this.window) {
+      this.window.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.isFocused = true;
+        this.window.classList.add('focused');
+      });
+    }
+
+    document.addEventListener('click', () => {
+      this.isFocused = false;
+      if (this.window) this.window.classList.remove('focused');
+    });
+
     window.addEventListener('keydown', (e) => this.handleKey(e));
     this.updatePrompt();
     console.log("Easter Engine: Terminal System Online");
@@ -68,6 +83,8 @@ export class TerminalSystem {
   }
 
   handleKey(e) {
+    if (!this.isFocused) return;
+
     const isOverlay = document.getElementById('game-overlay').classList.contains('active');
     if (isOverlay) return;
 
