@@ -1,3 +1,4 @@
+export class ChatSystem {
   constructor() {
     this.isActive = false;
     this.history = [];
