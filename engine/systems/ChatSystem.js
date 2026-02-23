@@ -130,11 +130,23 @@ export class ChatSystem {
         // Reposition if it was triggered by a message
         if (target && target.element) {
           const rect = target.element.getBoundingClientRect();
-          this.emojiPicker.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+          const pickerHeight = 350; // max-height from CSS
+          const spaceAbove = rect.top;
+          
+          if (spaceAbove > pickerHeight) {
+            // Position ABOVE
+            this.emojiPicker.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+            this.emojiPicker.style.top = 'auto';
+          } else {
+            // Position BELOW
+            this.emojiPicker.style.top = (rect.bottom + 10) + 'px';
+            this.emojiPicker.style.bottom = 'auto';
+          }
           this.emojiPicker.style.right = (window.innerWidth - rect.right) + 'px';
         } else {
           // Default input bar position
           this.emojiPicker.style.bottom = '100px';
+          this.emojiPicker.style.top = 'auto';
           this.emojiPicker.style.right = '40px';
         }
       }
@@ -358,7 +370,9 @@ export class ChatSystem {
     const isOurSession = eventData.channel_id === this.sessionId;
 
     if (type === 'messaging.user.reaction_added') {
-      this.addOrUpdateReaction(eventData.message_id, eventData.emoji, eventData.user_name);
+      if (!isOurSession) {
+        this.addOrUpdateReaction(eventData.message_id, eventData.emoji, eventData.user_name);
+      }
       return;
     }
 
