@@ -169,7 +169,7 @@ export class ChatSystem {
             const type = eventData.type;
             
             if (type === 'messaging.user.sent_message') {
-              this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false, new Date(e.timestamp * 1000));
+              this.addMessage('user', 'You', eventData.content, eventData.message_id, false, new Date(e.timestamp * 1000));
             } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
               this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false, new Date(e.timestamp * 1000));
             }
