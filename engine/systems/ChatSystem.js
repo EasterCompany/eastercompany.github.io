@@ -222,7 +222,8 @@ export class ChatSystem {
 
     if (isOurSession) {
       if (type === 'messaging.user.sent_message') {
-        this.addMessage('user', 'You', eventData.content);
+        // Skip: already added optimistically in sendMessage
+        return;
       } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
         this.addMessage('assistant', 'Dexter', eventData.content || eventData.text);
       } else {
@@ -240,6 +241,9 @@ export class ChatSystem {
     
     const text = this.input.value.trim();
     this.input.value = '';
+
+    // Optimistic UI update: add message immediately
+    this.addMessage('user', 'You', text);
 
     const payload = {
       service: "dex-web-frontend",
