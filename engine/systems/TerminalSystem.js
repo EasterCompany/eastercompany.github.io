@@ -88,6 +88,7 @@ export class TerminalSystem {
     if (e.key === 'Escape') {
       this.isFocused = false;
       if (this.window) this.window.classList.remove('focused');
+      e.stopImmediatePropagation();
       return;
     }
 

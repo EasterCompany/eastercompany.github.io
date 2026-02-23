@@ -46,6 +46,7 @@ export class UISystem {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.activeView) {
         this.toggleOverlay(this.activeView);
+        e.stopImmediatePropagation();
       }
     });
     

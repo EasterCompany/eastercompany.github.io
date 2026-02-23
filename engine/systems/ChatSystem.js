@@ -96,12 +96,22 @@ export class ChatSystem {
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        const overlay = document.getElementById('game-overlay');
+        const isOverlayActive = overlay && overlay.classList.contains('active');
+
         if (this.emojiPicker && this.emojiPicker.classList.contains('active')) {
           this.toggleEmojiPicker();
+          e.stopImmediatePropagation();
         } else if (this.isProcessing) {
           this.cancelProcess();
+          e.stopImmediatePropagation();
         } else if (this.isActive) {
           this.toggleChatMode();
+          e.stopImmediatePropagation();
+        } else if (!isOverlayActive) {
+          // If everything is closed, open chat
+          this.enterChatMode();
+          e.stopImmediatePropagation();
         }
       }
     });
