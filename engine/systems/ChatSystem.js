@@ -119,8 +119,12 @@ export class ChatSystem {
     await this.fetchHistory();
     await this.syncProcessState();
     
+    // Add placeholders ONLY if no real history was loaded
     if (this.history.length === 0) {
+      console.log("ChatSystem: History empty, adding placeholders.");
       this.addPlaceholderMessages();
+    } else {
+      console.log(`ChatSystem: History resumed with ${this.history.length} messages.`);
     }
     
     console.log("Easter Engine: Chat System Online");
@@ -140,30 +144,41 @@ export class ChatSystem {
       
       const data = await response.json();
       if (data && data.events && data.events.length > 0) {
-        console.log(`ChatSystem: Fetched ${data.events.length} events for session ${this.sessionId}`);
+        console.log(`ChatSystem: Fetched ${data.events.length} raw events`);
         
-        // Clear initial placeholders if we have real history
-        this.historyEl.innerHTML = '';
-        this.history = [];
-        
-        // Reverse because we fetched newest first (desc) but want to display chronological (asc)
-        const sortedEvents = data.events.reverse();
-        
-        sortedEvents.forEach(e => {
-          let eventData;
+        // Filter events first to see if we have actual messages
+        const validEvents = data.events.filter(e => {
           try {
-            eventData = JSON.parse(e.event);
-          } catch(err) { return; }
-          
-          const type = eventData.type;
-          console.log(`ChatSystem: Processing event type: ${type}`);
-          
-          if (type === 'messaging.user.sent_message') {
-            this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false);
-          } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
-            this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false);
-          }
+            const ed = JSON.parse(e.event);
+            return ed.type === 'messaging.user.sent_message' || 
+                   ed.type === 'messaging.bot.sent_message' || 
+                   ed.type === 'bot_response';
+          } catch(err) { return false; }
         });
+
+        if (validEvents.length > 0) {
+          console.log(`ChatSystem: Found ${validEvents.length} valid messages in history.`);
+          // Clear placeholders/previous content
+          this.historyEl.innerHTML = '';
+          this.history = [];
+          
+          // Reverse because we fetched newest first (desc) but want to display chronological (asc)
+          validEvents.reverse().forEach(e => {
+            const eventData = JSON.parse(e.event);
+            const type = eventData.type;
+            
+            if (type === 'messaging.user.sent_message') {
+              this.addMessage('user', eventData.user_name || 'You', eventData.content, eventData.message_id, false);
+            } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
+              this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false);
+            }
+          });
+          
+          // Final scroll to bottom
+          this.historyEl.scrollTop = this.historyEl.scrollHeight;
+        } else {
+          console.log("ChatSystem: No valid messages found in event history.");
+        }
       } else {
         console.log("ChatSystem: No history found for this session.");
       }
