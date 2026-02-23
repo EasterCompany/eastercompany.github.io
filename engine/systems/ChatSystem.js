@@ -1,4 +1,3 @@
-export class ChatSystem {
   constructor() {
     this.isActive = false;
     this.history = [];
@@ -209,6 +208,11 @@ export class ChatSystem {
   }
 
   handleLiveEvent(rawEvent) {
+    if (!rawEvent || !rawEvent.event) {
+      // console.warn("Received malformed event via WS:", rawEvent);
+      return;
+    }
+
     const eventData = rawEvent.event;
     const type = eventData.type;
     
