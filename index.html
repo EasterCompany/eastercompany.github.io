@@ -1034,6 +1034,24 @@
         transform: scale(1.1) rotate(90deg);
         box-shadow: 0 0 20px rgba(255, 95, 86, 0.2);
       }
+
+      .btn-danger {
+        padding: 10px 20px;
+        background: rgba(255, 95, 86, 0.1);
+        border: 1px solid rgba(255, 95, 86, 0.2);
+        color: #ff5f56;
+        border-radius: 12px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-danger:hover {
+        background: #ff5f56;
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255, 95, 86, 0.3);
+      }
     </style>
     <style>
       #initial-loader {
@@ -1122,6 +1140,13 @@
                 <input type="checkbox" id="setting-debug-mode">
                 <span class="slider"></span>
               </label>
+            </div>
+            <div class="settings-item">
+              <div class="settings-info">
+                <h4>Delete Chat</h4>
+                <p>Deletes the existing chat instance.</p>
+              </div>
+              <button id="setting-delete-chat" class="btn-danger">Delete</button>
             </div>
           </div>
         </div>

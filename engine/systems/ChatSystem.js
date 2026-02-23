@@ -64,6 +64,11 @@ export class ChatSystem {
       this.debugToggle.addEventListener('change', (e) => this.setDebugMode(e.target.checked));
     }
 
+    this.deleteChatBtn = document.getElementById('setting-delete-chat');
+    if (this.deleteChatBtn) {
+      this.deleteChatBtn.addEventListener('click', () => this.deleteChat());
+    }
+
     // Elements to fade out
     this.mainContent = document.getElementById('main');
     this.footer = document.querySelector('.site-footer');
@@ -327,6 +332,52 @@ export class ChatSystem {
       badge.title = userName;
       badge.innerHTML = `<span>${emoji}</span><span class="reaction-count">1</span>`;
       reactionsContainer.appendChild(badge);
+    }
+  }
+
+  async deleteChat() {
+    if (!confirm("Are you sure you want to delete this chat instance? This will clear all history and kill any active processes for this session.")) {
+      return;
+    }
+
+    console.log(`ChatSystem: Deleting chat instance ${this.sessionId}`);
+
+    try {
+      // 1. Kill any active processes for this session
+      await fetch(`${this.eventServiceUrl}/processes/${this.sessionId}`, {
+        method: 'DELETE'
+      });
+
+      // 2. Delete all events for this channel
+      // We use the bulk delete endpoint with channel filter
+      await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}`, {
+        method: 'DELETE'
+      });
+
+      // 3. Clear Local State
+      this.history = [];
+      if (this.historyEl) this.historyEl.innerHTML = '';
+      
+      // 4. Generate New Session ID
+      const oldId = this.sessionId;
+      this.sessionId = 'web-' + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('dex_session_id', this.sessionId);
+      console.log(`ChatSystem: Session reset from ${oldId} to ${this.sessionId}`);
+
+      // 5. Reset UI
+      this.setProcessing(false);
+      this.isSleeping = false;
+      this.addPlaceholderMessages();
+      
+      // 6. Close Settings Overlay
+      const uiSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'UISystem');
+      if (uiSystem) {
+        uiSystem.toggleOverlay('settings');
+      }
+
+    } catch (err) {
+      console.error("ChatSystem: Failed to delete chat:", err);
+      alert("Failed to delete chat instance. Please try again.");
     }
   }
 
