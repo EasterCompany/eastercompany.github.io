@@ -125,7 +125,7 @@ export class ChatSystem {
     if (!this.historyEl) return;
     
     try {
-      const response = await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}&order=desc&format=json&ml=50`);
+      const response = await fetch(`${this.eventServiceUrl}/events?channel=${this.sessionId}&category=messaging&order=desc&format=json&ml=50`);
       if (!response.ok) return;
       
       const data = await response.json();
