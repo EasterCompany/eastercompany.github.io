@@ -741,6 +741,21 @@
         color: rgba(255, 255, 255, 0.2);
       }
 
+      .chat-emoji-btn {
+        padding: 0 10px;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chat-emoji-btn:hover {
+        color: var(--neon-blue);
+        transform: scale(1.1);
+      }
+
       .chat-submit-btn {
         width: 56px;
         height: 56px;
@@ -867,6 +882,103 @@
       input:checked + .slider { background-color: var(--neon-blue); }
       input:checked + .slider:before { transform: translateX(24px); }
 
+      /* Emoji Picker UI */
+      #emoji-picker-container {
+        position: fixed;
+        bottom: 100px;
+        right: 40px;
+        width: 300px;
+        height: 400px;
+        background: rgba(10, 10, 15, 0.8);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        z-index: 3100;
+        display: none;
+        flex-direction: column;
+        padding: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        animation: pickerFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      @keyframes pickerFadeIn {
+        from { opacity: 0; transform: translateY(10px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      #emoji-picker-container.active { display: flex; }
+
+      .emoji-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        overflow-y: auto;
+        padding-right: 5px;
+      }
+      .emoji-grid span {
+        font-size: 1.5rem;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .emoji-grid span:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.2);
+      }
+
+      /* Message Reactions */
+      .message-reactions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .reaction-badge {
+        padding: 4px 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .reaction-badge:hover {
+        background: rgba(0, 243, 255, 0.1);
+        border-color: rgba(0, 243, 255, 0.3);
+      }
+      .reaction-badge.active {
+        background: rgba(0, 243, 255, 0.15);
+        border-color: var(--neon-blue);
+      }
+
+      .message-action-btn {
+        position: absolute;
+        top: 0;
+        right: -40px;
+        opacity: 0;
+        transition: all 0.3s ease;
+        color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        font-size: 1.2rem;
+      }
+      .chat-message:hover .message-action-btn {
+        opacity: 1;
+        right: -30px;
+      }
+      .message-user .message-action-btn {
+        right: auto;
+        left: -40px;
+      }
+      .message-user:hover .message-action-btn {
+        left: -30px;
+      }
+
       /* Chat Close Button */
       .chat-close-btn {
         position: fixed;
@@ -930,12 +1042,20 @@
       <button id="chat-close" class="chat-close-btn" title="Exit Chat (Esc)">
         <i class='bx bx-x'></i>
       </button>
+      <div id="emoji-picker-container">
+        <div class="emoji-grid" id="emoji-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
       <div class="chat-history" id="chat-history">
         <!-- Messages will be injected here -->
       </div>
       <div class="chat-input-wrapper">
         <div class="liquid-chat-bar">
           <input type="text" id="chat-input" placeholder="Enter command or message..." />
+          <div id="chat-emoji-btn" class="chat-emoji-btn" title="Choose Emoji">
+            <i class='bx bx-smile'></i>
+          </div>
         </div>
         <button class="chat-submit-btn" id="chat-submit">
           <i class='bx bx-send'></i>
@@ -1084,6 +1204,6 @@
       </div>
     </footer>
 
-    <script type="module" src="/engine/main.js?v=3"></script>
+    <script type="module" src="/engine/main.js?v=4"></script>
   </body>
 </html>

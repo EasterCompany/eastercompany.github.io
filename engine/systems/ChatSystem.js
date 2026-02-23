@@ -9,7 +9,10 @@ export class ChatSystem {
     this.sessionId = this.getOrCreateSessionId();
     this.isProcessing = false;
     this.debugMode = localStorage.getItem('dex_debug_mode') === 'true';
-    this.version = "12.1.0"; // Derived from build report
+    this.version = "12.1.0";
+    
+    this.emojis = ['👍', '👎', '❤️', '🔥', '😂', '😮', '😢', '🙏', '✨', '🚀', '✅', '❌', '🤔', '👀', '💯'];
+    this.activeReactionTarget = null; // Store messageEl or messageId for reaction
   }
 
   getOrCreateSessionId() {
@@ -31,6 +34,28 @@ export class ChatSystem {
     this.trigger = document.getElementById('dexter-chat-trigger');
     this.closeBtn = document.getElementById('chat-close');
     
+    // Emoji Picker
+    this.emojiBtn = document.getElementById('chat-emoji-btn');
+    this.emojiPicker = document.getElementById('emoji-picker-container');
+    this.emojiGrid = document.getElementById('emoji-grid');
+    
+    if (this.emojiGrid) {
+      this.emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.textContent = emoji;
+        span.addEventListener('click', () => this.pickEmoji(emoji));
+        this.emojiGrid.appendChild(span);
+      });
+    }
+
+    if (this.emojiBtn) {
+      this.emojiBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.activeReactionTarget = null; // Target is input bar
+        this.toggleEmojiPicker();
+      });
+    }
+
     // Settings
     this.debugToggle = document.getElementById('setting-debug-mode');
     if (this.debugToggle) {
@@ -70,10 +95,21 @@ export class ChatSystem {
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        if (this.isProcessing) {
+        if (this.emojiPicker && this.emojiPicker.classList.contains('active')) {
+          this.toggleEmojiPicker();
+        } else if (this.isProcessing) {
           this.cancelProcess();
         } else if (this.isActive) {
           this.toggleChatMode();
+        }
+      }
+    });
+
+    // Close picker on click outside
+    document.addEventListener('click', (e) => {
+      if (this.emojiPicker && this.emojiPicker.classList.contains('active')) {
+        if (!this.emojiPicker.contains(e.target) && e.target !== this.emojiBtn) {
+          this.toggleEmojiPicker();
         }
       }
     });
@@ -82,17 +118,103 @@ export class ChatSystem {
     this.addPlaceholderMessages();
     
     console.log("Easter Engine: Chat System Online");
-    console.log(`Easter Engine: API URL: ${this.apiUrl}`);
-    console.log(`Easter Engine: Session ID: ${this.sessionId}`);
+  }
+
+  toggleEmojiPicker(target = null) {
+    if (this.emojiPicker) {
+      const isOpen = this.emojiPicker.classList.contains('active');
+      if (isOpen) {
+        this.emojiPicker.classList.remove('active');
+      } else {
+        this.emojiPicker.classList.add('active');
+        // Reposition if it was triggered by a message
+        if (target && target.element) {
+          const rect = target.element.getBoundingClientRect();
+          this.emojiPicker.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+          this.emojiPicker.style.right = (window.innerWidth - rect.right) + 'px';
+        } else {
+          // Default input bar position
+          this.emojiPicker.style.bottom = '100px';
+          this.emojiPicker.style.right = '40px';
+        }
+      }
+    }
+  }
+
+  pickEmoji(emoji) {
+    if (this.activeReactionTarget) {
+      // Message Reaction
+      this.sendReaction(this.activeReactionTarget.messageId, emoji);
+      this.toggleEmojiPicker();
+    } else {
+      // Input Bar
+      if (this.input) {
+        this.input.value += emoji;
+        this.input.focus();
+      }
+    }
+  }
+
+  async sendReaction(messageId, emoji) {
+    const payload = {
+      service: "dex-web-frontend",
+      event: {
+        type: "messaging.user.reaction_added",
+        source: "web",
+        user_id: "anonymous",
+        user_name: "Web User",
+        channel_id: this.sessionId,
+        server_id: window.location.hostname,
+        message_id: messageId,
+        emoji: emoji,
+        timestamp: new Date().toISOString()
+      }
+    };
+
+    // Optimistic local update
+    this.addOrUpdateReaction(messageId, emoji, "Web User");
+
+    try {
+      await fetch(`${this.eventServiceUrl}/post`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.error("Error sending reaction:", err);
+    }
+  }
+
+  addOrUpdateReaction(messageId, emoji, userName) {
+    const messageEl = document.querySelector(`[data-message-id="${messageId}"]`);
+    if (!messageEl) return;
+
+    let reactionsContainer = messageEl.querySelector('.message-reactions');
+    if (!reactionsContainer) {
+      reactionsContainer = document.createElement('div');
+      reactionsContainer.className = 'message-reactions';
+      messageEl.querySelector('.message-bubble').appendChild(reactionsContainer);
+    }
+
+    let badge = reactionsContainer.querySelector(`[data-emoji="${emoji}"]`);
+    if (badge) {
+      const countEl = badge.querySelector('.reaction-count');
+      const count = parseInt(countEl.textContent) + 1;
+      countEl.textContent = count;
+      badge.classList.add('active');
+    } else {
+      badge = document.createElement('div');
+      badge.className = 'reaction-badge active';
+      badge.dataset.emoji = emoji;
+      badge.innerHTML = `<span>${emoji}</span><span class="reaction-count">1</span>`;
+      reactionsContainer.appendChild(badge);
+    }
   }
 
   setDebugMode(enabled) {
     this.debugMode = enabled;
     localStorage.setItem('dex_debug_mode', enabled);
     console.log(`Easter Engine: Debug Mode ${enabled ? 'Enabled' : 'Disabled'}`);
-    
-    // Re-render history? For now just affects new messages
-    // Optional: could hide/show existing event bubbles
   }
 
   resolveUrls() {
@@ -102,13 +224,12 @@ export class ChatSystem {
     if (host === 'easter.company' || host === 'www.easter.company') {
       this.apiUrl = 'https://dashboard.easter.company';
       this.wsUrl = 'wss://dashboard.easter.company/ws';
-      this.eventServiceUrl = 'https://dashboard.easter.company'; // Post to dashboard proxy
+      this.eventServiceUrl = 'https://dashboard.easter.company'; 
     } else if (host === '100.100.1.0') {
       this.apiUrl = 'http://100.100.1.3:8200';
       this.wsUrl = 'ws://100.100.1.3:8200/ws';
-      this.eventServiceUrl = 'http://100.100.1.3:8200'; // Dashboard port
+      this.eventServiceUrl = 'http://100.100.1.3:8200'; 
     } else {
-      // Development/Fallback
       this.apiUrl = `${protocol}//${host}:8200`;
       this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
       this.eventServiceUrl = `${protocol}//${host}:8200`;
@@ -119,7 +240,6 @@ export class ChatSystem {
     if (this.isActive) {
       this.exitChatMode();
     } else {
-      // Only open if no other overlays are open
       const overlay = document.getElementById('game-overlay');
       const isOverlayActive = overlay && overlay.classList.contains('active');
       if (!isOverlayActive) {
@@ -132,7 +252,6 @@ export class ChatSystem {
     if (this.isActive) return;
     this.isActive = true;
 
-    // 1. Fade out everything
     if (this.mainContent) {
       this.mainContent.style.visibility = "visible";
       this.mainContent.style.transition = "opacity 0.8s ease, visibility 0.8s ease";
@@ -156,10 +275,8 @@ export class ChatSystem {
       }
     });
 
-    // 2. Lock scroll
     document.body.classList.add('no-scroll');
 
-    // 3. Show Chat Container
     if (this.container) {
       this.container.classList.add('active');
       setTimeout(() => {
@@ -167,7 +284,6 @@ export class ChatSystem {
       }, 800);
     }
 
-    // 4. Connect WebSocket
     this.connectWebSocket();
   }
 
@@ -175,13 +291,11 @@ export class ChatSystem {
     if (!this.isActive) return;
     this.isActive = false;
 
-    // Disconnect WebSocket
     if (this.ws) {
       this.ws.close();
       this.ws = null;
     }
 
-    // 1. Fade in everything
     if (this.mainContent) {
       this.mainContent.style.visibility = "visible";
       this.mainContent.style.opacity = "1";
@@ -200,13 +314,13 @@ export class ChatSystem {
       }
     });
 
-    // 2. Unlock scroll
     document.body.classList.remove('no-scroll');
 
-    // 3. Hide Chat Container
     if (this.container) {
       this.container.classList.remove('active');
     }
+    
+    if (this.emojiPicker) this.emojiPicker.classList.remove('active');
   }
 
   connectWebSocket() {
@@ -237,33 +351,31 @@ export class ChatSystem {
   }
 
   handleLiveEvent(rawEvent) {
-    if (!rawEvent || !rawEvent.event) {
-      return;
-    }
+    if (!rawEvent || !rawEvent.event) return;
 
     const eventData = rawEvent.event;
     const type = eventData.type;
-    
-    // Check if this event belongs to our session
     const isOurSession = eventData.channel_id === this.sessionId;
+
+    if (type === 'messaging.user.reaction_added') {
+      this.addOrUpdateReaction(eventData.message_id, eventData.emoji, eventData.user_name);
+      return;
+    }
 
     if (isOurSession) {
       if (type === 'messaging.user.sent_message') {
-        return; // Already added optimistically
+        return; 
       } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
-        this.addMessage('assistant', 'Dexter', eventData.content || eventData.response || eventData.text);
+        this.addMessage('assistant', 'Dexter', eventData.content || eventData.response || eventData.text, eventData.message_id);
         this.setProcessing(false);
       } else if (type === 'system.process.unregistered' || type === 'system.process.error' || type === 'system.process.cancelled') {
-        // Unlock if our processing finishes or fails
         this.setProcessing(false);
       } else {
-        // Only show log events in UI if debug mode is on
         if (this.debugMode) {
           this.addMessage('event', 'Session Event', rawEvent);
         }
       }
     } else {
-      // General system events - only show if debug mode is on
       if (this.debugMode) {
         this.addMessage('event', 'System Event', rawEvent);
       }
@@ -276,9 +388,9 @@ export class ChatSystem {
     
     const text = this.input.value.trim();
     this.input.value = '';
+    const messageId = this.generateUUID();
 
-    // Optimistic UI update
-    this.addMessage('user', 'You', text);
+    this.addMessage('user', 'You', text, messageId);
     this.setProcessing(true);
 
     const payload = {
@@ -293,7 +405,7 @@ export class ChatSystem {
         channel_name: "Private Web Chat",
         server_id: window.location.hostname,
         server_name: "Easter Company Web",
-        message_id: this.generateUUID(),
+        message_id: messageId,
         timestamp: new Date().toISOString()
       }
     };
@@ -317,9 +429,6 @@ export class ChatSystem {
 
   async cancelProcess() {
     if (!this.isProcessing) return;
-    
-    console.log("Cancelling process...");
-    // Update label to show cancellation in progress
     if (this.input) this.input.placeholder = "Cancelling...";
 
     const payload = {
@@ -338,10 +447,9 @@ export class ChatSystem {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      // We don't unlock yet - we wait for the backend to send 'system.process.cancelled' or similar via WS
     } catch (err) {
       console.error("Error sending cancel request:", err);
-      this.setProcessing(false); // Fallback unlock on network error
+      this.setProcessing(false); 
     }
   }
 
@@ -374,13 +482,15 @@ export class ChatSystem {
     });
   }
 
-  addMessage(type, sender, content) {
-    const msg = { type, sender, content, timestamp: new Date() };
+  addMessage(type, sender, content, messageId = null) {
+    const id = messageId || this.generateUUID();
+    const msg = { type, sender, content, id, timestamp: new Date() };
     this.history.push(msg);
 
     if (this.historyEl) {
       const msgEl = document.createElement('div');
       msgEl.className = `chat-message message-${type}`;
+      msgEl.dataset.messageId = id;
       
       const label = document.createElement('span');
       label.className = 'message-label';
@@ -407,6 +517,17 @@ export class ChatSystem {
         });
       } else {
         bubble.textContent = content;
+        
+        // Add Reaction Button
+        const reactBtn = document.createElement('div');
+        reactBtn.className = 'message-action-btn';
+        reactBtn.innerHTML = "<i class='bx bx-smile'></i>";
+        reactBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.activeReactionTarget = { element: msgEl, messageId: id };
+          this.toggleEmojiPicker(this.activeReactionTarget);
+        });
+        bubble.appendChild(reactBtn);
       }
 
       msgEl.appendChild(label);
