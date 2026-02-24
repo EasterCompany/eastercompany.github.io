@@ -69,26 +69,34 @@ export class UISystem {
     if (isSameView) {
       // Close Overlay
       this.activeView = null;
-      this.overlay.classList.remove('active');
+      if (this.overlay) this.overlay.classList.remove('active');
       document.body.classList.remove('no-scroll'); // Unlock scroll
       
-      this.mainContent.style.opacity = "1";
-      this.mainContent.style.visibility = "visible";
-      this.footer.style.opacity = "1";
-      this.footer.style.visibility = "visible";
+      if (this.mainContent) {
+        this.mainContent.style.opacity = "1";
+        this.mainContent.style.visibility = "visible";
+      }
+      if (this.footer) {
+        this.footer.style.opacity = "1";
+        this.footer.style.visibility = "visible";
+      }
     } else {
       // Switch/Open Overlay
       this.activeView = viewKey;
       const targetView = document.getElementById(`overlay-view-${viewKey}`);
       if (targetView) targetView.classList.add('active');
       
-      this.overlay.classList.add('active');
+      if (this.overlay) this.overlay.classList.add('active');
       document.body.classList.add('no-scroll'); // Lock scroll
       
-      this.mainContent.style.opacity = "0";
-      this.mainContent.style.visibility = "hidden";
-      this.footer.style.opacity = "0";
-      this.footer.style.visibility = "hidden";
+      if (this.mainContent) {
+        this.mainContent.style.opacity = "0";
+        this.mainContent.style.visibility = "hidden";
+      }
+      if (this.footer) {
+        this.footer.style.opacity = "0";
+        this.footer.style.visibility = "hidden";
+      }
     }
   }
 
