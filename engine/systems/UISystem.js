@@ -35,7 +35,7 @@ export class UISystem {
     
     // HUD Titles
     this.viewTitles = {
-      spartan: "PUBLIC DEXNET",
+      spartan: "SPARTAN",
       market: "MARKET",
       user: "PROFILE & FAMILY",
       settings: "SETTINGS"
