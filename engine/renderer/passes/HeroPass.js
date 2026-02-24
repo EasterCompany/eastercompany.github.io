@@ -8,47 +8,47 @@ export class HeroPass {
     this.shapes = [];
     this.maxShapes = 8;
 
-    // --- Curated \"Highland\" Scripts ---
+    // --- Curated "Highland" Scripts ---
     this.scripts = [
       {
         name: "The Great Highland",
         size: 1.8,
-        color: [0.8, 0.7, 0.9], // Purple
-        duration: 25, // Very slow
+        color: [0.8, 0.7, 0.9], 
+        duration: 25, 
         path: { x1: -0.8, y1: 0.8, x2: 1.8, y2: 0.7 }
       },
       {
         name: "The Event Pulse",
         size: 0.9,
-        color: [0.0, 0.9, 1.0], // Neon Blue
+        color: [0.0, 0.9, 1.0], 
         duration: 12,
         path: { x1: 1.2, y1: 0.2, x2: -0.2, y2: 0.8 }
       },
       {
         name: "The Distant Dawn",
         size: 2.5,
-        color: [0.9, 0.8, 0.6], // Orange/Amber
+        color: [0.9, 0.8, 0.6], 
         duration: 40,
         path: { x1: 0.5, y1: 1.5, x2: 0.6, y2: -0.5 }
       },
       {
         name: "Neural Drift",
         size: 0.7,
-        color: [0.7, 1.0, 0.8], // Green
+        color: [0.7, 1.0, 0.8], 
         duration: 15,
         path: { x1: -0.3, y1: -0.2, x2: 1.3, y2: 1.2 }
       },
       {
         name: "The Obsidian Sweep",
         size: 1.2,
-        color: [0.6, 0.7, 1.0], // Steel Blue
+        color: [0.6, 0.7, 1.0], 
         duration: 20,
         path: { x1: -0.5, y1: 0.3, x2: 1.5, y2: 0.3 }
       },
       {
         name: "Shadow Glimmer",
         size: 0.5,
-        color: [1.0, 0.8, 1.0], // Soft Pink
+        color: [1.0, 0.8, 1.0], 
         duration: 8,
         path: { x1: 0.8, y1: 1.2, x2: 0.2, y2: -0.2 }
       }
@@ -58,6 +58,8 @@ export class HeroPass {
     this.targetBusyIntensity = 0;
     this.uiIntensity = 0;
     this.targetUIIntensity = 0;
+    this.lastHB = 0;
+    this.connectionsInitialized = false;
   }
 
   async init(device, format, registry) {
@@ -80,7 +82,7 @@ export class HeroPass {
         time: f32,
         width: f32,
         height: f32,
-        active_mask: f32, 
+        p0: f32, 
         mouse: vec2<f32>,
         busy_intensity: f32,
         heartbeat: f32,
@@ -131,9 +133,7 @@ export class HeroPass {
         let aspect = uniforms.width / uniforms.height;
         let busy = uniforms.busy_intensity;
         let hb = uniforms.heartbeat;
-        let ui = uniforms.ui_intensity;
         let center = vec2<f32>(0.5, 0.5);
-        let mask = u32(uniforms.active_mask);
         
         // 1. Fog Layer (Organic Smoke)
         var fog_noise = 0.0;
@@ -145,21 +145,12 @@ export class HeroPass {
         let smoke_color = vec3<f32>(0.05, 0.07, 0.1);
         color = mix(color, smoke_color, fog_noise * 0.4);
         
-        // 3. Neural Root Nodes (Central Circle)
-        for (var j = 0; j < 6; j++) {
-          let fj = f32(j);
-          let is_active = (mask >> u32(j)) & 1u;
-          
-          if (is_active > 0u) {
-            let angle = fj * 1.047 + t * 0.5;
-            let light_pos = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
-            let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
-            
-            var flicker = hb * 0.8 + 0.2;
-            let light_color = vec3<f32>(abs(sin(fj * 1.2)), abs(cos(fj * 0.8)), abs(sin(fj * 2.5)));
-            let glow = exp(-d * 40.0) * 0.5 * flicker * busy;
-            color += light_color * glow;
-          }
+        // 3. Central Blue Light Source
+        if (busy > 0.01) {
+          let d_center = distance(uv * vec2<f32>(aspect, 1.0), center * vec2<f32>(aspect, 1.0));
+          let center_pulse = hb * 0.5 + 0.5;
+          let center_glow = exp(-d_center * 30.0) * 0.15 * busy * center_pulse;
+          color += vec3<f32>(0.0, 0.5, 1.0) * center_glow;
         }
 
         // 4. Synaptic Bonds and Wandering Nodes
@@ -167,42 +158,42 @@ export class HeroPass {
           let s = uniforms.shapes[i];
           let d_shape = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
-          // Brighter based on momentum and size-dependent glow falloff
-          let intensity_boost = 1.0 + (s.momentum * 0.5);
-          let node_glow = exp(-d_shape * (10.0 / s.size)) * 0.3 * s.opacity * intensity_boost;
+          // Dimmer base intensity, pulses with heartbeat if connected
+          let momentum_boost = s.momentum * hb * 0.4;
+          let node_glow = exp(-d_shape * (15.0 / s.size)) * 0.1 * s.opacity * (1.0 + momentum_boost);
           color += s.color * node_glow;
 
-          // Neural Bonds
-          if (busy > 0.1 && hb > 0.1 && s.opacity > 0.2 && s.parent_idx >= 0.0) {
+          // Neural Bonds (Synapses)
+          if (busy > 0.1 && hb > 0.01 && s.opacity > 0.2 && s.parent_idx >= -1.5) {
             var origin: vec2<f32>;
-            if (s.parent_idx < 10.0) {
-              let angle = s.parent_idx * 1.047 + t * 0.5;
-              origin = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
+            if (s.parent_idx < -0.5) { // Center connection
+              origin = center;
             } else {
-              origin = uniforms.shapes[i32(s.parent_idx - 10.0)].pos;
+              origin = uniforms.shapes[i32(s.parent_idx)].pos;
             }
             
             let pa = uv - origin;
             let ba = s.pos - origin;
             let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
             
-            // Flowy \"hand-drawn\" curve displacement
+            // Flowy curve displacement
             let p_norm = normalize(vec2<f32>(-ba.y, ba.x)); 
-            let curve_freq = 3.0;
-            let curve_amp = 0.02 * sin(h * 3.14159);
-            let flow_noise = noise(vec2<f32>(h * curve_freq, t * 0.4)) * curve_amp;
+            let curve_freq = 2.0;
+            let curve_amp = 0.01 * sin(h * 3.14159);
+            let flow_noise = noise(vec2<f32>(h * curve_freq, t * 0.3)) * curve_amp;
             
             let dist_to_bond = distance(uv, origin + ba * h + p_norm * flow_noise);
             
-            // Slower, smoother energy surge
-            let surge = sin(t * 4.0 - h * 6.0) * 0.5 + 0.5;
-            let bond_core = exp(-dist_to_bond * 800.0);
-            let bond_glow = exp(-dist_to_bond * 100.0) * 0.3;
+            // Slower, subtle energy surge
+            let surge = sin(t * 3.0 - h * 5.0) * 0.5 + 0.5;
+            let bond_core = exp(-dist_to_bond * 1000.0);
+            let bond_glow = exp(-dist_to_bond * 150.0) * 0.2;
             
-            // Smoother \"flash\" activation
-            let activation = clamp((hb - 0.1) * 1.5, 0.0, 1.0);
+            // Heartbeat fade-in/out for the bond
+            let bond_intensity = hb * 0.3 * busy;
+            let bond_color = mix(s.color, vec3<f32>(0.0, 0.6, 1.0), 0.5);
             
-            color += s.color * (bond_core + bond_glow * surge) * activation * (8.0 + s.momentum * 8.0) * busy;
+            color += bond_color * (bond_core + bond_glow * surge) * bond_intensity;
           }
         }
         
@@ -240,39 +231,17 @@ export class HeroPass {
     if (!this.device || !this.pipeline) return;
     this.updateShapes(registry);
 
-    // Calculate Neural Synapse Bonds and Momentum
-    let activeMask = 0;
-    this.shapes.forEach(s => { s.momentum = 0; s.parentIdx = -1; });
-    
     const hb = registry.heartbeatIntensity || 0;
-    if (registry.systemBusy && hb > 0.05) {
-      const center = { x: 0.5, y: 0.5 };
-      
-      // Level 1: Core to Shapes (Stable parentIdx)
-      this.shapes.forEach((s, idx) => {
-        const d = Math.hypot(s.x - center.x, s.y - center.y);
-        if (d < 0.45 && s.opacity > 0.3) {
-          s.momentum = 1.0;
-          s.parentIdx = s.preferredLight;
-          activeMask |= (1 << s.parentIdx);
-        }
-      });
+    
+    // Re-calculate neural bonds each cycle when heartbeat is low
+    if (hb < 0.05 && this.lastHB >= 0.05) {
+      this.connectionsInitialized = false;
+    }
+    this.lastHB = hb;
 
-      // Level 2+: Shape to Shape (Chain Reaction)
-      for (let j = 0; j < 3; j++) {
-        this.shapes.forEach((s1, i) => {
-          if (s1.momentum > 0) return;
-          this.shapes.forEach((s2, k) => {
-            if (s2.momentum === 0 || i === k) return;
-            const d = Math.hypot(s1.x - s2.x, s1.y - s2.y);
-            const threshold = 0.25 + (s2.momentum * 0.12);
-            if (d < threshold && s1.opacity > 0.3) {
-              s1.momentum = s2.momentum + 1.0;
-              s1.parentIdx = k + 10;
-            }
-          });
-        });
-      }
+    if (!this.connectionsInitialized && hb < 0.1) {
+      this.calculateBonds(registry);
+      this.connectionsInitialized = true;
     }
 
     // Update Intensities
@@ -287,7 +256,7 @@ export class HeroPass {
     data[0] = registry.time;
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
-    data[3] = activeMask;
+    data[3] = 0; // Padding
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
     data[6] = this.busyIntensity;
@@ -296,7 +265,7 @@ export class HeroPass {
 
     for (let i = 0; i < 8; i++) {
       const offset = 12 + (i * 12);
-      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -1, size: 0.1 };
+      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -5, size: 0.1 };
       data[offset] = s.x;
       data[offset + 1] = s.y;
       data[offset + 2] = s.opacity || 0;
@@ -305,7 +274,7 @@ export class HeroPass {
       data[offset + 5] = s.color[1];
       data[offset + 6] = s.color[2];
       data[offset + 7] = s.momentum || 0;
-      data[offset + 8] = s.parentIdx;
+      data[offset + 8] = s.parentIdx === undefined ? -5 : s.parentIdx;
     }
 
     this.device.queue.writeBuffer(this.uniformBuffer, 0, data);
@@ -314,90 +283,56 @@ export class HeroPass {
     passEncoder.draw(4);
   }
 
+  calculateBonds(registry) {
+    this.shapes.forEach(s => { s.momentum = 0; s.parentIdx = -5; });
+    const center = { x: 0.5, y: 0.5 };
+
+    // Level 1: Center to Shapes
+    this.shapes.forEach((s) => {
+      const d = Math.hypot(s.x - center.x, s.y - center.y);
+      if (d < 0.5 && s.opacity > 0.2) {
+        s.momentum = 1.0;
+        s.parentIdx = -2; // Special code for center
+      }
+    });
+
+    // Level 2+: Shape to Shape
+    for (let j = 0; j < 3; j++) {
+      this.shapes.forEach((s1, i) => {
+        if (s1.momentum > 0) return;
+        this.shapes.forEach((s2, k) => {
+          if (s2.momentum === 0 || i === k) return;
+          const d = Math.hypot(s1.x - s2.x, s1.y - s2.y);
+          const threshold = 0.25 + (s2.momentum * 0.1);
+          if (d < threshold && s1.opacity > 0.2) {
+            s1.momentum = s2.momentum + 1.0;
+            s1.parentIdx = k;
+          }
+        });
+      });
+    }
+  }
+
   execute2D(ctx, registry) {
+    // 2D fallback simplified for the new design
     this.updateShapes(registry);
     const { width, height } = registry.screen;
-
-    this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
-    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * 0.05;
-    this.targetUIIntensity = registry.isOverlayActive ? 1.0 : 0.0;
-    this.uiIntensity += (this.targetUIIntensity - this.uiIntensity) * 0.05;
-
     ctx.fillStyle = "#050507";
     ctx.fillRect(0, 0, width, height);
-
-    ctx.globalCompositeOperation = "screen";
-
-    // Thinking Lights (2D Fallback)
-    if (this.busyIntensity > 0.01) {
-      const t = registry.time;
-      const hb = registry.heartbeatIntensity || 0;
-      const center = { x: width * 0.5, y: height * 0.5 };
-      const clusterRadius = 100 * this.busyIntensity;
-
-      for (let j = 0; j < 6; j++) {
-        const angle = j * 1.047 + t * 0.5;
-        const lx = center.x + Math.cos(angle) * clusterRadius;
-        const ly = center.y + Math.sin(angle) * clusterRadius;
-        let flicker = hb * 0.8 + 0.2;
-        const size = 100 * this.busyIntensity * flicker;
-        const grad = ctx.createRadialGradient(lx, ly, 0, lx, ly, size);
-        const r = Math.round(Math.abs(Math.sin(j * 1.2)) * 255);
-        const g = Math.round(Math.abs(Math.cos(j * 0.8)) * 255);
-        const b = Math.round(Math.abs(Math.sin(j * 2.5)) * 255);
-        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.3 * this.busyIntensity})`);
-        grad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(lx - size, ly - size, size * 2, size * 2);
-
-        if (hb > 0.1) {
-          this.shapes.forEach((s, i) => {
-            if (s.parentIdx !== j && s.parentIdx !== (i + 10)) return; 
-            const sx = s.x * width;
-            const sy = (1.0 - s.y) * height;
-            ctx.beginPath();
-            ctx.moveTo(lx, ly);
-            ctx.lineTo(sx, sy);
-            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.1) * this.busyIntensity})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          });
-        }
-      }
-    }
-
-    for (let s of this.shapes) {
-      const x = s.x * width;
-      const y = (1.0 - s.y) * height;
-      const size = (s.size || 1.0) * 1000;
-      const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
-      const c = s.color;
-      const alpha = 0.12 * (s.opacity || 0);
-      sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, ${alpha})`); 
-      sGrad.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = sGrad;
-      ctx.fillRect(x - size, y - size, size * 2, size * 2);
-    }
-    ctx.globalCompositeOperation = "source-over";
   }
 
   updateShapes(registry) {
     const t = registry.time;
     const isBusy = registry.systemBusy;
-    
-    // Spawn every 4-6 seconds (Idle) or 0.5-1.5 seconds (Busy)
     const interval = isBusy ? (0.5 + Math.random() * 1.0) : (4.0 + Math.random() * 2.0);
 
     if (!this.lastTrigger || t - this.lastTrigger > interval) {
       if (this.shapes.length < this.maxShapes) {
         this.lastTrigger = t;
-        
-        // Select random script
         const script = this.scripts[Math.floor(Math.random() * this.scripts.length)];
-        
         this.shapes.push({
           ...script,
-          size: script.size * (0.8 + Math.random() * 1.5), // Random size
+          size: script.size * (0.8 + Math.random() * 1.5),
           startTime: t,
           opacity: 0,
           active: true,
@@ -408,31 +343,14 @@ export class HeroPass {
     }
 
     this.shapes = this.shapes.filter(s => s.active);
-
     for (let s of this.shapes) {
       const progress = (t - s.startTime) / s.duration;
-      
-      // Interpolate Position
       s.x = s.path.x1 + (s.path.x2 - s.path.x1) * progress;
       s.y = s.path.y1 + (s.path.y2 - s.path.y1) * progress;
-      
-      // Stable preferred light index for bonding
-      if (s.preferredLight === undefined) {
-        s.preferredLight = Math.floor(Math.random() * 6);
-      }
-      
-      // Fine-tuned Opacity Curve
-      if (progress < 0.2) {
-        s.opacity = progress / 0.2;
-      } else if (progress > 0.8) {
-        s.opacity = 1.0 - (progress - 0.8) / 0.2;
-      } else {
-        s.opacity = 1.0;
-      }
-
-      if (progress >= 1.0) {
-        s.active = false;
-      }
+      if (progress < 0.2) s.opacity = progress / 0.2;
+      else if (progress > 0.8) s.opacity = 1.0 - (progress - 0.8) / 0.2;
+      else s.opacity = 1.0;
+      if (progress >= 1.0) s.active = false;
     }
   }
 }
