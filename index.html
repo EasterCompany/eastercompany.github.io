@@ -708,9 +708,23 @@
         border-radius: 16px;
         transition: all 0.3s ease;
       }
+      .settings-item:has(input[readonly]),
+      .settings-item:has(input:disabled),
+      .settings-item:has(select:disabled) {
+        opacity: 0.4;
+        filter: grayscale(0.5);
+      }
       .settings-item:hover {
         background: rgba(255, 255, 255, 0.05);
         border-color: rgba(255, 255, 255, 0.1);
+      }
+      .settings-item:has(input[readonly]):hover,
+      .settings-item:has(input:disabled):hover,
+      .settings-item:has(select:disabled):hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.05);
+        transform: none;
+        box-shadow: none;
       }
       .settings-info h4 {
         font-size: 1rem;
@@ -1400,7 +1414,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771903961"></script>
+    <script type="module" src="/engine/main.js?h=1771904043"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
