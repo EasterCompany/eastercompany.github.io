@@ -133,6 +133,7 @@ export class HeroPass {
         let aspect = uniforms.width / uniforms.height;
         let busy = uniforms.busy_intensity;
         let hb = uniforms.heartbeat;
+        let ui = uniforms.ui_intensity;
         let center = vec2<f32>(0.5, 0.5);
         
         // 1. Fog Layer (Organic Smoke)
