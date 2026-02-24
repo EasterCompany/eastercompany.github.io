@@ -259,7 +259,7 @@ export class HeroPass {
     }
 
     // Update Intensities
-    this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
+    this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.2; // 0.2 floor for idle base state
     const lerpSpeed = 0.05;
     this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
     
@@ -270,10 +270,10 @@ export class HeroPass {
     data[0] = registry.time;
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
-    data[3] = 0; // Padding
+    data[3] = 0; 
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
-    data[6] = this.busyIntensity;
+    data[6] = Math.max(0.2, this.busyIntensity);
     data[7] = hb;
     data[8] = this.uiIntensity;
 

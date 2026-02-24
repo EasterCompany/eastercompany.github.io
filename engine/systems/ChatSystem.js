@@ -1302,7 +1302,7 @@ export class ChatSystem {
     else if (phase < 0.6) heartbeat = (phase - 0.5) / 0.1 * 0.4;
     else if (phase < 0.7) heartbeat = 0.4 - (phase - 0.6) / 0.1 * 0.4;
     
-    registry.heartbeatIntensity = heartbeat;
+    registry.heartbeatIntensity = Math.max(0.1, heartbeat);
 
     // Sync Neural Core visibility and animation
     const core = document.getElementById('neural-core');
