@@ -14,6 +14,7 @@ export class ChatSystem {
     
     this.emojis = ['👍', '👎', '❤️', '🔥', '😂', '😮', '😢', '🙏', '✨', '🚀', '✅', '❌', '🤔', '👀', '💯'];
     this.activeReactionTarget = null; // Store messageEl or messageId for reaction
+    this.cancelAttempts = 0;
   }
 
   getOrCreateSessionId() {
@@ -729,7 +730,19 @@ export class ChatSystem {
 
   async cancelProcess() {
     if (!this.isProcessing) return;
-    if (this.input) this.input.placeholder = "Cancelling...";
+    
+    this.cancelAttempts++;
+    
+    if (this.cancelAttempts >= 3) {
+      console.log("ChatSystem: Force unlocking after multiple cancel attempts.");
+      this.setProcessing(false);
+      this.cancelAttempts = 0;
+      return;
+    }
+
+    if (this.input) {
+      this.input.placeholder = this.cancelAttempts > 1 ? `Force Unlock (${3 - this.cancelAttempts})...` : "Cancelling...";
+    }
 
     const payload = {
       service: "dex-web-frontend",
@@ -761,6 +774,8 @@ export class ChatSystem {
 
   setProcessing(processing) {
     this.isProcessing = processing;
+    if (!processing) this.cancelAttempts = 0;
+    
     if (this.container) {
       if (processing) {
         this.container.classList.add('locked');
