@@ -332,10 +332,18 @@
         to { opacity: 1; transform: translateY(0); }
       }
       .overlay-view h2 {
-        font-size: 2rem;
-        letter-spacing: 0.1em;
-        margin-bottom: 20px;
+        position: fixed;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
         color: var(--neon-blue);
+        margin: 0;
+        pointer-events: none;
+        opacity: 0.6;
+        white-space: nowrap;
       }
 
       /* Chat Mode & Liquid Display */
@@ -686,14 +694,14 @@
       .settings-list {
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        margin-top: 30px;
+        gap: 10px;
+        margin-top: 10px;
       }
       .settings-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 20px;
+        padding: 12px 20px;
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 16px;
@@ -716,9 +724,9 @@
       .settings-category {
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        padding-bottom: 25px;
-        margin-bottom: 25px;
+        gap: 10px;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       }
       .settings-category:last-child {
