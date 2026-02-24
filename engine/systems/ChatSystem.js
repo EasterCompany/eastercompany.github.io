@@ -138,10 +138,54 @@ export class ChatSystem {
 
     // Initialize
     console.log(`ChatSystem: Initializing session ${this.sessionId}`);
-    this.syncOptions();
+    this.syncOptions().then(() => {
+      this.setupObfuscation();
+    });
     this.startNetworkStatusSync();
     
     console.log("Easter Engine: Chat System Online");
+  }
+
+  setupObfuscation() {
+    const items = document.querySelectorAll('.discord-configs .settings-item');
+    items.forEach(item => {
+      const input = item.querySelector('input.obfuscated');
+      if (!input) return;
+
+      // Ensure we have the latest real value
+      const realValue = input.value;
+      input.dataset.realValue = realValue;
+      
+      // Store intervals per input to avoid overlaps
+      let interval = null;
+
+      const startScrambling = () => {
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+          input.value = this.generateScrambledText(realValue.length);
+        }, 100);
+      };
+
+      const stopScrambling = () => {
+        if (interval) clearInterval(interval);
+        input.value = input.dataset.realValue;
+      };
+
+      // Initial state: Scrambled
+      input.value = this.generateScrambledText(realValue.length);
+
+      item.addEventListener('mouseenter', stopScrambling);
+      item.addEventListener('mouseleave', startScrambling);
+    });
+  }
+
+  generateScrambledText(length) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
   }
 
   startNetworkStatusSync() {
