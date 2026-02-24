@@ -1177,7 +1177,19 @@ export class ChatSystem {
       const response = await fetch(`${this.eventServiceUrl}/cli/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ command, args })
+        body: JSON.stringify({ 
+          command, 
+          args,
+          metadata: {
+            channel_id: this.sessionId,
+            channel_name: "Private Web Chat",
+            user_id: "anonymous",
+            user_name: "Web User",
+            source: "web",
+            server_id: window.location.hostname,
+            server_name: "Easter Company Web"
+          }
+        })
       });
 
       if (!response.ok) {
