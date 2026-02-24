@@ -148,10 +148,14 @@ export class ChatSystem {
       // By default, source from production for public/non-logged-in users
       const url = "https://dashboard.easter.company/system/options";
       const response = await fetch(url);
-      if (!response.ok) return;
+      if (!response.ok) {
+        console.warn(`ChatSystem: Failed to fetch options from ${url} (Status: ${response.status})`);
+        return;
+      }
       
       const data = await response.json();
       const discord = data["dex-discord-service"]?.options;
+      
       if (discord) {
         const elToken = document.getElementById('setting-discord-token');
         const elServer = document.getElementById('setting-discord-server-id');
@@ -166,6 +170,10 @@ export class ChatSystem {
         if (elBuild) elBuild.value = discord.build_channel_id || "";
         if (elDebug) elDebug.value = discord.debug_channel_id || "";
         if (elMaster) elMaster.value = discord.master_user || "";
+        
+        console.log("ChatSystem: Discord options synchronized from production.");
+      } else {
+        console.warn("ChatSystem: Discord options not found in API response.", data);
       }
     } catch (err) {
       console.error("Failed to sync options:", err);
