@@ -154,17 +154,50 @@ export class HeroPass {
             
             let glow = exp(-d * 40.0) * 0.4 * flicker * busy;
             color += light_color * glow;
+
+            // 3.1 Zappy Arcs to wandering shapes
+            if (hb > 0.5) {
+              for (var k = 0; i < 8; i++) { // Using i from outer loop context if available? No, need separate index
+                // Wait, shader loops are limited. Let's iterate shapes inside thinking lights or vice versa.
+              }
+            }
           }
         }
 
-        // 4. Gliding Scripted Shapes
+        // 4. Gliding Scripted Shapes and Zaps
+        let center = vec2<f32>(0.5, 0.5);
         for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
-          let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
+          let d_shape = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
           // Very soft light scattering
-          let glow = exp(-d * (4.5 / s.size)) * 0.25 * s.opacity;
-          color += s.color * glow;
+          let shape_glow = exp(-d_shape * (4.5 / s.size)) * 0.25 * s.opacity;
+          color += s.color * shape_glow;
+
+          // Zappy connection logic
+          if (busy > 0.1 && hb > 0.6 && s.opacity > 0.5) {
+            // Check distance from center to shape
+            let dist_to_center = distance(s.pos, center);
+            if (dist_to_center < 0.4) {
+              // Draw a jagged line from a thinking light position to the shape
+              // Pick one of the 6 lights based on shape index
+              let light_idx = f32(i % 6);
+              let angle = light_idx * 1.047 + t * 0.5;
+              let light_origin = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
+              
+              // Segment distance logic
+              let pa = uv - light_origin;
+              let ba = s.pos - light_origin;
+              let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+              let dist_to_line = distance(uv, light_origin + ba * h);
+              
+              // Add "Zap" distortion using noise
+              let zap_noise = noise(uv * 20.0 + t * 50.0) * 0.01;
+              let zap_fade = exp(-(dist_to_line + zap_noise) * 150.0);
+              
+              color += s.color * zap_fade * (hb - 0.6) * 2.0 * busy;
+            }
+          }
         }
         
         color = mix(color, color * 0.3, fog);
@@ -254,18 +287,19 @@ export class HeroPass {
     // Thinking Lights (2D Fallback)
     if (this.busyIntensity > 0.01) {
       const t = registry.time;
+      const hb = registry.heartbeatIntensity || 0;
       const center = { x: width * 0.5, y: height * 0.5 };
       const clusterRadius = 100 * this.busyIntensity;
 
       for (let j = 0; j < 6; j++) {
         const angle = j * 1.047 + t * 0.5;
-        const x = center.x + Math.cos(angle) * clusterRadius;
-        const y = center.y + Math.sin(angle) * clusterRadius;
+        const lx = center.x + Math.cos(angle) * clusterRadius;
+        const ly = center.y + Math.sin(angle) * clusterRadius;
         
-        let flicker = (registry.heartbeatIntensity || 0) * 0.8 + 0.2;
+        let flicker = hb * 0.8 + 0.2;
 
         const size = 100 * this.busyIntensity * flicker;
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, size);
+        const grad = ctx.createRadialGradient(lx, ly, 0, lx, ly, size);
         const r = Math.round(Math.abs(Math.sin(j * 1.2)) * 255);
         const g = Math.round(Math.abs(Math.cos(j * 0.8)) * 255);
         const b = Math.round(Math.abs(Math.sin(j * 2.5)) * 255);
@@ -274,7 +308,34 @@ export class HeroPass {
         grad.addColorStop(1, "rgba(0,0,0,0)");
         
         ctx.fillStyle = grad;
-        ctx.fillRect(x - size, y - size, size * 2, size * 2);
+        ctx.fillRect(lx - size, ly - size, size * 2, size * 2);
+
+        // Zaps to shapes
+        if (hb > 0.6) {
+          this.shapes.forEach((s, i) => {
+            if (i % 6 !== j) return; // Each light zaps specific shapes
+            const sx = s.x * width;
+            const sy = (1.0 - s.y) * height;
+            const dist = Math.hypot(sx - center.x, sy - center.y);
+            
+            if (dist < 300 && s.opacity > 0.5) {
+              ctx.beginPath();
+              ctx.moveTo(lx, ly);
+              
+              // Draw jagged line
+              const segments = 5;
+              for(let k = 1; k <= segments; k++) {
+                const px = lx + (sx - lx) * (k/segments) + (Math.random() - 0.5) * 20;
+                const py = ly + (sy - ly) * (k/segments) + (Math.random() - 0.5) * 20;
+                ctx.lineTo(px, py);
+              }
+              
+              ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.6) * this.busyIntensity})`;
+              ctx.lineWidth = 2;
+              ctx.stroke();
+            }
+          });
+        }
       }
     }
 
