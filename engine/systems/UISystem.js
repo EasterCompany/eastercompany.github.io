@@ -35,10 +35,10 @@ export class UISystem {
     
     // HUD Titles
     this.viewTitles = {
-      spartan: "DEXTER NETWORK",
-      market: "INSIDERS MARKET",
-      user: "USER PROFILE",
-      settings: "SYSTEM SETTINGS"
+      spartan: "DEXTER",
+      market: "MARKET",
+      user: "PROFILE & FAMILY",
+      settings: "SETTINGS"
     };
 
     // HUD Triggers
