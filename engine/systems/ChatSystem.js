@@ -1046,10 +1046,12 @@ export class ChatSystem {
       } else if (type === 'messaging.bot.sent_message') {
         // Handle streaming updates
         if (eventData.is_debug && !this.debugMode) return;
-        this.addMessage('assistant', 'Dexter', eventData.content, eventData.message_id);
+        const sender = eventData.user_name || 'Dexter';
+        this.addMessage('assistant', sender, eventData.content, eventData.message_id);
         this.setProcessing(true); // Still processing if it's just a chunk
       } else if (type === 'bot_response') {
-        this.addMessage('assistant', 'Dexter', eventData.content || eventData.response || eventData.text, eventData.message_id);
+        const sender = eventData.user_name || 'Dexter';
+        this.addMessage('assistant', sender, eventData.content || eventData.response || eventData.text, eventData.message_id);
         this.setProcessing(false);
       } else if (type === 'system.process.registered') {
         this.updateProcessStatus(eventData.state || "Processing...");
