@@ -30,6 +30,12 @@ export class ChatSystem {
     this.resolveUrls();
     this.container = document.getElementById('chat-container');
     this.historyEl = document.getElementById('chat-history');
+    if (this.historyEl) {
+      this.historyEl.addEventListener('scroll', () => {
+        const isScrolled = this.historyEl.scrollTop > 10;
+        this.historyEl.classList.toggle('is-scrolled', isScrolled);
+      });
+    }
     this.input = document.getElementById('chat-input');
     this.submitBtn = document.getElementById('chat-submit');
     this.cancelBtn = document.getElementById('chat-cancel');
@@ -1231,28 +1237,49 @@ export class ChatSystem {
     const bubble = messageEl.querySelector('.message-bubble');
     if (!bubble) return;
 
-    // 1. Process Virtual Terminal Logic (Handle \r and \x1b[K)
-    // We split by newline, then for each line, handle carriage returns.
-    const lines = raw.split(/\r?\n/);
-    const processedLines = [];
+    let screen = [""];
+    let row = 0;
 
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i];
-      
-      // Handle \r by taking only the content after the last \r in this line segment
-      if (line.includes('\r')) {
-        const parts = line.split('\r');
-        line = parts[parts.length - 1];
+    // Regex to match escape sequences, newlines, and carriage returns
+    const regex = /(\x1b\[[0-9;]*[A-GJKSTm]|\r|\n)/g;
+    const parts = raw.split(regex);
+
+    for (const part of parts) {
+      if (!part) continue;
+
+      if (part === '\n') {
+        row++;
+        if (screen[row] === undefined) screen[row] = "";
+      } else if (part === '\r') {
+        // Conceptually move to start of line. 
+        // We clear the current buffer because the next token will likely be the update.
+        screen[row] = "";
+      } else if (part.startsWith('\x1b[')) {
+        const code = part.charAt(part.length - 1);
+        const val = parseInt(part.substring(2, part.length - 1)) || 1;
+
+        if (code === 'A') { // Move cursor up
+          row = Math.max(0, row - val);
+        } else if (code === 'B') { // Move cursor down
+          row += val;
+          while (screen.length <= row) screen.push("");
+        } else if (code === 'K') { // Clear line
+          screen[row] = "";
+        } else if (code === 'm') { // Color/Style
+          // We must preserve these in the screen buffer for parseAnsi
+          screen[row] += part;
+        }
+      } else {
+        // Plain text
+        if (screen[row] === undefined) screen[row] = "";
+        screen[row] += part;
       }
-
-      // Handle ANSI Clear Line [K
-      line = line.replace(/.*\x1b\[K/, '');
-
-      processedLines.push(line);
     }
 
-    const finalRaw = processedLines.join('\n');
-    bubble.innerHTML = this.parseAnsi(finalRaw);
+    // Clean up trailing empty rows
+    while (screen.length > 1 && screen[screen.length - 1] === "") screen.pop();
+
+    bubble.innerHTML = this.parseAnsi(screen.join('\n'));
     this.historyEl.scrollTop = this.historyEl.scrollHeight;
   }
 
