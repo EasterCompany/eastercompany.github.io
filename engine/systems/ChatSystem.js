@@ -144,6 +144,27 @@ export class ChatSystem {
   }
 
   async syncOptions() {
+    const cacheKey = 'dex_settings_cache';
+    const cacheTTL = 3600000; // 1 hour in milliseconds
+
+    // 1. Check Local Cache
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const cacheData = JSON.parse(cached);
+        const age = Date.now() - cacheData.timestamp;
+        
+        if (age < cacheTTL) {
+          console.log(`ChatSystem: Using cached settings (Age: ${Math.round(age/60000)}m)`);
+          this.applyOptionsToUI(cacheData.options);
+          return;
+        }
+        console.log("ChatSystem: Settings cache expired.");
+      } catch (e) {
+        console.warn("ChatSystem: Failed to parse settings cache.");
+      }
+    }
+
     const urls = [
       "https://dashboard.easter.company/system/options",
       `${this.eventServiceUrl}/system/options`
@@ -163,20 +184,14 @@ export class ChatSystem {
         const discord = data["dex-discord-service"]?.options;
         
         if (discord) {
-          const elToken = document.getElementById('setting-discord-token');
-          const elServer = document.getElementById('setting-discord-server-id');
-          const elVoice = document.getElementById('setting-discord-voice-channel');
-          const elBuild = document.getElementById('setting-discord-build-channel');
-          const elDebug = document.getElementById('setting-discord-debug-channel');
-          const elMaster = document.getElementById('setting-discord-master-user');
-
-          if (elToken) elToken.value = discord.token || "*************";
-          if (elServer) elServer.value = discord.server_id || "";
-          if (elVoice) elVoice.value = discord.default_voice_channel || "";
-          if (elBuild) elBuild.value = discord.build_channel_id || "";
-          if (elDebug) elDebug.value = discord.debug_channel_id || "";
-          if (elMaster) elMaster.value = discord.master_user || "";
+          this.applyOptionsToUI(data);
           
+          // Update Cache
+          localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            options: data
+          }));
+
           console.log(`ChatSystem: Discord options synchronized from ${url}`);
           return; // Success!
         }
@@ -185,6 +200,25 @@ export class ChatSystem {
       }
     }
     console.error("ChatSystem: Failed to sync options from all available sources.");
+  }
+
+  applyOptionsToUI(data) {
+    const discord = data["dex-discord-service"]?.options;
+    if (!discord) return;
+
+    const elToken = document.getElementById('setting-discord-token');
+    const elServer = document.getElementById('setting-discord-server-id');
+    const elVoice = document.getElementById('setting-discord-voice-channel');
+    const elBuild = document.getElementById('setting-discord-build-channel');
+    const elDebug = document.getElementById('setting-discord-debug-channel');
+    const elMaster = document.getElementById('setting-discord-master-user');
+
+    if (elToken) elToken.value = discord.token || "*************";
+    if (elServer) elServer.value = discord.server_id || "";
+    if (elVoice) elVoice.value = discord.default_voice_channel || "";
+    if (elBuild) elBuild.value = discord.build_channel_id || "";
+    if (elDebug) elDebug.value = discord.debug_channel_id || "";
+    if (elMaster) elMaster.value = discord.master_user || "";
   }
 
   async fetchHistory() {
