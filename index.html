@@ -804,7 +804,7 @@
       }
       .settings-input[readonly] {
         opacity: 0.5;
-        cursor: copy;
+        cursor: pointer;
         border-color: rgba(255, 255, 255, 0.05);
       }
 
@@ -833,12 +833,31 @@
       }
       .settings-select:disabled {
         opacity: 0.5;
-        cursor: copy;
+        cursor: pointer;
         border-color: rgba(255, 255, 255, 0.05);
       }
       .settings-select option {
         background: #050507;
         color: #fff;
+      }
+
+      /* Party Particle Effect */
+      .copy-particle {
+        position: fixed;
+        pointer-events: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 800;
+        font-size: 0.6rem;
+        color: var(--neon-blue);
+        text-transform: uppercase;
+        z-index: 10000;
+        animation: particleOut 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+      }
+
+      @keyframes particleOut {
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+        100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
       }
 
       /* Network Status Table */
@@ -1626,7 +1645,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771910516"></script>
+    <script type="module" src="/engine/main.js?h=1771910653"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

@@ -176,8 +176,7 @@ export class ChatSystem {
   setupClickToCopy() {
     const inputs = document.querySelectorAll('.settings-input[readonly], .settings-select:disabled');
     inputs.forEach(input => {
-      input.style.cursor = 'copy';
-      input.title = 'Click to copy';
+      input.title = 'Copy to clipboard';
 
       input.addEventListener('click', async (e) => {
         const valueToCopy = input.dataset.realValue || input.value;
@@ -185,6 +184,9 @@ export class ChatSystem {
 
         try {
           await navigator.clipboard.writeText(valueToCopy);
+          
+          // Party Effect
+          this.createCopyParticles(e.clientX, e.clientY);
           
           // Visual Feedback
           const originalBg = input.style.background;
@@ -199,6 +201,41 @@ export class ChatSystem {
         }
       });
     });
+  }
+
+  createCopyParticles(x, y) {
+    const particleCount = 8;
+    const colors = ['#00f3ff', '#27c93f', '#ffffff', '#ffd600'];
+    
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement('div');
+      p.className = 'copy-particle';
+      
+      // Random direction
+      const angle = (Math.random() * Math.PI * 2);
+      const velocity = 50 + Math.random() * 50;
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+      
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.setProperty('--tx', `${tx}px`);
+      p.style.setProperty('--ty', `${ty}px`);
+      p.style.color = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Half text, half dots
+      if (i % 2 === 0) {
+        p.textContent = 'COPIED';
+      } else {
+        p.textContent = '✦';
+        p.style.fontSize = '1rem';
+      }
+      
+      document.body.appendChild(p);
+      
+      // Cleanup
+      setTimeout(() => p.remove(), 800);
+    }
   }
 
   generateScrambledText(length) {
