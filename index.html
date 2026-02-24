@@ -276,6 +276,20 @@
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
       }
+      #spartan-trigger {
+        overflow: hidden;
+        position: relative;
+      }
+      .spartan-logo {
+        width: 180%;
+        height: auto;
+        position: absolute;
+        left: -35%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.7;
+        transition: all 0.3s ease;
+      }
       #settings-trigger:hover { transform: scale(1.1) rotate(45deg); }
       #user-trigger:hover { transform: scale(1.1) translateY(-2px); }
       #spartan-trigger:hover { transform: scale(1.1) rotate(-10deg); }
@@ -1534,7 +1548,7 @@
 
     <div class="game-ui-left-group">
       <div id="spartan-trigger" class="game-ui-icon">
-        <img src="/static/assets/logo/dexter-icon.svg" alt="Spartan" style="width: 24px; height: 24px; opacity: 0.7;" />
+        <img src="/static/assets/logo/easter_logo.svg" class="spartan-logo" alt="Spartan" />
       </div>
       <div id="market-trigger" class="game-ui-icon">
         <i class="bx bx-shopping-bag"></i>
@@ -1575,7 +1589,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771908515"></script>
+    <script type="module" src="/engine/main.js?h=1771909059"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
