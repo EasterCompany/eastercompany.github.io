@@ -62,6 +62,14 @@ export class HeroPass {
     this.device = device;
 
     const shaderCode = `
+      struct Shape {
+        pos: vec2<f32>,
+        opacity: f32,
+        pad: f32,
+        color: vec3<f32>,
+        size: f32,
+      };
+
       struct Uniforms {
         time: f32,
         width: f32,
