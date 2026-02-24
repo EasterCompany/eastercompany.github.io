@@ -225,7 +225,7 @@ export class ChatSystem {
 
     body.innerHTML = services.map(svc => {
       const cpu = svc.cpu != null ? `${svc.cpu.toFixed(1)}%` : '--';
-      const mem = svc.mem != null ? `${(svc.mem / 1024 / 1024).toFixed(0)}MB` : '--';
+      const mem = svc.mem != null ? `${svc.mem.toFixed(0)}MB` : '--';
       const version = svc.version ? svc.version.split('.').slice(0, 3).join('.') : 'N/A';
 
       return `
