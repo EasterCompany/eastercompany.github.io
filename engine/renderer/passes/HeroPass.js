@@ -61,20 +61,11 @@ export class HeroPass {
   async init(device, format, registry) {
     this.device = device;
 
-    const shaderCode = `
-      struct Shape {
-        pos: vec2<f32>,
-        opacity: f32,
-        momentum: f32,
-        color: vec3<f32>,
-        parent_idx: f32, // -1: none, 0-5: thinking light, 10+: shape index + 10
-      };
-
       struct Uniforms {
         time: f32,
         width: f32,
         height: f32,
-        shape_count: f32,
+        active_mask: f32, // Bitmask for 6 core lights
         mouse: vec2<f32>,
         busy_intensity: f32,
         heartbeat: f32,
@@ -122,6 +113,7 @@ export class HeroPass {
         let busy = uniforms.busy_intensity;
         let hb = uniforms.heartbeat;
         let center = vec2<f32>(0.5, 0.5);
+        let mask = u32(uniforms.active_mask);
         
         // 1. Fog Layer
         var fog = 0.0;
@@ -131,54 +123,54 @@ export class HeroPass {
         // 2. Base Darkness
         var color = vec3<f32>(0.01, 0.01, 0.02);
         
-        // 3. Thinking Lights (Root Nodes)
+        // 3. Neural Root Nodes (Central Circle)
         for (var j = 0; j < 6; j++) {
           let fj = f32(j);
-          let angle = fj * 1.047 + t * 0.5;
-          let light_pos = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
-          let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
+          let is_active = (mask >> u32(j)) & 1u;
           
-          var flicker = hb * 0.8 + 0.2;
-          let light_color = vec3<f32>(abs(sin(fj * 1.2)), abs(cos(fj * 0.8)), abs(sin(fj * 2.5)));
-          let glow = exp(-d * 40.0) * 0.4 * flicker * busy;
-          color += light_color * glow;
+          if (is_active > 0u) {
+            let angle = fj * 1.047 + t * 0.5;
+            let light_pos = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
+            let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
+            
+            var flicker = hb * 0.8 + 0.2;
+            let light_color = vec3<f32>(abs(sin(fj * 1.2)), abs(cos(fj * 0.8)), abs(sin(fj * 2.5)));
+            let glow = exp(-d * 40.0) * 0.5 * flicker * busy;
+            color += light_color * glow;
+          }
         }
 
-        // 4. Wandering Shapes and Chain Reaction Zaps
+        // 4. Synaptic Bonds and Wandering Nodes
         for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
           let d_shape = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
           // Brighter based on momentum
           let intensity_boost = 1.0 + (s.momentum * 0.5);
-          let shape_glow = exp(-d_shape * 6.0) * 0.25 * s.opacity * intensity_boost;
-          color += s.color * shape_glow;
+          let node_glow = exp(-d_shape * 10.0) * 0.3 * s.opacity * intensity_boost;
+          color += s.color * node_glow;
 
-          // Chain Reaction Zaps
-          if (busy > 0.1 && hb > 0.6 && s.opacity > 0.3 && s.parent_idx >= 0.0) {
+          // Neural Bonds
+          if (busy > 0.1 && hb > 0.6 && s.opacity > 0.2 && s.parent_idx >= 0.0) {
             var origin: vec2<f32>;
-            
             if (s.parent_idx < 10.0) {
-              // Zap from core light
               let angle = s.parent_idx * 1.047 + t * 0.5;
               origin = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
             } else {
-              // Zap from another shape
-              let p_idx = i32(s.parent_idx - 10.0);
-              origin = uniforms.shapes[p_idx].pos;
+              origin = uniforms.shapes[i32(s.parent_idx - 10.0)].pos;
             }
             
             let pa = uv - origin;
             let ba = s.pos - origin;
             let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-            let dist_to_line = distance(uv, origin + ba * h);
+            let dist_to_bond = distance(uv, origin + ba * h);
             
-            let zap_noise = noise(uv * 30.0 + t * 60.0) * 0.005;
-            let zap_core = exp(-(dist_to_line + zap_noise) * 500.0);
-            let zap_glow = exp(-(dist_to_line + zap_noise) * 50.0) * 0.5;
+            // Pulsing energy surge along the bond
+            let surge = sin(t * 15.0 - h * 10.0) * 0.5 + 0.5;
+            let bond_core = exp(-dist_to_bond * 600.0);
+            let bond_glow = exp(-dist_to_bond * 80.0) * 0.4;
             
-            // Scaled by momentum
-            color += s.color * (zap_core + zap_glow) * (hb - 0.6) * (10.0 + s.momentum * 10.0) * busy;
+            color += s.color * (bond_core + bond_glow * surge) * (hb - 0.6) * (8.0 + s.momentum * 8.0) * busy;
           }
         }
         
@@ -216,26 +208,33 @@ export class HeroPass {
     if (!this.device || !this.pipeline) return;
     this.updateShapes(registry);
 
-    // Calculate Chain Reaction Momentum
+    // Calculate Neural Synapse Bonds and Momentum
+    let activeMask = 0;
     this.shapes.forEach(s => { s.momentum = 0; s.parentIdx = -1; });
+    
     if (registry.systemBusy && (registry.heartbeatIntensity || 0) > 0.6) {
       const center = { x: 0.5, y: 0.5 };
-      // Level 1: Core to Shapes
+      
+      // Level 1: Core to Shapes (Building the root of the chain)
       this.shapes.forEach((s, idx) => {
         const d = Math.hypot(s.x - center.x, s.y - center.y);
-        if (d < 0.35 && s.opacity > 0.3) {
+        // Wider reach for neural bonds
+        if (d < 0.45 && s.opacity > 0.3) {
           s.momentum = 1.0;
-          s.parentIdx = Math.floor(Math.random() * 6); // Pick random thinking light
+          const lightIdx = Math.floor(Math.random() * 6);
+          s.parentIdx = lightIdx;
+          activeMask |= (1 << lightIdx);
         }
       });
-      // Level 2+: Shape to Shape
-      for (let j = 0; j < 2; j++) {
+
+      // Level 2+: Shape to Shape (Chain Reaction)
+      for (let j = 0; j < 3; j++) { // Up to 3 levels of depth
         this.shapes.forEach((s1, i) => {
           if (s1.momentum > 0) return;
           this.shapes.forEach((s2, k) => {
             if (s2.momentum === 0 || i === k) return;
             const d = Math.hypot(s1.x - s2.x, s1.y - s2.y);
-            const threshold = 0.2 + (s2.momentum * 0.1); // Area of influence grows
+            const threshold = 0.25 + (s2.momentum * 0.12); // Reach grows with momentum
             if (d < threshold && s1.opacity > 0.3) {
               s1.momentum = s2.momentum + 1.0;
               s1.parentIdx = k + 10;
@@ -254,7 +253,7 @@ export class HeroPass {
     data[0] = registry.time;
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
-    data[3] = 8.0;
+    data[3] = activeMask;
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
     data[6] = this.busyIntensity;
