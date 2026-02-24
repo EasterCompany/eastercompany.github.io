@@ -138,8 +138,33 @@ export class ChatSystem {
 
     // Initialize
     console.log(`ChatSystem: Initializing session ${this.sessionId}`);
+    this.syncOptions();
     
     console.log("Easter Engine: Chat System Online");
+  }
+
+  async syncOptions() {
+    try {
+      const url = `${this.eventServiceUrl}/system/options`;
+      const response = await fetch(url);
+      if (!response.ok) return;
+      
+      const data = await response.json();
+      const discord = data["dex-discord-service"]?.options;
+      if (discord) {
+        const elToken = document.getElementById('setting-discord-token');
+        const elServer = document.getElementById('setting-discord-server-id');
+        const elVoice = document.getElementById('setting-discord-voice-channel');
+        const elMaster = document.getElementById('setting-discord-master-user');
+
+        if (elToken) elToken.value = discord.token || "*************";
+        if (elServer) elServer.value = discord.server_id || "";
+        if (elVoice) elVoice.value = discord.default_voice_channel || "";
+        if (elMaster) elMaster.value = discord.master_user || "";
+      }
+    } catch (err) {
+      console.error("Failed to sync options:", err);
+    }
   }
 
   async fetchHistory() {
