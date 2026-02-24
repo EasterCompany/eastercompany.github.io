@@ -371,9 +371,12 @@ export class HeroPass {
 
   updateShapes(registry) {
     const t = registry.time;
+    const isBusy = registry.systemBusy;
     
-    // Spawn every 4-6 seconds
-    if (!this.lastTrigger || t - this.lastTrigger > (4.0 + Math.random() * 2.0)) {
+    // Spawn every 4-6 seconds (Idle) or 0.5-1.5 seconds (Busy)
+    const interval = isBusy ? (0.5 + Math.random() * 1.0) : (4.0 + Math.random() * 2.0);
+
+    if (!this.lastTrigger || t - this.lastTrigger > interval) {
       if (this.shapes.length < this.maxShapes) {
         this.lastTrigger = t;
         
