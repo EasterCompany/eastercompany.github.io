@@ -735,6 +735,10 @@
         font-size: 0.8rem;
         color: rgba(255, 255, 255, 0.4);
       }
+      .settings-info p.public-notice {
+        color: var(--neon-blue);
+        opacity: 0.8;
+      }
 
       .settings-category {
         display: flex;
@@ -1218,21 +1222,21 @@
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>First Name</h4>
-                  <p>Primary AI identity</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" value="Dexter" readonly title="Login to change agent settings">
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Last Name</h4>
-                  <p>Family lineage</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" value="Easter" readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Model Type</h4>
-                  <p>Defines the power and capabilities of your AI.</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <select class="settings-select" disabled>
                   <option selected>DexNet</option>
@@ -1246,21 +1250,21 @@
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>First Name</h4>
-                  <p>Evolutionary architect identity</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" value="Darwin" readonly title="Login to change agent settings">
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Last Name</h4>
-                  <p>Family lineage</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" value="Easter" readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Model Type</h4>
-                  <p>Defines the power and capabilities of your AI.</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <select class="settings-select" disabled>
                   <option selected>DexNet</option>
@@ -1274,42 +1278,42 @@
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Token</h4>
-                  <p>Authentication credential</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-discord-token" value="*************" readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Server</h4>
-                  <p>Primary guild identifier</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-discord-server-id" value="..." readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Voice Channel</h4>
-                  <p>Boot-time connectivity target</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-discord-voice-channel" value="..." readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Build Channel</h4>
-                  <p>Deployment log target</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-discord-build-channel" value="..." readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Debug Channel</h4>
-                  <p>System diagnostic target</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-discord-debug-channel" value="..." readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Master User</h4>
-                  <p>Primary administrative override</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-discord-master-user" value="..." readonly>
               </div>
@@ -1321,7 +1325,7 @@
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>GPU Enabled</h4>
-                  <p>Sets the device for text-to-speech</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <label class="switch">
                   <input type="checkbox" id="setting-tts-gpu-enabled" disabled>
@@ -1336,7 +1340,7 @@
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>GPU Enabled</h4>
-                  <p>Sets the device for speech-to-text</p>
+                  <p class="public-notice">Public mode, read only.</p>
                 </div>
                 <label class="switch">
                   <input type="checkbox" id="setting-stt-gpu-enabled" disabled>
@@ -1414,7 +1418,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771904043"></script>
+    <script type="module" src="/engine/main.js?h=1771904215"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
