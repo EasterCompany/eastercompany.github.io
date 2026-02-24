@@ -249,6 +249,17 @@
         font-size: 1.5rem;
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+      }
+      .game-ui-icon i {
+        position: absolute;
+        font-size: 5rem;
+        left: -25%;
+        top: 70%;
+        transform: translateY(-50%);
+        opacity: 0.4;
+        transition: all 0.3s ease;
       }
       .game-ui-left-group {
         position: fixed;
@@ -275,10 +286,6 @@
         border-color: rgba(0, 243, 255, 0.3);
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-      }
-      #spartan-trigger {
-        overflow: hidden;
-        position: relative;
       }
       .spartan-logo {
         width: 180%;
@@ -1645,7 +1652,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771910653"></script>
+    <script type="module" src="/engine/main.js?h=1771910788"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
