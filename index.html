@@ -710,6 +710,53 @@
         color: rgba(255, 255, 255, 0.4);
       }
 
+      .settings-category {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .settings-category:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      .settings-category h3 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--neon-blue);
+        opacity: 0.8;
+        margin-bottom: 5px;
+      }
+      .settings-category.danger h3 {
+        color: #ff5f56;
+      }
+
+      .settings-input {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 10px 15px;
+        color: #fff;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        width: 200px;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+      .settings-input:focus {
+        border-color: var(--neon-blue);
+        background: rgba(0, 243, 255, 0.05);
+      }
+      .settings-input[readonly] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: rgba(255, 255, 255, 0.05);
+      }
+
       /* Toggle Switch */
       .switch {
         position: relative;
@@ -1109,22 +1156,64 @@
         <div id="overlay-view-settings" class="overlay-view">
           <h2>SYSTEM SETTINGS</h2>
           <div class="settings-list">
-            <div class="settings-item">
-              <div class="settings-info">
-                <h4>Debug Mode</h4>
-                <p>Display all logs & events in the active chat stream.</p>
+            <!-- AGENT Assistant -->
+            <div class="settings-category">
+              <h3>[AGENT] Assistant</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>First Name</h4>
+                  <p>Primary AI identity</p>
+                </div>
+                <input type="text" class="settings-input" value="Dexter" readonly title="Login to change agent settings">
               </div>
-              <label class="switch">
-                <input type="checkbox" id="setting-debug-mode">
-                <span class="slider"></span>
-              </label>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>Last Name</h4>
+                  <p>Family lineage</p>
+                </div>
+                <input type="text" class="settings-input" value="Easter" readonly>
+              </div>
             </div>
-            <div class="settings-item">
-              <div class="settings-info">
-                <h4>Delete Chat</h4>
-                <p>Deletes the existing chat instance.</p>
+
+            <!-- AGENT Developer -->
+            <div class="settings-category">
+              <h3>[AGENT] Developer</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>First Name</h4>
+                  <p>Evolutionary architect identity</p>
+                </div>
+                <input type="text" class="settings-input" value="Darwin" readonly title="Login to change agent settings">
               </div>
-              <button id="setting-delete-chat" class="btn-danger">Delete</button>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>Last Name</h4>
+                  <p>Family lineage</p>
+                </div>
+                <input type="text" class="settings-input" value="Easter" readonly>
+              </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-category danger">
+              <h3>Danger Zone</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>Debug Mode</h4>
+                  <p>Display all logs & events in the active chat stream.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-debug-mode">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>Delete Chat</h4>
+                  <p>Deletes the existing chat instance.</p>
+                </div>
+                <button id="setting-delete-chat" class="btn-danger">Delete</button>
+              </div>
             </div>
           </div>
         </div>
