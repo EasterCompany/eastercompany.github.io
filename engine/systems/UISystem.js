@@ -50,36 +50,159 @@ export class UISystem {
     };
 
     this.activeView = null;
+    
+    // Default Hotkeys
+    this.defaultHotkeys = {
+      escape: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Close Windows' },
+      chat: { key: '`', ctrl: false, alt: true, shift: false, label: 'Jump to Chat' },
+      spartan: { key: '1', ctrl: false, alt: true, shift: false, label: 'Jump to Spartan' },
+      market: { key: '2', ctrl: false, alt: true, shift: false, label: 'Jump to Market' },
+      user: { key: '3', ctrl: false, alt: true, shift: false, label: 'Jump to Profile' },
+      settings: { key: '4', ctrl: false, alt: true, shift: false, label: 'Jump to Settings' }
+    };
+
+    this.hotkeys = this.loadHotkeys();
+    this.pendingHotkeys = null; // Copy of hotkeys during editing
+    this.recordingAction = null; // ID of hotkey being recorded
+
     this.setupListeners();
+    this.setupHotkeyUI();
 
     window.addEventListener('keydown', (e) => {
-      // 1. Escape Handling (Existing)
-      if (e.key === 'Escape' && this.activeView) {
-        this.toggleOverlay(this.activeView);
-        e.stopImmediatePropagation();
+      // 1. Hotkey Recording Mode
+      if (this.recordingAction) {
+        e.preventDefault();
+        this.handleHotkeyRecording(e);
         return;
       }
 
-      // 2. Global Hotkeys (ALT + Key)
-      if (e.altKey) {
-        const key = e.key;
-        let targetView = null;
-        let targetChat = false;
-
-        if (key === '`' || key === '0') targetChat = true;
-        else if (key === '1') targetView = 'spartan';
-        else if (key === '2') targetView = 'market';
-        else if (key === '3') targetView = 'user';
-        else if (key === '4') targetView = 'settings';
-
-        if (targetView || targetChat) {
-          e.preventDefault();
-          this.jumpTo(targetView, targetChat);
+      // 2. Escape Handling (Configurable)
+      const esc = this.hotkeys.escape;
+      if (e.key === esc.key && e.ctrlKey === esc.ctrl && e.altKey === esc.alt && e.shiftKey === esc.shift) {
+        if (this.activeView) {
+          this.toggleOverlay(this.activeView);
+          e.stopImmediatePropagation();
+          return;
         }
       }
+
+      // 3. Global Hotkeys (Dynamic)
+      Object.entries(this.hotkeys).forEach(([action, hk]) => {
+        if (action === 'escape') return;
+        if (e.key.toLowerCase() === hk.key.toLowerCase() && e.ctrlKey === hk.ctrl && e.altKey === hk.alt && e.shiftKey === hk.shift) {
+          e.preventDefault();
+          this.jumpTo(action === 'chat' ? null : action, action === 'chat');
+        }
+      });
     });
     
     console.log("Easter Engine: UI System Online");
+  }
+
+  loadHotkeys() {
+    const saved = localStorage.getItem('dex_hotkeys');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.warn("UISystem: Failed to parse saved hotkeys, using defaults.");
+      }
+    }
+    return JSON.parse(JSON.stringify(this.defaultHotkeys));
+  }
+
+  saveHotkeys(hk) {
+    this.hotkeys = JSON.parse(JSON.stringify(hk));
+    localStorage.setItem('dex_hotkeys', JSON.stringify(this.hotkeys));
+  }
+
+  setupHotkeyUI() {
+    const btnAccept = document.getElementById('hotkeys-accept');
+    const btnDiscard = document.getElementById('hotkeys-discard');
+    const btnReset = document.getElementById('hotkeys-reset');
+
+    if (btnAccept) btnAccept.addEventListener('click', () => this.acceptHotkeyChanges());
+    if (btnDiscard) btnDiscard.addEventListener('click', () => this.discardHotkeyChanges());
+    if (btnReset) btnReset.addEventListener('click', () => this.resetHotkeys());
+
+    this.renderHotkeys();
+  }
+
+  renderHotkeys() {
+    const body = document.getElementById('hotkeys-status-body');
+    if (!body) return;
+
+    const current = this.pendingHotkeys || this.hotkeys;
+
+    body.innerHTML = Object.entries(current).map(([id, hk]) => {
+      let display = "";
+      if (hk.ctrl) display += "CTRL+";
+      if (hk.alt) display += "ALT+";
+      if (hk.shift) display += "SHIFT+";
+      display += hk.key.toUpperCase();
+
+      return `
+        <tr>
+          <td><span style="opacity: 0.8;">${hk.label}</span></td>
+          <td style="text-align: right;">
+            <div class="hotkey-value ${this.recordingAction === id ? 'recording' : ''}" 
+                 onclick="window.easterEngine.systems.find(s => s.constructor.name === 'UISystem').startRecordingHotkey('${id}')">
+              ${this.recordingAction === id ? '...' : display}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Update visibility of action buttons
+    const actions = document.getElementById('hotkeys-actions');
+    const resets = document.getElementById('hotkeys-reset-container');
+    if (actions) actions.style.display = this.pendingHotkeys ? 'block' : 'none';
+    if (resets) resets.style.display = this.pendingHotkeys ? 'none' : 'block';
+  }
+
+  startRecordingHotkey(actionId) {
+    if (!this.pendingHotkeys) {
+      this.pendingHotkeys = JSON.parse(JSON.stringify(this.hotkeys));
+    }
+    this.recordingAction = actionId;
+    this.renderHotkeys();
+  }
+
+  handleHotkeyRecording(e) {
+    if (!this.recordingAction) return;
+
+    const forbidden = ['Tab', 'Control', 'Alt', 'Shift', 'Meta', 'CapsLock'];
+    if (forbidden.includes(e.key)) return;
+
+    this.pendingHotkeys[this.recordingAction] = {
+      ...this.pendingHotkeys[this.recordingAction],
+      key: e.key,
+      ctrl: e.ctrlKey,
+      alt: e.altKey,
+      shift: e.shiftKey
+    };
+
+    this.recordingAction = null;
+    this.renderHotkeys();
+  }
+
+  acceptHotkeyChanges() {
+    if (this.pendingHotkeys) {
+      this.saveHotkeys(this.pendingHotkeys);
+      this.pendingHotkeys = null;
+      this.renderHotkeys();
+    }
+  }
+
+  discardHotkeyChanges() {
+    this.pendingHotkeys = null;
+    this.renderHotkeys();
+  }
+
+  resetHotkeys() {
+    this.saveHotkeys(this.defaultHotkeys);
+    this.renderHotkeys();
   }
 
   jumpTo(viewKey, isChat = false) {

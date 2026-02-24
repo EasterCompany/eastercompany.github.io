@@ -867,6 +867,33 @@
         color: #fff;
       }
 
+      /* Hotkeys Styling */
+      .hotkey-value {
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: var(--neon-blue);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-block;
+        min-width: 60px;
+        text-align: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+      }
+      .hotkey-value:hover {
+        background: rgba(0, 243, 255, 0.1);
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+      }
+      .hotkey-value.recording {
+        background: rgba(0, 243, 255, 0.2);
+        border-color: var(--neon-blue);
+        animation: pulse 1s infinite;
+      }
+
       /* Party Particle Effect */
       .copy-particle {
         position: fixed;
@@ -1356,6 +1383,25 @@
         </div>
         <div id="overlay-view-settings" class="overlay-view">
           <div class="settings-list">
+            <!-- HOTKEYS -->
+            <div class="settings-category">
+              <h3>Hotkeys</h3>
+              <p class="public-notice" style="font-size: 0.7rem; margin-bottom: 10px;">Click a key to rebind. Press the new key combination to assign.</p>
+              <div class="network-status-container">
+                <table class="network-status-table">
+                  <thead>
+                    <tr>
+                      <th>Action</th>
+                      <th>Hotkey</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hotkeys-status-body">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <!-- AGENT Assistant -->
             <div class="settings-category">
               <h3>[AGENT] Assistant</h3>
@@ -1623,6 +1669,19 @@
                 <button id="setting-delete-chat" class="btn-danger">Delete</button>
               </div>
             </div>
+
+            <!-- Hotkeys Actions -->
+            <div id="hotkeys-actions" class="settings-category" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; display: none;">
+              <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="hotkeys-discard" class="btn-secondary">Discard Changes</button>
+                <button id="hotkeys-accept" class="btn-primary">Accept Changes</button>
+              </div>
+            </div>
+            <div id="hotkeys-reset-container" class="settings-category" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px;">
+              <div style="display: flex; justify-content: flex-end;">
+                <button id="hotkeys-reset" class="btn-secondary">Reset to Default</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1671,7 +1730,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771911167"></script>
+    <script type="module" src="/engine/main.js?h=1771911667"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
