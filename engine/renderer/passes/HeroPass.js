@@ -132,7 +132,7 @@ export class HeroPass {
         // 3. Thinking Lights (Cluster)
         if (busy > 0.0) {
           let center = vec2<f32>(0.5, 0.5);
-          let cluster_radius = 0.08 * busy;
+          let cluster_radius = 0.16 * busy;
           
           for (var j = 0; j < 6; j++) {
             let fj = f32(j);
@@ -255,7 +255,7 @@ export class HeroPass {
     if (this.busyIntensity > 0.01) {
       const t = registry.time;
       const center = { x: width * 0.5, y: height * 0.5 };
-      const clusterRadius = 50 * this.busyIntensity;
+      const clusterRadius = 100 * this.busyIntensity;
 
       for (let j = 0; j < 6; j++) {
         const angle = j * 1.047 + t * 0.5;
