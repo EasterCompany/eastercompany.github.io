@@ -186,7 +186,7 @@ export class HeroPass {
               
               // Add "Zap" distortion using noise
               let zap_noise = noise(uv * 20.0 + t * 50.0) * 0.01;
-              let zap_fade = exp(-(dist_to_line + zap_noise) * 150.0);
+              let zap_fade = exp(-(dist_to_line + zap_noise) * 400.0);
               
               color += s.color * zap_fade * (hb - 0.6) * 2.0 * busy;
             }
@@ -324,7 +324,7 @@ export class HeroPass {
               }
               
               ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.6) * this.busyIntensity})`;
-              ctx.lineWidth = 2;
+              ctx.lineWidth = 1;
               ctx.stroke();
             }
           });
