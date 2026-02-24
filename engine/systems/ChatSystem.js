@@ -102,7 +102,12 @@ export class ChatSystem {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const overlay = document.getElementById('game-overlay');
-        const isOverlayActive = overlay && overlay.classList.contains('active');
+        const confirmModal = document.getElementById('confirm-modal');
+        const alertModal = document.getElementById('alert-modal');
+        
+        const isOverlayActive = (overlay && overlay.classList.contains('active')) ||
+                               (confirmModal && confirmModal.classList.contains('active')) ||
+                               (alertModal && alertModal.classList.contains('active'));
 
         if (this.emojiPicker && this.emojiPicker.classList.contains('active')) {
           this.toggleEmojiPicker();

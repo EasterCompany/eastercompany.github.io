@@ -13,8 +13,8 @@ const engine = new Engine('hero-canvas');
 
 // Add Systems
 engine.addSystem(new RenderSystem());
-engine.addSystem(new UISystem());
 engine.addSystem(new ChatSystem());
+engine.addSystem(new UISystem());
 
 // Start
 window.easterEngine = engine;
