@@ -1312,14 +1312,14 @@
                   <h4>First Name</h4>
                   <p class="public-notice">Public mode, limited read only.</p>
                 </div>
-                <input type="text" class="settings-input" value="Dexter" readonly title="Login to change agent settings">
+                <input type="text" class="settings-input" id="setting-assistant-first-name" value="Dexter" readonly title="Login to change agent settings">
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Last Name</h4>
                   <p class="public-notice">Public mode, limited read only.</p>
                 </div>
-                <input type="text" class="settings-input" value="Easter" readonly>
+                <input type="text" class="settings-input" id="setting-assistant-last-name" value="Easter" readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
@@ -1328,6 +1328,17 @@
                 </div>
                 <select class="settings-select" disabled>
                   <option selected>DexNet</option>
+                </select>
+              </div>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>Restrictions</h4>
+                  <p class="public-notice">Public mode, limited read only.</p>
+                </div>
+                <select class="settings-select" id="setting-assistant-restrictions" disabled>
+                  <option value="-1">Unrestricted</option>
+                  <option value="0">Regular</option>
+                  <option value="1" selected>Safe</option>
                 </select>
               </div>
             </div>
@@ -1340,14 +1351,14 @@
                   <h4>First Name</h4>
                   <p class="public-notice">Public mode, limited read only.</p>
                 </div>
-                <input type="text" class="settings-input" value="Darwin" readonly title="Login to change agent settings">
+                <input type="text" class="settings-input" id="setting-developer-first-name" value="Darwin" readonly title="Login to change agent settings">
               </div>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Last Name</h4>
                   <p class="public-notice">Public mode, limited read only.</p>
                 </div>
-                <input type="text" class="settings-input" value="Easter" readonly>
+                <input type="text" class="settings-input" id="setting-developer-last-name" value="Easter" readonly>
               </div>
               <div class="settings-item">
                 <div class="settings-info">
@@ -1356,6 +1367,17 @@
                 </div>
                 <select class="settings-select" disabled>
                   <option selected>DexNet</option>
+                </select>
+              </div>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>Restrictions</h4>
+                  <p class="public-notice">Public mode, limited read only.</p>
+                </div>
+                <select class="settings-select" id="setting-developer-restrictions" disabled>
+                  <option value="-1">Unrestricted</option>
+                  <option value="0">Regular</option>
+                  <option value="1" selected>Safe</option>
                 </select>
               </div>
             </div>
@@ -1590,7 +1612,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771909321"></script>
+    <script type="module" src="/engine/main.js?h=1771909783"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

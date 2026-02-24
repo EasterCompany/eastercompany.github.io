@@ -383,6 +383,28 @@ export class ChatSystem {
       const elOrchestrator = document.getElementById('setting-system-orchestrator');
       if (elOrchestrator) elOrchestrator.value = system.orchestrator || "";
     }
+
+    const assistant = data["dex-assistant-service"]?.options;
+    if (assistant) {
+      const elFirst = document.getElementById('setting-assistant-first-name');
+      const elLast = document.getElementById('setting-assistant-last-name');
+      const elRest = document.getElementById('setting-assistant-restrictions');
+      
+      if (elFirst) elFirst.value = assistant.first_name || "Dexter";
+      if (elLast) elLast.value = assistant.last_name || "Easter";
+      if (elRest) elRest.value = assistant.restrictions != null ? assistant.restrictions.toString() : "1";
+    }
+
+    const developer = data["dex-developer-service"]?.options;
+    if (developer) {
+      const elFirst = document.getElementById('setting-developer-first-name');
+      const elLast = document.getElementById('setting-developer-last-name');
+      const elRest = document.getElementById('setting-developer-restrictions');
+      
+      if (elFirst) elFirst.value = developer.first_name || "Darwin";
+      if (elLast) elLast.value = developer.last_name || "Easter";
+      if (elRest) elRest.value = developer.restrictions != null ? developer.restrictions.toString() : "1";
+    }
   }
 
   async fetchHistory() {
