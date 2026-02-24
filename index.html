@@ -440,6 +440,9 @@
         max-width: 85%;
         animation: messageFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
+      .chat-message.group-continuation {
+        margin-top: -12px;
+      }
       @keyframes messageFadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -1747,7 +1750,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771921162"></script>
+    <script type="module" src="/engine/main.js?h=1771921394"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

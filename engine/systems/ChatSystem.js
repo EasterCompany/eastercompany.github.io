@@ -512,6 +512,7 @@ export class ChatSystem {
             if (this.debugMode) return true; // Accept all in debug mode
             return ed.type === 'messaging.user.sent_message' || 
                    ed.type === 'messaging.bot.sent_message' || 
+                   ed.type === 'messaging.assistant.sent_message' || 
                    ed.type === 'bot_response' ||
                    ed.type === 'messaging.user.reaction_added' ||
                    ed.type === 'messaging.bot.reaction_added';
@@ -531,8 +532,10 @@ export class ChatSystem {
             
             if (type === 'messaging.user.sent_message') {
               this.addMessage('user', 'You', eventData.content, eventData.message_id, false, new Date(e.timestamp * 1000));
-            } else if (type === 'messaging.bot.sent_message' || type === 'bot_response') {
-              this.addMessage('assistant', 'Dexter', eventData.content || eventData.response, eventData.message_id, false, new Date(e.timestamp * 1000));
+            } else if (type === 'messaging.bot.sent_message' || type === 'messaging.assistant.sent_message' || type === 'bot_response') {
+              const sender = eventData.user_name || 'Dexter';
+              const msgType = eventData.source === 'terminal' ? 'pty' : 'assistant';
+              this.addMessage(msgType, sender, eventData.content || eventData.response, eventData.message_id, false, new Date(e.timestamp * 1000));
             } else if (type === 'messaging.user.reaction_added' || type === 'messaging.bot.reaction_added') {
               this.addOrUpdateReaction(eventData.message_id, eventData.emoji, eventData.user_name || 'Dexter');
             } else if (this.debugMode) {
@@ -1353,7 +1356,12 @@ export class ChatSystem {
           const reactBtn = bubble.querySelector('.message-action-btn');
           const reactions = bubble.querySelector('.message-reactions');
           
-          bubble.textContent = content;
+          if (type === 'pty') {
+            bubble.innerHTML = this.parseAnsi(content);
+          } else {
+            bubble.textContent = content;
+          }
+          
           if (reactBtn) bubble.appendChild(reactBtn);
           if (reactions) bubble.appendChild(reactions);
         }
@@ -1365,8 +1373,17 @@ export class ChatSystem {
     this.history.push(msg);
 
     if (this.historyEl) {
+      const lastMsgEl = this.historyEl.lastElementChild;
+      let isContinuation = false;
+      if (lastMsgEl && lastMsgEl.classList.contains(`message-${type}`)) {
+        const lastLabel = lastMsgEl.querySelector('.message-label');
+        if (lastLabel && lastLabel.textContent === sender) {
+          isContinuation = true;
+        }
+      }
+
       const msgEl = document.createElement('div');
-      msgEl.className = `chat-message message-${type}`;
+      msgEl.className = `chat-message message-${type}${isContinuation ? ' group-continuation' : ''}`;
       msgEl.dataset.messageId = id;
       
       const label = document.createElement('span');
@@ -1392,6 +1409,8 @@ export class ChatSystem {
         msgEl.addEventListener('click', () => {
           msgEl.classList.toggle('expanded');
         });
+      } else if (type === 'pty') {
+        bubble.innerHTML = this.parseAnsi(content);
       } else {
         bubble.textContent = content;
         
@@ -1423,7 +1442,9 @@ export class ChatSystem {
         bubble.appendChild(reactBtn);
       }
 
-      msgEl.appendChild(label);
+      if (!isContinuation) {
+        msgEl.appendChild(label);
+      }
       msgEl.appendChild(bubble);
       this.historyEl.appendChild(msgEl);
       if (scrollToBottom) {
