@@ -152,30 +152,23 @@ export class ChatSystem {
       const input = item.querySelector('input.obfuscated');
       if (!input) return;
 
-      // Ensure we have the latest real value
-      const realValue = input.value;
-      input.dataset.realValue = realValue;
-      
-      // Store intervals per input to avoid overlaps
-      let interval = null;
+      // Save the real value for restoration
+      input.dataset.realValue = input.value;
 
-      const startScrambling = () => {
-        if (interval) clearInterval(interval);
-        interval = setInterval(() => {
-          input.value = this.generateScrambledText(realValue.length);
-        }, 100);
+      const scramble = () => {
+        const val = input.dataset.realValue || "";
+        input.value = this.generateScrambledText(val.length);
       };
 
-      const stopScrambling = () => {
-        if (interval) clearInterval(interval);
+      const reveal = () => {
         input.value = input.dataset.realValue;
       };
 
-      // Initial state: Scrambled
-      input.value = this.generateScrambledText(realValue.length);
+      // Initial state: Scrambled once
+      scramble();
 
-      item.addEventListener('mouseenter', stopScrambling);
-      item.addEventListener('mouseleave', startScrambling);
+      item.addEventListener('mouseenter', reveal);
+      item.addEventListener('mouseleave', scramble);
     });
   }
 
