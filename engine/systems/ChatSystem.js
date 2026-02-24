@@ -286,7 +286,7 @@ export class ChatSystem {
 
   async sendReaction(messageId, emoji) {
     const payload = {
-      service: "dex-web-frontend",
+      service: "easter.company",
       event: {
         type: "messaging.user.reaction_added",
         source: "web",
@@ -695,7 +695,7 @@ export class ChatSystem {
     this.setProcessing(true);
 
     const payload = {
-      service: "dex-web-frontend",
+      service: "easter.company",
       event: {
         type: "messaging.user.sent_message",
         source: "web",
@@ -745,7 +745,7 @@ export class ChatSystem {
     }
 
     const payload = {
-      service: "dex-web-frontend",
+      service: "easter.company",
       event: {
         type: "system.process.cancel_request",
         source: "web",
