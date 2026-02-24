@@ -50,10 +50,12 @@ export class UISystem {
     };
 
     this.activeView = null;
+    this.defaultWindow = localStorage.getItem('dex_default_window') || 'chat';
     
     // Default Hotkeys
     this.defaultHotkeys = {
       escape: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Close Windows' },
+      default: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Default Window' },
       chat: { key: '`', ctrl: false, alt: true, shift: false, label: 'Jump to Chat' },
       spartan: { key: '1', ctrl: false, alt: true, shift: false, label: 'Jump to Spartan' },
       market: { key: '2', ctrl: false, alt: true, shift: false, label: 'Jump to Market' },
@@ -62,8 +64,8 @@ export class UISystem {
     };
 
     this.hotkeys = this.loadHotkeys();
-    this.pendingHotkeys = null; // Copy of hotkeys during editing
-    this.recordingAction = null; // ID of hotkey being recorded
+    this.pendingHotkeys = null; 
+    this.recordingAction = null; 
 
     this.setupListeners();
     this.setupHotkeyUI();
@@ -76,20 +78,63 @@ export class UISystem {
         return;
       }
 
-      // 2. Escape Handling (Configurable)
+      const isMatch = (hk) => e.key === hk.key && e.ctrlKey === hk.ctrl && e.altKey === hk.alt && e.shiftKey === hk.shift;
+
+      // 2. Specialized Shared Logic (Usually Escape or remapped default)
       const esc = this.hotkeys.escape;
-      if (e.key === esc.key && e.ctrlKey === esc.ctrl && e.altKey === esc.alt && e.shiftKey === esc.shift) {
-        if (this.activeView) {
-          this.toggleOverlay(this.activeView);
+      const def = this.hotkeys.default;
+      const chatSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'ChatSystem');
+
+      const isEscMatch = isMatch(esc);
+      const isDefMatch = isMatch(def);
+
+      if (isEscMatch || isDefMatch) {
+        const overlay = document.getElementById('game-overlay');
+        const confirmModal = document.getElementById('confirm-modal');
+        const alertModal = document.getElementById('alert-modal');
+        const isOverlayActive = (overlay && overlay.classList.contains('active')) ||
+                               (confirmModal && confirmModal.classList.contains('active')) ||
+                               (alertModal && alertModal.classList.contains('active'));
+
+        // Case A: Something is open -> CLOSE it (Priority)
+        if (isEscMatch && isOverlayActive) {
+          // Handle Chat System internal states if chat is the active overlay
+          if (chatSystem && chatSystem.isActive) {
+            if (chatSystem.emojiPicker?.classList.contains('active')) {
+              chatSystem.toggleEmojiPicker();
+              e.stopImmediatePropagation();
+              return;
+            }
+            if (chatSystem.isProcessing) {
+              chatSystem.cancelProcess();
+              e.stopImmediatePropagation();
+              return;
+            }
+          }
+
+          // Close active view
+          if (this.activeView) {
+            this.toggleOverlay(this.activeView);
+          } else if (chatSystem && chatSystem.isActive) {
+            chatSystem.exitChatMode();
+          }
+          
+          e.stopImmediatePropagation();
+          return;
+        }
+
+        // Case B: Nothing is open -> OPEN Default (If match)
+        if (isDefMatch && !isOverlayActive) {
+          this.jumpTo(this.defaultWindow === 'chat' ? null : this.defaultWindow, this.defaultWindow === 'chat');
           e.stopImmediatePropagation();
           return;
         }
       }
 
-      // 3. Global Hotkeys (Dynamic)
+      // 3. Global Jump Hotkeys (Dynamic)
       Object.entries(this.hotkeys).forEach(([action, hk]) => {
-        if (action === 'escape') return;
-        if (e.key.toLowerCase() === hk.key.toLowerCase() && e.ctrlKey === hk.ctrl && e.altKey === hk.alt && e.shiftKey === hk.shift) {
+        if (action === 'escape' || action === 'default') return;
+        if (isMatch(hk)) {
           e.preventDefault();
           this.jumpTo(action === 'chat' ? null : action, action === 'chat');
         }
@@ -120,10 +165,20 @@ export class UISystem {
     const btnAccept = document.getElementById('hotkeys-accept');
     const btnDiscard = document.getElementById('hotkeys-discard');
     const btnReset = document.getElementById('hotkeys-reset');
+    const selDefault = document.getElementById('setting-default-window');
 
     if (btnAccept) btnAccept.addEventListener('click', () => this.acceptHotkeyChanges());
     if (btnDiscard) btnDiscard.addEventListener('click', () => this.discardHotkeyChanges());
     if (btnReset) btnReset.addEventListener('click', () => this.resetHotkeys());
+    
+    if (selDefault) {
+      selDefault.value = this.defaultWindow;
+      selDefault.addEventListener('change', (e) => {
+        this.defaultWindow = e.target.value;
+        localStorage.setItem('dex_default_window', this.defaultWindow);
+        console.log(`UISystem: Default window set to ${this.defaultWindow}`);
+      });
+    }
 
     this.renderHotkeys();
   }

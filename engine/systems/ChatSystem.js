@@ -100,33 +100,6 @@ export class ChatSystem {
       });
     }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const overlay = document.getElementById('game-overlay');
-        const confirmModal = document.getElementById('confirm-modal');
-        const alertModal = document.getElementById('alert-modal');
-        
-        const isOverlayActive = (overlay && overlay.classList.contains('active')) ||
-                               (confirmModal && confirmModal.classList.contains('active')) ||
-                               (alertModal && alertModal.classList.contains('active'));
-
-        if (this.emojiPicker && this.emojiPicker.classList.contains('active')) {
-          this.toggleEmojiPicker();
-          e.stopImmediatePropagation();
-        } else if (this.isProcessing) {
-          this.cancelProcess();
-          e.stopImmediatePropagation();
-        } else if (this.isActive) {
-          this.toggleChatMode();
-          e.stopImmediatePropagation();
-        } else if (!isOverlayActive) {
-          // If everything is closed, open chat
-          this.enterChatMode();
-          e.stopImmediatePropagation();
-        }
-      }
-    });
-
     // Close picker on click outside
     document.addEventListener('click', (e) => {
       if (this.emojiPicker && this.emojiPicker.classList.contains('active')) {
