@@ -143,7 +143,7 @@ export class HeroPass {
         // 2. Base Darkness and Volumetric Smoke
         var color = vec3<f32>(0.01, 0.01, 0.02);
         let smoke_color = vec3<f32>(0.05, 0.07, 0.1);
-        color = mix(color, smoke_color, fog_noise * 0.4);
+        color = mix(color, smoke_color, fog_noise * 0.36);
         
         // 3. Central Blue Light Source
         if (busy > 0.01) {
@@ -197,7 +197,7 @@ export class HeroPass {
           }
         }
         
-        color = mix(color, color * 0.3, fog_noise);
+        color = mix(color, color * 0.3, fog_noise * 0.9);
         let edge_dist = distance(uv, vec2<f32>(0.5));
         color *= (1.0 - edge_dist * 0.7);
         return vec4<f32>(color, 1.0);
