@@ -418,9 +418,31 @@ export class ChatSystem {
       // 5. Reset UI
       this.setProcessing(false);
       this.isSleeping = false;
-      this.addPlaceholderMessages();
+      this.historyEl.innerHTML = '';
+      this.history = [];
+
+      // 6. Emit Greeting Event to server
+      const greetingPayload = {
+        service: "easter.company",
+        event: {
+          type: "greeting",
+          channel_id: this.sessionId,
+          channel_name: "Private Web Chat",
+          timestamp: new Date().toISOString()
+        }
+      };
+
+      try {
+        await fetch(`${this.eventServiceUrl}/post`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(greetingPayload)
+        });
+      } catch (err) {
+        console.error("ChatSystem: Failed to emit initial greeting:", err);
+      }
       
-      // 6. Close Settings Overlay
+      // 7. Close Settings Overlay
       const uiSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'UISystem');
       if (uiSystem) {
         uiSystem.toggleOverlay('settings');
@@ -527,8 +549,27 @@ export class ChatSystem {
     
     // Check Inactivity
     if (this.history.length === 0) {
-      console.log("ChatSystem: History empty, adding placeholders.");
-      this.addPlaceholderMessages();
+      console.log("ChatSystem: History empty, requesting initial greeting.");
+      
+      const greetingPayload = {
+        service: "easter.company",
+        event: {
+          type: "greeting",
+          channel_id: this.sessionId,
+          channel_name: "Private Web Chat",
+          timestamp: new Date().toISOString()
+        }
+      };
+
+      try {
+        await fetch(`${this.eventServiceUrl}/post`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(greetingPayload)
+        });
+      } catch (err) {
+        console.error("ChatSystem: Failed to emit initial greeting:", err);
+      }
     } else {
       console.log(`ChatSystem: History resumed with ${this.history.length} messages.`);
       
@@ -893,13 +934,6 @@ export class ChatSystem {
       if (scrollToBottom) {
         this.historyEl.scrollTop = this.historyEl.scrollHeight;
       }
-    }
-  }
-
-  addPlaceholderMessages() {
-    if (this.history.length === 0) {
-      this.addMessage('system', 'System', 'Start of Chat.');
-      this.addMessage('assistant', 'Dexter', `Hello. I am Dexter Mark 14 Version ${this.version}, how are you doing today?`);
     }
   }
 
