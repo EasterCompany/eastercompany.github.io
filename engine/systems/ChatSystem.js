@@ -1396,19 +1396,13 @@ export class ChatSystem {
       return existingMsgEl;
     }
 
+    const lastMsg = this.history.length > 0 ? this.history[this.history.length - 1] : null;
+    const isContinuation = lastMsg && lastMsg.type === type && lastMsg.sender === sender;
+
     const msg = { type, sender, content, id, timestamp: timestamp || new Date() };
     this.history.push(msg);
 
     if (this.historyEl) {
-      const lastMsgEl = this.historyEl.lastElementChild;
-      let isContinuation = false;
-      if (lastMsgEl && lastMsgEl.classList.contains(`message-${type}`)) {
-        const lastLabel = lastMsgEl.querySelector('.message-label');
-        if (lastLabel && lastLabel.textContent === sender) {
-          isContinuation = true;
-        }
-      }
-
       const msgEl = document.createElement('div');
       msgEl.className = `chat-message message-${type}${isContinuation ? ' group-continuation' : ''}`;
       msgEl.dataset.messageId = id;
