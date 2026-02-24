@@ -57,11 +57,11 @@ export class UISystem {
       cancel: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Cancel Process' },
       escape: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Close Windows' },
       default: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Default Window' },
-      chat: { key: '`', ctrl: false, alt: true, shift: false, label: 'Jump to Chat' },
-      spartan: { key: '1', ctrl: false, alt: true, shift: false, label: 'Jump to Spartan' },
-      market: { key: '2', ctrl: false, alt: true, shift: false, label: 'Jump to Market' },
-      user: { key: '3', ctrl: false, alt: true, shift: false, label: 'Jump to Profile' },
-      settings: { key: '4', ctrl: false, alt: true, shift: false, label: 'Jump to Settings' }
+      chat: { key: '`', ctrl: false, alt: true, shift: false, label: 'Toggle Chat' },
+      spartan: { key: '1', ctrl: false, alt: true, shift: false, label: 'Toggle Spartan' },
+      market: { key: '2', ctrl: false, alt: true, shift: false, label: 'Toggle Market' },
+      user: { key: '3', ctrl: false, alt: true, shift: false, label: 'Toggle Profile' },
+      settings: { key: '4', ctrl: false, alt: true, shift: false, label: 'Toggle Settings' }
     };
 
     this.hotkeys = this.loadHotkeys();
@@ -156,7 +156,12 @@ export class UISystem {
     const saved = localStorage.getItem('dex_hotkeys');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const hk = JSON.parse(saved);
+        // Ensure labels are updated if using old save
+        Object.keys(hk).forEach(id => {
+          if (this.defaultHotkeys[id]) hk[id].label = this.defaultHotkeys[id].label;
+        });
+        return hk;
       } catch (e) {
         console.warn("UISystem: Failed to parse saved hotkeys, using defaults.");
       }
@@ -271,24 +276,31 @@ export class UISystem {
   jumpTo(viewKey, isChat = false) {
     const chatSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'ChatSystem');
     
-    // 1. Exit Chat if active and we are moving to a view
-    if (chatSystem && chatSystem.isActive && !isChat) {
-      chatSystem.exitChatMode();
-    }
-
-    // 2. Close existing overlay if active and we are moving to a DIFFERENT view or chat
-    if (this.activeView && (this.activeView !== viewKey || isChat)) {
-      const currentView = this.activeView;
-      this.toggleOverlay(currentView); // Close current
-    }
-
-    // 3. Open target
+    // 1. Toggle Chat
     if (isChat) {
-      if (chatSystem && !chatSystem.isActive) {
-        chatSystem.enterChatMode();
+      if (chatSystem) {
+        if (chatSystem.isActive) {
+          chatSystem.exitChatMode();
+        } else {
+          // Close active overlay if any
+          if (this.activeView) this.toggleOverlay(this.activeView);
+          chatSystem.enterChatMode();
+        }
       }
-    } else if (viewKey) {
-      if (this.activeView !== viewKey) {
+      return;
+    }
+
+    // 2. Toggle Overlay Views
+    if (viewKey) {
+      if (this.activeView === viewKey) {
+        // Same view -> Close it
+        this.toggleOverlay(viewKey);
+      } else {
+        // Different view
+        // Exit Chat if active
+        if (chatSystem && chatSystem.isActive) chatSystem.exitChatMode();
+        
+        // Open new view (toggleOverlay handles resetting classes and closing previous view)
         this.toggleOverlay(viewKey);
       }
     }
