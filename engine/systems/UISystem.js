@@ -54,6 +54,7 @@ export class UISystem {
     
     // Default Hotkeys
     this.defaultHotkeys = {
+      cancel: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Cancel Process' },
       escape: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Close Windows' },
       default: { key: 'Escape', ctrl: false, alt: false, shift: false, label: 'Default Window' },
       chat: { key: '`', ctrl: false, alt: true, shift: false, label: 'Jump to Chat' },
@@ -80,15 +81,17 @@ export class UISystem {
 
       const isMatch = (hk) => e.key === hk.key && e.ctrlKey === hk.ctrl && e.altKey === hk.alt && e.shiftKey === hk.shift;
 
-      // 2. Specialized Shared Logic (Usually Escape or remapped default)
+      // 2. Specialized Shared Logic (Cancel > Close > Open Default)
       const esc = this.hotkeys.escape;
       const def = this.hotkeys.default;
+      const can = this.hotkeys.cancel;
       const chatSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'ChatSystem');
 
       const isEscMatch = isMatch(esc);
       const isDefMatch = isMatch(def);
+      const isCanMatch = isMatch(can);
 
-      if (isEscMatch || isDefMatch) {
+      if (isEscMatch || isDefMatch || isCanMatch) {
         const overlay = document.getElementById('game-overlay');
         const chatContainer = document.getElementById('chat-container');
         const confirmModal = document.getElementById('confirm-modal');
@@ -99,17 +102,19 @@ export class UISystem {
                                (confirmModal && confirmModal.classList.contains('active')) ||
                                (alertModal && alertModal.classList.contains('active'));
 
-        // Case A: Something is open -> CLOSE it (Priority)
+        // Case A: Process Cancellation (Priority 1)
+        if (isCanMatch && chatSystem && chatSystem.isProcessing) {
+          chatSystem.cancelProcess();
+          e.stopImmediatePropagation();
+          return;
+        }
+
+        // Case B: Something is open -> CLOSE it (Priority 2)
         if (isEscMatch && isOverlayActive) {
           // Handle Chat System internal states if chat is the active overlay
           if (chatSystem && chatSystem.isActive) {
             if (chatSystem.emojiPicker?.classList.contains('active')) {
               chatSystem.toggleEmojiPicker();
-              e.stopImmediatePropagation();
-              return;
-            }
-            if (chatSystem.isProcessing) {
-              chatSystem.cancelProcess();
               e.stopImmediatePropagation();
               return;
             }
@@ -126,7 +131,7 @@ export class UISystem {
           return;
         }
 
-        // Case B: Nothing is open -> OPEN Default (If match)
+        // Case C: Nothing is open -> OPEN Default (Priority 3)
         if (isDefMatch && !isOverlayActive) {
           this.jumpTo(this.defaultWindow === 'chat' ? null : this.defaultWindow, this.defaultWindow === 'chat');
           e.stopImmediatePropagation();
@@ -136,7 +141,7 @@ export class UISystem {
 
       // 3. Global Jump Hotkeys (Dynamic)
       Object.entries(this.hotkeys).forEach(([action, hk]) => {
-        if (action === 'escape' || action === 'default') return;
+        if (action === 'escape' || action === 'default' || action === 'cancel') return;
         if (isMatch(hk)) {
           e.preventDefault();
           this.jumpTo(action === 'chat' ? null : action, action === 'chat');
