@@ -147,10 +147,12 @@ export class ChatSystem {
   startNetworkStatusSync() {
     // Initial fetch
     this.fetchNetworkStatus();
+    this.fetchServiceStatus();
     
     // Refresh every 10 seconds
     setInterval(() => {
       this.fetchNetworkStatus();
+      this.fetchServiceStatus();
     }, 10000);
   }
 
@@ -183,6 +185,64 @@ export class ChatSystem {
         // Silently fail per-URL
       }
     }
+  }
+
+  async fetchServiceStatus() {
+    const urls = [
+      "https://dashboard.easter.company/system/services",
+      `${this.eventServiceUrl}/system/services`
+    ];
+
+    const isTailscale = window.location.hostname.startsWith('100.100.') || 
+                        window.location.hostname === 'easter-server' ||
+                        window.location.hostname === 'easter-us-3';
+    const prioritizedUrls = isTailscale ? [urls[1], urls[0]] : [urls[0], urls[1]];
+
+    for (const url of prioritizedUrls) {
+      try {
+        const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        if (!response.ok) continue;
+        
+        const data = await response.json();
+        if (data && data.services) {
+          this.renderServiceStatus(data.services);
+          return;
+        }
+      } catch (err) {
+        // Silently fail per-URL
+      }
+    }
+  }
+
+  renderServiceStatus(services) {
+    const body = document.getElementById('service-status-body');
+    if (!body) return;
+
+    if (!services || services.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" style="text-align: center; opacity: 0.5; padding: 20px;">No services detected.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = services.map(svc => {
+      const cpu = svc.cpu != null ? `${svc.cpu.toFixed(1)}%` : '--';
+      const mem = svc.mem != null ? `${(svc.mem / 1024 / 1024).toFixed(0)}MB` : '--';
+      const version = svc.version ? svc.version.split('.').slice(0, 3).join('.') : 'N/A';
+
+      return `
+        <tr>
+          <td><span class="node-name">${svc.id}</span></td>
+          <td><span style="opacity: 0.6;">${version}</span></td>
+          <td>
+            <span class="status-pill ${svc.status === 'OK' ? 'online' : 'offline'}">
+              ${svc.status}
+            </span>
+          </td>
+          <td><span style="opacity: 0.6; font-size: 0.65rem;">${svc.uptime || '--'}</span></td>
+          <td><span style="color: var(--neon-blue); opacity: 0.8;">${cpu}</span></td>
+          <td><span style="color: #27c93f; opacity: 0.8;">${mem}</span></td>
+        </tr>
+      `;
+    }).join('');
   }
 
   renderNetworkStatus(nodes) {

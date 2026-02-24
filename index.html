@@ -1375,6 +1375,28 @@
                   </tbody>
                 </table>
               </div>
+
+              <!-- Service Status Table -->
+              <div class="network-status-container">
+                <table class="network-status-table">
+                  <thead>
+                    <tr>
+                      <th>Service</th>
+                      <th>Version</th>
+                      <th>Status</th>
+                      <th>Uptime</th>
+                      <th>CPU</th>
+                      <th>RAM</th>
+                    </tr>
+                  </thead>
+                  <tbody id="service-status-body">
+                    <!-- Populated by JS -->
+                    <tr>
+                      <td colspan="6" style="text-align: center; opacity: 0.5; padding: 20px;">Polling service metrics...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <!-- SERVICE Discord -->
@@ -1553,7 +1575,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771906610"></script>
+    <script type="module" src="/engine/main.js?h=1771906802"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
