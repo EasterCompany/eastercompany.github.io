@@ -154,13 +154,6 @@ export class HeroPass {
             
             let glow = exp(-d * 40.0) * 0.4 * flicker * busy;
             color += light_color * glow;
-
-            // 3.1 Zappy Arcs to wandering shapes
-            if (hb > 0.5) {
-              for (var k = 0; i < 8; i++) { // Using i from outer loop context if available? No, need separate index
-                // Wait, shader loops are limited. Let's iterate shapes inside thinking lights or vice versa.
-              }
-            }
           }
         }
 
