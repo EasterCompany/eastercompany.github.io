@@ -90,9 +90,12 @@ export class UISystem {
 
       if (isEscMatch || isDefMatch) {
         const overlay = document.getElementById('game-overlay');
+        const chatContainer = document.getElementById('chat-container');
         const confirmModal = document.getElementById('confirm-modal');
         const alertModal = document.getElementById('alert-modal');
+        
         const isOverlayActive = (overlay && overlay.classList.contains('active')) ||
+                               (chatContainer && chatContainer.classList.contains('active')) ||
                                (confirmModal && confirmModal.classList.contains('active')) ||
                                (alertModal && alertModal.classList.contains('active'));
 
