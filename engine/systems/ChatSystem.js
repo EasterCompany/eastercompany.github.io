@@ -224,11 +224,13 @@ export class ChatSystem {
     // Initial fetch
     this.fetchNetworkStatus();
     this.fetchServiceStatus();
+    this.syncProcessState();
     
     // Refresh every 10 seconds
     setInterval(() => {
       this.fetchNetworkStatus();
       this.fetchServiceStatus();
+      this.syncProcessState();
     }, 10000);
   }
 
@@ -558,26 +560,26 @@ export class ChatSystem {
   async syncProcessState() {
     try {
       const url = `${this.eventServiceUrl}/processes`;
-      console.log(`ChatSystem: Syncing process state from ${url}`);
       const response = await fetch(url);
       if (!response.ok) return;
       
       const data = await response.json();
       const active = data.active || [];
       const queue = data.queue || [];
-      console.log(`ChatSystem: Processes - Active: ${active.length}, Queue: ${queue.length}`);
       
       const ourProcess = [...active, ...queue].find(p => p.channel_id === this.sessionId);
       
       if (ourProcess) {
-        console.log(`ChatSystem: Active process found for our session (${this.sessionId}), re-attaching...`, ourProcess);
         this.setProcessing(true);
         this.updateProcessStatus(ourProcess.state);
       } else {
-        console.log(`ChatSystem: No active process found for session ${this.sessionId}`);
+        this.setProcessing(false);
       }
+
+      this.systemBusy = (active.length + queue.length) > 0;
     } catch (err) {
       console.error("Failed to sync process state:", err);
+      this.systemBusy = false;
     }
   }
 
@@ -1285,5 +1287,8 @@ export class ChatSystem {
     }
   }
 
-  update(registry) {}
+  update(registry) {
+    registry.isProcessing = this.isProcessing;
+    registry.systemBusy = this.systemBusy;
+  }
 }

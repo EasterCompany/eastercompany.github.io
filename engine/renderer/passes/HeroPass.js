@@ -53,27 +53,23 @@ export class HeroPass {
         path: { x1: 0.8, y1: 1.2, x2: 0.2, y2: -0.2 }
       }
     ];
+
+    this.busyIntensity = 0;
+    this.targetBusyIntensity = 0;
   }
 
   async init(device, format, registry) {
     this.device = device;
 
     const shaderCode = `
-      struct Shape {
-        pos: vec2<f32>,
-        opacity: f32,
-        pad: f32,
-        color: vec3<f32>,
-        size: f32,
-      };
-
       struct Uniforms {
         time: f32,
         width: f32,
         height: f32,
         shape_count: f32,
         mouse: vec2<f32>,
-        padding: vec2<f32>,
+        busy_intensity: f32,
+        pad: f32,
         shapes: array<Shape, 8>,
       };
       
@@ -115,6 +111,7 @@ export class HeroPass {
         let uv = in.uv;
         let t = uniforms.time;
         let aspect = uniforms.width / uniforms.height;
+        let busy = uniforms.busy_intensity;
         
         // 1. Fog Layer
         var fog = 0.0;
@@ -124,7 +121,36 @@ export class HeroPass {
         // 2. Base Darkness
         var color = vec3<f32>(0.01, 0.01, 0.02);
         
-        // 3. Gliding Scripted Shapes
+        // 3. Thinking Lights (Cluster)
+        if (busy > 0.0) {
+          let center = vec2<f32>(0.5, 0.5);
+          let cluster_radius = 0.08 * busy;
+          
+          for (var j = 0; j < 6; j++) {
+            let fj = f32(j);
+            let angle = fj * 1.047 + t * 0.5; // 60 degrees apart
+            let offset = vec2<f32>(cos(angle), sin(angle)) * cluster_radius;
+            let light_pos = center + offset;
+            
+            let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
+            
+            // Flicker pattern
+            var flicker = sin(t * (2.0 + fj) + fj) * 0.5 + 0.5;
+            // Pause and dim pattern
+            if (sin(t * 0.5 + fj) > 0.8) { flicker *= 0.2; }
+            
+            let light_color = vec3<f32>(
+              abs(sin(fj * 1.2)),
+              abs(cos(fj * 0.8)),
+              abs(sin(fj * 2.5))
+            );
+            
+            let glow = exp(-d * 40.0) * 0.4 * flicker * busy;
+            color += light_color * glow;
+          }
+        }
+
+        // 4. Gliding Scripted Shapes
         for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
           let d = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
@@ -171,6 +197,11 @@ export class HeroPass {
     if (!this.device || !this.pipeline) return;
     this.updateShapes(registry);
 
+    // Update Busy Intensity
+    this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
+    const lerpSpeed = 0.05;
+    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
+
     const data = new Float32Array(288 / 4);
     data[0] = registry.time;
     data[1] = registry.screen.width;
@@ -178,6 +209,7 @@ export class HeroPass {
     data[3] = 8.0;
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
+    data[6] = this.busyIntensity;
 
     for (let i = 0; i < 8; i++) {
       const offset = 8 + (i * 8);
@@ -201,10 +233,44 @@ export class HeroPass {
     this.updateShapes(registry);
     const { width, height } = registry.screen;
 
+    // Update Busy Intensity
+    this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
+    const lerpSpeed = 0.05;
+    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
+
     ctx.fillStyle = "#050507";
     ctx.fillRect(0, 0, width, height);
 
     ctx.globalCompositeOperation = "screen";
+
+    // Thinking Lights (2D Fallback)
+    if (this.busyIntensity > 0.01) {
+      const t = registry.time;
+      const center = { x: width * 0.5, y: height * 0.5 };
+      const clusterRadius = 50 * this.busyIntensity;
+
+      for (let j = 0; j < 6; j++) {
+        const angle = j * 1.047 + t * 0.5;
+        const x = center.x + Math.cos(angle) * clusterRadius;
+        const y = center.y + Math.sin(angle) * clusterRadius;
+        
+        let flicker = Math.sin(t * (2.0 + j) + j) * 0.5 + 0.5;
+        if (Math.sin(t * 0.5 + j) > 0.8) flicker *= 0.2;
+
+        const size = 100 * this.busyIntensity * flicker;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, size);
+        const r = Math.round(Math.abs(Math.sin(j * 1.2)) * 255);
+        const g = Math.round(Math.abs(Math.cos(j * 0.8)) * 255);
+        const b = Math.round(Math.abs(Math.sin(j * 2.5)) * 255);
+        
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.3 * this.busyIntensity})`);
+        grad.addColorStop(1, "rgba(0,0,0,0)");
+        
+        ctx.fillStyle = grad;
+        ctx.fillRect(x - size, y - size, size * 2, size * 2);
+      }
+    }
+
     for (let s of this.shapes) {
       const x = s.x * width;
       const y = (1.0 - s.y) * height;
