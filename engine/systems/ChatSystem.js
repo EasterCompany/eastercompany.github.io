@@ -165,10 +165,12 @@ export class ChatSystem {
       }
     }
 
-    const urls = [
-      "https://dashboard.easter.company/system/options",
-      `${this.eventServiceUrl}/system/options`
-    ];
+    const prodUrl = "https://dashboard.easter.company/system/options";
+    const localUrl = `${this.eventServiceUrl}/system/options`;
+    
+    // Dynamic Prioritization: If we are on 100.100.x.y, try local URL first.
+    const isTailscale = window.location.hostname.startsWith('100.100.');
+    const urls = isTailscale ? [localUrl, prodUrl] : [prodUrl, localUrl];
 
     for (const url of urls) {
       try {
