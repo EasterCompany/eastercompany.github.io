@@ -142,7 +142,7 @@ export class HeroPass {
         
         // 2. Base Darkness and Smoke Glow
         var color = vec3<f32>(0.01, 0.01, 0.02);
-        let smoke_intensity = 0.05 + (ui * 0.15); // Persistent on homepage, stronger in UI
+        let smoke_intensity = 0.2; // Consistent intensity for blur/smoke effect
         let smoke_color = vec3<f32>(0.05, 0.07, 0.1) * fog_noise * smoke_intensity;
         color += smoke_color;
         
