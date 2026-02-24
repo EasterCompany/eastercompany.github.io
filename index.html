@@ -331,9 +331,9 @@
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
       }
-      .overlay-view h2 {
-        position: fixed;
-        top: 40px;
+      .overlay-header {
+        position: absolute;
+        top: -57px; /* Positioned between HUD buttons (at top 30px) and window (at top 100px) */
         left: 50%;
         transform: translateX(-50%);
         font-size: 0.8rem;
@@ -344,6 +344,7 @@
         pointer-events: none;
         opacity: 0.6;
         white-space: nowrap;
+        z-index: 1100;
       }
 
       /* Chat Mode & Liquid Display */
@@ -1184,21 +1185,18 @@
 
     <!-- Game UI Elements -->
     <div id="game-overlay" class="game-ui-overlay">
+      <h2 id="overlay-title" class="overlay-header"></h2>
       <div class="overlay-content">
         <div id="overlay-view-spartan" class="overlay-view">
-          <h2>DEXTER NETWORK</h2>
           <p>System Status: Operational</p>
         </div>
         <div id="overlay-view-market" class="overlay-view">
-          <h2>INSIDERS MARKET</h2>
           <p>Loading catalog...</p>
         </div>
         <div id="overlay-view-user" class="overlay-view">
-          <h2>USER PROFILE</h2>
           <p>Synchronizing identity...</p>
         </div>
         <div id="overlay-view-settings" class="overlay-view">
-          <h2>SYSTEM SETTINGS</h2>
           <div class="settings-list">
             <!-- AGENT Assistant -->
             <div class="settings-category">

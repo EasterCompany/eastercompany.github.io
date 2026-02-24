@@ -30,8 +30,17 @@ export class UISystem {
     this.overlay = document.getElementById('game-overlay');
     this.mainContent = document.getElementById('main');
     this.footer = document.querySelector('.site-footer');
+    this.overlayTitle = document.getElementById('overlay-title');
     this.startTime = registry.time;
     
+    // HUD Titles
+    this.viewTitles = {
+      spartan: "DEXTER NETWORK",
+      market: "INSIDERS MARKET",
+      user: "USER PROFILE",
+      settings: "SYSTEM SETTINGS"
+    };
+
     // HUD Triggers
     this.triggers = {
       spartan: document.getElementById('spartan-trigger'),
@@ -116,6 +125,7 @@ export class UISystem {
       // Close Overlay
       this.activeView = null;
       if (this.overlay) this.overlay.classList.remove('active');
+      if (this.overlayTitle) this.overlayTitle.textContent = "";
       document.body.classList.remove('no-scroll'); // Unlock scroll
       
       if (this.mainContent) {
@@ -129,6 +139,7 @@ export class UISystem {
     } else {
       // Switch/Open Overlay
       this.activeView = viewKey;
+      if (this.overlayTitle) this.overlayTitle.textContent = this.viewTitles[viewKey] || "";
       const targetView = document.getElementById(`overlay-view-${viewKey}`);
       if (targetView) targetView.classList.add('active');
       
