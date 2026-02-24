@@ -186,9 +186,10 @@ export class HeroPass {
               
               // Add "Zap" distortion using noise
               let zap_noise = noise(uv * 20.0 + t * 50.0) * 0.01;
-              let zap_fade = exp(-(dist_to_line + zap_noise) * 400.0);
+              let zap_core = exp(-(dist_to_line + zap_noise) * 400.0);
+              let zap_glow = exp(-(dist_to_line + zap_noise) * 40.0) * 0.4;
               
-              color += s.color * zap_fade * (hb - 0.6) * 2.0 * busy;
+              color += s.color * (zap_core + zap_glow) * (hb - 0.6) * 10.0 * busy;
             }
           }
         }
@@ -323,9 +324,12 @@ export class HeroPass {
                 ctx.lineTo(px, py);
               }
               
-              ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.6) * this.busyIntensity})`;
+              ctx.shadowBlur = 15;
+              ctx.shadowColor = `rgb(${r}, ${g}, ${b})`;
+              ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.6) * this.busyIntensity * 2.0})`;
               ctx.lineWidth = 1;
               ctx.stroke();
+              ctx.shadowBlur = 0; // Reset for other drawing operations
             }
           });
         }
