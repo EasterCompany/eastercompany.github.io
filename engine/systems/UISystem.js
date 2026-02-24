@@ -118,8 +118,11 @@ export class UISystem {
   toggleOverlay(viewKey) {
     const isSameView = this.activeView === viewKey;
     
-    // Reset views
+    // Reset views and triggers
     document.querySelectorAll('.overlay-view').forEach(v => v.classList.remove('active'));
+    Object.values(this.triggers).forEach(el => {
+      if (el) el.classList.remove('highlighted', 'dimmed');
+    });
     
     if (isSameView) {
       // Close Overlay
@@ -139,6 +142,17 @@ export class UISystem {
     } else {
       // Switch/Open Overlay
       this.activeView = viewKey;
+      
+      // Highlight active trigger, dim others
+      Object.entries(this.triggers).forEach(([key, el]) => {
+        if (!el) return;
+        if (key === viewKey) {
+          el.classList.add('highlighted');
+        } else {
+          el.classList.add('dimmed');
+        }
+      });
+
       if (this.overlayTitle) this.overlayTitle.textContent = this.viewTitles[viewKey] || "";
       const targetView = document.getElementById(`overlay-view-${viewKey}`);
       if (targetView) targetView.classList.add('active');
