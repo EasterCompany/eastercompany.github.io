@@ -1296,10 +1296,11 @@ export class ChatSystem {
     const period = 2.0;
     const phase = (t % period) / period;
     let heartbeat = 0;
-    if (phase < 0.1) heartbeat = phase / 0.1; // Pulse 1 up
-    else if (phase < 0.2) heartbeat = 1.0 - (phase - 0.1) / 0.1; // Pulse 1 down
-    else if (phase < 0.3) heartbeat = (phase - 0.2) / 0.1 * 0.6; // Pulse 2 up (smaller)
-    else if (phase < 0.4) heartbeat = 0.6 - (phase - 0.3) / 0.1 * 0.6; // Pulse 2 down
+    // Smoother, longer pulses for neural flow
+    if (phase < 0.25) heartbeat = phase / 0.25; 
+    else if (phase < 0.5) heartbeat = 1.0 - (phase - 0.25) / 0.25;
+    else if (phase < 0.6) heartbeat = (phase - 0.5) / 0.1 * 0.4;
+    else if (phase < 0.7) heartbeat = 0.4 - (phase - 0.6) / 0.1 * 0.4;
     
     registry.heartbeatIntensity = heartbeat;
 

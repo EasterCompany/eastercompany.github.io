@@ -160,7 +160,7 @@ export class HeroPass {
           color += s.color * node_glow;
 
           // Neural Bonds
-          if (busy > 0.1 && hb > 0.6 && s.opacity > 0.2 && s.parent_idx >= 0.0) {
+          if (busy > 0.1 && hb > 0.1 && s.opacity > 0.2 && s.parent_idx >= 0.0) {
             var origin: vec2<f32>;
             if (s.parent_idx < 10.0) {
               let angle = s.parent_idx * 1.047 + t * 0.5;
@@ -171,15 +171,26 @@ export class HeroPass {
             
             let pa = uv - origin;
             let ba = s.pos - origin;
+            let ba_len = length(ba);
             let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-            let dist_to_bond = distance(uv, origin + ba * h);
             
-            // Pulsing energy surge along the bond
-            let surge = sin(t * 15.0 - h * 10.0) * 0.5 + 0.5;
-            let bond_core = exp(-dist_to_bond * 600.0);
-            let bond_glow = exp(-dist_to_bond * 80.0) * 0.4;
+            // Flowy "hand-drawn" curve displacement
+            let p_norm = normalize(vec2<f32>(-ba.y, ba.x)); 
+            let curve_freq = 3.0;
+            let curve_amp = 0.02 * sin(h * 3.14159);
+            let flow_noise = noise(vec2<f32>(h * curve_freq, t * 0.4)) * curve_amp;
             
-            color += s.color * (bond_core + bond_glow * surge) * (hb - 0.6) * (8.0 + s.momentum * 8.0) * busy;
+            let dist_to_bond = distance(uv, origin + ba * h + p_norm * flow_noise);
+            
+            // Slower, smoother energy surge
+            let surge = sin(t * 4.0 - h * 6.0) * 0.5 + 0.5;
+            let bond_core = exp(-dist_to_bond * 800.0);
+            let bond_glow = exp(-dist_to_bond * 100.0) * 0.3;
+            
+            // Smoother "flash" activation (longer ramp)
+            let activation = clamp((hb - 0.1) * 1.5, 0.0, 1.0);
+            
+            color += s.color * (bond_core + bond_glow * surge) * activation * (6.0 + s.momentum * 6.0) * busy;
           }
         }
         
