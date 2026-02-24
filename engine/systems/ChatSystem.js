@@ -1189,22 +1189,19 @@ export class ChatSystem {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = '';
+      let rawBuffer = '';
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        buffer += chunk;
+        rawBuffer += decoder.decode(value, { stream: true });
 
         if (!ptyMessageEl) {
-          ptyMessageEl = this.addMessage('pty', 'Terminal', buffer, ptyId);
-        } else {
-          const bubble = ptyMessageEl.querySelector('.message-bubble');
-          if (bubble) bubble.textContent = buffer;
-          this.historyEl.scrollTop = this.historyEl.scrollHeight;
+          ptyMessageEl = this.addMessage('pty', 'Terminal', '', ptyId);
         }
+        
+        this.updatePtyContent(ptyMessageEl, rawBuffer);
       }
 
       this.setProcessing(false);
@@ -1213,6 +1210,84 @@ export class ChatSystem {
       this.addMessage('system', 'System', `Command failed: ${err.message}`, null, true);
       this.setProcessing(false);
     }
+  }
+
+  updatePtyContent(messageEl, raw) {
+    const bubble = messageEl.querySelector('.message-bubble');
+    if (!bubble) return;
+
+    // 1. Process Virtual Terminal Logic (Handle \r and \x1b[K)
+    // We split by newline, then for each line, handle carriage returns.
+    const lines = raw.split(/\r?\n/);
+    const processedLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+      
+      // Handle \r by taking only the content after the last \r in this line segment
+      if (line.includes('\r')) {
+        const parts = line.split('\r');
+        line = parts[parts.length - 1];
+      }
+
+      // Handle ANSI Clear Line [K
+      line = line.replace(/.*\x1b\[K/, '');
+
+      processedLines.push(line);
+    }
+
+    const finalRaw = processedLines.join('\n');
+    bubble.innerHTML = this.parseAnsi(finalRaw);
+    this.historyEl.scrollTop = this.historyEl.scrollHeight;
+  }
+
+  parseAnsi(text) {
+    const colors = {
+      '30': '#000000', '31': '#ff5f56', '32': '#27c93f', '33': '#ffbd2e',
+      '34': '#007aff', '35': '#ff4081', '36': '#00f3ff', '37': '#ffffff',
+      '90': '#666666', '91': '#ff5f56', '92': '#27c93f', '93': '#ffbd2e',
+      '94': '#007aff', '95': '#ff4081', '96': '#00f3ff', '97': '#ffffff'
+    };
+
+    let result = '';
+    let i = 0;
+    let currentColor = null;
+    let isBold = false;
+
+    while (i < text.length) {
+      if (text[i] === '\x1b' && text[i + 1] === '[') {
+        let j = i + 2;
+        let code = '';
+        while (j < text.length && text[j] !== 'm') {
+          code += text[j];
+          j++;
+        }
+        
+        const codes = code.split(';');
+        codes.forEach(c => {
+          if (c === '0') { currentColor = null; isBold = false; }
+          else if (c === '1') { isBold = true; }
+          else if (colors[c]) { currentColor = colors[c]; }
+        });
+
+        if (currentColor || isBold) {
+          result += `<span style="${currentColor ? 'color:' + currentColor + ';' : ''}${isBold ? 'font-weight:bold;' : ''}">`;
+        } else {
+          result += '</span>';
+        }
+        i = j + 1;
+      } else {
+        // Escape HTML
+        const char = text[i];
+        if (char === '<') result += '&lt;';
+        else if (char === '>') result += '&gt;';
+        else if (char === '&') result += '&amp;';
+        else result += char;
+        i++;
+      }
+    }
+
+    return result;
   }
 
   updateProcessStatus(status) {
