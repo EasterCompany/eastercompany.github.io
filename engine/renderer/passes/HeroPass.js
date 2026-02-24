@@ -65,16 +65,20 @@ export class HeroPass {
       struct Shape {
         pos: vec2<f32>,
         opacity: f32,
-        momentum: f32,
+        size: f32,
         color: vec3<f32>,
-        parent_idx: f32, // -1: none, 0-5: thinking light, 10+: shape index + 10
+        momentum: f32,
+        parent_idx: f32,
+        p1: f32,
+        p2: f32,
+        p3: f32,
       };
 
       struct Uniforms {
         time: f32,
         width: f32,
         height: f32,
-        active_mask: f32, // Bitmask for 6 core lights
+        active_mask: f32, 
         mouse: vec2<f32>,
         busy_intensity: f32,
         heartbeat: f32,
@@ -154,9 +158,9 @@ export class HeroPass {
           let s = uniforms.shapes[i];
           let d_shape = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
-          // Brighter based on momentum
+          // Brighter based on momentum and size-dependent glow falloff
           let intensity_boost = 1.0 + (s.momentum * 0.5);
-          let node_glow = exp(-d_shape * 10.0) * 0.3 * s.opacity * intensity_boost;
+          let node_glow = exp(-d_shape * (10.0 / s.size)) * 0.3 * s.opacity * intensity_boost;
           color += s.color * node_glow;
 
           // Neural Bonds
@@ -171,10 +175,9 @@ export class HeroPass {
             
             let pa = uv - origin;
             let ba = s.pos - origin;
-            let ba_len = length(ba);
             let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
             
-            // Flowy "hand-drawn" curve displacement
+            // Flowy \"hand-drawn\" curve displacement
             let p_norm = normalize(vec2<f32>(-ba.y, ba.x)); 
             let curve_freq = 3.0;
             let curve_amp = 0.02 * sin(h * 3.14159);
@@ -187,10 +190,10 @@ export class HeroPass {
             let bond_core = exp(-dist_to_bond * 800.0);
             let bond_glow = exp(-dist_to_bond * 100.0) * 0.3;
             
-            // Smoother "flash" activation (longer ramp)
+            // Smoother \"flash\" activation
             let activation = clamp((hb - 0.1) * 1.5, 0.0, 1.0);
             
-            color += s.color * (bond_core + bond_glow * surge) * activation * (6.0 + s.momentum * 6.0) * busy;
+            color += s.color * (bond_core + bond_glow * surge) * activation * (8.0 + s.momentum * 8.0) * busy;
           }
         }
         
@@ -214,7 +217,7 @@ export class HeroPass {
     });
 
     this.uniformBuffer = this.device.createBuffer({
-      size: 288, 
+      size: 416, 
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
 
@@ -232,13 +235,12 @@ export class HeroPass {
     let activeMask = 0;
     this.shapes.forEach(s => { s.momentum = 0; s.parentIdx = -1; });
     
-    if (registry.systemBusy && (registry.heartbeatIntensity || 0) > 0.6) {
+    if (registry.systemBusy && (registry.heartbeatIntensity || 0) > 0.1) {
       const center = { x: 0.5, y: 0.5 };
       
-      // Level 1: Core to Shapes (Building the root of the chain)
+      // Level 1: Core to Shapes
       this.shapes.forEach((s, idx) => {
         const d = Math.hypot(s.x - center.x, s.y - center.y);
-        // Wider reach for neural bonds
         if (d < 0.45 && s.opacity > 0.3) {
           s.momentum = 1.0;
           const lightIdx = Math.floor(Math.random() * 6);
@@ -247,14 +249,14 @@ export class HeroPass {
         }
       });
 
-      // Level 2+: Shape to Shape (Chain Reaction)
-      for (let j = 0; j < 3; j++) { // Up to 3 levels of depth
+      // Level 2+: Shape to Shape
+      for (let j = 0; j < 3; j++) {
         this.shapes.forEach((s1, i) => {
           if (s1.momentum > 0) return;
           this.shapes.forEach((s2, k) => {
             if (s2.momentum === 0 || i === k) return;
             const d = Math.hypot(s1.x - s2.x, s1.y - s2.y);
-            const threshold = 0.25 + (s2.momentum * 0.12); // Reach grows with momentum
+            const threshold = 0.25 + (s2.momentum * 0.12);
             if (d < threshold && s1.opacity > 0.3) {
               s1.momentum = s2.momentum + 1.0;
               s1.parentIdx = k + 10;
@@ -269,7 +271,7 @@ export class HeroPass {
     const lerpSpeed = 0.05;
     this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
 
-    const data = new Float32Array(288 / 4);
+    const data = new Float32Array(416 / 4);
     data[0] = registry.time;
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
@@ -280,16 +282,17 @@ export class HeroPass {
     data[7] = registry.heartbeatIntensity || 0;
 
     for (let i = 0; i < 8; i++) {
-      const offset = 8 + (i * 8);
-      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -1 };
+      const offset = 8 + (i * 12);
+      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -1, size: 0.1 };
       data[offset] = s.x;
       data[offset + 1] = s.y;
       data[offset + 2] = s.opacity || 0;
-      data[offset + 3] = s.momentum || 0;
+      data[offset + 3] = s.size || 0.1;
       data[offset + 4] = s.color[0];
       data[offset + 5] = s.color[1];
       data[offset + 6] = s.color[2];
-      data[offset + 7] = s.parentIdx;
+      data[offset + 7] = s.momentum || 0;
+      data[offset + 8] = s.parentIdx;
     }
 
     this.device.queue.writeBuffer(this.uniformBuffer, 0, data);
@@ -338,33 +341,19 @@ export class HeroPass {
         ctx.fillStyle = grad;
         ctx.fillRect(lx - size, ly - size, size * 2, size * 2);
 
-        // Zaps to shapes
-        if (hb > 0.6) {
+        // Bonds to shapes
+        if (hb > 0.1) {
           this.shapes.forEach((s, i) => {
-            if (i % 6 !== j) return; // Each light zaps specific shapes
+            if (s.parentIdx !== j && s.parentIdx !== (i + 10)) return; 
             const sx = s.x * width;
             const sy = (1.0 - s.y) * height;
-            const dist = Math.hypot(sx - center.x, sy - center.y);
             
-            if (dist < 300 && s.opacity > 0.5) {
-              ctx.beginPath();
-              ctx.moveTo(lx, ly);
-              
-              // Draw jagged line
-              const segments = 5;
-              for(let k = 1; k <= segments; k++) {
-                const px = lx + (sx - lx) * (k/segments) + (Math.random() - 0.5) * 20;
-                const py = ly + (sy - ly) * (k/segments) + (Math.random() - 0.5) * 20;
-                ctx.lineTo(px, py);
-              }
-              
-              ctx.shadowBlur = 15;
-              ctx.shadowColor = `rgb(${r}, ${g}, ${b})`;
-              ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.6) * this.busyIntensity * 2.0})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-              ctx.shadowBlur = 0; // Reset for other drawing operations
-            }
+            ctx.beginPath();
+            ctx.moveTo(lx, ly);
+            ctx.lineTo(sx, sy);
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(hb - 0.1) * this.busyIntensity})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
           });
         }
       }
@@ -373,7 +362,7 @@ export class HeroPass {
     for (let s of this.shapes) {
       const x = s.x * width;
       const y = (1.0 - s.y) * height;
-      const size = s.size * 1000;
+      const size = (s.size || 1.0) * 1000;
       
       const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
       const c = s.color;
@@ -404,6 +393,7 @@ export class HeroPass {
         
         this.shapes.push({
           ...script,
+          size: script.size * (0.8 + Math.random() * 1.5), // Random size
           startTime: t,
           opacity: 0,
           active: true,
@@ -422,7 +412,7 @@ export class HeroPass {
       s.x = s.path.x1 + (s.path.x2 - s.path.x1) * progress;
       s.y = s.path.y1 + (s.path.y2 - s.path.y1) * progress;
       
-      // Fine-tuned Opacity Curve: Fade in first 20%, stay full, fade out last 20%
+      // Fine-tuned Opacity Curve
       if (progress < 0.2) {
         s.opacity = progress / 0.2;
       } else if (progress > 0.8) {
