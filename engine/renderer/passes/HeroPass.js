@@ -156,14 +156,28 @@ export class HeroPass {
         // 4. Synaptic Bonds and Wandering Nodes
         for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
-          let d_shape = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
+          let aspect_vec = vec2<f32>(aspect, 1.0);
+          let d_shape = distance(uv * aspect_vec, s.pos * aspect_vec);
           
-          // Dimmer base intensity, pulses with heartbeat if connected
+          // 4a. Base Node Glow
           let momentum_boost = s.momentum * hb * 0.4;
           let node_glow = exp(-d_shape * (15.0 / s.size)) * 0.1 * s.opacity * (1.0 + momentum_boost);
           color += s.color * node_glow;
 
-          // Neural Bonds (Synapses)
+          // 4b. Directional Light Cone (In front of motion)
+          let dir = vec2<f32>(s.p1, s.p2);
+          if (length(dir) > 0.1) {
+            let to_frag = (uv - s.pos) * aspect_vec;
+            let dist_to_frag = length(to_frag);
+            if (dist_to_frag > 0.001) {
+              let cos_theta = dot(normalize(to_frag), dir);
+              let cone_intensity = smoothstep(0.7, 1.0, cos_theta); 
+              let cone_falloff = exp(-dist_to_frag * (8.0 / s.size));
+              color += s.color * cone_intensity * cone_falloff * 0.15 * s.opacity;
+            }
+          }
+
+          // 4c. Neural Bonds (Synapses)
           if (busy > 0.1 && hb > 0.01 && s.opacity > 0.2 && s.parent_idx >= -1.5) {
             var origin: vec2<f32>;
             if (s.parent_idx < -0.5) { // Center connection
@@ -266,6 +280,19 @@ export class HeroPass {
     for (let i = 0; i < 8; i++) {
       const offset = 12 + (i * 12);
       const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -5, size: 0.1 };
+      
+      // Calculate normalized direction vector
+      let dirX = 0, dirY = 0;
+      if (s.path) {
+        dirX = s.path.x2 - s.path.x1;
+        dirY = s.path.y2 - s.path.y1;
+        const len = Math.hypot(dirX, dirY);
+        if (len > 0) {
+          dirX /= len;
+          dirY /= len;
+        }
+      }
+
       data[offset] = s.x;
       data[offset + 1] = s.y;
       data[offset + 2] = s.opacity || 0;
@@ -275,6 +302,8 @@ export class HeroPass {
       data[offset + 6] = s.color[2];
       data[offset + 7] = s.momentum || 0;
       data[offset + 8] = s.parentIdx === undefined ? -5 : s.parentIdx;
+      data[offset + 9] = dirX;  // p1
+      data[offset + 10] = dirY; // p2
     }
 
     this.device.queue.writeBuffer(this.uniformBuffer, 0, data);
