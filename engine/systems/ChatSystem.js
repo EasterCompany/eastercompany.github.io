@@ -221,6 +221,18 @@ export class ChatSystem {
     if (elBuild) elBuild.value = discord.build_channel_id || "";
     if (elDebug) elDebug.value = discord.debug_channel_id || "";
     if (elMaster) elMaster.value = discord.master_user || "";
+
+    const tts = data["dex-tts-model-service"]?.options;
+    if (tts) {
+      const elTtsGpu = document.getElementById('setting-tts-gpu-enabled');
+      if (elTtsGpu) elTtsGpu.checked = tts.device === 'gpu' || tts.device === 'cuda';
+    }
+
+    const stt = data["dex-stt-model-service"]?.options;
+    if (stt) {
+      const elSttGpu = document.getElementById('setting-stt-gpu-enabled');
+      if (elSttGpu) elSttGpu.checked = stt.device === 'gpu' || stt.device === 'cuda';
+    }
   }
 
   async fetchHistory() {
