@@ -168,8 +168,8 @@ export class ChatSystem {
     const prodUrl = "https://dashboard.easter.company/system/options";
     const localUrl = `${this.eventServiceUrl}/system/options`;
     
-    // Dynamic Prioritization: If we are on 100.100.x.y, try local URL first.
-    const isTailscale = window.location.hostname.startsWith('100.100.');
+    // Dynamic Prioritization: If we are on 100.100.x.y or easter-server, try local URL first.
+    const isTailscale = window.location.hostname.startsWith('100.100.') || window.location.hostname === 'easter-server';
     const urls = isTailscale ? [localUrl, prodUrl] : [prodUrl, localUrl];
 
     for (const url of urls) {
@@ -586,6 +586,10 @@ export class ChatSystem {
       this.apiUrl = 'http://100.100.1.3:8200';
       this.wsUrl = 'ws://100.100.1.3:8200/ws';
       this.eventServiceUrl = 'http://100.100.1.3:8200'; 
+    } else if (host === 'easter-server') {
+      this.apiUrl = 'http://easter-us-3:8200';
+      this.wsUrl = 'ws://easter-us-3:8200/ws';
+      this.eventServiceUrl = 'http://easter-us-3:8200';
     } else {
       this.apiUrl = `${protocol}//${host}:8200`;
       this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
