@@ -44,13 +44,59 @@ export class UISystem {
     this.setupListeners();
 
     window.addEventListener('keydown', (e) => {
+      // 1. Escape Handling (Existing)
       if (e.key === 'Escape' && this.activeView) {
         this.toggleOverlay(this.activeView);
         e.stopImmediatePropagation();
+        return;
+      }
+
+      // 2. Global Hotkeys (ALT + Key)
+      if (e.altKey) {
+        const key = e.key;
+        let targetView = null;
+        let targetChat = false;
+
+        if (key === '`' || key === '0') targetChat = true;
+        else if (key === '1') targetView = 'spartan';
+        else if (key === '2') targetView = 'market';
+        else if (key === '3') targetView = 'user';
+        else if (key === '4') targetView = 'settings';
+
+        if (targetView || targetChat) {
+          e.preventDefault();
+          this.jumpTo(targetView, targetChat);
+        }
       }
     });
     
     console.log("Easter Engine: UI System Online");
+  }
+
+  jumpTo(viewKey, isChat = false) {
+    const chatSystem = window.easterEngine?.systems?.find(s => s.constructor.name === 'ChatSystem');
+    
+    // 1. Exit Chat if active and we are moving to a view
+    if (chatSystem && chatSystem.isActive && !isChat) {
+      chatSystem.exitChatMode();
+    }
+
+    // 2. Close existing overlay if active and we are moving to a DIFFERENT view or chat
+    if (this.activeView && (this.activeView !== viewKey || isChat)) {
+      const currentView = this.activeView;
+      this.toggleOverlay(currentView); // Close current
+    }
+
+    // 3. Open target
+    if (isChat) {
+      if (chatSystem && !chatSystem.isActive) {
+        chatSystem.enterChatMode();
+      }
+    } else if (viewKey) {
+      if (this.activeView !== viewKey) {
+        this.toggleOverlay(viewKey);
+      }
+    }
   }
 
   setupListeners() {
