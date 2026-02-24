@@ -1036,14 +1036,7 @@
         width: 140px;
         height: auto;
         filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.4));
-        animation: heartBeat 2s infinite ease-in-out;
-      }
-      @keyframes heartBeat {
-        0% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3)); }
-        10% { transform: scale(1.1); filter: drop-shadow(0 0 40px rgba(0, 243, 255, 0.6)); }
-        20% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3)); }
-        30% { transform: scale(1.08); filter: drop-shadow(0 0 35px rgba(0, 243, 255, 0.5)); }
-        100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3)); }
+        transition: transform 0.1s ease-out;
       }
 
       /* Emoji Picker UI */
@@ -1776,7 +1769,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771913635"></script>
+    <script type="module" src="/engine/main.js?h=1771913747"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

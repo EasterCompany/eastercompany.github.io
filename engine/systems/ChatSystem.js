@@ -1288,14 +1288,33 @@ export class ChatSystem {
   }
 
   update(registry) {
+    const t = registry.time;
     registry.isProcessing = this.isProcessing;
     registry.systemBusy = this.systemBusy;
 
-    // Sync Neural Core visibility
+    // Synchronized Heartbeat Calculation (2s period)
+    const period = 2.0;
+    const phase = (t % period) / period;
+    let heartbeat = 0;
+    if (phase < 0.1) heartbeat = phase / 0.1; // Pulse 1 up
+    else if (phase < 0.2) heartbeat = 1.0 - (phase - 0.1) / 0.1; // Pulse 1 down
+    else if (phase < 0.3) heartbeat = (phase - 0.2) / 0.1 * 0.6; // Pulse 2 up (smaller)
+    else if (phase < 0.4) heartbeat = 0.6 - (phase - 0.3) / 0.1 * 0.6; // Pulse 2 down
+    
+    registry.heartbeatIntensity = heartbeat;
+
+    // Sync Neural Core visibility and animation
     const core = document.getElementById('neural-core');
     if (core) {
       if (this.systemBusy) {
         core.classList.add('active');
+        const img = core.querySelector('img');
+        if (img) {
+          const scale = 1.0 + (heartbeat * 0.1);
+          const brightness = 1.0 + (heartbeat * 0.5);
+          img.style.transform = `scale(${scale})`;
+          img.style.filter = `drop-shadow(0 0 30px rgba(0, 243, 255, 0.4)) brightness(${brightness})`;
+        }
       } else {
         core.classList.remove('active');
       }

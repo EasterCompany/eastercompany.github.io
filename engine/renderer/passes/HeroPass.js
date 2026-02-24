@@ -77,7 +77,7 @@ export class HeroPass {
         shape_count: f32,
         mouse: vec2<f32>,
         busy_intensity: f32,
-        pad: f32,
+        heartbeat: f32,
         shapes: array<Shape, 8>,
       };
       
@@ -120,6 +120,7 @@ export class HeroPass {
         let t = uniforms.time;
         let aspect = uniforms.width / uniforms.height;
         let busy = uniforms.busy_intensity;
+        let hb = uniforms.heartbeat;
         
         // 1. Fog Layer
         var fog = 0.0;
@@ -142,10 +143,8 @@ export class HeroPass {
             
             let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
             
-            // Flicker pattern
-            var flicker = sin(t * (2.0 + fj) + fj) * 0.5 + 0.5;
-            // Pause and dim pattern
-            if (sin(t * 0.5 + fj) > 0.8) { flicker *= 0.2; }
+            // Flicker pattern synchronized with heartbeat
+            var flicker = hb * 0.8 + 0.2;
             
             let light_color = vec3<f32>(
               abs(sin(fj * 1.2)),
@@ -218,6 +217,7 @@ export class HeroPass {
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
     data[6] = this.busyIntensity;
+    data[7] = registry.heartbeatIntensity || 0;
 
     for (let i = 0; i < 8; i++) {
       const offset = 8 + (i * 8);
@@ -262,8 +262,7 @@ export class HeroPass {
         const x = center.x + Math.cos(angle) * clusterRadius;
         const y = center.y + Math.sin(angle) * clusterRadius;
         
-        let flicker = Math.sin(t * (2.0 + j) + j) * 0.5 + 0.5;
-        if (Math.sin(t * 0.5 + j) > 0.8) flicker *= 0.2;
+        let flicker = (registry.heartbeatIntensity || 0) * 0.8 + 0.2;
 
         const size = 100 * this.busyIntensity * flicker;
         const grad = ctx.createRadialGradient(x, y, 0, x, y, size);
