@@ -247,6 +247,12 @@ export class ChatSystem {
       const elSummaryGpu = document.getElementById('setting-summary-gpu-enabled');
       if (elSummaryGpu) elSummaryGpu.checked = summaryModel.device === 'gpu' || summaryModel.device === 'cuda';
     }
+
+    const system = data["dex-system"]?.options;
+    if (system) {
+      const elOrchestrator = document.getElementById('setting-system-orchestrator');
+      if (elOrchestrator) elOrchestrator.value = system.orchestrator || "";
+    }
   }
 
   async fetchHistory() {
