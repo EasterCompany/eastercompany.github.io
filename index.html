@@ -1400,6 +1400,18 @@
                   </tbody>
                 </table>
               </div>
+              <!-- Hotkeys Actions -->
+              <div id="hotkeys-actions" style="display: none; margin-top: 15px;">
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                  <button id="hotkeys-discard" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">Discard</button>
+                  <button id="hotkeys-accept" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;">Accept</button>
+                </div>
+              </div>
+              <div id="hotkeys-reset-container" style="margin-top: 15px;">
+                <div style="display: flex; justify-content: flex-end;">
+                  <button id="hotkeys-reset" class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">Reset to Default</button>
+                </div>
+              </div>
             </div>
 
             <!-- AGENT Assistant -->
@@ -1669,19 +1681,6 @@
                 <button id="setting-delete-chat" class="btn-danger">Delete</button>
               </div>
             </div>
-
-            <!-- Hotkeys Actions -->
-            <div id="hotkeys-actions" class="settings-category" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; display: none;">
-              <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button id="hotkeys-discard" class="btn-secondary">Discard Changes</button>
-                <button id="hotkeys-accept" class="btn-primary">Accept Changes</button>
-              </div>
-            </div>
-            <div id="hotkeys-reset-container" class="settings-category" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px;">
-              <div style="display: flex; justify-content: flex-end;">
-                <button id="hotkeys-reset" class="btn-secondary">Reset to Default</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1730,7 +1729,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771911667"></script>
+    <script type="module" src="/engine/main.js?h=1771911783"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
