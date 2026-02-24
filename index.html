@@ -740,6 +740,16 @@
         transform: none;
         box-shadow: none;
       }
+
+      .settings-category.discord-configs .settings-item {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .settings-category.discord-configs:hover .settings-item {
+        opacity: 0.4;
+        pointer-events: auto;
+      }
       .settings-info h4 {
         font-size: 1rem;
         margin-bottom: 4px;
@@ -1437,7 +1447,7 @@
             </div>
 
             <!-- SERVICE Discord -->
-            <div class="settings-category">
+            <div class="settings-category discord-configs">
               <h3>[SERVICE] Discord</h3>
               <div class="settings-item">
                 <div class="settings-info">
@@ -1612,7 +1622,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771909830"></script>
+    <script type="module" src="/engine/main.js?h=1771909936"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
