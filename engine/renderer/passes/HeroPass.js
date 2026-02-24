@@ -135,6 +135,11 @@ export class HeroPass {
         let center = vec2<f32>(0.5, 0.5);
         let mask = u32(uniforms.active_mask);
         
+        // 1. Fog Layer (Organic Smoke)
+        var fog_noise = 0.0;
+        fog_noise += noise(uv * 3.0 + t * 0.05) * 0.6;
+        fog_noise += noise(uv * 6.0 - t * 0.02) * 0.3;
+        
         // 2. Base Darkness and Volumetric Smoke
         var color = vec3<f32>(0.01, 0.01, 0.02);
         let smoke_color = vec3<f32>(0.05, 0.07, 0.1);
@@ -197,7 +202,7 @@ export class HeroPass {
             // Smoother \"flash\" activation
             let activation = clamp((hb - 0.1) * 1.5, 0.0, 1.0);
             
-            color += s.color * (bond_core + bond_glow * surge) * activation * (6.0 + s.momentum * 6.0) * busy;
+            color += s.color * (bond_core + bond_glow * surge) * activation * (8.0 + s.momentum * 8.0) * busy;
           }
         }
         
@@ -239,17 +244,21 @@ export class HeroPass {
     let activeMask = 0;
     this.shapes.forEach(s => { s.momentum = 0; s.parentIdx = -1; });
     
-    if (registry.systemBusy && (registry.heartbeatIntensity || 0) > 0.1) {
+    const hb = registry.heartbeatIntensity || 0;
+    if (registry.systemBusy && hb > 0.05) {
       const center = { x: 0.5, y: 0.5 };
+      
+      // Level 1: Core to Shapes (Stable parentIdx)
       this.shapes.forEach((s, idx) => {
         const d = Math.hypot(s.x - center.x, s.y - center.y);
         if (d < 0.45 && s.opacity > 0.3) {
           s.momentum = 1.0;
-          const lightIdx = Math.floor(Math.random() * 6);
-          s.parentIdx = lightIdx;
-          activeMask |= (1 << lightIdx);
+          s.parentIdx = s.preferredLight;
+          activeMask |= (1 << s.parentIdx);
         }
       });
+
+      // Level 2+: Shape to Shape (Chain Reaction)
       for (let j = 0; j < 3; j++) {
         this.shapes.forEach((s1, i) => {
           if (s1.momentum > 0) return;
@@ -268,10 +277,11 @@ export class HeroPass {
 
     // Update Intensities
     this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
-    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * 0.05;
+    const lerpSpeed = 0.05;
+    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
     
     this.targetUIIntensity = registry.isOverlayActive ? 1.0 : 0.0;
-    this.uiIntensity += (this.targetUIIntensity - this.uiIntensity) * 0.05;
+    this.uiIntensity += (this.targetUIIntensity - this.uiIntensity) * lerpSpeed;
 
     const data = new Float32Array(432 / 4);
     data[0] = registry.time;
@@ -281,7 +291,7 @@ export class HeroPass {
     data[4] = registry.input.mouse[0];
     data[5] = registry.input.mouse[1];
     data[6] = this.busyIntensity;
-    data[7] = registry.heartbeatIntensity || 0;
+    data[7] = hb;
     data[8] = this.uiIntensity;
 
     for (let i = 0; i < 8; i++) {
@@ -405,6 +415,11 @@ export class HeroPass {
       // Interpolate Position
       s.x = s.path.x1 + (s.path.x2 - s.path.x1) * progress;
       s.y = s.path.y1 + (s.path.y2 - s.path.y1) * progress;
+      
+      // Stable preferred light index for bonding
+      if (s.preferredLight === undefined) {
+        s.preferredLight = Math.floor(Math.random() * 6);
+      }
       
       // Fine-tuned Opacity Curve
       if (progress < 0.2) {
