@@ -1321,7 +1321,7 @@
 
             <!-- SERVICE TTS -->
             <div class="settings-category">
-              <h3>[SERVICE] TTS</h3>
+              <h3>[SERVICE] TTS Model</h3>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>GPU Enabled</h4>
@@ -1336,7 +1336,7 @@
 
             <!-- SERVICE STT -->
             <div class="settings-category">
-              <h3>[SERVICE] STT</h3>
+              <h3>[SERVICE] STT Model</h3>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>GPU Enabled</h4>
@@ -1344,6 +1344,36 @@
                 </div>
                 <label class="switch">
                   <input type="checkbox" id="setting-stt-gpu-enabled" disabled>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- SERVICE Response Model -->
+            <div class="settings-category">
+              <h3>[SERVICE] Response Model</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>GPU Enabled</h4>
+                  <p class="public-notice">Public mode, read only.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-response-gpu-enabled" disabled>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- SERVICE Summary Model -->
+            <div class="settings-category">
+              <h3>[SERVICE] Summary Model</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <h4>GPU Enabled</h4>
+                  <p class="public-notice">Public mode, read only.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-summary-gpu-enabled" disabled>
                   <span class="slider"></span>
                 </label>
               </div>
@@ -1418,7 +1448,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771904215"></script>
+    <script type="module" src="/engine/main.js?h=1771904393"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

@@ -233,6 +233,18 @@ export class ChatSystem {
       const elSttGpu = document.getElementById('setting-stt-gpu-enabled');
       if (elSttGpu) elSttGpu.checked = stt.device === 'gpu' || stt.device === 'cuda';
     }
+
+    const responseModel = data["dex-response-model-service"]?.options;
+    if (responseModel) {
+      const elResponseGpu = document.getElementById('setting-response-gpu-enabled');
+      if (elResponseGpu) elResponseGpu.checked = responseModel.device === 'gpu' || responseModel.device === 'cuda';
+    }
+
+    const summaryModel = data["dex-summary-model-service"]?.options;
+    if (summaryModel) {
+      const elSummaryGpu = document.getElementById('setting-summary-gpu-enabled');
+      if (elSummaryGpu) elSummaryGpu.checked = summaryModel.device === 'gpu' || summaryModel.device === 'cuda';
+    }
   }
 
   async fetchHistory() {
