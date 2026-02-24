@@ -145,7 +145,8 @@ export class ChatSystem {
 
   async syncOptions() {
     try {
-      const url = `${this.eventServiceUrl}/system/options`;
+      // By default, source from production for public/non-logged-in users
+      const url = "https://dashboard.easter.company/system/options";
       const response = await fetch(url);
       if (!response.ok) return;
       
@@ -155,11 +156,15 @@ export class ChatSystem {
         const elToken = document.getElementById('setting-discord-token');
         const elServer = document.getElementById('setting-discord-server-id');
         const elVoice = document.getElementById('setting-discord-voice-channel');
+        const elBuild = document.getElementById('setting-discord-build-channel');
+        const elDebug = document.getElementById('setting-discord-debug-channel');
         const elMaster = document.getElementById('setting-discord-master-user');
 
         if (elToken) elToken.value = discord.token || "*************";
         if (elServer) elServer.value = discord.server_id || "";
         if (elVoice) elVoice.value = discord.default_voice_channel || "";
+        if (elBuild) elBuild.value = discord.build_channel_id || "";
+        if (elDebug) elDebug.value = discord.debug_channel_id || "";
         if (elMaster) elMaster.value = discord.master_user || "";
       }
     } catch (err) {
