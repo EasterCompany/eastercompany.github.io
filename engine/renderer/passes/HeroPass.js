@@ -61,6 +61,7 @@ export class HeroPass {
   async init(device, format, registry) {
     this.device = device;
 
+    const shaderCode = `
       struct Shape {
         pos: vec2<f32>,
         opacity: f32,
