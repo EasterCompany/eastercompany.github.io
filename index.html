@@ -820,6 +820,79 @@
         color: #fff;
       }
 
+      /* Network Status Table */
+      .network-status-container {
+        width: 100%;
+        margin-top: 10px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .network-status-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .network-status-table th {
+        text-align: left;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--neon-blue);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.65rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .network-status-table td {
+        padding: 10px 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        vertical-align: top;
+      }
+      .network-status-table tr:last-child td {
+        border-bottom: none;
+      }
+      .node-name {
+        font-weight: 600;
+        color: #fff;
+      }
+      .node-ip {
+        opacity: 0.5;
+      }
+      .status-pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .status-pill.online {
+        background: rgba(39, 201, 63, 0.1);
+        color: #27c93f;
+        border: 1px solid rgba(39, 201, 63, 0.2);
+      }
+      .status-pill.offline {
+        background: rgba(255, 95, 86, 0.1);
+        color: #ff5f56;
+        border: 1px solid rgba(255, 95, 86, 0.2);
+      }
+      .service-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .service-tag {
+        padding: 1px 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        font-size: 0.65rem;
+        opacity: 0.7;
+      }
+
       /* Toggle Switch */
       .switch {
         position: relative;
@@ -1272,15 +1345,35 @@
               </div>
             </div>
 
-            <!-- GENERAL Configurations -->
+            <!-- NETWORK Configurations -->
             <div class="settings-category">
-              <h3>[GENERAL] Configurations</h3>
+              <h3>[NETWORK] Configurations</h3>
               <div class="settings-item">
                 <div class="settings-info">
                   <h4>Orchestrator</h4>
                   <p class="public-notice">Public mode, limited read only.</p>
                 </div>
                 <input type="text" class="settings-input" id="setting-system-orchestrator" value="..." readonly>
+              </div>
+              
+              <!-- Network Status Table -->
+              <div class="network-status-container">
+                <table class="network-status-table">
+                  <thead>
+                    <tr>
+                      <th>Node</th>
+                      <th>IP</th>
+                      <th>Status</th>
+                      <th>Services</th>
+                    </tr>
+                  </thead>
+                  <tbody id="network-status-body">
+                    <!-- Populated by JS -->
+                    <tr>
+                      <td colspan="4" style="text-align: center; opacity: 0.5; padding: 20px;">Initializing network scan...</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
@@ -1460,7 +1553,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771906336"></script>
+    <script type="module" src="/engine/main.js?h=1771906610"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

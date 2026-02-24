@@ -139,8 +139,78 @@ export class ChatSystem {
     // Initialize
     console.log(`ChatSystem: Initializing session ${this.sessionId}`);
     this.syncOptions();
+    this.startNetworkStatusSync();
     
     console.log("Easter Engine: Chat System Online");
+  }
+
+  startNetworkStatusSync() {
+    // Initial fetch
+    this.fetchNetworkStatus();
+    
+    // Refresh every 10 seconds
+    setInterval(() => {
+      this.fetchNetworkStatus();
+    }, 10000);
+  }
+
+  async fetchNetworkStatus() {
+    // Don't fetch if settings window isn't active to save resources? 
+    // Actually, user might open it anytime, and it's small payload.
+    
+    const urls = [
+      "https://dashboard.easter.company/system/network",
+      `${this.eventServiceUrl}/system/network`
+    ];
+
+    // Priority based on location (same as syncOptions)
+    const isTailscale = window.location.hostname.startsWith('100.100.') || 
+                        window.location.hostname === 'easter-server' ||
+                        window.location.hostname === 'easter-us-3';
+    const prioritizedUrls = isTailscale ? [urls[1], urls[0]] : [urls[0], urls[1]];
+
+    for (const url of prioritizedUrls) {
+      try {
+        const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+        if (!response.ok) continue;
+        
+        const data = await response.json();
+        if (data && data.nodes) {
+          this.renderNetworkStatus(data.nodes);
+          return;
+        }
+      } catch (err) {
+        // Silently fail per-URL
+      }
+    }
+  }
+
+  renderNetworkStatus(nodes) {
+    const body = document.getElementById('network-status-body');
+    if (!body) return;
+
+    if (!nodes || nodes.length === 0) {
+      body.innerHTML = '<tr><td colspan="4" style="text-align: center; opacity: 0.5; padding: 20px;">No nodes detected in network.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = nodes.map(node => `
+      <tr>
+        <td><span class="node-name">${node.name}</span></td>
+        <td><span class="node-ip">${node.ip}</span></td>
+        <td>
+          <span class="status-pill ${node.online ? 'online' : 'offline'}">
+            ${node.online ? 'Online' : 'Offline'}
+          </span>
+        </td>
+        <td>
+          <div class="service-list">
+            ${(node.services || []).map(svc => `<span class="service-tag">${svc}</span>`).join('')}
+            ${(!node.services || node.services.length === 0) ? '<span style="opacity: 0.3;">None</span>' : ''}
+          </div>
+        </td>
+      </tr>
+    `).join('');
   }
 
   async syncOptions() {
