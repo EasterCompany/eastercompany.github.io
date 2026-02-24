@@ -1015,6 +1015,37 @@
       input:checked + .slider { background-color: var(--neon-blue); }
       input:checked + .slider:before { transform: translateX(24px); }
 
+      /* Neural Core (Beating Heart) */
+      .neural-core {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .neural-core.active {
+        opacity: 0.25;
+      }
+      .neural-core img {
+        width: 140px;
+        height: auto;
+        filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.4));
+        animation: heartBeat 2s infinite ease-in-out;
+      }
+      @keyframes heartBeat {
+        0% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3)); }
+        10% { transform: scale(1.1); filter: drop-shadow(0 0 40px rgba(0, 243, 255, 0.6)); }
+        20% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3)); }
+        30% { transform: scale(1.08); filter: drop-shadow(0 0 35px rgba(0, 243, 255, 0.5)); }
+        100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3)); }
+      }
+
       /* Emoji Picker UI */
       #emoji-picker-container {
         position: fixed;
@@ -1366,6 +1397,9 @@
     </div>
 
     <!-- WebGPU Site Background -->
+    <div id="neural-core" class="neural-core">
+      <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter Core" />
+    </div>
     <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;"></canvas>
 
     <!-- Game UI Elements -->
@@ -1742,7 +1776,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771913279"></script>
+    <script type="module" src="/engine/main.js?h=1771913416"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

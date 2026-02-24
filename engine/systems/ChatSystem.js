@@ -1290,5 +1290,15 @@ export class ChatSystem {
   update(registry) {
     registry.isProcessing = this.isProcessing;
     registry.systemBusy = this.systemBusy;
+
+    // Sync Neural Core visibility
+    const core = document.getElementById('neural-core');
+    if (core) {
+      if (this.systemBusy) {
+        core.classList.add('active');
+      } else {
+        core.classList.remove('active');
+      }
+    }
   }
 }
