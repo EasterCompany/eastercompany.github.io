@@ -382,6 +382,9 @@ export class ChatSystem {
     if (system) {
       const elOrchestrator = document.getElementById('setting-system-orchestrator');
       if (elOrchestrator) elOrchestrator.value = system.orchestrator || "";
+
+      const elIdentifier = document.getElementById('setting-system-network-identifier');
+      if (elIdentifier) elIdentifier.value = system.network_identifier || "Public Network";
     }
 
     const assistant = data["dex-assistant-service"]?.options;
