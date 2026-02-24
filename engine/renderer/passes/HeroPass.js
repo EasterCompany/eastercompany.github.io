@@ -148,9 +148,9 @@ export class HeroPass {
         // 3. Central Blue Light Source
         if (busy > 0.01) {
           let d_center = distance(uv * vec2<f32>(aspect, 1.0), center * vec2<f32>(aspect, 1.0));
-          let center_pulse = hb * 0.5 + 0.5;
-          let center_glow = exp(-d_center * 30.0) * 0.15 * busy * center_pulse;
-          color += vec3<f32>(0.0, 0.5, 1.0) * center_glow;
+          let center_pulse = hb * 0.4 + 0.6;
+          let center_glow = exp(-d_center * 15.0) * 0.4 * busy * center_pulse;
+          color += vec3<f32>(0.0, 0.6, 1.0) * center_glow;
         }
 
         // 4. Synaptic Bonds and Wandering Nodes
@@ -184,16 +184,16 @@ export class HeroPass {
             
             let dist_to_bond = distance(uv, origin + ba * h + p_norm * flow_noise);
             
-            // Slower, subtle energy surge
-            let surge = sin(t * 3.0 - h * 5.0) * 0.5 + 0.5;
-            let bond_core = exp(-dist_to_bond * 1000.0);
-            let bond_glow = exp(-dist_to_bond * 150.0) * 0.2;
+            // Slower, energetic surge
+            let surge = sin(t * 4.0 - h * 6.0) * 0.5 + 0.5;
+            let bond_core = exp(-dist_to_bond * 1500.0);
+            let bond_glow = exp(-dist_to_bond * 200.0) * 0.4;
             
             // Heartbeat fade-in/out for the bond
-            let bond_intensity = hb * 0.3 * busy;
-            let bond_color = mix(s.color, vec3<f32>(0.0, 0.6, 1.0), 0.5);
+            let bond_intensity = hb * 0.8 * busy;
+            let bond_color = mix(s.color, vec3<f32>(0.0, 0.7, 1.0), 0.6);
             
-            color += bond_color * (bond_core + bond_glow * surge) * bond_intensity;
+            color += bond_color * (bond_core * 2.0 + bond_glow * surge) * bond_intensity;
           }
         }
         
