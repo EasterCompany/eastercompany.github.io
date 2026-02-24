@@ -420,11 +420,14 @@
         flex-direction: column;
         gap: 24px;
         padding-bottom: 40px;
-        mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, black 100%);
-        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, black 100%);
+        transition: mask-image 0.3s ease;
         /* Hide scrollbar for Chrome, Safari and Opera */
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
+      }
+      .chat-history.is-scrollable {
+        mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, black 100%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, black 100%);
       }
       .chat-history::-webkit-scrollbar {
         display: none;
@@ -1744,7 +1747,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771918598"></script>
+    <script type="module" src="/engine/main.js?h=1771918960"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">

@@ -1346,7 +1346,7 @@ export class ChatSystem {
           if (reactions) bubble.appendChild(reactions);
         }
       }
-      return;
+      return existingMsgEl;
     }
 
     const msg = { type, sender, content, id, timestamp: timestamp || new Date() };
@@ -1417,13 +1417,21 @@ export class ChatSystem {
       if (scrollToBottom) {
         this.historyEl.scrollTop = this.historyEl.scrollHeight;
       }
+      return msgEl;
     }
+    return null;
   }
 
   update(registry) {
     const t = registry.time;
     registry.isProcessing = this.isProcessing;
     registry.systemBusy = this.systemBusy;
+
+    // Toggle scrollable class for gradient mask
+    if (this.historyEl) {
+      const isScrollable = this.historyEl.scrollHeight > this.historyEl.clientHeight;
+      this.historyEl.classList.toggle('is-scrollable', isScrollable);
+    }
 
     // Synchronized Heartbeat Calculation (2s period)
     const period = 2.0;
