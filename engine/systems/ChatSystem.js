@@ -144,40 +144,47 @@ export class ChatSystem {
   }
 
   async syncOptions() {
-    try {
-      // By default, source from production for public/non-logged-in users
-      const url = "https://dashboard.easter.company/system/options";
-      const response = await fetch(url);
-      if (!response.ok) {
-        console.warn(`ChatSystem: Failed to fetch options from ${url} (Status: ${response.status})`);
-        return;
-      }
-      
-      const data = await response.json();
-      const discord = data["dex-discord-service"]?.options;
-      
-      if (discord) {
-        const elToken = document.getElementById('setting-discord-token');
-        const elServer = document.getElementById('setting-discord-server-id');
-        const elVoice = document.getElementById('setting-discord-voice-channel');
-        const elBuild = document.getElementById('setting-discord-build-channel');
-        const elDebug = document.getElementById('setting-discord-debug-channel');
-        const elMaster = document.getElementById('setting-discord-master-user');
+    const urls = [
+      "https://dashboard.easter.company/system/options",
+      `${this.eventServiceUrl}/system/options`
+    ];
 
-        if (elToken) elToken.value = discord.token || "*************";
-        if (elServer) elServer.value = discord.server_id || "";
-        if (elVoice) elVoice.value = discord.default_voice_channel || "";
-        if (elBuild) elBuild.value = discord.build_channel_id || "";
-        if (elDebug) elDebug.value = discord.debug_channel_id || "";
-        if (elMaster) elMaster.value = discord.master_user || "";
+    for (const url of urls) {
+      try {
+        console.log(`ChatSystem: Attempting to sync options from ${url}`);
+        const response = await fetch(url, { signal: AbortSignal.timeout(3000) }); // 3s timeout per attempt
         
-        console.log("ChatSystem: Discord options synchronized from production.");
-      } else {
-        console.warn("ChatSystem: Discord options not found in API response.", data);
+        if (!response.ok) {
+          console.warn(`ChatSystem: Failed to fetch options from ${url} (Status: ${response.status})`);
+          continue;
+        }
+        
+        const data = await response.json();
+        const discord = data["dex-discord-service"]?.options;
+        
+        if (discord) {
+          const elToken = document.getElementById('setting-discord-token');
+          const elServer = document.getElementById('setting-discord-server-id');
+          const elVoice = document.getElementById('setting-discord-voice-channel');
+          const elBuild = document.getElementById('setting-discord-build-channel');
+          const elDebug = document.getElementById('setting-discord-debug-channel');
+          const elMaster = document.getElementById('setting-discord-master-user');
+
+          if (elToken) elToken.value = discord.token || "*************";
+          if (elServer) elServer.value = discord.server_id || "";
+          if (elVoice) elVoice.value = discord.default_voice_channel || "";
+          if (elBuild) elBuild.value = discord.build_channel_id || "";
+          if (elDebug) elDebug.value = discord.debug_channel_id || "";
+          if (elMaster) elMaster.value = discord.master_user || "";
+          
+          console.log(`ChatSystem: Discord options synchronized from ${url}`);
+          return; // Success!
+        }
+      } catch (err) {
+        console.warn(`ChatSystem: Error syncing from ${url}:`, err.message);
       }
-    } catch (err) {
-      console.error("Failed to sync options:", err);
     }
+    console.error("ChatSystem: Failed to sync options from all available sources.");
   }
 
   async fetchHistory() {
