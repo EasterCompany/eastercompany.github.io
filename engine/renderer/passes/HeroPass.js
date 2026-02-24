@@ -135,16 +135,10 @@ export class HeroPass {
         let center = vec2<f32>(0.5, 0.5);
         let mask = u32(uniforms.active_mask);
         
-        // 1. Fog Layer (Organic Smoke)
-        var fog_noise = 0.0;
-        fog_noise += noise(uv * 3.0 + t * 0.05) * 0.6;
-        fog_noise += noise(uv * 6.0 - t * 0.02) * 0.3;
-        
-        // 2. Base Darkness and Smoke Glow
+        // 2. Base Darkness and Volumetric Smoke
         var color = vec3<f32>(0.01, 0.01, 0.02);
-        let smoke_intensity = 0.2; // Consistent intensity for blur/smoke effect
-        let smoke_color = vec3<f32>(0.05, 0.07, 0.1) * fog_noise * smoke_intensity;
-        color += smoke_color;
+        let smoke_color = vec3<f32>(0.05, 0.07, 0.1);
+        color = mix(color, smoke_color, fog_noise * 0.4);
         
         // 3. Neural Root Nodes (Central Circle)
         for (var j = 0; j < 6; j++) {

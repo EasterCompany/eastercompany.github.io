@@ -1017,11 +1017,11 @@
 
       /* Neural Core (Beating Heart) */
       .neural-core {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 10;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         pointer-events: none;
         opacity: 0;
         transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1390,10 +1390,12 @@
     </div>
 
     <!-- WebGPU Site Background -->
-    <div id="neural-core" class="neural-core">
-      <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter Core" />
+    <div id="background-animation-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; filter: blur(40px); transform: scale(1.1);">
+      <div id="neural-core" class="neural-core" style="z-index: 1;">
+        <img src="/static/assets/logo/dexter-icon.svg" alt="Dexter Core" />
+      </div>
+      <canvas id="hero-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></canvas>
     </div>
-    <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;"></canvas>
 
     <!-- Game UI Elements -->
     <div id="game-overlay" class="game-ui-overlay">
@@ -1769,7 +1771,7 @@
       </section>
     </main>
 
-    <script type="module" src="/engine/main.js?h=1771915379"></script>
+    <script type="module" src="/engine/main.js?h=1771915581"></script>
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="confirm-overlay">
       <div class="confirm-dialog">
