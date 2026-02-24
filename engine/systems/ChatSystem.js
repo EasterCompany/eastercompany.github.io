@@ -1082,6 +1082,11 @@ export class ChatSystem {
     this.input.value = '';
     const messageId = this.generateUUID();
 
+    if (text.startsWith('/')) {
+      this.handleSlashCommand(text, messageId);
+      return;
+    }
+
     this.addMessage('user', 'You', text, messageId);
     this.setProcessing(true);
 
@@ -1154,6 +1159,59 @@ export class ChatSystem {
     } catch (err) {
       console.error("Error sending cancel request:", err);
       this.setProcessing(false); 
+    }
+  }
+
+  async handleSlashCommand(text, messageId) {
+    const parts = text.substring(1).split(' ');
+    const command = parts[0];
+    const args = parts.slice(1);
+
+    this.addMessage('user', 'You', text, messageId);
+    this.setProcessing(true);
+
+    const ptyId = this.generateUUID();
+    let ptyMessageEl = null;
+
+    try {
+      const response = await fetch(`${this.eventServiceUrl}/cli/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command, args })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        this.addMessage('system', 'System', `Error: ${errorText}`, null, true);
+        this.setProcessing(false);
+        return;
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        if (!ptyMessageEl) {
+          ptyMessageEl = this.addMessage('pty', 'Terminal', buffer, ptyId);
+        } else {
+          const bubble = ptyMessageEl.querySelector('.message-bubble');
+          if (bubble) bubble.textContent = buffer;
+          this.historyEl.scrollTop = this.historyEl.scrollHeight;
+        }
+      }
+
+      this.setProcessing(false);
+    } catch (err) {
+      console.error("Slash command failed:", err);
+      this.addMessage('system', 'System', `Command failed: ${err.message}`, null, true);
+      this.setProcessing(false);
     }
   }
 
