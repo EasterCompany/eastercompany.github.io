@@ -61,13 +61,12 @@ export class HeroPass {
   async init(device, format, registry) {
     this.device = device;
 
-    const shaderCode = `
       struct Shape {
         pos: vec2<f32>,
         opacity: f32,
-        pad: f32,
+        momentum: f32,
         color: vec3<f32>,
-        size: f32,
+        parent_idx: f32, // -1: none, 0-5: thinking light, 10+: shape index + 10
       };
 
       struct Uniforms {
@@ -121,6 +120,7 @@ export class HeroPass {
         let aspect = uniforms.width / uniforms.height;
         let busy = uniforms.busy_intensity;
         let hb = uniforms.heartbeat;
+        let center = vec2<f32>(0.5, 0.5);
         
         // 1. Fog Layer
         var fog = 0.0;
@@ -130,76 +130,60 @@ export class HeroPass {
         // 2. Base Darkness
         var color = vec3<f32>(0.01, 0.01, 0.02);
         
-        // 3. Thinking Lights (Cluster)
-        if (busy > 0.0) {
-          let center = vec2<f32>(0.5, 0.5);
-          let cluster_radius = 0.16 * busy;
+        // 3. Thinking Lights (Root Nodes)
+        for (var j = 0; j < 6; j++) {
+          let fj = f32(j);
+          let angle = fj * 1.047 + t * 0.5;
+          let light_pos = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
+          let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
           
-          for (var j = 0; j < 6; j++) {
-            let fj = f32(j);
-            let angle = fj * 1.047 + t * 0.5; // 60 degrees apart
-            let offset = vec2<f32>(cos(angle), sin(angle)) * cluster_radius;
-            let light_pos = center + offset;
-            
-            let d = distance(uv * vec2<f32>(aspect, 1.0), light_pos * vec2<f32>(aspect, 1.0));
-            
-            // Flicker pattern synchronized with heartbeat
-            var flicker = hb * 0.8 + 0.2;
-            
-            let light_color = vec3<f32>(
-              abs(sin(fj * 1.2)),
-              abs(cos(fj * 0.8)),
-              abs(sin(fj * 2.5))
-            );
-            
-            let glow = exp(-d * 40.0) * 0.4 * flicker * busy;
-            color += light_color * glow;
-          }
+          var flicker = hb * 0.8 + 0.2;
+          let light_color = vec3<f32>(abs(sin(fj * 1.2)), abs(cos(fj * 0.8)), abs(sin(fj * 2.5)));
+          let glow = exp(-d * 40.0) * 0.4 * flicker * busy;
+          color += light_color * glow;
         }
 
-        // 4. Gliding Scripted Shapes and Zaps
-        let center = vec2<f32>(0.5, 0.5);
+        // 4. Wandering Shapes and Chain Reaction Zaps
         for (var i = 0; i < 8; i++) {
           let s = uniforms.shapes[i];
           let d_shape = distance(uv * vec2<f32>(aspect, 1.0), s.pos * vec2<f32>(aspect, 1.0));
           
-          // Very soft light scattering
-          let shape_glow = exp(-d_shape * (4.5 / s.size)) * 0.25 * s.opacity;
+          // Brighter based on momentum
+          let intensity_boost = 1.0 + (s.momentum * 0.5);
+          let shape_glow = exp(-d_shape * 6.0) * 0.25 * s.opacity * intensity_boost;
           color += s.color * shape_glow;
 
-          // Zappy connection logic
-          if (busy > 0.1 && hb > 0.6 && s.opacity > 0.5) {
-            // Check distance from center to shape
-            let dist_to_center = distance(s.pos, center);
-            if (dist_to_center < 0.4) {
-              // Draw a jagged line from a thinking light position to the shape
-              // Pick one of the 6 lights based on shape index
-              let light_idx = f32(i % 6);
-              let angle = light_idx * 1.047 + t * 0.5;
-              let light_origin = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
-              
-              // Segment distance logic
-              let pa = uv - light_origin;
-              let ba = s.pos - light_origin;
-              let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-              let dist_to_line = distance(uv, light_origin + ba * h);
-              
-              // Add "Zap" distortion using noise
-              let zap_noise = noise(uv * 20.0 + t * 50.0) * 0.01;
-              let zap_core = exp(-(dist_to_line + zap_noise) * 400.0);
-              let zap_glow = exp(-(dist_to_line + zap_noise) * 40.0) * 0.4;
-              
-              color += s.color * (zap_core + zap_glow) * (hb - 0.6) * 10.0 * busy;
+          // Chain Reaction Zaps
+          if (busy > 0.1 && hb > 0.6 && s.opacity > 0.3 && s.parent_idx >= 0.0) {
+            var origin: vec2<f32>;
+            
+            if (s.parent_idx < 10.0) {
+              // Zap from core light
+              let angle = s.parent_idx * 1.047 + t * 0.5;
+              origin = center + vec2<f32>(cos(angle), sin(angle)) * 0.16;
+            } else {
+              // Zap from another shape
+              let p_idx = i32(s.parent_idx - 10.0);
+              origin = uniforms.shapes[p_idx].pos;
             }
+            
+            let pa = uv - origin;
+            let ba = s.pos - origin;
+            let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+            let dist_to_line = distance(uv, origin + ba * h);
+            
+            let zap_noise = noise(uv * 30.0 + t * 60.0) * 0.005;
+            let zap_core = exp(-(dist_to_line + zap_noise) * 500.0);
+            let zap_glow = exp(-(dist_to_line + zap_noise) * 50.0) * 0.5;
+            
+            // Scaled by momentum
+            color += s.color * (zap_core + zap_glow) * (hb - 0.6) * (10.0 + s.momentum * 10.0) * busy;
           }
         }
         
         color = mix(color, color * 0.3, fog);
-        
-        // Final Vignette
         let edge_dist = distance(uv, vec2<f32>(0.5));
         color *= (1.0 - edge_dist * 0.7);
-
         return vec4<f32>(color, 1.0);
       }
     `;
@@ -231,6 +215,35 @@ export class HeroPass {
     if (!this.device || !this.pipeline) return;
     this.updateShapes(registry);
 
+    // Calculate Chain Reaction Momentum
+    this.shapes.forEach(s => { s.momentum = 0; s.parentIdx = -1; });
+    if (registry.systemBusy && (registry.heartbeatIntensity || 0) > 0.6) {
+      const center = { x: 0.5, y: 0.5 };
+      // Level 1: Core to Shapes
+      this.shapes.forEach((s, idx) => {
+        const d = Math.hypot(s.x - center.x, s.y - center.y);
+        if (d < 0.35 && s.opacity > 0.3) {
+          s.momentum = 1.0;
+          s.parentIdx = Math.floor(Math.random() * 6); // Pick random thinking light
+        }
+      });
+      // Level 2+: Shape to Shape
+      for (let j = 0; j < 2; j++) {
+        this.shapes.forEach((s1, i) => {
+          if (s1.momentum > 0) return;
+          this.shapes.forEach((s2, k) => {
+            if (s2.momentum === 0 || i === k) return;
+            const d = Math.hypot(s1.x - s2.x, s1.y - s2.y);
+            const threshold = 0.2 + (s2.momentum * 0.1); // Area of influence grows
+            if (d < threshold && s1.opacity > 0.3) {
+              s1.momentum = s2.momentum + 1.0;
+              s1.parentIdx = k + 10;
+            }
+          });
+        });
+      }
+    }
+
     // Update Busy Intensity
     this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
     const lerpSpeed = 0.05;
@@ -248,14 +261,15 @@ export class HeroPass {
 
     for (let i = 0; i < 8; i++) {
       const offset = 8 + (i * 8);
-      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], size: 0.1 };
+      const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -1 };
       data[offset] = s.x;
       data[offset + 1] = s.y;
       data[offset + 2] = s.opacity || 0;
+      data[offset + 3] = s.momentum || 0;
       data[offset + 4] = s.color[0];
       data[offset + 5] = s.color[1];
       data[offset + 6] = s.color[2];
-      data[offset + 7] = s.size;
+      data[offset + 7] = s.parentIdx;
     }
 
     this.device.queue.writeBuffer(this.uniformBuffer, 0, data);
