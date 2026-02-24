@@ -453,7 +453,9 @@ export class UISystem {
     const now = registry.time;
     const isAtTop = window.scrollY === 0;
     const isOverlayActive = this.overlay && this.overlay.classList.contains('active');
+    registry.isOverlayActive = isOverlayActive;
     const isChatActive = document.getElementById('chat-container')?.classList.contains('active');
+    if (isChatActive) registry.isOverlayActive = true;
     
     // 1. Scroll Indicator Logic
     if (this.scrollIndicator) {

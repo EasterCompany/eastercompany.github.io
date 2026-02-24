@@ -8,7 +8,7 @@ export class HeroPass {
     this.shapes = [];
     this.maxShapes = 8;
 
-    // --- Curated "Highland" Scripts ---
+    // --- Curated \"Highland\" Scripts ---
     this.scripts = [
       {
         name: "The Great Highland",
@@ -56,6 +56,8 @@ export class HeroPass {
 
     this.busyIntensity = 0;
     this.targetBusyIntensity = 0;
+    this.uiIntensity = 0;
+    this.targetUIIntensity = 0;
   }
 
   async init(device, format, registry) {
@@ -82,6 +84,10 @@ export class HeroPass {
         mouse: vec2<f32>,
         busy_intensity: f32,
         heartbeat: f32,
+        ui_intensity: f32,
+        p1: f32,
+        p2: f32,
+        p3: f32,
         shapes: array<Shape, 8>,
       };
       
@@ -125,16 +131,20 @@ export class HeroPass {
         let aspect = uniforms.width / uniforms.height;
         let busy = uniforms.busy_intensity;
         let hb = uniforms.heartbeat;
+        let ui = uniforms.ui_intensity;
         let center = vec2<f32>(0.5, 0.5);
         let mask = u32(uniforms.active_mask);
         
-        // 1. Fog Layer
-        var fog = 0.0;
-        fog += noise(uv * 3.0 + t * 0.05) * 0.6;
-        fog += noise(uv * 6.0 - t * 0.02) * 0.3;
+        // 1. Fog Layer (Organic Smoke)
+        var fog_noise = 0.0;
+        fog_noise += noise(uv * 3.0 + t * 0.05) * 0.6;
+        fog_noise += noise(uv * 6.0 - t * 0.02) * 0.3;
         
-        // 2. Base Darkness
+        // 2. Base Darkness and Smoke Glow
         var color = vec3<f32>(0.01, 0.01, 0.02);
+        let smoke_intensity = 0.05 + (ui * 0.15); // Persistent on homepage, stronger in UI
+        let smoke_color = vec3<f32>(0.05, 0.07, 0.1) * fog_noise * smoke_intensity;
+        color += smoke_color;
         
         // 3. Neural Root Nodes (Central Circle)
         for (var j = 0; j < 6; j++) {
@@ -193,11 +203,11 @@ export class HeroPass {
             // Smoother \"flash\" activation
             let activation = clamp((hb - 0.1) * 1.5, 0.0, 1.0);
             
-            color += s.color * (bond_core + bond_glow * surge) * activation * (8.0 + s.momentum * 8.0) * busy;
+            color += s.color * (bond_core + bond_glow * surge) * activation * (6.0 + s.momentum * 6.0) * busy;
           }
         }
         
-        color = mix(color, color * 0.3, fog);
+        color = mix(color, color * 0.3, fog_noise);
         let edge_dist = distance(uv, vec2<f32>(0.5));
         color *= (1.0 - edge_dist * 0.7);
         return vec4<f32>(color, 1.0);
@@ -217,7 +227,7 @@ export class HeroPass {
     });
 
     this.uniformBuffer = this.device.createBuffer({
-      size: 416, 
+      size: 432, 
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
 
@@ -237,8 +247,6 @@ export class HeroPass {
     
     if (registry.systemBusy && (registry.heartbeatIntensity || 0) > 0.1) {
       const center = { x: 0.5, y: 0.5 };
-      
-      // Level 1: Core to Shapes
       this.shapes.forEach((s, idx) => {
         const d = Math.hypot(s.x - center.x, s.y - center.y);
         if (d < 0.45 && s.opacity > 0.3) {
@@ -248,8 +256,6 @@ export class HeroPass {
           activeMask |= (1 << lightIdx);
         }
       });
-
-      // Level 2+: Shape to Shape
       for (let j = 0; j < 3; j++) {
         this.shapes.forEach((s1, i) => {
           if (s1.momentum > 0) return;
@@ -266,12 +272,14 @@ export class HeroPass {
       }
     }
 
-    // Update Busy Intensity
+    // Update Intensities
     this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
-    const lerpSpeed = 0.05;
-    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
+    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * 0.05;
+    
+    this.targetUIIntensity = registry.isOverlayActive ? 1.0 : 0.0;
+    this.uiIntensity += (this.targetUIIntensity - this.uiIntensity) * 0.05;
 
-    const data = new Float32Array(416 / 4);
+    const data = new Float32Array(432 / 4);
     data[0] = registry.time;
     data[1] = registry.screen.width;
     data[2] = registry.screen.height;
@@ -280,9 +288,10 @@ export class HeroPass {
     data[5] = registry.input.mouse[1];
     data[6] = this.busyIntensity;
     data[7] = registry.heartbeatIntensity || 0;
+    data[8] = this.uiIntensity;
 
     for (let i = 0; i < 8; i++) {
-      const offset = 8 + (i * 12);
+      const offset = 12 + (i * 12);
       const s = this.shapes[i] || { x: -5, y: -5, opacity: 0, color: [0,0,0], momentum: 0, parentIdx: -1, size: 0.1 };
       data[offset] = s.x;
       data[offset + 1] = s.y;
@@ -305,10 +314,10 @@ export class HeroPass {
     this.updateShapes(registry);
     const { width, height } = registry.screen;
 
-    // Update Busy Intensity
     this.targetBusyIntensity = registry.systemBusy ? 1.0 : 0.0;
-    const lerpSpeed = 0.05;
-    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * lerpSpeed;
+    this.busyIntensity += (this.targetBusyIntensity - this.busyIntensity) * 0.05;
+    this.targetUIIntensity = registry.isOverlayActive ? 1.0 : 0.0;
+    this.uiIntensity += (this.targetUIIntensity - this.uiIntensity) * 0.05;
 
     ctx.fillStyle = "#050507";
     ctx.fillRect(0, 0, width, height);
@@ -326,28 +335,22 @@ export class HeroPass {
         const angle = j * 1.047 + t * 0.5;
         const lx = center.x + Math.cos(angle) * clusterRadius;
         const ly = center.y + Math.sin(angle) * clusterRadius;
-        
         let flicker = hb * 0.8 + 0.2;
-
         const size = 100 * this.busyIntensity * flicker;
         const grad = ctx.createRadialGradient(lx, ly, 0, lx, ly, size);
         const r = Math.round(Math.abs(Math.sin(j * 1.2)) * 255);
         const g = Math.round(Math.abs(Math.cos(j * 0.8)) * 255);
         const b = Math.round(Math.abs(Math.sin(j * 2.5)) * 255);
-        
         grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.3 * this.busyIntensity})`);
         grad.addColorStop(1, "rgba(0,0,0,0)");
-        
         ctx.fillStyle = grad;
         ctx.fillRect(lx - size, ly - size, size * 2, size * 2);
 
-        // Bonds to shapes
         if (hb > 0.1) {
           this.shapes.forEach((s, i) => {
             if (s.parentIdx !== j && s.parentIdx !== (i + 10)) return; 
             const sx = s.x * width;
             const sy = (1.0 - s.y) * height;
-            
             ctx.beginPath();
             ctx.moveTo(lx, ly);
             ctx.lineTo(sx, sy);
@@ -363,17 +366,14 @@ export class HeroPass {
       const x = s.x * width;
       const y = (1.0 - s.y) * height;
       const size = (s.size || 1.0) * 1000;
-      
       const sGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
       const c = s.color;
       const alpha = 0.12 * (s.opacity || 0);
       sGrad.addColorStop(0, `rgba(${c[0]*255}, ${c[1]*255}, ${c[2]*255}, ${alpha})`); 
       sGrad.addColorStop(1, "rgba(0,0,0,0)");
-      
       ctx.fillStyle = sGrad;
       ctx.fillRect(x - size, y - size, size * 2, size * 2);
     }
-    
     ctx.globalCompositeOperation = "source-over";
   }
 
