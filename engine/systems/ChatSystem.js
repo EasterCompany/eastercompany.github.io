@@ -140,6 +140,7 @@ export class ChatSystem {
     console.log(`ChatSystem: Initializing session ${this.sessionId}`);
     this.syncOptions().then(() => {
       this.setupObfuscation();
+      this.setupClickToCopy();
     });
     this.startNetworkStatusSync();
     
@@ -169,6 +170,34 @@ export class ChatSystem {
 
       item.addEventListener('mouseenter', reveal);
       item.addEventListener('mouseleave', scramble);
+    });
+  }
+
+  setupClickToCopy() {
+    const inputs = document.querySelectorAll('.settings-input[readonly], .settings-select:disabled');
+    inputs.forEach(input => {
+      input.style.cursor = 'copy';
+      input.title = 'Click to copy';
+
+      input.addEventListener('click', async (e) => {
+        const valueToCopy = input.dataset.realValue || input.value;
+        if (!valueToCopy || valueToCopy === '...') return;
+
+        try {
+          await navigator.clipboard.writeText(valueToCopy);
+          
+          // Visual Feedback
+          const originalBg = input.style.background;
+          input.style.background = 'rgba(0, 243, 255, 0.2)';
+          setTimeout(() => {
+            input.style.background = originalBg;
+          }, 200);
+          
+          console.log(`ChatSystem: Copied value to clipboard.`);
+        } catch (err) {
+          console.error('ChatSystem: Failed to copy text: ', err);
+        }
+      });
     });
   }
 
