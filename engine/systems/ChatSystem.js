@@ -822,19 +822,19 @@ export class ChatSystem {
     if (host === 'easter.company' || host === 'www.easter.company') {
       this.apiUrl = 'https://dashboard.easter.company';
       this.wsUrl = 'wss://dashboard.easter.company/ws';
-      this.eventServiceUrl = 'https://dashboard.easter.company'; 
+      this.eventServiceUrl = 'https://event.easter.company'; 
     } else if (host === '100.100.1.0' || host === 'easter-server') {
-      this.apiUrl = 'http://easter-us-3:8200';
-      this.wsUrl = 'ws://easter-us-3:8200/ws';
-      this.eventServiceUrl = 'http://easter-us-3:8200'; 
+      this.apiUrl = 'http://100.100.1.3:8200';
+      this.wsUrl = 'ws://100.100.1.3:8200/ws';
+      this.eventServiceUrl = 'http://100.100.1.0:8100'; 
     } else if (host === '100.100.1.3' || host === 'easter-us-3') {
       this.apiUrl = 'http://127.0.0.1:8200';
       this.wsUrl = 'ws://127.0.0.1:8200/ws';
-      this.eventServiceUrl = 'http://127.0.0.1:8200';
+      this.eventServiceUrl = 'http://100.100.1.0:8100';
     } else {
       this.apiUrl = `${protocol}//${host}:8200`;
       this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
-      this.eventServiceUrl = `${protocol}//${host}:8200`;
+      this.eventServiceUrl = `${protocol}//${host}:8100`;
     }
   }
 
