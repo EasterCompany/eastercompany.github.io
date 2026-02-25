@@ -827,23 +827,48 @@ export class ChatSystem {
   resolveUrls() {
     const host = window.location.hostname;
     const protocol = window.location.protocol;
+    const isSecure = protocol === 'https:';
     
+    // 1. Production Domain Strategy
     if (host === 'easter.company' || host === 'www.easter.company') {
       this.apiUrl = 'https://dashboard.easter.company';
       this.wsUrl = 'wss://dashboard.easter.company/ws';
       this.eventServiceUrl = 'https://event.easter.company'; 
-    } else if (host === '100.100.1.0' || host === 'easter-server') {
-      this.apiUrl = 'http://100.100.1.3:8200';
-      this.wsUrl = 'ws://100.100.1.3:8200/ws';
-      this.eventServiceUrl = 'http://100.100.1.0:8100'; 
+      return;
+    }
+
+    // 2. Efficient Resolution Strategy
+    // Default to the current host but correct ports for each service
+    let apiHost = host;
+    let eventHost = host;
+
+    // Special Case: Master/Dashboard Split
+    // If we are at the master node (100.100.1.0), the dashboard is usually on 100.100.1.3
+    if (host === '100.100.1.0' || host === 'easter-server' || host === '127.0.0.1' || host === 'localhost') {
+      apiHost = '100.100.1.3';
+      // If we are literally on the master machine, event is local
+      if (host === '127.0.0.1' || host === 'localhost') {
+        eventHost = '127.0.0.1';
+      } else {
+        eventHost = '100.100.1.0';
+      }
     } else if (host === '100.100.1.3' || host === 'easter-us-3') {
-      this.apiUrl = 'http://127.0.0.1:8200';
-      this.wsUrl = 'ws://127.0.0.1:8200/ws';
-      this.eventServiceUrl = 'http://100.100.1.0:8100';
-    } else {
-      this.apiUrl = `${protocol}//${host}:8200`;
-      this.wsUrl = (protocol === 'https:' ? 'wss:' : 'ws:') + `//${host}:8200/ws`;
-      this.eventServiceUrl = `${protocol}//${host}:8100`;
+      // If we are at the dashboard node, API is local, event is on master
+      apiHost = '127.0.0.1';
+      eventHost = '100.100.1.0';
+    }
+
+    this.apiUrl = `http://${apiHost}:8200`;
+    this.wsUrl = (isSecure ? 'wss:' : 'ws:') + `//${apiHost}:8200/ws`;
+    this.eventServiceUrl = `http://${eventHost}:8100`;
+    
+    // Final check: if we are using an IP that looks like LAN (192.168 or 10.), 
+    // we should trust it for the current machine at least.
+    if (host.startsWith('192.168.') || host.startsWith('10.')) {
+      // If the user accessed the frontend via LAN, try to use LAN for services on the same machine
+      if (eventHost === '100.100.1.0' || eventHost === 'easter-server') {
+        // We don't know the server's LAN IP yet, so we stay on Tailscale for cross-node
+      }
     }
   }
 
