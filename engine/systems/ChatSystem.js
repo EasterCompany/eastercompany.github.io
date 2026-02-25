@@ -838,20 +838,29 @@ export class ChatSystem {
     }
 
     // 2. Cluster Awareness Resolution Strategy
+    // Default targets (Tailscale IPs)
     let apiHost = '100.100.1.3';
     let eventHost = '100.100.1.0';
 
+    // If using machine names, prefer machine names for sub-services
+    const isUsingMachineName = !/^[0-9.]+$/.test(host) && host !== 'localhost';
+
+    if (isUsingMachineName) {
+      apiHost = 'easter-us-3';
+      eventHost = 'easter-server';
+    }
+
     // Local override if literally on the cluster machine
     if (host === '127.0.0.1' || host === 'localhost' || host === '::1') {
-      apiHost = '100.100.1.3'; // Dashboard is usually remote from master
+      apiHost = isUsingMachineName ? 'easter-us-3' : '100.100.1.3';
       eventHost = '127.0.0.1';
     } else if (host === '100.100.1.3' || host === 'easter-us-3') {
       apiHost = '127.0.0.1';
-      eventHost = '100.100.1.0';
+      eventHost = isUsingMachineName ? 'easter-server' : '100.100.1.0';
     } else if (host === '100.100.1.0' || host === 'easter-server') {
-      apiHost = '100.100.1.3';
+      apiHost = isUsingMachineName ? 'easter-us-3' : '100.100.1.3';
       eventHost = '127.0.0.1';
-    } else if (!host.startsWith('100.100.') && !host.includes('easter-us-') && !host.includes('easter-server')) {
+    } else if (!host.startsWith('100.100.') && !isUsingMachineName) {
       // If we are NOT on the Tailscale network (e.g. LAN or public), fallback to current hostname
       apiHost = host;
       eventHost = host;
