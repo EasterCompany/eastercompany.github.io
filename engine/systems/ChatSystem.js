@@ -241,21 +241,12 @@ export class ChatSystem {
   }
 
   async fetchNetworkStatus() {
-    // Don't fetch if settings window isn't active to save resources? 
-    // Actually, user might open it anytime, and it's small payload.
-    
     const urls = [
-      "https://dashboard.easter.company/system/network",
+      `${this.apiUrl}/system/network`,
       `${this.eventServiceUrl}/system/network`
     ];
 
-    // Priority based on location (same as syncOptions)
-    const isTailscale = window.location.hostname.startsWith('100.100.') || 
-                        window.location.hostname === 'easter-server' ||
-                        window.location.hostname === 'easter-us-3';
-    const prioritizedUrls = isTailscale ? [urls[1], urls[0]] : [urls[0], urls[1]];
-
-    for (const url of prioritizedUrls) {
+    for (const url of urls) {
       try {
         const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
         if (!response.ok) continue;
@@ -273,21 +264,25 @@ export class ChatSystem {
 
   async fetchServiceStatus() {
     const urls = [
-      "https://dashboard.easter.company/system/services",
+      `${this.apiUrl}/system/services`,
       `${this.eventServiceUrl}/system/services`
     ];
 
-    const isTailscale = window.location.hostname.startsWith('100.100.') || 
-                        window.location.hostname === 'easter-server' ||
-                        window.location.hostname === 'easter-us-3';
-    const prioritizedUrls = isTailscale ? [urls[1], urls[0]] : [urls[0], urls[1]];
-
-    for (const url of prioritizedUrls) {
+    for (const url of urls) {
       try {
         const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
         if (!response.ok) continue;
         
         const data = await response.json();
+        if (data && data.services) {
+          this.renderServiceStatus(data.services);
+          return;
+        }
+      } catch (err) {
+        // Silently fail per-URL
+      }
+    }
+  }
         if (data && data.services) {
           this.renderServiceStatus(data.services);
           return;
@@ -379,14 +374,10 @@ export class ChatSystem {
       }
     }
 
-    const prodUrl = "https://dashboard.easter.company/system/options";
-    const localUrl = `${this.eventServiceUrl}/system/options`;
-    
-    // Dynamic Prioritization: If we are on 100.100.x.y, easter-server, or easter-us-3, try local URL first.
-    const isTailscale = window.location.hostname.startsWith('100.100.') || 
-                        window.location.hostname === 'easter-server' ||
-                        window.location.hostname === 'easter-us-3';
-    const urls = isTailscale ? [localUrl, prodUrl] : [prodUrl, localUrl];
+    const urls = [
+      `${this.apiUrl}/system/options`,
+      `${this.eventServiceUrl}/system/options`
+    ];
 
     for (const url of urls) {
       try {
