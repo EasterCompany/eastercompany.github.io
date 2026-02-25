@@ -866,9 +866,9 @@ export class ChatSystem {
       eventHost = host;
     }
 
-    this.apiUrl = `http://${apiHost}:8200`;
-    this.wsUrl = (isSecure ? 'wss:' : 'ws:') + `//${apiHost}:8200/ws`;
-    this.eventServiceUrl = `http://${eventHost}:8100`;
+    this.apiUrl = `http://${apiHost}:24200`;
+    this.wsUrl = (isSecure ? 'wss:' : 'ws:') + `//${apiHost}:24200/ws`;
+    this.eventServiceUrl = `http://${eventHost}:24100`;
   }
 
   toggleChatMode() {
