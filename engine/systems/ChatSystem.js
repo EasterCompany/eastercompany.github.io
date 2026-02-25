@@ -837,39 +837,29 @@ export class ChatSystem {
       return;
     }
 
-    // 2. Efficient Resolution Strategy
-    // Default to the current host but correct ports for each service
-    let apiHost = host;
-    let eventHost = host;
+    // 2. Cluster Awareness Resolution Strategy
+    let apiHost = '100.100.1.3';
+    let eventHost = '100.100.1.0';
 
-    // Special Case: Master/Dashboard Split
-    // If we are at the master node (100.100.1.0), the dashboard is usually on 100.100.1.3
-    if (host === '100.100.1.0' || host === 'easter-server' || host === '127.0.0.1' || host === 'localhost') {
-      apiHost = '100.100.1.3';
-      // If we are literally on the master machine, event is local
-      if (host === '127.0.0.1' || host === 'localhost') {
-        eventHost = '127.0.0.1';
-      } else {
-        eventHost = '100.100.1.0';
-      }
+    // Local override if literally on the cluster machine
+    if (host === '127.0.0.1' || host === 'localhost' || host === '::1') {
+      apiHost = '100.100.1.3'; // Dashboard is usually remote from master
+      eventHost = '127.0.0.1';
     } else if (host === '100.100.1.3' || host === 'easter-us-3') {
-      // If we are at the dashboard node, API is local, event is on master
       apiHost = '127.0.0.1';
       eventHost = '100.100.1.0';
+    } else if (host === '100.100.1.0' || host === 'easter-server') {
+      apiHost = '100.100.1.3';
+      eventHost = '127.0.0.1';
+    } else if (!host.startsWith('100.100.') && !host.includes('easter-us-') && !host.includes('easter-server')) {
+      // If we are NOT on the Tailscale network (e.g. LAN or public), fallback to current hostname
+      apiHost = host;
+      eventHost = host;
     }
 
     this.apiUrl = `http://${apiHost}:8200`;
     this.wsUrl = (isSecure ? 'wss:' : 'ws:') + `//${apiHost}:8200/ws`;
     this.eventServiceUrl = `http://${eventHost}:8100`;
-    
-    // Final check: if we are using an IP that looks like LAN (192.168 or 10.), 
-    // we should trust it for the current machine at least.
-    if (host.startsWith('192.168.') || host.startsWith('10.')) {
-      // If the user accessed the frontend via LAN, try to use LAN for services on the same machine
-      if (eventHost === '100.100.1.0' || eventHost === 'easter-server') {
-        // We don't know the server's LAN IP yet, so we stay on Tailscale for cross-node
-      }
-    }
   }
 
   toggleChatMode() {
@@ -1200,8 +1190,17 @@ export class ChatSystem {
 
   async handleSlashCommand(text, messageId) {
     const parts = text.substring(1).split(' ');
-    const command = parts[0];
+    const command = parts[0].toLowerCase();
     const args = parts.slice(1);
+
+    // 0. Handle Virtual Frontend Commands
+    if (command === 'clear') {
+      if (this.historyEl) {
+        this.historyEl.innerHTML = '';
+        this.addMessage('system', 'System', 'Visual history cleared.', null, true);
+      }
+      return;
+    }
 
     this.addMessage('user', 'You', text, messageId);
     this.setProcessing(true);
