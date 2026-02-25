@@ -853,22 +853,22 @@ export class ChatSystem {
     // Local override if literally on the cluster machine
     if (host === '127.0.0.1' || host === 'localhost' || host === '::1') {
       apiHost = isUsingMachineName ? 'easter-us-3' : '100.100.1.3';
-      eventHost = '127.0.0.1';
+      eventHost = host;
     } else if (host === '100.100.1.3' || host === 'easter-us-3') {
-      apiHost = '127.0.0.1';
+      apiHost = host;
       eventHost = isUsingMachineName ? 'easter-server' : '100.100.1.0';
     } else if (host === '100.100.1.0' || host === 'easter-server') {
       apiHost = isUsingMachineName ? 'easter-us-3' : '100.100.1.3';
-      eventHost = '127.0.0.1';
+      eventHost = host;
     } else if (!host.startsWith('100.100.') && !isUsingMachineName) {
       // If we are NOT on the Tailscale network (e.g. LAN or public), fallback to current hostname
       apiHost = host;
       eventHost = host;
     }
 
-    this.apiUrl = `http://${apiHost}:24200`;
-    this.wsUrl = (isSecure ? 'wss:' : 'ws:') + `//${apiHost}:24200/ws`;
-    this.eventServiceUrl = `http://${eventHost}:24100`;
+    this.apiUrl = `https://${apiHost}:25200`;
+    this.wsUrl = `wss://${apiHost}:25200/ws`;
+    this.eventServiceUrl = `https://${eventHost}:25100`;
   }
 
   toggleChatMode() {
