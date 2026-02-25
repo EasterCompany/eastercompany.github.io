@@ -815,7 +815,7 @@ export class ChatSystem {
     if (host === 'easter.company' || host === 'www.easter.company') {
       this.apiUrl = 'https://dashboard.easter.company';
       this.wsUrl = 'wss://dashboard.easter.company/ws';
-      this.eventServiceUrl = 'https://event.easter.company'; 
+      this.eventServiceUrl = 'https://dashboard.easter.company'; 
       return;
     }
 
