@@ -244,7 +244,7 @@ export class ChatSystem {
     // Network status is authoritative on the event service
     const url = `${this.eventServiceUrl}/system/network`;
     try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+      const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!response.ok) return;
       
       const data = await response.json();
@@ -260,7 +260,7 @@ export class ChatSystem {
     // Service status is authoritative on the event service
     const url = `${this.eventServiceUrl}/system/services`;
     try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!response.ok) return;
       
       const data = await response.json();
