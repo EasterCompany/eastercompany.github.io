@@ -232,55 +232,43 @@ export class ChatSystem {
     this.fetchServiceStatus();
     this.syncProcessState();
     
-    // Refresh every 10 seconds
+    // Refresh every 20 seconds
     setInterval(() => {
       this.fetchNetworkStatus();
       this.fetchServiceStatus();
       this.syncProcessState();
-    }, 10000);
+    }, 20000);
   }
 
   async fetchNetworkStatus() {
-    const urls = [
-      `${this.apiUrl}/system/network`,
-      `${this.eventServiceUrl}/system/network`
-    ];
-
-    for (const url of urls) {
-      try {
-        const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
-        if (!response.ok) continue;
-        
-        const data = await response.json();
-        if (data && data.nodes) {
-          this.renderNetworkStatus(data.nodes);
-          return;
-        }
-      } catch (err) {
-        // Silently fail per-URL
+    // Network status is authoritative on the event service
+    const url = `${this.eventServiceUrl}/system/network`;
+    try {
+      const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+      if (!response.ok) return;
+      
+      const data = await response.json();
+      if (data && data.nodes) {
+        this.renderNetworkStatus(data.nodes);
       }
+    } catch (err) {
+      // Silently fail
     }
   }
 
   async fetchServiceStatus() {
-    const urls = [
-      `${this.apiUrl}/system/services`,
-      `${this.eventServiceUrl}/system/services`
-    ];
-
-    for (const url of urls) {
-      try {
-        const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
-        if (!response.ok) continue;
-        
-        const data = await response.json();
-        if (data && data.services) {
-          this.renderServiceStatus(data.services);
-          return;
-        }
-      } catch (err) {
-        // Silently fail per-URL
+    // Service status is authoritative on the event service
+    const url = `${this.eventServiceUrl}/system/services`;
+    try {
+      const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (!response.ok) return;
+      
+      const data = await response.json();
+      if (data && data.services) {
+        this.renderServiceStatus(data.services);
       }
+    } catch (err) {
+      // Silently fail
     }
   }
 
@@ -365,21 +353,15 @@ export class ChatSystem {
       }
     }
 
-    const urls = [
-      `${this.apiUrl}/system/options`,
-      `${this.eventServiceUrl}/system/options`
-    ];
-
-    for (const url of urls) {
-      try {
-        console.log(`ChatSystem: Attempting to sync options from ${url}`);
-        const response = await fetch(url, { signal: AbortSignal.timeout(3000) }); // 3s timeout per attempt
-        
-        if (!response.ok) {
-          console.warn(`ChatSystem: Failed to fetch options from ${url} (Status: ${response.status})`);
-          continue;
-        }
-        
+    // Options are authoritative on the event service
+    const url = `${this.eventServiceUrl}/system/options`;
+    try {
+      console.log(`ChatSystem: Attempting to sync options from ${url}`);
+      const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      
+      if (!response.ok) {
+        console.warn(`ChatSystem: Failed to fetch options from ${url} (Status: ${response.status})`);
+      } else {
         const data = await response.json();
         const discord = data["dex-discord-service"]?.options;
         
@@ -395,11 +377,11 @@ export class ChatSystem {
           console.log(`ChatSystem: Discord options synchronized from ${url}`);
           return; // Success!
         }
-      } catch (err) {
-        console.warn(`ChatSystem: Error syncing from ${url}:`, err.message);
       }
+    } catch (err) {
+      console.warn(`ChatSystem: Error syncing from ${url}:`, err.message);
     }
-    console.error("ChatSystem: Failed to sync options from all available sources.");
+    console.error("ChatSystem: Failed to sync options from authoritative source.");
   }
 
   applyOptionsToUI(data) {
