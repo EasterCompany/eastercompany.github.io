@@ -283,15 +283,6 @@ export class ChatSystem {
       }
     }
   }
-        if (data && data.services) {
-          this.renderServiceStatus(data.services);
-          return;
-        }
-      } catch (err) {
-        // Silently fail per-URL
-      }
-    }
-  }
 
   renderServiceStatus(services) {
     const body = document.getElementById('service-status-body');
