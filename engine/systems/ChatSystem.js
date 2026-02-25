@@ -869,6 +869,14 @@ export class ChatSystem {
     this.apiUrl = `https://${apiHost}:25200`;
     this.wsUrl = `wss://${apiHost}:25200/ws`;
     this.eventServiceUrl = `https://${eventHost}:25100`;
+
+    // 3. BFF Proxy Strategy (Prefer relative paths for local/VPN to avoid cert issues)
+    if (host !== 'easter.company' && host !== 'www.easter.company') {
+      console.log("ChatSystem: Cluster mode detected, using BFF Proxy paths.");
+      this.apiUrl = window.location.origin + '/api/dashboard';
+      this.wsUrl = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/api/dashboard/ws';
+      this.eventServiceUrl = window.location.origin + '/api/event';
+    }
   }
 
   toggleChatMode() {
