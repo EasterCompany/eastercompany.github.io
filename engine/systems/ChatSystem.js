@@ -841,6 +841,10 @@ export class ChatSystem {
       this.wsUrl = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/api/dashboard/ws';
       this.eventServiceUrl = window.location.origin + '/api/event';
     }
+
+    console.log(`ChatSystem: API URL: ${this.apiUrl}`);
+    console.log(`ChatSystem: WS URL: ${this.wsUrl}`);
+    console.log(`ChatSystem: Event URL: ${this.eventServiceUrl}`);
   }
 
   toggleChatMode() {
