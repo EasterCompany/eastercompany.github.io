@@ -793,14 +793,6 @@ export class ChatSystem {
     const protocol = window.location.protocol;
     const isSecure = protocol === 'https:';
     
-    // 1. Production Domain Strategy
-    if (host === 'easter.company' || host === 'www.easter.company') {
-      this.apiUrl = 'https://dashboard.easter.company';
-      this.wsUrl = 'wss://dashboard.easter.company/ws';
-      this.eventServiceUrl = 'https://dashboard.easter.company'; 
-      return;
-    }
-
     // 2. Cluster Awareness Resolution Strategy
     // Default targets (Tailscale IPs)
     let apiHost = '100.100.1.3';
@@ -830,17 +822,13 @@ export class ChatSystem {
       eventHost = host;
     }
 
-    this.apiUrl = `https://${apiHost}:25200`;
-    this.wsUrl = `wss://${apiHost}:25200/ws`;
-    this.eventServiceUrl = `https://${eventHost}:25100`;
-
-    // 3. BFF Proxy Strategy (Prefer relative paths for local/VPN to avoid cert issues)
-    if (host !== 'easter.company' && host !== 'www.easter.company') {
-      console.log("ChatSystem: Cluster mode detected, using BFF Proxy paths.");
-      this.apiUrl = window.location.origin + '/api/dashboard';
-      this.wsUrl = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/api/dashboard/ws';
-      this.eventServiceUrl = window.location.origin + '/api/event';
-    }
+    // 3. BFF Proxy Strategy (Universal Gateway Routing)
+    // Always use relative paths when behind the centralized Dexter Gateway.
+    // This removes the need for hardcoded addresses and supports dynamic service migration.
+    console.log("ChatSystem: Cluster mode detected, using BFF Proxy paths.");
+    this.apiUrl = window.location.origin + '/api/dashboard';
+    this.wsUrl = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/api/dashboard/ws';
+    this.eventServiceUrl = window.location.origin + '/api/event';
 
     console.log(`ChatSystem: API URL: ${this.apiUrl}`);
     console.log(`ChatSystem: WS URL: ${this.wsUrl}`);
