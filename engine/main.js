@@ -15,10 +15,10 @@ if (buildHash) {
   localStorage.setItem('dex_build_hash', buildHash);
 }
 
-import { Engine } from './core/Engine.js?h=1772207280';
-import { RenderSystem } from './systems/RenderSystem.js?h=1772207280';
-import { UISystem } from './systems/UISystem.js?h=1772207280';
-import { ChatSystem } from './systems/ChatSystem.js?h=1772207280';
+import { Engine } from './core/Engine.js?h=1772208111';
+import { RenderSystem } from './systems/RenderSystem.js?h=1772208111';
+import { UISystem } from './systems/UISystem.js?h=1772208111';
+import { ChatSystem } from './systems/ChatSystem.js?h=1772208111';
 
 // Initialize the Engine
 const engine = new Engine('hero-canvas');
