@@ -1,11 +1,7 @@
 /* Local Font Definitions */
 
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  src: url('/static/assets/fonts/inter/Inter-Regular.ttf') format('truetype'); /* We will need to ensure this file exists */
-}
+/* Inter is removed as a local asset to prevent decoding errors. 
+   We use the system stack in the main CSS. */
 
 @font-face {
   font-family: 'Poppins';
