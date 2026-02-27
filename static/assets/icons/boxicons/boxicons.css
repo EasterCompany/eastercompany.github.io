@@ -1,0 +1,33 @@
+@font-face {
+  font-family: 'boxicons';
+  font-weight: 400;
+  font-style: normal;
+  src: url('boxicons.woff2') format('woff2'),
+       url('boxicons.woff') format('woff'),
+       url('boxicons.ttf') format('truetype');
+}
+
+.bx {
+  font-family: 'boxicons' !important;
+  font-weight: 400;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+  display: inline-block;
+  text-transform: none;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bx-shopping-bag:before { content: "\ec0b"; }
+.bx-user:before { content: "\ec63"; }
+.bx-cog:before { content: "\ec8c"; }
+.bx-x:before { content: "\ec8d"; }
+.bx-smile:before { content: "\ec19"; }
+.bx-send:before { content: "\ebfc"; }
+.bx-stop-circle:before { content: "\ec2c"; }
+.bx-message-square-detail:before { content: "\eb49"; }
+
+/* Minimal set for now, the bundler will handle the rest if we import full CSS */

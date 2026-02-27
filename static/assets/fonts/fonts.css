@@ -1,0 +1,22 @@
+/* Local Font Definitions */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/static/assets/fonts/inter/Inter-Regular.ttf') format('truetype'); /* We will need to ensure this file exists */
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 800;
+  src: url('/static/assets/fonts/poppins/Poppins-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/static/assets/fonts/jetbrains-mono/JetBrainsMono-Regular.ttf') format('truetype');
+}
