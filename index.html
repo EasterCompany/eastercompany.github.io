@@ -159,13 +159,33 @@
         </div>
 
         <div class="eid-form">
-            <input type="password" placeholder="EID OVERRIDE KEY" disabled>
-            <button onclick="alert('EID System Offline. Contact Darwin for Manual Override.')">Initialize Secure Uplink</button>
+            <input type="password" id="eid-input" placeholder="EID OVERRIDE KEY">
+            <button id="eid-submit">Initialize Secure Uplink</button>
         </div>
 
         <div class="footer">
             &copy; 2026 Easter Company | Engineered for the Singularity
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.getElementById('eid-submit').addEventListener('click', function() {
+            const val = document.getElementById('eid-input').value;
+            if(val === '0xDARWIN' || val === 'darwin') {
+                document.querySelector('.status-terminal').innerHTML = '<div class="line"><span class="prompt">></span>EID OVERRIDE ACCEPTED. <span class="success">ACCESS GRANTED</span></div><div class="line"><span class="prompt">></span>DECRYPTING CORE INTELLIGENCE...</div>';
+                setTimeout(() => {
+                    document.querySelector('.terminal-container').style.maxWidth = '90%';
+                    document.querySelector('.terminal-container').innerHTML = '<h1 style="text-align:left; font-size:2rem;">EASTER COMPANY WIKI</h1><div id="wiki-content" style="text-align:left; overflow-y:auto; max-height:70vh; font-family: sans-serif; line-height:1.6; padding-right:20px;">Loading...</div>';
+                    fetch('https://raw.githubusercontent.com/EasterCompany/EasterCompany/main/docs/DEXTER.md')
+                        .then(r => r.text())
+                        .then(text => {
+                            document.getElementById('wiki-content').innerHTML = marked.parse(text);
+                        });
+                }, 1500);
+            } else {
+                alert('EID System Offline. Invalid Override Key.');
+            }
+        });
+    </script>
 </body>
 </html>
