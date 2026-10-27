@@ -1,11 +1,13 @@
-# Easter Company / e-server Cloud
+# Easter Company / e-server
 
 Buildless product site, served from site/. No dependency installation required.
 Serve locally with `python3 -m http.server --directory site 8080`.
 
-The page introduces e-server Cloud, retains the interactive agent-harness render,
+The page introduces e-server,
 explains the four agents and uses accessible tabs for security, network privacy
-and event monitoring. Supplied owner photos and existing renders are preserved.
+and event monitoring. The first screen is the supplied hero loop (site/assets/hero-loop.html)
+behind the hero; the owner photos are preserved. The interactive agent-harness preview that
+used to sit under the hero was removed on 2026-10-27 (docs/agent-product-preview.md).
 
 Beta requests are email-based. The form validates company, work email and use case,
 shows a text-only review and creates an encoded mailto link to the company's

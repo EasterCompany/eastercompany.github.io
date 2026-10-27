@@ -1,6 +1,6 @@
-# e-server Cloud and the agent workspace
+# e-server and the agent workspace
 
-The complete product is e-server Cloud. Customers get an e-server where their
+The complete product is e-server. Customers get an e-server where their
 hosted agents live, run and work; agent-harness is its AI workspace. Dexter runs
 locally on the user’s own machine. The two-week offer remains free AI credits,
 three beta models and a tailored harness; no quota or blanket free-platform

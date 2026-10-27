@@ -45,9 +45,9 @@ GitHub Pages serves https://eastercompany.github.io/. The previous easter.compan
 custom-domain setting was cleared because its DNS points to domain parking.
 DNS was not changed. Noindex/nofollow is retained for review.
 
-## e-server Cloud platform positioning
+## e-server platform positioning
 
-Owen clarified that e-server Cloud is the entire product, with agent-harness as
+Owen clarified that e-server is the entire product, with agent-harness as
 one component. Added a bundle overview and security, network-routing and event
 monitoring sections, each with native HTML/CSS/SVG illustrations. The new primary
 interests are available in the prototype signup and its draft JSON includes the
