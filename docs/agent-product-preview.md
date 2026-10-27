@@ -6,6 +6,15 @@ locally on the user’s own machine. The two-week offer remains free AI credits,
 three beta models and a tailored harness; no quota or blanket free-platform
 entitlement is invented.
 
+**2026-10-27: the interactive preview is gone, and the first screen is the loop.** Owen
+asked for the Agent-harness "Interactive preview" section to be removed and for the hero to
+become a full-screen opening whose background is `Hero Loop.html`. So `#harness`, its
+`.harness-demo` render, the `.render-caption` line and every `demo-*` rule and handler went
+with it (51 dead rules in `styles.css`, 80 in `components.css`, the demo half of
+`site.js`), and `site/assets/hero-loop.html` now plays behind a full-viewport hero. The
+paragraph below is the record of the preview AS IT WAS, kept for the reasoning it holds
+(what was fictional, what was labelled) rather than as a description of the page today.
+
 The six supplied ah0–ah5 screenshots were reviewed. They show a dark inbox,
 agent channels, Epsilon task lists and swarm controls. The marketing render uses
 those visual patterns, existing agent avatars and newly authored HTML/CSS. All

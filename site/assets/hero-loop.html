@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agent Harness – Hero Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0c0c10;--line:#1a1a22;--mut:#8c8c98;--txt:#d6d6de;--pur:#a78bfa;--pur2:#8b5cf6;--cy:#00f0ff}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#04080d;overflow:hidden;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(60% 70% at 20% 20%,#0a2a3a 0%,transparent 60%),radial-gradient(60% 70% at 85% 85%,#1c1340 0%,transparent 60%),#04080d}
+#rig{position:absolute;width:1280px;height:720px;transform-origin:0 0}
+#cam{position:absolute;inset:0;transform-origin:0 0;will-change:transform}
+#desk{position:absolute;inset:-700px;background:linear-gradient(160deg,#03121c,#05202b 55%,#041019)}
+#bar{position:absolute;left:14px;top:6px;width:1252px;height:26px;border:1px solid #0d4c5c;border-radius:6px;background:#04161f;display:flex;align-items:center;font:500 9px ui-monospace,Menlo,monospace;color:#7fb4c0}
+#bar span{width:26px;text-align:center;line-height:22px}#bar .on{background:var(--cy);color:#001418;border-radius:3px}
+#bar em{margin-left:auto;margin-right:16px;font-style:normal;color:#b9e6ee}
+#win{position:absolute;left:8px;top:38px;width:1264px;height:674px;background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 80px rgba(139,92,246,.12)}
+#tb{height:20px;background:#07070a;display:flex;align-items:center;gap:6px;padding:0 8px;font-size:9px;color:var(--txt)}
+#tb i{width:11px;height:11px;border-radius:50%;background:var(--pur2)}#tb u{margin-left:auto;text-decoration:none;letter-spacing:8px;color:#a0a0ac}
+#ah{height:28px;border-bottom:1px solid #17171e;display:flex;align-items:center;padding:0 14px;position:relative}
+#ah .av{width:15px;height:15px;border-radius:50%;background:var(--pur2);color:#fff;font:600 7px Inter;display:grid;place-items:center;margin-right:8px}
+#ah .ct{position:absolute;left:50%;transform:translateX(-50%);text-align:center;font-size:6.5px;line-height:1.3;color:var(--mut)}#ah .ct b{color:#fff;display:block}
+#ah .mn{margin-left:auto;border:1px solid #23232b;border-radius:5px;padding:3px 9px;font-size:8px;color:var(--txt)}
+#body{flex:1;min-height:0;display:flex}
+#side{width:190px;border-right:1px solid #17171e;background:#0d0d11;padding:10px 8px}
+#side h4{margin:0 0 8px 6px;font-size:10px;color:#fff;font-weight:600}
+#side h5{margin:12px 0 6px 6px;font-size:7.5px;color:var(--mut);font-weight:600}
+.ag{display:flex;align-items:center;gap:7px;height:36px;padding:0 6px;border-radius:7px}.ag.sel{background:#17171d}
+.ag .a{position:relative;width:20px;height:20px;border-radius:50%;flex:none}
+.ag .a::after{content:"";position:absolute;right:-2px;bottom:-2px;width:7px;height:7px;border-radius:50%;background:#22c55e;border:1.5px solid #0d0d11}
+.ag.off .a::after{background:#ef4444}.ag.off{opacity:.55}
+.ag b{display:block;font-size:9.5px;color:#ececf1;font-weight:500}.ag small{display:block;font-size:8px;color:var(--mut)}.ag small.w{color:var(--pur)}.ag small.ok{color:#4ade80}
+.cn{display:flex;align-items:center;gap:6px;height:25px;margin-left:16px;padding:0 6px;border-left:1px solid #2c2744;opacity:0;transform:translateX(-6px);transition:opacity .5s,transform .5s}
+.cn.on{opacity:1;transform:none}.cn .a{width:14px;height:14px;border-radius:50%;flex:none}
+.cn.wk .a{animation:cp 1.6s ease-out infinite}@keyframes cp{0%{box-shadow:0 0 0 0 rgba(167,139,250,.6)}70%,100%{box-shadow:0 0 0 5px rgba(167,139,250,0)}}
+.cn b{font-size:8.5px;font-weight:500;color:#dcdce4}.cn small{margin-left:auto;font-size:7.5px;color:var(--mut)}.cn small.w{color:var(--pur)}.cn small.ok{color:#4ade80}
+.r.sp b{color:#c4b5fd}.r.sp svg{color:#a78bfa}
+.pulse::after{animation:pl 1.4s ease-in-out infinite}
+@keyframes pl{50%{box-shadow:0 0 0 4px rgba(34,197,94,.22)}}
+#main{flex:1;display:flex;justify-content:center;padding:0 0 10px}
+#col{width:540px;display:flex;flex-direction:column}
+#feed{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 14%);mask-image:linear-gradient(transparent,#000 14%)}
+.r{display:none;align-items:center;gap:6px;height:27px;flex:none;font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden}
+.r b{color:#d0d0d8;font-weight:500}.r i{font-style:normal;opacity:.6}.r span{overflow:hidden;text-overflow:ellipsis}
+.r svg{width:10px;height:10px;flex:none;color:#a4a4b0}.r u{color:#d8d8e0}
+.r.t{display:none;height:auto;white-space:normal;margin:7px 0;font-size:12px;line-height:1.55;color:#f1f1f5}
+.in{animation:ri .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes ri{from{opacity:0;transform:translateY(10px)}}
+#wk{height:26px;display:flex;align-items:center;gap:6px;font-size:9px;color:var(--mut)}#wk b{color:var(--pur);font-weight:500}
+#cmp{position:relative;height:62px;border-radius:12px;background:#14121d;border:1px solid #24212f;padding:11px 14px}
+#cmp .ph{font-size:11px;color:#757584;white-space:nowrap}#cmp .ph.ty{color:#f1f1f5}
+#cmp .ph.ty::after{content:"";display:inline-block;width:1px;height:11px;background:var(--pur);margin-left:1px;vertical-align:-2px;animation:cb 1s steps(1) infinite}
+@keyframes cb{50%{opacity:0}}
+#cmp .pl{position:absolute;left:8px;bottom:7px;width:15px;height:15px;border-radius:50%;color:#c4c4d0;font-size:12px;line-height:14px;text-align:center}
+#cmp .ef{position:absolute;right:62px;bottom:10px;font-size:8px;color:var(--mut)}#cmp .ef b{color:var(--txt);font-weight:500}
+#cmp .sp{position:absolute;right:42px;bottom:10px;width:10px;height:10px;border-radius:50%;border:1.5px solid #3a3a46;border-top-color:#9a9aa8;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#cmp .st{position:absolute;right:8px;bottom:7px;width:22px;height:22px;border-radius:50%;background:var(--pur2);display:grid;place-items:center;box-shadow:0 0 16px rgba(139,92,246,.55)}
+#cmp .st::after{content:"";width:7px;height:7px;background:#fff;border-radius:1.5px}
+#rp{width:120px;border-left:1px solid #17171e}
+.fx{position:absolute;inset:0;pointer-events:none}
+#shade{background:radial-gradient(120% 100% at 50% 50%,rgba(4,6,12,.1) 40%,rgba(4,6,12,.75) 100%),rgba(4,6,12,.28)}
+#grain{opacity:.07;mix-blend-mode:overlay;animation:gr .5s steps(4) infinite;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px)}
+@keyframes gr{25%{transform:translate(-14px,10px)}50%{transform:translate(12px,-16px)}75%{transform:translate(-8px,-6px)}}
+#flash{background:rgba(200,190,255,.22);opacity:0}
+#dip{background:#04080d;opacity:0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-bash" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5 6.5l2 1.5-2 1.5M8.5 10h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-think" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 4.5l7 7M11.5 4.5l-7 7M8 2v12" stroke="currentColor" stroke-width="1" fill="none"/></symbol>
+<symbol id="i-write" viewBox="0 0 16 16"><path d="M3 13l.6-3L11 2.6a1.4 1.4 0 012 2L5.6 12.4zM9.8 3.8l2 2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+<symbol id="i-spawn" viewBox="0 0 16 16"><circle cx="8" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="3.5" cy="12.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="12.5" cy="12.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M8 4.6v2.4M8 7L4.3 11M8 7l3.7 4" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></symbol>
+<symbol id="i-merge" viewBox="0 0 16 16"><circle cx="3.5" cy="3.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="12.5" cy="3.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="8" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M3.9 5.1L8 9v2.4M12.1 5.1L8 9" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></symbol>
+</defs></svg>
+<div id="stage" aria-hidden="true">
+<div id="rig"><div id="cam">
+<div id="desk"></div>
+<div id="bar"><span style="margin-left:34px">1</span><span class="on">2</span><span>3</span><em>Tue 27 Oct &nbsp; 01:23</em></div>
+<div id="win">
+<div id="tb"><i></i><span id="tbn">Delta — e-server</span><u>– ▢ ✕</u></div>
+<div id="ah"><div class="av">O</div><div class="ct">Agent<b id="hdn">Delta</b></div><div class="mn">Menu</div></div>
+<div id="body">
+<div id="side"><h4>Inbox</h4><div id="ags"></div><h5 id="swh">Swarm · Delta</h5><div id="sw"></div><h5>Agent Channels</h5><div id="chs"></div></div>
+<div id="main"><div id="col"><div id="feed"></div>
+<div id="wk"><b>Working…</b><span id="tm">5m 22s</span></div>
+<div id="cmp"><div class="ph" id="ph">Message the agent</div><div class="pl">+</div><div class="ef">Effort &nbsp;<b>Dynamic ⌄</b></div><div class="sp"></div><div class="st"></div></div>
+</div></div>
+<div id="rp"></div>
+</div></div>
+</div></div>
+<div class="fx" id="shade"></div>
+<svg class="fx" id="grain"><filter id="gf"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0"/></filter><rect width="100%" height="100%" filter="url(#gf)"/></svg>
+<div class="fx" id="flash"></div>
+<div class="fx" id="dip"></div>
+</div>
+<script>
+(function(){
+var D=20,$=function(i){return document.getElementById(i)},rnd=function(n){return Math.floor(Math.random()*n)};
+var AV={delta:"",darwin:"",diana:"",dexter:""};/* image URLs or data: URIs */
+function avBg(id,f){return AV[id]?"url("+AV[id]+") center/cover":f}
+var G=function(a,b){return"radial-gradient(circle at 35% 30%,"+a+","+b+")"};
+var AG=[["delta","Delta",G("#7dd3fc","#6d28d9"),"Epsilon","2h ago"],["darwin","Darwin",G("#5eead4","#0e7490"),"Zeta","3d ago"],["diana","Diana",G("#f9a8d4","#4f46e5"),"Eta","6d ago"],["dexter","Dexter",G("#9ca3af","#374151"),"","Disabled"]];
+var CH=[["ch1","Delta-Darwin",G("#7dd3fc","#0e7490")],["ch2","Delta-Diana",G("#7dd3fc","#4f46e5")],["ch3","Darwin-Diana",G("#5eead4","#4f46e5")]];
+var subs={},els={};
+function item(id,name,bg,x){var d=document.createElement("div");d.className="ag"+x;d.innerHTML='<div class="a" style="background:'+bg+'"></div><div><b>'+name+'</b><small></small></div>';subs[id]=d.querySelector("small");els[id]=d;return d}
+AG.forEach(function(a){$("ags").appendChild(item(a[0],a[1],avBg(a[0],a[2]),a[0]=="dexter"?" off":""))});
+CH.forEach(function(c){$("chs").appendChild(item(c[0],c[1],c[2],""))});
+/* ---- variants ---- */
+var MSG=[
+{n:["auth module","billing module","search module","docs and examples","unit tests","end-to-end suite"],s:["auth","billing","search","docs","tests","e2e"],d:["14 files","9 files","6 files","11 files","conflict resolved","212 tests pass"],
+B:["Map the repo and split work by module","Poll the swarm for status","Rebase the swarm branches onto main","Verify the release candidate","Open release PR #412","Request review from {o}"],
+T:["Six modules are independent — one clone per module should cut wall-clock time by about 5×","Six clones running in isolated worktrees. I’ll take the router and watch for conflicts…","{c4} and {c5} both touched the same fixture. Rebasing the branches and resolving the conflict…","All six branches are green. Merging the swarm into a single release candidate."],
+X:["The migration touches six independent modules. I’ll fan out a swarm of clones and keep the router myself:","Swarm complete. Six clones merged, no conflicts left, and PR #412 is ready for review."],W:"/src/router/normalize.ts"},
+{n:["hero and copy","pricing page","checkout flow","analytics events","SEO metadata","accessibility pass"],s:["hero","pricing","checkout","analytics","seo","a11y"],d:["3 variants","4 plans","payments test pass","22 events","48 pages","0 violations"],
+B:["Read the launch checklist","Poll the swarm for status","Merge the six branches into release","Run Lighthouse on staging","Tag v2.4.0 and push","Notify {o} on Slack"],
+T:["The launch splits into six surfaces with no shared files — one clone each, then I merge.","Clones are building in parallel worktrees. I’ll keep the release branch and watch for overlaps…","{c2} and {c5} both edited the nav component. Reconciling the two versions now…","Lighthouse is 98 across the board and every gate is green. Ready to tag."],
+X:["Launch day. Six surfaces, six clones — I’ll fan them out and run the release branch myself:","Launch complete. v2.4.0 is tagged, staging is green, and the team has been notified."],W:"/release/CHANGELOG.md"},
+{n:["api latency traces","database locks","cache hit rate","queue backlog","edge and CDN logs","recent deploy diff"],s:["api","database","cache","queue","edge","deploy diff"],d:["p99 up 4×","2 long locks","hit rate 61%","backlog 18k","no anomalies","1 suspect commit"],
+B:["Pull the alert timeline","Poll the swarm for findings","Cross-reference the findings","Replay the failing request","Roll back commit a41f9c2","Post the incident summary for {o}"],
+T:["Checkout latency spiked at 02:14. Six independent signals to check — one clone per signal.","Six clones are reading logs and traces in parallel. I’ll correlate findings as they come in…","{c1} found two long locks and {c5} flagged a suspect commit — both point at the same migration.","Rollback applied. p99 is back under 200 ms and the queue is draining."],
+X:["Checkout latency is spiking. I’ll fan out a swarm to investigate every layer at once:","Incident resolved. The root cause was a locking migration; it’s rolled back and the summary is posted."],W:"/ops/incident-summary.md"}];
+var PRM=["Spin up six more clones for the mobile app","Run the full regression pass overnight","Draft the release notes and tag the build","Find out why checkout latency spiked"];
+/* camera plans per shot [wide, sidebar, feed, composer]: [zoomStart,zoomEnd,dx,dy,rollStart,rollEnd] */
+var CAMS=[[[1.04,1.12,10,12,0,0],[1.9,1.98,0,0,0,0],[1.75,1.82,0,0,0,0],[2,2.08,0,0,0,0]],
+[[1.1,1.2,-60,10,-1.4,-.5],[1.75,1.88,-26,-10,1.3,2.2],[1.65,1.74,34,0,-1.6,-2.4],[1.9,2,-24,0,1.6,.7]],
+[[1,1.08,70,0,0,0],[1.42,1.5,60,20,0,0],[1.32,1.4,0,-30,0,0],[1.55,1.62,-30,0,0,0]],
+[[1.25,1.38,40,-10,.8,1.4],[2.25,2.4,-14,0,-1,-1.8],[2.1,2.25,10,-6,1,1.9],[2.2,2.3,0,0,-1.2,-.6]]];
+var SP=[-2,-1,.6,1.4,2.2,3],DN=[6.9,7.5,8.1,8.7,12.4,13.4];
+var SL=[[-5,"bash",0],[-4,"think",0],[-3,"text",0],[-2,"spawn",0],[-1,"spawn",1],[.6,"spawn",2],[1.4,"spawn",3],[2.2,"spawn",4],[3,"spawn",5],[3.8,"think",1],[4.9,"write",0],[6.2,"bash",1],[6.9,"merge",0],[7.5,"merge",1],[8.1,"merge",2],[8.7,"merge",3],[10.4,"think",2],[11.5,"bash",2],[12.4,"merge",4],[13.4,"merge",5],[13.9,"bash",3],[15.3,"think",3],[16.2,"bash",4],[17,"bash",5],[18,"text",1]];
+var LB={bash:"Bash",think:"Think",write:"Write",spawn:"Spawn",merge:"Merge"};
+var S=[0,0,0,0],R=[],CL=[],EV=[],base={},K=[],TY="",plan=CAMS[0],sc=1;
+var feed=$("feed"),ph=$("ph"),tm=$("tm"),cam=$("cam"),rig=$("rig");
+function cl(v,a,b){return Math.max(a,Math.min(b,v))}
+function setup(c){
+var ld=AG[c[0]],M=MSG[c[1]],i,k;TY=PRM[c[2]];plan=CAMS[c[3]];
+var oth=AG.slice(0,3).filter(function(a){return a!=ld}).map(function(a){return a[1]}).join(" and ");
+$("tbn").textContent=ld[1]+" — e-server";$("hdn").textContent=ld[1];$("swh").textContent="Swarm · "+ld[1];
+AG.forEach(function(a){base[a[0]]=a==ld?["Working…","w"]:[a[4],""];els[a[0]].className="ag"+(a==ld?" sel pulse":"")+(a[0]=="dexter"?" off":"")});
+CH.forEach(function(h){base[h[0]]=["Read-only channel",""]});
+var mine=CH.filter(function(h){return h[1].indexOf(ld[1])>=0}).map(function(h){return h[0]});
+EV=[[6.2,mine[0],"Swarm sync · 6 clones","w"],[8.8,mine[1],"Review requested","w"]];
+$("sw").innerHTML="";CL=[];var nm=[];
+for(i=0;i<6;i++){var n=ld[3]+"-"+i,d=document.createElement("div");nm.push(n);d.className="cn";
+d.innerHTML='<div class="a" style="background:'+avBg(ld[0],ld[2])+';filter:hue-rotate('+(i*52)+'deg)"></div><b>'+n+'</b><small></small>';
+CL.push({sp:SP[i],dn:DN[i],el:d,sm:d.querySelector("small"),st:""});$("sw").appendChild(d)}
+feed.innerHTML="";R=[];
+SL.forEach(function(sl){var kd=sl[1],j=sl[2],tx;
+tx=kd=="bash"?M.B[j]:kd=="think"?M.T[j]:kd=="text"?M.X[j]:kd=="write"?M.W:kd=="spawn"?nm[j]+" · "+M.n[j]:nm[j]+" returned · "+M.s[j]+" · "+M.d[j];
+tx=tx.replace("{o}",oth).replace(/\{c(\d)\}/g,function(_,x){return nm[x]});
+var e=document.createElement("div");
+if(kd=="text"){e.className="r t";e.innerHTML="<span></span>"}
+else{e.className="r"+(kd=="spawn"||kd=="merge"?" sp":"");e.innerHTML='<svg><use href="#i-'+kd+'"/></svg><b>'+LB[kd]+'</b><i>·</i><span>'+(kd=="write"?"<u>"+tx+"</u>":kd=="think"?"":tx)+"</span>"}
+R.push({t:sl[0],k:kd,tx:tx,el:e,sp:e.querySelector("span"),on:false,n:-1});feed.appendChild(e)});
+build()}
+function build(){var rr=rig.getBoundingClientRect(),sv=cam.style.transform;cam.style.transform="none";
+function g(e){var r=e.getBoundingClientRect();return[(r.left-rr.left)/sc,(r.top-rr.top)/sc,(r.right-rr.left)/sc,(r.bottom-rr.top)/sc]}
+var sd=g($("ags")),sb=g($("sw")),co=g($("col")),cp=g($("cmp"));cam.style.transform=sv;
+function sideC(z,p){return[sd[0]-26+640/z+p[2],(sd[1]+sb[3])/2+p[3]]}
+function colC(z,vb,p){return[(co[0]+co[2])/2+p[2],vb-360/z+p[3]]}
+var w=plan[0],a=plan[1],f=plan[2],c=plan[3],q;
+K=[[0,w[0],640,360,w[4]],[4.4,w[1],640+w[2],360+w[3],w[5]]];
+q=sideC(a[0],a);K.push([5.4,a[0],q[0],q[1],a[4]]);q=sideC(a[1],a);K.push([9.2,a[1],q[0],q[1],a[5]]);
+q=colC(f[0],cp[1]+28,f);K.push([10.2,f[0],q[0],q[1],f[4]]);q=colC(f[1],cp[1]+28,f);K.push([14.2,f[1],q[0],q[1],f[5]]);
+q=colC(c[0],cp[3]+14,c);K.push([15,c[0],q[0],q[1],c[4]]);q=colC(c[1],cp[3]+14,c);K.push([18.6,c[1],q[0],q[1],c[5]]);
+K.push([19.4,1.08,640,360,0],[20,1.08,640,360,0])}
+function sz(){var w=innerWidth,h=innerHeight;sc=Math.max(w/1280,h/720);rig.style.transform="scale("+sc+")";rig.style.left=(w-1280*sc)/2+"px";rig.style.top=(h-720*sc)/2+"px"}
+function frame(t){
+var i=0;while(i<K.length-2&&t>=K[i+1][0])i++;
+var a=K[i],b=K[i+1],u=cl((t-a[0])/(b[0]-a[0]),0,1),e=u*u*u*(u*(u*6-15)+10);
+function L(x){return a[x]+(b[x]-a[x])*e}
+var z=L(1),cx=L(2)+Math.sin(t*.9)*2,cy=L(3)+Math.cos(t*.7)*1.5,r=L(4);
+cam.style.transform="translate(640px,360px) rotate("+r+"deg) scale("+z+") translate("+(-cx)+"px,"+(-cy)+"px)";
+R.forEach(function(r){var s=t>=r.t;
+if(s&&!r.on){r.el.style.display=r.k=="text"?"block":"flex";r.el.classList.remove("in");void r.el.offsetWidth;r.el.classList.add("in");r.on=true}
+else if(!s&&r.on){r.el.style.display="none";r.on=false;r.n=-1}
+if(s&&(r.k=="think"||r.k=="text")){var n=r.t<0?r.tx.length:Math.min(r.tx.length,Math.floor((t-r.t)*(r.k=="text"?42:70)));
+if(n!=r.n){r.n=n;r.sp.textContent=r.tx.slice(0,n)}}});
+for(var k in subs){var v=base[k];EV.forEach(function(x){if(x[1]==k&&t>=x[0])v=[x[2],x[3]]});
+if(subs[k].textContent!=v[0])subs[k].textContent=v[0];subs[k].className=v[1]}
+CL.forEach(function(c){var on=t>=c.sp,v=!on?"":t<c.sp+.9&&c.sp>=0?"Spawning…":t<c.dn?"Working…":"Done";
+if(c.st!=v){c.st=v;c.sm.textContent=v;c.sm.className=v=="Done"?"ok":"w";c.el.classList.toggle("on",on);c.el.classList.toggle("wk",v=="Working…"||v=="Spawning…")}});
+var s=Math.floor(322+t);tm.textContent=Math.floor(s/60)+"m "+(s%60<10?"0":"")+(s%60)+"s";
+var n=t<15.6||t>18.1?0:Math.floor((t-15.6)*20);
+if(n>0){ph.className="ph ty";ph.textContent=TY.slice(0,Math.min(n,TY.length))}else{ph.className="ph";ph.textContent="Message the agent"}
+var d=t<.5?1-t/.5:(t>19.3?(t-19.3)/.7:0);$("dip").style.opacity=cl(d,0,1);
+var bp=0;[4.9,9.7,14.6].forEach(function(m){bp=Math.max(bp,1-Math.abs(t-m)/.4)});$("flash").style.opacity=bp*.5;cam.style.filter=bp>.05?"blur("+(bp*2.4).toFixed(2)+"px)":"none"}
+function fit(){sz();build()}
+sz();setup(S);addEventListener("resize",fit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(build);
+if(matchMedia("(prefers-reduced-motion: reduce)").matches){frame(7)}
+else{var t0=performance.now(),it=0;(function loop(){var el=(performance.now()-t0)/1000,n=Math.floor(el/D);
+if(n!=it){it=n;S=S.map(function(v,i){var m=[3,3,4,4][i],x;do{x=rnd(m)}while(x==v);return x});setup(S)}
+frame(el%D);requestAnimationFrame(loop)})()}
+})();
+</script>
+</body>
+</html>
