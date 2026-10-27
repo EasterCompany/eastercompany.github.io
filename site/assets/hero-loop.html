@@ -104,7 +104,7 @@ var D=20,$=function(i){return document.getElementById(i)},rnd=function(n){return
 var AV={delta:"",darwin:"",diana:"",dexter:""};/* image URLs or data: URIs */
 function avBg(id,f){return AV[id]?"url("+AV[id]+") center/cover":f}
 var G=function(a,b){return"radial-gradient(circle at 35% 30%,"+a+","+b+")"};
-var AG=[["delta","Delta",G("#7dd3fc","#6d28d9"),"Epsilon","2h ago"],["darwin","Darwin",G("#5eead4","#0e7490"),"Zeta","3d ago"],["diana","Diana",G("#f9a8d4","#4f46e5"),"Eta","6d ago"],["dexter","Dexter",G("#9ca3af","#374151"),"","Disabled"]];
+var AG=[["delta","Delta",G("#7dd3fc","#6d28d9"),"Epsilon","2h ago"],["darwin","Darwin",G("#5eead4","#0e7490"),"Epsilon","3d ago"],["diana","Diana",G("#f9a8d4","#4f46e5"),"Epsilon","6d ago"],["dexter","Dexter",G("#9ca3af","#374151"),"","Disabled"]];
 var CH=[["ch1","Delta-Darwin",G("#7dd3fc","#0e7490")],["ch2","Delta-Diana",G("#7dd3fc","#4f46e5")],["ch3","Darwin-Diana",G("#5eead4","#4f46e5")]];
 var subs={},els={};
 function item(id,name,bg,x){var d=document.createElement("div");d.className="ag"+x;d.innerHTML='<div class="a" style="background:'+bg+'"></div><div><b>'+name+'</b><small></small></div>';subs[id]=d.querySelector("small");els[id]=d;return d}
@@ -137,13 +137,13 @@ var S=[0,0,0,0],R=[],CL=[],EV=[],base={},K=[],TY="",plan=CAMS[0],sc=1;
 var feed=$("feed"),ph=$("ph"),tm=$("tm"),cam=$("cam"),rig=$("rig");
 function cl(v,a,b){return Math.max(a,Math.min(b,v))}
 function setup(c){
-var ld=AG[c[0]],M=MSG[c[1]],i,k;TY=PRM[c[2]];plan=CAMS[c[3]];
-var oth=AG.slice(0,3).filter(function(a){return a!=ld}).map(function(a){return a[1]}).join(" and ");
+var ld=AG[0],sup=AG[1+c[0]],M=MSG[c[1]],i,k;TY=PRM[c[2]];plan=CAMS[c[3]];
+var oth=sup[1];
 $("tbn").textContent=ld[1]+" — e-server";$("hdn").textContent=ld[1];$("swh").textContent="Swarm · "+ld[1];
 AG.forEach(function(a){base[a[0]]=a==ld?["Working…","w"]:[a[4],""];els[a[0]].className="ag"+(a==ld?" sel pulse":"")+(a[0]=="dexter"?" off":"")});
 CH.forEach(function(h){base[h[0]]=["Read-only channel",""]});
-var mine=CH.filter(function(h){return h[1].indexOf(ld[1])>=0}).map(function(h){return h[0]});
-EV=[[6.2,mine[0],"Swarm sync · 6 clones","w"],[8.8,mine[1],"Review requested","w"]];
+var ch=c[0]?"ch2":"ch1";
+EV=[[6.2,ch,"Swarm sync · 6 clones","w"],[8.8,sup[0],"Reviewing…","w"]];
 $("sw").innerHTML="";CL=[];var nm=[];
 for(i=0;i<6;i++){var n=ld[3]+"-"+i,d=document.createElement("div");nm.push(n);d.className="cn";
 d.innerHTML='<div class="a" style="background:'+avBg(ld[0],ld[2])+';filter:hue-rotate('+(i*52)+'deg)"></div><b>'+n+'</b><small></small>';
@@ -193,7 +193,7 @@ function fit(){sz();build()}
 sz();setup(S);addEventListener("resize",fit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(build);
 if(matchMedia("(prefers-reduced-motion: reduce)").matches){frame(7)}
 else{var t0=performance.now(),it=0;(function loop(){var el=(performance.now()-t0)/1000,n=Math.floor(el/D);
-if(n!=it){it=n;S=S.map(function(v,i){var m=[3,3,4,4][i],x;do{x=rnd(m)}while(x==v);return x});setup(S)}
+if(n!=it){it=n;S=S.map(function(v,i){var m=[2,3,4,4][i],x;do{x=rnd(m)}while(x==v);return x});setup(S)}
 frame(el%D);requestAnimationFrame(loop)})()}
 })();
 </script>
