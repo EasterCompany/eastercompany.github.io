@@ -1,13 +1,17 @@
-# Agent product story and standalone concept
+# e-server Cloud and the agent workspace
 
-The marketing draft now includes an interactive harness concept with an agent inbox,
-peer-channel labels and a separate Epsilon worker view. Those patterns were inspected
-in the existing private prototype source through the authorised remote connection.
-The private live origin was unreachable from the cloud browser; no literal live
-screenshot is claimed. The concept is newly authored HTML/CSS with fictional prompts,
-responses, tasks and state, visibly labelled as illustrative. It does not connect to
-or operate the real harness. No conversations, tickets, account data or endpoints
-were copied. Existing agent avatars are used with Owen's authorization.
+The complete product is e-server Cloud. Customers get an e-server where their
+hosted agents live, run and work; agent-harness is its AI workspace. Dexter runs
+locally on the user’s own machine. The two-week offer remains free AI credits,
+three beta models and a tailored harness; no quota or blanket free-platform
+entitlement is invented.
+
+The six supplied ah0–ah5 screenshots were reviewed. They show a dark inbox,
+agent channels, Epsilon task lists and swarm controls. The marketing render uses
+those visual patterns, existing agent avatars and newly authored HTML/CSS. All
+conversation, task and status content is fictional and visibly labelled. No raw
+screenshots or private work details are included in the deliverable. The inbox,
+peer channels and worker selector are interactive illustrations, not live agents.
 
 Public model disclosure stays at the limit Owen specified:
 - Delta runs Epsilon; each swarm worker has one expert job.

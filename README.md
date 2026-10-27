@@ -1,6 +1,7 @@
-# Easter Company AI corporate beta draft
+# Easter Company / e-server Cloud corporate draft
 
-A buildless, conversion-focused company landing page: two weeks of free AI
+A buildless company landing page for e-server Cloud: hosted AI agents, security,
+network routing and event monitoring. The entry offer is two weeks of free AI
 credits, beta access to three proprietary models, and a tailored agent harness.
 The broader Engineering, Entertainment, Education and Enterprise story, SMP
 feature and owner links sit below the main AI signup path.
@@ -38,3 +39,10 @@ See docs/agent-product-preview.md for the scope and verification limits.
 
 Additional browser review covered all four agent selections, switching between
 inbox and Epsilon workers, and the new agent sections at 320px and 390px.
+
+The supplied six agent-harness screenshots informed the dark marketing render.
+Raw screenshots and private work details are excluded. Added an e-server bundle
+overview and native security, routing and event-response illustrations. Updated
+beta interests and review support home/office security, network privacy and monitoring.
+Browser checks covered both peer channels, inbox/worker switching, mobile layouts
+and retention of a network-privacy application through review/edit.

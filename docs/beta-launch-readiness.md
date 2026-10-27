@@ -42,3 +42,29 @@ Do not silently activate a paid plan or promise unlimited usage.
 
 The repository's previous write attempt returned403 Resource not accessible by
 integration. Changes remain a packaged draft until write access is granted.
+
+
+## e-server Cloud platform positioning
+
+Owen clarified that e-server Cloud is the entire product, with agent-harness as
+one component. Added a bundle overview and security, network-routing and event
+monitoring sections, each with native HTML/CSS/SVG illustrations. The new primary
+interests are available in the prototype signup and its draft JSON includes the
+product name. Dexter remains distinct and local.
+
+The platform capabilities are supplied product descriptions, not the outcome of
+a security audit or end-to-end integration test. Before publishing stronger
+security claims, establish encryption in transit/at rest, key custody, access by
+operators and subprocessors, recovery/backup access and the threat model. The
+page describes encrypted access, owner-controlled permissions and data ownership;
+it does not promise that no other party can ever access data.
+
+Network copy describes choosing a supported device or available public VPN
+endpoint as the outward-facing route. Confirm supported operating systems,
+protocols, routing scope, DNS/IPv6 handling, failure behaviour and endpoint
+availability before publishing compatibility details. No anonymity, absence of
+tracking or arbitrary location guarantee is made.
+
+Monitoring copy covers network/API signals and configured agent workflows.
+The timeline is explicitly fictional. No response-time SLA, autonomous repair
+guarantee, uptime figure or verified event coverage is claimed.
