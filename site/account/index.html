@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111317">
+<meta name="robots" content="noindex,nofollow">
+<!-- THE ADDRESS THIS PAGE IS REGISTERED AT. Microsoft sends the browser back to exactly this URI
+     (registered as a Web redirect on the Easter Company application, 2026-10-27), and the account
+     module reads this tag so the one sentence that names the address names the corporate one
+     rather than the launcher's. -->
+<meta name="easter-redirect-uri" content="https://easter.company/account/">
+<title>Easter Company account</title>
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../styles.css">
+<!-- The account surface itself is the launcher site's own: one implementation, served there,
+     loaded here. GitHub Pages answers .mjs and .css with access-control-allow-origin: *
+     (measured 2026-10-27), and every relative import inside that module resolves back to the
+     origin it came from. -->
+<link rel="stylesheet" href="https://launcher.easter.company/account/account.css">
+<link rel="stylesheet" href="account-corporate.css"></head>
+<body class="account">
+<main class="account-main">
+<div class="account-panel" id="account-panel" data-busy="false">
+<p class="account-overline">EASTER COMPANY</p>
+<h1 class="account-heading">Easter Company account</h1>
+<p class="account-wait" id="account-wait"></p>
+<div class="account-error" id="account-error" role="alert" hidden></div>
+<div class="account-body" id="account-root"></div>
+</div>
+</main>
+<footer class="account-footer"><span>© Easter LTD</span><span><a href="../">easter.company</a></span><span>Numquam Succumbe</span></footer>
+<noscript><p class="account-noscript">Enable JavaScript to sign in.</p></noscript>
+<script type="module" src="https://launcher.easter.company/account/account.mjs"></script>
+</body></html>
