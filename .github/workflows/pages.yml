@@ -23,15 +23,14 @@ jobs:
           python-version: '3.13'
       - run: python scripts/validate.py
       - uses: actions/configure-pages@v5
-      # MICROSOFT'S PUBLISHER-DOMAIN PROOF LIVES UNDER A DOT-DIRECTORY. This action
-      # excludes every top-level dot-entry by default (it passes `--exclude=.[^/]*` to
-      # tar unless told otherwise), so site/.well-known/ was silently dropped from the
-      # artifact: the first publish after adding it deployed the whole site and answered
-      # 404 at /.well-known/microsoft-identity-association.json - measured 2026-10-27,
-      # run 40460226775 succeeded while that URL 404'd and the rest of the tree was live.
-      # The domain verification depends on that exact path, so hidden files are included
-      # deliberately. Nothing else in site/ starts with a dot.
-      - uses: actions/upload-pages-artifact@v4
+      # MICROSOFT'S PUBLISHER-DOMAIN PROOF LIVES UNDER A DOT-DIRECTORY. v4 of this action
+      # hard-codes `--exclude=".[^/]*"` and does not accept an input to change it: run
+      # 40460226775 published the whole site - the hero loop included - and answered 404 at
+      # /.well-known/microsoft-identity-association.json, and the downloaded artifact showed
+      # no dot-entry at all in its tar listing. v5 is the release that has the input, so the
+      # pin moves with it. Nothing else under site/ starts with a dot, so this admits
+      # exactly the association file.
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
           include-hidden-files: true
