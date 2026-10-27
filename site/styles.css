@@ -18,3 +18,18 @@
    is left of the first screen, so header + hero is exactly one viewport. */
 @media(max-width:650px){:root{--header-h:119px}.hero{min-height:calc(100svh - var(--header-h));padding-block:32px 40px}}
 @media(prefers-reduced-motion:reduce){.hero-loop{opacity:.45}}
+
+/* THE BETA CARD'S CONTACT LINE, and the carousel's arrival. Both are layout only: the words are
+   Owen's, typed into site/index.html. */
+.beta-summary .beta-contact{margin-top:10px;font-size:12px}
+.beta-summary .beta-contact a{color:inherit;text-decoration:none;border-bottom:1px solid #ffffff40}
+.beta-summary h2{line-height:1.32}
+/* A panel that arrives on its own should not snap: a short fade, and none at all under
+   prefers-reduced-motion (site/site.js refuses to advance there either). */
+/* The harness panel is prose, not a diagram: it takes the section's own reading size rather
+   than a stretched hero paragraph, and reads as wide as the other panels' text columns. */
+.platform-panel>div>p{font-size:13px;line-height:1.8;color:var(--muted);max-width:620px;margin:0}
+.platform-panel:not([hidden]):not(.no-fade){animation:panel-in .45s ease-out}
+@keyframes panel-in{from{opacity:.35}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.platform-panel:not([hidden]){animation:none}}
+@media(max-width:650px){.beta-summary h2{line-height:1.3}}
