@@ -26,23 +26,24 @@ sampling, tool and token budgets, versions and evaluation dates for comparisons.
 A coding-agent score is a model-plus-harness measurement; do not present it as
 an isolated base-model score or blend incompatible evaluation settings.
 
-## Signup behaviour
+## Beta requests and deployment
 
-This build is a prototype. The form validates required fields, formats a safe
-text-only review, permits editing and downloads a JSON application marked
-`draft:true` and `submitted:false`. It sends nothing, creates no account and
-activates no credits. It uses no cookies, localStorage or backend submission.
-The page states those limits beside the form and in the review.
+The revised site uses an email request, not automated account signup. The form
+validates company, work email and use case, renders a text-only review, and
+prepares an encoded mailto draft to contact@easter.company. The address is the
+company's published GitHub organisation contact. The visitor must send it through
+their email app; the site does not claim it has sent or provisioned anything.
+There is a direct mailto and no-JavaScript fallback. The former JSON-download
+prototype is removed. No email was sent during testing.
 
-Live signup needs an authorised registration endpoint, offer eligibility and
-credit allowance, the activation/onboarding flow, trial-expiry handling, any
-billing terms, and appropriate privacy/terms for processing company contact data.
-Wire the endpoint before replacing the draft review with a real success state.
-Do not silently activate a paid plan or promise unlimited usage.
+Automated signup would require an authorised backend, privacy/offer terms, credit
+allowance, activation and expiry handling. This email route supports a manually
+arranged beta without inventing those systems or terms.
 
-The repository's previous write attempt returned403 Resource not accessible by
-integration. Changes remain a packaged draft until write access is granted.
-
+The repository was pushed and deployed using the authorised remote machine.
+GitHub Pages serves https://eastercompany.github.io/. The previous easter.company
+custom-domain setting was cleared because its DNS points to domain parking.
+DNS was not changed. Noindex/nofollow is retained for review.
 
 ## e-server Cloud platform positioning
 

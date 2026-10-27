@@ -1,48 +1,27 @@
-# Easter Company / e-server Cloud corporate draft
+# Easter Company / e-server Cloud
 
-A buildless company landing page for e-server Cloud: hosted AI agents, security,
-network routing and event monitoring. The entry offer is two weeks of free AI
-credits, beta access to three proprietary models, and a tailored agent harness.
-The broader Engineering, Entertainment, Education and Enterprise story, SMP
-feature and owner links sit below the main AI signup path.
+Buildless product site, served from site/. No dependency installation required.
+Serve locally with `python3 -m http.server --directory site 8080`.
 
-Open the included self-contained preview.html without a server, or serve editable
-source with `python -m http.server --directory site 8080` and visit localhost:8080.
-No dependency installation or build step is required.
+The page introduces e-server Cloud, retains the interactive agent-harness render,
+explains the four agents and uses accessible tabs for security, network privacy
+and event monitoring. Supplied owner photos and existing renders are preserved.
 
-The signup is an explicit prototype. It validates company contact details, shows a
-safe text-only review, supports editing, and downloads a draft JSON application.
-It submits nothing, creates no account and activates no credits. No contact data
-is stored in localStorage, sent to analytics, or submitted to an external service.
-See docs/beta-launch-readiness.md before wiring a real registration endpoint.
+Beta requests are email-based. The form validates company, work email and use case,
+shows a text-only review and creates an encoded mailto link to the company's
+published contact@easter.company address. The visitor must open their email app
+and send the request. There is no backend submission or automatic provisioning.
+A direct email link and no-JavaScript fallback are included.
 
-Real evaluation references are linked, without fabricated scores or unverified
-comparative pricing claims. The user-supplied frontier-parity and 10x-cheaper
-claims require reproducible model evaluations and matched pricing evidence.
-The existing company phoenix and SMP artwork are preserved.
+Validation: python3 scripts/validate.py; node --check site/site.js.
+Browser checks cover desktop, 320px/390px layouts, keyboard tab navigation,
+review/edit and correct encoding of ampersands and line breaks in the email draft.
+No emails were sent during testing.
 
-Validation: `python scripts/validate.py`, `node --check site/site.js`.
-Browser review covered desktop, 320px and 390px layouts with zero horizontal
-overflow, working anchors, required-field validation, application summary,
-downloaded draft/submitted flags, and editing without losing entered details.
+Published to GitHub Pages by the manual pages.yml workflow from Prd. The public
+review URL is https://eastercompany.github.io/. The previous custom-domain setting
+was cleared because easter.company resolves to parking; DNS was not changed.
+Noindex/nofollow is retained during review. Remove it for the confirmed launch.
 
-The noindex/nofollow metadata and manual-only Pages workflow retain draft status.
-No production deploy or public signup integration was made. The GitHub connection
-previously refused repository writes with403 Resource not accessible by integration.
-
-The interactive harness concept uses the actual agent avatars and source-informed
-inbox/worker patterns with fictional conversations. It is explicitly illustrative,
-not a live screenshot or agent connection. Delta, Darwin and Diana have individual
-profiles; Dexter is a separate local companion direction. Public model details stay
-within the approved disclosure. Owner cards use the supplied Owen and Hannah photos.
-See docs/agent-product-preview.md for the scope and verification limits.
-
-Additional browser review covered all four agent selections, switching between
-inbox and Epsilon workers, and the new agent sections at 320px and 390px.
-
-The supplied six agent-harness screenshots informed the dark marketing render.
-Raw screenshots and private work details are excluded. Added an e-server bundle
-overview and native security, routing and event-response illustrations. Updated
-beta interests and review support home/office security, network privacy and monitoring.
-Browser checks covered both peer channels, inbox/worker switching, mobile layouts
-and retention of a network-privacy application through review/edit.
+No fabricated benchmarks, price comparisons or blanket security guarantees appear
+on the page. Product specification and offer-term checks remain in docs.

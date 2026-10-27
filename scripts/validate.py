@@ -21,4 +21,8 @@ for link in p.links:
 for asset in p.assets:
     if not urlsplit(asset).scheme:assert (Path('site') / asset).is_file(), f'Missing asset: {asset}'
 assert {'beta-form','application-review','application-summary','signup','work-email'} <= p.ids
+for tab in p.tabs:
+    assert tab.get('aria-controls') in p.panels, 'Missing tab panel'
+    assert tab.get('aria-selected') in ('true','false'), 'Missing tab state'
+assert sum(t['aria-selected']=='true' for t in p.tabs)==1
 print(f'Validated {len(p.links)} links, {len(p.assets)} asset references and beta signup anchors.')

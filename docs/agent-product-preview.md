@@ -33,3 +33,8 @@ weights, parameter counts, routing logic or private configuration.
 Owen and Hannah’s supplied profile photographs are used for their respective cards.
 The photo itself is preserved; the circular crop is presentation-only CSS. The
 footer now shows Engineering, Entertainment, Education, Enterprise above copyright.
+
+The revised compact page retains the harness and platform renders, groups the
+three platform features into keyboard-accessible tabs, and removes repeated
+marketing sections. Render interactions remain illustrative. Beta requests use
+an explicit email draft rather than the previous JSON-download prototype.
