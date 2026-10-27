@@ -20,7 +20,5 @@ for link in p.links:
     if link.startswith('#'):assert link[1:] in p.ids, f'Missing anchor: {link}'
 for asset in p.assets:
     if not urlsplit(asset).scheme:assert (Path('site') / asset).is_file(), f'Missing asset: {asset}'
-assert len(p.tabs)==4 and len(p.panels)==4
-assert sum(t.get('aria-selected')=='true' for t in p.tabs)==1
-for tab in p.tabs:assert tab['aria-controls'] in p.panels
-print(f'Validated {len(p.links)} links, {len(p.assets)} asset references and 4 focus panels.')
+assert {'beta-form','application-review','application-summary','signup','work-email'} <= p.ids
+print(f'Validated {len(p.links)} links, {len(p.assets)} asset references and beta signup anchors.')
