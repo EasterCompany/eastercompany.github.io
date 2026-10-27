@@ -1,0 +1,181 @@
+/* THE ACCOUNT CONTROL'S RULES, COPIED - NOT THE LAUNCHER'S STYLESHEETS.
+   ------------------------------------------------------------------------
+   easter.company mounts the launcher's account control (site/account-corporate.mjs ->
+   https://launcher.easter.company/account-control.mjs), and that control brings its dialogs and its
+   menu with it as markup only: their styling lives on the launcher site. Two files were copied from,
+   rule by rule, and nothing else was:
+
+     * launcher site/web.css      - the account pill, its face slot, its name, the dialog close
+                                   control, the menu's button height and the notice line.
+     * launcher site/desktop.css  - the profile menu panel and the whole company-dialog family
+                                   (the sign-in chooser, username/password setup, Verified emails,
+                                   My Profile and Linked Accounts), plus the wait line and the
+                                   entry motion those dialogs use.
+
+   WHY A COPY AND NOT A <link>. web.css carries the launcher's web-mode styling for ITS header (a
+   five-destination nav, its own gaps and breakpoints) and desktop.css carries the desktop shell's
+   chrome; linked in whole, either collides with this page's own styles.css and components.css. The
+   rule numbers below are the "which lines" record the ticket asked for, taken 2026-10-27.
+
+   WHAT IS THIS PAGE'S OWN, and is marked as such further down: the pill's padding, radius and type
+   size (this header's Request Beta Access button sets that scale), the breakpoints this header has
+   (it wraps at 650px with two items, where the launcher's nav has five at 600px), and the two custom
+   properties web.css reads but this page's styles.css does not define.
+
+   The whole file is scoped to .web-mode, because the copied rules are: site/account-corporate.mjs
+   adds that class to <html> before mounting the control, exactly as the launcher's site/web.js does
+   on its own page. */
+
+/* ---------------------------------------------------------------------------------------------
+   FROM launcher site/web.css:3 - the palette the dialog family below is painted with. */
+.web-mode{
+ /* launcher site/styles.css:2 supplies --gold for the launcher's nav; this page's styles.css does
+    not have one, and the pill's own colour rule (web.css:18) reads it. Same value, same var name. */
+ --gold:#dbba79;
+ --app-panel:#11252d;--app-border:#ffffff24;--app-muted:#a8b9b4;--app-gold:#e4c486}
+/* web.css:4-5 - the control's markup carries [hidden] on the face slot and the picture, and the
+   gold focus ring is what the launcher's own controls show. */
+.web-mode [hidden]{display:none!important}
+.web-mode :is(button,a,input,summary):focus-visible{outline:2px solid var(--app-gold);outline-offset:3px}
+
+/* ---------------------------------------------------------------------------------------------
+   FROM launcher site/web.css:18-19 - the pill, and the height it takes once it carries a face. The
+   padding-block:3px + 32px face + 1px border is the 40px the launcher's Download button beside it
+   already has. */
+.web-mode .site-header nav .web-account-nav{display:inline-flex;align-items:center;gap:7px;max-width:140px;overflow:hidden;border:1px solid #e4c48650;background:transparent;color:var(--gold);cursor:pointer}
+.web-mode .site-header nav .web-account-nav.web-account-with-face{padding-block:3px;height:40px}
+
+/* FROM launcher site/web.css:24-35 - one fixed face slot so the control measures the same whether
+   an image is absent, loading, painted or failed; the tile is the launcher's own last resort
+   (#536b66 with cream #eedbb2), the mark stands in when there is no name to letter, and the head
+   cropped from a Minecraft skin is drawn with nearest-neighbour rather than smoothed. */
+.web-mode .web-account-face{position:relative;flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:4px;overflow:hidden;background:#536b66;color:#eedbb2;font-size:20px;font-weight:700;line-height:1;text-transform:uppercase}
+.web-mode .web-account-face-mark{background:#536b66 url(assets/ec-logo.svg) center/76% no-repeat}
+.web-mode .web-account-face.has-picture .web-account-initial{visibility:hidden}
+.web-mode .web-account-face.has-picture.web-account-face-mark{background-image:none}
+.web-mode .web-account-picture{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.web-mode .web-account-picture.web-account-head{image-rendering:pixelated}
+/* web.css:35 - the name ellipsizes rather than widening the pill. */
+.web-mode .web-account-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* FROM launcher site/web.css:36-41 - the company dialogs' close control, their focus ring and their
+   cursor, the menu's 44px touch target, and the refusal/notice line. */
+.web-mode .desktop-company-dialog .dialog-close{display:inline-flex;align-items:center;justify-content:center;padding:0;line-height:1;right:14px;top:14px;border-radius:6px}
+.web-mode .desktop-company-dialog input:focus-visible{outline:2px solid var(--app-gold);outline-offset:2px}
+.web-mode .desktop-company-dialog button{cursor:pointer}
+.web-mode .desktop-company-dialog button:disabled{cursor:default}
+.web-mode .desktop-profile-menu button{min-height:44px}
+.web-mode .web-account-notice{font-size:12px;color:#f4b6a6}
+
+/* FROM launcher site/desktop.css:124,133-134 - the dropdown panel. It is a popover in the top layer;
+   the control positions it (account-control.mjs) and these rules give it the launcher's body,
+   border, shadow and row rhythm. */
+.desktop-profile-menu{position:fixed;inset:auto;margin:0;width:min(280px,calc(100vw - 24px));max-height:calc(100dvh - 90px);overflow:auto;padding:8px;border:1px solid #ffffff30;border-radius:9px;background:var(--app-panel);color:#e5e9df;box-shadow:0 12px 32px #0005}
+.desktop-profile-menu button{display:block;width:100%;text-align:left;padding:11px 12px;border:0;border-radius:5px;background:transparent;color:inherit;font-size:12px;cursor:pointer}
+.desktop-profile-menu button:hover,.desktop-profile-menu button:focus-visible{background:#ffffff0a}
+
+/* FROM launcher site/styles.css:20 AND launcher site/desktop.css:88-89 - the dialogs' close control
+   is pinned to the corner. This page has no `dialog` base rules of its own (the launcher's styles.css
+   states them for its page), so the two properties that actually place it - position and box - are
+   carried here. Everything else the dialogs need is in the desktop.css rules below, because
+   .desktop-company-dialog restates the size, padding, border, ground, colour and shadow the launcher
+   site's dialog block gave. */
+.desktop-company-dialog .dialog-close{position:absolute;width:36px;height:36px;font-size:28px;color:var(--app-muted)}
+
+/* FROM launcher site/desktop.css:203-224 - the company dialog family's frame and its shared parts:
+   the Microsoft and submit buttons, the step line, the identity-conflict refusal, the verified-email
+   rows, the status line, the section headings, My Profile's own buttons and the linked-provider
+   lines. These are all scoped to .desktop-company-dialog or #company-profile, neither of which this
+   page defines anywhere else, so they cannot reach the marketing page. */
+.desktop-company-dialog{width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:28px;border:1px solid var(--app-border);border-radius:12px;background:var(--app-panel);color:#e5e9df;box-shadow:0 18px 65px #0007}
+.desktop-company-dialog::backdrop{background:#06131bc9;backdrop-filter:blur(5px)}
+.desktop-company-dialog h2{margin:0 32px 12px 0;font:600 22px/1.3 Inter,system-ui,sans-serif}.desktop-company-dialog p{font-size:12px;line-height:1.6;color:var(--app-muted)}
+.desktop-company-dialog label{display:block;font-size:12px;margin:16px 0;color:#d1ded5}.desktop-company-dialog input:not([type=checkbox]):not([type=radio]){display:block;width:100%;padding:10px 12px;margin-top:7px;border:1px solid #ffffff28;border-radius:6px;background:#0b1d25;color:#e5e9df;font:13px/1.5 system-ui}
+.desktop-company-dialog .company-microsoft,.desktop-company-dialog .company-submit{width:100%;padding:12px;border:1px solid var(--app-gold);border-radius:6px;background:var(--app-gold);color:#11252d;font:600 13px/1.4 system-ui;cursor:pointer}.desktop-company-dialog .company-microsoft{margin-top:10px}
+.desktop-company-dialog .company-provider-note{font-size:11px}.desktop-company-dialog .company-step{margin:0 0 6px;font:600 10px/1.4 system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--app-gold)}
+.desktop-company-dialog .company-no-reset{margin:14px 0 0;font-size:11px}.desktop-company-dialog .company-error{color:#f4b6a6}.desktop-company-dialog .company-username{color:var(--app-gold);font-size:15px}.desktop-company-dialog .company-show{display:flex;align-items:center;gap:8px}.company-show input{accent-color:var(--app-gold)}
+/* desktop.css:210-214 - the identity conflict is three separately scannable lines. */
+.desktop-company-dialog .company-error p{margin:0;color:inherit}
+.desktop-company-dialog .company-error p+p{margin-top:9px}
+/* desktop.css:224 - on a short window a dialog carrying a refusal trims its bottom inset. */
+@media(max-height:700px){.desktop-company-dialog:has(.company-error:not([hidden])){padding-bottom:16px}}
+/* desktop.css:229-244 - Verified emails, and the headings/sentences My Profile adds. */
+.desktop-company-dialog .company-emails{display:grid;gap:6px;margin:0 0 4px}
+.desktop-company-dialog .company-emails[hidden]{display:none}
+.desktop-company-dialog .company-email{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"mark address" "mark meta";align-items:start;column-gap:10px;margin:0;padding:10px 12px;border:1px solid #ffffff1f;border-radius:7px;background:#0b1d25;cursor:pointer}
+.desktop-company-dialog .company-email:hover{border-color:#ffffff38}
+.desktop-company-dialog .company-email:has(input:checked){border-color:var(--app-gold);background:#12252c}
+.desktop-company-dialog .company-email input{grid-area:mark;width:16px;height:16px;margin:1px 0 0;padding:0;accent-color:var(--app-gold)}
+.desktop-company-dialog .company-email-address{grid-area:address;font-size:13px;line-height:1.4;color:#e5e9df;overflow-wrap:anywhere}
+.desktop-company-dialog .company-email-meta{grid-area:meta;font-size:11px;line-height:1.5;color:var(--app-muted)}
+.desktop-company-dialog .company-emails-empty,.desktop-company-dialog .company-emails-unset,.desktop-company-dialog .company-emails-loading{margin:0 0 10px;font-size:12px;line-height:1.6}
+.desktop-company-dialog .company-status{margin:10px 0 0;font-size:11px;line-height:1.6;color:var(--app-gold)}
+.desktop-company-dialog .company-email-actions{display:grid;gap:2px;margin-top:16px}
+.desktop-company-dialog .company-clear{display:block;margin:10px auto 0;font-size:11px}
+.desktop-company-dialog h3{margin:20px 0 0;font:600 13px/1.4 system-ui;color:#e5e9df}
+.desktop-company-dialog .company-section-note{margin:6px 0 10px;font-size:11px}
+/* desktop.css:266-282 - provider choices, disabled/focus states, and My Profile's buttons, picture
+   actions and linked-provider lines. */
+.desktop-company-dialog .company-provider{display:block;width:100%;margin-top:8px;padding:12px;border:1px solid #ffffff38;border-radius:6px;background:#122b34;color:#e5e9df;font:600 13px/1.4 system-ui;cursor:pointer}
+.desktop-company-dialog button:disabled{opacity:.5;cursor:default}
+.desktop-company-dialog button:focus-visible{outline:2px solid var(--app-gold);outline-offset:3px}
+#company-profile form button,#company-profile [data-open-emails],.company-picture-actions button,.company-provider-link button{min-height:40px;padding:9px 13px;border:1px solid #ffffff38;border-radius:6px;background:#17333c;color:#e5e9df;font:600 12px/1.4 system-ui;cursor:pointer}
+#company-profile form button{width:100%;border-color:var(--app-gold)}
+.company-picture-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.company-provider-links{display:grid;gap:8px}
+.company-provider-link{display:grid;gap:3px;padding:8px 0;border-bottom:1px solid #ffffff18;font:13px/1.5 system-ui}
+.company-provider-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.company-provider-name{min-width:0;overflow-wrap:anywhere}
+.company-provider-head button{flex-shrink:0}
+.company-provider-details{display:grid;gap:2px;margin:2px 0 2px;padding-left:10px;border-left:2px solid #ffffff20}
+.company-provider-detail{margin:0;font:12px/1.5 system-ui;color:var(--app-muted);overflow-wrap:anywhere}
+.company-provider-detail-label{color:#8fa39d}
+.company-provider-detail-value{color:#e5e9df}
+/* desktop.css:194,285-290,299 - the quiet wait line the dialogs show while they talk to the API
+   (site/wait-feedback.mjs), with its spinner stopped when the system asks for reduced motion. */
+@keyframes update-spin{to{transform:rotate(360deg)}}
+.wait-feedback{display:flex;align-items:flex-start;gap:9px;color:var(--app-muted);font:12px/1.6 system-ui;text-align:left;overflow-wrap:anywhere}
+.wait-feedback[hidden]{display:none!important}
+.wait-feedback-mark{flex:none;width:13px;height:13px;margin-top:3px;border:1.5px solid #e4c48635;border-top-color:var(--app-gold);border-radius:50%;animation:update-spin 1.3s linear infinite}
+.wait-feedback small{display:block;margin-top:4px;color:var(--app-muted);font-size:11px;line-height:1.6}
+.desktop-company-dialog .company-wait{margin:12px 0;font-size:12px}.desktop-company-dialog .company-wait small{font-size:11px}
+@media(prefers-reduced-motion:reduce){.wait-feedback-mark{animation:none;border-color:var(--app-gold);opacity:.7}}
+/* desktop.css:317-331 - entry motion only: the dialog and its backdrop fade, a refusal and a step
+   line fade in place. No transforms, because these dialogs measure their own geometry to decide
+   where a refusal has to be scrolled to, and closes stay instant. */
+@keyframes dialog-enter{from{opacity:0}to{opacity:1}}
+@keyframes backdrop-enter{from{opacity:0}to{opacity:1}}
+@keyframes line-enter{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:no-preference){
+ .desktop-company-dialog[open]{animation:dialog-enter 170ms cubic-bezier(.22,.61,.36,1) both}
+ .desktop-company-dialog[open]::backdrop{animation:backdrop-enter 170ms ease-out both}
+ .desktop-company-dialog .company-step{animation:line-enter 200ms ease-out both}
+ .wait-feedback:not([hidden]){animation:line-enter 160ms ease-out both}
+ .desktop-company-dialog .company-error:not([hidden]){animation:line-enter 160ms ease-out both}
+}
+
+/* =============================================================================================
+   THIS PAGE'S OWN. easter.company's header is not the launcher's: one button and (from this change)
+   the account control, 84px tall, wrapping to its own row at 650px, against the launcher's five
+   destinations and 72px bar. So the pill takes this header's button scale - the Request Beta Access
+   button beside it is .button.small, 9px/13px padding, 11px type, 5px radius - and the breakpoints
+   below are this header's own instead of web.css:42-65's, which are sized for five nav links. The
+   face sizes and the name's disappearance are the launcher's, at the widths they have to be. */
+.web-mode .site-header nav .web-account-nav{padding:9px 13px;border-radius:5px;font-size:11px;font-weight:600;line-height:1.5}
+/* 650px is where this header's own styles.css wraps the nav onto a full-width row with two items
+   spread to both edges: the control keeps the beta button's small type and its 40px face height. */
+@media(max-width:650px){
+ .web-mode .site-header nav .web-account-nav{padding:8px 10px;font-size:10px}
+ .web-mode .site-header nav .web-account-nav.web-account-with-face{padding-block:3px}
+}
+/* web.css:57-59 - the launcher's own narrow breakpoint: a 24px face in the same 4px rounded square. */
+@media(max-width:420px){
+ .web-mode .web-account-face{width:24px;height:24px;font-size:15px}
+ .web-mode .site-header nav .web-account-nav.web-account-with-face{padding-block:5px}
+}
+/* web.css:63-65 - below 360px there is room for the face or the name, not both: the control becomes
+   the face alone, one whole mark rather than a word clipped to a letter, and its accessible name and
+   its menu are unchanged. */
+@media(max-width:360px){
+ .web-mode .site-header nav .web-account-nav.web-account-with-face .web-account-name{display:none}
+}
