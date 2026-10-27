@@ -25,4 +25,16 @@ for tab in p.tabs:
     assert tab.get('aria-controls') in p.panels, 'Missing tab panel'
     assert tab.get('aria-selected') in ('true','false'), 'Missing tab state'
 assert sum(t['aria-selected']=='true' for t in p.tabs)==1
+# MICROSOFT'S PUBLISHER-DOMAIN PROOF. Azure fetches this exact path and compares the one
+# applicationId, so a renamed file, a moved directory or a typo'd id is the whole
+# verification failing - silently, with the refusal happening in a portal rather than here.
+import json
+association = Path('site/.well-known/microsoft-identity-association.json')
+assert association.is_file(), 'Missing site/.well-known/microsoft-identity-association.json'
+document = json.loads(association.read_text())
+assert list(document) == ['associatedApplications'], document.keys()
+assert document['associatedApplications'] == [
+    {'applicationId': 'c3fc8a5e-4540-4691-aecc-14ebbb17b94e'}], document['associatedApplications']
+
 print(f'Validated {len(p.links)} links, {len(p.assets)} asset references and beta signup anchors.')
+print('Validated the Microsoft publisher-domain association for application c3fc8a5e.')
