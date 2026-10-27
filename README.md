@@ -28,3 +28,13 @@ downloaded draft/submitted flags, and editing without losing entered details.
 The noindex/nofollow metadata and manual-only Pages workflow retain draft status.
 No production deploy or public signup integration was made. The GitHub connection
 previously refused repository writes with403 Resource not accessible by integration.
+
+The interactive harness concept uses the actual agent avatars and source-informed
+inbox/worker patterns with fictional conversations. It is explicitly illustrative,
+not a live screenshot or agent connection. Delta, Darwin and Diana have individual
+profiles; Dexter is a separate local companion direction. Public model details stay
+within the approved disclosure. Owner cards use the supplied Owen and Hannah photos.
+See docs/agent-product-preview.md for the scope and verification limits.
+
+Additional browser review covered all four agent selections, switching between
+inbox and Epsilon workers, and the new agent sections at 320px and 390px.
