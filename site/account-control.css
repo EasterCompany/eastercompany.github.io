@@ -29,10 +29,15 @@
 /* ---------------------------------------------------------------------------------------------
    FROM launcher site/web.css:3 - the palette the dialog family below is painted with. */
 .web-mode{
- /* launcher site/styles.css:2 supplies --gold for the launcher's nav; this page's styles.css does
-    not have one, and the pill's own colour rule (web.css:18) reads it. Same value, same var name. */
- --gold:#dbba79;
- --app-panel:#11252d;--app-border:#ffffff24;--app-muted:#a8b9b4;--app-gold:#e4c486}
+ /* THE SITE'S OWN ACCENT, NOT THE LAUNCHER'S GOLD. These elements are imported from the launcher
+    and were painted with its palette; on this page they take the site's accent instead so the
+    account pill, its focus ring, the sign-in dialog and the waiting spinner belong to the page
+    they sit on. Owen, 2026-10-28: "the sign in modal and other imported user elements on
+    easter.company should use the same accent colors as the site, not the gold from the
+    easter-co-smp site". --accent is this page's (:root in styles.css); the launcher keeps its own
+    file, and its site is untouched. */
+ --gold:var(--accent,#c9b1ff);
+ --app-panel:#11252d;--app-border:#ffffff24;--app-muted:#a8b9b4;--app-gold:var(--accent,#c9b1ff)}
 /* web.css:4-5 - the control's markup carries [hidden] on the face slot and the picture, and the
    gold focus ring is what the launcher's own controls show. */
 .web-mode [hidden]{display:none!important}
@@ -42,7 +47,7 @@
    FROM launcher site/web.css:18-19 - the pill, and the height it takes once it carries a face. The
    padding-block:3px + 32px face + 1px border is the 40px the launcher's Download button beside it
    already has. */
-.web-mode .site-header nav .web-account-nav{display:inline-flex;align-items:center;gap:7px;max-width:140px;overflow:hidden;border:1px solid #e4c48650;background:transparent;color:var(--gold);cursor:pointer}
+.web-mode .site-header nav .web-account-nav{display:inline-flex;align-items:center;gap:7px;max-width:140px;overflow:hidden;border:1px solid #c9b1ff50;background:transparent;color:var(--gold);cursor:pointer}
 .web-mode .site-header nav .web-account-nav.web-account-with-face{padding-block:3px;height:40px}
 
 /* FROM launcher site/web.css:24-35 - one fixed face slot so the control measures the same whether
@@ -139,7 +144,7 @@
 @keyframes update-spin{to{transform:rotate(360deg)}}
 .wait-feedback{display:flex;align-items:flex-start;gap:9px;color:var(--app-muted);font:12px/1.6 system-ui;text-align:left;overflow-wrap:anywhere}
 .wait-feedback[hidden]{display:none!important}
-.wait-feedback-mark{flex:none;width:13px;height:13px;margin-top:3px;border:1.5px solid #e4c48635;border-top-color:var(--app-gold);border-radius:50%;animation:update-spin 1.3s linear infinite}
+.wait-feedback-mark{flex:none;width:13px;height:13px;margin-top:3px;border:1.5px solid #c9b1ff35;border-top-color:var(--app-gold);border-radius:50%;animation:update-spin 1.3s linear infinite}
 .wait-feedback small{display:block;margin-top:4px;color:var(--app-muted);font-size:11px;line-height:1.6}
 .desktop-company-dialog .company-wait{margin:12px 0;font-size:12px}.desktop-company-dialog .company-wait small{font-size:11px}
 @media(prefers-reduced-motion:reduce){.wait-feedback-mark{animation:none;border-color:var(--app-gold);opacity:.7}}
