@@ -33,3 +33,16 @@
 @keyframes panel-in{from{opacity:.35}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.platform-panel:not([hidden]){animation:none}}
 @media(max-width:650px){.beta-summary h2{line-height:1.3}}
+
+/* THE FOUNDERS, AS BIOGRAPHIES. The company section's second column used to be two
+   avatar-and-LinkedIn links in a row; it now holds one card per person, stacked, with the
+   role under the name and the biography under that. The face and the LinkedIn link stay
+   exactly as they were, so the block still reads as the same people, only with something
+   to say. Appended rather than edited in place because the rules above are one minified
+   line and the responsive blocks already set .people's flex properties. */
+.people{display:grid;gap:30px;align-items:start}
+.people .person{padding-bottom:26px;border-bottom:1px solid var(--line)}
+.people .person:last-child{padding-bottom:0;border-bottom:0}
+.people .person-role{font-size:11px;letter-spacing:.02em;color:#bba7dc;margin:12px 0 10px}
+.people .person>p:last-child{font-size:12px;line-height:1.9;color:var(--muted);margin:0;max-width:520px}
+@media(max-width:650px){.people .person>p:last-child{font-size:11px}}
