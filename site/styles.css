@@ -21,6 +21,8 @@
 
 /* THE BETA CARD'S CONTACT LINE, and the carousel's arrival. Both are layout only: the words are
    Owen's, typed into site/index.html. */
+.beta-summary .beta-sub{font-size:12px;line-height:1.7;color:#a2a7b3;margin:0 0 16px}
+.beta-summary .beta-organisations{margin-top:16px}
 .beta-summary .beta-contact{margin-top:10px;font-size:12px}
 .beta-summary .beta-contact a{color:inherit;text-decoration:none;border-bottom:1px solid #ffffff40}
 .beta-summary h2{line-height:1.32}
