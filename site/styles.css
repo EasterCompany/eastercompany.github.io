@@ -59,3 +59,22 @@
 #panel-agents{display:block;align-items:initial}
 #panel-agents .agent-grid{margin-top:22px}
 @media(max-width:650px){#panel-agents .agent-grid{margin-top:18px}}
+
+/* THE FOOTER LEADS WITH WHERE THE COMPANY CAME FROM. Owen, 2026-10-28: "add
+   Started in the UK [flag] Made in the USA [flag] in the footer ... put in the top line, center of
+   the footer, move the 'back to top' thing below this." So the grid gains two full-width rows at
+   the top - the origin line, then the back-to-top link - and the copyright and motto keep the
+   outer columns of the row beneath them. The flags are aria-hidden because the words beside them
+   already say UK and USA, and a screen reader announcing "flag: United Kingdom" twice per phrase
+   is noise rather than meaning. Lines are placed explicitly at both widths so the order cannot
+   depend on source order or on the older mobile rules that placed the motto first. */
+.footer-origin{grid-column:1/-1;grid-row:1;text-align:center;margin:0;font-size:10px;color:#9aa3b2;line-height:1.9}
+.footer-top{grid-column:1/-1;grid-row:2;text-align:center}
+.footer-legal{grid-column:1;grid-row:3}
+.site-footer .motto{grid-column:3;grid-row:3}
+@media(max-width:650px){
+ .footer-origin{grid-row:1;grid-column:1/-1}
+ .footer-top{grid-row:2;grid-column:1/-1}
+ .footer-legal{grid-row:3;grid-column:1}
+ .site-footer .motto{grid-row:3;grid-column:2;text-align:right}
+}
