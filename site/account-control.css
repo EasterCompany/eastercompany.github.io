@@ -88,7 +88,15 @@
    carried here. Everything else the dialogs need is in the desktop.css rules below, because
    .desktop-company-dialog restates the size, padding, border, ground, colour and shadow the launcher
    site's dialog block gave. */
-.desktop-company-dialog .dialog-close{position:absolute;width:36px;height:36px;font-size:28px;color:var(--app-muted)}
+/* THE CLOSE CONTROL, CENTRED AND PLACED. Two things were missing on this page and neither
+   shows up on the launcher: the reset above (so the glyph sat in a UA button), and the
+   centring, which the launcher does with `.web-mode ... .dialog-close` - this page's body has
+   no web-mode class, so those rules never matched and right/top were never applied either.
+   Owen, 2026-10-28: "the x icon is not centered". grid + place-items centres the glyph on both
+   axes at any font size, and the same declarations now hold whether or not a mode class is
+   present. */
+.desktop-company-dialog .dialog-close{position:absolute;right:14px;top:14px;width:36px;height:36px;padding:0;display:grid;place-items:center;line-height:1;font-size:28px;color:var(--app-muted);border-radius:6px}
+.desktop-company-dialog .dialog-close:hover{background:#ffffff0b;color:var(--ink)}
 
 /* FROM launcher site/desktop.css:203-224 - the company dialog family's frame and its shared parts:
    the Microsoft and submit buttons, the step line, the identity-conflict refusal, the verified-email
