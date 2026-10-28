@@ -49,3 +49,9 @@
 
 
 /* The tab panels are stacked and swapped from an inline <style> block in index.html, not from here: the inactive panels no longer carry the hidden attribute, so a stale copy of this file must not be able to paint all four at once. Look for "THE TAB PANELS SHARE ONE GRID CELL" in index.html. */
+
+
+/* The agents section has no rule above it. Owen, 2026-10-28: "remove the border-top from the
+   parent <section> element here". .section draws that line on every section; this is the
+   one that does not want it, and the id beats the class whatever order they load in. */
+#agents{border-top:0}
