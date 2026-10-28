@@ -69,7 +69,7 @@
    both widths so the order never depends on source order or on the older mobile rules. */
 .footer-legal{grid-column:1;grid-row:1}
 .footer-centre{grid-column:2;grid-row:1;display:grid;gap:5px;justify-items:center;text-align:center;margin:0}
-.footer-origin{margin:0;font-size:10px;color:#9aa3b2;line-height:1.9}
+.footer-centre p{margin:0;font-size:10px;color:#9aa3b2;line-height:1.9}
 .site-footer .motto{grid-column:3;grid-row:1}
 @media(max-width:650px){
  .footer-legal{grid-row:1;grid-column:1}
