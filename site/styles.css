@@ -47,18 +47,5 @@
 .people .person>p:last-child{font-size:12px;line-height:1.9;color:var(--muted);margin:0;max-width:520px}
 @media(max-width:650px){.people .person>p:last-child{font-size:11px}}
 
-/* THE TAB PANELS ALL SHARE ONE GRID CELL, so the section is always as tall as its tallest
-   panel and the page does not move when the panel swaps. Owen, 2026-10-28: "all these tabs
-   result in content of different heights, so the page shifts a little while I'm reading."
-   The old mechanism was the `hidden` attribute, which has to take the inactive panel out of
-   layout, so the section was only ever as tall as the panel on screen. The panels now stay
-   measured and are swapped with `visibility`, which keeps an inactive panel out of the
-   accessibility tree and out of the tab order exactly as `display:none` did, and leaves the
-   section's height decided by the tallest of the four rather than by the current one.
-   site.js toggles .is-active; the first panel carries it in the markup so the section reads
-   correctly with scripting off. */
-#platform{display:grid}
-#platform>.section-head{grid-row:1}
-#platform>.platform-tabs{grid-row:2}
-#platform>.platform-panel{grid-area:3/1;visibility:hidden}
-#platform>.platform-panel.is-active{visibility:visible}
+
+/* The tab panels are stacked and swapped from an inline <style> block in index.html, not from here: the inactive panels no longer carry the hidden attribute, so a stale copy of this file must not be able to paint all four at once. Look for "THE TAB PANELS SHARE ONE GRID CELL" in index.html. */
