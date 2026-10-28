@@ -76,3 +76,29 @@
  .site-footer .motto{grid-row:1;grid-column:2;text-align:right}
  .footer-centre{grid-row:2;grid-column:1/-1;gap:3px}
 }
+
+/* THE GAMES SECTION: two cards between the e-server tabs and the enquiries form. Each card is an
+   illustration in the same framed shape the platform tabs use, then the name, the one-line
+   promise and a paragraph. Owen, 2026-10-28: "add a section ... Easter Co. Launcher, your portal
+   to our world of gaming. Easter Co. SMP The Ultimate Minecraft Experience, custom client &
+   server, effortless install and setup. Much more to come in this space!" The launcher card
+   borrows the launcher's own vocabulary - a server row with a ready light and a Play button -
+   and the SMP card its three pillars, so the two read as screenshots of the products rather
+   than as marketing tiles. Palette is this page's: surface, line and the purple accent. */
+.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.game-card{display:flex;flex-direction:column;padding:20px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.game-art{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:178px;padding:16px;border:1px solid #ffffff1f;border-radius:8px;background:radial-gradient(ellipse at 60% 15%,#8b68bc1f,transparent 72%),#0d1820}
+.game-window{display:grid;gap:10px;padding:12px 14px;border:1px solid #ffffff1f;border-radius:7px;background:#111317}
+.game-window-row{display:flex;align-items:center;gap:10px}
+.game-window-row strong{font:500 13px/1.4 ui-sans-serif,system-ui;color:#e2e4ea}
+.game-window-row small{margin-left:auto;font:10px/1.5 ui-sans-serif,system-ui;color:#8f95a2}
+.game-led{width:7px;height:7px;border-radius:50%;background:#7ed6a5;box-shadow:0 0 9px #7ed6a580}
+.game-window-button{padding:8px 10px;border:1px solid #c9b1ff55;border-radius:5px;background:#c9b1ff14;color:#dfd2fa;font:600 11px/1 ui-sans-serif,system-ui;text-align:center}
+.game-world{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.game-world span{padding:10px 4px;border:1px solid #ffffff1f;border-radius:5px;background:#ffffff08;text-align:center;font:9px/1.5 ui-sans-serif,system-ui;letter-spacing:.08em;text-transform:uppercase;color:#a9b3c6}
+.game-card h3{margin:18px 0 5px;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.game-tagline{margin:0 0 12px;font-size:12px;letter-spacing:.01em;color:var(--accent)}
+.game-card p:not(.game-tagline){margin:0 0 16px;font-size:12px;line-height:1.9;color:var(--muted);max-width:520px}
+.game-card .text-link{align-self:flex-start;margin-top:auto}
+.game-more{margin:34px 0 0;text-align:center;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+@media(max-width:750px){.game-grid{grid-template-columns:1fr;gap:20px}.game-more{margin-top:26px}}
