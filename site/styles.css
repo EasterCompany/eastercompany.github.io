@@ -51,7 +51,11 @@
 /* The tab panels are stacked and swapped from an inline <style> block in index.html, not from here: the inactive panels no longer carry the hidden attribute, so a stale copy of this file must not be able to paint all four at once. Look for "THE TAB PANELS SHARE ONE GRID CELL" in index.html. */
 
 
-/* The agents section has no rule above it. Owen, 2026-10-28: "remove the border-top from the
-   parent <section> element here". .section draws that line on every section; this is the
-   one that does not want it, and the id beats the class whatever order they load in. */
-#agents{border-top:0}
+/* THE AGENTS TAB SPANS THE PANEL. The agents lived in a section of their own until Owen asked
+   for them as a tab inside this one (2026-10-28: "make this a tab within the section below call
+   this tab 'Your Agents, Our Models.'"). Every other panel is a two-column grid of copy and
+   illustration; this one is a single block of four agent cards, so it takes the panel's whole
+   width and the cards keep the four-across grid they had in their own section. */
+#panel-agents{display:block;align-items:initial}
+#panel-agents .agent-grid{margin-top:22px}
+@media(max-width:650px){#panel-agents .agent-grid{margin-top:18px}}
