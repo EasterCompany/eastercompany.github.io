@@ -43,21 +43,6 @@ const seam=createWebAccount({microsoftBrowser:createMicrosoftSignIn({redirectUri
 const nav=document.querySelector('.site-header nav');
 const control=nav?await mountAccountControl({nav,seam}):null;
 
-// THE PAGE'S OWN BUTTONS FOLLOW THE SAME STATE THE PILL DOES. Owen, 2026-10-28: the nav's
-// Request Beta Access button goes; a signed-in visitor gets an "e-server" button in its place
-// and the hero offers "Open e-server dashboard" instead of "Sign up & Login". The seam's
-// subscribe calls back with the current state immediately and on every change, so the first
-// paint is already correct - there is no frame where the wrong button shows.
-const navEServer=document.getElementById('nav-eserver');
-const heroSignIn=document.getElementById('hero-signin');
-const heroDashboard=document.getElementById('hero-dashboard');
-seam.subscribe(state=>{
- const signedIn=Boolean(state&&state.account);
- if(navEServer)navEServer.hidden=!signedIn;
- if(heroDashboard)heroDashboard.hidden=!signedIn;
- if(heroSignIn)heroSignIn.hidden=signedIn;
-});
+// Installer controls are available before and after sign-in. The shared account
+// control above continues to own sign-in, sign-up, profile and linked accounts.
 
-// "Sign up & Login" opens the same account menu the pill does, because that is where this
-// page's sign-in lives. It is a button and not a link for that reason: nothing navigates.
-if(heroSignIn&&control)heroSignIn.addEventListener('click',()=>control.account.click());
