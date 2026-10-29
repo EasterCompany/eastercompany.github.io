@@ -1,0 +1,9 @@
+/* The shared installer dropdown in the corporate site's existing palette. */
+.eserver-download{--download-accent:#d4c2fa;--card:var(--surface);--text:var(--ink);--border:var(--line)}
+.eserver-download .eserver-download-primary,.eserver-download .eserver-download-picker>summary{color:#21182f}
+.site-header #nav-download{--download-accent:transparent}
+.site-header #nav-download .eserver-download-primary,.site-header #nav-download summary{color:#dfd2fa;border-color:#c9b1ff55;border-radius:5px 0 0 5px}
+.site-header #nav-download summary{border-radius:0 5px 5px 0}
+.intro-actions{flex-wrap:wrap}
+@media(max-width:700px){.site-header{height:auto;min-height:84px;flex-wrap:wrap;padding-block:18px;gap:16px}.site-header nav{gap:12px;flex-wrap:wrap;max-width:100%}.intro-actions{gap:18px}.site-header .wordmark{flex:1 1 auto}.site-header nav{flex:1 1 auto;justify-content:flex-end}}
+@media(max-width:440px){.site-header nav{width:100%;justify-content:space-between}.intro-actions .eserver-download{width:100%}.intro-actions .eserver-download-primary{flex:1}}
