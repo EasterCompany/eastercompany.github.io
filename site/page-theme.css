@@ -1,0 +1,71 @@
+/* Load AFTER client-download-theme.css. Existing :root and all dark colours remain unchanged. */
+:root{
+ --selection:#9466df55;--on-accent:#17131f;
+ --button:#d4c2fa;--button-ink:#21182f;--button-hover:#e2d4fd;
+ --accent-text:#dfd2fa;--accent-line:#c9b1ff55;
+ --link:#c4c7d0;--link-line:#ffffff40;--eyebrow:#bba7dc;--lead:#d3d6df;
+ --status:#bcb5c9;--status-dot:#c6aaf4;--offer-list:#c4c5cc;--check:#bc9aef;
+ --offer-note:#7f8592;--caption:#8f95a2;--agent-role:#a39bad;--agent-note:#757d8d;
+ --tab-line:#b497e5;--tab-ink:#e3d6fc;
+ --signup:#191920;--label:#bbbec9;--input-line:#ffffff27;--input-bg:#111317;--input-ink:#ececf2;
+ --form-note:#7e8492;--edit:#b9b0c9;--term:#9790a3;--detail:#c7c9d4;
+ --company-link:#b7afc6;--person-note:#808694;--footer:#6e7788;--motto:#aca1bb;--origin:#9aa3b2;
+ --offer-mobile:#181a20;--hero-fallback:#04080d;
+ --veil-90:#111317e6;--veil-72:#111317b8;--veil-80:#111317cc;
+ --download-shadow:#0006;--download-hover:#8b5cf61a;--download-backdrop:#080a12ce;
+}
+/* Same six public tokens; --bg deliberately equals the hero's light --page. */
+html[data-easter-theme="light"]{
+ color-scheme:light;
+ --bg:#eef2f9;--surface:#f8faff;--ink:#2b2b36;--muted:#515b70;--line:#c7d1e0;--accent:#6d4fd8;
+ --selection:#9466df33;--on-accent:#ffffff;
+ --button:#6d4fd8;--button-ink:#ffffff;--button-hover:#5d40c4;
+ --accent-text:#6244bb;--accent-line:#927bc4;
+ --link:#46516a;--link-line:#8793a8;--eyebrow:#6b4c93;--lead:#394356;
+ --status:#5e526f;--status-dot:#7551ae;--offer-list:#465168;--check:#73509f;
+ --offer-note:#566075;--caption:#566075;--agent-role:#655875;--agent-note:#59647a;
+ --tab-line:#6d4fd8;--tab-ink:#6244bb;
+ --signup:#e5e7f2;--label:#465168;--input-line:#758299;--input-bg:#f8faff;--input-ink:#2b2b36;
+ --form-note:#566075;--edit:#624978;--term:#655875;--detail:#465168;
+ --company-link:#624978;--person-note:#566075;--footer:#59647a;--motto:#655875;--origin:#566075;
+ --offer-mobile:#f8faff;--hero-fallback:#eef2f9;
+ --veil-90:#eef2f9e6;--veil-72:#eef2f9b8;--veil-80:#eef2f9cc;
+ --download-shadow:#28345229;--download-hover:#6d4fd814;--download-backdrop:#28345280;
+}
+::selection{background:var(--selection)}
+.skip-link{color:var(--on-accent)}
+.button{background:var(--button);color:var(--button-ink);border-color:var(--button)}
+.button:hover{background:var(--button-hover);border-color:var(--button-hover)}
+.button.small{background:transparent;color:var(--accent-text);border-color:var(--accent-line)}
+.text-link{color:var(--link);border-bottom-color:var(--link-line)}
+.eyebrow,.people .person-role{color:var(--eyebrow)}
+.lead{color:var(--lead)}
+.status{color:var(--status)}.status i{background:var(--status-dot)}
+.beta-summary ul{color:var(--offer-list)}.beta-summary li::before{color:var(--check)}
+.beta-summary>p{color:var(--offer-note)}
+.beta-summary .beta-sub{color:var(--muted)}
+.beta-summary .beta-contact a{border-bottom-color:var(--link-line)}
+.section-head>p,.platform-tabs button{color:var(--caption)}
+.agent-grid h3 span{color:var(--agent-role)}.agent-grid small{color:var(--agent-note)}
+.platform-tabs button[aria-selected=true]{border-color:var(--tab-line);color:var(--tab-ink)}
+.signup{background:var(--signup)}
+.request-card label{color:var(--label)}
+#signup input,#signup textarea{border-color:var(--input-line);background:var(--input-bg);color:var(--input-ink)}
+.form-note{color:var(--form-note)}.review-actions button{color:var(--edit)}
+#application-summary dt{color:var(--term)}#application-summary dd{color:var(--detail)}
+.company p a{color:var(--company-link)}.people small{color:var(--person-note)}
+.site-footer p{color:var(--footer)}.motto>span{color:var(--motto)}
+.footer-centre p{color:var(--origin)}
+.hero-loop{background:var(--hero-fallback)}
+.hero-veil{background:linear-gradient(180deg,var(--veil-90) 0%,var(--veil-72) 30%,var(--veil-80) 68%,var(--bg) 100%)}
+@media(max-width:650px){.beta-summary{background:var(--offer-mobile)}}
+/* Installer is page chrome, not account chrome. Bridge only its existing API. */
+.eserver-download{--download-accent:var(--button)}
+.eserver-download .eserver-download-primary,.eserver-download .eserver-download-picker>summary{color:var(--button-ink)}
+.site-header #nav-download .eserver-download-primary,.site-header #nav-download summary{color:var(--accent-text);border-color:var(--accent-line)}
+.eserver-download-picker>summary{border-left-color:var(--link-line)}
+.eserver-download :focus-visible,.eserver-install :focus-visible{outline-color:var(--accent)}
+.eserver-download-menu{box-shadow:0 14px 40px var(--download-shadow)}
+.eserver-download-menu a:hover{background:var(--download-hover)}
+.eserver-install{--card:var(--surface);--text:var(--ink);--border:var(--line)}
+.eserver-install::backdrop{background:var(--download-backdrop)}

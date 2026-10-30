@@ -1,0 +1,27 @@
+/* THE ACCOUNT CONTROL'S HOST TOKENS, which this page never published.
+ *
+ * site/account-control.css (served from launcher.easter.company) builds its own five
+ * --es-* tokens out of four host declarations: --app-panel, --app-border, --app-muted and
+ * --app-gold, with --ink as its text. This page declared none of them, so the pill, its menu
+ * and the settings panel fell back to the launcher's teal/gold literals here — visibly a
+ * different product on the same page — and in the light theme they would have stayed dark
+ * panels on a light page. These are the same four names, taken from this page's own palette,
+ * so the control reads as Easter Company in both themes and Diana's page-theme.css needs no
+ * knowledge of it.
+ *
+ * Dark is the page's long-standing palette (#191c22 surface, #c9b1ff accent); light follows
+ * page-theme.css (#f8faff surface, #6d4fd8 accent). Measured after adding this file: the
+ * panel's surface and accent resolve to these values in both themes.
+ */
+:root{
+ --app-panel:#191c22;
+ --app-border:#ffffff24;
+ --app-muted:#a2a7b3;
+ --app-gold:#c9b1ff;
+}
+html[data-easter-theme="light"]{
+ --app-panel:#f8faff;
+ --app-border:#c7d1e0;
+ --app-muted:#515b70;
+ --app-gold:#6d4fd8;
+}
