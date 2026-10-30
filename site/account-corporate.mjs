@@ -77,23 +77,26 @@ const control=nav?await mountAccountControl({nav,seam}):null;
 // preview and only move on save. The preview therefore wins until the document catches
 // up, which it does on the save or on the discard that follows.
 const HERO_THEMES=new Set(['light','dark','system']);
+// THE PREFERENCE COMES FROM THE CONTROL THAT MOUNTED ABOVE, not from a second read of the
+// settings document. `mountAccountControl` publishes the page's theme on load and returns the
+// choice it resolved (`control.theme`), because the published attribute is RESOLVED — it cannot
+// tell `system` from a `dark` chosen on a dark OS, and the hero must keep following the OS under
+// `system`. A second `seam.settingsRead()` here was measured to be refused outright: the seam
+// serves one account request at a time ("Another account request is in progress.", 2026-10-30).
 const heroFrame=document.querySelector('iframe.hero-loop');
 if(heroFrame){
   const media=window.matchMedia?.('(prefers-color-scheme: light)');
+  const accountTheme=control?.theme||null;
+  let choice='system';
   let sent=null;
   const paint=theme=>{
     sent=theme;
     try{heroFrame.contentWindow.postMessage({type:'hero-theme',theme},location.origin);}catch{/* a frame between documents drops it; load sends again */}
   };
-  const readChoice=async()=>{
-    try{
-      const answer=await seam.settingsRead();
-      const theme=answer?.ok?answer.value?.settings?.theme:null;
-      return HERO_THEMES.has(theme)?theme:'system';
-    }catch{ return 'system'; }
-  };
-  const follow=async()=>{
-    const choice=await readChoice();
+  // ONE RULE, unchanged from the version that read the document itself: the account's choice
+  // decides, except while the settings panel is previewing an unsaved choice that disagrees with
+  // it — the panel is already painting the page in that colour, so the hero follows it.
+  const follow=()=>{
     const resolved=choice==='system'?(media?.matches?'light':'dark'):choice;
     const applied=document.documentElement.dataset.easterTheme;
     const previewing=(applied==='light'||applied==='dark')&&applied!==resolved;
@@ -103,6 +106,12 @@ if(heroFrame){
   heroFrame.addEventListener('load',()=>{ if(sent)paint(sent); follow(); });
   new MutationObserver(follow).observe(document.documentElement,
     {attributes:true,attributeFilter:['data-easter-theme']});
+  if(accountTheme){
+    accountTheme.subscribe(next=>{ choice=HERO_THEMES.has(next)?next:'system'; follow(); });
+  }
+  // The OS answer is the hero's own business too: a `system` account must follow a media change
+  // here, and the control's publication of it is what this observer above already hears.
+  media?.addEventListener?.('change',follow);
   follow();
 }
 

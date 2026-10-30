@@ -1,6 +1,23 @@
 <!doctype html>
 <html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111317">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111317"><script>/* THE PAGE'S THEME, DECIDED BEFORE THE FIRST PAINT.
+     Owen, 2026-10-30: "the easter.company website is dark theme by default, even though my
+     setting is 'system - light' ... make sure that the site when not logged in uses system
+     (auto) and when logging in, automatically updates to user preference."
+     Only the account can name a palette, and the account document is a network read — so the
+     first paint uses the one answer that needs no request at all: `system`. This runs while the
+     head is parsed, which is why there is no flash; `site/account-corporate.mjs` never gets
+     there first, and a module could not (it runs after the document parses).
+     NO MEDIA-QUERY LISTENER HERE, deliberately: the shared account control publishes the theme
+     on load and owns every change after it, so this listener would fight an account that chose
+     a palette the OS disagrees with on the next OS change. If the control's module never loads,
+     the page keeps the OS answer it painted, which is the honest degradation. */
+(function(){
+ var root=document.documentElement,media=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)');
+ var resolved=media&&media.matches?'light':'dark';
+ root.dataset.easterTheme=resolved;
+ root.style.colorScheme=resolved;
+})();</script>
 <meta name="robots" content="noindex,nofollow"><meta name="description" content="e-server from Easter Company. Run AI agents, manage home and office security, control network routing and respond to system events. Request beta access with two weeks of free AI credits.">
 <title>e-server | Easter Company</title><link rel="icon" href="assets/favicon.png" type="image/png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="stylesheet" href="components.css"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="account-control.css"><link rel="stylesheet" href="eserver-downloads.css"><link rel="stylesheet" href="client-download-theme.css">
 <link rel="stylesheet" href="page-theme.css">

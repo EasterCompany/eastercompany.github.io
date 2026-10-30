@@ -33,7 +33,13 @@ const output = process.env.EASTER_HERO_OUTPUT || join(tmpdir(), 'corporate-hero-
 await mkdir(output, {recursive: true});
 // The launcher checkout, which is where the shared account control actually lives. Its
 // own repository is what serves launcher.easter.company; nothing here edits it.
-const launcher = process.env.EASTER_LAUNCHER_SITE || '/root/easter-co-smp.github.io/site';
+// The shared control, from the checkout under test — the corporate page imports it over the wire,
+// so a suite that served the deployed checkout would test yesterday's control against today's
+// adapter. The launcher worktree wins when it is there; the deployed checkout is the fallback.
+const launcher = process.env.EASTER_LAUNCHER_SITE || (
+  existsSync('/root/easter-co-smp-worktrees/theme-default/site/account-control.mjs')
+    ? '/root/easter-co-smp-worktrees/theme-default/site'
+    : '/root/easter-co-smp.github.io/site');
 const API = 'https://jyjshd22z3.execute-api.us-east-2.amazonaws.com';
 
 const TYPES = {'.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript',
