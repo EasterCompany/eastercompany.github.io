@@ -57,6 +57,14 @@ const control=nav?await mountAccountControl({nav,seam}):null;
 // Signed out, or an account service that cannot answer, means `system`: the hero then
 // follows the OS exactly as a signed-out visitor's page would. No document, no choice.
 //
+// WHY THE IFRAME'S URL CARRIES NO `?theme=`, unlike the billing page's: this page's
+// preference is a server-side document, so it cannot be known synchronously while the
+// markup parses. The frame therefore cold-loads the only answer available with no request
+// at all — `system` — and this module repaints it the moment the document lands, over
+// postMessage, which is a repaint rather than a reload: for a `system` account (the
+// default) the first paint is already right, and for an explicit choice the frame is
+// corrected once, before the person has read anything.
+//
 // THE LIVE PATH. The shared control publishes what it applied to this document as
 // `documentElement.dataset.easterTheme` on every read, preview, save and discard (see
 // site/user-settings.mjs, applyTheme). That attribute is RESOLVED — it can never tell us
