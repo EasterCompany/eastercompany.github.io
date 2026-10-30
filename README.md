@@ -6,7 +6,13 @@ Serve locally with `python3 -m http.server --directory site 8080`.
 The page introduces e-server,
 explains the four agents and uses accessible tabs for security, network privacy
 and event monitoring. The first screen is the supplied hero loop (site/assets/hero-loop.html)
-behind the hero; the owner photos are preserved. The interactive agent-harness preview that
+behind the hero; the owner photos are preserved.
+
+The hero loop is COPIED, not authored here: e-server owns the animation and its theme
+contract (e-server/infra/web-app/hero-loop.html, whose header documents it), and this
+repository publishes the same bytes. site/account-corporate.mjs hands it the account's
+saved Theme setting through that contract, and e-server's tests/test_hero_theme.py is the
+`cmp` gate that fails when the two copies drift. The interactive agent-harness preview that
 used to sit under the hero was removed on 2026-10-27 (docs/agent-product-preview.md).
 
 Beta requests are email-based. The form validates company, work email and use case,
