@@ -104,3 +104,10 @@
 .game-card .text-link{align-self:flex-start;margin-top:auto}
 .game-more{margin:34px 0 0;text-align:center;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
 @media(max-width:750px){.game-grid{grid-template-columns:1fr;gap:20px}.game-more{margin-top:26px}}
+/* THE WORDMARK'S MARK, IN THE COLOUR THE PAGE CAN SEE. Its white cut measures 1.12:1 on the
+   light page — a mark nobody can find. Both cuts are in the markup and exactly one is shown,
+   so the swap needs no JavaScript and no filter that could misshape the phoenix (Owen,
+   2026-10-30). tests/test_marks.py holds the two files to identical geometry. */
+.mark-for-light{display:none}
+html[data-easter-theme="light"] .mark-for-dark{display:none}
+html[data-easter-theme="light"] .mark-for-light{display:inline-block}
