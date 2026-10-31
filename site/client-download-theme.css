@@ -1,4 +1,17 @@
-/* The shared installer dropdown in the corporate site's existing palette. */
+/* THE CORPORATE SITE'S ADAPTER FOR THE DOWNLOAD WIDGET.
+   The widget's rules are written once, in e-server's api/desktop_assets/downloads.css, and this
+   page vendors them verbatim: site/eserver-downloads.css IS that file, byte for byte, and
+   scripts/check_vendored_account.py fails a deploy when the copy drifts (ticket DRY-4 -- before
+   it, the same widget was written twice across the two surfaces a person fetches the launcher
+   from, and a change to one silently left the other behind).
+   A copy could not carry the differences below because they are THIS PAGE'S, not the widget's:
+   the corporate palette (it has its own surface, ink and line tokens), the header button's
+   geometry, and the narrow-bar layout. The install dialog's ::backdrop used to be a fourth
+   difference; the vendored file reads the household --modal-scrim / --modal-blur pair now, so
+   the copy carries it unchanged -- and site/page-theme.css, which loads after this sheet, still
+   carries the same rule as the page's own theme layer. That one is now a duplicate of the
+   vendored rule and is page-theme.css's to drop, not this adapter's to paper over.
+*/
 .eserver-download{--download-accent:#d4c2fa;--card:var(--surface);--text:var(--ink);--border:var(--line)}
 .eserver-download .eserver-download-primary,.eserver-download .eserver-download-picker>summary{color:#21182f}
 .site-header #nav-download{--download-accent:transparent}
