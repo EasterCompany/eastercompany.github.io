@@ -34,3 +34,24 @@ def test_every_page_keys_the_browser_chrome_to_both_schemes():
         values = {scheme: colour.lower() for colour, scheme in found}
         assert values["dark"] == dark, f"{page}'s dark chrome {values['dark']} is not the page's dark --bg {dark}"
         assert values["light"] == light, f"{page}'s light chrome {values['light']} is not the page's light --bg {light}"
+
+
+def test_the_light_hero_veil_and_offer_rule_are_the_reviewed_values():
+    """Diana's verdict of 2026-10-31, as numbers a future edit cannot quietly undo.
+
+    Equal alpha in both modes was not visually equivalent: at 72-90% the hero's own ghost
+    words ran behind the reading columns, and the header met the hero in an accidental tonal
+    step. The fix is a light veil that is nearly opaque - 100% at the top stop, 96.08% at 30%,
+    96.86% at 68% - over #eef2f9, and a strengthened rule on the offer column. The frame's own
+    artwork is untouched, and so is every dark stop.
+    """
+    theme = (SITE / "page-theme.css").read_text()
+    light = theme.split('html[data-easter-theme="light"]', 1)[1]
+    assert "--veil-90:#eef2f9;" in light, "the light veil's top stop must be fully opaque, so the header meets it with no seam"
+    assert "--veil-72:#eef2f9f5;" in light, "the light veil's 30% stop must be #eef2f9f5 (96.08%)"
+    assert "--veil-80:#eef2f9f7;" in light, "the light veil's 68% stop must be #eef2f9f7 (96.86%)"
+    assert 'html[data-easter-theme="light"] .beta-summary{border-color:#b5c1d4}' in theme
+    # Dark is the shipped design and does not move.
+    assert "--veil-90:#111317e6;--veil-72:#111317b8;--veil-80:#111317cc;" in theme
+    # And the gradient still runs top stop, 30%, 68%, page.
+    assert "linear-gradient(180deg,var(--veil-90) 0%,var(--veil-72) 30%,var(--veil-80) 68%,var(--bg) 100%)" in theme

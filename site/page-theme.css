@@ -29,7 +29,12 @@ html[data-easter-theme="light"]{
  --form-note:#566075;--edit:#624978;--term:#655875;--detail:#465168;
  --company-link:#624978;--person-note:#566075;--footer:#59647a;--motto:#655875;--origin:#566075;
  --offer-mobile:#f8faff;--hero-fallback:#eef2f9;
- --veil-90:#eef2f9e6;--veil-72:#eef2f9b8;--veil-80:#eef2f9cc;
+ /* THE LIGHT VEIL IS NEARLY OPAQUE, AND THAT IS THE DECISION (Diana, 2026-10-31).
+    Equal alpha in both modes was not visually equivalent: at 10-28% the hero's own
+    ghost words ran directly behind the reading columns. 100% at the top stop also
+    removes the accidental tonal step at the header, without inventing a second
+    header surface. Dark keeps its own stops, untouched. */
+ --veil-90:#eef2f9;--veil-72:#eef2f9f5;--veil-80:#eef2f9f7;
  --download-shadow:#28345229;--download-hover:#6d4fd814;--download-backdrop:#28345280;
 }
 ::selection{background:var(--selection)}
@@ -69,3 +74,7 @@ html[data-easter-theme="light"]{
 .eserver-download-menu a:hover{background:var(--download-hover)}
 .eserver-install{--card:var(--surface);--text:var(--ink);--border:var(--line)}
 .eserver-install::backdrop{background:var(--download-backdrop)}
+/* The offer column's rule, light only: --line is a hairline for structure at dark contrast,
+   and on #eef2f9 it read as a suggestion. Diana, 2026-10-31: strengthen the existing rule
+   rather than add a card surface; the same colour serves the mobile card's border. */
+html[data-easter-theme="light"] .beta-summary{border-color:#b5c1d4}
