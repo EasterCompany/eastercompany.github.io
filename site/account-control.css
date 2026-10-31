@@ -1,36 +1,46 @@
+/* WHAT THIS FILE IS, IN ONE SENTENCE: only what easter.company itself owns - its host tokens, its
+   own header's pill scale, the close control its stylesheets have no base rule for, and the
+   light-theme adapter - because the account control's MENU and DIALOGS are styled by the launcher's
+   site/account-control.css, which the control loads over the wire from launcher.easter.company
+   wherever it is mounted (ticket DRY-6, 2026-10-31).
+   ================================================================================
+
+   WHAT THIS SHEET USED TO BE. It was a hand-grown copy, rule by rule, of two of the launcher's
+   stylesheets: 64 blocks of launcher site/desktop.css (the whole company-dialog family, the
+   profile menu panel and the quiet wait line) and 18 of launcher site/web.css (the pill, its face
+   slot and its name) - the numbers scripts/report_css_duplication.py prints for this file. Every one of those rules was re-typed here because this page cannot link a
+   file it does not host - and the re-typing drifted, as copies do: the copies were still being
+   edited here weeks after upstream moved.
+
+   WHY THE DIALOG RULES DO NOT NEED A COPY AT ALL. site/account-corporate.mjs mounts
+   https://launcher.easter.company/account-control.mjs, and that module appends its OWN stylesheet
+   to <head> ("The stylesheet comes with the module"), resolved against its own url. So this page
+   already receives the launcher's site/account-control.css over the wire - and the dialog markup
+   comes with it (site/company-profile.mjs and site/company-auth.mjs are imported by that same
+   module). The rules that paint that markup now live in the sheet that carries it, which is the
+   sheet this page already loads; there is nothing left to copy and nothing left to drift.
+
+   WHY THE PILL STILL IS one. The control's pill rules in launcher site/web.css are scoped to the
+   launcher's five-destination header, and this page restates them at ITS header's button scale
+   (below, "THIS PAGE'S OWN"). A copy is what lets this page's static sheet win: the control's sheet
+   is appended to <head> at runtime, so at equal specificity it would outrank this one and the pill
+   would take the launcher's padding. Moving those rules would therefore change how this pill looks
+   unless this page's scale were re-declared at higher specificity - a separate ticket, not this one.
+
+   ORDERING, AND WHY IT MATTERS TO A DEPLOY. The dialog rules arrive from launcher.easter.company,
+   so the launcher's branch has to be live before this sheet's deletions are: pushed to Prd with the
+   launcher still old, the dialog would render unstyled for as long as that window is open. The
+   launcher site deploys on a push to main, so merge/publish the launcher side first.
+
+   THE SCRIM PAIR IS DECLARED HERE because per-document tokens cannot arrive over the wire with a
+   component: e-server's gate allows exactly one declaration per document, and this document's is
+   this line. */
 /* ONE MODAL BACKDROP: colour and blur are declared here and nowhere else. */
 :root{--modal-scrim:#06131bc9;--modal-blur:5px}
 html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
-/* THE ACCOUNT CONTROL'S RULES, COPIED - NOT THE LAUNCHER'S STYLESHEETS.
-   ------------------------------------------------------------------------
-   easter.company mounts the launcher's account control (site/account-corporate.mjs ->
-   https://launcher.easter.company/account-control.mjs), and that control brings its dialogs and its
-   menu with it as markup only: their styling lives on the launcher site. Two files were copied from,
-   rule by rule, and nothing else was:
-
-     * launcher site/web.css      - the account pill, its face slot, its name, the dialog close
-                                   control, the menu's button height and the notice line.
-     * launcher site/desktop.css  - the profile menu panel and the whole company-dialog family
-                                   (the sign-in chooser, username/password setup, Verified emails,
-                                   My Profile and Linked Accounts), plus the wait line and the
-                                   entry motion those dialogs use.
-
-   WHY A COPY AND NOT A <link>. web.css carries the launcher's web-mode styling for ITS header (a
-   five-destination nav, its own gaps and breakpoints) and desktop.css carries the desktop shell's
-   chrome; linked in whole, either collides with this page's own styles.css and components.css. The
-   rule numbers below are the "which lines" record the ticket asked for, taken 2026-10-27.
-
-   WHAT IS THIS PAGE'S OWN, and is marked as such further down: the pill's padding, radius and type
-   size (this header's Request Beta Access button sets that scale), the breakpoints this header has
-   (it wraps at 650px with two items, where the launcher's nav has five at 600px), and the two custom
-   properties web.css reads but this page's styles.css does not define.
-
-   The whole file is scoped to .web-mode, because the copied rules are: site/account-corporate.mjs
-   adds that class to <html> before mounting the control, exactly as the launcher's site/web.js does
-   on its own page. */
-
 /* ---------------------------------------------------------------------------------------------
-   FROM launcher site/web.css:3 - the palette the dialog family below is painted with. */
+   FROM launcher site/web.css:3 - the host tokens the control's sheet maps its own five from, and
+   the accent this page hands it instead of the launcher's gold. */
 .web-mode{
  /* THE SITE'S OWN ACCENT, NOT THE LAUNCHER'S GOLD. These elements are imported from the launcher
     and were painted with its palette; on this page they take the site's accent instead so the
@@ -75,16 +85,6 @@ html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
 /* No 44px touch floor: e-server's menu is the pattern and its rows are 8px/10px padding at
    .85rem (Owen, 2026-10-28). */
 .web-mode .web-account-notice{font-size:12px;color:#f4b6a6}
-
-/* FROM launcher site/desktop.css:124,133-134 - the dropdown panel. It is a popover in the top layer;
-   the control positions it (account-control.mjs) and these rules give it the launcher's body,
-   border, shadow and row rhythm. */
-/* The same drop down as e-server's (api/page_utils.py USER_MENU_CSS): 4px inset, 10px radius,
-   .85rem type, 8px/10px rows. Kept in step with site/desktop.css in the launcher repository. */
-.desktop-profile-menu{position:fixed;inset:auto;margin:0;min-width:200px;max-width:min(280px,calc(100vw - 24px));max-height:calc(100dvh - 90px);overflow:auto;padding:4px;border:1px solid #ffffff30;border-radius:10px;background:var(--app-panel);color:#e5e9df;box-shadow:0 12px 32px #0005;font-size:.85rem}
-.desktop-profile-menu button{display:block;width:100%;margin-top:4px;text-align:left;padding:8px 10px;border:0;border-radius:6px;background:transparent;color:inherit;font:inherit;font-size:.85rem;line-height:1.3;cursor:pointer}
-.desktop-profile-menu button:hover,.desktop-profile-menu button:focus-visible{background:#ffffff0a}
-
 /* FROM launcher site/styles.css:20 AND launcher site/desktop.css:88-89 - the dialogs' close control
    is pinned to the corner. This page has no `dialog` base rules of its own (the launcher's styles.css
    states them for its page), so the two properties that actually place it - position and box - are
@@ -100,78 +100,13 @@ html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
    present. */
 .desktop-company-dialog .dialog-close{position:absolute;right:14px;top:14px;width:36px;height:36px;padding:0;display:grid;place-items:center;line-height:1;font-size:28px;color:var(--app-muted);border-radius:6px}
 .desktop-company-dialog .dialog-close:hover{background:#ffffff0b;color:var(--ink)}
-
-/* FROM launcher site/desktop.css:203-224 - the company dialog family's frame and its shared parts:
-   the Microsoft and submit buttons, the step line, the identity-conflict refusal, the verified-email
-   rows, the status line, the section headings, My Profile's own buttons and the linked-provider
-   lines. These are all scoped to .desktop-company-dialog or #company-profile, neither of which this
-   page defines anywhere else, so they cannot reach the marketing page. */
-.desktop-company-dialog{width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:28px;border:1px solid var(--app-border);border-radius:12px;background:var(--app-panel);color:#e5e9df;box-shadow:0 18px 65px #0007}
-.desktop-company-dialog::backdrop{background:var(--modal-scrim);backdrop-filter:blur(var(--modal-blur))}
-.desktop-company-dialog h2{margin:0 32px 12px 0;font:600 22px/1.3 Inter,system-ui,sans-serif}.desktop-company-dialog p{font-size:12px;line-height:1.6;color:var(--app-muted)}
-.desktop-company-dialog label{display:block;font-size:12px;margin:16px 0;color:#d1ded5}.desktop-company-dialog input:not([type=checkbox]):not([type=radio]){display:block;width:100%;padding:10px 12px;margin-top:7px;border:1px solid #ffffff28;border-radius:6px;background:#0b1d25;color:#e5e9df;font:13px/1.5 system-ui}
-.desktop-company-dialog .company-microsoft,.desktop-company-dialog .company-submit{width:100%;padding:12px;border:1px solid var(--app-gold);border-radius:6px;background:var(--app-gold);color:#11252d;font:600 13px/1.4 system-ui;cursor:pointer}.desktop-company-dialog .company-microsoft{margin-top:10px}
-.desktop-company-dialog .company-provider-note{font-size:11px}.desktop-company-dialog .company-step{margin:0 0 6px;font:600 10px/1.4 system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--app-gold)}
-.desktop-company-dialog .company-no-reset{margin:14px 0 0;font-size:11px}.desktop-company-dialog .company-error{color:#f4b6a6}.desktop-company-dialog .company-username{color:var(--app-gold);font-size:15px}.desktop-company-dialog .company-show{display:flex;align-items:center;gap:8px}.company-show input{accent-color:var(--app-gold)}
-/* desktop.css:210-214 - the identity conflict is three separately scannable lines. */
-.desktop-company-dialog .company-error p{margin:0;color:inherit}
-.desktop-company-dialog .company-error p+p{margin-top:9px}
-/* desktop.css:224 - on a short window a dialog carrying a refusal trims its bottom inset. */
-@media(max-height:700px){.desktop-company-dialog:has(.company-error:not([hidden])){padding-bottom:16px}}
-/* desktop.css:229-244 - Verified emails, and the headings/sentences My Profile adds. */
-.desktop-company-dialog .company-emails{display:grid;gap:6px;margin:0 0 4px}
-.desktop-company-dialog .company-emails[hidden]{display:none}
-.desktop-company-dialog .company-email{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"mark address" "mark meta";align-items:start;column-gap:10px;margin:0;padding:10px 12px;border:1px solid #ffffff1f;border-radius:7px;background:#0b1d25;cursor:pointer}
-.desktop-company-dialog .company-email:hover{border-color:#ffffff38}
-.desktop-company-dialog .company-email:has(input:checked){border-color:var(--app-gold);background:#12252c}
-.desktop-company-dialog .company-email input{grid-area:mark;width:16px;height:16px;margin:1px 0 0;padding:0;accent-color:var(--app-gold)}
-.desktop-company-dialog .company-email-address{grid-area:address;font-size:13px;line-height:1.4;color:#e5e9df;overflow-wrap:anywhere}
-.desktop-company-dialog .company-email-meta{grid-area:meta;font-size:11px;line-height:1.5;color:var(--app-muted)}
-.desktop-company-dialog .company-emails-empty,.desktop-company-dialog .company-emails-unset,.desktop-company-dialog .company-emails-loading{margin:0 0 10px;font-size:12px;line-height:1.6}
-.desktop-company-dialog .company-status{margin:10px 0 0;font-size:11px;line-height:1.6;color:var(--app-gold)}
-.desktop-company-dialog .company-email-actions{display:grid;gap:2px;margin-top:16px}
-.desktop-company-dialog .company-clear{display:block;margin:10px auto 0;font-size:11px}
-.desktop-company-dialog h3{margin:20px 0 0;font:600 13px/1.4 system-ui;color:#e5e9df}
-.desktop-company-dialog .company-section-note{margin:6px 0 10px;font-size:11px}
-/* desktop.css:266-282 - provider choices, disabled/focus states, and My Profile's buttons, picture
-   actions and linked-provider lines. */
-.desktop-company-dialog .company-provider{display:block;width:100%;margin-top:8px;padding:12px;border:1px solid #ffffff38;border-radius:6px;background:#122b34;color:#e5e9df;font:600 13px/1.4 system-ui;cursor:pointer}
-.desktop-company-dialog button:disabled{opacity:.5;cursor:default}
-.desktop-company-dialog button:focus-visible{outline:2px solid var(--app-gold);outline-offset:3px}
-#company-profile form button,#company-profile [data-open-emails],.company-picture-actions button,.company-provider-link button{min-height:40px;padding:9px 13px;border:1px solid #ffffff38;border-radius:6px;background:#17333c;color:#e5e9df;font:600 12px/1.4 system-ui;cursor:pointer}
-#company-profile form button{width:100%;border-color:var(--app-gold)}
-.company-picture-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.company-provider-links{display:grid;gap:8px}
-.company-provider-link{display:grid;gap:3px;padding:8px 0;border-bottom:1px solid #ffffff18;font:13px/1.5 system-ui}
-.company-provider-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.company-provider-name{min-width:0;overflow-wrap:anywhere}
-.company-provider-head button{flex-shrink:0}
-.company-provider-details{display:grid;gap:2px;margin:2px 0 2px;padding-left:10px;border-left:2px solid #ffffff20}
-.company-provider-detail{margin:0;font:12px/1.5 system-ui;color:var(--app-muted);overflow-wrap:anywhere}
-.company-provider-detail-label{color:#8fa39d}
-.company-provider-detail-value{color:#e5e9df}
-/* desktop.css:194,285-290,299 - the quiet wait line the dialogs show while they talk to the API
-   (site/wait-feedback.mjs), with its spinner stopped when the system asks for reduced motion. */
-@keyframes update-spin{to{transform:rotate(360deg)}}
-.wait-feedback{display:flex;align-items:flex-start;gap:9px;color:var(--app-muted);font:12px/1.6 system-ui;text-align:left;overflow-wrap:anywhere}
-.wait-feedback[hidden]{display:none!important}
-.wait-feedback-mark{flex:none;width:13px;height:13px;margin-top:3px;border:1.5px solid #c9b1ff35;border-top-color:var(--app-gold);border-radius:50%;animation:update-spin 1.3s linear infinite}
-.wait-feedback small{display:block;margin-top:4px;color:var(--app-muted);font-size:11px;line-height:1.6}
-.desktop-company-dialog .company-wait{margin:12px 0;font-size:12px}.desktop-company-dialog .company-wait small{font-size:11px}
-@media(prefers-reduced-motion:reduce){.wait-feedback-mark{animation:none;border-color:var(--app-gold);opacity:.7}}
-/* desktop.css:317-331 - entry motion only: the dialog and its backdrop fade, a refusal and a step
-   line fade in place. No transforms, because these dialogs measure their own geometry to decide
-   where a refusal has to be scrolled to, and closes stay instant. */
-@keyframes dialog-enter{from{opacity:0}to{opacity:1}}
-@keyframes backdrop-enter{from{opacity:0}to{opacity:1}}
-@keyframes line-enter{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:no-preference){
- .desktop-company-dialog[open]{animation:dialog-enter 170ms cubic-bezier(.22,.61,.36,1) both}
- .desktop-company-dialog[open]::backdrop{animation:backdrop-enter 170ms ease-out both}
- .desktop-company-dialog .company-step{animation:line-enter 200ms ease-out both}
- .wait-feedback:not([hidden]){animation:line-enter 160ms ease-out both}
- .desktop-company-dialog .company-error:not([hidden]){animation:line-enter 160ms ease-out both}
-}
+/* ── THIS PAGE'S ACCENT ON THE CONTROL'S WAIT RING ──────────────────────────────────────
+   The launcher tints the ring with its own gold (#e4c48635) and keeps the gold for the spinning
+   edge. On this page the imported controls take the page's accent instead (Owen, 2026-10-28), so
+   the ring is the lilac accent at the same 21%, with the themed --app-gold on the top edge. The
+   selector is not the bare class: the control's own sheet is appended to <head> at runtime, so an
+   equal-specificity rule written here would lose to it. */
+html body .wait-feedback-mark{border:1.5px solid #c9b1ff35;border-top-color:var(--app-gold)}
 
 /* =============================================================================================
    THIS PAGE'S OWN. easter.company's header is not the launcher's: one button and (from this change)
@@ -198,7 +133,6 @@ html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
 @media(max-width:360px){
  .web-mode .site-header nav .web-account-nav.web-account-with-face .web-account-name{display:none}
 }
-
 /* ── THE SHARED CONTROL'S OWN LITERALS, IN LIGHT ────────────────────────────────────────
    The control was copied from the launcher's dark window, so its dropdown, its dialogs and
    its provider rows carry dark-panel literals (#e5e9df ink, #0b1d25 fields, #ffffff2x
@@ -235,7 +169,12 @@ html[data-easter-theme="light"] #company-profile [data-open-emails]{
  border:1px solid #c7d1e0;background:#f1f4f9;color:#2b2b36}
 html[data-easter-theme="light"] .desktop-company-dialog .company-email:hover,
 html[data-easter-theme="light"] .desktop-company-dialog .company-provider:hover{border-color:#758299}
-html[data-easter-theme="light"] .desktop-company-dialog .company-email:has(input:checked){background:#e5eaf2}
+/* The selected row is marked by its ground here, not by an accent border: the control's own sheet
+   paints border-color:var(--app-gold) once a row is checked, and on this page that resolves to the
+   page accent. It is restated at the ground colour this page has always shown, with the extra
+   specificity the runtime-appended sheet needs - measured, without it the checked row's border
+   went #c7d1e0 -> #6d4fd8 on this page and nothing else moved. */
+html[data-easter-theme="light"] .desktop-company-dialog .company-email:has(input:checked){border-color:#c7d1e0;background:#e5eaf2}
 html[data-easter-theme="light"] .desktop-company-dialog .company-email-address,
 html[data-easter-theme="light"] .company-provider-detail-value,
 html[data-easter-theme="light"] .company-provider-name{color:#2b2b36}
