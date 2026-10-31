@@ -214,7 +214,6 @@ html[data-easter-theme="light"] .desktop-profile-menu button:hover,
 html[data-easter-theme="light"] .desktop-profile-menu button:focus-visible,
 html[data-easter-theme="light"] .desktop-profile-menu a:hover{background:#6d4fd814;color:#2b2b36}
 html[data-easter-theme="light"] .desktop-company-dialog{color:#2b2b36;box-shadow:0 18px 65px #28345229}
-html[data-easter-theme="light"] .desktop-company-dialog::backdrop{background:var(--modal-scrim)}
 html[data-easter-theme="light"] .desktop-company-dialog h3,
 html[data-easter-theme="light"] .desktop-company-dialog p,
 html[data-easter-theme="light"] .desktop-company-dialog li,
