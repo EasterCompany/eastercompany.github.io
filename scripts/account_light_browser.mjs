@@ -67,7 +67,7 @@ await context.route('https://fonts.googleapis.com/**', route => route.fulfill({c
 await context.route('https://fonts.gstatic.com/**', route => route.fulfill({status: 404, body: ''}));
 await context.route('https://api.github.com/**', route =>
   route.fulfill({contentType: 'application/json', headers: {'access-control-allow-origin': '*'}, body: '[]'}));
-await context.route(API + '/**', route => {
+for (const host of [API, 'https://auth.easter.company']) await context.route(host + '/**', route => {
   const request = route.request();
   const json = body => route.fulfill({status: 200, headers: {
     'access-control-allow-origin': '*', 'content-type': 'application/json', 'cache-control': 'no-store'},
@@ -142,7 +142,8 @@ const check = async (label, shot) => {
   await page.screenshot({path: join(output, shot), fullPage: false});
 };
 
-await page.goto(origin + '/', {waitUntil: 'load'});
+const auditOrigin = process.env.EASTER_AUDIT_ORIGIN || origin;
+await page.goto(auditOrigin + '/', {waitUntil: 'load'});
 await page.waitForTimeout(3500);
 assert.equal(await page.evaluate(() => document.documentElement.getAttribute('data-easter-theme')), 'light',
   'this suite only means anything in the light theme');

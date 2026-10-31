@@ -1,3 +1,6 @@
+/* ONE MODAL BACKDROP: colour and blur are declared here and nowhere else. */
+:root{--modal-scrim:#06131bc9;--modal-blur:5px}
+html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
 /* THE ACCOUNT CONTROL'S RULES, COPIED - NOT THE LAUNCHER'S STYLESHEETS.
    ------------------------------------------------------------------------
    easter.company mounts the launcher's account control (site/account-corporate.mjs ->
@@ -104,7 +107,7 @@
    lines. These are all scoped to .desktop-company-dialog or #company-profile, neither of which this
    page defines anywhere else, so they cannot reach the marketing page. */
 .desktop-company-dialog{width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:28px;border:1px solid var(--app-border);border-radius:12px;background:var(--app-panel);color:#e5e9df;box-shadow:0 18px 65px #0007}
-.desktop-company-dialog::backdrop{background:#06131bc9;backdrop-filter:blur(5px)}
+.desktop-company-dialog::backdrop{background:var(--modal-scrim);backdrop-filter:blur(var(--modal-blur))}
 .desktop-company-dialog h2{margin:0 32px 12px 0;font:600 22px/1.3 Inter,system-ui,sans-serif}.desktop-company-dialog p{font-size:12px;line-height:1.6;color:var(--app-muted)}
 .desktop-company-dialog label{display:block;font-size:12px;margin:16px 0;color:#d1ded5}.desktop-company-dialog input:not([type=checkbox]):not([type=radio]){display:block;width:100%;padding:10px 12px;margin-top:7px;border:1px solid #ffffff28;border-radius:6px;background:#0b1d25;color:#e5e9df;font:13px/1.5 system-ui}
 .desktop-company-dialog .company-microsoft,.desktop-company-dialog .company-submit{width:100%;padding:12px;border:1px solid var(--app-gold);border-radius:6px;background:var(--app-gold);color:#11252d;font:600 13px/1.4 system-ui;cursor:pointer}.desktop-company-dialog .company-microsoft{margin-top:10px}
@@ -211,7 +214,7 @@ html[data-easter-theme="light"] .desktop-profile-menu button:hover,
 html[data-easter-theme="light"] .desktop-profile-menu button:focus-visible,
 html[data-easter-theme="light"] .desktop-profile-menu a:hover{background:#6d4fd814;color:#2b2b36}
 html[data-easter-theme="light"] .desktop-company-dialog{color:#2b2b36;box-shadow:0 18px 65px #28345229}
-html[data-easter-theme="light"] .desktop-company-dialog::backdrop{background:#28345280}
+html[data-easter-theme="light"] .desktop-company-dialog::backdrop{background:var(--modal-scrim)}
 html[data-easter-theme="light"] .desktop-company-dialog h3,
 html[data-easter-theme="light"] .desktop-company-dialog p,
 html[data-easter-theme="light"] .desktop-company-dialog li,
