@@ -46,8 +46,8 @@ def test_the_light_hero_lets_the_animation_show_and_protects_the_words_locally()
     """
     theme = (SITE / "page-theme.css").read_text()
     light = theme.split('html[data-easter-theme="light"]', 1)[1]
-    assert "--veil-90:#eef2f980;--veil-72:#eef2f770;--veil-80:#eef2f778;" in light, (
-        "the light veil must let the hero animation show through (about half, not 90%)")
+    assert "--veil-90:#eef2f94d;--veil-72:#eef2f942;--veil-80:#eef2f947;" in light, (
+        "the light veil must let the hero animation show through (30%, not 90%)")
     for ghostkiller in ("--veil-72:#eef2f9f5;", "--veil-90:#eef2f9;--veil-72:#eef2f9b8;"):
         assert ghostkiller not in light, f"a veil that erases the animation came back: {ghostkiller}"
     # The local protection, on the two columns that carry words over the hero.

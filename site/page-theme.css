@@ -34,10 +34,11 @@ html[data-easter-theme="light"]{
     90/72/80 again. The ghost text that motivated the stronger veil is handled where it
     actually matters - behind the two reading columns - by the scrim below, not by painting
     the whole hero out. Dark keeps its own stops, untouched. */
- /* ~50% in light, not 90%: the frame paints its own LIGHT palette, so a heavy veil leaves
-    white-on-white however much alpha it takes. Half a veil lets the blue/lilac motion show,
-    and the reading columns carry their own scrim, so words stay clean regardless. */
- --veil-90:#eef2f980;--veil-72:#eef2f770;--veil-80:#eef2f778;
+ /* 30% in light, not 90%. The frame paints its own LIGHT palette, so a heavy veil leaves
+    white-on-white no matter how much alpha it takes (measured 2026-10-31: at 96% the hero was
+    an empty field). At 30% the mock-UI motion reads, and the reading field below keeps the words
+    clean, so the two no longer have to fight for one number. */
+ --veil-90:#eef2f94d;--veil-72:#eef2f942;--veil-80:#eef2f947;
  --download-shadow:#28345229;--download-hover:#6d4fd814;--download-backdrop:#28345280;
 }
 ::selection{background:var(--selection)}
