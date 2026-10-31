@@ -1,13 +1,65 @@
-/* The corporate origin's own two adjustments to the account surface it borrows from
+/* The corporate origin's own adjustments to the account surface it borrows from
    launcher.easter.company/account/account.css. The panel, its type and its states are that
-   file's; this one only sets the page's ground so the corporate site and the account page do
-   not meet as two different sites. */
-:root{color-scheme:dark}
-body.account{background:var(--bg,#111317);color:var(--ink,#f1f2f5);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;min-height:100svh;display:flex;flex-direction:column}
+   file's; this one sets the page's ground, and it teaches the borrowed card the household's
+   LIGHT mood.
+
+   WHY THE LIGHT BLOCK IS HERE AND NOT IN THE BORROWED SHEET. That sheet is dark by construction:
+   it declares its own five tokens as literals on `.account` (`--account-ink:#edf1e9`,
+   `--account-gold:#e4c486`, `--account-panel:#11252d`, `--account-line:#d7e5df1c`,
+   `--account-muted:#a8b9b4`) and its ground as `#0d2029`, which are the household's DARK values.
+   On launcher.easter.company that gap is closed by site/launcher-light-adapter.css; that file is
+   the launcher's, binds the launcher's names (--surface, --gold, --on-gold, --control-line) and
+   carries the wiki's rules as well, so this page cannot simply link it. The same handful of
+   account selectors are bound here instead, to the --ec-* tokens this page now consumes through
+   site/page-theme.css's names - the palette is still declared once, in site/theme.css.
+
+   Measured 2026-10-31 on a local preview of this branch: before this block the light account page
+   was a light ground carrying the borrowed card's dark literals - a gold #e4c486 "Sign in with
+   Microsoft" on paper, near-black #0b1d25 username and password fields, and muted labels at
+   roughly 1.2:1 (unreadable). After it, the card is the household's light panel.
+*/
+:root{color-scheme:var(--ec-color-scheme)}
+body.account{background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;min-height:100svh;display:flex;flex-direction:column}
 .account-main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 18px}
-.account-panel{width:min(520px,100%);background:var(--surface,#191c22);border:1px solid var(--line,#ffffff18);border-radius:10px;padding:28px}
-.account-footer{display:flex;justify-content:space-between;gap:16px;padding:16px 24px;font-size:11px;color:var(--muted,#a2a7b3);border-top:1px solid var(--line,#ffffff18)}
+.account-panel{width:min(520px,100%);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:28px}
+.account-footer{display:flex;justify-content:space-between;gap:16px;padding:16px 24px;font-size:11px;color:var(--muted);border-top:1px solid var(--line)}
 .account-footer a{color:inherit}
-.account-overline{font-size:10px;letter-spacing:.14em;color:var(--muted,#a2a7b3);margin:0 0 6px}
+.account-overline{font-size:10px;letter-spacing:.14em;color:var(--muted);margin:0 0 6px}
 .account-heading{font-size:22px;margin:0 0 18px;letter-spacing:-.02em}
-.account-error{color:#f4b6a6;font-size:13px}
+.account-error{color:var(--ec-danger);font-size:13px}
+
+/* ── THE BORROWED CARD, IN LIGHT ─────────────────────────────────────────────────────────── */
+/* Its five tokens are declared on `.account` (the body), not on :root, so the override has to
+   carry at least that specificity: html[data-easter-theme="light"] alone loses to the class. */
+html[data-easter-theme="light"] .account{
+ --account-panel:var(--ec-panel);
+ --account-ink:var(--ec-ink);
+ --account-muted:var(--ec-muted);
+ --account-gold:var(--ec-accent);
+ --account-line:var(--ec-line);
+}
+/* The primary control: a cream gradient with dark ink in dark mode becomes the household's filled
+   action with its own label colour - the measured pair tests/test_household_theme.py asserts. */
+html[data-easter-theme="light"] .company-microsoft,
+html[data-easter-theme="light"] .account-body .account-providers .account-provider:first-child{
+ border-color:var(--ec-accent-action);background:var(--ec-accent-action);color:var(--ec-on-accent)}
+html[data-easter-theme="light"] .company-microsoft:hover,
+html[data-easter-theme="light"] .account-body .account-providers .account-provider:first-child:hover{
+ background:var(--ec-accent-hover);border-color:var(--ec-accent-hover);color:var(--ec-on-accent)}
+html[data-easter-theme="light"] .account-provider,
+html[data-easter-theme="light"] .company-provider,
+html[data-easter-theme="light"] .company-submit{
+ background:var(--ec-panel);border-color:var(--ec-control-line);color:var(--ec-ink)}
+html[data-easter-theme="light"] .account-provider:hover,
+html[data-easter-theme="light"] .company-provider:hover,
+html[data-easter-theme="light"] .company-submit:hover{border-color:var(--ec-accent)}
+html[data-easter-theme="light"] .company-signin label,
+html[data-easter-theme="light"] .company-provider-note,
+html[data-easter-theme="light"] .company-no-reset,
+html[data-easter-theme="light"] .account-body .account-busy-line,
+html[data-easter-theme="light"] .account-wait,
+html[data-easter-theme="light"] .account-noscript{color:var(--ec-muted)}
+html[data-easter-theme="light"] .company-signin input:not([type=checkbox]){
+ background:var(--ec-panel-soft);border-color:var(--ec-control-line);color:var(--ec-ink)}
+html[data-easter-theme="light"] .account-error,
+html[data-easter-theme="light"] .company-error{background:var(--ec-danger-bg);color:var(--ec-danger)}

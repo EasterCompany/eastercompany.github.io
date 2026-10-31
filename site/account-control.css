@@ -35,9 +35,10 @@
    THE SCRIM PAIR IS DECLARED HERE because per-document tokens cannot arrive over the wire with a
    component: e-server's gate allows exactly one declaration per document, and this document's is
    this line. */
-/* ONE MODAL BACKDROP: colour and blur are declared here and nowhere else. */
-:root{--modal-scrim:#06131bc9;--modal-blur:5px}
-html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
+/* ONE MODAL BACKDROP: colour and blur are declared here and nowhere else - and they are the
+   household's own pair (theme.css --ec-scrim / --ec-scrim-blur, the same two values this file used
+   to carry as literals, one per mode). */
+:root{--modal-scrim:var(--ec-scrim);--modal-blur:var(--ec-scrim-blur)}
 /* ---------------------------------------------------------------------------------------------
    FROM launcher site/web.css:3 - the host tokens the control's sheet maps its own five from, and
    the accent this page hands it instead of the launcher's gold. */
@@ -49,8 +50,8 @@ html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
     easter.company should use the same accent colors as the site, not the gold from the
     easter-co-smp site". --accent is this page's (:root in styles.css); the launcher keeps its own
     file, and its site is untouched. */
- --gold:var(--accent,#c9b1ff);
- --app-panel:#11252d;--app-border:#ffffff24;--app-muted:#a8b9b4;--app-gold:var(--accent,#c9b1ff)}
+ --gold:var(--accent);
+ --app-panel:var(--ec-panel);--app-border:var(--ec-line);--app-muted:var(--ec-muted-panel);--app-gold:var(--accent)}
 /* web.css:4-5 - the control's markup carries [hidden] on the face slot and the picture, and the
    gold focus ring is what the launcher's own controls show. */
 .web-mode [hidden]{display:none!important}
@@ -60,7 +61,7 @@ html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
    FROM launcher site/web.css:18-19 - the pill, and the height it takes once it carries a face. The
    padding-block:3px + 32px face + 1px border is the 40px the launcher's Download button beside it
    already has. */
-.web-mode .site-header nav .web-account-nav{display:inline-flex;align-items:center;gap:7px;max-width:140px;overflow:hidden;border:1px solid #c9b1ff50;background:transparent;color:var(--gold);cursor:pointer}
+.web-mode .site-header nav .web-account-nav{display:inline-flex;align-items:center;gap:7px;max-width:140px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 31%,transparent);background:transparent;color:var(--gold);cursor:pointer}
 .web-mode .site-header nav .web-account-nav.web-account-with-face{padding-block:3px;height:40px}
 
 /* FROM launcher site/web.css:24-35 - one fixed face slot so the control measures the same whether
@@ -106,7 +107,7 @@ html[data-easter-theme="light"]{--modal-scrim:#28345280;--modal-blur:5px}
    the ring is the lilac accent at the same 21%, with the themed --app-gold on the top edge. The
    selector is not the bare class: the control's own sheet is appended to <head> at runtime, so an
    equal-specificity rule written here would lose to it. */
-html body .wait-feedback-mark{border:1.5px solid #c9b1ff35;border-top-color:var(--app-gold)}
+html body .wait-feedback-mark{border:1.5px solid color-mix(in srgb,var(--accent) 21%,transparent);border-top-color:var(--app-gold)}
 
 /* =============================================================================================
    THIS PAGE'S OWN. easter.company's header is not the launcher's: one button and (from this change)
