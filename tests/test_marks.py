@@ -1,73 +1,88 @@
-"""The wordmark's mark exists in two colours and only those two things differ.
+"""The wordmark's mark is one asset, in both themes, and nothing recolours it.
 
-`assets/ec-logo-outline.svg` is white, for the dark page. On the light page white measures
-1.12:1 against `#eef2f9` — a mark nobody can find — so `assets/ec-logo-outline-light.svg` is
-the same geometry in the page's ink (`#2b2b36`, 12.46:1 there). The markup carries both and
-`styles.css` shows exactly one, which means the swap costs no JavaScript and no CSS filter:
-a filter would recolour the fire phoenix along with it.
+Owen, 2026-10-31: "the Easter Co. phoenix icon is black in light mode, but it should not be,
+it's a complex detailed fire-y phoenix icon, should not be impacted by the theme at all."
 
-This gate exists because two copies of a drawing drift. The only permitted differences are
-the fill attribute and the explanatory comment this repository added to the light cut; every
-path, transform and coordinate must be identical, and each file must declare exactly one fill.
+`assets/ec-logo.svg` is that icon: the 60 KB fire phoenix, gradient-filled with `url(#ecEmber)`
+and `url(#ecFire)`. Until now the header never showed it. The markup carried two 5 KB flat
+silhouettes — `assets/ec-logo-outline.svg` in white for the dark page and
+`assets/ec-logo-outline-light.svg` in `#2b2b36` for the light one — and `styles.css` swapped
+them by the theme attribute, which is why the light page wore a flat near-black shape.
+
+This gate holds the replacement in place by name and by file: the header carries
+`assets/ec-logo.svg` exactly once, no stylesheet applies a filter, an opacity or a colour to a
+logo mark, no page swaps one mark asset for another by theme, and the flattenings are gone
+from the repository rather than merely unused.
 """
 import re
-import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 
-import pytest
-
 SITE = Path(__file__).resolve().parents[1] / "site"
-WHITE = SITE / "assets" / "ec-logo-outline.svg"
-INK = SITE / "assets" / "ec-logo-outline-light.svg"
-STYLES = SITE / "styles.css"
 INDEX = SITE / "index.html"
+STYLES = SITE / "styles.css"
+
+#: The one mark, and the flattenings it replaced.
+MARK = "assets/ec-logo.svg"
+FLATTENINGS = ("ec-logo-outline.svg", "ec-logo-outline-light.svg")
+
+#: Every class name that addresses a logo mark. A rule matching one of these may size the
+#: artwork; it may not recolour it.
+MARK_CLASSES = (".wordmark-mark", ".mark-for-dark", ".mark-for-light")
+
+#: Class names that existed only to swap one asset for another by theme.
+SWAP_CLASSES = ("mark-for-dark", "mark-for-light")
+
+#: The declarations a mark rule may never carry: each one changes the artwork's own colour.
+RECOLOURING = ("filter", "opacity", "color", "fill", "background", "mix-blend-mode",
+               "-webkit-filter")
 
 
-def geometry(path):
-    """Every drawing element, as tag + attributes, with the fill stripped out."""
-    root = ElementTree.parse(path).getroot()
-    shapes = []
-    for element in root.iter():
-        tag = element.tag.split("}")[-1]
-        if tag in {"svg", "defs", "metadata", "title", "desc"}:
-            continue
-        attributes = {key: value for key, value in element.attrib.items() if key != "fill"}
-        shapes.append((tag, tuple(sorted(attributes.items()))))
-    return shapes
+def _css_rules(path):
+    """(selector list, declarations) for every rule, with comments stripped."""
+    body = re.sub(r"/\*.*?\*/", "", path.read_text(encoding="utf-8"), flags=re.S)
+    return re.findall(r"([^{}]+)\{([^{}]*)\}", body)
 
 
-def test_the_two_marks_are_the_same_drawing():
-    white, ink = geometry(WHITE), geometry(INK)
-    assert white, "the white mark carries no drawing elements"
-    assert ink == white, "the light mark's geometry has drifted from the white one"
-
-
-def test_each_mark_declares_exactly_one_fill_and_they_differ():
-    fills = {}
-    for path in (WHITE, INK):
-        found = set(re.findall(r'fill="([^"]+)"', path.read_text(encoding="utf-8")))
-        assert len(found) == 1, f"{path.name} declares {sorted(found)}, expected one fill"
-        fills[path.name] = found.pop()
-    assert fills[WHITE.name] == "#ffffff", "the dark page's mark is white"
-    assert fills[INK.name] != "#ffffff", "the light page's mark must not be white"
-
-
-def test_the_page_carries_both_and_shows_one_by_theme():
+def test_the_header_carries_the_artwork_exactly_once():
     markup = INDEX.read_text(encoding="utf-8")
-    assert markup.count('class="mark-for-dark"') == 1
-    assert markup.count('class="mark-for-light"') == 1
-    css = STYLES.read_text(encoding="utf-8")
-    # Hidden by default, shown under the light attribute, and the white one hidden there.
-    assert re.search(r"\.mark-for-light\s*\{[^}]*display:\s*none", css), "the light mark must be hidden by default"
-    assert re.search(r'html\[data-easter-theme="light"\]\s+\.mark-for-dark\s*\{[^}]*display:\s*none', css), (
-        "the white mark must be hidden on the light page")
-    assert re.search(r'html\[data-easter-theme="light"\]\s+\.mark-for-light\s*\{[^}]*display:', css), (
-        "the ink mark must be shown on the light page")
+    header = markup.split("<header", 1)[1].split("</header>", 1)[0]
+    assert header.count(MARK) == 1, (
+        f"the header carries {header.count(MARK)} marks from {MARK}, expected exactly one")
+    assert '<img class="wordmark-mark" src="assets/ec-logo.svg"' in header, (
+        "the header mark is no longer the artwork, or lost its class")
+    # One mark, not one per theme: no page swaps a mark asset by the theme attribute.
+    for swap in SWAP_CLASSES:
+        assert swap not in markup, f"index.html still carries the {swap!r} theme swap"
+    for flattening in FLATTENINGS:
+        assert flattening not in markup, f"index.html still references {flattening}"
 
 
-def test_the_swap_needs_no_script():
-    """A filter or a script would be a second way to recolour the mark; the gate refuses both."""
+def test_no_stylesheet_recolours_the_mark_or_swaps_it_by_theme():
+    """styles.css is where the swap lived, so it is asserted first and by name."""
     css = STYLES.read_text(encoding="utf-8")
-    block = css[css.index(".mark-for-light"):]
-    assert "filter" not in block.split("/*")[0], "the swap must not use a CSS filter"
-    assert "ec-logo-outline-light" in INDEX.read_text(encoding="utf-8")
+    for swap in SWAP_CLASSES:
+        assert swap not in css, f"styles.css still carries the {swap!r} swap rule"
+    # And no sheet in site/ filters, fades or paints any logo mark.
+    sheets = sorted(SITE.glob("*.css"))
+    assert len(sheets) >= 6, f"expected the page's stylesheets, found {[s.name for s in sheets]}"
+    for sheet in sheets:
+        for selector_list, declarations in _css_rules(sheet):
+            for selector in selector_list.split(","):
+                if not any(mark_class in selector for mark_class in MARK_CLASSES):
+                    continue
+                for declaration in declarations.split(";"):
+                    name = declaration.partition(":")[0].strip()
+                    assert name not in RECOLOURING, (
+                        f"{sheet.name}: {selector.strip()!r} recolours the mark: "
+                        f"{declaration.strip()!r}")
+
+
+def test_the_flattenings_are_deleted_not_merely_unused():
+    remaining = [name for name in FLATTENINGS if (SITE / "assets" / name).exists()]
+    assert not remaining, f"the flattened cuts survive in site/assets: {remaining}"
+    # The artwork they were standing in for is still here, still the gradient phoenix.
+    artwork = (SITE / "assets" / "ec-logo.svg").read_text(encoding="utf-8")
+    assert "url(#ecEmber)" in artwork and "url(#ecFire)" in artwork, (
+        "assets/ec-logo.svg is no longer the gradient-filled phoenix")
+    assert 'fill="#ffffff"' not in artwork and 'fill="#2b2b36"' not in artwork, (
+        "assets/ec-logo.svg has been flattened to a single colour")
