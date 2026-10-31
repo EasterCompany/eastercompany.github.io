@@ -29,12 +29,15 @@ html[data-easter-theme="light"]{
  --form-note:#566075;--edit:#624978;--term:#655875;--detail:#465168;
  --company-link:#624978;--person-note:#566075;--footer:#59647a;--motto:#655875;--origin:#566075;
  --offer-mobile:#f8faff;--hero-fallback:#eef2f9;
- /* THE LIGHT VEIL IS NEARLY OPAQUE, AND THAT IS THE DECISION (Diana, 2026-10-31).
-    Equal alpha in both modes was not visually equivalent: at 10-28% the hero's own
-    ghost words ran directly behind the reading columns. 100% at the top stop also
-    removes the accidental tonal step at the header, without inventing a second
-    header surface. Dark keeps its own stops, untouched. */
- --veil-90:#eef2f9;--veil-72:#eef2f9f5;--veil-80:#eef2f9f7;
+ /* THE VEIL LETS THE ANIMATION BE SEEN. A 96-100% veil erased it (Owen, 2026-10-31: "the
+    hero background animation is barely visible"), so the light stops are the original
+    90/72/80 again. The ghost text that motivated the stronger veil is handled where it
+    actually matters - behind the two reading columns - by the scrim below, not by painting
+    the whole hero out. Dark keeps its own stops, untouched. */
+ /* ~50% in light, not 90%: the frame paints its own LIGHT palette, so a heavy veil leaves
+    white-on-white however much alpha it takes. Half a veil lets the blue/lilac motion show,
+    and the reading columns carry their own scrim, so words stay clean regardless. */
+ --veil-90:#eef2f980;--veil-72:#eef2f770;--veil-80:#eef2f778;
  --download-shadow:#28345229;--download-hover:#6d4fd814;--download-backdrop:#28345280;
 }
 ::selection{background:var(--selection)}
@@ -78,3 +81,20 @@ html[data-easter-theme="light"]{
    and on #eef2f9 it read as a suggestion. Diana, 2026-10-31: strengthen the existing rule
    rather than add a card surface; the same colour serves the mobile card's border. */
 html[data-easter-theme="light"] .beta-summary{border-color:#b5c1d4}
+
+/* EVERY READING COLUMN CARRIES ITS OWN BACKING, so the frame's ghost text never sits behind a
+   sentence while the rest of the hero shows the animation. The negative margins are exactly the
+   padding, so no geometry moves: this paints behind words, it does not lay anything out. */
+html[data-easter-theme="light"] .intro{position:relative;isolation:isolate}
+html[data-easter-theme="light"] .intro::before{
+ content:"";position:absolute;inset:-38px -40px;z-index:-1;pointer-events:none;
+ background:radial-gradient(125% 155% at 50% 52%,#eef2f9f8 0%,#eef2f9f0 46%,#eef2f9dc 68%,#eef2f900 100%)}
+@media(max-width:650px){
+ html[data-easter-theme="light"] .intro::before{inset:-18px -14px}
+}
+
+/* The framed-art captions sit on the artwork's own dark ground, which stays dark on purpose.
+   Their ink was measured at 3.76:1 in light (the audit's only text failure); this is the same
+   label at a value that reads on it. */
+html[data-easter-theme="light"] .art-topline > span:last-child,
+html[data-easter-theme="light"] .game-art .art-topline span:last-child{color:#c3cedd}

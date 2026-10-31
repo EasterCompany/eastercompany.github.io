@@ -36,22 +36,24 @@ def test_every_page_keys_the_browser_chrome_to_both_schemes():
         assert values["light"] == light, f"{page}'s light chrome {values['light']} is not the page's light --bg {light}"
 
 
-def test_the_light_hero_veil_and_offer_rule_are_the_reviewed_values():
-    """Diana's verdict of 2026-10-31, as numbers a future edit cannot quietly undo.
+def test_the_light_hero_lets_the_animation_show_and_protects_the_words_locally():
+    """Owen, 2026-10-31: "the hero background animation is barely visible".
 
-    Equal alpha in both modes was not visually equivalent: at 72-90% the hero's own ghost
-    words ran behind the reading columns, and the header met the hero in an accidental tonal
-    step. The fix is a light veil that is nearly opaque - 100% at the top stop, 96.08% at 30%,
-    96.86% at 68% - over #eef2f9, and a strengthened rule on the offer column. The frame's own
-    artwork is untouched, and so is every dark stop.
+    A 96-100% light veil (Diana's suggestion, applied 2026-10-31) erased the animation entirely.
+    The light stops are the original 90/72/80 again, and the ghost text she objected to is
+    handled where it actually matters - behind the two reading columns - by a scrim on each
+    column. Dark stops are the shipped design and do not move.
     """
     theme = (SITE / "page-theme.css").read_text()
     light = theme.split('html[data-easter-theme="light"]', 1)[1]
-    assert "--veil-90:#eef2f9;" in light, "the light veil's top stop must be fully opaque, so the header meets it with no seam"
-    assert "--veil-72:#eef2f9f5;" in light, "the light veil's 30% stop must be #eef2f9f5 (96.08%)"
-    assert "--veil-80:#eef2f9f7;" in light, "the light veil's 68% stop must be #eef2f9f7 (96.86%)"
-    assert 'html[data-easter-theme="light"] .beta-summary{border-color:#b5c1d4}' in theme
+    assert "--veil-90:#eef2f980;--veil-72:#eef2f770;--veil-80:#eef2f778;" in light, (
+        "the light veil must let the hero animation show through (about half, not 90%)")
+    for ghostkiller in ("--veil-72:#eef2f9f5;", "--veil-90:#eef2f9;--veil-72:#eef2f9b8;"):
+        assert ghostkiller not in light, f"a veil that erases the animation came back: {ghostkiller}"
+    # The local protection, on the two columns that carry words over the hero.
+    assert 'html[data-easter-theme="light"] .intro::before{' in theme, "the reading field behind the hero columns is missing"
+    assert "position:absolute;inset:-38px -40px;z-index:-1" in theme, (
+        "the scrim must be a painted layer, not padding: padding or negative margins move the columns")
     # Dark is the shipped design and does not move.
     assert "--veil-90:#111317e6;--veil-72:#111317b8;--veil-80:#111317cc;" in theme
-    # And the gradient still runs top stop, 30%, 68%, page.
     assert "linear-gradient(180deg,var(--veil-90) 0%,var(--veil-72) 30%,var(--veil-80) 68%,var(--bg) 100%)" in theme
