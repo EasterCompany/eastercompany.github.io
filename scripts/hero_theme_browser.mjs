@@ -131,12 +131,12 @@ const seed = (theme, signedIn) => async ([themeValue, signed]) => {
     token: 'fixture-session-token', expiresAt: Date.now() + 3600_000, account: null}));
 };
 
-async function load(theme, signedIn, scheme) {
+async function load(theme, signedIn, scheme, motion = 'no-preference') {
   stored = {...stored, theme};
   sent.length = 0;
   if (context) await context.close();
   context = await browser.newContext({viewport: {width: 1280, height: 900},
-                                      colorScheme: scheme});
+                                      colorScheme: scheme, reducedMotion: motion});
   await context.addInitScript(seed(theme, signedIn), [theme, signedIn]);
   await wire(context);
   page = await context.newPage();
@@ -151,15 +151,25 @@ const heroState = async () => {
   const frame = page.frames().find(f => f.url().includes('hero-loop.html'));
   assert(frame, 'the hero iframe is not in the page');
   await page.waitForTimeout(750);   // the frame animates colours over 600ms
-  return frame.evaluate(() => {
+  const state = await frame.evaluate(() => {
     const root = document.documentElement, style = getComputedStyle(root);
     return {theme: root.getAttribute('data-theme'),
             page: style.getPropertyValue('--page').trim(),
-            g1: style.getPropertyValue('--g1').trim(),
             body: getComputedStyle(document.body).backgroundColor,
+            // Owen's v2.1 mounts its own Dark/Light pill inside the frame (#tg, two buttons).
             controls: document.querySelectorAll('#tg, [aria-pressed], [data-t], button').length,
+            pill: getComputedStyle(document.getElementById('tg')).display,
+            // A non-blank document: his scene is real nodes with real text in them.
+            scene: document.querySelectorAll('#stage *').length,
+            text: document.body.innerText.replace(/\s+/g, ' ').trim().length,
+            reduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
             href: location.href};
   });
+  // The pill is decoration inside an aria-hidden, pointer-events:none frame: a person can see
+  // it and cannot press it. If a host ever lets events through, that becomes a live control.
+  state.framePointerEvents = await page.evaluate(() =>
+    getComputedStyle(document.querySelector('iframe.hero-loop')).pointerEvents);
+  return state;
 };
 
 const plant = async () => {
@@ -179,7 +189,12 @@ try {
   assert.equal(state.theme, 'light', 'the stored light theme must paint the light palette');
   assert.equal(state.page, '#eef2f9', 'the light palette token --page');
   assert.equal(state.body, 'rgb(238, 242, 249)', 'the painted body background');
-  assert.equal(state.controls, 0, 'the corporate hero mounts no theme control either');
+  // 3 unique nodes: #tg, and the two buttons that match [aria-pressed], [data-t] and button.
+  assert.equal(state.controls, 3, "Owen's v2.1 pill is in the frame (#tg + its two buttons)");
+  assert.equal(state.pill, 'flex', 'and it is painted, not hidden');
+  assert.equal(state.framePointerEvents, 'none', 'the host frame cannot receive a click');
+  assert.ok(state.scene > 100, `the scene draws real nodes (${state.scene})`);
+  assert.ok(state.text > 100, `and carries real text (${state.text} characters)`);
   assert.equal(sent, sent, 'no write was needed to paint');
   await page.screenshot({path: join(output, 'corporate-signed-in-light.png')});
 
@@ -188,8 +203,8 @@ try {
   state = await heroState();
   measured.signedInDark = state;
   assert.equal(state.theme, 'dark', 'the stored dark theme must paint the dark palette');
-  assert.equal(state.page, '#04080d', 'the dark palette token --page');
-  assert.equal(state.body, 'rgb(4, 8, 13)', 'the painted body background');
+  assert.equal(state.page, '#050507', 'the dark palette token --page');
+  assert.equal(state.body, 'rgb(5, 5, 7)', 'the painted body background');
   await page.screenshot({path: join(output, 'corporate-signed-in-dark.png')});
 
   // ── 3. system, both directions, live ─────────────────────────────────────────────
@@ -201,7 +216,7 @@ try {
   await page.emulateMedia({colorScheme: 'dark'});
   state = await heroState();
   measured.systemDark = state;
-  assert.equal(state.page, '#04080d', 'the OS change repaints the hero live');
+  assert.equal(state.page, '#050507', 'the OS change repaints the hero live');
   assert.equal(await stillSameFrame(), 'same document', 'with no frame reload');
   await page.emulateMedia({colorScheme: 'light'});
   state = await heroState();
@@ -216,14 +231,14 @@ try {
   await page.emulateMedia({colorScheme: 'dark'});
   state = await heroState();
   measured.signedOutDarkOS = state;
-  assert.equal(state.page, '#04080d',
+  assert.equal(state.page, '#050507',
     'signed out, the stored preference is not read at all: the hero follows the OS');
 
   // ── 5. a Theme change in the shared control repaints the hero, no reload ────────
   await load('system', true, 'dark');
   state = await heroState();
   measured.beforePanel = state;
-  assert.equal(state.page, '#04080d', 'starting dark through system+dark OS');
+  assert.equal(state.page, '#050507', 'starting dark through system+dark OS');
   await plant();
   // The panel is the launcher's own dialog, opened from the account control's menu.
   const openSettings = async () => {
@@ -263,16 +278,30 @@ try {
   await again.locator('input[name=es-theme][value=dark]').check();
   state = await heroState();
   measured.panelPreviewDark = state;
-  assert.equal(state.page, '#04080d', 'the hero follows the panel back to dark');
+  assert.equal(state.page, '#050507', 'the hero follows the panel back to dark');
   await again.getByRole('button', {name: /^Save Changes$/}).click();
   await page.waitForTimeout(1200);
   state = await heroState();
   measured.afterSaveDark = state;
-  assert.equal(state.page, '#04080d', 'dark survives the save');
+  assert.equal(state.page, '#050507', 'dark survives the save');
   assert.equal(await stillSameFrame(), 'same document', 'still the same frame');
   await page.screenshot({path: join(output, 'corporate-panel-dark.png')});
 
-  // ── 6. no page reload anywhere in this run ──────────────────────────────────────
+  // ── 6. reduced motion: the scene is held still, and it is a scene ───────────────
+  // v2.1 draws one frame of the fly-through (frame(7)) instead of looping, so the palm
+  // transform must not move and the mocked harness UI must still be there.
+  await load('dark', true, 'dark', 'reduce');
+  state = await heroState();
+  measured.reducedMotion = state;
+  assert.equal(state.reduced, true, 'the browser is honouring prefers-reduced-motion');
+  const readCam = () => page.frames().find(f => f.url().includes('hero-loop.html'))
+    .evaluate(() => getComputedStyle(document.getElementById('cam')).transform);
+  const camStill = await readCam();
+  await page.waitForTimeout(600);
+  assert.equal(await readCam(), camStill, 'reduced motion holds the camera still');
+  assert.ok(state.scene > 100, `and the scene is still drawn (${state.scene} nodes)`);
+
+  // ── 7. no page reload anywhere in this run ──────────────────────────────────────
   const navigations = await page.evaluate(() =>
     performance.getEntriesByType('navigation').length);
   assert.equal(navigations, 1, 'the whole run is one document: nothing reloaded the page');
