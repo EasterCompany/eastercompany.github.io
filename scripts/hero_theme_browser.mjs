@@ -44,7 +44,8 @@ const API = 'https://jyjshd22z3.execute-api.us-east-2.amazonaws.com';
 
 const TYPES = {'.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript',
                '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml',
-               '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.ico': 'image/x-icon'};
+               '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.ico': 'image/x-icon',
+               '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8'};
 
 // ── the site, served the way Pages serves it ─────────────────────────────────────────
 const server = createServer((request, response) => {
@@ -76,6 +77,7 @@ const sent = [];
 const browser = await chromium.launch({executablePath: '/usr/bin/chromium', args: ['--no-sandbox']});
 const errors = [];
 const measured = {};
+const externalFonts = [];   // any request that leaves for a font host: must stay empty
 let context, page;
 
 async function wire(target) {
@@ -90,11 +92,15 @@ async function wire(target) {
                           headers: {'access-control-allow-origin': '*'},
                           body: readFileSync(file)});
   });
-  // The frame links Google Fonts and the page's download widget asks GitHub; neither is
-  // part of this test, and a suite that waits on the internet is a suite that hangs.
-  await target.route('https://fonts.googleapis.com/**', route =>
-    route.fulfill({contentType: 'text/css', headers: {'access-control-allow-origin': '*'}, body: ''}));
-  await target.route('https://fonts.gstatic.com/**', route => route.fulfill({status: 404, body: ''}));
+  // THE HERO MUST FETCH NO FONT FROM A THIRD PARTY: Inter is vendored beside the frame
+  // (site/assets/static/fonts/) and every one of its four weights is declared from there.
+  // So anything that reaches the Google Fonts hosts is recorded and aborted, and the run
+  // fails on it — a stub that answers quietly would hide exactly the regression to catch.
+  for (const host of ['https://fonts.googleapis.com/**', 'https://fonts.gstatic.com/**']) {
+    await target.route(host, route => { externalFonts.push(route.request().url()); return route.abort(); });
+  }
+  // The page's download widget asks GitHub; that is not part of this test, and a suite
+  // that waits on the internet is a suite that hangs.
   await target.route('https://api.github.com/**', route =>
     route.fulfill({contentType: 'application/json', headers: {'access-control-allow-origin': '*'},
                    body: '[]'}));
@@ -287,7 +293,28 @@ try {
   assert.equal(await stillSameFrame(), 'same document', 'still the same frame');
   await page.screenshot({path: join(output, 'corporate-panel-dark.png')});
 
-  // ── 6. reduced motion: the scene is held still, and it is a scene ───────────────
+  // ── 6. the font is ours: four weights, one vendored file, no third-party request ──
+  await load('light', true, 'dark');
+  const fonts = await page.frames().find(f => f.url().includes('hero-loop.html')).evaluate(async () => {
+    await document.fonts.ready;
+    const weights = [400, 500, 600, 700];
+    const check = {};
+    for (const w of weights) check[w] = document.fonts.check(`${w} 16px Inter`);
+    const faces = [...document.fonts].map(f => ({family: f.family, weight: f.weight, status: f.status}));
+    return {check, faces, families: document.fonts.size,
+            family: getComputedStyle(document.body).fontFamily};
+  });
+  measured.fonts = fonts;
+  for (const weight of [400, 500, 600, 700]) {
+    assert.equal(fonts.check[weight], true, `Inter ${weight} is available to the frame`);
+  }
+  assert.ok(fonts.family.startsWith('Inter'), `the frame paints in Inter (${fonts.family})`);
+  assert.ok(fonts.faces.every(face => face.status === 'loaded' || face.status === 'unloaded'),
+    'every declared face resolved without a load error');
+  assert.deepEqual(externalFonts, [],
+    'the hero requests NOTHING from a font host: Inter is vendored beside the frame');
+
+  // ── 7. reduced motion: the scene is held still, and it is a scene ───────────────
   // v2.1 draws one frame of the fly-through (frame(7)) instead of looping, so the palm
   // transform must not move and the mocked harness UI must still be there.
   await load('dark', true, 'dark', 'reduce');
@@ -301,7 +328,7 @@ try {
   assert.equal(await readCam(), camStill, 'reduced motion holds the camera still');
   assert.ok(state.scene > 100, `and the scene is still drawn (${state.scene} nodes)`);
 
-  // ── 7. no page reload anywhere in this run ──────────────────────────────────────
+  // ── 8. no page reload anywhere in this run ──────────────────────────────────────
   const navigations = await page.evaluate(() =>
     performance.getEntriesByType('navigation').length);
   assert.equal(navigations, 1, 'the whole run is one document: nothing reloaded the page');
