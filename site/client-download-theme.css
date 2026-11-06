@@ -28,7 +28,8 @@
 .eserver-download-menu h2{font:23px Georgia,serif;margin:0 12px 18px;color:var(--ink)}
 .eserver-download-menu[popover] a:not(.download-icon-credit){display:flex;align-items:center;gap:13px;width:100%;padding:15px 12px;border:1px solid transparent;border-radius:9px;color:var(--ink);text-decoration:none}
 .eserver-download-menu[popover] a:not(.download-icon-credit):hover{background:var(--download-hover);border-color:var(--line)}
-.eserver-download-menu .platform-icon{display:block;width:34px;height:34px;flex:none;background:var(--download-hover);border:1px solid var(--line);border-radius:8px}
+.eserver-download-menu .platform-icon{display:block;width:34px;height:34px;flex:none;filter:brightness(0) invert(1)}
+html[data-easter-theme="light"] .eserver-download-menu .platform-icon{filter:brightness(0)}
 .eserver-download-menu strong{display:block;font-size:12px;font-weight:500;color:var(--ink)}
 .eserver-download-menu small{display:block;font-size:9px;color:var(--muted);margin-top:6px}
 .eserver-download-menu .platform-arrow{margin-left:auto;color:var(--accent);font-size:19px}
