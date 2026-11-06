@@ -21,7 +21,19 @@
 
 /* THE BETA CARD'S CONTACT LINE, and the carousel's arrival. Both are layout only: the words are
    Owen's, typed into site/index.html. */
-.beta-summary .beta-price{font-size:24px;line-height:1.3;font-weight:550;letter-spacing:-.025em;color:var(--ink);margin:0 0 16px}.beta-plans{overflow:hidden}.beta-plan-track{display:flex;transition:transform .45s ease}.beta-plan{flex:0 0 100%;min-width:0}.beta-summary .beta-plan-dots{display:flex;gap:6px;margin-top:14px}.beta-plan-dot{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:var(--line-strong,var(--line));opacity:.6;cursor:pointer}.beta-plan-dot[aria-pressed="true"]{opacity:1;background:var(--accent)}@media(prefers-reduced-motion:reduce){.beta-plan-track{transition:none}}
+.beta-summary .beta-price{font-size:24px;line-height:1.3;font-weight:550;letter-spacing:-.025em;color:var(--ink);margin:0 0 16px}.beta-plans{overflow:hidden}.beta-plan-track{display:flex;transition:transform .45s ease}.beta-plan{flex:0 0 100%;min-width:0}.beta-summary .beta-plan-dots{display:flex;gap:6px;margin-top:14px}.beta-plan-dot{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:var(--line-strong,var(--line));opacity:.6;cursor:pointer}.beta-plan-dot[aria-pressed="true"]{opacity:1;background:var(--accent)}
+/* THE TOP NAV IS THE LAUNCHER'S, BY OWEN'S INSTRUCTION (2026-11-06): "same style and layout
+   as the launcher.easter.company website". Geometry and item treatment are read from
+   /root/easter-co-smp.github.io/site/styles.css:104-114 and restated in THIS site's tokens:
+   the launcher hard-codes its single dark palette, while these pages have two moods. So the
+   shape is copied and the colour is not. */
+.site-header{height:72px;width:min(1120px,calc(100% - 96px));margin-inline:auto;gap:24px}
+.site-header nav{gap:6px}
+.site-header nav>a,.site-header nav>#nav-download .eserver-download-primary{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 17px;border-radius:8px;font-size:12px;line-height:1.2;white-space:nowrap;text-decoration:none;background:transparent;border:1px solid transparent;color:var(--muted)}
+.site-header nav>a:hover,.site-header nav>#nav-download .eserver-download-primary:hover{background:var(--line);color:var(--ink)}
+.site-header nav .eserver-download-picker summary{padding:11px 9px;border:0;background:transparent;color:var(--muted)}
+@media(max-width:650px){.site-header{width:calc(100% - 36px)}.site-header nav{gap:2px}.site-header nav>a,.site-header nav>#nav-download .eserver-download-primary{font-size:11px;padding:11px 9px}}
+@media(prefers-reduced-motion:reduce){.beta-plan-track{transition:none}}
 .beta-summary .beta-organisations{margin-top:16px}
 .beta-summary .beta-contact{margin-top:10px;font-size:12px}
 .beta-summary .beta-contact a{color:inherit;text-decoration:none;border-bottom:1px solid var(--link-line)}
