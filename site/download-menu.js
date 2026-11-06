@@ -7,6 +7,7 @@
   const trigger=details.querySelector('summary');
   const original=host.querySelector('.eserver-download-primary');
   const primary=document.createElement('button');primary.type='button';primary.className=original.className;primary.textContent=original.textContent;original.replaceWith(primary);
+  if(host.id==='nav-download'){const chevron=document.createElement('span');chevron.className='download-nav-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌄';primary.append(chevron);trigger.hidden=true;}
   if(!HTMLElement.prototype.showPopover){primary.addEventListener('click',()=>{details.open=!details.open;});return;}
   const menu=details.querySelector('.eserver-download-menu');
   menu.id=`download-platforms-${index}`;

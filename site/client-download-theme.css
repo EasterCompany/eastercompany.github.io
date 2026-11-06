@@ -34,3 +34,7 @@ html[data-easter-theme="light"] .eserver-download-menu .platform-icon{filter:bri
 .eserver-download-menu small{display:block;font-size:9px;color:var(--muted);margin-top:6px}
 .eserver-download-menu .platform-arrow{margin-left:auto;color:var(--accent);font-size:19px}
 .eserver-download-menu[popover] .download-icon-credit{display:block;font-size:10px;color:var(--muted);margin:12px 6px 2px;text-align:right}
+
+/* The navigation label and chevron form one focusable control. */
+.site-header #nav-download .eserver-download-primary{border-radius:8px;gap:8px}
+.download-nav-chevron{font-size:18px;line-height:1}
