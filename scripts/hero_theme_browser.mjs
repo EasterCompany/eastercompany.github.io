@@ -78,9 +78,13 @@ const browser = await chromium.launch({executablePath: '/usr/bin/chromium', args
 const errors = [];
 const measured = {};
 const externalFonts = [];   // any request that leaves for a font host: must stay empty
+const fontFiles = [];       // this page's own font requests: only the subsets its text can use
 let context, page;
 
 async function wire(target) {
+  target.on('response', response => {
+    if (response.url().includes('/assets/fonts/')) fontFiles.push(new URL(response.url()).pathname.split('/').pop());
+  });
   target.on('pageerror', error => errors.push(String(error)));
   // The shared control's modules, from the shipped launcher checkout. Cross-origin
   // module loads need the same headers GitHub Pages serves.
@@ -313,6 +317,14 @@ try {
     'every declared face resolved without a load error');
   assert.deepEqual(externalFonts, [],
     'the hero requests NOTHING from a font host: Inter is vendored beside the frame');
+  // Seven subset files ship, and the browser downloads exactly the ones Owen's own text can
+  // use: `latin` for the English, and `greek` because his scene prints epsilon (U+03B5) —
+  // measured, not assumed. Cyrillic, Greek-ext, Cyrillic-ext, Vietnamese and Latin-ext stay on
+  // the shelf, which is the whole point of keeping Google's unicode-range splits.
+  const fetched = [...new Set(fontFiles)].sort();
+  assert.deepEqual(fetched, ['inter-greek.woff2', 'inter-latin.woff2'],
+    `only the subsets this text can show are downloaded (measured ${JSON.stringify(fetched)})`);
+  measured.fontFiles = fontFiles;
 
   // ── 7. reduced motion: the scene is held still, and it is a scene ───────────────
   // v2.1 draws one frame of the fly-through (frame(7)) instead of looping, so the palm
