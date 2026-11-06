@@ -19,7 +19,7 @@
  }
  function mount(host){
   if(host.dataset.mounted)return;host.dataset.mounted='true';host.classList.add('eserver-download');
-  const selection=preferred(),label=host.dataset.label||'Start for free';
+  const selection=preferred(),label=host.dataset.label||'Download Now';
   const primary=element(selection?'a':'button','eserver-download-primary',label);
   if(selection){primary.href=BASE+selection.file;primary.target='_blank';primary.rel='noopener';primary.addEventListener('click',()=>instructions(selection));}else primary.type='button';
   const details=element('details','eserver-download-picker'),summary=element('summary','','⌄');summary.setAttribute('aria-label','Choose e-server desktop platform');
