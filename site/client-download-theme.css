@@ -53,8 +53,4 @@ html[data-easter-theme="light"] .eserver-download-menu .platform-icon{filter:bri
 html[data-easter-theme="light"] #hero-download .eserver-download-primary,html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary{background:var(--button);color:var(--button-ink);border-color:var(--button)}
 html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary{border-left-color:var(--button-ink)}
 html[data-easter-theme="light"] #hero-download .eserver-download-primary:hover,html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary:hover{background:var(--button-hover)}
-@media(prefers-reduced-motion:no-preference){
- #hero-download::after{content:"";position:absolute;inset:0;border-radius:9px;pointer-events:none;background:linear-gradient(110deg,transparent 25%,#ffffff45 45%,transparent 65%);background-size:250% 100%;animation:download-shimmer 5s ease-in-out infinite}
- @keyframes download-shimmer{0%,25%{background-position:150% 0}65%,100%{background-position:-100% 0}}
-}
 @media(max-width:440px){#hero-download .eserver-download-primary{min-width:0;gap:12px;padding:18px 16px;font-size:15px}}
