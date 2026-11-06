@@ -20,3 +20,17 @@
 .intro-actions{flex-wrap:wrap}
 @media(max-width:700px){.site-header{height:auto;min-height:84px;flex-wrap:wrap;padding-block:18px;gap:16px}.site-header nav{gap:12px;flex-wrap:wrap;max-width:100%}.intro-actions{gap:18px}.site-header .wordmark{flex:1 1 auto}.site-header nav{flex:1 1 auto;justify-content:flex-end}}
 @media(max-width:440px){.site-header nav{width:100%;justify-content:space-between}.intro-actions .eserver-download{width:100%}.intro-actions .eserver-download-primary{flex:1}}
+
+/* The launcher site's platform selector, adapted to the corporate theme. */
+.eserver-download-menu[popover]{position:fixed;inset:auto;margin:0;width:min(310px,calc(100vw - 24px));max-width:none;max-height:calc(100dvh - 24px);overflow:auto;padding:20px 10px 10px;border:1px solid var(--line);border-radius:15px;background:var(--surface);color:var(--ink);box-shadow:0 25px 80px var(--download-shadow);font:14px/1.4 system-ui,sans-serif}
+.eserver-download-menu[popover]::backdrop{background:var(--modal-scrim);backdrop-filter:blur(var(--modal-blur))}
+.eserver-download-menu .download-menu-title{font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin:0 12px 8px}
+.eserver-download-menu h2{font:23px Georgia,serif;margin:0 12px 18px;color:var(--ink)}
+.eserver-download-menu[popover] a:not(.download-icon-credit){display:flex;align-items:center;gap:13px;width:100%;padding:15px 12px;border:1px solid transparent;border-radius:9px;color:var(--ink);text-decoration:none}
+.eserver-download-menu[popover] a:not(.download-icon-credit) + a:not(.download-icon-credit){border-top-color:var(--line)}
+.eserver-download-menu[popover] a:not(.download-icon-credit):hover{background:var(--download-hover);border-color:var(--line)}
+.eserver-download-menu .platform-icon{display:block;width:34px;height:34px;flex:none;background:var(--download-hover);border:1px solid var(--line);border-radius:8px}
+.eserver-download-menu strong{display:block;font-size:12px;font-weight:500;color:var(--ink)}
+.eserver-download-menu small{display:block;font-size:9px;color:var(--muted);margin-top:6px}
+.eserver-download-menu .platform-arrow{margin-left:auto;color:var(--accent);font-size:19px}
+.eserver-download-menu[popover] .download-icon-credit{display:block;font-size:10px;color:var(--muted);margin:12px 6px 2px;text-align:right}
