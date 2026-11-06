@@ -38,3 +38,22 @@ html[data-easter-theme="light"] .eserver-download-menu .platform-icon{filter:bri
 /* The navigation label and chevron form one focusable control. */
 .site-header #nav-download .eserver-download-primary{border-radius:8px;gap:8px}
 .download-nav-chevron{font-size:18px;line-height:1}
+
+/* Launcher-style hero download control, using this site's theme accents. */
+.download-chevron-icon{display:block;width:18px;height:18px;flex:none}
+#hero-download.eserver-download{position:relative;isolation:isolate;border-radius:9px;box-shadow:0 10px 40px #0006,0 0 40px #e6c98f28}
+#hero-download .eserver-download-primary,#hero-download .eserver-download-picker>summary{min-height:72px;border:1px solid #ffe5a9;color:#192a2e;background:linear-gradient(120deg,#f2d99d,#d3ae66)}
+#hero-download .eserver-download-primary{display:flex;gap:16px;min-width:235px;justify-content:center;padding:19px 25px;border-right:0;border-radius:9px 0 0 9px;font:700 16px/1.4 system-ui,sans-serif;text-align:left}
+#hero-download .hero-download-icon{width:25px;height:25px;flex:none}
+#hero-download .hero-download-label{white-space:nowrap}
+#hero-download .hero-download-label small{display:block;margin-top:6px;font:500 9px/1.4 system-ui,sans-serif;letter-spacing:.06em}
+#hero-download .eserver-download-picker>summary{display:grid;place-items:center;width:46px;padding:0;border-left:1px solid #8b733f55;border-radius:0 9px 9px 0;line-height:1;cursor:pointer}
+#hero-download .eserver-download-primary:hover,#hero-download .eserver-download-picker>summary:hover{background:linear-gradient(120deg,#ffe6ae,#dfbb76)}
+html[data-easter-theme="light"] #hero-download .eserver-download-primary,html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary{background:var(--button);color:var(--button-ink);border-color:var(--button)}
+html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary{border-left-color:var(--button-ink)}
+html[data-easter-theme="light"] #hero-download .eserver-download-primary:hover,html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary:hover{background:var(--button-hover)}
+@media(prefers-reduced-motion:no-preference){
+ #hero-download::after{content:"";position:absolute;inset:0;border-radius:9px;pointer-events:none;background:linear-gradient(110deg,transparent 25%,#ffffff45 45%,transparent 65%);background-size:250% 100%;animation:download-shimmer 5s ease-in-out infinite}
+ @keyframes download-shimmer{0%,25%{background-position:150% 0}65%,100%{background-position:-100% 0}}
+}
+@media(max-width:440px){#hero-download .eserver-download-primary{min-width:0;gap:12px;padding:18px 16px;font-size:15px}}

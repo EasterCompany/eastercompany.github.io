@@ -7,7 +7,15 @@
   const trigger=details.querySelector('summary');
   const original=host.querySelector('.eserver-download-primary');
   const primary=document.createElement('button');primary.type='button';primary.className=original.className;primary.textContent=original.textContent;original.replaceWith(primary);
-  if(host.id==='nav-download'){const chevron=document.createElement('span');chevron.className='download-nav-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌄';primary.append(chevron);trigger.hidden=true;}
+  const svg=(path,cls)=>{const node=document.createElementNS('http://www.w3.org/2000/svg','svg');node.setAttribute('viewBox','0 0 24 24');node.setAttribute('fill','none');node.setAttribute('stroke','currentColor');node.setAttribute('stroke-width','2');node.setAttribute('stroke-linecap','round');node.setAttribute('stroke-linejoin','round');node.setAttribute('aria-hidden','true');node.classList.add(cls);const shape=document.createElementNS('http://www.w3.org/2000/svg','path');shape.setAttribute('d',path);node.append(shape);return node;};
+  const chevron=()=>svg('m6 9 6 6 6-6','download-chevron-icon');
+  if(host.id==='nav-download'){primary.append(chevron());trigger.hidden=true;}
+  if(host.id==='hero-download'){
+   const label=document.createElement('span');label.className='hero-download-label';label.textContent=primary.textContent;
+   const sub=document.createElement('small');sub.textContent='Choose your platform';label.append(sub);
+   primary.replaceChildren(svg('M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5','hero-download-icon'),label);
+   trigger.replaceChildren(chevron());
+  }
   if(!HTMLElement.prototype.showPopover){primary.addEventListener('click',()=>{details.open=!details.open;});return;}
   const menu=details.querySelector('.eserver-download-menu');
   menu.id=`download-platforms-${index}`;
