@@ -30,7 +30,7 @@
   let anchor=trigger;
   function position(){
    if(!menu.matches(':popover-open'))return;
-   const rect=anchor.getBoundingClientRect(),width=menu.offsetWidth,height=menu.offsetHeight;
+   const rect=host.getBoundingClientRect(),width=menu.offsetWidth,height=menu.offsetHeight;
    menu.style.left=Math.max(12,Math.min(rect.left,innerWidth-width-12))+'px';
    menu.style.top=(rect.bottom+10+height<=innerHeight-12?rect.bottom+10:Math.max(12,Math.min(rect.top-height-10,innerHeight-height-12)))+'px';
   }
