@@ -109,3 +109,13 @@
    stylesheet no longer needs a rule for the mark at all. tests/test_marks.py fails if a
    filter or a per-theme swap comes back. */
 
+
+/* Give each main section a full screen while allowing longer content to grow. */
+main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:clamp(48px,8vh,96px)}
+#platform{align-content:center}
+#games{display:flex;flex-direction:column;justify-content:center}
+.signup{display:grid;align-content:center}
+.company{align-content:center;align-items:center}
+@media(max-width:650px){
+  .platform-tabs{flex-wrap:wrap;justify-content:flex-start;gap:12px 18px}
+}
