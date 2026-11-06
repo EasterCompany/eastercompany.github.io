@@ -47,7 +47,8 @@ html[data-easter-theme="light"] .eserver-download-menu .platform-icon{filter:bri
 #hero-download .hero-download-icon{width:25px;height:25px;flex:none}
 #hero-download .hero-download-label{white-space:nowrap}
 #hero-download .hero-download-label small{display:block;margin-top:6px;font:500 9px/1.4 system-ui,sans-serif;letter-spacing:.06em}
-#hero-download .eserver-download-picker>summary{display:grid;place-items:center;width:46px;padding:0;border-left:1px solid #8b733f55;border-radius:0 9px 9px 0;line-height:1;cursor:pointer}
+#hero-download .eserver-download-picker{display:flex;align-self:stretch}
+#hero-download .eserver-download-picker>summary{flex:1;display:grid;place-items:center;width:46px;padding:0;border-left:1px solid #8b733f55;border-radius:0 9px 9px 0;line-height:1;cursor:pointer}
 #hero-download .eserver-download-primary:hover,#hero-download .eserver-download-picker>summary:hover{background:linear-gradient(120deg,#ffe6ae,#dfbb76)}
 html[data-easter-theme="light"] #hero-download .eserver-download-primary,html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary{background:var(--button);color:var(--button-ink);border-color:var(--button)}
 html[data-easter-theme="light"] #hero-download .eserver-download-picker>summary{border-left-color:var(--button-ink)}
