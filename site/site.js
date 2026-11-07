@@ -46,3 +46,22 @@ if (carousel && tabs.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
   start();
 }
+
+// THE CARD LINKS POINT AT THE HERO'S OWN DOWNLOAD CONTROL (Owen, 2026-11-08: "the links should
+// link to the hero download button and open the drop down options" ... "for both cards"). A card
+// is not a second installer control: it names the hero's button as its target, scrolls it into
+// view and clicks it, so ONE menu decides what a platform link does and the cards cannot drift
+// from it. Scroll is instant on purpose — the popover positions itself from the host's rect at
+// the moment it opens, so a smooth scroll would place the menu where the button used to be.
+for (const link of document.querySelectorAll('[data-open-download]')) {
+  const hero = document.getElementById('hero-download');
+  if (!hero) continue;                       // no hero control: the link's own href still works
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    hero.scrollIntoView({block: 'center'});
+    requestAnimationFrame(() => {
+      const control = hero.querySelector('button:not([hidden]), summary');
+      if (control) control.click();
+    });
+  });
+}
