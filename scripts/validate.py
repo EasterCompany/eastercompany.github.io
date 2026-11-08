@@ -21,10 +21,17 @@ for link in p.links:
 for asset in p.assets:
     if not urlsplit(asset).scheme:assert (Path('site') / asset).is_file(), f'Missing asset: {asset}'
 assert {'beta-form','application-review','application-summary','signup','work-email'} <= p.ids
-for tab in p.tabs:
-    assert tab.get('aria-controls') in p.panels, 'Missing tab panel'
-    assert tab.get('aria-selected') in ('true','false'), 'Missing tab state'
-assert sum(t['aria-selected']=='true' for t in p.tabs)==1
+# THE TAB RULE ONLY APPLIES WHEN THE PAGE HAS TABS, and this assertion used to say so by
+# assuming it always would: the What's in your e-server section was the page's only tab strip,
+# and when it was removed (Owen, 2026-11-08) this line failed the deploy on a page that had
+# nothing wrong with it. A validator that hard-codes a section is a second author of that
+# section, so the rule is written as the thing it means: if there are tabs, exactly one is
+# selected.
+if p.tabs:
+    for tab in p.tabs:
+        assert tab.get('aria-controls') in p.panels, 'Missing tab panel'
+        assert tab.get('aria-selected') in ('true','false'), 'Missing tab state'
+    assert sum(t['aria-selected']=='true' for t in p.tabs)==1, 'More than one tab is selected'
 # MICROSOFT'S PUBLISHER-DOMAIN PROOF. Azure fetches this exact path and compares the one
 # applicationId, so a renamed file, a moved directory or a typo'd id is the whole
 # verification failing - silently, with the refusal happening in a portal rather than here.
