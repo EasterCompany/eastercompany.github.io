@@ -128,11 +128,35 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
    the file he supplied 2026-11-08). It is mounted the way the hero mounts its loop
    — an inert, non-focusable iframe at z-index -2 — with a veil over it so the copy
    is legible at every viewport and in both palettes rather than depending on which
-   part of the frame happens to sit behind the text. No colour literal: the veil is
-   the page's own background at a fixed share, so it follows the palette. */
-.productivity{position:relative;isolation:isolate;overflow:hidden}
-.productivity-frame{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:-2;pointer-events:none;opacity:.85;background:var(--surface)}
-.productivity-veil{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 86%,transparent) 18%,color-mix(in srgb,var(--bg) 86%,transparent) 82%,var(--bg) 100%)}
+   part of the frame happens to sit behind the text.
+
+   HIS THREE CORRECTIONS, 2026-11-08: the cards sit in the MIDDLE of the section
+   rather than at its top, they are a tinted window rather than an opaque panel, and
+   the background shows through more than the first pass allowed. Every one of them
+   is a variable here and none of them is a colour literal: the glass is the page's
+   own --surface at a share, the veil is --bg at a share, so both palettes follow. */
+.productivity{position:relative;isolation:isolate;overflow:hidden;display:grid;align-content:center;min-height:clamp(560px,74vh,780px)}
+.productivity-frame{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:-2;pointer-events:none;opacity:1;background:var(--surface)}
+.productivity-veil{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 92%,transparent) 0%,color-mix(in srgb,var(--bg) 68%,transparent) 26%,color-mix(in srgb,var(--bg) 68%,transparent) 74%,color-mix(in srgb,var(--bg) 92%,transparent) 100%)}
 .productivity-inner{position:relative}
-@media(max-width:750px){.productivity-frame{opacity:.62}}
-@media(prefers-reduced-motion:reduce){.productivity-frame{opacity:.62}}
+/* A tinted window: the page's own surface at a share, blurred and slightly
+   saturated so the frame behind it reads as light through glass rather than as a
+   photograph under a label. The alpha is the legibility budget — measured against
+   the rendered pixels, not chosen by eye — and the fallback keeps the reading
+   surface when backdrop-filter is unavailable. */
+.productivity .game-card{
+  background:color-mix(in srgb,var(--surface) 80%,transparent);
+  border-color:color-mix(in srgb,var(--line) 72%,transparent);
+  -webkit-backdrop-filter:blur(16px) saturate(135%);
+  backdrop-filter:blur(16px) saturate(135%);
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--bg) 34%,transparent),0 18px 48px -28px color-mix(in srgb,#000 55%,transparent);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .productivity .game-card{background:color-mix(in srgb,var(--surface) 88%,transparent)}
+}
+@media(max-width:750px){
+  .productivity{min-height:0;align-content:start}
+  .productivity-frame{opacity:.9}
+  .productivity .game-card{-webkit-backdrop-filter:blur(12px) saturate(130%);backdrop-filter:blur(12px) saturate(130%)}
+}
+@media(prefers-reduced-motion:reduce){.productivity-frame{opacity:.9}}
