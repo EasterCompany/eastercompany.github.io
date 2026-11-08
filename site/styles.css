@@ -170,7 +170,7 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
    guessing from prefers-color-scheme, and its own page-level padding, background and
    borders give way to the page's .section rhythm. Everything under 750px stops moving
    and wraps, which is his file's own reduced-motion rule applied at phone width. */
-.partners{text-align:center}
+.partners{text-align:center;display:grid;align-content:center;justify-items:stretch}
 .partners-wrap{max-width:760px;margin-inline:auto}
 .partners h2{font:500 25px/1.2 inherit;letter-spacing:-.035em;margin:0}
 .partners-sub{margin:12px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.55}
