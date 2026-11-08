@@ -318,3 +318,25 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
   .js .partners .rv,.js .education .rv{opacity:1;transform:none;transition:none}
   .education .card::before,.education .cta a,.education .roles button{transition:none}
 }
+
+/* ── Five section links in the header ─────────────────────────────────────────
+   Owen, 2026-11-08: the one "Games & Entertainment" button became Engineering,
+   Entertainment, Education, Enterprise and Contact, each linking to its own section on this
+   page. Five words and a download button will not sit on one line at every width, and the
+   nav's own rule was `flex-wrap: nowrap`, so at 768px the header overflowed the document by
+   98px. These rules let it wrap and tighten instead, and they only touch the header. */
+.site-header nav{flex-wrap:wrap;gap:8px 20px;justify-content:flex-end}
+.site-header nav>a{white-space:nowrap}
+@media(max-width:820px){
+  .site-header nav{justify-content:flex-start;gap:6px 16px}
+  .site-header nav>a{font-size:11px}
+}
+@media(max-width:650px){
+  /* Six words and a download button: on a phone the header wraps, so it is tightened here.
+     `.site-header.shell` rather than `.site-header` on purpose — page-theme.css is loaded
+     AFTER this file and owns the narrow-width header padding, so an equal-specificity rule
+     here loses no matter where it sits. */
+  .site-header.shell{padding-block:12px;gap:10px}
+  .site-header nav{gap:4px 10px}
+  .site-header nav>a{font-size:10px;white-space:nowrap}
+}
