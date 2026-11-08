@@ -121,3 +121,18 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
 @media(max-width:650px){
   .platform-tabs{flex-wrap:wrap;justify-content:flex-start;gap:12px 18px}
 }
+
+/* ── Productivity & Engineering ───────────────────────────────────────────────
+   The owner's own asset is the background: a self-contained render of the harness
+   in a 3D frame (`site/assets/harness-3d-frame.html`, shipped byte for byte from
+   the file he supplied 2026-11-08). It is mounted the way the hero mounts its loop
+   — an inert, non-focusable iframe at z-index -2 — with a veil over it so the copy
+   is legible at every viewport and in both palettes rather than depending on which
+   part of the frame happens to sit behind the text. No colour literal: the veil is
+   the page's own background at a fixed share, so it follows the palette. */
+.productivity{position:relative;isolation:isolate;overflow:hidden}
+.productivity-frame{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:-2;pointer-events:none;opacity:.85;background:var(--surface)}
+.productivity-veil{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 86%,transparent) 18%,color-mix(in srgb,var(--bg) 86%,transparent) 82%,var(--bg) 100%)}
+.productivity-inner{position:relative}
+@media(max-width:750px){.productivity-frame{opacity:.62}}
+@media(prefers-reduced-motion:reduce){.productivity-frame{opacity:.62}}
