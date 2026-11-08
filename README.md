@@ -26,7 +26,13 @@ Browser checks cover desktop, 320px/390px layouts, keyboard tab navigation,
 review/edit and correct encoding of ampersands and line breaks in the email draft.
 No emails were sent during testing.
 
-Published to GitHub Pages by the manual pages.yml workflow from Prd. The public
+Published to GitHub Pages by the manual pages.yml workflow from Prd. IT IS
+`workflow_dispatch` ONLY - a push to Prd publishes NOTHING. Measured 2026-11-07:
+commit 05fcee9 was on origin/Prd while the served site was still 81d00cc, and the
+new cards 404'd until `gh workflow run "Publish corporate website" --ref Prd` was
+dispatched. So a "live" claim needs the dispatch, the run's success, and then the
+production URL measured in a browser (the served HTML plus the asset status codes).
+The public
 review URL is https://eastercompany.github.io/. The previous custom-domain setting
 was cleared because easter.company resolves to parking; DNS was not changed.
 Noindex/nofollow is retained during review. Remove it for the confirmed launch.
