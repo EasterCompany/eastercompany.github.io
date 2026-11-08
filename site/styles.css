@@ -209,7 +209,13 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
 .partners .wm{color:var(--band-wm)}
 .partners .partners-track li:hover .wm{color:var(--band-ink)}
 .partners .partners-track li::after{border-color:var(--band-muted);opacity:.5}
-.partners{border-top-color:transparent}
+/* NO BORDER AT ALL, not just a transparent one: the section paints its own background to the
+   border box, and an absolutely positioned ::before is placed against the PADDING box — so a
+   1px transparent border left exactly one pixel of --band-edge (#0a0a10) showing above the
+   page-colour feather. Measured on the live page 2026-11-08: row 24 of the seam read
+   rgb(10,10,16) between two rows of the page's own rgb(238,242,249). Owen saw that pixel as
+   "a thin black line across the top". With the border gone the feather reaches the edge. */
+.partners.section{border-top:0}
 .partners-wrap{max-width:760px;margin-inline:auto}
 .partners h2{font:500 25px/1.2 inherit;letter-spacing:-.035em;margin:0}
 .partners-sub{margin:12px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.55}
