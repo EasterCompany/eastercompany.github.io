@@ -252,8 +252,12 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
   --shadow:0 1px 0 color-mix(in srgb,var(--ink) 4%,transparent),0 18px 40px -22px color-mix(in srgb,#000 34%,transparent);
   text-align:left;
 }
-.education .ed{position:relative;overflow:hidden;padding-block:clamp(56px,8vh,108px);
-  background:radial-gradient(60% 50% at 8% 0%,var(--glow),transparent 70%)}
+/* NO INNER PADDING WRAPPER: Claude's .ed carried its own clamp(56px,8vh,108px) on top of the
+   page's .section padding, which stacked into whitespace above and below that the rest of the
+   page does not have (Owen, 2026-11-08: "remove the 'ed' container it's adding whitespace to
+   the top and bottom"). The wrapper is gone and its glow now sits on the section itself, so
+   the band keeps the page's own rhythm. */
+.education{position:relative;overflow:hidden;background:radial-gradient(60% 50% at 8% 0%,var(--glow),transparent 70%)}
 .education .in{max-width:1120px;margin-inline:auto;padding-inline:24px}
 .education .hd{display:grid;grid-template-columns:1.15fr 1fr;gap:24px 64px;align-items:end;margin-bottom:56px}
 .education .eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
