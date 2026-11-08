@@ -160,3 +160,48 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
   .productivity .game-card{-webkit-backdrop-filter:blur(12px) saturate(130%);backdrop-filter:blur(12px) saturate(130%)}
 }
 @media(prefers-reduced-motion:reduce){.productivity-frame{opacity:.9}}
+
+/* ── Our Clients & Partners ───────────────────────────────────────────────────
+   The owner's own section, supplied 2026-11-08 as
+   `~/Downloads/Previous clients & partners.html`, re-worded by him: his heading and
+   subtext, and the marquee of client wordmarks drawn in each brand's own typeface —
+   that type mixing is the design and it is kept. His file's palette and CSS variables
+   are replaced by this page's tokens so the band follows BOTH palettes instead of
+   guessing from prefers-color-scheme, and its own page-level padding, background and
+   borders give way to the page's .section rhythm. Everything under 750px stops moving
+   and wraps, which is his file's own reduced-motion rule applied at phone width. */
+.partners{text-align:center}
+.partners-wrap{max-width:760px;margin-inline:auto}
+.partners h2{font:500 25px/1.2 inherit;letter-spacing:-.035em;margin:0}
+.partners-sub{margin:12px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.55}
+.partners-marq{margin-top:38px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.partners-track{display:flex;align-items:center;width:max-content;margin:0;padding:0;list-style:none;animation:partners-scroll 42s linear infinite}
+.partners-marq:hover .partners-track,.partners-marq:focus-within .partners-track{animation-play-state:paused}
+@keyframes partners-scroll{to{transform:translateX(-50%)}}
+.partners-track li{display:flex;align-items:center;padding:0 clamp(26px,4vw,52px);position:relative}
+.partners-track li::after{content:'';position:absolute;right:-3px;top:50%;width:6px;height:6px;border:1px solid var(--accent);transform:translateY(-50%) rotate(45deg);opacity:.55}
+.wm{display:block;white-space:nowrap;color:var(--muted);font-size:28px;line-height:1;transition:color .25s ease}
+.partners-track li:hover .wm{color:var(--ink)}
+.wm-bl{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;font-size:30px;letter-spacing:-.01em}
+.wm-dr{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;text-transform:uppercase;letter-spacing:.34em;font-size:31px}
+.wm-wl{font-family:Inter,sans-serif;font-weight:800;letter-spacing:-.03em;font-size:30px}
+.wm-oa{font-family:"Space Grotesk",Inter,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:30px}
+.wm-ds{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:-.02em;font-size:26px}
+.wm-ms{font-family:Inter,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:28px}
+.wm-aw{font-family:Outfit,Inter,sans-serif;font-weight:600;letter-spacing:.06em;font-size:30px}
+.wm-rd{font-family:Sora,Inter,sans-serif;font-weight:700;letter-spacing:-.02em;font-size:28px}
+.wm-mj{font-family:Silkscreen,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;font-size:24px}
+@media(max-width:750px){
+  .partners-marq{-webkit-mask-image:none;mask-image:none}
+  .partners-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:22px 0;padding:0}
+  .partners-track li[aria-hidden="true"]{display:none}
+  .partners-track li{padding:0 16px}
+  .wm{font-size:24px}
+  .wm-bl,.wm-dr,.wm-wl,.wm-oa,.wm-aw{font-size:26px}
+  .wm-ds,.wm-mj{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){
+  .partners-marq{-webkit-mask-image:none;mask-image:none}
+  .partners-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:22px 0;padding:0}
+  .partners-track li[aria-hidden="true"]{display:none}
+}
