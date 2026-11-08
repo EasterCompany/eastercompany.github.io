@@ -179,9 +179,15 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
    palette. Everything else here (spacing, border, .section rhythm) stays the page's. */
 .partners{
   --band-ink:#f6f4ef;--band-muted:#cfccd6;--band-wm:#b7b4c0;
+  /* THE EDGES GO DARKER THAN THE MIDDLE, so the band arrives and leaves instead of starting
+     and stopping: the first layer here is a vertical shade over the pastels (near-black at
+     0% and 100%, clear through the middle), which is what makes the top and bottom read as
+     the page's own darkness rather than as a stripe's ends. */
+  --band-edge:#0a0a10;
   text-align:center;display:grid;align-content:center;justify-items:stretch;
   position:relative;isolation:isolate;
   background:
+    linear-gradient(180deg,var(--band-edge) 0%,color-mix(in srgb,var(--band-edge) 74%,transparent) 9%,transparent 30%,transparent 70%,color-mix(in srgb,var(--band-edge) 74%,transparent) 91%,var(--band-edge) 100%),
     radial-gradient(58% 78% at 16% 18%,color-mix(in srgb,#f9c6d6 30%,transparent),transparent 72%),
     radial-gradient(52% 66% at 84% 12%,color-mix(in srgb,#c6d6f9 28%,transparent),transparent 74%),
     radial-gradient(66% 88% at 52% 104%,color-mix(in srgb,#cdeedb 24%,transparent),transparent 80%),
@@ -189,11 +195,21 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
     #101018;
   color:var(--band-ink);
 }
+/* AND THE LAST FEW PIXELS FADE TO THE PAGE'S OWN BACKGROUND, which is the half that makes it
+   blend in a LIGHT palette: a near-black band meeting a light page is a hard seam however
+   dark its edges are, so the outermost 56px carry --bg itself. Nothing readable sits there
+   (the content is centred), and the page-colour feather is transparent through the rest. */
+.partners::before{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,
+    var(--bg) 0,color-mix(in srgb,var(--bg) 55%,transparent) 16px,transparent 56px,
+    transparent calc(100% - 56px),color-mix(in srgb,var(--bg) 55%,transparent) calc(100% - 16px),var(--bg) 100%);
+}
 .partners .partners-sub{color:var(--band-muted)}
 .partners .wm{color:var(--band-wm)}
 .partners .partners-track li:hover .wm{color:var(--band-ink)}
 .partners .partners-track li::after{border-color:var(--band-muted);opacity:.5}
-.partners{border-top-color:color-mix(in srgb,var(--band-ink) 12%,transparent)}
+.partners{border-top-color:transparent}
 .partners-wrap{max-width:760px;margin-inline:auto}
 .partners h2{font:500 25px/1.2 inherit;letter-spacing:-.035em;margin:0}
 .partners-sub{margin:12px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.55}
