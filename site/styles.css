@@ -170,7 +170,30 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
    guessing from prefers-color-scheme, and its own page-level padding, background and
    borders give way to the page's .section rhythm. Everything under 750px stops moving
    and wraps, which is his file's own reduced-motion rule applied at phone width. */
-.partners{text-align:center;display:grid;align-content:center;justify-items:stretch}
+/* THE BAND IS DARK IN BOTH PALETTES, BY THE OWNER'S OWN INSTRUCTION (2026-11-08: "add a
+   dark background with a pastel gradient abstract for this section"), so it carries its own
+   ink/muted/wordmark values instead of the page's: a light-mode page would otherwise paint
+   dark text on it. The pastels are the abstract — four soft radial gradients over a near-
+   black base, no image and no third-party asset — and they are the one place on this page
+   that deliberately is not a palette token, because the band is deliberately not the page's
+   palette. Everything else here (spacing, border, .section rhythm) stays the page's. */
+.partners{
+  --band-ink:#f6f4ef;--band-muted:#cfccd6;--band-wm:#b7b4c0;
+  text-align:center;display:grid;align-content:center;justify-items:stretch;
+  position:relative;isolation:isolate;
+  background:
+    radial-gradient(58% 78% at 16% 18%,color-mix(in srgb,#f9c6d6 30%,transparent),transparent 72%),
+    radial-gradient(52% 66% at 84% 12%,color-mix(in srgb,#c6d6f9 28%,transparent),transparent 74%),
+    radial-gradient(66% 88% at 52% 104%,color-mix(in srgb,#cdeedb 24%,transparent),transparent 80%),
+    radial-gradient(40% 52% at 72% 62%,color-mix(in srgb,#e7d3f7 20%,transparent),transparent 76%),
+    #101018;
+  color:var(--band-ink);
+}
+.partners .partners-sub{color:var(--band-muted)}
+.partners .wm{color:var(--band-wm)}
+.partners .partners-track li:hover .wm{color:var(--band-ink)}
+.partners .partners-track li::after{border-color:var(--band-muted);opacity:.5}
+.partners{border-top-color:color-mix(in srgb,var(--band-ink) 12%,transparent)}
 .partners-wrap{max-width:760px;margin-inline:auto}
 .partners h2{font:500 25px/1.2 inherit;letter-spacing:-.035em;margin:0}
 .partners-sub{margin:12px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.55}
@@ -191,13 +214,14 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
 .wm-aw{font-family:Outfit,Inter,sans-serif;font-weight:600;letter-spacing:.06em;font-size:30px}
 .wm-rd{font-family:Sora,Inter,sans-serif;font-weight:700;letter-spacing:-.02em;font-size:28px}
 .wm-mj{font-family:Silkscreen,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;font-size:24px}
+.wm-lt{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.02em;font-size:30px}
 @media(max-width:750px){
   .partners-marq{-webkit-mask-image:none;mask-image:none}
   .partners-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:22px 0;padding:0}
   .partners-track li[aria-hidden="true"]{display:none}
   .partners-track li{padding:0 16px}
   .wm{font-size:24px}
-  .wm-bl,.wm-dr,.wm-wl,.wm-oa,.wm-aw{font-size:26px}
+  .wm-bl,.wm-dr,.wm-wl,.wm-oa,.wm-aw,.wm-lt{font-size:26px}
   .wm-ds,.wm-mj{font-size:21px}
 }
 @media(prefers-reduced-motion:reduce){
