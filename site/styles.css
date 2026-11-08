@@ -161,93 +161,79 @@ main > .section{min-height:100vh;min-height:100svh;margin-top:0;padding-block:cl
 }
 @media(prefers-reduced-motion:reduce){.productivity-frame{opacity:.9}}
 
-/* ── Our Clients & Partners ───────────────────────────────────────────────────
-   The owner's own section, supplied 2026-11-08 as
-   `~/Downloads/Previous clients & partners.html`, re-worded by him: his heading and
-   subtext, and the marquee of client wordmarks drawn in each brand's own typeface —
-   that type mixing is the design and it is kept. His file's palette and CSS variables
-   are replaced by this page's tokens so the band follows BOTH palettes instead of
-   guessing from prefers-color-scheme, and its own page-level padding, background and
-   borders give way to the page's .section rhythm. Everything under 750px stops moving
-   and wraps, which is his file's own reduced-motion rule applied at phone width. */
-/* THE BAND IS DARK IN BOTH PALETTES, BY THE OWNER'S OWN INSTRUCTION (2026-11-08: "add a
-   dark background with a pastel gradient abstract for this section"), so it carries its own
-   ink/muted/wordmark values instead of the page's: a light-mode page would otherwise paint
-   dark text on it. The pastels are the abstract — four soft radial gradients over a near-
-   black base, no image and no third-party asset — and they are the one place on this page
-   that deliberately is not a palette token, because the band is deliberately not the page's
-   palette. Everything else here (spacing, border, .section rhythm) stays the page's. */
+/* ── Partners & Enterprise ───────────────────────────────────────────────────
+   CLAUDE'S REDESIGN, IMPLEMENTED (Owen, 2026-11-08: "claude sent a reviewed updated much
+   better section for clients & partners, but I might also add let's implement claudes
+   design with our existing light/dark themes and also rename the section to 'Partners &
+   Enterprise'"). The layout, the four cards, the category icons, the hover spotlight and
+   the reveal are the design he sent — taken as the spec, not re-imagined here.
+
+   WHAT CHANGED ON THE WAY IN, and only this: its palette. Claude's file declares its own
+   --bg/--card/--txt/--mut/--acc/--wm/--spot/--chip/--shadow and switches them on
+   prefers-color-scheme; this page already owns a palette (dark gold / light violet, driven
+   by the ACCOUNT theme as well as the OS), so every one of those is derived from the page's
+   own tokens instead and the band follows both palettes with no second colour system. That
+   is also why the dark pastel band this section used to carry is gone: the redesign brings
+   the page's two palettes back, which was the point of "with our existing light/dark
+   themes". Its eight wordmark typefaces are kept exactly (they are the design), and the
+   small inline script keeps its 2.5s failsafe so nothing can stay invisible if the observer
+   never fires. */
 .partners{
-  --band-ink:#f6f4ef;--band-muted:#cfccd6;--band-wm:#b7b4c0;
-  /* THE EDGES GO DARKER THAN THE MIDDLE, so the band arrives and leaves instead of starting
-     and stopping: the first layer here is a vertical shade over the pastels (near-black at
-     0% and 100%, clear through the middle), which is what makes the top and bottom read as
-     the page's own darkness rather than as a stripe's ends. */
-  --band-edge:#0a0a10;
-  text-align:center;display:grid;align-content:center;justify-items:stretch;
-  position:relative;isolation:isolate;
-  background:
-    linear-gradient(180deg,var(--band-edge) 0%,color-mix(in srgb,var(--band-edge) 74%,transparent) 9%,transparent 30%,transparent 70%,color-mix(in srgb,var(--band-edge) 74%,transparent) 91%,var(--band-edge) 100%),
-    radial-gradient(58% 78% at 16% 18%,color-mix(in srgb,#f9c6d6 30%,transparent),transparent 72%),
-    radial-gradient(52% 66% at 84% 12%,color-mix(in srgb,#c6d6f9 28%,transparent),transparent 74%),
-    radial-gradient(66% 88% at 52% 104%,color-mix(in srgb,#cdeedb 24%,transparent),transparent 80%),
-    radial-gradient(40% 52% at 72% 62%,color-mix(in srgb,#e7d3f7 20%,transparent),transparent 76%),
-    #101018;
-  color:var(--band-ink);
+  --card:var(--surface);
+  --acc:var(--accent);
+  --wm:color-mix(in srgb,var(--ink) 84%,var(--muted));
+  --spot:color-mix(in srgb,var(--accent) 13%,transparent);
+  --chip:color-mix(in srgb,var(--accent) 12%,var(--surface));
+  --shadow:0 1px 0 color-mix(in srgb,var(--ink) 4%,transparent),0 18px 40px -22px color-mix(in srgb,#000 34%,transparent);
+  text-align:left;
 }
-/* AND THE LAST FEW PIXELS FADE TO THE PAGE'S OWN BACKGROUND, which is the half that makes it
-   blend in a LIGHT palette: a near-black band meeting a light page is a hard seam however
-   dark its edges are, so the outermost 56px carry --bg itself. Nothing readable sits there
-   (the content is centred), and the page-colour feather is transparent through the rest. */
-.partners::before{
-  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(180deg,
-    var(--bg) 0,color-mix(in srgb,var(--bg) 55%,transparent) 16px,transparent 56px,
-    transparent calc(100% - 56px),color-mix(in srgb,var(--bg) 55%,transparent) calc(100% - 16px),var(--bg) 100%);
-}
-.partners .partners-sub{color:var(--band-muted)}
-.partners .wm{color:var(--band-wm)}
-.partners .partners-track li:hover .wm{color:var(--band-ink)}
-.partners .partners-track li::after{border-color:var(--band-muted);opacity:.5}
-/* NO BORDER AT ALL, not just a transparent one: the section paints its own background to the
-   border box, and an absolutely positioned ::before is placed against the PADDING box — so a
-   1px transparent border left exactly one pixel of --band-edge (#0a0a10) showing above the
-   page-colour feather. Measured on the live page 2026-11-08: row 24 of the seam read
-   rgb(10,10,16) between two rows of the page's own rgb(238,242,249). Owen saw that pixel as
-   "a thin black line across the top". With the border gone the feather reaches the edge. */
-.partners.section{border-top:0}
-.partners-wrap{max-width:760px;margin-inline:auto}
-.partners h2{font:500 25px/1.2 inherit;letter-spacing:-.035em;margin:0}
-.partners-sub{margin:12px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.55}
-.partners-marq{margin-top:38px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.partners-track{display:flex;align-items:center;width:max-content;margin:0;padding:0;list-style:none;animation:partners-scroll 42s linear infinite}
-.partners-marq:hover .partners-track,.partners-marq:focus-within .partners-track{animation-play-state:paused}
-@keyframes partners-scroll{to{transform:translateX(-50%)}}
-.partners-track li{display:flex;align-items:center;padding:0 clamp(26px,4vw,52px);position:relative}
-.partners-track li::after{content:'';position:absolute;right:-3px;top:50%;width:6px;height:6px;border:1px solid var(--accent);transform:translateY(-50%) rotate(45deg);opacity:.55}
-.wm{display:block;white-space:nowrap;color:var(--muted);font-size:28px;line-height:1;transition:color .25s ease}
-.partners-track li:hover .wm{color:var(--ink)}
-.wm-bl{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;font-size:30px;letter-spacing:-.01em}
-.wm-dr{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;text-transform:uppercase;letter-spacing:.34em;font-size:31px}
-.wm-wl{font-family:Inter,sans-serif;font-weight:800;letter-spacing:-.03em;font-size:30px}
-.wm-oa{font-family:"Space Grotesk",Inter,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:30px}
-.wm-ds{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:-.02em;font-size:26px}
-.wm-ms{font-family:Inter,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:28px}
-.wm-aw{font-family:Outfit,Inter,sans-serif;font-weight:600;letter-spacing:.06em;font-size:30px}
-.wm-rd{font-family:Sora,Inter,sans-serif;font-weight:700;letter-spacing:-.02em;font-size:28px}
-.wm-mj{font-family:Silkscreen,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;font-size:24px}
-.wm-lt{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.02em;font-size:30px}
-@media(max-width:750px){
-  .partners-marq{-webkit-mask-image:none;mask-image:none}
-  .partners-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:22px 0;padding:0}
-  .partners-track li[aria-hidden="true"]{display:none}
-  .partners-track li{padding:0 16px}
-  .wm{font-size:24px}
-  .wm-bl,.wm-dr,.wm-wl,.wm-oa,.wm-aw,.wm-lt{font-size:26px}
-  .wm-ds,.wm-mj{font-size:21px}
+.partners .cp{padding-block:clamp(56px,8vh,104px)}
+.partners .in{max-width:1120px;margin-inline:auto;padding-inline:24px}
+.partners .hd{display:grid;grid-template-columns:1.1fr 1fr;gap:24px 64px;align-items:end;margin-bottom:44px}
+.partners .eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+.partners .eyebrow::before{content:"";width:22px;height:1px;background:currentColor}
+.partners h2{margin:0;font:600 clamp(32px,4.8vw,52px)/1.04 Inter,sans-serif;letter-spacing:-.035em}
+.partners .lead{margin:0;color:var(--muted);font-size:17px;line-height:1.6;max-width:480px;justify-self:end;max-width:none}
+.partners .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.partners .card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:var(--shadow);padding:26px 28px 10px;isolation:isolate}
+.partners .card::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),var(--spot),transparent 62%);opacity:0;transition:opacity .35s ease}
+.partners .card:hover::before{opacity:1}
+.partners .card h3{display:flex;align-items:center;gap:10px;margin:0 0 14px;font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.partners .card h3 i{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--chip);color:var(--acc)}
+.partners .card h3 svg{width:16px;height:16px}
+.partners .card ul{list-style:none;margin:0;padding:0}
+.partners .card li{display:flex;align-items:center;justify-content:space-between;height:84px;border-top:1px solid var(--line)}
+.partners .card li:first-child{border-top:0}
+.partners .wm{display:block;white-space:nowrap;line-height:1;font-size:32px;color:var(--wm);transition:color .25s ease,transform .25s ease}
+.partners .card li:hover .wm{color:var(--ink);transform:translateX(4px)}
+.partners .card li::after{content:"";width:7px;height:7px;border-top:1.5px solid var(--acc);border-right:1.5px solid var(--acc);transform:rotate(45deg) translate(-4px,4px);opacity:0;transition:opacity .25s ease,transform .25s ease}
+.partners .card li:hover::after{opacity:1;transform:rotate(45deg)}
+.partners .wm-bl{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;font-size:34px;letter-spacing:-.01em}
+.partners .wm-dr{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;text-transform:uppercase;letter-spacing:.34em;font-size:34px}
+.partners .wm-wl{font-family:Inter,sans-serif;font-weight:800;letter-spacing:-.03em;font-size:33px}
+.partners .wm-oa{font-family:"Space Grotesk",Inter,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:33px}
+.partners .wm-ds{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500;letter-spacing:-.02em;font-size:29px}
+.partners .wm-lt{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.02em;font-size:34px}
+.partners .wm-ms{font-family:Inter,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:31px}
+.partners .wm-aw{font-family:Outfit,Inter,sans-serif;font-weight:600;letter-spacing:.06em;font-size:33px}
+.partners .wm-rd{font-family:Sora,Inter,sans-serif;font-weight:700;letter-spacing:-.02em;font-size:31px}
+.partners .wm-mj{font-family:Silkscreen,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;font-size:38px}
+.partners .wide{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1.1fr;align-items:center;gap:20px 40px;padding:30px 32px}
+.partners .wide h3{margin:0}
+.partners .wide .wm{font-size:44px;color:var(--ink)}
+.partners .wide p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.6}
+.partners .wide a{display:inline-block;margin-top:10px;color:var(--acc);font-weight:600;text-decoration:none}
+.partners .wide a:hover,.partners .wide a:focus-visible{text-decoration:underline}
+.partners .wide::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;background:conic-gradient(from 90deg at 1px 1px,transparent 90deg,var(--line) 0) 0 0/22px 22px;-webkit-mask-image:linear-gradient(90deg,transparent 30%,#000 90%);mask-image:linear-gradient(90deg,transparent 30%,#000 90%)}
+.partners .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+.partners .rv.show{opacity:1;transform:none}
+@media(max-width:900px){
+  .partners .grid{grid-template-columns:1fr}
+  .partners .hd{grid-template-columns:1fr}
+  .partners .lead{justify-self:start}
+  .partners .wide{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
-  .partners-marq{-webkit-mask-image:none;mask-image:none}
-  .partners-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:22px 0;padding:0}
-  .partners-track li[aria-hidden="true"]{display:none}
+  .partners .rv{opacity:1;transform:none;transition:none}
+  .partners .wm,.partners .card li::after,.partners .card::before{transition:none}
 }
