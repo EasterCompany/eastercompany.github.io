@@ -9,6 +9,21 @@ form.addEventListener('submit',event=>{
  form.hidden=true;review.hidden=false;review.focus();
 });
 document.getElementById('edit-application').addEventListener('click',()=>{review.hidden=true;form.hidden=false;document.getElementById('company-name').focus();});
+// THE HERO SUBTRACTS THE HEADER'S REAL HEIGHT. It used to be a number written into CSS (84px,
+// then 119px below 650px) and the header has since become two rows with a download button and
+// an account control mounted from launcher.easter.company — a height nobody can keep in a
+// constant. So it is measured here, once and after any change (a font swap, the mounted pill,
+// a resize, a rotation), and published as --header-h for the hero's min-height.
+const header = document.querySelector('.site-header');
+if (header) {
+  const publishHeaderHeight = () => document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  publishHeaderHeight();
+  if ('ResizeObserver' in window) new ResizeObserver(publishHeaderHeight).observe(header);
+  else addEventListener('resize', publishHeaderHeight);
+  addEventListener('load', publishHeaderHeight);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(publishHeaderHeight);
+}
+
 const tabs=[...document.querySelectorAll('[role="tab"]')];
 function selectTab(tab){for(const item of tabs){const selected=item===tab;item.setAttribute('aria-selected',String(selected));item.tabIndex=selected?0:-1;const panel=document.getElementById(item.getAttribute('aria-controls'));panel.classList.toggle('is-active',selected);panel.setAttribute('aria-hidden',String(!selected));}}
 for(const [index,tab] of tabs.entries()){tab.addEventListener('click',()=>selectTab(tab));tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();selectTab(tabs[next]);tabs[next].focus();});}
