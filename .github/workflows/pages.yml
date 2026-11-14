@@ -1,5 +1,7 @@
 name: Publish corporate website
 on:
+  push:
+    branches: [Prd]
   workflow_dispatch:
 permissions:
   contents: read
