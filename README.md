@@ -26,16 +26,20 @@ Browser checks cover desktop, 320px/390px layouts, keyboard tab navigation,
 review/edit and correct encoding of ampersands and line breaks in the email draft.
 No emails were sent during testing.
 
-Published to GitHub Pages by the manual pages.yml workflow from Prd. IT IS
-`workflow_dispatch` ONLY - a push to Prd publishes NOTHING. Measured 2026-11-07:
-commit 05fcee9 was on origin/Prd while the served site was still 81d00cc, and the
-new cards 404'd until `gh workflow run "Publish corporate website" --ref Prd` was
-dispatched. So a "live" claim needs the dispatch, the run's success, and then the
-production URL measured in a browser (the served HTML plus the asset status codes).
-The public
-review URL is https://eastercompany.github.io/. The previous custom-domain setting
-was cleared because easter.company resolves to parking; DNS was not changed.
-Noindex/nofollow is retained during review. Remove it for the confirmed launch.
+Published to GitHub Pages from `Prd` by `.github/workflows/pages.yml`. Since
+commit 21ff17d a push to `Prd` publishes on its own; the workflow also keeps
+`workflow_dispatch`. A "live" claim still needs the run's success and the
+production URL measured (the served HTML plus the asset status codes), not a
+green push alone.
+
+The production origin is **https://easter.company/**; `http://`, `www.` and
+`http://www.` all answer a single 301 to it. The homepage is indexable, carries
+`rel=canonical` and is the only URL in `site/sitemap.xml`. The account page and
+the custom 404 page are deliberately `noindex,nofollow`, and `robots.txt` keeps
+crawlers out of `/account/` and `/login/`. The old Google Search Console
+"Excluded by noindex" and `/lander` 404 reports are the review-era state: the
+homepage noindex was removed on 2026-11-17, `/lander` is a dead parking URL and
+now gets the custom noindex 404, and `/login` redirects to `/account/`.
 
 No fabricated benchmarks, price comparisons or blanket security guarantees appear
 on the page. Product specification and offer-term checks remain in docs.

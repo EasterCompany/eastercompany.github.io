@@ -45,3 +45,34 @@ assert document['associatedApplications'] == [
 
 print(f'Validated {len(p.links)} links, {len(p.assets)} asset references and beta signup anchors.')
 print('Validated the Microsoft publisher-domain association for application c3fc8a5e.')
+
+# SEARCH INDEXING IS A PROPERTY OF THE PAGE, NOT A SEARCH CONSOLE SETTING.
+# Owen, 2026-11-17: Search Console reported all three address variants as "Excluded by
+# noindex tag". The review noindex is gone; the homepage is the one indexable page, the
+# account page stays out, and robots/sitemap/canonical agree on the origin.
+home = Path('site/index.html').read_text()
+assert 'name="robots" content="noindex' not in home, 'the homepage is no longer under review'
+assert 'rel="canonical" href="https://easter.company/"' in home, 'the homepage needs its canonical origin'
+assert 'property="og:url" content="https://easter.company/"' in home, 'og:url must match canonical'
+account = Path('site/account/index.html').read_text()
+assert 'name="robots" content="noindex' in account, 'the account page must not be indexed'
+robots = Path('site/robots.txt')
+assert robots.is_file(), 'robots.txt is missing'
+robots_text = robots.read_text()
+assert 'Sitemap: https://easter.company/sitemap.xml' in robots_text
+assert 'Disallow: /account/' in robots_text
+sitemap = Path('site/sitemap.xml')
+assert sitemap.is_file(), 'sitemap.xml is missing'
+assert '<loc>https://easter.company/</loc>' in sitemap.read_text()
+print('Validated indexability: homepage canonical, account noindex, robots and sitemap.')
+not_found = Path('site/404.html')
+assert not_found.is_file(), 'a custom 404 page is missing'
+assert 'name="robots" content="noindex' in not_found.read_text(), 'the 404 page must not be indexed'
+print('Validated the custom 404 page is noindex.')
+login = Path('site/login/index.html')
+assert login.is_file(), 'the retired /login URL must keep a redirect page'
+login_text = login.read_text()
+assert 'http-equiv="refresh" content="0; url=/account/"' in login_text
+assert 'rel="canonical" href="https://easter.company/account/"' in login_text
+assert 'name="robots" content="noindex' in login_text
+print('Validated /login redirects to the noindex account page.')
